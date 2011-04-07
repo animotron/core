@@ -4,4 +4,11 @@
   <artifactId>eXist</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>Animo plugin for eXist-db</name>
+  <dependencies>
+  	<dependency>
+  		<groupId>org.existdb</groupId>
+  		<artifactId>existdb-core</artifactId>
+  		<version>1.5-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>
