@@ -18,19 +18,33 @@
  */
 package org.animotron.exist.index;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.animotron.Namespaces;
 import org.exist.collections.Collection;
 import org.exist.dom.DocumentImpl;
 import org.exist.dom.DocumentSet;
+import org.exist.dom.ElementImpl;
+import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
 import org.exist.dom.StoredNode;
+import org.exist.indexing.AbstractStreamListener;
 import org.exist.indexing.IndexController;
+import org.exist.indexing.IndexWorker;
 import org.exist.indexing.MatchListener;
+import org.exist.indexing.OrderedValuesIndex;
+import org.exist.indexing.QNamedKeysIndex;
 import org.exist.indexing.StreamListener;
+import org.exist.numbering.NodeId;
 import org.exist.storage.DBBroker;
 import org.exist.storage.NodePath;
+import org.exist.storage.txn.Txn;
 import org.exist.util.DatabaseConfigurationException;
 import org.exist.util.Occurrences;
 import org.exist.xquery.XQueryContext;
@@ -40,7 +54,7 @@ import org.w3c.dom.NodeList;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class AnimoIndexWorker implements org.exist.indexing.IndexWorker {
+public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
     private int mode = 0;
     private DocumentImpl document = null;
@@ -118,13 +132,14 @@ public class AnimoIndexWorker implements org.exist.indexing.IndexWorker {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	private StreamListener listener = new AnimoStreamListener();
 
 	/* (non-Javadoc)
 	 * @see org.exist.indexing.IndexWorker#getListener()
 	 */
 	public StreamListener getListener() {
-		// TODO Auto-generated method stub
-		return null;
+		return listener;
 	}
 
 	/* (non-Javadoc)
@@ -167,5 +182,96 @@ public class AnimoIndexWorker implements org.exist.indexing.IndexWorker {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	//instance name -> reference
+	private Map<String, NodeProxy> names = new HashMap<String, NodeProxy>(); 
+	private Map<NodeProxy, String> ids = new HashMap<NodeProxy, String>(); 
+	
+	private NodeProxy addNode(ElementImpl element) {
+		String name = element.getLocalName();
+		if (names.containsKey(name)) 
+			return names.get(name);
+		
+		else {
+			NodeProxy proxy = new NodeProxy(element);
+			names.put(name, proxy);
+			return proxy;
+		}
+	}
+	
+	private NodeProxy getNode(String name) {
+		return names.get(name);
+	}
+	
+	public String getNodeName(NodeProxy id) {
+		return ids.get(id);
+	}
 
+	//instance -> is-relations nodes (down)
+	private Map<NodeProxy, Set<NodeProxy>> downIsRelations = new HashMap<NodeProxy, Set<NodeProxy>>(); 
+	
+	//instance -> is-relations nodes (up)
+	private Map<NodeProxy, Set<NodeProxy>> upIsRelations = new HashMap<NodeProxy, Set<NodeProxy>>(); 
+
+	
+	private void addIsRelationship(NodeProxy node, NodeProxy is) {
+		
+		Set<NodeProxy> nodes = null;
+		if (downIsRelations.containsKey(is)) {
+			nodes = downIsRelations.get(is);
+		} else {
+			nodes = new HashSet<NodeProxy>();
+			
+			downIsRelations.put(is, nodes);
+		}
+		
+		nodes.add(node);
+	}
+
+	private class AnimoStreamListener extends AbstractStreamListener implements Namespaces {
+
+    	private NodeProxy currentNode;
+    	
+        @Override
+        public void startElement(Txn transaction, ElementImpl element, NodePath path) {
+            if (mode == STORE) {
+            	if (the.equals(element.getQName().getNamespaceURI())) {
+            		currentNode = addNode(element);
+            	
+            	} else if (is.equals(element.getQName().getNamespaceURI())) {
+            		addIsRelationship(currentNode, addNode(element));
+            	}
+            }
+            super.startElement(transaction, element, path);
+        }
+
+    	@Override
+		public IndexWorker getWorker() {
+			return AnimoIndexWorker.this;
+		}
+    	
+    }
+
+	public NodeSet resolveDownIsLogic(String name) {
+		NodeProxy node = getNode(name);
+		
+		if (!downIsRelations.containsKey(node))
+			return NodeSet.EMPTY_SET;
+		
+		NodeSet set = new NewArrayNodeSet(5);
+		
+		resolveDownIsLogic(node, set);
+		
+		return set;
+	}
+
+	private void resolveDownIsLogic(NodeProxy node, NodeSet set) {
+		if (!downIsRelations.containsKey(node))
+			return;
+		
+		for (NodeProxy n : downIsRelations.get(node)) {
+			set.add(n);
+			resolveDownIsLogic(n, set);
+		}
+	}
 }

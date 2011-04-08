@@ -18,14 +18,14 @@
  */
 package org.animotron.exist.index;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.File;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.exist.EXistException;
 import org.exist.Indexer;
 //import org.exist.TestUtils;
 import org.exist.collections.Collection;
@@ -34,6 +34,7 @@ import org.exist.collections.IndexInfo;
 import org.exist.dom.DefaultDocumentSet;
 import org.exist.dom.DocumentSet;
 import org.exist.dom.MutableDocumentSet;
+import org.exist.dom.NodeSet;
 import org.exist.storage.BrokerPool;
 import org.exist.storage.DBBroker;
 import org.exist.storage.txn.TransactionManager;
@@ -78,12 +79,31 @@ public class AnimoIndexTests {
 	public void resolveUpIsLogic() {
         System.out.println("Test resolve up is-logic queries ...");
         
-        Map<String, String> nameDataMap = new HashMap<String, String>();
+        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
         nameDataMap.put("A.xml", THE_A);
         nameDataMap.put("B.xml", THE_B);
         nameDataMap.put("C.xml", THE_C);
         
-        DocumentSet docs = configureAndStore(COLLECTION_CONFIG1, nameDataMap);
+        configureAndStore(COLLECTION_CONFIG1, nameDataMap);
+        
+        DBBroker broker = null;
+        try {
+            broker = pool.get(pool.getSecurityManager().getSystemSubject());
+            assertNotNull(broker);
+
+            AnimoIndexWorker wk = (AnimoIndexWorker) broker.getIndexController().getWorkerByIndexId(AnimoIndex.ID);
+            
+            NodeSet set = wk.resolveDownIsLogic("A");
+            
+            assertEquals(2, set.getItemCount());
+            
+        } catch (EXistException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} finally {
+        	pool.release(broker);
+        }
+
 		
 	}
 
