@@ -22,30 +22,50 @@ package org.animotron;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Namespaces {
+public enum Namespaces {
 	
-	public String the	= "animo/instance";
-	public String an	= "animo/reference";
+	ANIMO	("animo", "animo"),
+	 
+	THE		("the", "animo/instance"),
+	AN		("an", "animo/reference"),
 
-	public String ic	= "animo/connection";
+	IC		("ic", "animo/connection"),
 
-	public String all	= "animo/query/all";
-	public String any	= "animo/query/any";
-	public String self	= "animo/query/self";
-	public String get	= "animo/query/extract";
+	ALL		("all", "animo/query/all"),
+	ANY		("any", "animo/query/any"),
+	GET		("get", "animo/query/extract"),
+	SELF	("self", "animo/query/self"),
 
-	public String ptrn	= "animo/pattern";
+	PTRN	("ptrn", "animo/pattern"),
 
-	//public String do	= "animo/perform";
+	DO		("do", "animo/perform"),
 
-	public String is	= "animo/relation/is";
-	public String use	= "animo/relation/use";
-	public String have	= "animo/relation/have";
+	IS		("is", "animo/relation/is"),
+	USE		("use", "animo/relation/use"),
+	HAVE	("have", "animo/relation/have"),
 
-	public String lt	= "animo/compare/lt"; 
-	public String gt	= "animo/compare/gt"; 
-	public String eq	= "animo/compare/eq"; 
-	public String ne	= "animo/compare/ne"; 
-	public String le	= "animo/compare/le"; 
-	public String ge	= "animo/compare/ge";
+	LT		("lt", "animo/compare/lt"), 
+	GT		("gt", "animo/compare/gt"), 
+	EQ		("eq", "animo/compare/eq"), 
+	NE		("ne", "animo/compare/ne"), 
+	LE		("le", "animo/compare/le"), 
+	GE		("ne", "animo/compare/ge");
+
+	
+	private final String prefix; 
+	private final String namespace; 
+	
+	
+	Namespaces (String prefix, String namespace){
+		this.prefix = prefix;
+		this.namespace = namespace;
+	}
+	
+	public String prefix(){
+		return prefix;
+	}
+	
+	public String namespace(){
+		return namespace;
+	}
 }

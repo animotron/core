@@ -255,17 +255,17 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		nodes.add(is);
 	}
 
-	private class AnimoStreamListener extends AbstractStreamListener implements Namespaces {
+	private class AnimoStreamListener extends AbstractStreamListener {
 
     	private NodeProxy currentNode;
     	
         @Override
         public void startElement(Txn transaction, ElementImpl element, NodePath path) {
             if (mode == STORE) {
-            	if (the.equals(element.getQName().getNamespaceURI())) {
+            	if (Namespaces.THE.namespace().equals(element.getQName().getNamespaceURI())) {
             		currentNode = addNode(element);
             	
-            	} else if (is.equals(element.getQName().getNamespaceURI())) {
+            	} else if (Namespaces.IS.namespace().equals(element.getQName().getNamespaceURI())) {
             		addIsRelationship(currentNode, getOrCreateNode(element.getLocalName()));
             	}
             }
