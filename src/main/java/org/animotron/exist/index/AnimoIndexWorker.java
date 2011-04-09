@@ -20,8 +20,6 @@ package org.animotron.exist.index;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,7 +39,6 @@ import org.exist.indexing.MatchListener;
 import org.exist.indexing.OrderedValuesIndex;
 import org.exist.indexing.QNamedKeysIndex;
 import org.exist.indexing.StreamListener;
-import org.exist.numbering.NodeId;
 import org.exist.storage.DBBroker;
 import org.exist.storage.NodePath;
 import org.exist.storage.txn.Txn;
@@ -199,6 +196,8 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		}
 	}
 	
+	//TODO: forward references
+
 	private NodeProxy getNode(String name) {
 		return names.get(name);
 	}
@@ -216,6 +215,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	
 	private void addIsRelationship(NodeProxy node, NodeProxy is) {
 		
+		//record down relations
 		Set<NodeProxy> nodes = null;
 		if (downIsRelations.containsKey(is)) {
 			nodes = downIsRelations.get(is);
@@ -226,6 +226,18 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		}
 		
 		nodes.add(node);
+
+		//record up relations
+		nodes = null;
+		if (upIsRelations.containsKey(node)) {
+			nodes = upIsRelations.get(node);
+		} else {
+			nodes = new HashSet<NodeProxy>();
+			
+			upIsRelations.put(node, nodes);
+		}
+		
+		nodes.add(is);
 	}
 
 	private class AnimoStreamListener extends AbstractStreamListener implements Namespaces {
@@ -252,6 +264,29 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
     	
     }
 
+	public NodeSet resolveUpIsLogic(String name) {
+		NodeProxy node = getNode(name);
+		
+		if (!upIsRelations.containsKey(node))
+			return NodeSet.EMPTY_SET;
+		
+		NodeSet set = new NewArrayNodeSet(5);
+		
+		resolveUpIsLogic(node, set);
+		
+		return set;
+	}
+
+	private void resolveUpIsLogic(NodeProxy node, NodeSet set) {
+		if (!upIsRelations.containsKey(node))
+			return;
+		
+		for (NodeProxy n : upIsRelations.get(node)) {
+			set.add(n);
+			resolveUpIsLogic(n, set);
+		}
+	}
+
 	public NodeSet resolveDownIsLogic(String name) {
 		NodeProxy node = getNode(name);
 		
@@ -274,4 +309,5 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 			resolveDownIsLogic(n, set);
 		}
 	}
+	
 }

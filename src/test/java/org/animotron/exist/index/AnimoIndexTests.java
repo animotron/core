@@ -97,6 +97,10 @@ public class AnimoIndexTests {
             
             assertEquals(2, set.getItemCount());
             
+            set = wk.resolveUpIsLogic("C");
+            
+            assertEquals(2, set.getItemCount());
+
         } catch (EXistException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
