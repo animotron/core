@@ -9,12 +9,23 @@ import org.exist.xquery.FunctionDef;
 
 public class AnimoModule extends AbstractInternalModule {
 
+    public static final String NAMESPACE_URI = Namespaces.ANIMO.namespace();
+    
+    public static final String PREFIX = Namespaces.ANIMO.prefix();
+    public final static String INCLUSION_DATE = "2011-04-09";
+    public final static String RELEASED_IN_VERSION = "eXist-1.5";
+    
+    public static final FunctionDef[] functions = {
+        new FunctionDef(ResolveIsLogic.signature[0], ResolveIsLogic.class),
+        new FunctionDef(ResolveIsLogic.signature[1], ResolveIsLogic.class)
+    };
+    
 	public AnimoModule(FunctionDef[] functions, Map<String, List<? extends Object>> parameters) {
 		super(functions, parameters);
 	}
 
 	public String getDefaultPrefix() {
-		return Namespaces.ANIMO.prefix();
+		return PREFIX;
 	}
 
 	public String getDescription() {
@@ -22,7 +33,7 @@ public class AnimoModule extends AbstractInternalModule {
 	}
 
 	public String getNamespaceURI() {
-		return Namespaces.ANIMO.namespace();
+		return NAMESPACE_URI;
 	}
 
 	public String getReleaseVersion() {
