@@ -22,7 +22,7 @@ package org.animotron;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public enum AnimoNamespaces {
+public enum Namespaces {
 	
 	ANIMO	("animo", "animo"),
 	 
@@ -56,7 +56,7 @@ public enum AnimoNamespaces {
 	private final String namespace; 
 	
 	
-	AnimoNamespaces (String prefix, String namespace){
+	Namespaces (String prefix, String namespace){
 		this.prefix = prefix;
 		this.namespace = namespace;
 	}

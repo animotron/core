@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.animotron.AnimoNamespaces;
+import org.animotron.Namespaces;
 import org.exist.collections.Collection;
 import org.exist.dom.DocumentImpl;
 import org.exist.dom.DocumentSet;
@@ -247,10 +247,10 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
         @Override
         public void startElement(Txn transaction, ElementImpl element, NodePath path) {
             if (mode == STORE) {
-            	if (AnimoNamespaces.THE.namespace().equals(element.getQName().getNamespaceURI())) {
+            	if (Namespaces.THE.namespace().equals(element.getQName().getNamespaceURI())) {
             		currentNode = addNode(element);
             	
-            	} else if (AnimoNamespaces.IS.namespace().equals(element.getQName().getNamespaceURI())) {
+            	} else if (Namespaces.IS.namespace().equals(element.getQName().getNamespaceURI())) {
             		addIsRelationship(currentNode, addNode(element));
             	}
             }

@@ -3,7 +3,7 @@ package org.animotron.exist.xquery.functions;
 import java.util.List;
 import java.util.Map;
 
-import org.animotron.AnimoNamespaces;
+import org.animotron.Namespaces;
 import org.exist.xquery.AbstractInternalModule;
 import org.exist.xquery.FunctionDef;
 
@@ -14,7 +14,7 @@ public class AnimoModule extends AbstractInternalModule {
 	}
 
 	public String getDefaultPrefix() {
-		return AnimoNamespaces.ANIMO.prefix();
+		return Namespaces.ANIMO.prefix();
 	}
 
 	public String getDescription() {
@@ -22,7 +22,7 @@ public class AnimoModule extends AbstractInternalModule {
 	}
 
 	public String getNamespaceURI() {
-		return AnimoNamespaces.ANIMO.namespace();
+		return Namespaces.ANIMO.namespace();
 	}
 
 	public String getReleaseVersion() {
