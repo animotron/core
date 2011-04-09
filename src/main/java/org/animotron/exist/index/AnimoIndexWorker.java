@@ -53,14 +53,14 @@ import org.w3c.dom.NodeList;
  */
 public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
-    private int mode = 0;
+	private int mode = 0;
     private DocumentImpl document = null;
     private AnimoIndex index;
 
 	public AnimoIndexWorker(AnimoIndex index) {
-		// TODO Auto-generated constructor stub
+		this.index = index;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.exist.indexing.IndexWorker#getIndexId()
 	 */
@@ -174,29 +174,44 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	/* (non-Javadoc)
 	 * @see org.exist.indexing.IndexWorker#scanIndex(org.exist.xquery.XQueryContext, org.exist.dom.DocumentSet, org.exist.dom.NodeSet, java.util.Map)
 	 */
-	public Occurrences[] scanIndex(XQueryContext context, DocumentSet docs,
-			NodeSet contextSet, Map hints) {
+	public Occurrences[] scanIndex(XQueryContext context, DocumentSet docs, NodeSet contextSet, Map hints) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	//instance name -> reference
-	private Map<String, NodeProxy> names = new HashMap<String, NodeProxy>(); 
+	private Map<String, NodeProxy> names = new HashMap<String, NodeProxy>();
+	
+	//TODO: make this map do the job
 	private Map<NodeProxy, String> ids = new HashMap<NodeProxy, String>(); 
 	
 	private NodeProxy addNode(ElementImpl element) {
 		String name = element.getLocalName();
-		if (names.containsKey(name)) 
-			return names.get(name);
+		if (names.containsKey(name)) { 
+			NodeProxy proxy = names.get(name);
+			if (proxy.getDocument() == index.unresolvedReferenceDocument) {
+				proxy.update(element);
+			}
+			return proxy;
 		
-		else {
+		} else {
 			NodeProxy proxy = new NodeProxy(element);
 			names.put(name, proxy);
 			return proxy;
 		}
 	}
 	
-	//TODO: forward references
+	private NodeProxy getOrCreateNode(String name) {
+		NodeProxy node = names.get(name);
+		
+		if (node == null) {
+			node = new NodeProxy(
+					index.unresolvedReferenceDocument, 
+					index.unresolvedReferenceId.newChild());
+			names.put(name, node);
+		}
+		return node;
+	}
 
 	private NodeProxy getNode(String name) {
 		return names.get(name);
@@ -251,7 +266,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
             		currentNode = addNode(element);
             	
             	} else if (is.equals(element.getQName().getNamespaceURI())) {
-            		addIsRelationship(currentNode, addNode(element));
+            		addIsRelationship(currentNode, getOrCreateNode(element.getLocalName()));
             	}
             }
             super.startElement(transaction, element, path);

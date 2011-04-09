@@ -19,11 +19,17 @@
 package org.animotron.exist.index;
 
 import org.apache.log4j.Logger;
+import org.exist.dom.DocumentImpl;
 import org.exist.indexing.AbstractIndex;
 import org.exist.indexing.IndexWorker;
+import org.exist.numbering.DLN;
+import org.exist.numbering.NodeId;
+import org.exist.storage.BrokerPool;
 import org.exist.storage.DBBroker;
 import org.exist.storage.btree.DBException;
 import org.exist.util.DatabaseConfigurationException;
+import org.exist.xmldb.XmldbURI;
+import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,7 +42,19 @@ public class AnimoIndex extends AbstractIndex {
     public static final String ID = AnimoIndex.class.getName();
     public static final String FILE_NAME = "animo.dbx";
 
-    /* (non-Javadoc)
+	protected DocumentImpl unresolvedReferenceDocument = null;  
+	protected NodeId unresolvedReferenceId = new DLN();  
+	
+	public final static XmldbURI ANIMO_COLLETION_URI = XmldbURI.SYSTEM_COLLECTION_URI.append("animo");
+	public final static XmldbURI UNRESOLVED_REFERENCES_FILE_URI = XmldbURI.create("unresolved-references.xml");
+
+    public void configure(BrokerPool db, String dataDir, Element config) throws DatabaseConfigurationException {
+    	super.configure(db, dataDir, config);
+    	
+    	//initialize(db);
+    }
+
+	/* (non-Javadoc)
 	 * @see org.exist.indexing.AbstractIndex#open()
 	 */
 	@Override
@@ -89,5 +107,61 @@ public class AnimoIndex extends AbstractIndex {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
+//	private void initialize(Database db) {
+//		
+//		if (unresolvedReferenceDocument != null) return;
+//		
+//        TransactionManager tm = db.getTransactionManager();
+//		
+//        DBBroker broker = null;
+//        Txn txn = null;
+//        try {
+//            broker = db.getActiveBroker();//db.getSecurityManager().getSystemSubject()
+//
+//            Collection animoCollection = null;
+//            try {
+//            	animoCollection = broker.getCollection(ANIMO_COLLETION_URI);
+//    			if (animoCollection == null) {
+//    				txn = tm.beginTransaction();
+//    				animoCollection = broker.getOrCreateCollection(txn, ANIMO_COLLETION_URI);
+//    				if (animoCollection == null)
+//    					return;
+//    				animoCollection.setPermissions(0770);
+//    				broker.saveCollection(txn, animoCollection);
+//
+//    				tm.commit(txn);
+//    			}
+//            } catch (Exception e) {
+//            	tm.abort(txn);
+//    			e.printStackTrace();
+//    			//LOG.debug("loading acl failed: " + e.getMessage());
+//    		}
+//            
+//            unresolvedReferenceDocument = animoCollection.getDocument(broker, UNRESOLVED_REFERENCES_FILE_URI);
+//
+//            if (unresolvedReferenceDocument == null) {
+//	            txn = tm.beginTransaction();
+//	
+//	            String data = "<unresolved-references/>"; 
+//	        	IndexInfo info = animoCollection.validateXMLResource(txn, broker, UNRESOLVED_REFERENCES_FILE_URI, data);
+//	        	animoCollection.store(txn, broker, info, data, false);
+//	
+//	            unresolvedReferenceDocument = info.getDocument();
+//	
+//	            tm.commit(txn);
+//            }
+//        } catch (Exception e) {
+//
+//        	if (tm != null)
+//        		tm.abort(txn);
+//            
+//        	e.printStackTrace();
+//        	
+//            fail(e.getMessage());
+//            
+//        }
+//        
+//        unresolvedReference = (ElementImpl) unresolvedReferenceDocument.getDocumentElement();
+//	}
 }

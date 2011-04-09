@@ -111,7 +111,41 @@ public class AnimoIndexTests {
 		
 	}
 
-    private DocumentSet configureAndStore(String configuration, Map<String, String> nameDataMap) {
+	@Test
+	public void forwardReference() {
+        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
+        nameDataMap.put("C.xml", THE_C);
+        nameDataMap.put("B.xml", THE_B);
+        nameDataMap.put("A.xml", THE_A);
+        
+        configureAndStore(COLLECTION_CONFIG1, nameDataMap);
+        
+        DBBroker broker = null;
+        try {
+            broker = pool.get(pool.getSecurityManager().getSystemSubject());
+            assertNotNull(broker);
+
+            AnimoIndexWorker wk = (AnimoIndexWorker) broker.getIndexController().getWorkerByIndexId(AnimoIndex.ID);
+            
+            NodeSet set = wk.resolveDownIsLogic("A");
+            
+            assertEquals(2, set.getItemCount());
+            
+            set = wk.resolveUpIsLogic("C");
+            
+            assertEquals(2, set.getItemCount());
+
+        } catch (EXistException e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		} finally {
+        	pool.release(broker);
+        }
+
+		
+	}
+
+	private DocumentSet configureAndStore(String configuration, Map<String, String> nameDataMap) {
         DBBroker broker = null;
         TransactionManager transact = null;
         Txn transaction = null;
