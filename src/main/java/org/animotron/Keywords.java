@@ -68,4 +68,8 @@ public enum Keywords {
 		return qname;
 	}
 	
+	public boolean equals(QName qname){
+		return this.qname.equals(qname);
+	}
+	
 }

@@ -21,10 +21,10 @@ package org.animotron.exist.interpreter;
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
 import org.exist.dom.NewArrayNodeSet;
-import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
 import org.exist.memtree.NodeImpl;
+import org.exist.memtree.TextImpl;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
@@ -66,41 +66,42 @@ public class Animo {
 
 			String ns = input.getNamespaceURI();
 
-			if (ns.equals(Namespaces.AN.namespace())) {
+			if (Namespaces.AN.equals(ns)) {
 
 				String name = input.getLocalName();
 
-				if (name.equals(Keywords.AN_EMPTY.keyword())) {
+				if (Keywords.AN_EMPTY.keyword().equals(name)) {
 					// TODO: process an:empty
 
-				} else if (name.equals(Keywords.AN_SELF.keyword())) {
+				} else if (Keywords.AN_SELF.keyword().equals(name)) {
 					// TODO: process an:self
 
-				} else if (name.equals(Keywords.AN_CONTENT.keyword())) {
+				} else if (Keywords.AN_CONTENT.keyword().equals(name)) {
 					// TODO: process an:content
 
 				} else {
 					// TODO: process an:*
 				}
 
-			} else if (ns.equals(Namespaces.ANY.namespace())) {
+			} else if (Namespaces.ANY.equals(ns)) {
 				// TODO: process any:*
 
-			} else if (ns.equals(Namespaces.ALL.namespace())) {
+			} else if (Namespaces.ALL.equals(ns)) {
 				// TODO: process all:*
 
-			} else if (ns.equals(Namespaces.PTRN.namespace())) {
+			} else if (Namespaces.PTRN.equals(ns)) {
 				// TODO: process ptrn:*
 
-			} else if (ns.equals(Namespaces.GET.namespace())) {
+			} else if (Namespaces.GET.equals(ns)) {
 				// TODO: process get:*
 
-			} else if (ns.equals(Namespaces.SELF.namespace())) {
+			} else if (Namespaces.SELF.equals(ns)) {
 
-				if (input.getLocalName().equals(
-						Keywords.SELF_INSTANCE.keyword())) {
+				if (Keywords.SELF_INSTANCE.keyword().equals(input.getLocalName())) {
 					// process self:instance 
 					// return local-name() as text()
+					return (NodeSet) new TextImpl(input.getDocument(), input.getNodeNumber());
+					
 				} else {
 					// TODO: process self:*
 
@@ -115,28 +116,28 @@ public class Animo {
 
 				QName keyword = input.getQName();
 
-				if (keyword.equals(Keywords.DO_SKIP.QName())) {
+				if (Keywords.DO_SKIP.equals(keyword)) {
 					// TODO: process do:skip
 
-				} else if (keyword.equals(Keywords.DO_XQUERY.QName())) {
+				} else if (Keywords.DO_XQUERY.equals(keyword)) {
 					// TODO: process do:xquery
 
-				} else if (keyword.equals(Keywords.DO_XSLT.QName())) {
+				} else if (Keywords.DO_XSLT.equals(keyword)) {
 					// TODO: process do:xslt
 
-				} else if (keyword.equals(Keywords.USE_FLOW_STACK.QName())) {
+				} else if (Keywords.USE_FLOW_STACK.equals(keyword)) {
 					// TODO: process use:flow-stack
 
-				} else if (keyword.equals(Keywords.USE_CONTEXT_STACK.QName())) {
+				} else if (Keywords.USE_CONTEXT_STACK.equals(keyword)) {
 					// TODO: process use:stack
 
-				} else if (keyword.equals(Keywords.USE_LOCAL_CONTEXT.QName())) {
+				} else if (Keywords.USE_LOCAL_CONTEXT.equals(keyword)) {
 					// TODO: process use:context
 
-				} else if (keyword.equals(Keywords.USE_CONTEXT.QName())) {
+				} else if (Keywords.USE_CONTEXT.equals(keyword)) {
 					// TODO: process use:CONTEXT
 
-				} else if (keyword.equals(Keywords.USE_GLOBAL_CONTEXT.QName())) {
+				} else if (Keywords.USE_GLOBAL_CONTEXT.equals(keyword)) {
 					// TODO: process use:repository
 
 				} else {

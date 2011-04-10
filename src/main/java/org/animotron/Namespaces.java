@@ -68,4 +68,9 @@ public enum Namespaces {
 	public String namespace(){
 		return namespace;
 	}
+	
+	public boolean equals(String ns){
+		return namespace.equals(ns);
+	}
+	
 }
