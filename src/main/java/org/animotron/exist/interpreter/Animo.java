@@ -18,9 +18,13 @@
  */
 package org.animotron.exist.interpreter;
 
+import org.animotron.Keywords;
+import org.animotron.Namespaces;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
+import org.exist.dom.QName;
+import org.exist.memtree.NodeImpl;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
@@ -30,7 +34,7 @@ import org.w3c.dom.Node;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class Animo extends Process {
+public class Animo {
 
 	public NodeSet process(NodeSet flow) throws XPathException {
 		return process(flow, null);
@@ -40,12 +44,12 @@ public class Animo extends Process {
 		return process(flow, null, context, null, null);
 	}
 
-	protected NodeSet process(NodeSet flow, NodeSet stackFlow, NodeSet context,
+	private NodeSet process(NodeSet flow, NodeSet stackFlow, NodeSet context,
 			NodeSet stackContext, NodeSet source) throws XPathException {
 		NodeSet res = new NewArrayNodeSet();
 		SequenceIterator i = flow.iterate();
 		while (i.hasNext()) {
-			NodeProxy input = (NodeProxy) i.nextItem();
+			NodeImpl input = (NodeImpl) i.nextItem();
 			NodeSet set = process(input, stackFlow, context, stackContext,
 					source);
 			res.addAll(set);
@@ -53,31 +57,105 @@ public class Animo extends Process {
 		return res;
 	}
 
-	private NodeSet process(NodeProxy input, NodeSet stackFlow,
-			NodeSet context, NodeSet stackContext, NodeSet source)
-			throws XPathException {
+	private NodeSet process(NodeImpl input, NodeSet stackFlow, NodeSet context,
+			NodeSet stackContext, NodeSet source) throws XPathException {
 
 		switch (input.getType()) {
 
-			case Type.ELEMENT: {
-				 
-				Node node = input.getNode();
-				
-				return process(node, stackFlow, context, stackContext, source);
-				
+		case Type.ELEMENT: {
+
+			String ns = input.getNamespaceURI();
+
+			if (ns.equals(Namespaces.AN.namespace())) {
+
+				String name = input.getLocalName();
+
+				if (name.equals(Keywords.AN_EMPTY.keyword())) {
+					// TODO: process an:empty
+
+				} else if (name.equals(Keywords.AN_SELF.keyword())) {
+					// TODO: process an:self
+
+				} else if (name.equals(Keywords.AN_CONTENT.keyword())) {
+					// TODO: process an:content
+
+				} else {
+					// TODO: process an:*
+				}
+
+			} else if (ns.equals(Namespaces.ANY.namespace())) {
+				// TODO: process any:*
+
+			} else if (ns.equals(Namespaces.ALL.namespace())) {
+				// TODO: process all:*
+
+			} else if (ns.equals(Namespaces.PTRN.namespace())) {
+				// TODO: process ptrn:*
+
+			} else if (ns.equals(Namespaces.GET.namespace())) {
+				// TODO: process get:*
+
+			} else if (ns.equals(Namespaces.SELF.namespace())) {
+
+				if (input.getLocalName().equals(
+						Keywords.SELF_INSTANCE.keyword())) {
+					// TODO: process self:instance
+
+				} else {
+					// TODO: process self:*
+
+				}
+
+			} else if (ns.equals(Namespaces.IC.namespace())) {
+				// TODO: skip ic:*
+
+			} else {
+
+				QName keyword = input.getQName();
+
+				if (keyword.equals(Keywords.DO_SKIP.QName())) {
+					// TODO: process do:skip
+
+				} else if (keyword.equals(Keywords.DO_XQUERY.QName())) {
+					// TODO: process do:xquery
+
+				} else if (keyword.equals(Keywords.DO_XSLT.QName())) {
+					// TODO: process do:xslt
+
+				} else if (keyword.equals(Keywords.USE_FLOW_STACK.QName())) {
+					// TODO: process use:flow-stack
+
+				} else if (keyword.equals(Keywords.USE_CONTEXT_STACK.QName())) {
+					// TODO: process use:stack
+
+				} else if (keyword.equals(Keywords.USE_LOCAL_CONTEXT.QName())) {
+					// TODO: process use:context
+
+				} else if (keyword.equals(Keywords.USE_CONTEXT.QName())) {
+					// TODO: process use:CONTEXT
+
+				} else if (keyword.equals(Keywords.USE_GLOBAL_CONTEXT.QName())) {
+					// TODO: process use:repository
+
+				} else {
+					// process element()
+					Node node = input.getNode();
+					return process(node, stackFlow, context, stackContext,
+							source);
+				}
+
 			}
-	
-			default:
-				return input;
-				
+		}
+
+		default:
+			// process node()
+			return (NodeSet) input;
+
 		}
 	}
 
-	@Override
-	protected NodeSet process(Node input, NodeSet stackFlow,
-			NodeSet context, NodeSet stackContext, NodeSet source)
-			throws XPathException {
-		// TODO Auto-generated method stub
+	private NodeSet process(Node input, NodeSet stackFlow, NodeSet context,
+			NodeSet stackContext, NodeSet source) throws XPathException {
 		return null;
 	}
 

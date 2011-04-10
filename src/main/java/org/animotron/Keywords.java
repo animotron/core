@@ -18,6 +18,8 @@
  */
 package org.animotron;
 
+import org.exist.dom.QName;
+
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
  *
@@ -40,13 +42,14 @@ public enum Keywords {
 	USE_CONTEXT			("CONTEXT", Namespaces.USE),
 	USE_CONTEXT_STACK	("stack", Namespaces.USE);
 	
+	private final QName qname; 
 	private final String keyword; 
 	private final Namespaces namespace; 
-	
 	
 	Keywords (String keyword, Namespaces namespace){
 		this.keyword = keyword;
 		this.namespace = namespace;
+		this.qname = new QName(keyword, namespace.namespace());
 	}
 	
 	public String keyword(){
@@ -60,4 +63,9 @@ public enum Keywords {
 	public String prefix(){
 		return namespace.prefix();
 	}
+	
+	public QName QName(){
+		return qname;
+	}
+	
 }
