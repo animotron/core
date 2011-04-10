@@ -190,7 +190,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		if (names.containsKey(name)) { 
 			NodeProxy proxy = names.get(name);
 			if (proxy.getDocument() == index.unresolvedReferenceDocument) {
-				//proxy.update(element);
+				proxy.update(element);
 			}
 			return proxy;
 		
