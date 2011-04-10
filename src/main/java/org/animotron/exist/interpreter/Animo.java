@@ -18,79 +18,65 @@
  */
 package org.animotron.exist.interpreter;
 
-import java.io.IOException;
-import java.util.Properties;
-
-import org.exist.interpreter.Compiled;
-import org.exist.interpreter.Compiler;
-import org.exist.interpreter.Context;
-import org.exist.security.xacml.AccessContext;
-import org.exist.source.Source;
-import org.exist.storage.XQueryPool;
+import org.exist.dom.NewArrayNodeSet;
+import org.exist.dom.NodeProxy;
+import org.exist.dom.NodeSet;
 import org.exist.xquery.XPathException;
-import org.exist.xquery.value.Sequence;
+import org.exist.xquery.value.SequenceIterator;
+import org.exist.xquery.value.Type;
+import org.w3c.dom.Node;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * 
  */
-public class Animo implements Compiler {
+public class Animo extends Process {
 
-	public Context newContext(AccessContext accessCtx) {
-		// TODO Auto-generated method stub
-		return null;
+	public NodeSet process(NodeSet flow) throws XPathException {
+		return process(flow, null);
 	}
 
-	public XQueryPool getXQueryPool() {
-		// TODO Auto-generated method stub
-		return null;
+	public NodeSet process(NodeSet flow, NodeSet context) throws XPathException {
+		return process(flow, null, context, null, null);
 	}
 
-	public Compiled compile(Context context, String expression)
+	protected NodeSet process(NodeSet flow, NodeSet stackFlow, NodeSet context,
+			NodeSet stackContext, NodeSet source) throws XPathException {
+		NodeSet res = new NewArrayNodeSet();
+		SequenceIterator i = flow.iterate();
+		while (i.hasNext()) {
+			NodeProxy input = (NodeProxy) i.nextItem();
+			NodeSet set = process(input, stackFlow, context, stackContext,
+					source);
+			res.addAll(set);
+		}
+		return res;
+	}
+
+	private NodeSet process(NodeProxy input, NodeSet stackFlow,
+			NodeSet context, NodeSet stackContext, NodeSet source)
 			throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
+
+		switch (input.getType()) {
+
+			case Type.ELEMENT: {
+				 
+				Node node = input.getNode();
+				
+				return process(node, stackFlow, context, stackContext, source);
+				
+			}
+	
+			default:
+				return input;
+				
+		}
 	}
 
-	public Compiled compile(Context context, Source source)
-			throws XPathException, IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Compiled compile(Context context, Source source, boolean xpointer)
-			throws XPathException, IOException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Sequence execute(Compiled expression, Sequence contextSequence)
+	@Override
+	protected NodeSet process(Node input, NodeSet stackFlow,
+			NodeSet context, NodeSet stackContext, NodeSet source)
 			throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Sequence execute(Compiled expression, Sequence contextSequence,
-			Properties outputProperties) throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Sequence execute(Compiled expression, Sequence contextSequence,
-			boolean resetContext) throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Sequence execute(Compiled expression, Sequence contextSequence,
-			Properties outputProperties, boolean resetContext)
-			throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Sequence execute(String expression, Sequence contextSequence,
-			AccessContext accessCtx) throws XPathException {
 		// TODO Auto-generated method stub
 		return null;
 	}

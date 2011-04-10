@@ -76,6 +76,10 @@
             raise-error-on-failed-retrieval="no">
         
         <builtin-modules>
+            <!--
+                Animotron
+            -->
+            <module class="org.animotron.exist.xquery.functions.AnimoModule" uri="animo"/>
             <!-- 
                 Modularized Indexes 
             -->
