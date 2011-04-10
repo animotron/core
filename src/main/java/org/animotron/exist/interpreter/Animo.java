@@ -99,15 +99,17 @@ public class Animo {
 
 				if (input.getLocalName().equals(
 						Keywords.SELF_INSTANCE.keyword())) {
-					// TODO: process self:instance
-
+					// process self:instance 
+					// return local-name() as text()
 				} else {
 					// TODO: process self:*
 
 				}
 
 			} else if (ns.equals(Namespaces.IC.namespace())) {
-				// TODO: skip ic:*
+				// skip ic:* 
+				// return input as is
+				return (NodeSet) input;
 
 			} else {
 
