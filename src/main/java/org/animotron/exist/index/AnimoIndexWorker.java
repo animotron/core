@@ -201,7 +201,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		}
 	}
 	
-	private NodeProxy getOrCreateNode(String name) {
+	public NodeProxy getOrCreateNode(String name) {
 		NodeProxy node = names.get(name);
 		
 		if (node == null) {
@@ -213,7 +213,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		return node;
 	}
 
-	private NodeProxy getNode(String name) {
+	public NodeProxy getNode(String name) {
 		return names.get(name);
 	}
 	

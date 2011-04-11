@@ -20,146 +20,190 @@ package org.animotron.exist.interpreter;
 
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
+import org.animotron.exist.index.AnimoIndex;
+import org.animotron.exist.index.AnimoIndexWorker;
 import org.exist.dom.NewArrayNodeSet;
+import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
-import org.exist.memtree.NodeImpl;
-import org.exist.memtree.TextImpl;
+import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.XPathException;
-import org.exist.xquery.value.SequenceIterator;
+import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Type;
-import org.w3c.dom.Node;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
 public class Animo {
-
+	
+	private XQueryContext context;
+	
+	private NodeProxy source;
+	
+	public Animo(XQueryContext context) throws XPathException{
+		this.context = context;
+		this.source = (NodeProxy) context.getStaticallyKnownDocuments();
+	}
+	
 	public NodeSet process(NodeSet flow) throws XPathException {
 		return process(flow, null);
-	}
-
+	};
+	
 	public NodeSet process(NodeSet flow, NodeSet context) throws XPathException {
-		return process(flow, null, context, null, null);
-	}
-
-	private NodeSet process(NodeSet flow, NodeSet stackFlow, NodeSet context,
-			NodeSet stackContext, NodeSet source) throws XPathException {
 		NodeSet res = new NewArrayNodeSet();
-		SequenceIterator i = flow.iterate();
-		while (i.hasNext()) {
-			NodeImpl input = (NodeImpl) i.nextItem();
-			NodeSet set = process(input, stackFlow, context, stackContext,
-					source);
-			res.addAll(set);
+		this.context.pushDocumentContext();
+		MemTreeBuilder builder = this.context.getDocumentBuilder();
+		process(flow, context, builder);
+		res.add(builder.getDocument());
+		this.context.popDocumentContext();
+		return res;
+	}
+	
+	private NodeSet children(NodeProxy node){
+		NodeSet res = new NewArrayNodeSet();;
+		for (NodeProxy i : node){
+			res.add(i);
 		}
 		return res;
 	}
 
-	private NodeSet process(NodeImpl input, NodeSet stackFlow, NodeSet context,
-			NodeSet stackContext, NodeSet source) throws XPathException {
+	private void process(NodeSet input, NodeSet context, MemTreeBuilder builder) throws XPathException {
+		for (NodeProxy i : input){
+			process(i, context, builder);
+		}
+	}
+
+	private void process(NodeProxy input, NodeSet context, MemTreeBuilder builder) throws XPathException {
 
 		switch (input.getType()) {
 
 		case Type.ELEMENT: {
 
-			String ns = input.getNamespaceURI();
+			String ns = input.getNode().getNamespaceURI();
+			String name = input.getNode().getLocalName();
 
 			if (Namespaces.AN.equals(ns)) {
 
-				String name = input.getLocalName();
-
 				if (Keywords.AN_EMPTY.keyword().equals(name)) {
-					// TODO: process an:empty
+					// process an:empty
+					// return nothing
+					return;
 
 				} else if (Keywords.AN_SELF.keyword().equals(name)) {
-					// TODO: process an:self
+					// process an:self
+					// return root
+					builder.addReferenceNode(input.getDocument().getFirstChildProxy());
 
 				} else if (Keywords.AN_CONTENT.keyword().equals(name)) {
-					// TODO: process an:content
+					// process an:content
+					// process children
+					process((NodeSet)input, context, builder);
 
 				} else {
-					// TODO: process an:*
+					// process reference an:*
+					processReference(input, context, builder);
 				}
 
 			} else if (Namespaces.ANY.equals(ns)) {
 				// TODO: process any:*
+				return;
 
 			} else if (Namespaces.ALL.equals(ns)) {
 				// TODO: process all:*
+				return;
 
 			} else if (Namespaces.PTRN.equals(ns)) {
 				// TODO: process ptrn:*
+				return;
 
 			} else if (Namespaces.GET.equals(ns)) {
 				// TODO: process get:*
+				return;
 
 			} else if (Namespaces.SELF.equals(ns)) {
 
-				if (Keywords.SELF_INSTANCE.keyword().equals(input.getLocalName())) {
+				if (Keywords.SELF_INSTANCE.keyword().equals(name)) {
 					// process self:instance 
-					// return local-name() as text()
-					return (NodeSet) new TextImpl(input.getDocument(), input.getNodeNumber());
+					// return local name
+					builder.characters(name);
 					
 				} else {
 					// TODO: process self:*
+					return;
 
 				}
 
-			} else if (ns.equals(Namespaces.IC.namespace())) {
+			} else if (Namespaces.IC.equals(ns)) {
 				// skip ic:* 
-				// return input as is
-				return (NodeSet) input;
+				// return as is 
+				builder.addReferenceNode(input);
+
+			} else if (Namespaces.DO.equals(ns)) {
+				
+				if (Keywords.DO_SKIP.keyword().equals(name)) {
+					// process do:skip
+					// return children
+					for (NodeProxy i : input){
+						builder.addReferenceNode(i);
+					}
+
+				} else if (Keywords.DO_XQUERY.keyword().equals(name)) {
+					// TODO: process do:xquery
+					return;
+
+				} else if (Keywords.DO_XSLT.keyword().equals(name)) {
+					// TODO: process do:xslt
+					return;
+					
+				}
+
+			} else if (Namespaces.USE.equals(ns)) {
+				
+				if (Keywords.USE_FLOW_STACK.keyword().equals(name)) {
+					// TODO: process use:flow-stack
+					return;
+
+				} else if (Keywords.USE_CONTEXT_STACK.keyword().equals(name)) {
+					// TODO: process use:stack
+					return;
+
+				} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)) {
+					// TODO: process use:context
+					return;
+
+				} else if (Keywords.USE_CONTEXT.keyword().equals(name)) {
+					// TODO: process use:CONTEXT
+					return;
+
+				} else if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)) {
+					// TODO: process use:repository
+					return;
+					
+				}
 
 			} else {
-
-				QName keyword = input.getQName();
-
-				if (Keywords.DO_SKIP.equals(keyword)) {
-					// TODO: process do:skip
-
-				} else if (Keywords.DO_XQUERY.equals(keyword)) {
-					// TODO: process do:xquery
-
-				} else if (Keywords.DO_XSLT.equals(keyword)) {
-					// TODO: process do:xslt
-
-				} else if (Keywords.USE_FLOW_STACK.equals(keyword)) {
-					// TODO: process use:flow-stack
-
-				} else if (Keywords.USE_CONTEXT_STACK.equals(keyword)) {
-					// TODO: process use:stack
-
-				} else if (Keywords.USE_LOCAL_CONTEXT.equals(keyword)) {
-					// TODO: process use:context
-
-				} else if (Keywords.USE_CONTEXT.equals(keyword)) {
-					// TODO: process use:CONTEXT
-
-				} else if (Keywords.USE_GLOBAL_CONTEXT.equals(keyword)) {
-					// TODO: process use:repository
-
-				} else {
-					// process element()
-					Node node = input.getNode();
-					return process(node, stackFlow, context, stackContext,
-							source);
-				}
-
+				// process element()
+				builder.startElement(new QName(name, ns), null);
+				process((NodeSet)input, context, builder);
+				builder.endElement();
 			}
+
 		}
 
 		default:
 			// process node()
-			return (NodeSet) input;
-
+			builder.addReferenceNode(input);
+			
 		}
+		
 	}
-
-	private NodeSet process(Node input, NodeSet stackFlow, NodeSet context,
-			NodeSet stackContext, NodeSet source) throws XPathException {
-		return null;
+	
+	private void processReference(NodeProxy input, NodeSet context, MemTreeBuilder builder) throws XPathException {
+		AnimoIndexWorker wk = (AnimoIndexWorker) this.context.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID); 
+		NodeProxy res = wk.getNode(input.getNode().getLocalName());
+		NodeSet newContext = process(children(input), context);
+		process(res, newContext, builder);
 	}
 
 }
