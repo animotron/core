@@ -39,11 +39,10 @@ public class Animo {
 	
 	private XQueryContext context;
 	
-	private NodeProxy source;
+	private Sources source = Sources.GLOBAL_CONTEXT;
 	
 	public Animo(XQueryContext context) throws XPathException{
 		this.context = context;
-		this.source = (NodeProxy) context.getStaticallyKnownDocuments();
 	}
 	
 	public NodeSet process(NodeSet flow) throws XPathException {
@@ -161,24 +160,34 @@ public class Animo {
 			} else if (Namespaces.USE.equals(ns)) {
 				
 				if (Keywords.USE_FLOW_STACK.keyword().equals(name)) {
-					// TODO: process use:flow-stack
-					return;
+					// process use:flow-stack
+					// process children use flow stack as source of instances
+					source = Sources.FLOW_STACK;
+					process((NodeSet)input, context, builder);
 
 				} else if (Keywords.USE_CONTEXT_STACK.keyword().equals(name)) {
-					// TODO: process use:stack
-					return;
+					// process use:stack
+					// process children use context stack as source of instances
+					source = Sources.CONTEXT_STACK;
+					process((NodeSet)input, context, builder);
 
 				} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)) {
-					// TODO: process use:context
-					return;
+					// process use:context
+					// process children use local context as source of instances
+					source = Sources.LOCAL_CONTEXT;
+					process((NodeSet)input, context, builder);
 
 				} else if (Keywords.USE_CONTEXT.keyword().equals(name)) {
-					// TODO: process use:CONTEXT
-					return;
+					// process use:CONTEXT
+					// process children use local context and context source as source of instances
+					source = Sources.CONTEXT;
+					process((NodeSet)input, context, builder);
 
 				} else if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)) {
-					// TODO: process use:repository
-					return;
+					// process use:repository
+					// process children use global context (repository) as source of instances
+					source = Sources.GLOBAL_CONTEXT;
+					process((NodeSet)input, context, builder);
 					
 				}
 
