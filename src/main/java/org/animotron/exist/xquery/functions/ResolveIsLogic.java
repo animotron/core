@@ -45,7 +45,7 @@ public class ResolveIsLogic extends BasicFunction {
 		new FunctionParameterSequenceType("name", Type.STRING, Cardinality.EXACTLY_ONE, "The name for resolving")
 	};
 	
-	private static FunctionReturnSequenceType RES = new FunctionReturnSequenceType(Type.STRING, Cardinality.ZERO_OR_MORE, "Resolved node set");
+	private static FunctionReturnSequenceType RES = new FunctionReturnSequenceType(Type.STRING, Cardinality.ZERO_OR_MORE, "Returns resolved node set");
 
 	public final static FunctionSignature[] signature = {
 		new FunctionSignature(
