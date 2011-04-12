@@ -47,7 +47,7 @@ public class Process extends BasicFunction {
 
 	public final static FunctionSignature[] signature = {
 		new FunctionSignature(
-			new QName("process", AnimoModule.NAMESPACE_URI, AnimoModule.PREFIX),
+			new QName(NAME, AnimoModule.NAMESPACE_URI, AnimoModule.PREFIX),
 			"Process flow with context",
 			new SequenceType[]{ARG1, ARG2}, RES),
 		new FunctionSignature(
@@ -63,7 +63,7 @@ public class Process extends BasicFunction {
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 		Animo animo = new Animo(context); 
-		Sequence res = args.length == 1 ? animo.process((NodeSet)args[1]) : animo.process((NodeSet)args[1], (NodeSet)args[2]);
+		Sequence res = args.length == 1 ? animo.process((NodeSet)args[0]) : animo.process((NodeSet)args[0], (NodeSet)args[1]);
 		return res;
 	}
 
