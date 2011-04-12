@@ -38,11 +38,13 @@ public class AnimoModule extends AbstractInternalModule {
     public final static String RELEASED_IN_VERSION = "eXist-1.5";
     
     public static final FunctionDef[] functions = {
+        new FunctionDef(Process.signature[0], Process.class),
+        new FunctionDef(Process.signature[1], Process.class),
         new FunctionDef(ResolveIsLogic.signature[0], ResolveIsLogic.class),
         new FunctionDef(ResolveIsLogic.signature[1], ResolveIsLogic.class)
     };
     
-	public AnimoModule(FunctionDef[] functions, Map<String, List<? extends Object>> parameters) {
+	public AnimoModule(Map<String, List<? extends Object>> parameters) {
 		super(functions, parameters);
 	}
 
