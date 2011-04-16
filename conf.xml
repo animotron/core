@@ -208,6 +208,9 @@
                 <parameter name="processorAdapter" value="org.exist.xquery.modules.xslfo.ApacheFopProcessorAdapter"/>
             </module>
             -->
+            
+            <module class="org.animotron.exist.xquery.functions.AnimoModule" uri="animo"/>
+            
         </builtin-modules>
     </xquery>
 
