@@ -13,14 +13,14 @@ import org.exist.dom.NodeSet;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class AnimoNodeSet {
+public class AnimoContext {
 	
 	private NodeSet set;
 	
 	private Map <String, NodeSet> instances = new HashMap <String, NodeSet> ();
 	private Map <String, NodeSet> properties = new HashMap <String, NodeSet> ();
 	
-	public AnimoNodeSet(NodeSet set){
+	public AnimoContext(NodeSet set){
 		this.set = set;
 		scan(set);
 	}

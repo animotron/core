@@ -20,7 +20,7 @@ package org.animotron.exist.xquery;
 
 import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.AnimoIndexWorker;
-import org.animotron.exist.interpreter.AnimoNodeSet;
+import org.animotron.exist.interpreter.AnimoContext;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
@@ -80,7 +80,7 @@ public class ResolveReference extends BasicFunction {
 				res.addAll(set);
 			}
 		} else {
-			AnimoNodeSet source = new AnimoNodeSet(args[1].toNodeSet());
+			AnimoContext source = new AnimoContext(args[1].toNodeSet());
 			while (i.hasNext()){
 				String name = i.nextItem().getStringValue();
 				NodeSet set = source.resolveReference(name);
