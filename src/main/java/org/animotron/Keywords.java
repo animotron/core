@@ -72,4 +72,8 @@ public enum Keywords {
 		return this.qname.equals(qname);
 	}
 	
+	public boolean equals(String keyword, String namespace){
+		return this.namespace.equals(namespace) && this.keyword.equals(keyword);
+	}
+	
 }

@@ -40,10 +40,14 @@ public class Process extends BasicFunction {
 	
 	private static String NAME = "process"; 
 	
-	private static SequenceType ARG1 = new FunctionParameterSequenceType("flow", Type.NODE, Cardinality.ZERO_OR_MORE, "The processed animo flow");
-	private static SequenceType ARG2 = new FunctionParameterSequenceType("context", Type.NODE, Cardinality.ZERO_OR_MORE, "The context");
+	private static SequenceType ARG1 = 
+		new FunctionParameterSequenceType("flow", Type.NODE, Cardinality.ZERO_OR_MORE, "The processed animo flow");
 	
-	private static FunctionReturnSequenceType RES = new FunctionReturnSequenceType(Type.NODE, Cardinality.ZERO_OR_MORE, "Returns processed node set");
+	private static SequenceType ARG2 = 
+		new FunctionParameterSequenceType("context", Type.NODE, Cardinality.ZERO_OR_MORE, "The context");
+	
+	private static FunctionReturnSequenceType RES = 
+		new FunctionReturnSequenceType(Type.NODE, Cardinality.ZERO_OR_MORE, "Returns processed node set");
 
 	public final static FunctionSignature[] signature = {
 		new FunctionSignature(
@@ -63,7 +67,7 @@ public class Process extends BasicFunction {
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 		Animo animo = new Animo(context); 
-		Sequence res = args.length == 1 ? animo.process((NodeSet)args[0]) : animo.process((NodeSet)args[0], (NodeSet)args[1]);
+		Sequence res = args.length == 1 ? animo.process(args[0].toNodeSet()) : animo.process(args[0].toNodeSet(), args[1]);
 		return res;
 	}
 

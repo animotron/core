@@ -28,9 +28,12 @@ import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.FunctionParameterSequenceType;
 import org.exist.xquery.value.FunctionReturnSequenceType;
+import org.exist.xquery.value.Item;
 import org.exist.xquery.value.Sequence;
+import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.SequenceType;
 import org.exist.xquery.value.Type;
+import org.exist.xquery.value.ValueSequence;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -42,10 +45,11 @@ public class ResolveIsLogic extends BasicFunction {
 	private static String DOWN_NAME = "resolve-down-is-logic"; 
 	
 	private static SequenceType[] ARG = new SequenceType[] {
-		new FunctionParameterSequenceType("name", Type.STRING, Cardinality.EXACTLY_ONE, "The name for resolving")
+		new FunctionParameterSequenceType("name", Type.STRING, Cardinality.ONE_OR_MORE, "The name for resolving")
 	};
 	
-	private static FunctionReturnSequenceType RES = new FunctionReturnSequenceType(Type.STRING, Cardinality.ZERO_OR_MORE, "Returns resolved node set");
+	private static FunctionReturnSequenceType RES = 
+		new FunctionReturnSequenceType(Type.NODE, Cardinality.ZERO_OR_MORE, "Returns resolved node set");
 
 	public final static FunctionSignature[] signature = {
 		new FunctionSignature(
@@ -64,10 +68,19 @@ public class ResolveIsLogic extends BasicFunction {
 
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
-		String name = args[0].getStringValue();
+		SequenceIterator i = args[0].iterate();
 		AnimoIndexWorker wk = (AnimoIndexWorker) context.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
-		Sequence res = isCalledAs(UP_NAME) ? wk.resolveUpIsLogic(name) : wk.resolveDownIsLogic(name);
+		Sequence res = new ValueSequence();
+		if (isCalledAs(UP_NAME)){
+			while (i.hasNext()){
+				res.addAll(wk.resolveUpIsLogic(i.nextItem().getStringValue()));
+			}
+		} else {
+			while (i.hasNext()){
+				res.addAll(wk.resolveDownIsLogic(i.nextItem().getStringValue()));
+			}
+		}
 		return res;
 	}
-
+	
 }

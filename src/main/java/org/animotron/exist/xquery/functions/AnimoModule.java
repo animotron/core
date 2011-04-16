@@ -40,8 +40,11 @@ public class AnimoModule extends AbstractInternalModule {
     public static final FunctionDef[] functions = {
         new FunctionDef(Process.signature[0], Process.class),
         new FunctionDef(Process.signature[1], Process.class),
+        new FunctionDef(ResolveReference.signature[0], ResolveReference.class),
+        new FunctionDef(ResolveReference.signature[1], ResolveReference.class),
         new FunctionDef(ResolveIsLogic.signature[0], ResolveIsLogic.class),
-        new FunctionDef(ResolveIsLogic.signature[1], ResolveIsLogic.class)
+        new FunctionDef(ResolveIsLogic.signature[1], ResolveIsLogic.class),
+        new FunctionDef(GetProperty.signature, GetProperty.class)
     };
     
 	public AnimoModule(Map<String, List<? extends Object>> parameters) {
