@@ -16,12 +16,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.xquery.functions;
+package org.animotron.exist.xquery;
 
 import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.AnimoIndexWorker;
-import org.animotron.exist.interpreter.AnimoNodeSet;
-import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;
@@ -30,6 +28,7 @@ import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.FunctionParameterSequenceType;
 import org.exist.xquery.value.FunctionReturnSequenceType;
+import org.exist.xquery.value.Item;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.SequenceType;
@@ -40,38 +39,46 @@ import org.exist.xquery.value.ValueSequence;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class GetProperty extends BasicFunction {
+public class ResolveIsLogic extends BasicFunction {
 	
-	private static String NAME = "get-property"; 
+	private static String UP_NAME = "resolve-up-is-logic"; 
+	private static String DOWN_NAME = "resolve-down-is-logic"; 
 	
-	private static SequenceType ARG1 = 
-		new FunctionParameterSequenceType("name", Type.STRING, Cardinality.ONE_OR_MORE, "The name of property");
-	
-	private static SequenceType ARG2 = 
-		new FunctionParameterSequenceType("source", Type.NODE, Cardinality.ZERO_OR_MORE, "The source of properties");
+	private static SequenceType[] ARG = new SequenceType[] {
+		new FunctionParameterSequenceType("name", Type.STRING, Cardinality.ONE_OR_MORE, "The name for resolving")
+	};
 	
 	private static FunctionReturnSequenceType RES = 
-		new FunctionReturnSequenceType(Type.NODE, Cardinality.ZERO_OR_MORE, "Returns properties nodes");
+		new FunctionReturnSequenceType(Type.NODE, Cardinality.ZERO_OR_MORE, "Returns resolved node set");
 
-	public final static FunctionSignature signature = 
+	public final static FunctionSignature[] signature = {
 		new FunctionSignature(
-			new QName(NAME, AnimoModule.NAMESPACE_URI, AnimoModule.PREFIX),
-			"Get properties: \"have\" (\"ic\") relations.",
-			new SequenceType[] {ARG1, ARG2}, RES);
+			new QName(UP_NAME, AnimoModule.NAMESPACE_URI, AnimoModule.PREFIX),
+			"Resolve \"is\" logic up.",
+			ARG, RES),
+		new FunctionSignature(
+			new QName(DOWN_NAME, AnimoModule.NAMESPACE_URI, AnimoModule.PREFIX),
+			"Resolve \"is\" logic down.",
+			ARG, RES)
+	};
 	
-	public GetProperty(XQueryContext context, FunctionSignature signature) {
+	public ResolveIsLogic(XQueryContext context, FunctionSignature signature) {
 		super(context, signature);
 	}
 
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 		SequenceIterator i = args[0].iterate();
+		AnimoIndexWorker wk = (AnimoIndexWorker) context.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
 		Sequence res = new ValueSequence();
-		AnimoNodeSet source = new AnimoNodeSet(args[1].toNodeSet());  
-		while (i.hasNext()){
-			String name = i.nextItem().getStringValue();
-			NodeSet set = source.getProperty(name);
-			res.addAll(set);
+		if (isCalledAs(UP_NAME)){
+			while (i.hasNext()){
+				res.addAll(wk.resolveUpIsLogic(i.nextItem().getStringValue()));
+			}
+		} else {
+			while (i.hasNext()){
+				res.addAll(wk.resolveDownIsLogic(i.nextItem().getStringValue()));
+			}
 		}
 		return res;
 	}
