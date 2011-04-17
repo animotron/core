@@ -33,6 +33,8 @@ public class Controller {
 
 	private Database db;
 	
+	private NodeSet use = new NewArrayNodeSet();
+	
 	public Controller(Database db) {
 		this.db = db;
 	}
@@ -40,12 +42,17 @@ public class Controller {
 	public AnimoIndexWorker getIndexWorker() {
         return (AnimoIndexWorker) db.getActiveBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
 	}
+	
+	public void pushContext(NodeSet context) {
+		//TODO: code
+	}
+	
+	protected void addUse(NodeProxy node) {
+		use.add(node);
+	}
 
 	public NodeSet getUse(NodeSet set) {
-		//XXX: code
-//      let $query := concat("unordered($CONTEXT/", local:name-sequence($is, "descendant-or-self::use"), ")")
-//      let $use   := local:eval-query($query, (), $context, ())
-		return set;
+		return use.intersection(set);
 	}
 	
 	//TODO: write tests
