@@ -7,9 +7,12 @@ import net.sf.saxon.type.Type;
 
 import org.animotron.Namespaces;
 import org.exist.dom.QName;
+import org.exist.xquery.AnalyzeContextInfo;
 import org.exist.xquery.Constants;
+import org.exist.xquery.Expression;
 import org.exist.xquery.LocationStep;
 import org.exist.xquery.NameTest;
+import org.exist.xquery.PathExpr;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Sequence;
@@ -34,9 +37,14 @@ public class AnimoContext {
 	private Sequence scan (Map <String, Sequence> map, String name, Namespaces ns, int axis) throws XPathException{
 		Sequence res = map.get(name);
 		if (res == null){
-			LocationStep step = new LocationStep(this.context, axis, new NameTest(Type.ELEMENT, new QName (name, ns.namespace())));
-			step.resetState(true);
-			res = step.eval(set);
+			LocationStep step = new LocationStep(context, axis, new NameTest(Type.ELEMENT, new QName (name, ns.namespace())));
+			AnalyzeContextInfo info = new AnalyzeContextInfo(context);
+			info.setFlags(Expression.UNORDERED);
+			PathExpr exp = new PathExpr(context);
+			exp.add(step);
+			exp.analyze(info);
+			exp.reset();
+			res = exp.eval(set);
 			map.put(name, res);
 		}
 		return res;
