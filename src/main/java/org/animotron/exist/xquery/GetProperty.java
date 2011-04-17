@@ -18,8 +18,6 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.exist.index.AnimoIndex;
-import org.animotron.exist.index.AnimoIndexWorker;
 import org.animotron.exist.interpreter.AnimoContext;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
@@ -67,10 +65,10 @@ public class GetProperty extends BasicFunction {
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 		SequenceIterator i = args[0].iterate();
 		Sequence res = new ValueSequence();
-		AnimoContext source = new AnimoContext(args[1].toNodeSet());  
+		AnimoContext source = new AnimoContext(args[1], context);  
 		while (i.hasNext()){
 			String name = i.nextItem().getStringValue();
-			NodeSet set = source.getProperty(name);
+			Sequence set = source.getProperty(name);
 			res.addAll(set);
 		}
 		return res;

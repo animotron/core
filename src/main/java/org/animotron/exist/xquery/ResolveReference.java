@@ -80,10 +80,10 @@ public class ResolveReference extends BasicFunction {
 				res.addAll(set);
 			}
 		} else {
-			AnimoContext source = new AnimoContext(args[1].toNodeSet());
+			AnimoContext source = new AnimoContext(args[1].toNodeSet(), context);
 			while (i.hasNext()){
 				String name = i.nextItem().getStringValue();
-				NodeSet set = source.resolveReference(name);
+				Sequence set = source.resolveReference(name);
 				res.addAll(set);
 			}
 		}
