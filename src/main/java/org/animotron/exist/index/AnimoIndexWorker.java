@@ -292,6 +292,20 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		return set;
 	}
 
+	public NodeSet resolveUpIsLogic(NodeSet s) {
+		NodeSet result = new NewArrayNodeSet(5);
+		
+		for (NodeProxy node : s) {
+		
+			if (!upIsRelations.containsKey(node))
+				continue;
+		
+			resolveUpIsLogic(node, result);
+		}
+		//TODO: to check: is empty?
+		return result;
+	}
+
 	private void resolveUpIsLogic(NodeProxy node, NodeSet set) {
 		if (!upIsRelations.containsKey(node))
 			return;
@@ -308,21 +322,35 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		if (!downIsRelations.containsKey(node))
 			return NodeSet.EMPTY_SET;
 		
-		NodeSet set = new NewArrayNodeSet(5);
+		NodeSet result = new NewArrayNodeSet(5);
 		
-		resolveDownIsLogic(node, set);
+		resolveDownIsLogic(node, result);
 		
-		return set;
+		return result;
 	}
 
-	private void resolveDownIsLogic(NodeProxy node, NodeSet set) {
+	public NodeSet resolveDownIsLogic(NodeSet set) {
+		NodeSet result = new NewArrayNodeSet(5);
+		
+		for (NodeProxy node : set) {
+			if (!downIsRelations.containsKey(node))
+				continue;
+		
+			resolveDownIsLogic(node, result);
+		}
+		//TODO: to check: is empty?
+		return result;
+	}
+
+	private void resolveDownIsLogic(NodeProxy node, NodeSet result) {
 		if (!downIsRelations.containsKey(node))
 			return;
 		
 		for (NodeProxy n : downIsRelations.get(node)) {
-			set.add(n);
-			resolveDownIsLogic(n, set);
+			result.add(n);
+			resolveDownIsLogic(n, result);
 		}
 	}
 	
+	//TODO: cycled relations (up & down relations)
 }
