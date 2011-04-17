@@ -6,74 +6,48 @@ import java.util.Map;
 import net.sf.saxon.type.Type;
 
 import org.animotron.Namespaces;
-import org.exist.dom.ElementImpl;
-import org.exist.dom.NewArrayNodeSet;
-import org.exist.dom.NodeProxy;
-import org.exist.dom.NodeSet;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.exist.dom.QName;
+import org.exist.xquery.Constants;
+import org.exist.xquery.LocationStep;
+import org.exist.xquery.NameTest;
+import org.exist.xquery.XPathException;
+import org.exist.xquery.XQueryContext;
+import org.exist.xquery.value.Sequence;
 
 public class AnimoContext {
 	
-	private NodeSet set;
+	private Sequence set;
+	private XQueryContext context;
 	
-	private Map <String, NodeSet> instances = new HashMap <String, NodeSet> ();
-	private Map <String, NodeSet> properties = new HashMap <String, NodeSet> ();
+	private Map <String, Sequence> instances = new HashMap <String, Sequence> ();
+	private Map <String, Sequence> properties = new HashMap <String, Sequence> ();
 	
-	public AnimoContext(NodeSet set){
+	public AnimoContext(Sequence set, XQueryContext context){
+		this.context = context;
 		this.set = set;
-		scan(set);
 	}
 	
-	public NodeSet getNodes(){
+	public Sequence getNodes(){
 		return set;
 	}
 	
-	private void scan(ElementImpl node, Map <String, NodeSet> map){
-		String name = node.getLocalName();
-		NodeSet set = map.get(name);
-		if (set == null) {
-			set = new NewArrayNodeSet();
-			map.put(name, set);
+	private Sequence scan (Map <String, Sequence> map, String name, Namespaces ns, int axis) throws XPathException{
+		Sequence res = map.get(name);
+		if (res == null){
+			LocationStep step = new LocationStep(this.context, axis, new NameTest(Type.ELEMENT, new QName (name, ns.namespace())));
+			step.resetState(true);
+			res = step.eval(set);
+			map.put(name, res);
 		}
-		NodeProxy proxy = new NodeProxy(node);
-		set.add(proxy);
+		return res;
 	}
 	
-	private void scan(ElementImpl node){
-		String ns = node.getNamespaceURI();
-		if (Namespaces.THE.equals(ns)){
-			scan(node, instances);
-		} else if (Namespaces.HAVE.equals(ns) || Namespaces.IC.equals(ns)){
-			scan(node, properties);
-		}
-		scan(node.getChildNodes());
+	public Sequence resolveReference(String name) throws XPathException{
+		return scan(instances, name, Namespaces.THE, Constants.SELF_AXIS); 
 	}
 	
-	private void scan(NodeSet set){
-		for (NodeProxy i : set){
-			if (i.getType() == Type.ELEMENT){
-				ElementImpl node = (ElementImpl) i.getNode();
-				scan(node);
-			}
-		}
-	}
-	
-	private void scan(NodeList set){
-		for (int i = 0; i < set.getLength(); i++){
-			Node node = set.item(i);
-			if (node.getNodeType() == Type.ELEMENT){
-				scan((ElementImpl)node);
-			}
-		}
-	}
-	
-	public NodeSet resolveReference(String name){
-		return instances.get(name); 
-	}
-	
-	public NodeSet getProperty(String name){
-		return properties.get(name); 
+	public Sequence getProperty(String name) throws XPathException{
+		return scan(properties, name, Namespaces.HAVE, Constants.DESCENDANT_SELF_AXIS); 
 	}
 	
 }
