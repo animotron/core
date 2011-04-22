@@ -4,25 +4,21 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import org.exist.collections.Collection;
-import org.exist.dom.DocumentSet;
+import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
-import org.exist.dom.StoredNode;
-import org.exist.numbering.NodeId;
-import org.exist.xquery.Cardinality;
 import org.exist.xquery.XPathException;
-import org.exist.xquery.value.AtomicValue;
+import org.exist.xquery.value.AbstractSequence;
 import org.exist.xquery.value.Item;
 import org.exist.xquery.value.MemoryNodeSet;
+import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
 import org.exist.xquery.value.ValueSequence;
 
-public class AnimoSequence implements Sequence {
-	
-	
+public class AnimoSequence extends AbstractSequence {
+
 	private Vector <Sequence> vector = new Vector <Sequence> ();
-	private Sequence items = Sequence.EMPTY_SEQUENCE;
 	private int itemType = Type.ANY_TYPE;
 	private int size = 0;
 	private boolean sizeChanged = false;
@@ -43,17 +39,6 @@ public class AnimoSequence implements Sequence {
         else
             itemType = Type.getCommonSuperType(type, itemType);
 		sizeChanged = true;
-		items = null;
-	}
-	
-	public Sequence getItems() throws XPathException{
-		if (items == null){
-			items = new ValueSequence();
-			for (Sequence i : vector){
-				items.addAll(i);
-			}
-		}
-		return items;
 	}
 	
 	public void push(Sequence seq) throws XPathException{
@@ -63,6 +48,7 @@ public class AnimoSequence implements Sequence {
 		reset(seq.getItemType());
 	}
 	
+	@Override
 	public void add(Item item) throws XPathException {
 		if (vector.isEmpty()){
 			Sequence seq = new ValueSequence();
@@ -74,28 +60,43 @@ public class AnimoSequence implements Sequence {
 		reset(item.getType());
 	}
 
-	public void addAll(Sequence other) throws XPathException {
-		if (other.isEmpty())
-			return;
-		if (vector.isEmpty())
-			vector.add(other);
-		else
-			getFirst().addAll(other);
-		reset(other.getItemType());
+	public void removeDuplicates() {
+		for (Sequence i : vector) {
+			i.removeDuplicates();
+		}
 	}
 
+	public NodeSet toNodeSet() throws XPathException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public MemoryNodeSet toMemNodeSet() throws XPathException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public int getItemType() {
 		return itemType;
 	}
 
+	@Override
 	public SequenceIterator iterate() throws XPathException {
 		return new AnimoSequenceIterator();
 	}
 
+	@Override
 	public SequenceIterator unorderedIterator() throws XPathException {
 		return iterate();
 	}
 
+	@Override
+	public Iterator<Collection> getCollectionIterator() {
+		return new CollectionIterator();
+	}
+
+	@Override
 	public int getItemCount() {
 		if (sizeChanged){
 			size = 0;
@@ -111,34 +112,22 @@ public class AnimoSequence implements Sequence {
 		return vector.size();
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return vector.isEmpty();
 	}
 
+	@Override
 	public boolean hasOne() {
 		return vector.size() == 1 && getFirst().hasOne();
 	}
 
+	@Override
 	public boolean hasMany() {
 		return vector.size() > 1 || getFirst().hasMany();
 	}
-
-	public void removeDuplicates() {
-		for (Sequence i : vector) {
-			i.removeDuplicates();
-		}
-	}
-
-	public int getCardinality() {
-		if (isEmpty())
-			return Cardinality.EMPTY;
-		if (hasOne())
-			return Cardinality.EXACTLY_ONE;
-		if (hasMany())
-			return Cardinality.ONE_OR_MORE;
-		throw new IllegalArgumentException("Illegal argument");
-	}
-
+	
+	@Override
 	public Item itemAt(int pos) {
 		Sequence seq = null;
 		int index = pos;
@@ -151,98 +140,6 @@ public class AnimoSequence implements Sequence {
 			index = pos;
 		}
 		return seq == null ? null : seq.itemAt(index);
-	}
-
-	public AtomicValue convertTo(int requiredType) throws XPathException {
-		return getItems().convertTo(requiredType);
-	}
-
-	public String getStringValue() throws XPathException {
-		return getItems().getStringValue();
-	}
-
-	public boolean effectiveBooleanValue() throws XPathException {
-		return getItems().effectiveBooleanValue();
-	}
-
-	public NodeSet toNodeSet() throws XPathException {
-		return getItems().toNodeSet();
-	}
-
-	public MemoryNodeSet toMemNodeSet() throws XPathException {
-		return getItems().toMemNodeSet();
-	}
-
-	public DocumentSet getDocumentSet() {
-		try {
-			return getItems().getDocumentSet();
-		} catch (XPathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public Iterator<Collection> getCollectionIterator() {
-		try {
-			return getItems().getCollectionIterator();
-		} catch (XPathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	public int conversionPreference(Class<?> javaClass) {
-		try {
-			return getItems().conversionPreference(javaClass);
-		} catch (XPathException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return 0;
-	}
-
-	public Object toJavaObject(Class<?> target) throws XPathException {
-		return getItems().toJavaObject(target);
-	}
-
-	public boolean isCached() {
-		return false;
-	}
-
-	public void setIsCached(boolean cached) {
-		//
-	}
-
-	public void clearContext(int contextId) throws XPathException {
-		//
-	}
-
-	public void setSelfAsContext(int contextId) throws XPathException {
-		//
-	}
-
-	public boolean isPersistentSet() {
-		return false;
-	}
-
-	public void nodeMoved(NodeId oldNodeId, StoredNode newNode) {
-		// 
-	}
-
-	public boolean isCacheable() {
-		//
-		return false;
-	}
-
-	public int getState() {
-		//
-		return 0;
-	}
-
-	public boolean hasChanged(int previousState) {
-		return false;
 	}
 	
 	private class AnimoSequenceIterator implements SequenceIterator {
@@ -276,6 +173,52 @@ public class AnimoSequence implements Sequence {
 		}
 
 	}
+	
+    private class CollectionIterator implements Iterator<Collection> {
+
+    	private Collection next = null;
+    	private SequenceIterator i;
+		
+        CollectionIterator() {
+        	try {
+				i = iterate();
+			} catch (XPathException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+            next();
+        }
+
+        public boolean hasNext() {
+            return next != null;
+        }
+
+        public Collection next() {
+        	
+            Collection old = next;
+            
+            while (i.hasNext()) {
+            	Item item = i.nextItem();
+                if (Type.subTypeOf(item.getType(), Type.NODE)) {
+                    NodeValue node = (NodeValue) item;
+                    if (node.getImplementationType() == NodeValue.PERSISTENT_NODE) {
+                        NodeProxy p = (NodeProxy) node;
+                        if (!p.getDocument().getCollection().equals(old)) {
+                            next = p.getDocument().getCollection();
+                            break;
+                        }
+                    }
+                }
+            }
+            return old;
+        }
+
+        public void remove() {
+             // not needed
+            throw new IllegalStateException();
+        }
+        
+    }
 
 
 }
