@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.exist.collections.Collection;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
+import org.exist.memtree.InMemoryNodeSet;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.value.AbstractSequence;
 import org.exist.xquery.value.Item;
@@ -41,7 +42,8 @@ public class AnimoSequence extends AbstractSequence {
 		sizeChanged = true;
 	}
 	
-	public void push(Sequence seq) throws XPathException{
+	@Override
+	public void addAll(Sequence seq) throws XPathException{
 		if (seq.isEmpty())
 			return;
 		vector.insertElementAt(seq, 0);
@@ -61,19 +63,21 @@ public class AnimoSequence extends AbstractSequence {
 	}
 
 	public void removeDuplicates() {
-		for (Sequence i : vector) {
-			i.removeDuplicates();
-		}
+		// TODO not required
+	}
+	
+	private ValueSequence toValueSequence() throws XPathException{
+		ValueSequence res = new ValueSequence(this);
+		res.keepUnOrdered(true);
+		return res;
 	}
 
 	public NodeSet toNodeSet() throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
+		return toValueSequence().toNodeSet();
 	}
 
 	public MemoryNodeSet toMemNodeSet() throws XPathException {
-		// TODO Auto-generated method stub
-		return null;
+		return toValueSequence().toMemNodeSet();
 	}
 
 	@Override
@@ -140,6 +144,10 @@ public class AnimoSequence extends AbstractSequence {
 			index = pos;
 		}
 		return seq == null ? null : seq.itemAt(index);
+	}
+	
+	public Sequence getSecuenceAt(int pos){
+		return vector.get(pos);
 	}
 	
 	private class AnimoSequenceIterator implements SequenceIterator {
