@@ -18,11 +18,13 @@
  */
 package org.animotron.exist.interpreter;
 
-import org.animotron.Keywords;
-import org.animotron.Namespaces;
 import org.exist.dom.ElementImpl;
+import org.exist.dom.NodeImpl;
+import org.exist.dom.NodeProxy;
+import org.exist.dom.NodeSet;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.XPathException;
+import org.exist.xquery.value.Sequence;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -32,34 +34,42 @@ public class ProcessReference extends Process {
 	
 	ProcessReference(Controller controller) {
 		super(controller);
-		ns = Namespaces.AN.namespace();
 	}
-
-	public void process (ElementImpl input, MemTreeBuilder builder) throws XPathException{
-		
-		String name = input.getLocalName();
-		
-		if (Keywords.AN_EMPTY.keyword().equals(name)) {
-			// process an:empty
-			// return nothing
-			return;
-
-		} else if (Keywords.AN_CONTENT.keyword().equals(name)) {
-			// process an:content
-			// process children
-			getController().processChild(input, builder);
-
-		} else if (Keywords.AN_SELF.equals(name, ns)) {
-			// process an:self
-			// return root
-			builder.addReferenceNode(input.getDocument().getFirstChildProxy());
-			
+	
+	private NodeSet resolveReference (){
+		if (controller.getSource() == Sources.GLOBAL_CONTEXT) {
+			return controller.getIndexWorker().getNode(controller.getCurrentFlow().getLocalName());
 		} else {
-			// process reference an:*
-			return;
-			
+			//LocationStep step = new LocationStep(context, axis, new NameTest(Type.ELEMENT, new QName (name, ns.namespace())));
+			//AnalyzeContextInfo info = new AnalyzeContextInfo(context);
+			//info.setFlags(Expression.UNORDERED);
+			//PathExpr exp = new PathExpr(context);
+			//exp.add(step);
+			//exp.analyze(info);
+			//exp.reset();
+			//res = exp.eval(set);
+			//map.put(name, res);
+			return null;
 		}
 		
+	}
+
+	public void process (MemTreeBuilder builder) throws XPathException{
+		Sequence newContext;
+		if (!getCurrentFlow().hasChildNodes()){
+			Controller ctrl = new Controller(getXQueryContext(), getCurrentFlow().getChildNodes() , getContext());
+			newContext = ctrl.process();
+			controller.pushContext(newContext);
+		}
+		NodeSet input = resolveReference();
+		process(input, builder);
+	}
+	
+	private void process(NodeSet input, MemTreeBuilder builder) throws XPathException {
+		for (NodeProxy i : input){
+			controller.pushFlow((ElementImpl) i.getNode());
+			controller.process((NodeImpl) i.getNode(), builder);
+		}
 	}
 	
 }

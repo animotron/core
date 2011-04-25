@@ -55,16 +55,69 @@ public class Controller {
 	private NodeSet use = new NewArrayNodeSet();
 	private AnimoSequence contextStack = new AnimoSequence();
 	private Sequence flowStack = new ValueSequence();
-	private Sources source = Sources.GLOBAL_CONTEXT; 
+	private Sources source = Sources.GLOBAL_CONTEXT;
 	
-	public Controller(XQueryContext queryContext, Sequence flow) {
+	private ElementImpl currentFlow = null;
+	
+	private ProcessReference reference = new ProcessReference(this);
+	
+	public Controller(XQueryContext queryContext, Sequence flow) throws XPathException {
 		this(queryContext, flow, Sequence.EMPTY_SEQUENCE);
 	}
 	
-	public Controller(XQueryContext queryContext, Sequence flow, Sequence context) {
+	public Controller(XQueryContext queryContext, NodeList flow, Sequence context) throws XPathException {
 		this.queryContext = queryContext;
 		this.context = context;
+		this.flow = new ValueSequence();
+		for (int i = 0; i < flow.getLength(); i++){
+			this.flow.add((Item) flow.item(i));
+		}
+	}
+
+	public Controller(XQueryContext queryContext, Sequence flow, Sequence context) throws XPathException {
+		this.queryContext = queryContext;
+		this.contextStack.addAll(context);
+		this.context = context;
 		this.flow = flow;
+	}
+	
+	public Sequence getFlow(){
+		return flow;
+	}
+	
+	public ElementImpl getCurrentFlow(){
+		return currentFlow;
+	}
+	
+	public Sequence getContext(){
+		return context;
+	}
+	
+	public XQueryContext getXQueryContext(){
+		return queryContext;
+	}
+	
+	public void pushFlow(ElementImpl input) throws XPathException{
+		if (currentFlow != null)
+			flowStack.add((Item) currentFlow);
+		currentFlow = input;
+	}
+	
+	public void pushContext(Sequence context) throws XPathException{
+		contextStack.addAll(context);
+		this.context = context;
+	}
+	
+	public Sequence getFlowStack(){
+		return flowStack;
+	}
+	
+	public Sequence getContextStack(){
+		return contextStack;
+	}
+	
+	public Sources getSource(){
+		return source;
 	}
 	
 	public AnimoIndexWorker getIndexWorker() {
@@ -122,14 +175,13 @@ public class Controller {
 		return res; 
 	}
 	
-	private void process(NodeImpl input, MemTreeBuilder builder) throws XPathException {
+	protected void process(NodeImpl input, MemTreeBuilder builder) throws XPathException {
 		if (input.getNodeType() == Type.ELEMENT) {
 			process ((ElementImpl) input, builder);
 		} else {
 			builder.addReferenceNode(new NodeProxy((DocumentImpl) input.getDocumentAtExist(), input.getNodeId(), input.getNodeType()));
 		}
 	}
-	
 	
 	private void process(ElementImpl input, MemTreeBuilder builder) throws XPathException {
 
@@ -142,7 +194,27 @@ public class Controller {
 			builder.addReferenceNode(new NodeProxy(input));
 			
 		} else if (Namespaces.AN.equals(ns)) {
-			new ProcessReference(this).process(input, builder);
+			
+			if (Keywords.AN_EMPTY.keyword().equals(name)) {
+				// process an:empty
+				// return nothing
+				return;
+
+			} else if (Keywords.AN_CONTENT.keyword().equals(name)) {
+				// process an:content
+				// process children
+				processChild(input, builder);
+
+			} else if (Keywords.AN_SELF.equals(name, ns)) {
+				// process an:self
+				// return root
+				builder.addReferenceNode(input.getDocument().getFirstChildProxy());
+				
+			} else {
+				// process reference an:*
+				reference.process(builder);
+				
+			}
 
 		} else if (Namespaces.ANY.equals(ns)) {
 			// TODO: process any:*
@@ -235,7 +307,7 @@ public class Controller {
 
 	}
 	
-	protected void processChild(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+	private void processChild(ElementImpl input, MemTreeBuilder builder) throws XPathException {
 		NodeList list = input.getChildNodes(); 
 		for (int i = 0; i < list.getLength(); i++){
 			process((NodeImpl) list.item(i) , builder);			

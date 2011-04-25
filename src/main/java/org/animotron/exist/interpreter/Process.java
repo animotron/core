@@ -21,6 +21,8 @@ package org.animotron.exist.interpreter;
 import org.exist.dom.ElementImpl;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.XPathException;
+import org.exist.xquery.XQueryContext;
+import org.exist.xquery.value.Sequence;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -28,22 +30,24 @@ import org.exist.xquery.XPathException;
  */
 public abstract class Process {
 
-	private Controller controller;
-	
-	protected static String ns = null;
+	final public Controller controller;
 	
 	Process(Controller controller){
 		this.controller = controller;
 	}
 	
-	abstract public void process (ElementImpl input, MemTreeBuilder builder) throws XPathException;
+	abstract public void process (MemTreeBuilder builder) throws XPathException;
 	
-	public String getNamespaceURI(){
-		return ns;
+	public XQueryContext getXQueryContext(){
+		return controller.getXQueryContext();
 	}
 	
-	public Controller getController(){
-		return controller;
+	public Sequence getContext(){
+		return controller.getContext();
+	}
+	
+	public ElementImpl getCurrentFlow(){
+		return controller.getCurrentFlow();
 	}
 	
 }
