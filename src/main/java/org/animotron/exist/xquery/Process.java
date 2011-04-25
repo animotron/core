@@ -18,8 +18,7 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.exist.interpreter.Animo;
-import org.exist.dom.NodeSet;
+import org.animotron.exist.interpreter.Controller;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;
@@ -66,8 +65,8 @@ public class Process extends BasicFunction {
 
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
-		Animo animo = new Animo(context); 
-		Sequence res = args.length == 1 ? animo.process(args[0].toNodeSet()) : animo.process(args[0].toNodeSet(), args[1]);
+		Controller controller = args.length == 1 ? new Controller(context, args[0]) : new Controller(context, args[0], args[1]);
+		Sequence res = controller.process();
 		return res;
 	}
 
