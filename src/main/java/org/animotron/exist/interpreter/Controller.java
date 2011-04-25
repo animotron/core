@@ -23,32 +23,26 @@ import org.animotron.Namespaces;
 import org.animotron.exist.AnimoSequence;
 import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.AnimoIndexWorker;
-import org.exist.dom.AttrImpl;
-import org.exist.dom.CDATASectionImpl;
-import org.exist.dom.CommentImpl;
 import org.exist.dom.DocumentImpl;
 import org.exist.dom.ElementImpl;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeImpl;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
-import org.exist.dom.ProcessingInstructionImpl;
 import org.exist.dom.QName;
-import org.exist.dom.TextImpl;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Item;
-import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
 import org.exist.xquery.value.ValueSequence;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class Controller {
@@ -145,29 +139,10 @@ public class Controller {
 		if (Namespaces.IC.equals(ns)) {
 			// skip ic:* 
 			// return as is 
-			builder.addReferenceNode(new NodeProxy((ElementImpl) input));
+			builder.addReferenceNode(new NodeProxy(input));
 			
 		} else if (Namespaces.AN.equals(ns)) {
-
-			if (Keywords.AN_EMPTY.keyword().equals(name)) {
-				// process an:empty
-				// return nothing
-				return;
-
-			} else if (Keywords.AN_CONTENT.keyword().equals(name)) {
-				// process an:content
-				// process children
-				processChild(input, builder);
-
-			} else if (Keywords.AN_SELF.equals(name, ns)) {
-				// process an:self
-				// return root
-				builder.addReferenceNode(input.getDocument().getFirstChildProxy());
-				
-			} else {
-				// process reference an:*
-				
-			}
+			new ProcessReference(this).process(input, builder);
 
 		} else if (Namespaces.ANY.equals(ns)) {
 			// TODO: process any:*
@@ -260,7 +235,7 @@ public class Controller {
 
 	}
 	
-	private void processChild(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+	protected void processChild(ElementImpl input, MemTreeBuilder builder) throws XPathException {
 		NodeList list = input.getChildNodes(); 
 		for (int i = 0; i < list.getLength(); i++){
 			process((NodeImpl) list.item(i) , builder);			
