@@ -18,57 +18,60 @@
  */
 package org.animotron.exist.interpreter;
 
-import org.exist.dom.ElementImpl;
-import org.exist.dom.NodeImpl;
-import org.exist.dom.NodeProxy;
-import org.exist.dom.NodeSet;
+import org.animotron.Namespaces;
+import org.exist.dom.ElementAtExist;
+import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
+import org.exist.xquery.AnalyzeContextInfo;
+import org.exist.xquery.Constants;
+import org.exist.xquery.Expression;
+import org.exist.xquery.LocationStep;
+import org.exist.xquery.NameTest;
+import org.exist.xquery.PathExpr;
 import org.exist.xquery.XPathException;
+import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Sequence;
+import org.exist.xquery.value.Type;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ProcessReference extends Process {
+public class ProcessReference extends AbstractProcessReference {
 	
 	ProcessReference(Controller controller) {
 		super(controller);
 	}
 	
-	private NodeSet resolveReference (){
-		if (controller.getSource() == Sources.GLOBAL_CONTEXT) {
-			return controller.getIndexWorker().getNode(controller.getCurrentFlow().getLocalName());
+	private Sequence resolveReference () throws XPathException{
+		Sequence source = controller.getSource(); 
+		ElementAtExist input = controller.getCurrentStep();
+		if (source == null) {
+			return controller.getIndexWorker().getNode(input.getLocalName());
 		} else {
-			//LocationStep step = new LocationStep(context, axis, new NameTest(Type.ELEMENT, new QName (name, ns.namespace())));
-			//AnalyzeContextInfo info = new AnalyzeContextInfo(context);
-			//info.setFlags(Expression.UNORDERED);
-			//PathExpr exp = new PathExpr(context);
-			//exp.add(step);
-			//exp.analyze(info);
-			//exp.reset();
-			//res = exp.eval(set);
-			//map.put(name, res);
-			return null;
+			XQueryContext context = getXQueryContext();
+			LocationStep step = new LocationStep(context, Constants.SELF_AXIS, new NameTest(Type.ELEMENT, new QName (input.getLocalName(), Namespaces.THE.namespace())));
+			AnalyzeContextInfo info = new AnalyzeContextInfo(context);
+			info.setFlags(Expression.UNORDERED);
+			PathExpr exp = new PathExpr(context);
+			exp.add(step);
+			exp.analyze(info);
+			exp.reset();
+			return exp.eval(source);
 		}
 		
 	}
 
 	public void process (MemTreeBuilder builder) throws XPathException{
 		Sequence newContext;
-		if (!getCurrentFlow().hasChildNodes()){
+		if (!getCurrentStep().hasChildNodes()){
 			Controller ctrl = new Controller(getXQueryContext(), getCurrentFlow().getChildNodes() , getContext());
 			newContext = ctrl.process();
 			controller.pushContext(newContext);
 		}
-		NodeSet input = resolveReference();
-		process(input, builder);
-	}
-	
-	private void process(NodeSet input, MemTreeBuilder builder) throws XPathException {
-		for (NodeProxy i : input){
-			controller.pushFlow((ElementImpl) i.getNode());
-			controller.process((NodeImpl) i.getNode(), builder);
+		Sequence input = resolveReference();
+		if (input != null){
+			process(input, builder);
 		}
 	}
 	

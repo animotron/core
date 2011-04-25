@@ -24,8 +24,10 @@ import org.animotron.exist.AnimoSequence;
 import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.AnimoIndexWorker;
 import org.exist.dom.DocumentImpl;
-import org.exist.dom.ElementImpl;
+import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
+import org.exist.dom.NodeAtExist;
+import org.exist.dom.NodeHandle;
 import org.exist.dom.NodeImpl;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
@@ -53,11 +55,13 @@ public class Controller {
 	private Sequence context;
 	
 	private NodeSet use = new NewArrayNodeSet();
+	private AnimoSequence CONTEXT = new AnimoSequence();
 	private AnimoSequence contextStack = new AnimoSequence();
 	private Sequence flowStack = new ValueSequence();
-	private Sources source = Sources.GLOBAL_CONTEXT;
+	private Sequence source = null;
 	
-	private ElementImpl currentFlow = null;
+	private ElementAtExist currentFlow = null;
+	private ElementAtExist currentStep = null;
 	
 	private ProcessReference reference = new ProcessReference(this);
 	
@@ -76,17 +80,21 @@ public class Controller {
 
 	public Controller(XQueryContext queryContext, Sequence flow, Sequence context) throws XPathException {
 		this.queryContext = queryContext;
-		this.contextStack.addAll(context);
-		this.context = context;
 		this.flow = flow;
+		this.context = context;
+		CONTEXT.addAll(context);
 	}
 	
 	public Sequence getFlow(){
 		return flow;
 	}
 	
-	public ElementImpl getCurrentFlow(){
+	public ElementAtExist getCurrentFlow(){
 		return currentFlow;
+	}
+	
+	public ElementAtExist getCurrentStep(){
+		return currentStep;
 	}
 	
 	public Sequence getContext(){
@@ -97,14 +105,15 @@ public class Controller {
 		return queryContext;
 	}
 	
-	public void pushFlow(ElementImpl input) throws XPathException{
+	public void pushFlow(ElementAtExist input) throws XPathException{
 		if (currentFlow != null)
 			flowStack.add((Item) currentFlow);
 		currentFlow = input;
 	}
 	
 	public void pushContext(Sequence context) throws XPathException{
-		contextStack.addAll(context);
+		contextStack.addAll(this.context);
+		CONTEXT.addAll(context);
 		this.context = context;
 	}
 	
@@ -116,7 +125,7 @@ public class Controller {
 		return contextStack;
 	}
 	
-	public Sources getSource(){
+	public Sequence getSource(){
 		return source;
 	}
 	
@@ -162,10 +171,16 @@ public class Controller {
 		SequenceIterator i = flow.iterate();
 		while (i.hasNext()){
 			Item item = i.nextItem();
-			if (item.getType() == Type.NODE){
+			if (Type.getSuperType(item.getType()) ==  Type.NODE){
+				NodeAtExist node;
+				if (item instanceof NodeProxy){
+					node = (NodeAtExist) ((NodeProxy) item).getNode();
+				} else {
+					node = (NodeAtExist) item;
+				}
 				queryContext.pushDocumentContext();
 				MemTreeBuilder builder = queryContext.getDocumentBuilder();
-				process((NodeImpl) item, builder);
+				process(node, builder);
 				res.add(builder.getDocument().getNode(1));
 				queryContext.popDocumentContext();
 			} else {
@@ -175,23 +190,25 @@ public class Controller {
 		return res; 
 	}
 	
-	protected void process(NodeImpl input, MemTreeBuilder builder) throws XPathException {
+	public void process(NodeAtExist input, MemTreeBuilder builder) throws XPathException {
 		if (input.getNodeType() == Type.ELEMENT) {
-			process ((ElementImpl) input, builder);
+			process ((ElementAtExist) input, builder);
 		} else {
 			builder.addReferenceNode(new NodeProxy((DocumentImpl) input.getDocumentAtExist(), input.getNodeId(), input.getNodeType()));
 		}
 	}
 	
-	private void process(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+	private void process(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 
+		currentStep = input;
+		
 		String ns = input.getNamespaceURI();
 		String name = input.getLocalName();
 
 		if (Namespaces.IC.equals(ns)) {
 			// skip ic:* 
 			// return as is 
-			builder.addReferenceNode(new NodeProxy(input));
+			builder.addReferenceNode(new NodeProxy((NodeHandle) input));
 			
 		} else if (Namespaces.AN.equals(ns)) {
 			
@@ -208,7 +225,7 @@ public class Controller {
 			} else if (Keywords.AN_SELF.equals(name, ns)) {
 				// process an:self
 				// return root
-				builder.addReferenceNode(input.getDocument().getFirstChildProxy());
+				builder.addReferenceNode(new NodeProxy((DocumentImpl) input.getDocumentAtExist(), input.getDocumentAtExist().getNodeId()));
 				
 			} else {
 				// process reference an:*
@@ -269,31 +286,31 @@ public class Controller {
 			if (Keywords.USE_FLOW_STACK.keyword().equals(name)) {
 				// process use:flow-stack
 				// process children use flow stack as source of instances
-				source = Sources.FLOW_STACK;
+				source = flowStack;
 				processChild(input, builder);
 
 			} else if (Keywords.USE_CONTEXT_STACK.keyword().equals(name)) {
 				// process use:stack
 				// process children use context stack as source of instances
-				source = Sources.CONTEXT_STACK;
+				source = contextStack;
 				processChild(input, builder);
 
 			} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)) {
 				// process use:context
 				// process children use local context as source of instances
-				source = Sources.LOCAL_CONTEXT;
+				source = context;
 				processChild(input, builder);
 
 			} else if (Keywords.USE_CONTEXT.keyword().equals(name)) {
 				// process use:CONTEXT
 				// process children use local context and context source as source of instances
-				source = Sources.CONTEXT;
+				source = CONTEXT;
 				processChild(input, builder);
 
 			} else if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)) {
 				// process use:repository
 				// process children use global context (repository) as source of instances
-				source = Sources.GLOBAL_CONTEXT;
+				source = null;
 				processChild(input, builder);
 				
 			}
@@ -307,7 +324,7 @@ public class Controller {
 
 	}
 	
-	private void processChild(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+	private void processChild(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		NodeList list = input.getChildNodes(); 
 		for (int i = 0; i < list.getLength(); i++){
 			process((NodeImpl) list.item(i) , builder);			

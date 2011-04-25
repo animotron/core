@@ -18,14 +18,38 @@
  */
 package org.animotron.exist.interpreter;
 
+import org.exist.dom.ElementAtExist;
+import org.exist.dom.NodeProxy;
+import org.exist.memtree.MemTreeBuilder;
+import org.exist.xquery.XPathException;
+import org.exist.xquery.value.Item;
+import org.exist.xquery.value.Sequence;
+import org.exist.xquery.value.SequenceIterator;
+
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- * 
+ *
  */
-public enum Sources {
-	GLOBAL_CONTEXT,
-	LOCAL_CONTEXT,
-	CONTEXT,
-	CONTEXT_STACK,
-	FLOW_STACK
+public abstract class AbstractProcessReference extends Process {
+	
+	AbstractProcessReference(Controller controller) {
+		super(controller);
+	}
+	
+	@Override
+	public void process(Sequence input, MemTreeBuilder builder) throws XPathException {
+		SequenceIterator i = input.iterate();
+		while (i.hasNext()){
+			Item item = i.nextItem();
+			ElementAtExist node;
+			if (item instanceof NodeProxy){
+				node = (ElementAtExist) ((NodeProxy) item).getNode();
+			} else {
+				node = (ElementAtExist) item;
+			}
+			controller.pushFlow(node);
+			controller.process(node, builder);
+		}
+	}
+	
 }
