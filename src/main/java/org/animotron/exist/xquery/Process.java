@@ -40,13 +40,13 @@ public class Process extends BasicFunction {
 	private static String NAME = "process"; 
 	
 	private static SequenceType ARG1 = 
-		new FunctionParameterSequenceType("flow", Type.NODE, Cardinality.ZERO_OR_MORE, "The processed animo flow");
+		new FunctionParameterSequenceType("flow", Type.ITEM, Cardinality.ZERO_OR_MORE, "The processed animo flow");
 	
 	private static SequenceType ARG2 = 
-		new FunctionParameterSequenceType("context", Type.NODE, Cardinality.ZERO_OR_MORE, "The context");
+		new FunctionParameterSequenceType("context", Type.ITEM, Cardinality.ZERO_OR_MORE, "The context");
 	
 	private static FunctionReturnSequenceType RES = 
-		new FunctionReturnSequenceType(Type.NODE, Cardinality.ZERO_OR_MORE, "Returns processed node set");
+		new FunctionReturnSequenceType(Type.ITEM, Cardinality.ZERO_OR_MORE, "Returns processed sequence");
 
 	public final static FunctionSignature[] signature = {
 		new FunctionSignature(
