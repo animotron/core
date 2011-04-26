@@ -6,7 +6,6 @@ import java.util.Vector;
 import org.exist.collections.Collection;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
-import org.exist.memtree.InMemoryNodeSet;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.value.AbstractSequence;
 import org.exist.xquery.value.Item;
