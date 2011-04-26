@@ -38,6 +38,10 @@ public abstract class AbstractProcessReference extends Process {
 	
 	@Override
 	public void process(Sequence input, MemTreeBuilder builder) throws XPathException {
+		
+		if (input == null)
+			return;
+		
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
 			Item item = i.nextItem();
@@ -50,6 +54,7 @@ public abstract class AbstractProcessReference extends Process {
 			controller.pushFlow(node);
 			controller.process(node, builder);
 		}
+		
 	}
 	
 }

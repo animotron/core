@@ -52,10 +52,10 @@ public class Controller {
 	private XQueryContext queryContext;
 	
 	private Sequence flow;
-	private Sequence context;
+	private Sequence localContext;
 	
 	private NodeSet use = new NewArrayNodeSet();
-	private AnimoSequence CONTEXT = new AnimoSequence();
+	private AnimoSequence context = new AnimoSequence();
 	private AnimoSequence contextStack = new AnimoSequence();
 	private Sequence flowStack = new ValueSequence();
 	private Sequence source = null;
@@ -71,7 +71,7 @@ public class Controller {
 	
 	public Controller(XQueryContext queryContext, NodeList flow, Sequence context) throws XPathException {
 		this.queryContext = queryContext;
-		this.context = context;
+		this.localContext = context;
 		this.flow = new ValueSequence();
 		for (int i = 0; i < flow.getLength(); i++){
 			this.flow.add((Item) flow.item(i));
@@ -81,8 +81,12 @@ public class Controller {
 	public Controller(XQueryContext queryContext, Sequence flow, Sequence context) throws XPathException {
 		this.queryContext = queryContext;
 		this.flow = flow;
-		this.context = context;
-		CONTEXT.addAll(context);
+		this.localContext = context;
+		context.addAll(context);
+	}
+	
+	public ElementAtExist getCurrentStep(){
+		return currentStep;
 	}
 	
 	public Sequence getFlow(){
@@ -93,16 +97,28 @@ public class Controller {
 		return currentFlow;
 	}
 	
-	public ElementAtExist getCurrentStep(){
-		return currentStep;
+	public Sequence getFlowStack(){
+		return flowStack;
 	}
 	
 	public Sequence getContext(){
 		return context;
 	}
 	
+	public Sequence getLocalContext(){
+		return localContext;
+	}
+	
+	public Sequence getContextStack(){
+		return contextStack;
+	}
+	
 	public XQueryContext getXQueryContext(){
 		return queryContext;
+	}
+	
+	public Sequence getSource(){
+		return source;
 	}
 	
 	public void pushFlow(ElementAtExist input) throws XPathException{
@@ -112,21 +128,9 @@ public class Controller {
 	}
 	
 	public void pushContext(Sequence context) throws XPathException{
-		contextStack.addAll(this.context);
-		CONTEXT.addAll(context);
-		this.context = context;
-	}
-	
-	public Sequence getFlowStack(){
-		return flowStack;
-	}
-	
-	public Sequence getContextStack(){
-		return contextStack;
-	}
-	
-	public Sequence getSource(){
-		return source;
+		contextStack.addAll(this.localContext);
+		context.addAll(context);
+		this.localContext = context;
 	}
 	
 	public AnimoIndexWorker getIndexWorker() {
@@ -298,13 +302,13 @@ public class Controller {
 			} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)) {
 				// process use:context
 				// process children use local context as source of instances
-				source = context;
+				source = localContext;
 				processChild(input, builder);
 
 			} else if (Keywords.USE_CONTEXT.keyword().equals(name)) {
 				// process use:CONTEXT
 				// process children use local context and context source as source of instances
-				source = CONTEXT;
+				source = context;
 				processChild(input, builder);
 
 			} else if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)) {

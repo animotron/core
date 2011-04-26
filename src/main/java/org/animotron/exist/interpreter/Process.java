@@ -41,14 +41,18 @@ public abstract class Process {
 		this.controller = controller;
 	}
 	
-	abstract public void process (MemTreeBuilder builder) throws XPathException;
+	abstract public Sequence resolve () throws XPathException;
+	
+	public void process (MemTreeBuilder builder) throws XPathException {
+		process(resolve(), builder);
+	}
 	
 	public XQueryContext getXQueryContext(){
 		return controller.getXQueryContext();
 	}
 	
 	public Sequence getContext(){
-		return controller.getContext();
+		return controller.getLocalContext();
 	}
 	
 	public ElementAtExist getCurrentFlow(){
@@ -60,6 +64,9 @@ public abstract class Process {
 	}
 	
 	public void process(Sequence input, MemTreeBuilder builder) throws XPathException {
+		if (input == null)
+			return;
+		
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
 			Item item = i.nextItem();
