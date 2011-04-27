@@ -44,8 +44,10 @@ public class ProcessReference extends AbstractProcessReference {
 	}
 	
 	public Sequence resolve() throws XPathException{
-		Sequence source = controller.getSource(); 
+		
+		Sequence source = controller.getSource();
 		ElementAtExist input = controller.getCurrentStep();
+		
 		if (source == null) {
 			return controller.getIndexWorker().getNode(input.getLocalName());
 		} else {
@@ -64,13 +66,21 @@ public class ProcessReference extends AbstractProcessReference {
 
 	@Override
 	public void process(MemTreeBuilder builder) throws XPathException{
+		
+		Sequence res = resolve();
+		
+		if (res ==null || res.isEmpty())
+			return;
+		
 		Sequence newContext;
-		if (!getCurrentStep().hasChildNodes()){
-			Controller ctrl = new Controller(getXQueryContext(), getCurrentFlow().getChildNodes() , getContext());
+		if (getCurrentStep().hasChildNodes()){
+			Controller ctrl = new Controller(getXQueryContext(), controller.getChildNodes(getCurrentStep()) , getContext());
 			newContext = ctrl.process();
 			controller.pushContext(newContext);
 		}
-		super.process(builder);
+		
+		process(res, builder);
+		
 	}
 	
 }
