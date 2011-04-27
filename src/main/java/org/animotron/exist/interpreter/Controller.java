@@ -238,12 +238,12 @@ public class Controller {
 			} else if (Keywords.AN_CONTENT.keyword().equals(name)) {
 				// process an:content
 				// process children
-				processChild(input, builder);
+				processChildNodes(input, builder);
 
 			} else if (Keywords.AN_SELF.equals(name, ns)) {
 				// process an:self
 				// return root
-				//builder.addReferenceNode(new NodeProxy((NodeHandle) input.getDocumentAtExist().getNode(1)));
+				copy((ElementAtExist) input.getDocumentAtExist().getNode(1), builder);
 				
 			} else {
 				// process reference an:*
@@ -303,43 +303,43 @@ public class Controller {
 			// process use:flow-stack
 			// process children use flow stack as source of instances
 			source = flowStack;
-			processChild(input, builder);
+			processChildNodes(input, builder);
 
 		} else if (Keywords.USE_CONTEXT_STACK.keyword().equals(name)) {
 			// process use:stack
 			// process children use context stack as source of instances
 			source = contextStack;
-			processChild(input, builder);
+			processChildNodes(input, builder);
 
 		} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)) {
 			// process use:context
 			// process children use local context as source of instances
 			source = localContext;
-			processChild(input, builder);
+			processChildNodes(input, builder);
 
 		} else if (Keywords.USE_CONTEXT.keyword().equals(name)) {
 			// process use:CONTEXT
 			// process children use local context and context source as source of instances
 			source = context;
-			processChild(input, builder);
+			processChildNodes(input, builder);
 
 		} else if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)) {
 			// process use:repository
 			// process children use global context (repository) as source of instances
 			source = null;
-			processChild(input, builder);
+			processChildNodes(input, builder);
 				
 		} else {
 			// process element()
 			builder.startElement(new QName(name, ns), null);
 			copyAttributes(input, builder);
-			processChild(input, builder);
+			processChildNodes(input, builder);
 			builder.endElement();
 		}
 
 	}
 	
-	private void processChild(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
+	private void processChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		SequenceIterator i = getChildNodes(input).iterate();
 		while (i.hasNext()) {
 			NodeAtExist node;
@@ -419,7 +419,7 @@ public class Controller {
 		while (i.hasNext()) {
 			Item item = i.nextItem();
 			if (item.getType() == Type.ELEMENT) {
-				copy((ElementAtExist) item, builder);
+				copy((ElementImpl) item, builder);
 			} else {
 				copy((NodeImpl) item, builder);
 			}
