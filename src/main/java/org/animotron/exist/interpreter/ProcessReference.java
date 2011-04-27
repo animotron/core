@@ -69,14 +69,14 @@ public class ProcessReference extends AbstractProcessReference {
 		
 		Sequence res = resolve();
 		
-		if (res ==null || res.isEmpty())
+		if (res == null || res.isEmpty())
 			return;
 		
-		Sequence newContext;
 		if (getCurrentStep().hasChildNodes()){
+			Sequence newContext;
 			Controller ctrl = new Controller(getXQueryContext(), controller.getChildNodes(getCurrentStep()) , getContext());
 			newContext = ctrl.process();
-			controller.pushContext(newContext);
+			//controller.pushContext(newContext);
 		}
 		
 		process(res, builder);

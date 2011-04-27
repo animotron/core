@@ -33,7 +33,6 @@ import org.exist.dom.QName;
 import org.exist.memtree.AttributeImpl;
 import org.exist.memtree.CDATASectionImpl;
 import org.exist.memtree.CommentImpl;
-import org.exist.memtree.DocumentImpl;
 import org.exist.memtree.ElementImpl;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.memtree.NodeImpl;
@@ -53,6 +52,8 @@ import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
 import org.exist.xquery.value.ValueSequence;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -191,10 +192,17 @@ public class Controller {
 				}
 				queryContext.pushDocumentContext();
 				MemTreeBuilder builder = queryContext.getDocumentBuilder();
+				builder.startElement(new QName("result", Namespaces.ANIMO.namespace()), null);
 				process(node, builder);
-				DocumentImpl doc = builder.getDocument();
-				for (int k=1; k <= doc.getChildCount(); k++) {
-					res.add(doc.getNode(k));					
+				builder.endElement();
+				NodeList list = builder.getDocument().getNode(1).getChildNodes();
+				for (int k=0; k < list.getLength(); k++) {
+					Node n = list.item(k);
+					if (n instanceof NodeImpl){
+						res.add((Item) n);
+					} else {
+						res.add(new NodeProxy((NodeHandle) n));
+					}
 				}
 				queryContext.popDocumentContext();
 			} else {
@@ -299,31 +307,31 @@ public class Controller {
 				
 			}
 
-		} else  if (Keywords.USE_FLOW_STACK.keyword().equals(name)) {
+		} else  if (Keywords.USE_FLOW_STACK.equals(name, ns)) {
 			// process use:flow-stack
 			// process children use flow stack as source of instances
 			source = flowStack;
 			processChildNodes(input, builder);
 
-		} else if (Keywords.USE_CONTEXT_STACK.keyword().equals(name)) {
+		} else if (Keywords.USE_CONTEXT_STACK.equals(name, ns)) {
 			// process use:stack
 			// process children use context stack as source of instances
 			source = contextStack;
 			processChildNodes(input, builder);
 
-		} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)) {
+		} else if (Keywords.USE_LOCAL_CONTEXT.equals(name, ns)) {
 			// process use:context
 			// process children use local context as source of instances
 			source = localContext;
 			processChildNodes(input, builder);
 
-		} else if (Keywords.USE_CONTEXT.keyword().equals(name)) {
+		} else if (Keywords.USE_CONTEXT.equals(name, ns)) {
 			// process use:CONTEXT
 			// process children use local context and context source as source of instances
 			source = context;
 			processChildNodes(input, builder);
 
-		} else if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)) {
+		} else if (Keywords.USE_GLOBAL_CONTEXT.equals(name, ns)) {
 			// process use:repository
 			// process children use global context (repository) as source of instances
 			source = null;
