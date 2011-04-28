@@ -52,8 +52,6 @@ import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
 import org.exist.xquery.value.ValueSequence;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -136,8 +134,8 @@ public class Controller {
 	}
 	
 	public void pushContext(Sequence context) throws XPathException{
-		contextStack.addAll(this.localContext);
-		this.context.addAll(context);
+		contextStack.push(this.localContext);
+		this.context.push(context);
 		this.localContext = context;
 	}
 	
@@ -195,15 +193,7 @@ public class Controller {
 				builder.startElement(new QName("result", Namespaces.ANIMO.namespace()), null);
 				process(node, builder);
 				builder.endElement();
-				NodeList list = builder.getDocument().getNode(1).getChildNodes();
-				for (int k=0; k < list.getLength(); k++) {
-					Node n = list.item(k);
-					if (n instanceof NodeImpl){
-						res.add((Item) n);
-					} else {
-						res.add(new NodeProxy((NodeHandle) n));
-					}
-				}
+				res.addAll(getChildNodes((ElementAtExist) builder.getDocument().getNode(1)));
 				queryContext.popDocumentContext();
 			} else {
 				res.add(item);

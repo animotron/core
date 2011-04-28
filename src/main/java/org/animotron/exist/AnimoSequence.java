@@ -41,12 +41,25 @@ public class AnimoSequence extends AbstractSequence {
 		sizeChanged = true;
 	}
 	
-	@Override
-	public void addAll(Sequence seq) throws XPathException{
+	public void push(Sequence seq) throws XPathException{
 		if (seq.isEmpty())
 			return;
 		vector.insertElementAt(seq, 0);
 		reset(seq.getItemType());
+	}
+	
+	@Override
+	public void addAll(Sequence s) throws XPathException{
+		if (s.isEmpty())
+			return;
+		if (vector.isEmpty()){
+			Sequence seq = new ValueSequence();
+			seq.addAll(s);
+			vector.add(seq);
+		} else {
+			getFirst().addAll(s);
+		}
+		reset(s.getItemType());
 	}
 	
 	@Override
