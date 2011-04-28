@@ -18,14 +18,13 @@
  */
 package org.animotron.exist.interpreter;
 
-import net.sf.saxon.type.Type;
-
 import org.exist.security.PermissionDeniedException;
 import org.exist.xquery.CompiledXQuery;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQuery;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Sequence;
+import org.exist.xquery.value.Type;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
