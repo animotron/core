@@ -359,20 +359,6 @@ public class Controller {
 		}
 	}
 	
-	public Sequence getChildNodes(Node node) throws XPathException {
-		ValueSequence res = new ValueSequence();
-		Node next = node.getFirstChild();
-        while (next != null) {
-        	if (next instanceof NodeImpl){
-        		res.add((NodeValue) next);
-        	} else {
-        		res.add(new NodeProxy((NodeHandle) next));
-        	}
-            next = next.getNextSibling();
-        }
-		return res;
-	}
-
 	private Sequence getAttributes(Node input) throws XPathException {
 		LocationStep step = new LocationStep(queryContext, Constants.CHILD_AXIS, new TypeTest(Type.ATTRIBUTE));
 		AnalyzeContextInfo info = new AnalyzeContextInfo(queryContext);
@@ -406,14 +392,14 @@ public class Controller {
 	}
 	
 	private void copyChildNodes(ElementImpl input, MemTreeBuilder builder) throws XPathException {
-		SequenceIterator i = getChildNodes(input).iterate();
-		while (i.hasNext()) {
-			Item item = i.nextItem();
-			if (item.getType() == Type.ELEMENT) {
-				copy((ElementImpl) item, builder);
+		Node next = input.getFirstChild();
+		while (next != null) {
+			if (next.getNodeType() == Type.ELEMENT) {
+				copy((ElementImpl) next, builder);
 			} else {
-				copy((NodeImpl) item, builder);
+				copy((NodeImpl) next, builder);
 			}
+			next = next.getNextSibling();
 		}
 	}
 	
