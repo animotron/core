@@ -19,12 +19,17 @@
 package org.animotron.exist.interpreter;
 
 import org.exist.security.PermissionDeniedException;
+import org.exist.storage.serializers.Serializer;
+import org.exist.util.serializer.SAXSerializer;
+import org.exist.util.serializer.SerializerPool;
 import org.exist.xquery.CompiledXQuery;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQuery;
 import org.exist.xquery.XQueryContext;
+import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
-import org.exist.xquery.value.Type;
+import org.exist.xquery.value.SequenceIterator;
+import org.xml.sax.SAXException;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -39,25 +44,47 @@ public class ProcessXQuery extends Process {
 	@Override
 	public Sequence eval() throws XPathException {
 		
-		String query = controller.getChildNodes(getCurrentStep()).convertTo(Type.STRING).getStringValue();
 		
-		XQuery xquery = getBroker().getXQueryService();
+        SAXSerializer sax = (SAXSerializer) SerializerPool.getInstance().borrowObject(SAXSerializer.class);
+        try {
+            Serializer serializer = getBroker().getSerializer();
+            serializer.reset();
+            serializer.setSAXHandlers(sax, sax);
+            
+            sax.startDocument();
+            
+            
+    		String query = "";
+            SequenceIterator i = controller.getChildNodes(getCurrentStep()).iterate();
+            while(i.hasNext())
+            {
+        	   NodeValue next = (NodeValue)i.nextItem();
+               query += serializer.serialize(next);	
+            }
+            
+            sax.endDocument();
+            
+    		XQuery xquery = getBroker().getXQueryService();
 
-		XQueryContext context = getXQueryContext().copyContext();
-		
-		context.declareVariable("CONTEXT", getContext());
-		context.declareVariable("context", getLocalContext());
-		context.declareVariable("stack", getContextStack());
-		context.declareVariable("flow-stack", getFlowStack());
-		
-		CompiledXQuery compiled;
-		try {
-			compiled = xquery.compile(context, query);
+    		XQueryContext context = getXQueryContext().copyContext();
+    		
+    		context.declareVariable("CONTEXT", getContext());
+    		context.declareVariable("context", getLocalContext());
+    		context.declareVariable("stack", getContextStack());
+    		context.declareVariable("flow-stack", getFlowStack());
+    		
+    		CompiledXQuery  compiled = xquery.compile(context, query);
 			return xquery.execute(compiled, null);
-		} catch (PermissionDeniedException e) {
-			// TODO Auto-generated catch block
-			return Sequence.EMPTY_SEQUENCE; 
+			
+        }
+        catch(SAXException e) {
+            throw new XPathException("A problem occurred while serializing the node set: " + e.getMessage(), e);
+        } catch (PermissionDeniedException e) {
+            throw new XPathException("A problem occurred while serializing the node set: " + e.getMessage(), e);
 		}
+        finally {
+            SerializerPool.getInstance().returnObject(sax);
+        } 
 		
 	}
 	
