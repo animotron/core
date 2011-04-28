@@ -66,7 +66,7 @@ public class Controller {
 	private Sequence localContext;
 	
 	private NodeSet use = new NewArrayNodeSet();
-	private AnimoSequence context = new AnimoSequence();
+	private AnimoSequence context;
 	private AnimoSequence contextStack = new AnimoSequence();
 	private Sequence flowStack = new ValueSequence();
 	private Sequence source = null;
@@ -82,10 +82,10 @@ public class Controller {
 	}
 	
 	public Controller(XQueryContext queryContext, Sequence flow, Sequence context) throws XPathException {
-		this.queryContext = queryContext;
 		this.flow = flow;
 		this.localContext = context;
-		this.context.addAll(context);
+		this.context = new AnimoSequence(context);
+		this.queryContext = queryContext;
 	}
 	
 	public ElementAtExist getCurrentStep(){
