@@ -19,13 +19,12 @@
 package org.animotron.exist.interpreter;
 
 import org.exist.dom.ElementAtExist;
-import org.exist.dom.NodeAtExist;
-import org.exist.dom.NodeProxy;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.storage.DBBroker;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Item;
+import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
@@ -87,14 +86,8 @@ public abstract class Process {
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
 			Item item = i.nextItem();
-			if (Type.getSuperType(item.getType()) == Type.NODE){
-				NodeAtExist node;
-				if (item instanceof NodeProxy){
-					node = (NodeAtExist) ((NodeProxy) item).getNode();
-				} else {
-					node = (NodeAtExist) item;
-				}
-				controller.process(node, builder);
+			if (Type.getSuperType(item.getType()) == Type.NODE) {
+				controller.process((NodeValue) item, builder);
 			} else {
 				builder.characters(item.getStringValue());
 			}

@@ -25,7 +25,6 @@ import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.AnimoIndexWorker;
 import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
-import org.exist.dom.NodeAtExist;
 import org.exist.dom.NodeHandle;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
@@ -48,10 +47,12 @@ import org.exist.xquery.TypeTest;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Item;
+import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
 import org.exist.xquery.value.ValueSequence;
+import org.w3c.dom.Node;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -76,6 +77,7 @@ public class Controller {
 	
 	private ProcessReference reference = new ProcessReference(this);
 	private ProcessXQuery xquery = new ProcessXQuery(this);
+	private ProcessXSLT xslt = new ProcessXSLT(this);
 	
 	public Controller(XQueryContext queryContext, Sequence flow) throws XPathException {
 		this(queryContext, flow, Sequence.EMPTY_SEQUENCE);
@@ -183,18 +185,17 @@ public class Controller {
 		while (i.hasNext()) {
 			Item item = i.nextItem();
 			if (Type.getSuperType(item.getType()) ==  Type.NODE) {
-				NodeAtExist node;
-				if (item instanceof NodeProxy) {
-					node = (NodeAtExist) ((NodeProxy) item).getNode();
-				} else {
-					node = (NodeAtExist) item;
-				}
+				NodeValue node = (NodeValue) item;
 				queryContext.pushDocumentContext();
 				MemTreeBuilder builder = queryContext.getDocumentBuilder();
 				builder.startElement(new QName("result", Namespaces.ANIMO.namespace()), null);
 				process(node, builder);
 				builder.endElement();
-				res.addAll(getChildNodes((ElementAtExist) builder.getDocument().getNode(1)));
+				Node next = builder.getDocument().getFirstChild();
+	            while (next != null) {
+	                res.add((NodeValue) next);
+	                next = next.getNextSibling();
+	            }
 				queryContext.popDocumentContext();
 			} else {
 				res.add(item);
@@ -203,8 +204,8 @@ public class Controller {
 		return res; 
 	}
 	
-	public void process(NodeAtExist input, MemTreeBuilder builder) throws XPathException {
-		if (input.getNodeType() == Type.ELEMENT) {
+	public void process(NodeValue input, MemTreeBuilder builder) throws XPathException {
+		if (input.getType() == Type.ELEMENT) {
 			process ((ElementAtExist) input, builder);
 		} else {
 			if (input instanceof NodeImpl) {
@@ -294,8 +295,9 @@ public class Controller {
 				xquery.process(builder);
 
 			} else if (Keywords.DO_XSLT.keyword().equals(name)) {
-				// TODO: process do:xslt
-				return;
+				// process do:xslt
+				// perform in-line XSLT
+				xslt.process(builder);
 				
 			}
 
@@ -342,14 +344,7 @@ public class Controller {
 	private void processChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		SequenceIterator i = getChildNodes(input).iterate();
 		while (i.hasNext()) {
-			NodeAtExist node;
-			Item item = i.nextItem();
-			if (item instanceof NodeProxy) {
-				node = (NodeAtExist) ((NodeProxy) item).getNode();
-			} else {
-				node = (NodeAtExist) item;
-			}
-			process(node, builder);
+			process((NodeValue) i.nextItem(), builder);
 		}
 	}
 	
