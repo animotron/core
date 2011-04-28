@@ -19,7 +19,6 @@
 package org.animotron.exist.interpreter;
 
 import org.animotron.exist.index.AnimoIndexWorker;
-import org.exist.dom.ElementAtExist;
 import org.exist.dom.NodeHandle;
 import org.exist.dom.NodeProxy;
 import org.exist.memtree.MemTreeBuilder;
@@ -73,7 +72,7 @@ public abstract class Process {
 		return controller.getLocalContext();
 	}
 	
-	public ElementAtExist getCurrentFlow(){
+	public Item getCurrentFlow(){
 		return controller.getCurrentFlow();
 	}
 	
@@ -111,11 +110,11 @@ public abstract class Process {
 		controller.pushContext(context);
 	}
 	
-	public void pushFlow(ElementAtExist flow) throws XPathException{
+	public void pushFlow(Item flow) throws XPathException{
 		controller.pushFlow(flow);
 	}
 	
-	public void process(NodeValue input, MemTreeBuilder builder) throws XPathException {
+	public void process(Item input, MemTreeBuilder builder) throws XPathException {
 		controller.process(input, builder);
 	}
 	
@@ -127,7 +126,7 @@ public abstract class Process {
 		while (i.hasNext()){
 			Item item = i.nextItem();
 			if (Type.getSuperType(item.getType()) == Type.NODE) {
-				controller.process((NodeValue) item, builder);
+				controller.process(item, builder);
 			} else {
 				builder.characters(item.getStringValue());
 			}

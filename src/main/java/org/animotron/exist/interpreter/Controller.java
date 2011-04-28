@@ -71,7 +71,7 @@ public class Controller {
 	private Sequence flowStack = new ValueSequence();
 	private Sequence source = null;
 	
-	private ElementAtExist currentFlow = null;
+	private Item currentFlow = null;
 	private Node currentStep = null;
 	
 	private ProcessReference reference = new ProcessReference(this);
@@ -97,7 +97,7 @@ public class Controller {
 		return flow;
 	}
 	
-	public ElementAtExist getCurrentFlow(){
+	public Item getCurrentFlow(){
 		return currentFlow;
 	}
 	
@@ -125,13 +125,10 @@ public class Controller {
 		return source;
 	}
 	
-	public void pushFlow(ElementAtExist input) throws XPathException{
-		if (currentFlow != null)
-			if (currentFlow instanceof ElementImpl){
-				flowStack.add((Item) currentFlow);	
-			} else {
-				flowStack.add(new NodeProxy((NodeHandle) currentFlow));
-			}
+	public void pushFlow(Item input) throws XPathException{
+		if (currentFlow != null) {
+			flowStack.add(currentFlow);	
+		}
 		currentFlow = input;
 	}
 	
@@ -184,10 +181,9 @@ public class Controller {
 		while (i.hasNext()) {
 			Item item = i.nextItem();
 			if (Type.getSuperType(item.getType()) ==  Type.NODE) {
-				NodeValue node = (NodeValue) item;
 				queryContext.pushDocumentContext();
 				MemTreeBuilder builder = queryContext.getDocumentBuilder();
-				process(node, builder);
+				process(item, builder);
 				Node next = builder.getDocument().getFirstChild();
 	            while (next != null) {
 	                res.add((NodeValue) next);
@@ -201,19 +197,25 @@ public class Controller {
 		return res; 
 	}
 	
-	public void process(NodeValue input, MemTreeBuilder builder) throws XPathException {
+	public void process(Item input, MemTreeBuilder builder) throws XPathException {
 		if (input.getType() == Type.ELEMENT) {
-			process(input.getNode(), builder);
-		} else {
+				if (input instanceof NodeProxy){
+					process((ElementAtExist)((NodeProxy) input).getNode(), builder);
+				} else {
+					process((ElementAtExist) input, builder);
+				}
+		} else if (input.getType() == Type.NODE) {
 			if (input instanceof NodeImpl) {
 				copy((NodeImpl) input, builder);
 			} else {
 				builder.addReferenceNode(new NodeProxy((NodeHandle) input));
 			}
+		} else {
+			builder.characters(input.getStringValue());
 		}
 	}
 	
-	private void process(Node input, MemTreeBuilder builder) throws XPathException {
+	private void process(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 
 		currentStep = input;
 		
@@ -338,10 +340,14 @@ public class Controller {
 
 	}
 	
-	private void processChildNodes(Node input, MemTreeBuilder builder) throws XPathException {
+	private void processChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		Node next = input.getFirstChild();
         while (next != null) {
-			process(next, builder);
+        	if (next instanceof NodeImpl){
+        		process((Item) next, builder);
+        	} else {
+        		process(new NodeProxy((NodeHandle) next), builder);
+        	}
             next = next.getNextSibling();
         }
 	}

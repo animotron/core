@@ -18,10 +18,9 @@
  */
 package org.animotron.exist.interpreter;
 
-import org.exist.dom.ElementAtExist;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.XPathException;
-import org.exist.xquery.value.NodeValue;
+import org.exist.xquery.value.Item;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 
@@ -43,9 +42,9 @@ public abstract class AbstractProcessReference extends Process {
 		
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
-			NodeValue node = (NodeValue) i.nextItem();
-			pushFlow((ElementAtExist) node.getNode());
-			process(node, builder);
+			Item item = i.nextItem();
+			pushFlow(item);
+			process(item, builder);
 		}
 		
 	}
