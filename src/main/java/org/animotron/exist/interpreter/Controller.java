@@ -384,13 +384,6 @@ public class Controller {
 		}
 	}
 
-	private void copy(ElementImpl input, MemTreeBuilder builder) throws XPathException {
-		builder.startElement(input.getQName(), null);
-		copyAttributes(input, builder);
-		copyChildNodes(input, builder);
-		builder.endElement();
-	}
-	
 	private void copyChildNodes(ElementImpl input, MemTreeBuilder builder) throws XPathException {
 		Node next = input.getFirstChild();
 		while (next != null) {
@@ -401,6 +394,13 @@ public class Controller {
 			}
 			next = next.getNextSibling();
 		}
+	}
+	
+	private void copy(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+		builder.startElement(input.getQName(), null);
+		copyAttributes(input, builder);
+		copyChildNodes(input, builder);
+		builder.endElement();
 	}
 	
 	private void copy(NodeImpl input, MemTreeBuilder builder) throws XPathException {
