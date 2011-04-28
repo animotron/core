@@ -22,6 +22,7 @@ import org.exist.dom.ElementAtExist;
 import org.exist.dom.NodeAtExist;
 import org.exist.dom.NodeProxy;
 import org.exist.memtree.MemTreeBuilder;
+import org.exist.storage.DBBroker;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Item;
@@ -51,7 +52,15 @@ public abstract class Process {
 		return controller.getXQueryContext();
 	}
 	
+	public DBBroker getBroker(){
+		return getXQueryContext().getBroker();
+	}
+	
 	public Sequence getContext(){
+		return controller.getContext();
+	}
+	
+	public Sequence getLocalContext(){
 		return controller.getLocalContext();
 	}
 	
@@ -61,6 +70,14 @@ public abstract class Process {
 	
 	public ElementAtExist getCurrentStep(){
 		return controller.getCurrentStep();
+	}
+	
+	public Sequence getContextStack(){
+		return controller.getContextStack();
+	}
+	
+	public Sequence getFlowStack(){
+		return controller.getFlowStack();
 	}
 	
 	public void process(Sequence input, MemTreeBuilder builder) throws XPathException {

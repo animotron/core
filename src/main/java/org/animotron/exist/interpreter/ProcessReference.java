@@ -74,7 +74,7 @@ public class ProcessReference extends AbstractProcessReference {
 		
 		if (getCurrentStep().hasChildNodes()){
 			Sequence newContext;
-			Controller ctrl = new Controller(getXQueryContext(), controller.getChildNodes(getCurrentStep()) , getContext());
+			Controller ctrl = new Controller(getXQueryContext(), controller.getChildNodes(getCurrentStep()) , getLocalContext());
 			newContext = ctrl.process();
 			controller.pushContext(newContext);
 		}
