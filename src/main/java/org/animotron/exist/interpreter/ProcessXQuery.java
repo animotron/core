@@ -44,15 +44,14 @@ public class ProcessXQuery extends Process {
 	@Override
 	public Sequence eval() throws XPathException {
 		
-		
         SAXSerializer sax = (SAXSerializer) SerializerPool.getInstance().borrowObject(SAXSerializer.class);
         try {
             Serializer serializer = getBroker().getSerializer();
             serializer.reset();
+            serializer.setProperty(Serializer.GENERATE_DOC_EVENTS, "false");
             serializer.setSAXHandlers(sax, sax);
             
             sax.startDocument();
-            
             
     		String query = "";
             SequenceIterator i = controller.getChildNodes(getCurrentStep()).iterate();
