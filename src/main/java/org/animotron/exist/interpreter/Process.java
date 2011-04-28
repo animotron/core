@@ -70,7 +70,7 @@ public abstract class Process {
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
 			Item item = i.nextItem();
-			if (Type.getSuperType(item.getType()) ==  Type.NODE){
+			if (Type.getSuperType(item.getType()) == Type.NODE){
 				NodeAtExist node;
 				if (item instanceof NodeProxy){
 					node = (NodeAtExist) ((NodeProxy) item).getNode();
