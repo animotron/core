@@ -45,11 +45,11 @@ public class ProcessReference extends AbstractProcessReference {
 	
 	public Sequence eval() throws XPathException{
 		
-		Sequence source = controller.getSource();
-		Node input = controller.getCurrentStep();
+		Sequence source = getSource();
+		Node input = getCurrentStep();
 		
 		if (source == null) {
-			return controller.getIndexWorker().getNode(input.getLocalName());
+			return getIndexWorker().getNode(input.getLocalName());
 		} else {
 			XQueryContext context = getXQueryContext();
 			LocationStep step = new LocationStep(context, Constants.SELF_AXIS, new NameTest(Type.ELEMENT, new QName (input.getLocalName(), Namespaces.THE.namespace())));
@@ -74,9 +74,9 @@ public class ProcessReference extends AbstractProcessReference {
 		
 		if (getCurrentStep().hasChildNodes()){
 			Sequence newContext;
-			Controller ctrl = new Controller(getXQueryContext(), controller.getChildNodes(getCurrentStep()) , getLocalContext());
+			Controller ctrl = new Controller(getXQueryContext(), getChildSteps() , getLocalContext());
 			newContext = ctrl.process();
-			controller.pushContext(newContext);
+			pushContext(newContext);
 		}
 		
 		process(res, builder);

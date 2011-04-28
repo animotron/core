@@ -18,8 +18,12 @@
  */
 package org.animotron.exist.interpreter;
 
+import org.animotron.exist.index.AnimoIndexWorker;
 import org.exist.dom.ElementAtExist;
+import org.exist.dom.NodeHandle;
+import org.exist.dom.NodeProxy;
 import org.exist.memtree.MemTreeBuilder;
+import org.exist.memtree.NodeImpl;
 import org.exist.storage.DBBroker;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
@@ -28,6 +32,7 @@ import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
+import org.exist.xquery.value.ValueSequence;
 import org.w3c.dom.Node;
 
 /**
@@ -36,7 +41,7 @@ import org.w3c.dom.Node;
  */
 public abstract class Process {
 
-	final public Controller controller;
+	private Controller controller;
 	
 	Process(Controller controller){
 		this.controller = controller;
@@ -50,6 +55,10 @@ public abstract class Process {
 	
 	public XQueryContext getXQueryContext(){
 		return controller.getXQueryContext();
+	}
+	
+	public AnimoIndexWorker getIndexWorker() {
+		return controller.getIndexWorker();
 	}
 	
 	public DBBroker getBroker(){
@@ -72,12 +81,42 @@ public abstract class Process {
 		return controller.getCurrentStep();
 	}
 	
+	public Sequence getChildSteps(){
+		ValueSequence res = new ValueSequence();
+		Node next = getCurrentStep().getFirstChild();
+        while (next != null) {
+        	if (next instanceof NodeImpl){
+        		res.add((NodeValue) next);
+        	} else {
+        		res.add(new NodeProxy((NodeHandle) next));
+        	}
+            next = next.getNextSibling();
+        }
+		return res;
+	}
+	
 	public Sequence getContextStack(){
 		return controller.getContextStack();
 	}
 	
 	public Sequence getFlowStack(){
 		return controller.getFlowStack();
+	}
+	
+	public Sequence getSource(){
+		return controller.getSource();
+	}
+	
+	public void pushContext(Sequence context) throws XPathException{
+		controller.pushContext(context);
+	}
+	
+	public void pushFlow(ElementAtExist flow) throws XPathException{
+		controller.pushFlow(flow);
+	}
+	
+	public void process(NodeValue input, MemTreeBuilder builder) throws XPathException {
+		controller.process(input, builder);
 	}
 	
 	public void process(Sequence input, MemTreeBuilder builder) throws XPathException {

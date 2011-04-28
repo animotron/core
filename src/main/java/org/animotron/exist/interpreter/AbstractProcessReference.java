@@ -44,8 +44,8 @@ public abstract class AbstractProcessReference extends Process {
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
 			NodeValue node = (NodeValue) i.nextItem();
-			controller.pushFlow((ElementAtExist) node.getNode());
-			controller.process(node, builder);
+			pushFlow((ElementAtExist) node.getNode());
+			process(node, builder);
 		}
 		
 	}
