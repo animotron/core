@@ -23,6 +23,17 @@ public class AnimoSequence extends AbstractSequence {
 	private int size = 0;
 	private boolean sizeChanged = false;
 	
+	public AnimoSequence (Sequence seq) {
+		this();
+		if (!seq.isEmpty()){
+			vector.add(seq);
+		}
+	}
+	
+	public AnimoSequence() {
+		super();
+	}
+
 	public Sequence getFirst(){
 		return vector.isEmpty() ? Sequence.EMPTY_SEQUENCE : vector.get(0);
 	};
@@ -165,26 +176,27 @@ public class AnimoSequence extends AbstractSequence {
 	private class AnimoSequenceIterator implements SequenceIterator {
 		
 		private Iterator <Sequence> pos = vector.iterator(); 
-		private SequenceIterator cur;
-		
-		public AnimoSequenceIterator() {
-			try {
-				cur = getFirst().unorderedIterator();
-			} catch (XPathException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+		private SequenceIterator cur = null;;
 		
 		public boolean hasNext() {
-		   return cur.hasNext() || pos.hasNext();
+		   if (cur == null) {
+				try {
+					cur = pos.hasNext() ? pos.next().unorderedIterator() : null;
+				} catch (XPathException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		   }
+		   return cur != null && cur.hasNext();
 		}
 
 		public Item nextItem() {
-			if (cur.hasNext())
-				return cur.nextItem();
 			try {
-				cur = pos.next().unorderedIterator();
+				if (cur == null || !cur.hasNext()) {
+					if (pos.hasNext()) {
+						cur = pos.next().unorderedIterator();
+					}
+				}
 			} catch (XPathException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
