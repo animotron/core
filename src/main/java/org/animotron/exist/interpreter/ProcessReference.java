@@ -43,7 +43,7 @@ public class ProcessReference extends AbstractProcessReference {
 		super(controller);
 	}
 	
-	public Sequence resolve() throws XPathException{
+	public Sequence eval() throws XPathException{
 		
 		Sequence source = controller.getSource();
 		ElementAtExist input = controller.getCurrentStep();
@@ -67,7 +67,7 @@ public class ProcessReference extends AbstractProcessReference {
 	@Override
 	public void process(MemTreeBuilder builder) throws XPathException{
 		
-		Sequence res = resolve();
+		Sequence res = eval();
 		
 		if (res == null || res.isEmpty())
 			return;

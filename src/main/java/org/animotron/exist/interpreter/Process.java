@@ -41,10 +41,10 @@ public abstract class Process {
 		this.controller = controller;
 	}
 	
-	abstract public Sequence resolve () throws XPathException;
+	abstract public Sequence eval() throws XPathException;
 	
 	public void process (MemTreeBuilder builder) throws XPathException {
-		process(resolve(), builder);
+		process(eval(), builder);
 	}
 	
 	public XQueryContext getXQueryContext(){
