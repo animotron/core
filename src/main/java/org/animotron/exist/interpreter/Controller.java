@@ -75,6 +75,7 @@ public class Controller {
 	private ElementAtExist currentStep = null;
 	
 	private ProcessReference reference = new ProcessReference(this);
+	private ProcessXQuery xquery = new ProcessXQuery(this);
 	
 	public Controller(XQueryContext queryContext, Sequence flow) throws XPathException {
 		this(queryContext, flow, Sequence.EMPTY_SEQUENCE);
@@ -288,8 +289,9 @@ public class Controller {
 				//}
 
 			} else if (Keywords.DO_XQUERY.keyword().equals(name)) {
-				// TODO: process do:xquery
-				return;
+				// process do:xquery
+				// perform in-line XQuery
+				xquery.process(builder);
 
 			} else if (Keywords.DO_XSLT.keyword().equals(name)) {
 				// TODO: process do:xslt
