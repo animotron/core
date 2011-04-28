@@ -28,6 +28,7 @@ import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
+import org.w3c.dom.Node;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -67,7 +68,7 @@ public abstract class Process {
 		return controller.getCurrentFlow();
 	}
 	
-	public ElementAtExist getCurrentStep(){
+	public Node getCurrentStep(){
 		return controller.getCurrentStep();
 	}
 	

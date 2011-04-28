@@ -19,7 +19,6 @@
 package org.animotron.exist.interpreter;
 
 import org.animotron.Namespaces;
-import org.exist.dom.ElementAtExist;
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.AnalyzeContextInfo;
@@ -32,6 +31,7 @@ import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.Type;
+import org.w3c.dom.Node;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -46,7 +46,7 @@ public class ProcessReference extends AbstractProcessReference {
 	public Sequence eval() throws XPathException{
 		
 		Sequence source = controller.getSource();
-		ElementAtExist input = controller.getCurrentStep();
+		Node input = controller.getCurrentStep();
 		
 		if (source == null) {
 			return controller.getIndexWorker().getNode(input.getLocalName());

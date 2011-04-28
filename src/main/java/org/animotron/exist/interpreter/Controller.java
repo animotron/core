@@ -38,7 +38,6 @@ import org.exist.memtree.NodeImpl;
 import org.exist.memtree.ProcessingInstructionImpl;
 import org.exist.memtree.TextImpl;
 import org.exist.xquery.AnalyzeContextInfo;
-import org.exist.xquery.AnyNodeTest;
 import org.exist.xquery.Constants;
 import org.exist.xquery.Expression;
 import org.exist.xquery.LocationStep;
@@ -73,7 +72,7 @@ public class Controller {
 	private Sequence source = null;
 	
 	private ElementAtExist currentFlow = null;
-	private ElementAtExist currentStep = null;
+	private Node currentStep = null;
 	
 	private ProcessReference reference = new ProcessReference(this);
 	private ProcessXQuery xquery = new ProcessXQuery(this);
@@ -90,7 +89,7 @@ public class Controller {
 		this.queryContext = queryContext;
 	}
 	
-	public ElementAtExist getCurrentStep(){
+	public Node getCurrentStep(){
 		return currentStep;
 	}
 	
@@ -188,9 +187,7 @@ public class Controller {
 				NodeValue node = (NodeValue) item;
 				queryContext.pushDocumentContext();
 				MemTreeBuilder builder = queryContext.getDocumentBuilder();
-				builder.startElement(new QName("result", Namespaces.ANIMO.namespace()), null);
 				process(node, builder);
-				builder.endElement();
 				Node next = builder.getDocument().getFirstChild();
 	            while (next != null) {
 	                res.add((NodeValue) next);
@@ -206,7 +203,7 @@ public class Controller {
 	
 	public void process(NodeValue input, MemTreeBuilder builder) throws XPathException {
 		if (input.getType() == Type.ELEMENT) {
-			process ((ElementAtExist) input, builder);
+			process(input.getNode(), builder);
 		} else {
 			if (input instanceof NodeImpl) {
 				copy((NodeImpl) input, builder);
@@ -216,7 +213,7 @@ public class Controller {
 		}
 	}
 	
-	private void process(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
+	private void process(Node input, MemTreeBuilder builder) throws XPathException {
 
 		currentStep = input;
 		
@@ -243,7 +240,7 @@ public class Controller {
 			} else if (Keywords.AN_SELF.equals(name, ns)) {
 				// process an:self
 				// return root
-				copy((ElementAtExist) input.getDocumentAtExist().getNode(1), builder);
+				copy(input.getOwnerDocument().getFirstChild(), builder);
 				
 			} else {
 				// process reference an:*
@@ -341,14 +338,15 @@ public class Controller {
 
 	}
 	
-	private void processChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
-		SequenceIterator i = getChildNodes(input).iterate();
-		while (i.hasNext()) {
-			process((NodeValue) i.nextItem(), builder);
-		}
+	private void processChildNodes(Node input, MemTreeBuilder builder) throws XPathException {
+		Node next = input.getFirstChild();
+        while (next != null) {
+			process(next, builder);
+            next = next.getNextSibling();
+        }
 	}
 	
-	private void copyAttributes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
+	private void copyAttributes(Node input, MemTreeBuilder builder) throws XPathException {
 		SequenceIterator i = getAttributes(input).iterate();
 		while (i.hasNext()) {
 			Item item = i.nextItem();
@@ -361,23 +359,21 @@ public class Controller {
 		}
 	}
 	
-	public Sequence getChildNodes(ElementAtExist input) throws XPathException {
-		LocationStep step = new LocationStep(queryContext, Constants.CHILD_AXIS, new AnyNodeTest());
-		AnalyzeContextInfo info = new AnalyzeContextInfo(queryContext);
-		PathExpr exp = new PathExpr(queryContext);
-		exp.add(step);
-		exp.analyze(info);
-		exp.reset();
-		ValueSequence seq = new ValueSequence();
-		if (input instanceof ElementImpl) {
-			seq.add((Item) input);
-		} else {
-			seq.add(new NodeProxy((NodeHandle) input));
-		}
-		return exp.eval(seq);
+	public Sequence getChildNodes(Node node) throws XPathException {
+		ValueSequence res = new ValueSequence();
+		Node next = node.getFirstChild();
+        while (next != null) {
+        	if (next instanceof NodeImpl){
+        		res.add((NodeValue) next);
+        	} else {
+        		res.add(new NodeProxy((NodeHandle) next));
+        	}
+            next = next.getNextSibling();
+        }
+		return res;
 	}
 
-	private Sequence getAttributes(ElementAtExist input) throws XPathException {
+	private Sequence getAttributes(Node input) throws XPathException {
 		LocationStep step = new LocationStep(queryContext, Constants.CHILD_AXIS, new TypeTest(Type.ATTRIBUTE));
 		AnalyzeContextInfo info = new AnalyzeContextInfo(queryContext);
 		info.setFlags(Expression.UNORDERED);
@@ -394,7 +390,7 @@ public class Controller {
 		return exp.eval(seq);
 	}
 	
-	private void copy(ElementAtExist input, MemTreeBuilder builder) throws XPathException{
+	private void copy(Node input, MemTreeBuilder builder) throws XPathException{
 		if (input instanceof ElementImpl) {
 			copy((ElementImpl) input, builder);
 		} else {

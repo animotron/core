@@ -18,6 +18,9 @@
  */
 package org.animotron.exist.interpreter;
 
+import org.exist.dom.NodeHandle;
+import org.exist.dom.NodeProxy;
+import org.exist.memtree.NodeImpl;
 import org.exist.security.PermissionDeniedException;
 import org.exist.storage.serializers.Serializer;
 import org.exist.util.serializer.SAXSerializer;
@@ -28,7 +31,7 @@ import org.exist.xquery.XQuery;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
-import org.exist.xquery.value.SequenceIterator;
+import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 /**
@@ -54,11 +57,14 @@ public class ProcessXQuery extends Process {
             sax.startDocument();
             
     		String query = "";
-            SequenceIterator i = controller.getChildNodes(getCurrentStep()).iterate();
-            while(i.hasNext())
-            {
-        	   NodeValue next = (NodeValue)i.nextItem();
-               query += serializer.serialize(next);	
+            Node next= getCurrentStep().getFirstChild();
+            while(next != null) {
+            	if (next instanceof NodeImpl){
+            		query += serializer.serialize((NodeValue) next);
+            	} else {
+            		query += serializer.serialize(new NodeProxy((NodeHandle) next));
+            	}
+        	    next = next.getNextSibling();
             }
             
             sax.endDocument();

@@ -27,14 +27,16 @@ import javax.xml.transform.sax.SAXTransformerFactory;
 import javax.xml.transform.sax.TemplatesHandler;
 import javax.xml.transform.sax.TransformerHandler;
 
+import org.exist.dom.NodeHandle;
+import org.exist.dom.NodeProxy;
 import org.exist.memtree.DocumentBuilderReceiver;
 import org.exist.memtree.MemTreeBuilder;
+import org.exist.memtree.NodeImpl;
 import org.exist.storage.serializers.Serializer;
 import org.exist.util.serializer.Receiver;
 import org.exist.util.serializer.ReceiverToSAX;
 import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
-import org.exist.xquery.value.Item;
 import org.exist.xquery.value.NodeValue;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.ValueSequence;
@@ -61,13 +63,12 @@ public class ProcessXSLT extends Process {
 		XQueryContext context = this.getXQueryContext();
 		
 		Sequence inputNode = getContext();
-		Item stylesheetItem = controller.getChildNodes(getCurrentStep()).itemAt(0);
 		
-        TransformerHandler handler = createHandler((NodeValue) stylesheetItem);
+		Node node = getCurrentStep().getFirstChild();
+        TransformerHandler handler = createHandler(node instanceof NodeImpl ? (NodeValue) node : new NodeProxy((NodeHandle) node));
 
     	Transformer transformer = handler.getTransformer();
     	
-		
     	if (transformer.getClass().getName().equals("org.exist.xslt.TransformerImpl")) {
     		context.pushDocumentContext();
     		Sequence seq = ((org.exist.xslt.Transformer)transformer).transform(inputNode);
