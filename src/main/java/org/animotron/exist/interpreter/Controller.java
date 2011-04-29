@@ -125,11 +125,11 @@ public class Controller {
 		return source;
 	}
 	
-	public void pushFlow(Item input) throws XPathException{
+	public void pushFlow(Item item) throws XPathException{
 		if (currentFlow != null) {
-			flowStack.add(currentFlow);	
+			flowStack.add(item instanceof NodeImpl ? (NodeImpl) currentFlow : new NodeProxy((NodeHandle) item));	
 		}
-		currentFlow = input;
+		currentFlow = item;
 	}
 	
 	public void pushContext(Sequence context) throws XPathException{
@@ -205,11 +205,7 @@ public class Controller {
 					process((ElementAtExist) input, builder);
 				}
 		} else if (input.getType() == Type.NODE) {
-			if (input instanceof NodeImpl) {
-				copy((NodeImpl) input, builder);
-			} else {
-				builder.addReferenceNode(new NodeProxy((NodeHandle) input));
-			}
+    		copy((Node) input, builder);
 		} else {
 			builder.characters(input.getStringValue());
 		}
@@ -343,16 +339,16 @@ public class Controller {
 	private void processChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		Node next = input.getFirstChild();
         while (next != null) {
-        	if (next instanceof NodeImpl){
-        		process((Item) next, builder);
+        	if (next.getNodeType() == Type.ELEMENT){
+        		process((ElementAtExist) next, builder);
         	} else {
-        		process(new NodeProxy((NodeHandle) next), builder);
+        		copy(next, builder);
         	}
-            next = next.getNextSibling();
+        	next = next.getNextSibling();
         }
 	}
 	
-	private void copyAttributes(Node input, MemTreeBuilder builder) throws XPathException {
+	private void copyAttributes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		SequenceIterator i = getAttributes(input).iterate();
 		while (i.hasNext()) {
 			Item item = i.nextItem();
@@ -365,7 +361,7 @@ public class Controller {
 		}
 	}
 	
-	private Sequence getAttributes(Node input) throws XPathException {
+	private Sequence getAttributes(ElementAtExist input) throws XPathException {
 		LocationStep step = new LocationStep(queryContext, Constants.CHILD_AXIS, new TypeTest(Type.ATTRIBUTE));
 		AnalyzeContextInfo info = new AnalyzeContextInfo(queryContext);
 		info.setFlags(Expression.UNORDERED);

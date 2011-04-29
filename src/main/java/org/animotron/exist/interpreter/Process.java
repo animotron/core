@@ -110,8 +110,8 @@ public abstract class Process {
 		controller.pushContext(context);
 	}
 	
-	public void pushFlow(Item flow) throws XPathException{
-		controller.pushFlow(flow);
+	public void pushFlow(Item item) throws XPathException{
+		controller.pushFlow(item);
 	}
 	
 	public void process(Item input, MemTreeBuilder builder) throws XPathException {

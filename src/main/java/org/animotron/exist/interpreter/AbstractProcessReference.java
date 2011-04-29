@@ -42,7 +42,7 @@ public abstract class AbstractProcessReference extends Process {
 		
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
-			Item item = i.nextItem();
+			Item item =  i.nextItem();
 			pushFlow(item);
 			process(item, builder);
 		}
