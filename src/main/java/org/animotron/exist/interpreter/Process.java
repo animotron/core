@@ -121,15 +121,9 @@ public abstract class Process {
 	public void process(Sequence input, MemTreeBuilder builder) throws XPathException {
 		if (input == null)
 			return;
-		
 		SequenceIterator i = input.iterate();
 		while (i.hasNext()){
-			Item item = i.nextItem();
-			if (Type.getSuperType(item.getType()) == Type.NODE) {
-				controller.process(item, builder);
-			} else {
-				builder.characters(item.getStringValue());
-			}
+			process(i.nextItem(), builder);
 		}
 	}
 }
