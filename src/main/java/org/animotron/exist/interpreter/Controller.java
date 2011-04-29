@@ -379,18 +379,22 @@ public class Controller {
 	}
 	
 	private void copy(Node input, MemTreeBuilder builder) throws XPathException{
-		if (input instanceof ElementImpl) {
-			copy((ElementImpl) input, builder);
+		if (input instanceof ElementAtExist) {
+			copy((ElementAtExist) input, builder);
 		} else {
-			builder.addReferenceNode(new NodeProxy((NodeHandle) input));
+			if (input instanceof NodeImpl){
+				copy ((NodeImpl) input, builder);
+			} else {
+				builder.addReferenceNode(new NodeProxy((NodeHandle) input));
+			}
 		}
 	}
 
-	private void copyChildNodes(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+	private void copyChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		Node next = input.getFirstChild();
 		while (next != null) {
 			if (next.getNodeType() == Type.ELEMENT) {
-				copy((ElementImpl) next, builder);
+				copy((ElementAtExist) next, builder);
 			} else {
 				copy((NodeImpl) next, builder);
 			}
@@ -398,7 +402,7 @@ public class Controller {
 		}
 	}
 	
-	private void copy(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+	private void copy(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		builder.startElement(input.getQName(), null);
 		copyAttributes(input, builder);
 		copyChildNodes(input, builder);
