@@ -90,7 +90,7 @@ public class Controller {
 	// Current step node
 	private Node currentStep = null;
 	
-	// Dufferent porcessors 
+	// Different processors 
 	private ProcessReference reference = new ProcessReference(this);
 	private ProcessXQuery xquery = new ProcessXQuery(this);
 	private ProcessXSLT xslt = new ProcessXSLT(this);
