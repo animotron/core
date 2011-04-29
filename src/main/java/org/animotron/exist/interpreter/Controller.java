@@ -62,18 +62,35 @@ public class Controller {
 
 	private XQueryContext queryContext;
 	
+	// Input flow sequence
 	private Sequence flow;
+	
+	// Local context sequence
 	private Sequence localContext;
 	
+	// Reserved for use cases
 	private NodeSet use = new NewArrayNodeSet();
+	
+	// Local context + context stack
 	private AnimoSequence context;
+	
+	// Context stack
 	private AnimoSequence contextStack = new AnimoSequence();
+	
+	// Flow stack
 	private Sequence flowStack = new ValueSequence();
+	
+	// Source (Global context (repository or db), local context, context stack or flow stack) 
+	// to resolve references 
 	private Sequence source = null;
 	
+	// Current flow node
 	private Item currentFlow = null;
+	
+	// Current step node
 	private Node currentStep = null;
 	
+	// Dufferent porcessors 
 	private ProcessReference reference = new ProcessReference(this);
 	private ProcessXQuery xquery = new ProcessXQuery(this);
 	private ProcessXSLT xslt = new ProcessXSLT(this);
@@ -124,7 +141,8 @@ public class Controller {
 	public Sequence getSource(){
 		return source;
 	}
-	
+
+	// Push flow currentFlow into flow stack and use passed item as currentFlow 
 	public void pushFlow(Item item) throws XPathException{
 		if (currentFlow != null) {
 			flowStack.add(item instanceof NodeImpl ? (NodeImpl) currentFlow : new NodeProxy((NodeHandle) item));	
@@ -132,6 +150,7 @@ public class Controller {
 		currentFlow = item;
 	}
 	
+	// Push passed context into Stack
 	public void pushContext(Sequence context) throws XPathException{
 		contextStack.push(this.localContext);
 		this.context.push(context);
@@ -141,11 +160,13 @@ public class Controller {
 	public AnimoIndexWorker getIndexWorker() {
         return (AnimoIndexWorker) queryContext.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
 	}
-	
+
+	// TODO refactor
 	protected void addUse(NodeProxy node) {
 		use.add(node);
 	}
 
+	// TODO refactor
 	public NodeSet getUse(NodeSet set) {
 		return use.intersection(set);
 	}
@@ -175,15 +196,18 @@ public class Controller {
 		return result;
 	}
 	
+	// Process the flow
 	public Sequence process() throws XPathException {
 		Sequence res = new ValueSequence();
 		SequenceIterator i = flow.iterate();
 		while (i.hasNext()) {
 			Item item = i.nextItem();
 			if (Type.getSuperType(item.getType()) ==  Type.NODE) {
+				// if current item is node, process it
 				queryContext.pushDocumentContext();
 				MemTreeBuilder builder = queryContext.getDocumentBuilder();
 				process(item, builder);
+				// add results into result sequence
 				Node next = builder.getDocument().getFirstChild();
 	            while (next != null) {
 	                res.add((NodeValue) next);
@@ -191,26 +215,34 @@ public class Controller {
 	            }
 				queryContext.popDocumentContext();
 			} else {
+				// Add item into result sequence, instead
 				res.add(item);
 			}
 		}
 		return res; 
 	}
 	
+	// Process any item  
 	public void process(Item input, MemTreeBuilder builder) throws XPathException {
 		if (input.getType() == Type.ELEMENT) {
-				if (input instanceof NodeProxy){
-					process((ElementAtExist)((NodeProxy) input).getNode(), builder);
-				} else {
-					process((ElementAtExist) input, builder);
-				}
+			// Process as element
+			if (input instanceof NodeProxy){
+				// Process if NodeProxy
+				process((ElementAtExist)((NodeProxy) input).getNode(), builder);
+			} else {
+				// Process if stored or in-memory none
+				process((ElementAtExist) input, builder);
+			}
 		} else if (input.getType() == Type.NODE) {
+			// copy if not element
     		copy((Node) input, builder);
 		} else {
+			// add atomic item as text
 			builder.characters(input.getStringValue());
 		}
 	}
 	
+	// Process in-memory or stored element
 	private void process(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 
 		currentStep = input;
@@ -280,9 +312,7 @@ public class Controller {
 			if (Keywords.DO_SKIP.keyword().equals(name)) {
 				// process do:skip
 				// return children
-				//for (NodeProxy i : input){
-				//	builder.addReferenceNode(i);
-				//}
+				copyChildNodes(input, builder);
 
 			} else if (Keywords.DO_XQUERY.keyword().equals(name)) {
 				// process do:xquery
@@ -336,31 +366,39 @@ public class Controller {
 
 	}
 	
+	// Process child nodes of any element
 	private void processChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		Node next = input.getFirstChild();
         while (next != null) {
-        	if (next.getNodeType() == Type.ELEMENT){
+        	if (next.getNodeType() == Type.ELEMENT) {
+        		// process if node is element
         		process((ElementAtExist) next, builder);
         	} else {
+        		// copy instead
         		copy(next, builder);
         	}
         	next = next.getNextSibling();
         }
 	}
 	
+	// Copy attributes of any nodes
+	// TODO Refactor
 	private void copyAttributes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		SequenceIterator i = getAttributes(input).iterate();
 		while (i.hasNext()) {
 			Item item = i.nextItem();
 			if (item instanceof AttributeImpl) {
+				// Copy in-memory attribute
 				AttributeImpl attr = (AttributeImpl) item;
 				builder.addAttribute(new QName(attr.getLocalName(), attr.getNamespaceURI()), attr.getNodeValue());	
 			} else {
+				// Copy stored attribute
 				builder.addReferenceNode(new NodeProxy((NodeHandle) item));
 			}
 		}
 	}
 	
+	// Get attribute of any element
 	private Sequence getAttributes(ElementAtExist input) throws XPathException {
 		LocationStep step = new LocationStep(queryContext, Constants.CHILD_AXIS, new TypeTest(Type.ATTRIBUTE));
 		AnalyzeContextInfo info = new AnalyzeContextInfo(queryContext);
@@ -371,58 +409,80 @@ public class Controller {
 		exp.reset();
 		ValueSequence seq = new ValueSequence();
 		if (input instanceof ElementImpl) {
+			// Add in-memory attribute 
 			seq.add((Item) input);
 		} else {
+			// Add stored attribute
 			seq.add(new NodeProxy((NodeHandle) input));
 		}
 		return exp.eval(seq);
 	}
 	
+	// Copy any node;
 	private void copy(Node input, MemTreeBuilder builder) throws XPathException{
-		if (input instanceof ElementAtExist) {
-			copy((ElementAtExist) input, builder);
-		} else {
-			if (input instanceof NodeImpl){
-				copy ((NodeImpl) input, builder);
+		if (input instanceof NodeImpl){
+			// Copy in-memory-node
+			if (input instanceof ElementAtExist) {
+				// Copy as in-memory element
+				copy((ElementImpl) input, builder);
 			} else {
-				builder.addReferenceNode(new NodeProxy((NodeHandle) input));
+				// Copy as in-memory node
+				copy ((NodeImpl) input, builder);
 			}
+		} else {
+			// Copy any persistent node
+			builder.addReferenceNode(new NodeProxy((NodeHandle) input));
 		}
 	}
 
+	// Copy child nodes of any element
 	private void copyChildNodes(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
 		Node next = input.getFirstChild();
 		while (next != null) {
 			if (next.getNodeType() == Type.ELEMENT) {
+				// Copy as element
 				copy((ElementAtExist) next, builder);
 			} else {
-				copy((NodeImpl) next, builder);
+				// Copy as node
+				copy((Node) next, builder);
 			}
 			next = next.getNextSibling();
 		}
 	}
 	
-	private void copy(ElementAtExist input, MemTreeBuilder builder) throws XPathException {
-		builder.startElement(input.getQName(), null);
-		copyAttributes(input, builder);
-		copyChildNodes(input, builder);
-		builder.endElement();
+	// Copy in-memory element
+	private void copy(ElementImpl input, MemTreeBuilder builder) throws XPathException {
+		if (input instanceof ElementImpl){
+			// Copy in-memory element
+			builder.startElement(input.getQName(), null);
+			copyAttributes(input, builder);
+			copyChildNodes(input, builder);
+			builder.endElement();
+		} else {
+			// Copy stored element
+			builder.addReferenceNode(new NodeProxy((NodeHandle) input));
+		}
 	}
 	
+	// Copy other in-memory node 
 	private void copy(NodeImpl input, MemTreeBuilder builder) throws XPathException {
 		
 		int type = ((NodeImpl) input).getType();
 		
 		if (type == Type.TEXT) {
+			// copy text
 			builder.characters(((TextImpl)input).getNodeValue());
 			
 		} else if (type == Type.CDATA_SECTION) {
+			// copy CDATA
 			builder.cdataSection(((CDATASectionImpl)input).getData());
 			
 		} else if (type == Type.COMMENT) {
+			// copy comment
 			builder.comment(((CommentImpl)input).getData());
 			
 		} else if (type == Type.PROCESSING_INSTRUCTION) {
+			// copy PI
 			builder.processingInstruction(((ProcessingInstructionImpl)input).getTarget(), ((ProcessingInstructionImpl)input).getData());
 			
 		}
