@@ -21,9 +21,11 @@ package org.animotron.exist.index;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.exist.EXistException;
 import org.exist.Indexer;
@@ -77,7 +79,7 @@ public class AnimoIndexTests {
 
 	@Test
 	public void resolveUpIsLogic() {
-        System.out.println("Test resolve up is-logic queries ...");
+        System.out.println("Test resolve up/down is-logic queries ...");
         
         Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
         nameDataMap.put("A.xml", THE_A);
@@ -93,22 +95,37 @@ public class AnimoIndexTests {
 
             AnimoIndexWorker wk = (AnimoIndexWorker) broker.getIndexController().getWorkerByIndexId(AnimoIndex.ID);
             
+            //System.out.println("resolve down Is-Logic");
             NodeSet set = wk.resolveDownIsLogic("A");
             
             assertEquals(2, set.getItemCount());
             
+            Set<String> expect = new HashSet<String>();
+            expect.add("B"); expect.add("C");
+            
+            for (int i = 0; i < set.getItemCount(); i++) {
+            	String name = set.get(i).getNode().getLocalName();
+            	assertTrue(name, expect.remove(name));
+            }
+            
+            //System.out.println("resolve up Is-Logic");
             set = wk.resolveUpIsLogic("C");
             
             assertEquals(2, set.getItemCount());
 
+            expect.add("A"); expect.add("B");
+            for (int i = 0; i < set.getItemCount(); i++) {
+            	String name = set.get(i).getNode().getLocalName();
+            	assertTrue(name, expect.remove(name));
+            }
+            
         } catch (EXistException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		} finally {
         	pool.release(broker);
         }
-
-		
+        System.out.println("done.");
 	}
 
 	@Test

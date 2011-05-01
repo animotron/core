@@ -18,10 +18,7 @@
  */
 package org.animotron.exist.index;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import org.animotron.Namespaces;
 import org.exist.collections.Collection;
@@ -45,6 +42,13 @@ import org.exist.storage.txn.Txn;
 import org.exist.util.DatabaseConfigurationException;
 import org.exist.util.Occurrences;
 import org.exist.xquery.XQueryContext;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.kernel.Traversal;
 import org.w3c.dom.NodeList;
 
 /**
@@ -56,9 +60,29 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	private int mode = 0;
     private DocumentImpl document = null;
     private AnimoIndex index;
+    
+    private final Node instanceFactoryNode;
 
 	public AnimoIndexWorker(AnimoIndex index) {
 		this.index = index;
+		
+		Transaction tx = index.graphDb.beginTx();
+		try {
+			Relationship r = 
+				index.graphDb.getReferenceNode().getSingleRelationship(
+						RelationshipTypes.THEs, Direction.OUTGOING );
+			
+			if (r == null) {
+				instanceFactoryNode = index.graphDb.createNode();
+				index.graphDb.getReferenceNode().createRelationshipTo(
+						instanceFactoryNode, RelationshipTypes.THEs);
+			} else {
+				instanceFactoryNode = r.getEndNode();
+			}
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -124,8 +148,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	/* (non-Javadoc)
 	 * @see org.exist.indexing.IndexWorker#getReindexRoot(org.exist.dom.StoredNode, org.exist.storage.NodePath, boolean)
 	 */
-	public StoredNode getReindexRoot(StoredNode node, NodePath path,
-			boolean includeSelf) {
+	public StoredNode getReindexRoot(StoredNode node, NodePath path, boolean includeSelf) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -151,6 +174,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 * @see org.exist.indexing.IndexWorker#flush()
 	 */
 	public void flush() {
+		
 		// TODO Auto-generated method stub
 
 	}
@@ -179,94 +203,81 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		return null;
 	}
 	
-	//instance name -> reference
-	private Map<String, NodeProxy> names = new HashMap<String, NodeProxy>();
-	
-	//TODO: make this map do the job
-	private Map<NodeProxy, String> ids = new HashMap<NodeProxy, String>(); 
-	
-	private NodeProxy addNode(ElementImpl element) {
-		String name = element.getLocalName();
-		if (names.containsKey(name)) { 
-			NodeProxy proxy = names.get(name);
-			if (proxy.getDocument() == index.unresolvedReferenceDocument) {
-				proxy.update(element);
-			}
-			return proxy;
+	private synchronized THE addTHE(ElementImpl element) {
+		final String name = element.getLocalName();
 		
-		} else {
-			NodeProxy proxy = new NodeProxy(element);
-			names.put(name, proxy);
-			return proxy;
+		THE instance = getTHE(name);
+		
+		if (instance != null) {
+			if (instance.proxy.getDocument() == index.unresolvedReferenceDocument) {
+				instance.update(element.getDocumentAtExist(), element.getNodeId());
+			}
+			//XXX: check doc with element's doc
+			return instance;
 		}
+		Node node = null;
+		
+		Transaction tx = index.graphDb.beginTx();
+		try {
+	        node = index.graphDb.createNode();
+	
+	        node.setProperty("name", name);
+	        index.indexService.index( node, "name", name );
+	        
+	        instanceFactoryNode.createRelationshipTo( node, RelationshipTypes.THE );
+	        
+	        tx.success();
+		} finally {
+			tx.finish();
+		}
+        
+        return new THE( node, element );
 	}
 	
-	public NodeProxy getOrCreateNode(String name) {
-		NodeProxy node = names.get(name);
-		
-		if (node == null) {
-			node = new NodeProxy(
-					index.unresolvedReferenceDocument, 
-					index.unresolvedReferenceId.newChild());
-			names.put(name, node);
+	private synchronized THE getTHE(String name) {
+		Node node = index.indexService.getSingleNode( "name", name );
+		if (node != null) {
+			return new THE(index, node);
 		}
-		return node;
+		return null;
+	}
+	
+	
+	public synchronized THE getOrCreateNode(String name) {
+		THE instance = getTHE(name);
+		if (instance != null) return instance;
+		
+        Node node = index.graphDb.createNode();
+
+        node.setProperty("name", name);
+        index.indexService.index( node, "name", name );
+        
+        instanceFactoryNode.createRelationshipTo( node, RelationshipTypes.THE );
+		
+		return new THE(node, 
+				index.unresolvedReferenceDocument, 
+				index.unresolvedReferenceId.newChild());
 	}
 
 	public NodeProxy getNode(String name) {
-		return names.get(name);
-	}
-	
-	public String getNodeName(NodeProxy id) {
-		return ids.get(id);
-	}
-
-	//instance -> is-relations nodes (down)
-	private Map<NodeProxy, Set<NodeProxy>> downIsRelations = new HashMap<NodeProxy, Set<NodeProxy>>(); 
-	
-	//instance -> is-relations nodes (up)
-	private Map<NodeProxy, Set<NodeProxy>> upIsRelations = new HashMap<NodeProxy, Set<NodeProxy>>(); 
-
-	
-	private void addIsRelationship(NodeProxy node, NodeProxy is) {
+		THE instance = getTHE(name);
+		if (instance == null) return null;
 		
-		//record down relations
-		Set<NodeProxy> nodes = null;
-		if (downIsRelations.containsKey(is)) {
-			nodes = downIsRelations.get(is);
-		} else {
-			nodes = new HashSet<NodeProxy>();
-			
-			downIsRelations.put(is, nodes);
-		}
-		
-		nodes.add(node);
-
-		//record up relations
-		nodes = null;
-		if (upIsRelations.containsKey(node)) {
-			nodes = upIsRelations.get(node);
-		} else {
-			nodes = new HashSet<NodeProxy>();
-			
-			upIsRelations.put(node, nodes);
-		}
-		
-		nodes.add(is);
+		return instance.proxy;
 	}
 
 	private class AnimoStreamListener extends AbstractStreamListener {
 
-    	private NodeProxy currentNode;
+    	private THE currentNode;
     	
         @Override
         public void startElement(Txn transaction, ElementImpl element, NodePath path) {
             if (mode == STORE) {
             	if (Namespaces.THE.namespace().equals(element.getQName().getNamespaceURI())) {
-            		currentNode = addNode(element);
+            		currentNode = addTHE(element);
             	
             	} else if (Namespaces.IS.namespace().equals(element.getQName().getNamespaceURI())) {
-            		addIsRelationship(currentNode, getOrCreateNode(element.getLocalName()));
+            		currentNode.addIsRelationship(getOrCreateNode(element.getLocalName()));
             	}
             }
             super.startElement(transaction, element, path);
@@ -280,14 +291,13 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
     }
 
 	public NodeSet resolveUpIsLogic(String name) {
-		NodeProxy node = getNode(name);
-		
-		if (!upIsRelations.containsKey(node))
-			return NodeSet.EMPTY_SET;
+
+		THE instance = getTHE(name);
+		if (instance == null) return NodeSet.EMPTY_SET;
 		
 		NodeSet set = new NewArrayNodeSet(5);
 		
-		resolveUpIsLogic(node, set);
+		resolveUpIsLogic(instance, set);
 		
 		return set;
 	}
@@ -295,36 +305,36 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	public NodeSet resolveUpIsLogic(NodeSet s) {
 		NodeSet result = new NewArrayNodeSet(5);
 		
+		THE instance = null;
 		for (NodeProxy node : s) {
 		
-			if (!upIsRelations.containsKey(node))
-				continue;
-		
-			resolveUpIsLogic(node, result);
+			instance = getTHE(node.getNode().getLocalName());
+			if (instance == null) continue;
+			
+			resolveUpIsLogic(instance, result);
 		}
 		//TODO: to check: is empty?
 		return result;
 	}
 
-	private void resolveUpIsLogic(NodeProxy node, NodeSet set) {
-		if (!upIsRelations.containsKey(node))
-			return;
+	private void resolveUpIsLogic(THE node, NodeSet result) {
+		TraversalDescription td = Traversal.description().breadthFirst().relationships(
+				RelationshipTypes.IS ).filter(
+				        Traversal.returnAllButStartNode() );
 		
-		for (NodeProxy n : upIsRelations.get(node)) {
-			set.add(n);
-			resolveUpIsLogic(n, set);
+		for ( Path path : td.traverse( node.graphNode ) ) {
+			result.add(  (new THE(index, path.endNode())).proxy );
 		}
 	}
 
 	public NodeSet resolveDownIsLogic(String name) {
-		NodeProxy node = getNode(name);
 		
-		if (!downIsRelations.containsKey(node))
-			return NodeSet.EMPTY_SET;
+		THE instance = getTHE(name);
+		if (instance == null) return NodeSet.EMPTY_SET;
 		
 		NodeSet result = new NewArrayNodeSet(5);
 		
-		resolveDownIsLogic(node, result);
+		resolveDownIsLogic(instance, result);
 		
 		return result;
 	}
@@ -332,23 +342,25 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	public NodeSet resolveDownIsLogic(NodeSet set) {
 		NodeSet result = new NewArrayNodeSet(5);
 		
+		THE instance = null;
 		for (NodeProxy node : set) {
-			if (!downIsRelations.containsKey(node))
-				continue;
-		
-			resolveDownIsLogic(node, result);
+			
+			instance = getTHE(node.getNode().getLocalName());
+			if (instance == null) continue;
+			
+			resolveDownIsLogic(instance, set);
 		}
 		//TODO: to check: is empty?
 		return result;
 	}
 
-	private void resolveDownIsLogic(NodeProxy node, NodeSet result) {
-		if (!downIsRelations.containsKey(node))
-			return;
+	private void resolveDownIsLogic(THE node, NodeSet result) {
+		TraversalDescription td = Traversal.description().breadthFirst().relationships(
+				RelationshipTypes.IS ).filter(
+				        Traversal.returnAllButStartNode() );
 		
-		for (NodeProxy n : downIsRelations.get(node)) {
-			result.add(n);
-			resolveDownIsLogic(n, result);
+		for ( Path path : td.traverse( node.graphNode ) ) {
+			result.add(  (new THE(index, path.endNode())).proxy );
 		}
 	}
 	
