@@ -47,6 +47,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.w3c.dom.NodeList;
@@ -122,6 +123,8 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	public void setDocument(DocumentImpl doc, int mode) {
 		this.document = doc;
 		this.mode = mode;
+		
+		System.out.println("setDocument doc = "+doc+" mode = "+mode);
 	}
 
 	/* (non-Javadoc)
@@ -129,6 +132,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 */
 	public void setMode(int mode) {
 		this.mode = mode;
+		System.out.println("setMode mode = "+mode);
 	}
 
 	/* (non-Javadoc)
@@ -149,6 +153,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 * @see org.exist.indexing.IndexWorker#getReindexRoot(org.exist.dom.StoredNode, org.exist.storage.NodePath, boolean)
 	 */
 	public StoredNode getReindexRoot(StoredNode node, NodePath path, boolean includeSelf) {
+		System.out.println("getReindexRoot path = "+path);
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -183,6 +188,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 * @see org.exist.indexing.IndexWorker#removeCollection(org.exist.collections.Collection, org.exist.storage.DBBroker)
 	 */
 	public void removeCollection(Collection collection, DBBroker broker) {
+		System.out.println("removeCollection "+collection);
 		// TODO Auto-generated method stub
 
 	}
@@ -191,6 +197,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 * @see org.exist.indexing.IndexWorker#checkIndex(org.exist.storage.DBBroker)
 	 */
 	public boolean checkIndex(DBBroker broker) {
+		System.out.println("checkIndex called");
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -279,6 +286,8 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
             	} else if (Namespaces.IS.namespace().equals(element.getQName().getNamespaceURI())) {
             		currentNode.addIsRelationship(getOrCreateNode(element.getLocalName()));
             	}
+            } else {
+            	System.out.println("mode = "+mode+" path = "+path);
             }
             super.startElement(transaction, element, path);
         }
@@ -318,9 +327,10 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	}
 
 	private void resolveUpIsLogic(THE node, NodeSet result) {
-		TraversalDescription td = Traversal.description().breadthFirst().relationships(
-				RelationshipTypes.IS ).filter(
-				        Traversal.returnAllButStartNode() );
+		TraversalDescription td = Traversal.description().
+			breadthFirst().
+			relationships(RelationshipTypes.IS ).
+			evaluator(Evaluators.excludeStartPosition());
 		
 		for ( Path path : td.traverse( node.graphNode ) ) {
 			result.add(  (new THE(index, path.endNode())).proxy );
@@ -355,9 +365,10 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	}
 
 	private void resolveDownIsLogic(THE node, NodeSet result) {
-		TraversalDescription td = Traversal.description().breadthFirst().relationships(
-				RelationshipTypes.IS ).filter(
-				        Traversal.returnAllButStartNode() );
+		TraversalDescription td = Traversal.description().
+			breadthFirst().
+			relationships(RelationshipTypes.IS ).
+			evaluator(Evaluators.excludeStartPosition());
 		
 		for ( Path path : td.traverse( node.graphNode ) ) {
 			result.add(  (new THE(index, path.endNode())).proxy );

@@ -29,15 +29,22 @@ import org.exist.security.Subject;
 import org.exist.storage.DBBroker;
 import org.exist.util.ByteConversion;
 import org.exist.xmldb.XmldbURI;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.ReturnableEvaluator;
+import org.neo4j.graphdb.StopEvaluator;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.Traverser;
+import org.neo4j.graphdb.Traverser.Order;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class THE {
+public class THE implements Node {
 	
     public static final String KEY_DOC_ID = "docId";
     public static final String KEY_DOC_URI = "docURI";
@@ -134,5 +141,135 @@ public class THE {
 		} finally {
 			tx.finish();
 		}
+	}
+
+	//neo4j methods
+	
+	@Override
+	public GraphDatabaseService getGraphDatabase() {
+		return graphNode.getGraphDatabase();
+	}
+
+	@Override
+	public boolean hasProperty(String key) {
+		return graphNode.hasProperty(key);
+	}
+
+	@Override
+	public Object getProperty(String key) {
+		return graphNode.getProperty(key);
+	}
+
+	@Override
+	public Object getProperty(String key, Object defaultValue) {
+		return graphNode.getProperty(key, defaultValue);
+	}
+
+	@Override
+	public void setProperty(String key, Object value) {
+		graphNode.setProperty(key, value);
+	}
+
+	@Override
+	public Object removeProperty(String key) {
+		return graphNode.removeProperty(key);
+	}
+
+	@Override
+	public Iterable<String> getPropertyKeys() {
+		return graphNode.getPropertyKeys();
+	}
+
+	@Override
+	public Iterable<Object> getPropertyValues() {
+		return graphNode.getPropertyValues();
+	}
+
+	@Override
+	public long getId() {
+		return graphNode.getId();
+	}
+
+	@Override
+	public void delete() {
+		graphNode.delete();
+	}
+
+	@Override
+	public Iterable<Relationship> getRelationships() {
+		return graphNode.getRelationships();
+	}
+
+	@Override
+	public boolean hasRelationship() {
+		return graphNode.hasRelationship();
+	}
+
+	@Override
+	public Iterable<Relationship> getRelationships(RelationshipType... types) {
+		return graphNode.getRelationships(types);
+	}
+
+	@Override
+	public boolean hasRelationship(RelationshipType... types) {
+		return graphNode.hasRelationship(types);
+	}
+
+	@Override
+	public Iterable<Relationship> getRelationships(Direction dir) {
+		return graphNode.getRelationships(dir);
+	}
+
+	@Override
+	public boolean hasRelationship(Direction dir) {
+		return graphNode.hasRelationship(dir);
+	}
+
+	@Override
+	public Iterable<Relationship> getRelationships(RelationshipType type, Direction dir) {
+		return graphNode.getRelationships(type, dir);
+	}
+
+	@Override
+	public boolean hasRelationship(RelationshipType type, Direction dir) {
+		return graphNode.hasRelationship(type, dir);
+	}
+
+	@Override
+	public Relationship getSingleRelationship(RelationshipType type, Direction dir) {
+		return graphNode.getSingleRelationship(type, dir);
+	}
+
+	@Override
+	public Relationship createRelationshipTo(Node otherNode, RelationshipType type) {
+		return graphNode.createRelationshipTo(otherNode, type);
+	}
+
+	@Override
+	public Traverser traverse(Order traversalOrder,
+			StopEvaluator stopEvaluator,
+			ReturnableEvaluator returnableEvaluator,
+			RelationshipType relationshipType, Direction direction) {
+
+		return graphNode.traverse(traversalOrder, stopEvaluator, returnableEvaluator, relationshipType, direction);
+	}
+
+	@Override
+	public Traverser traverse(Order traversalOrder,
+			StopEvaluator stopEvaluator,
+			ReturnableEvaluator returnableEvaluator,
+			RelationshipType firstRelationshipType, Direction firstDirection,
+			RelationshipType secondRelationshipType, Direction secondDirection) {
+
+		return graphNode.traverse(traversalOrder, stopEvaluator, returnableEvaluator, firstRelationshipType, firstDirection, secondRelationshipType, secondDirection);
+	}
+
+	@Override
+	public Traverser traverse(Order traversalOrder,
+			StopEvaluator stopEvaluator,
+			ReturnableEvaluator returnableEvaluator,
+			Object... relationshipTypesAndDirections) {
+
+		return graphNode.traverse(traversalOrder, stopEvaluator, returnableEvaluator, relationshipTypesAndDirections);
 	}
 }
