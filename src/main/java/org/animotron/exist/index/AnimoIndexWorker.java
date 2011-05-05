@@ -254,16 +254,23 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		THE instance = getTHE(name);
 		if (instance != null) return instance;
 		
-        Node node = index.graphDb.createNode();
+		Transaction tx = index.graphDb.beginTx();
+		try {
+	        Node node = index.graphDb.createNode();
+	
+	        node.setProperty("name", name);
+	        index.indexService.index( node, "name", name );
+	        
+	        instanceFactoryNode.createRelationshipTo( node, RelationshipTypes.THE );
+	        
+	        tx.success();
 
-        node.setProperty("name", name);
-        index.indexService.index( node, "name", name );
-        
-        instanceFactoryNode.createRelationshipTo( node, RelationshipTypes.THE );
-		
-		return new THE(node, 
-				index.unresolvedReferenceDocument, 
-				index.unresolvedReferenceId.newChild());
+			return new THE(node, 
+					index.unresolvedReferenceDocument, 
+					index.unresolvedReferenceId.newChild());
+		} finally {
+			tx.finish();
+		}
 	}
 
 	public NodeProxy getNode(String name) {
