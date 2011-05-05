@@ -18,21 +18,27 @@
  */
 package org.animotron.exist.index;
 
-import org.neo4j.graphdb.RelationshipType;
+import org.exist.dom.DocumentAtExist;
+import org.exist.dom.ElementAtExist;
+import org.exist.numbering.NodeId;
+import org.neo4j.graphdb.Node;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public enum RelationshipTypes implements RelationshipType {
-	//used for iterator
-	PROCESSING_FLOW_ELEMENT,
+public class HAVE extends AnimoNode {
 	
-	DOCUMENT,
+	public HAVE(final Node gNode) {
+		super(gNode);
+	}
 	
-	THEs,
-	THE,
+	public HAVE(final Node gNode, final ElementAtExist node) {
+		super(gNode, node.getDocumentAtExist(), node.getNodeId());
+	}
 	
-	IS,
-	HAVE
+
+	public HAVE(final Node gNode, final DocumentAtExist doc, final NodeId nodeId) {
+		super(gNode, doc, nodeId);
+	}
 }

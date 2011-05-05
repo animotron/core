@@ -47,12 +47,9 @@ public class AnimoIndex extends AbstractIndex {
 
 	public static final String ID = AnimoIndex.class.getName();
 	public static final String FOLDER_NAME = "animo";
-
-	protected GraphDatabaseService graphDb;
-	protected IndexService indexService;
-
-	protected DocumentImpl unresolvedReferenceDocument = null;
-	protected NodeId unresolvedReferenceId = new DLN();
+	
+	protected static final DocumentImpl unresolvedReferenceDocument = null;
+	protected static final NodeId unresolvedReferenceId = new DLN();
 
 	public final static XmldbURI ANIMO_COLLETION_URI = 
 		XmldbURI.SYSTEM_COLLECTION_URI.append("animo");
@@ -60,6 +57,20 @@ public class AnimoIndex extends AbstractIndex {
 	public final static XmldbURI UNRESOLVED_REFERENCES_FILE_URI = 
 		XmldbURI.create("unresolved-references.xml");
 
+
+	private static AnimoIndex instance;
+	
+	public static AnimoIndex getInstance() {
+		return instance;
+	}
+
+	protected static GraphDatabaseService graphDb;
+	protected static IndexService indexService;
+
+	public AnimoIndex() {
+		AnimoIndex.instance = this;
+	}
+	
 	public void configure(BrokerPool db, String dataDir, Element config) throws DatabaseConfigurationException {
 		super.configure(db, dataDir, config);
 
@@ -75,8 +86,8 @@ public class AnimoIndex extends AbstractIndex {
 	public void open() throws DatabaseConfigurationException {
 		File folder = new File(getDataDir(), FOLDER_NAME);
 		
-		graphDb = new EmbeddedGraphDatabase(folder.getAbsolutePath());
-		indexService = new LuceneIndexService( graphDb );
+		AnimoIndex.graphDb = new EmbeddedGraphDatabase(folder.getAbsolutePath());
+		AnimoIndex.indexService = new LuceneIndexService( graphDb );
 
 		LOG.debug("Animo index opened at '" + folder.getAbsolutePath() + "' .");
 	}

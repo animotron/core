@@ -18,21 +18,16 @@
  */
 package org.animotron.exist.index;
 
-import org.neo4j.graphdb.RelationshipType;
+import org.exist.dom.ElementAtExist;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public enum RelationshipTypes implements RelationshipType {
-	//used for iterator
-	PROCESSING_FLOW_ELEMENT,
+public class Utils {
+
+	protected static String getUniqNodeId(ElementAtExist element) {
+		return String.valueOf( element.getDocumentAtExist().getDocId() ) + String.valueOf( element.getNodeId().units() );
+	}
 	
-	DOCUMENT,
-	
-	THEs,
-	THE,
-	
-	IS,
-	HAVE
 }

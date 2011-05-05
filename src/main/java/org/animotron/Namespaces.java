@@ -25,43 +25,49 @@ package org.animotron;
  */
 public enum Namespaces {
 	
-	ANIMO	("animo", "animo"),
+	ANIMO	(0, "animo", "animo"),
 	 
-	THE		("the", "animo/instance"),
-	AN		("an", "animo/reference"),
+	THE		( 1, "the", "animo/instance"),
+	AN		( 2, "an", "animo/reference"),
 
-	IC		("ic", "animo/connection"),
+	IS		(10, "is", "animo/relation/is"),
+	HAVE	(11, "have", "animo/relation/have"),
+	USE		(12, "use", "animo/relation/use"),
 
-	ALL		("all", "animo/query/all"),
-	ANY		("any", "animo/query/any"),
-	GET		("get", "animo/query/extract"),
-	SELF	("self", "animo/query/self"),
+	IC		(20, "ic", "animo/connection"),
 
-	PTRN	("ptrn", "animo/pattern"),
+	ALL		(31, "all", "animo/query/all"),
+	ANY		(32, "any", "animo/query/any"),
+	GET		(33, "get", "animo/query/extract"),
+	SELF	(34, "self", "animo/query/self"),
 
-	DO		("do", "animo/perform"),
+	PTRN	(40, "ptrn", "animo/pattern"),
 
-	IS		("is", "animo/relation/is"),
-	USE		("use", "animo/relation/use"),
-	HAVE	("have", "animo/relation/have"),
+	DO		(50, "do", "animo/perform"),
 
-	LT		("lt", "animo/compare/lt"), 
-	GT		("gt", "animo/compare/gt"), 
-	EQ		("eq", "animo/compare/eq"), 
-	NE		("ne", "animo/compare/ne"), 
-	LE		("le", "animo/compare/le"), 
-	GE		("ne", "animo/compare/ge");
+	LT		(61, "lt", "animo/compare/lt"), 
+	GT		(62, "gt", "animo/compare/gt"), 
+	EQ		(63, "eq", "animo/compare/eq"), 
+	NE		(64, "ne", "animo/compare/ne"), 
+	LE		(65, "le", "animo/compare/le"), 
+	GE		(66, "ne", "animo/compare/ge");
 
 	
 	private final String prefix; 
 	private final String namespace; 
+	private final short id; 
 	
 	
-	Namespaces (String prefix, String namespace){
+	Namespaces (int id, String prefix, String namespace){
+		this.id = (short)id;
 		this.prefix = prefix;
 		this.namespace = namespace;
 	}
 	
+	public short id(){
+		return id;
+	}
+
 	public String prefix(){
 		return prefix;
 	}
