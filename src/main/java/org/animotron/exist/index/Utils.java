@@ -27,7 +27,7 @@ import org.exist.dom.ElementAtExist;
 public class Utils {
 
 	protected static String getUniqNodeId(ElementAtExist element) {
-		return String.valueOf( element.getDocumentAtExist().getDocId() ) + String.valueOf( element.getNodeId().units() );
+		return String.valueOf( element.getDocumentAtExist().getDocId() ) + "-" + String.valueOf( element.getNodeId().units() );
 	}
 	
 }
