@@ -18,6 +18,8 @@
  */
 package org.animotron.exist.index;
 
+import net.sf.saxon.type.Type;
+
 import org.exist.Database;
 import org.exist.dom.DocumentAtExist;
 import org.exist.dom.DocumentImpl;
@@ -89,7 +91,7 @@ public class AnimoNode implements Node {
 				}
 			}
 			
-			proxy = new NodeProxy(doc, nodeId);
+			proxy = new NodeProxy(doc, nodeId, Type.ELEMENT);
 			
 			tx.success();
 		} finally {
@@ -157,7 +159,7 @@ public class AnimoNode implements Node {
 
         graphNode.setProperty( KEY_NODE_ID, data );
 		
-		proxy = new NodeProxy((DocumentImpl) doc, nodeId);//XXX: ???
+		proxy = new NodeProxy((DocumentImpl) doc, nodeId, Type.ELEMENT);//XXX: ???
 	}
 
 	//neo4j methods
