@@ -18,7 +18,10 @@
  */
 package org.animotron.exist.index;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.HashSet;
@@ -29,7 +32,6 @@ import java.util.Set;
 
 import org.exist.EXistException;
 import org.exist.Indexer;
-//import org.exist.TestUtils;
 import org.exist.collections.Collection;
 import org.exist.collections.CollectionConfigurationManager;
 import org.exist.collections.IndexInfo;
@@ -93,10 +95,8 @@ public class AnimoIndexTests {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
 
-            AnimoIndexWorker wk = (AnimoIndexWorker) broker.getIndexController().getWorkerByIndexId(AnimoIndex.ID);
-            
             //System.out.println("resolve down Is-Logic");
-            NodeSet set = wk.resolveDownIsLogic("A");
+            NodeSet set = AnimoGraph.resolveDownIsLogic("A");
             
             assertEquals(2, set.getItemCount());
             
@@ -109,7 +109,7 @@ public class AnimoIndexTests {
             }
             
             //System.out.println("resolve up Is-Logic");
-            set = wk.resolveUpIsLogic("C");
+            set = AnimoGraph.resolveUpIsLogic("C");
             
             assertEquals(2, set.getItemCount());
 
@@ -142,13 +142,11 @@ public class AnimoIndexTests {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
 
-            AnimoIndexWorker wk = (AnimoIndexWorker) broker.getIndexController().getWorkerByIndexId(AnimoIndex.ID);
-            
-            NodeSet set = wk.resolveDownIsLogic("A");
+            NodeSet set = AnimoGraph.resolveDownIsLogic("A");
             
             assertEquals(2, set.getItemCount());
             
-            set = wk.resolveUpIsLogic("C");
+            set = AnimoGraph.resolveUpIsLogic("C");
             
             assertEquals(2, set.getItemCount());
 

@@ -18,25 +18,23 @@
  */
 package org.animotron.exist.index;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.exist.EXistException;
 import org.exist.Indexer;
-//import org.exist.TestUtils;
 import org.exist.collections.Collection;
 import org.exist.collections.CollectionConfigurationManager;
 import org.exist.collections.IndexInfo;
 import org.exist.dom.DefaultDocumentSet;
 import org.exist.dom.DocumentSet;
 import org.exist.dom.MutableDocumentSet;
-import org.exist.dom.NodeSet;
 import org.exist.storage.BrokerPool;
 import org.exist.storage.DBBroker;
 import org.exist.storage.txn.TransactionManager;
@@ -49,6 +47,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.neo4j.graphdb.Node;
 
 
 /**
@@ -94,17 +93,16 @@ public class EvaluationTreeTests {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
 
-            AnimoIndexWorker wk = (AnimoIndexWorker) broker.getIndexController().getWorkerByIndexId(AnimoIndex.ID);
-            
-            THE node = wk.getTHE("B");
+            Node node = AnimoGraph.getTHE("B");
             
             assertNotNull(node);
             
             String[] must = new String[] {"the:B", "have:B", "some", "another"};
             int i = 0;
             
-            for (AnimoNode n : node) {
-            	assertEquals("on "+i+" step", must[i], n.proxy.getNode().getNodeName());
+            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
+            while (it.hasNext()) {
+            	assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	i++;
             }
             

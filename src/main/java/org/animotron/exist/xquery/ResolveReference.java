@@ -18,8 +18,7 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.exist.index.AnimoIndex;
-import org.animotron.exist.index.AnimoIndexWorker;
+import org.animotron.exist.index.AnimoGraph;
 import org.animotron.exist.interpreter.AnimoContext;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
@@ -73,10 +72,9 @@ public class ResolveReference extends BasicFunction {
 		SequenceIterator i = args[0].iterate();
 		Sequence res = new ValueSequence();
 		if (args.length == 1){
-			AnimoIndexWorker wk = (AnimoIndexWorker) context.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
 			while (i.hasNext()){
 				String name = i.nextItem().getStringValue();
-				NodeSet set = wk.getNode(name);
+				NodeSet set = AnimoGraph.getNode(name);
 				res.addAll(set);
 			}
 		} else {

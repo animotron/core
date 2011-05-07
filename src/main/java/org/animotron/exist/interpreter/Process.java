@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.interpreter;
 
-import org.animotron.exist.index.AnimoIndexWorker;
 import org.exist.dom.NodeHandle;
 import org.exist.dom.NodeProxy;
 import org.exist.memtree.MemTreeBuilder;
@@ -53,10 +52,6 @@ public abstract class Process {
 	
 	public XQueryContext getXQueryContext(){
 		return controller.getXQueryContext();
-	}
-	
-	public AnimoIndexWorker getIndexWorker() {
-		return controller.getIndexWorker();
 	}
 	
 	public DBBroker getBroker(){

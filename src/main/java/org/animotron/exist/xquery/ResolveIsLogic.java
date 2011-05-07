@@ -18,8 +18,7 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.exist.index.AnimoIndex;
-import org.animotron.exist.index.AnimoIndexWorker;
+import org.animotron.exist.index.AnimoGraph;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;
@@ -28,7 +27,6 @@ import org.exist.xquery.XPathException;
 import org.exist.xquery.XQueryContext;
 import org.exist.xquery.value.FunctionParameterSequenceType;
 import org.exist.xquery.value.FunctionReturnSequenceType;
-import org.exist.xquery.value.Item;
 import org.exist.xquery.value.Sequence;
 import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.SequenceType;
@@ -69,15 +67,14 @@ public class ResolveIsLogic extends BasicFunction {
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 		SequenceIterator i = args[0].iterate();
-		AnimoIndexWorker wk = (AnimoIndexWorker) context.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
 		Sequence res = new ValueSequence();
 		if (isCalledAs(UP_NAME)){
 			while (i.hasNext()){
-				res.addAll(wk.resolveUpIsLogic(i.nextItem().getStringValue()));
+				res.addAll(AnimoGraph.resolveUpIsLogic(i.nextItem().getStringValue()));
 			}
 		} else {
 			while (i.hasNext()){
-				res.addAll(wk.resolveDownIsLogic(i.nextItem().getStringValue()));
+				res.addAll(AnimoGraph.resolveDownIsLogic(i.nextItem().getStringValue()));
 			}
 		}
 		return res;

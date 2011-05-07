@@ -19,6 +19,7 @@
 package org.animotron.exist.interpreter;
 
 import org.animotron.Namespaces;
+import org.animotron.exist.index.AnimoGraph;
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.AnalyzeContextInfo;
@@ -49,7 +50,7 @@ public class ProcessReference extends AbstractProcessReference {
 		Node input = getCurrentStep();
 		
 		if (source == null) {
-			return getIndexWorker().getNode(input.getLocalName());
+			return AnimoGraph.getNode(input.getLocalName());
 		} else {
 			XQueryContext context = getXQueryContext();
 			LocationStep step = new LocationStep(context, Constants.SELF_AXIS, new NameTest(Type.ELEMENT, new QName (input.getLocalName(), Namespaces.THE.namespace())));

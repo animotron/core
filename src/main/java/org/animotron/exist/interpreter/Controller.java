@@ -21,8 +21,7 @@ package org.animotron.exist.interpreter;
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
 import org.animotron.exist.AnimoSequence;
-import org.animotron.exist.index.AnimoIndex;
-import org.animotron.exist.index.AnimoIndexWorker;
+import org.animotron.exist.index.AnimoGraph;
 import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeHandle;
@@ -157,10 +156,6 @@ public class Controller {
 		this.localContext = context;
 	}
 	
-	public AnimoIndexWorker getIndexWorker() {
-        return (AnimoIndexWorker) queryContext.getBroker().getIndexController().getWorkerByIndexId(AnimoIndex.ID);
-	}
-
 	// TODO refactor
 	protected void addUse(NodeProxy node) {
 		use.add(node);
@@ -180,7 +175,7 @@ public class Controller {
 		
 		NodeSet use = getUse(is);
 		for (NodeProxy node : use) {
-			NodeSet useIS = getIndexWorker().resolveDownIsLogic(node);
+			NodeSet useIS = AnimoGraph.resolveDownIsLogic(node);
 
 			if (useIS.isEmpty())
 				continue;
