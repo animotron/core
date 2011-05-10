@@ -210,13 +210,18 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	
 	private class AnimoStreamListener extends AbstractStreamListener {
 
+		//here because of optimization reasons
     	private Node THENode;
-    	Node currentNode = null;
+    	private Node activeNode = null;
     	
-    	private Stack<Node> currentNodeStack = new Stack<Node>();
-    	private List<Boolean> currentNodes = new ArrayList<Boolean>();
+    	private Stack<Node> nodes = new Stack<Node>();
+    	private Stack<Node> activeNodes = new Stack<Node>();
     	
-    	private int level = 1;
+    	private Stack<List<Node>> childrens = new Stack<List<Node>>();
+
+    	private List<Boolean> animoNodes = new ArrayList<Boolean>();
+    	
+    	private int level = 0;
     	
         @Override
         public void startElement(Txn transaction, ElementImpl element, NodePath path) {
@@ -229,7 +234,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
             	
             	else if (Namespaces.THE.namespace().equals(nsURI)) {
             		THENode = AnimoGraph.addTHE(element);
-            		currentNode = THENode;
+            		activeNode = THENode;
                 	
             		animo = true;
             	
@@ -237,20 +242,27 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
             		AnimoGraph.addIsRelationship(THENode, AnimoGraph.getOrCreateNode(instanceFactoryNode, element.getLocalName()));
 
             	} else if (Namespaces.HAVE.namespace().equals(nsURI)) {
-            		currentNode = AnimoGraph.createExistNode(element, currentNode);
+            		activeNode = AnimoGraph.createExistNode(element);
             		
             		animo = true;
             	}
 
-        		currentNodeStack.push(currentNode);
+    			activeNodes.push(activeNode);
+    			
+    			setAnimoMark(level, animo);
 
-        		if (animo)
-            		for (int i = 0; i < level; i++) {
-            			if (currentNodes.size() <= i) 
-            				currentNodes.add(true);
-            			else
-            				currentNodes.set(i, true);
-            		}
+    			Node currentNode = activeNode;
+        		if (!animo) {
+        			currentNode = AnimoGraph.createExistNode(element);
+        		}
+    			nodes.push(currentNode);
+        		
+    			if (level != 0)
+    				//add current element as child 
+    				childrens.peek().add(currentNode);
+        		
+        		//create empty children list
+        		childrens.push(new ArrayList<Node>());
             	
             } else {
             	System.out.println("mode = "+mode+" path = "+path);
@@ -260,19 +272,36 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
         }
         
         public void endElement(Txn transaction, ElementImpl element, NodePath path) {
+            level--;
             if (mode == STORE) {
-            	currentNode = currentNodeStack.pop();
-            	if (currentNodes.size() >= level && currentNodes.get(level-1))
-            		AnimoGraph.addProcessingInstruction(currentNode, AnimoGraph.getNode(element));
+            	
+            	activeNode = activeNodes.pop();
+            	Node currentNode = nodes.pop();
+            	List<Node> childs = childrens.pop();
+            	
+            	if (animoNodes.get(level)) {
+            		for (Node child : childs) {
+            			//XXX: ignore "IS" nodes
+                		AnimoGraph.addProcessingInstruction(currentNode, child);
+            		}
+            	}
             }
         	super.endElement(transaction, element, path);
-            level--;
         }
 
     	@Override
 		public IndexWorker getWorker() {
 			return AnimoIndexWorker.this;
 		}
+    	
+    	private void setAnimoMark(int index, boolean flag) {
+    		for (int i = 0; i <= level; i++) {
+    			if (animoNodes.size() <= i) 
+    				animoNodes.add(flag);
+    			else if (flag) 
+    				animoNodes.set(i, true);
+    		}
+    	}
     	
     }
 	

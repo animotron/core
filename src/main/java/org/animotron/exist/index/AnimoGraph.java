@@ -184,18 +184,23 @@ public class AnimoGraph {
 		return proxy;
 	}
 	
-	protected static Node createExistNode(ElementAtExist node, Node parentAnimoNode) {
+	protected static Node createExistNode(ElementAtExist node) {
 		Transaction tx = AnimoIndex.graphDb.beginTx();
 		try {
 			Node graphNode = AnimoIndex.graphDb.createNode();
 			String name = node.getLocalName();
 			graphNode.setProperty("name", name);
-	        AnimoIndex.indexService.index( graphNode, "name", name );
+	        
+			AnimoIndex.indexService.index( graphNode, "name", name );
 	        AnimoIndex.indexService.index( graphNode, "eXistID", getUniqNodeId(node) );
-	        parentAnimoNode.createRelationshipTo(graphNode, RelationshipTypes.PROCESSING_FLOW_ELEMENT );
+	        
+	        //parentAnimoNode.createRelationshipTo(graphNode, RelationshipTypes.PROCESSING_FLOW_ELEMENT );
+	        
 	        update(graphNode, node);
-			tx.success();
-			return graphNode;
+			
+	        tx.success();
+			
+	        return graphNode;
 		} finally {
 			tx.finish();
 		}

@@ -9,18 +9,16 @@ import org.neo4j.kernel.Traversal;
 
 public class ProcessingFlowIterator implements Iterator<Node> {
 	
-	/**
-	 * 
-	 */
 	private final Node the;
-	Iterator<Node> it;
+	private Iterator<Node> it;
 	
 	public ProcessingFlowIterator(Node the) {
 		this.the = the;
-		TraversalDescription td = Traversal.description().
-		breadthFirst().
-		relationships(RelationshipTypes.PROCESSING_FLOW_ELEMENT ).
-		evaluator(Evaluators.excludeStartPosition());
+		TraversalDescription td = 
+			Traversal.description().
+				breadthFirst().
+				relationships(RelationshipTypes.PROCESSING_FLOW_ELEMENT );
+				//.evaluator(Evaluators.excludeStartPosition());
 	
 		it = td.traverse(this.the).nodes().iterator();
 	}
