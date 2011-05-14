@@ -55,6 +55,13 @@ public class SimpleTests extends AbstractTest {
 		"	<is:B/>"+
 		"</the:C>";
 
+	private static final String THE_D = 
+		"<the:D "+ANIMO_NSs+">" +
+		"	<get:B>" +
+		"		<use:C/>" +
+		"	</get:B>" +
+		"</the:C>";
+
 	@Test
 	public void testGet() {
         System.out.println("Test 'get' ...");
@@ -72,12 +79,12 @@ public class SimpleTests extends AbstractTest {
             assertNotNull(broker);
 
             //System.out.println("get:B");
-            NodeSet set = AnimoGraph.evaluate("get:B");
+            NodeSet set = AnimoGraph.evaluate(THE_D);
             
-            assertEquals(2, set.getItemCount());
+            assertEquals(1, set.getItemCount());
             
             Set<String> expect = new HashSet<String>();
-            expect.add("B"); expect.add("C");
+            expect.add("C");
             
             for (int i = 0; i < set.getItemCount(); i++) {
             	String name = set.get(i).getNode().getLocalName();
