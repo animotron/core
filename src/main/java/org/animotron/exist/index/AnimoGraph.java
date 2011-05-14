@@ -286,6 +286,9 @@ public class AnimoGraph {
 		for ( Path path : td.traverse(node)) {
 			result.add(AnimoGraph.getNodeProxy(path.endNode()));
 		}
-	}	
+	}
 
+	public static NodeSet evaluate(String string) {
+		return null;
+	}	
 }
