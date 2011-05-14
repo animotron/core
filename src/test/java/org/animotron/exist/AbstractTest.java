@@ -56,7 +56,10 @@ public class AbstractTest {
 		"xmlns:an='animo/reference' " +
 		"xmlns:ptrn='animo/pattern' " +
 		"xmlns:have='animo/relation/have' " +
-		"xmlns:is='animo/relation/is'";
+		"xmlns:is='animo/relation/is'" +
+		"xmlns:get='animo/query/extract'" +
+		"xmlns:any='animo/query/any'" +
+		"xmlns:all='animo/query/all'";
 	
 	protected DocumentSet configureAndStore(String configuration, Map<String, String> nameDataMap) {
         DBBroker broker = null;
