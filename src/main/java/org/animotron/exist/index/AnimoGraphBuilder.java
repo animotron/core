@@ -35,11 +35,12 @@ public class AnimoGraphBuilder {
 	private static final Logger LOG = Logger.getLogger(AnimoGraphBuilder.class);
 
 	// here because of optimization reasons
-	private Node THENode, activeNode;
+	private Node the, current, active;
 
 	private Stack<Node> nodes = new Stack<Node>();
 	
 	private int skip;
+	private int order;
 	private int level = 0;
 	private boolean animo;
 	
@@ -49,13 +50,16 @@ public class AnimoGraphBuilder {
 		
 		if (level == 0 ){
 			System.out.println("reset");
-			skip = 0;
 			animo = true;
-			THENode = null;
-			activeNode = null;
+			current = null;
+			active = null;
+			the = null;
+			order = 0;
+			skip = 0;
 		}
 		
 		level++;
+		order++;
 		
 		if (!animo || (skip > 0 && level - 1 > skip))
 			return;
@@ -68,25 +72,38 @@ public class AnimoGraphBuilder {
 		if (level == 1) {
 			if (Namespaces.THE.equals(ns)) {
 				tx = AnimoGraph.beginTx();
-				THENode = AnimoGraph.getOrCreateTHE(element);
-				activeNode = THENode;
+				the = AnimoGraph.getOrCreateTHE(element);
+				current = the;
 				animo = true;
 			} else {
 				animo = false;
 			}
 		} else {
-			nodes.push(activeNode);
+			nodes.push(current);
 			try {
-				if (THENode != null && Namespaces.IS.equals(ns) && level == 2) {
-					AnimoGraph.addIsRelationship(THENode, AnimoGraph.getOrCreateTHE(element));
+				if (Namespaces.AN.equals(ns)) {
+					active = AnimoGraph.getOrCreateAN(current, element, order);
+					current = active;
+				}
+				if (Namespaces.ANY.equals(ns)) {
+					active = AnimoGraph.getOrCreateANY(current, element, order);
+					current = active;
+				}
+				if (Namespaces.ALL.equals(ns)) {
+					active = AnimoGraph.getOrCreateALL(current, element, order);
+					current = active;
+				}
+				else if (the != null && Namespaces.IS.equals(ns) && level == 2) {
+					AnimoGraph.addIsRelationship(the, AnimoGraph.getOrCreateTHE(element));
 					skip = level;
-				//} else if (Namespaces.USE.equals(ns)) {
-				//	if (THENode != null && level == 2) {
-				//		AnimoGraph.addUseRelationship(THENode, AnimoGraph.getOrCreateTHE(element));
-				//	} else {
-				//	}
+				} else if (Namespaces.USE.equals(ns)) {
+					if (the != null && level == 2) {
+						AnimoGraph.addUseRelationship(the, AnimoGraph.getOrCreateTHE(element));
+					} else {
+						AnimoGraph.addUseRelationship(active, AnimoGraph.getOrCreateTHE(element));
+					}
 				} else {
-					activeNode = AnimoGraph.createExistNode(activeNode, element);
+					current = AnimoGraph.getOrCreateElement(current, element, order);
 				}
 			} catch (Exception e) {
 				tx.finish();
@@ -103,7 +120,7 @@ public class AnimoGraphBuilder {
 
 		try {
 			if (level > 0) {
-				activeNode = nodes.pop();
+				current = nodes.pop();
 			}
 			if (level == 0) {
 				tx.success();
