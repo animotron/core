@@ -148,4 +148,7 @@ public class AnimoGraph {
 			nodes();
 	}	
 	
+	public static NodeSet evaluate(String string) {
+		return null;
+	}	
 }
