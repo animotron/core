@@ -18,28 +18,14 @@
  */
 package org.animotron.exist.index;
 
-import net.sf.saxon.type.Type;
-
-import org.exist.Database;
-import org.exist.dom.DocumentAtExist;
-import org.exist.dom.DocumentImpl;
 import org.exist.dom.ElementAtExist;
-import org.exist.dom.ElementImpl;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
-import org.exist.numbering.NodeId;
-import org.exist.security.PermissionDeniedException;
-import org.exist.security.Subject;
-import org.exist.storage.DBBroker;
-import org.exist.util.ByteConversion;
-import org.exist.xmldb.XmldbURI;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
 /**
@@ -48,193 +34,68 @@ import org.neo4j.kernel.Traversal;
  */
 public class AnimoGraph {
 
-	private static final String SEPARATOR = "-";
-
-	private static final String KEY_DOC_ID = "docId";
-	private static final String KEY_DOC_URI = "docURI";
-	private static final String KEY_NODE_ID = "nodeId";
-	private static final String KEY_NODE_TYPE = "nodeType";
-
-	// Return ID of node
-	protected static String getUniqNodeId(ElementAtExist element) {
-		return String.valueOf(element.getDocumentAtExist().getDocId())
-				+ SEPARATOR + String.valueOf(element.getNodeId().units());
+	protected static Transaction beginTx(){
+		return AnimoIndex.graphDb.beginTx();
 	}
 	
-	protected static Node addTHE(ElementImpl element) {
+	private static Node getNode(RelationshipType type, String name){
+		return AnimoIndex.indexService.getSingleNode(type.name(), name);
+	};
+
+	private static Node createNode() {
+		return AnimoIndex.graphDb.createNode();
+	}
+	private static Node createNode(String name) {
+		Node node = createNode();
+		node.setProperty("name", name);
+		return node;
+	}
+	
+	private static Node createNode(RelationshipType type, String name) {
+		Node node = createNode(name);
+        AnimoIndex.indexService.index(node, type.name(), name);
+		AnimoIndex.graphDb.getReferenceNode().createRelationshipTo(node, type);
+		return node;
+	}
+	
+	private static Node getOrCreateNode(RelationshipType type, ElementAtExist element) {
 		String name = element.getLocalName();
-		Transaction tx = AnimoIndex.graphDb.beginTx();
-		try {
-			Node instance = getTHE(name);
-			if (instance != null) {
-				if (getNodeProxy(instance).getDocument() == AnimoIndex.unresolvedReferenceDocument) {
-					update(instance, element);
-				}
-				//XXX: check doc with element's doc
-				return instance;
-			}
-			Node node = AnimoIndex.graphDb.createNode();
-	        node.setProperty("name", name);
-	        AnimoIndex.indexService.index(node, "THE", name);
-			update(node, element);
-	        tx.success();
-	        return node;
-		} finally {
-			tx.finish();
+		Node node = getNode(type, name);
+		if (node == null){
+			node = createNode(type, name);
 		}
-	}
-	
-	public static Node getNode(ElementAtExist element) {
-		String id = getUniqNodeId(element);
-		Node node = AnimoIndex.indexService.getSingleNode( "eXistID", id );
-		if (node != null) {
-			return node;
-		}
-		Transaction tx = AnimoIndex.graphDb.beginTx();
-		try {
-	        node = AnimoIndex.graphDb.createNode();
-	        AnimoIndex.indexService.index( node, "eXistID", id );
-	        tx.success();
-			return node;
-		} finally {
-			tx.finish();
-		}
-	}
-
-	protected static Node getOrCreateNode(Node instanceFactoryNode, String name) {
-		Node instance = getTHE(name);
-		if (instance != null) return instance;
-		Transaction tx = AnimoIndex.graphDb.beginTx();
-		try {
-	        Node node = AnimoIndex.graphDb.createNode();
-	        node.setProperty("name", name);
-	        AnimoIndex.indexService.index( node, "THE", name );
-	        instanceFactoryNode.createRelationshipTo( node, RelationshipTypes.THE );
-	        tx.success();
-			update(node, 
-					AnimoIndex.unresolvedReferenceDocument, 
-					AnimoIndex.unresolvedReferenceId.newChild());
-			return node;
-		} finally {
-			tx.finish();
-		}
-	}
-
-	public static NodeProxy getNode(String name) {
-		Node instance = getTHE(name);
-		if (instance == null) return null;
-		return getNodeProxy(instance);
-	}
-	
-	protected static void addIsRelationship(Node the, Node is) {
-		final GraphDatabaseService graphDb = the.getGraphDatabase();
-		final Transaction tx = graphDb.beginTx();
-		try {
-			the.createRelationshipTo(is, RelationshipTypes.IS);
-			tx.success();
-		} finally {
-			tx.finish();
-		}
+		return node;
 	}
 	
 	protected static synchronized Node getTHE(String name) {
-		return AnimoIndex.indexService.getSingleNode("THE", name);
+		return getNode(RelationshipTypes.THE, name);
 	}
 
-	protected static void addProcessingInstruction(Node graphNode, Node node) {
-		final GraphDatabaseService graphDb = graphNode.getGraphDatabase();
-		final Transaction tx = graphDb.beginTx();
-		try {
-			graphNode.createRelationshipTo( node, RelationshipTypes.PROCESSING_FLOW_ELEMENT );
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-	}
-
-	protected static NodeProxy getNodeProxy(Node node) {
-		NodeProxy proxy = null;
-		final Database db = AnimoIndex.getInstance().getBrokerPool();
-		final GraphDatabaseService graphDb = node.getGraphDatabase();
-		final Transaction tx = graphDb.beginTx();
-		try {
-			byte[] temp = (byte[]) node.getProperty(KEY_NODE_ID);
-			int units = ByteConversion.byteToShort(temp, 0);
-			NodeId nodeId = db.getNodeFactory().createFromData(units, temp, 2);
-			XmldbURI docURI = XmldbURI.create((String) node.getProperty(KEY_DOC_URI));
-			DocumentImpl doc = AnimoIndex.unresolvedReferenceDocument;
-			if (!docURI.equals("")) {
-				DBBroker broker = db.getActiveBroker();
-				Subject currentSubject = broker.getSubject();
-				try {
-					broker.setSubject(db.getSecurityManager().getSystemSubject());
-					doc = (DocumentImpl) broker.getXMLResource(docURI);
-				} catch (PermissionDeniedException e) {
-					// can't be
-					e.printStackTrace();
-				} finally {
-					broker.setSubject(currentSubject);
-				}
-			}
-			proxy = new NodeProxy(doc, nodeId, Type.ELEMENT);
-			tx.success();
-		} finally {
-			tx.finish();
-		}
-		return proxy;
+	protected static Node getOrCreateTHE(ElementAtExist element) {
+		return getOrCreateNode(RelationshipTypes.THE, element);
 	}
 	
-	protected static Node createExistNode(ElementAtExist node) {
-		Transaction tx = AnimoIndex.graphDb.beginTx();
-		try {
-			Node graphNode = AnimoIndex.graphDb.createNode();
-			String name = node.getLocalName();
-			graphNode.setProperty("name", name);
-	        
-			AnimoIndex.indexService.index( graphNode, "name", name );
-	        AnimoIndex.indexService.index( graphNode, "eXistID", getUniqNodeId(node) );
-	        
-	        //parentAnimoNode.createRelationshipTo(graphNode, RelationshipTypes.PROCESSING_FLOW_ELEMENT );
-	        
-	        update(graphNode, node);
-			
-	        tx.success();
-			
-	        return graphNode;
-		} finally {
-			tx.finish();
-		}
-	}
-
-	
-	
-	private static void update(Node node, ElementAtExist element) {
-		update(node, element.getDocumentAtExist(), element.getNodeId());
+	protected static void addIsRelationship(Node the, Node is) {
+		the.createRelationshipTo(is, RelationshipTypes.IS);
 	}
 	
-	private static void update(Node node, DocumentAtExist doc, NodeId nodeId) {
-		if (doc == null) {
-			node.setProperty(KEY_DOC_ID, 0);
-			node.setProperty(KEY_DOC_URI, "");
-		} else {
-			node.setProperty(KEY_DOC_ID, doc.getDocId());
-			node.setProperty(KEY_DOC_URI, doc.getURI().toString());
-		}
-		
-        // store the node id
-        int nodeIdLen = nodeId.size();
-        byte[] data = new byte[nodeIdLen + 2];
-        ByteConversion.shortToByte((short) nodeId.units(), data, 0);
-        nodeId.serialize(data, 2);
-
-        node.setProperty(KEY_NODE_ID, data);
+	protected static void addUseRelationship(Node the, Node is) {
+		the.createRelationshipTo(is, RelationshipTypes.USE);
+	}
+	
+	protected static Node createExistNode(Node parent, ElementAtExist element) {
+		String name = element.getLocalName();
+		Node node = createNode(name);
+        parent.createRelationshipTo(node, RelationshipTypes.ELEMENT);
+        return node;
 	}
 
 	public static NodeSet resolveUpIsLogic(String name) {
 		Node instance = AnimoGraph.getTHE(name);
 		if (instance == null) return NodeSet.EMPTY_SET;
 		NodeSet set = new NewArrayNodeSet(5);
-		resolveUpIsLogic(instance, set);
+		resolveUpIsLogic(instance);
+		// TODO: Serialize to NodeSet
 		return set;
 	}
 
@@ -243,27 +104,27 @@ public class AnimoGraph {
 		for (NodeProxy node : s) {
 			Node instance = AnimoGraph.getTHE(node.getNode().getLocalName());
 			if (instance == null) continue;
-			resolveUpIsLogic(instance, result);
+			resolveUpIsLogic(instance);
 		}
-		//TODO: to check: is empty?
+		// TODO: Serialize to NodeSet
 		return result;
 	}
 
-	private static void resolveUpIsLogic(Node node, NodeSet result) {
-		TraversalDescription td = Traversal.description().
+	private static Iterable<Node> resolveUpIsLogic(Node node) {
+		return Traversal.description().
 			breadthFirst().
 			relationships(RelationshipTypes.IS ).
-			evaluator(Evaluators.excludeStartPosition());
-		for (Path path : td.traverse(node)) {
-			result.add(AnimoGraph.getNodeProxy(path.endNode()));
-		}
+			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
+			traverse(node).
+			nodes();
 	}
 
 	public static NodeSet resolveDownIsLogic(String name) {
 		Node instance = AnimoGraph.getTHE(name);
 		if (instance == null) return NodeSet.EMPTY_SET;
 		NodeSet result = new NewArrayNodeSet(5);
-		resolveDownIsLogic(instance, result);
+		resolveDownIsLogic(instance);
+		// TODO: Serialize to NodeSet
 		return result;
 	}
 
@@ -272,20 +133,19 @@ public class AnimoGraph {
 		for (NodeProxy node : set) {
 			Node instance = AnimoGraph.getTHE(node.getNode().getLocalName());
 			if (instance == null) continue;
-			resolveDownIsLogic(instance, set);
+			resolveDownIsLogic(instance);
 		}
-		//TODO: to check: is empty?
+		// TODO: Serialize to NodeSet
 		return result;
 	}
 
-	private static void resolveDownIsLogic(Node node, NodeSet result) {
-		TraversalDescription td = Traversal.description().
+	private static Iterable<Node> resolveDownIsLogic(Node node) {
+		return Traversal.description().
 			breadthFirst().
 			relationships(RelationshipTypes.IS ).
-			evaluator(Evaluators.excludeStartPosition());
-		for ( Path path : td.traverse(node)) {
-			result.add(AnimoGraph.getNodeProxy(path.endNode()));
-		}
+			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
+			traverse(node).
+			nodes();
 	}	
-
+	
 }

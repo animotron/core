@@ -97,12 +97,12 @@ public class EvaluationTreeTests {
             
             assertNotNull(node);
             
-            String[] must = new String[] {"the:B", "have:B", "some", "another"};
+            String[] must = new String[] {"B", "B", "some", "another"};
             int i = 0;
             
             ProcessingFlowIterator it = new ProcessingFlowIterator(node);
             while (it.hasNext()) {
-            	System.out.println(AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
+            	System.out.println(it.next().getProperty("name"));
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	i++;
             }

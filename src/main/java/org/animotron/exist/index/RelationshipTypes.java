@@ -25,14 +25,11 @@ import org.neo4j.graphdb.RelationshipType;
  *
  */
 public enum RelationshipTypes implements RelationshipType {
-	//used for iterator
-	PROCESSING_FLOW_ELEMENT,
-	
-	DOCUMENT,
-	
-	THEs,
 	THE,
+	IS, USE, PTRN,
+	AN, ANY, ALL,
+	HAVE, IC,
+	GET, SELF,
 	
-	IS,
-	HAVE
+	ELEMENT, ATTRIBUTE, TEXT, CDATA, COMENT 
 }

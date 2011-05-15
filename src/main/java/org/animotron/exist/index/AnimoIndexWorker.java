@@ -18,12 +18,8 @@
  */
 package org.animotron.exist.index;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.Stack;
 
-import org.animotron.Namespaces;
 import org.exist.collections.Collection;
 import org.exist.dom.DocumentImpl;
 import org.exist.dom.DocumentSet;
@@ -44,62 +40,46 @@ import org.exist.storage.txn.Txn;
 import org.exist.util.DatabaseConfigurationException;
 import org.exist.util.Occurrences;
 import org.exist.xquery.XQueryContext;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.w3c.dom.NodeList;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
+ * 
  */
 public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	private int mode = 0;
-    private DocumentImpl document = null;
-    private AnimoIndex index;
-    
-    private final Node instanceFactoryNode;
+	private DocumentImpl document = null;
+	private AnimoIndex index;
 
 	public AnimoIndexWorker(AnimoIndex index) {
 		this.index = index;
-		
-		Transaction tx = AnimoIndex.graphDb.beginTx();
-		try {
-			Relationship r = 
-				AnimoIndex.graphDb.getReferenceNode().getSingleRelationship(
-						RelationshipTypes.THEs, Direction.OUTGOING );
-			
-			if (r == null) {
-				instanceFactoryNode = AnimoIndex.graphDb.createNode();
-				AnimoIndex.graphDb.getReferenceNode().createRelationshipTo(
-						instanceFactoryNode, RelationshipTypes.THEs);
-			} else {
-				instanceFactoryNode = r.getEndNode();
-			}
-			tx.success();
-		} finally {
-			tx.finish();
-		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#getIndexId()
 	 */
 	public String getIndexId() {
 		return AnimoIndex.ID;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#getIndexName()
 	 */
 	public String getIndexName() {
 		return index.getIndexName();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#configure(org.exist.indexing.IndexController, org.w3c.dom.NodeList, java.util.Map)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#configure(org.exist.indexing.IndexController
+	 * , org.w3c.dom.NodeList, java.util.Map)
 	 */
 	public Object configure(IndexController controller, NodeList configNodes,
 			Map<String, String> namespaces)
@@ -108,91 +88,123 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#setDocument(org.exist.dom.DocumentImpl)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#setDocument(org.exist.dom.DocumentImpl)
 	 */
 	public void setDocument(DocumentImpl doc) {
 		this.document = doc;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#setDocument(org.exist.dom.DocumentImpl, int)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#setDocument(org.exist.dom.DocumentImpl,
+	 * int)
 	 */
 	public void setDocument(DocumentImpl doc, int mode) {
 		this.document = doc;
 		this.mode = mode;
-		
-		System.out.println("setDocument doc = "+doc+" mode = "+mode);
+		System.out.println("setDocument doc = " + doc.getDocumentURI() + " mode = " + mode);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#setMode(int)
 	 */
 	public void setMode(int mode) {
 		this.mode = mode;
-		System.out.println("setMode mode = "+mode);
+		System.out.println("setMode mode = " + mode);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#getDocument()
 	 */
 	public DocumentImpl getDocument() {
 		return document;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#getMode()
 	 */
 	public int getMode() {
 		return mode;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#getReindexRoot(org.exist.dom.StoredNode, org.exist.storage.NodePath, boolean)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#getReindexRoot(org.exist.dom.StoredNode,
+	 * org.exist.storage.NodePath, boolean)
 	 */
-	public StoredNode getReindexRoot(StoredNode node, NodePath path, boolean includeSelf) {
-		System.out.println("getReindexRoot path = "+path);
+	public StoredNode getReindexRoot(StoredNode node, NodePath path,
+			boolean includeSelf) {
+		System.out.println("getReindexRoot path = " + path);
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	private StreamListener listener = new AnimoStreamListener();
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#getListener()
 	 */
 	public StreamListener getListener() {
 		return listener;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#getMatchListener(org.exist.storage.DBBroker, org.exist.dom.NodeProxy)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#getMatchListener(org.exist.storage.DBBroker
+	 * , org.exist.dom.NodeProxy)
 	 */
 	public MatchListener getMatchListener(DBBroker broker, NodeProxy proxy) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.exist.indexing.IndexWorker#flush()
 	 */
 	public void flush() {
-		
+
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#removeCollection(org.exist.collections.Collection, org.exist.storage.DBBroker)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#removeCollection(org.exist.collections
+	 * .Collection, org.exist.storage.DBBroker)
 	 */
 	public void removeCollection(Collection collection, DBBroker broker) {
-		System.out.println("removeCollection "+collection);
+		System.out.println("removeCollection " + collection);
 		// TODO Auto-generated method stub
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#checkIndex(org.exist.storage.DBBroker)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#checkIndex(org.exist.storage.DBBroker)
 	 */
 	public boolean checkIndex(DBBroker broker) {
 		System.out.println("checkIndex called");
@@ -200,110 +212,46 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.exist.indexing.IndexWorker#scanIndex(org.exist.xquery.XQueryContext, org.exist.dom.DocumentSet, org.exist.dom.NodeSet, java.util.Map)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * org.exist.indexing.IndexWorker#scanIndex(org.exist.xquery.XQueryContext,
+	 * org.exist.dom.DocumentSet, org.exist.dom.NodeSet, java.util.Map)
 	 */
 	public Occurrences[] scanIndex(XQueryContext context, DocumentSet docs, NodeSet contextSet, Map hints) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	private class AnimoStreamListener extends AbstractStreamListener {
 
-		//here because of optimization reasons
-    	private Node THENode;
-    	private Node activeNode = null;
-    	
-    	private Stack<Node> nodes = new Stack<Node>();
-    	private Stack<Node> activeNodes = new Stack<Node>();
-    	
-    	private Stack<List<Node>> childrens = new Stack<List<Node>>();
+		private AnimoGraphBuilder builder = new AnimoGraphBuilder();
 
-    	private List<Boolean> animoNodes = new ArrayList<Boolean>();
-    	
-    	private int level = 0;
-    	
-        @Override
-        public void startElement(Txn transaction, ElementImpl element, NodePath path) {
-            if (mode == STORE) {
-            	
-            	boolean animo = false;
-            	
-            	String nsURI = element.getQName().getNamespaceURI();
-            	if (nsURI == null || nsURI.isEmpty());
-            	
-            	else if (Namespaces.THE.namespace().equals(nsURI)) {
-            		THENode = AnimoGraph.addTHE(element);
-            		activeNode = THENode;
-                	
-            		animo = true;
-            	
-            	} else if (Namespaces.IS.namespace().equals(nsURI)) {
-            		AnimoGraph.addIsRelationship(THENode, AnimoGraph.getOrCreateNode(instanceFactoryNode, element.getLocalName()));
+		@Override
+		public void startElement(Txn transaction, ElementImpl element, NodePath path) {
+			if (mode == STORE) {
+				builder.startElement(element);
+			} else {
+				System.out.println("mode = " + mode + " path = " + path);
+			}
+			super.startElement(transaction, element, path);
+		}
 
-            	} else if (Namespaces.HAVE.namespace().equals(nsURI)) {
-            		activeNode = AnimoGraph.createExistNode(element);
-            		
-            		animo = true;
-            	}
+		@Override
+		public void endElement(Txn transaction, ElementImpl element, NodePath path) {
+			if (mode == STORE) {
+				builder.endElement(element);
+			}
+			super.endElement(transaction, element, path);
 
-    			activeNodes.push(activeNode);
-    			
-    			setAnimoMark(level, animo);
+		}
 
-    			Node currentNode = activeNode;
-        		if (!animo) {
-        			currentNode = AnimoGraph.createExistNode(element);
-        		}
-    			nodes.push(currentNode);
-        		
-    			if (level != 0)
-    				//add current element as child 
-    				childrens.peek().add(currentNode);
-        		
-        		//create empty children list
-        		childrens.push(new ArrayList<Node>());
-            	
-            } else {
-            	System.out.println("mode = "+mode+" path = "+path);
-            }
-            super.startElement(transaction, element, path);
-            level++;
-        }
-        
-        public void endElement(Txn transaction, ElementImpl element, NodePath path) {
-            level--;
-            if (mode == STORE) {
-            	
-            	activeNode = activeNodes.pop();
-            	Node currentNode = nodes.pop();
-            	List<Node> childs = childrens.pop();
-            	
-            	if (animoNodes.get(level)) {
-            		for (Node child : childs) {
-            			//XXX: ignore "IS" nodes
-                		AnimoGraph.addProcessingInstruction(currentNode, child);
-            		}
-            	}
-            }
-        	super.endElement(transaction, element, path);
-        }
-
-    	@Override
+		@Override
 		public IndexWorker getWorker() {
 			return AnimoIndexWorker.this;
 		}
-    	
-    	private void setAnimoMark(int index, boolean flag) {
-    		for (int i = 0; i <= level; i++) {
-    			if (animoNodes.size() <= i) 
-    				animoNodes.add(flag);
-    			else if (flag) 
-    				animoNodes.set(i, true);
-    		}
-    	}
-    	
-    }
-	
-	//TODO: cycled relations (up & down relations)
+
+	}
+
 }

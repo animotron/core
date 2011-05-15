@@ -48,16 +48,6 @@ public class AnimoIndex extends AbstractIndex {
 	public static final String ID = AnimoIndex.class.getName();
 	public static final String FOLDER_NAME = "animo";
 	
-	protected static final DocumentImpl unresolvedReferenceDocument = null;
-	protected static final NodeId unresolvedReferenceId = new DLN();
-
-	public final static XmldbURI ANIMO_COLLETION_URI = 
-		XmldbURI.SYSTEM_COLLECTION_URI.append("animo");
-	
-	public final static XmldbURI UNRESOLVED_REFERENCES_FILE_URI = 
-		XmldbURI.create("unresolved-references.xml");
-
-
 	private static AnimoIndex instance;
 	
 	public static AnimoIndex getInstance() {
