@@ -70,7 +70,7 @@ public class EvaluationTreeTests extends AbstractTest {
             
             assertNotNull(node);
             
-            String[] must = new String[] {"B", "B", "some", "another"};
+            String[] must = new String[] {"the:B", "have:B", "some", "another"};
             int i = 0;
             
             ProcessingFlowIterator it = new ProcessingFlowIterator(node);
