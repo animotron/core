@@ -43,7 +43,6 @@ public class AnimoGraphBuilder {
 	private Stack<Node> nodes = new Stack<Node>();
 	
 	private int skip;
-	private int order;
 	private int level = 0;
 	private boolean animo;
 	
@@ -57,12 +56,10 @@ public class AnimoGraphBuilder {
 			current = null;
 			active = null;
 			the = null;
-			order = 0;
 			skip = 0;
 		}
 		
 		level++;
-		order++;
 		
 		if (!animo || (skip > 0 && level - 1 > skip))
 			return;
@@ -143,19 +140,34 @@ public class AnimoGraphBuilder {
 			tx.finish();
 			LOG.error("AnimoGraph build error for element \"" + element.getNodeName() + "\"" , e);
 		}
+		
 	}
 
 	public void attribute(Attr attribute) {
+		
+		if (!animo || (skip > 0 && level - 1 > skip))
+			return;
+		
 		try {
 			AnimoGraph.createAttribute(current, attribute);
 		} catch (Exception e) {
 			tx.finish();
-			LOG.error("AnimoGraph build error for attribute \"" + attribute.getValue() + "\"" , e);
+			LOG.error("AnimoGraph build error for attribute " + attribute.getNodeName() + " = \"" + attribute.getNodeValue() + "\"" , e);
 		}
+		
 	}
 
 	public void characters(CharacterData text) {
-		// TODO Auto-generated method stub
+		
+		if (!animo || (skip > 0 && level - 1 > skip))
+			return;
+		
+		try {
+			AnimoGraph.createCharacterData(current, text);
+		} catch (Exception e) {
+			tx.finish();
+			LOG.error("AnimoGraph build error for node \"" + text.getNodeValue() + "\"" , e);
+		}
 		
 	}
 
