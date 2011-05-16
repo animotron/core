@@ -25,6 +25,9 @@ import org.apache.log4j.Logger;
 import org.exist.dom.ElementAtExist;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
+import org.w3c.dom.Attr;
+import org.w3c.dom.Element;
+import org.w3c.dom.CharacterData;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -46,7 +49,7 @@ public class AnimoGraphBuilder {
 	
 	private Transaction tx;
 	
-	public void startElement(ElementAtExist element) {
+	public void startElement(Element element) {
 		
 		if (level == 0 ){
 			System.out.println("reset");
@@ -122,7 +125,7 @@ public class AnimoGraphBuilder {
 		}
 	}
 
-	public void endElement(ElementAtExist element) {
+	public void endElement(Element element) {
 		
 		level--;
 		if (!animo || (skip > 0 && level + 1 >= skip)) 
@@ -140,6 +143,20 @@ public class AnimoGraphBuilder {
 			tx.finish();
 			LOG.error("AnimoGraph build error for element \"" + element.getNodeName() + "\"" , e);
 		}
+	}
+
+	public void attribute(Attr attribute) {
+		try {
+			AnimoGraph.createAttribute(current, attribute);
+		} catch (Exception e) {
+			tx.finish();
+			LOG.error("AnimoGraph build error for attribute \"" + attribute.getValue() + "\"" , e);
+		}
+	}
+
+	public void characters(CharacterData text) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

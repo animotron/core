@@ -21,6 +21,8 @@ package org.animotron.exist.index;
 import java.util.Map;
 
 import org.exist.collections.Collection;
+import org.exist.dom.AttrImpl;
+import org.exist.dom.CharacterDataImpl;
 import org.exist.dom.DocumentImpl;
 import org.exist.dom.DocumentSet;
 import org.exist.dom.ElementImpl;
@@ -246,6 +248,22 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 			super.endElement(transaction, element, path);
 
 		}
+
+	    @Override
+	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
+			if (mode == STORE) {
+				builder.attribute(attribute);
+			}
+			super.attribute(transaction, attribute, path);
+	    }
+	    
+	    @Override
+	    public void characters(Txn transaction, CharacterDataImpl text, NodePath path) {
+			if (mode == STORE) {
+				builder.characters(text);
+			}
+			super.characters(transaction, text, path);
+	    }
 
 		@Override
 		public IndexWorker getWorker() {

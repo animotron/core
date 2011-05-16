@@ -18,10 +18,10 @@
  */
 package org.animotron.exist.index;
 
-import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
+import org.exist.xquery.value.Type;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -29,6 +29,9 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.kernel.Traversal;
+import org.w3c.dom.Attr;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -96,12 +99,40 @@ public class AnimoGraph {
 	protected static Node createHAVE(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.HAVE, name);
 	}
+	
+	private static Node createNamedNode (Node parent, org.w3c.dom.Node n, RelationshipType type){
+		Node node = createNode(parent, type);
+		node.setProperty("namespace", n.getNamespaceURI());
+		node.setProperty("name", n.getLocalName());
+		node.setProperty("prefix", n.getPrefix());
+		return node;
+	}
 
-	protected static Node createElement(Node parent, ElementAtExist element) {
-		Node node = createNode(parent, RelationshipTypes.ELEMENT);
-		node.setProperty("namespace", element.getNamespaceURI());
-		node.setProperty("name", element.getLocalName());
-		node.setProperty("prefix", element.getPrefix());
+	protected static Node createElement(Node parent, Element element) {
+		return createNamedNode(parent, element, RelationshipTypes.ELEMENT);
+	}
+	
+	protected static Node createAttribute(Node parent, Attr attribute) {
+		Node node = createNamedNode(parent, attribute, RelationshipTypes.ATTRIBUTE);
+		node.setProperty("value", attribute.getNodeValue());
+		return node;
+	}
+	
+	private static Node createCharacterData(Node parent, CharacterData text, RelationshipType type) {
+		Node node = createNode(parent, type);
+		node.setProperty("value", text.getNodeValue());
+		return node;
+	}
+	
+	protected static Node createCharacterData(Node parent, CharacterData text) {
+		Node node = null;
+		if (text.getNodeType() == Type.TEXT) {
+			node = createCharacterData(parent, text, RelationshipTypes.TEXT);
+		} else if (text.getNodeType() == Type.COMMENT) {
+			node = createCharacterData(parent, text, RelationshipTypes.COMMENT);
+		} else if (text.getNodeType() == Type.CDATA_SECTION) {
+			node = createCharacterData(parent, text, RelationshipTypes.CDATA);
+		}
 		return node;
 	}
 	
