@@ -42,12 +42,12 @@ public class EvaluationTreeTests extends AbstractTest {
 	private static final String THE_B = 
 		"<the:B "+ANIMO_NSs+">" +
 		"	<is:A/>" +
-		"	<have:B>" +
+		"	<have:C>" +
 		"		<some/>" +
 		"		<another>" +
 		"			<one-more/>" +
 		"		</another>" +
-		"	</have:B>" +
+		"	</have:C>" +
 		"</the:B>";
 
 	@Test

@@ -18,8 +18,6 @@
  */
 package org.animotron.exist.index;
 
-import java.util.Iterator;
-
 import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
@@ -42,86 +40,89 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.beginTx();
 	}
 	
-	private static Node getNode(RelationshipType type, String name) {
-		return AnimoIndex.indexService.getSingleNode(type.name(), name);
+	protected static void clear (Node node){
+		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
+			r.delete();
+		}
+	}
+	
+	private static Node getNode(RelationshipType type) {
+		Relationship r = AnimoIndex.graphDb.getReferenceNode().getSingleRelationship(type, Direction.OUTGOING);
+		return r == null ? null : r.getEndNode();
 	};
 
-	private static Node getNode(Node parent, RelationshipType type, String name, int order) {
-		return null;
-	};
-
-	private static Node createNode(String name) {
+	private static Node createNode(Node parent, RelationshipType type) {
 		Node node = AnimoIndex.graphDb.createNode();
-		node.setProperty("name", name);
-		return node;
-	}
-	
-	private static Node createNode(RelationshipType type, String name) {
-		Node node = createNode(AnimoIndex.graphDb.getReferenceNode(), type, name);
-		AnimoIndex.indexService.index(node, type.name(), name);
-		return node;
-	}
-	
-	private static Node createNode(Node parent, RelationshipType type, String name) {
-		Node node = createNode(name);
 		parent.createRelationshipTo(node, type);
 		return node;
 	}
 	
-	private static Node createNode(Node parent, RelationshipType type, String name, int order) {
-		Node node = createNode(name);
-		parent.createRelationshipTo(node, type).setProperty("order", order);
-		return node;
-	}
-	
-	private static Node getOrCreateNode(RelationshipType type, ElementAtExist element) {
-		String name = element.getLocalName();
-		Node node = getNode(type, name);
-		if (node == null){
-			node = createNode(type, name);
-		}
-		return node;
-	}
-	
-	private static Node getOrCreateNode(Node parent, RelationshipType type, ElementAtExist element, int order) {
-		String name = element.getLocalName();
-		Node node = getNode(parent, type, name, order);
-		if (node == null){
-			node = createNode(parent, type, name, order);
-		}
+	private static Node createNode(Node parent, RelationshipType type, String name) {
+		Node node = createNode(parent, type);
+		node.createRelationshipTo(getOrCreateTHE(name), RelationshipTypes.IS);
 		return node;
 	}
 	
 	protected static Node getTHE(String name) {
-		return getNode(RelationshipTypes.THE, name);
+		return getNode(new RelationshipTypeTHE(name));
 	}
 
-	protected static Node getOrCreateTHE(ElementAtExist element) {
-		return getOrCreateNode(RelationshipTypes.THE, element);
+	protected static Node createTHE(String name) {
+		Node node = AnimoIndex.graphDb.createNode();
+		AnimoIndex.graphDb.getReferenceNode().createRelationshipTo(node, new RelationshipTypeTHE(name));
+		return node;
+	}
+
+	protected static Node getOrCreateTHE(String name) {
+		Node node = getTHE(name);
+		if (node == null){
+			node = createTHE(name);
+		}
+		return node;
 	}
 	
-	protected static Node getOrCreateAN(Node parent, ElementAtExist element, int order) {
-		return getOrCreateNode(parent, RelationshipTypes.AN, element, order);
+	protected static Node createAN(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.AN, name);
 	}
 
-	protected static Node getOrCreateANY(Node parent, ElementAtExist element, int order) {
-		return getOrCreateNode(parent, RelationshipTypes.ANY, element, order);
+	protected static Node createANY(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.ANY, name);
 	}
 
-	protected static Node getOrCreateALL(Node parent, ElementAtExist element, int order) {
-		return getOrCreateNode(parent, RelationshipTypes.ALL, element, order);
+	protected static Node createALL(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.ALL, name);
 	}
 
-	protected static Node getOrCreateElement(Node parent, ElementAtExist element, int order) {
-		return getOrCreateNode(parent, RelationshipTypes.ELEMENT, element, order);
+	protected static Node createHAVE(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.HAVE, name);
 	}
 
+	protected static Node createElement(Node parent, ElementAtExist element) {
+		Node node = createNode(parent, RelationshipTypes.ELEMENT);
+		node.setProperty("namespace", element.getNamespaceURI());
+		node.setProperty("name", element.getLocalName());
+		node.setProperty("prefix", element.getPrefix());
+		return node;
+	}
+	
+	private static void relationshipTo(Node start, Node end, RelationshipType type) {
+		start.createRelationshipTo(end, type);
+	}
+	
+	protected static void addIsRelationship(Node the, String is) {
+		addIsRelationship(the, getOrCreateTHE(is));
+	}
+	
 	protected static void addIsRelationship(Node the, Node is) {
-		the.createRelationshipTo(is, RelationshipTypes.IS);
+		relationshipTo(the, is, RelationshipTypes.IS);
+	}
+	
+	protected static void addUseRelationship(Node node, String is) {
+		addUseRelationship(node, getOrCreateTHE(is));
 	}
 	
 	protected static void addUseRelationship(Node node, Node is) {
-		node.createRelationshipTo(is, RelationshipTypes.USE);
+		relationshipTo(node, is, RelationshipTypes.USE);
 	}
 	
 	public static NodeSet resolveUpIsLogic(String name) {

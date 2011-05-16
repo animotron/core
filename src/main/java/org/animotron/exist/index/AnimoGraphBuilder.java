@@ -68,11 +68,17 @@ public class AnimoGraphBuilder {
 			skip = 0;
 		
 		String ns = element.getNamespaceURI();
+		String name = element.getLocalName();
 		
 		if (level == 1) {
 			if (Namespaces.THE.equals(ns)) {
 				tx = AnimoGraph.beginTx();
-				the = AnimoGraph.getOrCreateTHE(element);
+				the = AnimoGraph.getTHE(name);
+				if (the == null){
+					the = AnimoGraph.createTHE(name);
+				} else {
+					AnimoGraph.clear(the);
+				}
 				current = the;
 				animo = true;
 			} else {
@@ -82,28 +88,32 @@ public class AnimoGraphBuilder {
 			nodes.push(current);
 			try {
 				if (Namespaces.AN.equals(ns)) {
-					active = AnimoGraph.getOrCreateAN(current, element, order);
+					active = AnimoGraph.createAN(current, name);
 					current = active;
 				}
 				if (Namespaces.ANY.equals(ns)) {
-					active = AnimoGraph.getOrCreateANY(current, element, order);
+					active = AnimoGraph.createANY(current, name);
 					current = active;
 				}
 				if (Namespaces.ALL.equals(ns)) {
-					active = AnimoGraph.getOrCreateALL(current, element, order);
+					active = AnimoGraph.createALL(current, name);
+					current = active;
+				}
+				if (Namespaces.HAVE.equals(ns)) {
+					active = AnimoGraph.createHAVE(current, name);
 					current = active;
 				}
 				else if (the != null && Namespaces.IS.equals(ns) && level == 2) {
-					AnimoGraph.addIsRelationship(the, AnimoGraph.getOrCreateTHE(element));
+					AnimoGraph.addIsRelationship(the, name);
 					skip = level;
 				} else if (Namespaces.USE.equals(ns)) {
 					if (the != null && level == 2) {
-						AnimoGraph.addUseRelationship(the, AnimoGraph.getOrCreateTHE(element));
+						AnimoGraph.addUseRelationship(the, name);
 					} else {
-						AnimoGraph.addUseRelationship(active, AnimoGraph.getOrCreateTHE(element));
+						AnimoGraph.addUseRelationship(active, name);
 					}
 				} else {
-					current = AnimoGraph.getOrCreateElement(current, element, order);
+					current = AnimoGraph.createElement(current, element);
 				}
 			} catch (Exception e) {
 				tx.finish();
