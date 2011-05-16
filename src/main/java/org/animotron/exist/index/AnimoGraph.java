@@ -116,6 +116,14 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.SELF, name);
 	}
 	
+	protected static Node createXQUERY(Node parent) {
+		return createNode(parent, RelationshipTypes.XQUERY);
+	}
+	
+	protected static Node createXSLT(Node parent) {
+		return createNode(parent, RelationshipTypes.XSLT);
+	}
+	
 	private static Node createNamedNode (Node parent, org.w3c.dom.Node n, RelationshipType type){
 		Node node = createNode(parent, type);
 		node.setProperty("namespace", n.getNamespaceURI());
