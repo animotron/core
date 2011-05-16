@@ -110,7 +110,6 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	public void setDocument(DocumentImpl doc, int mode) {
 		this.document = doc;
 		this.mode = mode;
-		System.out.println("setDocument doc = " + doc.getDocumentURI() + " mode = " + mode);
 	}
 
 	/*
@@ -120,7 +119,6 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 */
 	public void setMode(int mode) {
 		this.mode = mode;
-		System.out.println("setMode mode = " + mode);
 	}
 
 	/*
@@ -232,36 +230,29 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 		@Override
 		public void startElement(Txn transaction, ElementImpl element, NodePath path) {
-			if (mode == STORE) {
+			if (mode == STORE) 
 				builder.startElement(element);
-			} else {
-				System.out.println("mode = " + mode + " path = " + path);
-			}
 			super.startElement(transaction, element, path);
 		}
 
 		@Override
 		public void endElement(Txn transaction, ElementImpl element, NodePath path) {
-			if (mode == STORE) {
-				builder.endElement(element);
-			}
+			if (mode == STORE) 
 			super.endElement(transaction, element, path);
 
 		}
 
 	    @Override
 	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
-			if (mode == STORE) {
+			if (mode == STORE) 
 				builder.attribute(attribute);
-			}
 			super.attribute(transaction, attribute, path);
 	    }
 	    
 	    @Override
 	    public void characters(Txn transaction, CharacterDataImpl text, NodePath path) {
-			if (mode == STORE) {
+			if (mode == STORE) 
 				builder.characters(text);
-			}
 			super.characters(transaction, text, path);
 	    }
 

@@ -18,6 +18,7 @@
  */
 package org.animotron.exist.index;
 
+import org.animotron.Sources;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
@@ -84,16 +85,22 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	protected static Node createAN(Node parent, String name) {
-		return createNode(parent, RelationshipTypes.AN, name);
+	private static Node createReference(Node parent, RelationshipType type, String name, Sources source) {
+		Node node = createNode(parent, type, name);
+		node.setProperty("source", source);
+		return node;
 	}
 
-	protected static Node createANY(Node parent, String name) {
-		return createNode(parent, RelationshipTypes.ANY, name);
+	protected static Node createAN(Node parent, String name, Sources source) {
+		return createReference(parent, RelationshipTypes.AN, name, source);
 	}
 
-	protected static Node createALL(Node parent, String name) {
-		return createNode(parent, RelationshipTypes.ALL, name);
+	protected static Node createANY(Node parent, String name, Sources source) {
+		return createReference(parent, RelationshipTypes.ANY, name, source);
+	}
+
+	protected static Node createALL(Node parent, String name, Sources source) {
+		return createReference(parent, RelationshipTypes.ALL, name, source);
 	}
 
 	protected static Node createPTRN(Node parent, String name) {
