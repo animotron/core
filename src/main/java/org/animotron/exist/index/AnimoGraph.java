@@ -96,8 +96,24 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.ALL, name);
 	}
 
+	protected static Node createPTRN(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.PTRN, name);
+	}
+	
 	protected static Node createHAVE(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.HAVE, name);
+	}
+	
+	protected static Node createIC(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.IC, name);
+	}
+	
+	protected static Node createGET(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.GET, name);
+	}
+	
+	protected static Node createSELF(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.SELF, name);
 	}
 	
 	private static Node createNamedNode (Node parent, org.w3c.dom.Node n, RelationshipType type){

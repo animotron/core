@@ -99,8 +99,24 @@ public class AnimoGraphBuilder {
 					active = AnimoGraph.createALL(current, name);
 					current = active;
 				}
+				if (Namespaces.PTRN.equals(ns)) {
+					active = AnimoGraph.createPTRN(current, name);
+					current = active;
+				}
 				if (Namespaces.HAVE.equals(ns)) {
 					active = AnimoGraph.createHAVE(current, name);
+					current = active;
+				}
+				if (Namespaces.IC.equals(ns)) {
+					active = AnimoGraph.createIC(current, name);
+					current = active;
+				}
+				if (Namespaces.GET.equals(ns)) {
+					active = AnimoGraph.createGET(current, name);
+					current = active;
+				}
+				if (Namespaces.SELF.equals(ns)) {
+					active = AnimoGraph.createSELF(current, name);
 					current = active;
 				}
 				else if (the != null && Namespaces.IS.equals(ns) && level == 2) {
