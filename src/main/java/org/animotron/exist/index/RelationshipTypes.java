@@ -35,5 +35,7 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	XQUERY, XSLT,
 	
-	SOURCE
+	SOURCE,
+	
+	GT, GE, EQ, NE, LE, LT
 }

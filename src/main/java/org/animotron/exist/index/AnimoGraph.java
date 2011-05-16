@@ -94,7 +94,11 @@ public class AnimoGraph {
 	//TODO: make deferred linking for every input context;  
 	private static Node createNode(Node parent, RelationshipType type, String name, Sources source) {
 		Node node = createNode(parent, type, name);
-		node.setProperty("source", source);
+		if (source == null){
+			node.setProperty("source", Sources.GLOBAL_CONTEXT);
+		} else {
+			node.setProperty("source", source);
+		}
 		return node;
 	}
 
@@ -120,6 +124,54 @@ public class AnimoGraph {
 	
 	protected static Node createIC(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.IC, name);
+	}
+	
+	protected static Node createGT(Node parent, String name, Sources source) {
+		return createNode(parent, RelationshipTypes.GT, name, source);
+	}
+	
+	protected static Node createGT(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.GT, name);
+	}
+	
+	protected static Node createGE(Node parent, String name, Sources source) {
+		return createNode(parent, RelationshipTypes.GE, name, source);
+	}
+	
+	protected static Node createGE(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.GE, name);
+	}
+	
+	protected static Node createLT(Node parent, String name, Sources source) {
+		return createNode(parent, RelationshipTypes.LT, name, source);
+	}
+	
+	protected static Node createLT(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.LT, name);
+	}
+	
+	protected static Node createLE(Node parent, String name, Sources source) {
+		return createNode(parent, RelationshipTypes.LE, name, source);
+	}
+	
+	protected static Node createLE(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.LE, name);
+	}
+	
+	protected static Node createEQ(Node parent, String name, Sources source) {
+		return createNode(parent, RelationshipTypes.EQ, name, source);
+	}
+	
+	protected static Node createEQ(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.EQ, name);
+	}
+	
+	protected static Node createNE(Node parent, String name, Sources source) {
+		return createNode(parent, RelationshipTypes.NE, name, source);
+	}
+	
+	protected static Node createNE(Node parent, String name) {
+		return createNode(parent, RelationshipTypes.NE, name);
 	}
 	
 	protected static Node createGET(Node parent, String name) {
