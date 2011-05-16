@@ -40,6 +40,8 @@ import org.w3c.dom.Element;
  */
 public class AnimoGraph {
 
+	private static Node root = AnimoIndex.graphDb.getReferenceNode();
+	
 	protected static Transaction beginTx() {
 		return AnimoIndex.graphDb.beginTx();
 	}
@@ -51,12 +53,16 @@ public class AnimoGraph {
 	}
 	
 	private static Node getNode(RelationshipType type) {
-		Relationship r = AnimoIndex.graphDb.getReferenceNode().getSingleRelationship(type, Direction.OUTGOING);
+		Relationship r = root.getSingleRelationship(type, Direction.OUTGOING);
 		return r == null ? null : r.getEndNode();
 	};
+	
+	private static Node createNode(){
+		return AnimoIndex.graphDb.createNode();
+	}
 
 	private static Node createNode(Node parent, RelationshipType type) {
-		Node node = AnimoIndex.graphDb.createNode();
+		Node node = createNode();
 		parent.createRelationshipTo(node, type);
 		return node;
 	}
@@ -72,8 +78,8 @@ public class AnimoGraph {
 	}
 
 	protected static Node createTHE(String name) {
-		Node node = AnimoIndex.graphDb.createNode();
-		AnimoIndex.graphDb.getReferenceNode().createRelationshipTo(node, new RelationshipTypeTHE(name));
+		Node node = createNode();
+		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
 		return node;
 	}
 
@@ -85,22 +91,23 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	private static Node createReference(Node parent, RelationshipType type, String name, Sources source) {
+	//TODO: make deferred linking for every input context;  
+	private static Node createNode(Node parent, RelationshipType type, String name, Sources source) {
 		Node node = createNode(parent, type, name);
 		node.setProperty("source", source);
 		return node;
 	}
 
 	protected static Node createAN(Node parent, String name, Sources source) {
-		return createReference(parent, RelationshipTypes.AN, name, source);
+		return createNode(parent, RelationshipTypes.AN, name, source);
 	}
 
 	protected static Node createANY(Node parent, String name, Sources source) {
-		return createReference(parent, RelationshipTypes.ANY, name, source);
+		return createNode(parent, RelationshipTypes.ANY, name, source);
 	}
 
 	protected static Node createALL(Node parent, String name, Sources source) {
-		return createReference(parent, RelationshipTypes.ALL, name, source);
+		return createNode(parent, RelationshipTypes.ALL, name, source);
 	}
 
 	protected static Node createPTRN(Node parent, String name) {
@@ -210,7 +217,7 @@ public class AnimoGraph {
 	private static Iterable<Node> resolveUpIsLogic(Node node) {
 		return Traversal.description().
 			breadthFirst().
-			relationships(RelationshipTypes.IS ).
+			relationships(RelationshipTypes.IS).
 			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
 			traverse(node).
 			nodes();
@@ -239,7 +246,7 @@ public class AnimoGraph {
 	private static Iterable<Node> resolveDownIsLogic(Node node) {
 		return Traversal.description().
 			breadthFirst().
-			relationships(RelationshipTypes.IS ).
+			relationships(RelationshipTypes.IS).
 			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
 			traverse(node).
 			nodes();

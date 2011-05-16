@@ -33,5 +33,7 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	ELEMENT, ATTRIBUTE, TEXT, CDATA, COMMENT,
 	
-	XQUERY, XSLT
+	XQUERY, XSLT,
+	
+	SOURCE
 }
