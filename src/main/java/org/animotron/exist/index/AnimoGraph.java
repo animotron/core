@@ -46,8 +46,11 @@ public class AnimoGraph {
 	
 	protected static void clear (Node node){
 		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
-			root.createRelationshipTo(r.getEndNode(), RelationshipTypes.GC);
+			Node end = r.getEndNode();
 			r.delete();
+			if (!end.hasRelationship(Direction.INCOMING)) {
+				root.createRelationshipTo(end, RelationshipTypes.GC);
+			}
 		}
 	}
 	
