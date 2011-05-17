@@ -74,7 +74,7 @@ public class ResolveReference extends BasicFunction {
 		if (args.length == 1){
 			while (i.hasNext()){
 				String name = i.nextItem().getStringValue();
-				NodeSet set = AnimoGraph.getNode(name);
+				NodeSet set = null;//AnimoGraph.getNode(name);
 				res.addAll(set);
 			}
 		} else {

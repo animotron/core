@@ -48,6 +48,7 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+@Deprecated //replaced by calculator
 public class ProcessXSLT extends Process {
 	
 	ProcessXSLT(Controller controller) {

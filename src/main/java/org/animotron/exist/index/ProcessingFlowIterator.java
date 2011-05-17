@@ -2,6 +2,7 @@ package org.animotron.exist.index;
 
 import java.util.Iterator;
 
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
@@ -16,7 +17,7 @@ public class ProcessingFlowIterator implements Iterator<Node> {
 		TraversalDescription td = 
 			Traversal.description().
 				breadthFirst().
-				relationships(RelationshipTypes.ELEMENT );
+				relationships(RelationshipTypes.ELEMENT, Direction.OUTGOING );
 				//.evaluator(Evaluators.excludeStartPosition());
 	
 		it = td.traverse(this.the).nodes().iterator();

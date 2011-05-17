@@ -72,7 +72,7 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	protected static Node getTHE(String name) {
+	public static Node getTHE(String name) {
 		return getNode(new RelationshipTypeTHE(name));
 	}
 

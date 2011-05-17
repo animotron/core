@@ -98,18 +98,19 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 */
 	public void setDocument(DocumentImpl doc) {
 		this.document = doc;
+		//System.out.println("setDocument doc = " + doc.getDocumentURI());
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see
-	 * org.exist.indexing.IndexWorker#setDocument(org.exist.dom.DocumentImpl,
-	 * int)
+	 * org.exist.indexing.IndexWorker#setDocument(org.exist.dom.DocumentImpl, int)
 	 */
 	public void setDocument(DocumentImpl doc, int mode) {
 		this.document = doc;
 		this.mode = mode;
+		//System.out.println("setDocument doc = " + doc.getDocumentURI() + " mode = " + mode);
 	}
 
 	/*
