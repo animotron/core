@@ -19,14 +19,13 @@
 package org.animotron.exist.interpreter;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Iterator;
 
 import org.animotron.exist.index.RelationshipTypes;
+import org.animotron.exist.interpreter.op.An;
 import org.animotron.exist.interpreter.op.Get;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -70,7 +69,7 @@ class Evaluator implements Runnable {
 						//an:self (return root)
 						//an:* (reference)
 						
-						out.write("an ");
+						An.eval(r, out, isLast(it));
 						break;
 	
 					case ANY:
@@ -91,7 +90,6 @@ class Evaluator implements Runnable {
 					case GET:
 						
 						Get.eval(r, out, isLast(it));
-						
 						break;
 	
 					case SELF:

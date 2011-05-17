@@ -20,10 +20,19 @@ package org.animotron.exist.interpreter.op;
 
 import java.io.IOException;
 
+import org.animotron.exist.index.RelationshipTypes;
 import org.animotron.exist.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.helpers.Predicate;
+import org.neo4j.kernel.Traversal;
 
 /**
  * Operation 'get'. Return 'have' relations on provided context.
@@ -33,16 +42,25 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Get {
 
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean sameThread) throws IOException {
+	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 
 		Calculator.eval(op, new PipedOutputObjectStream(in));
 		
-		out.write("GET ");
-
 		Object n; 
 		while ((n = in.read()) != null) {
-			out.write(n);
-		} 
+			if (n instanceof Relationship) {
+
+				TraversalDescription td = 
+					Traversal.description().
+						breadthFirst().
+						relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
+						//.evaluator(Evaluators.excludeStartPosition());
+			
+				for (Relationship r : td.traverse(((Relationship) n).getEndNode()).relationships()) {
+					out.write(r);
+				}
+			}
+		}
 	}
 }

@@ -51,6 +51,8 @@ import org.junit.BeforeClass;
  */
 public class AbstractTest {
 	
+	private boolean clean = false;
+	
 	protected static final String ANIMO_NSs = 
 		"xmlns:the='animo/instance' " +
 		"xmlns:an='animo/reference' " +
@@ -163,25 +165,22 @@ public class AbstractTest {
         TransactionManager transact = null;
         Txn transaction = null;
         try {
-            pool = BrokerPool.getInstance();
-            assertNotNull(pool);
-            broker = pool.get(pool.getSecurityManager().getSystemSubject());
-            assertNotNull(broker);
-            transact = pool.getTransactionManager();
-            assertNotNull(transact);
-            transaction = transact.beginTransaction();
-            assertNotNull(transaction);
+            if (clean) {
+            	pool = BrokerPool.getInstance(); assertNotNull(pool);
+            	broker = pool.get(pool.getSecurityManager().getSystemSubject()); assertNotNull(broker);
+            	transact = pool.getTransactionManager(); assertNotNull(transact);
+            	transaction = transact.beginTransaction(); assertNotNull(transaction);
 
-            Collection collConfig = broker.getOrCreateCollection(transaction,
-                XmldbURI.create(XmldbURI.CONFIG_COLLECTION + "/db"));
-            assertNotNull(collConfig);
-            broker.removeCollection(transaction, collConfig);
+           		assertNotNull(root);
+           		broker.removeCollection(transaction, root);
 
-            if (root != null) {
-                assertNotNull(root);
-                broker.removeCollection(transaction, root);
+            	Collection collConfig = broker.getOrCreateCollection(transaction,
+            			XmldbURI.create(XmldbURI.CONFIG_COLLECTION + "/db"));
+            	assertNotNull(collConfig);
+            	broker.removeCollection(transaction, collConfig);
+            
+            	transact.commit(transaction);
             }
-            transact.commit(transaction);
 
             Configuration config = BrokerPool.getInstance().getConfiguration();
             config.setProperty(Indexer.PROPERTY_PRESERVE_WS_MIXED_CONTENT, savedConfig);
