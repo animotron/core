@@ -25,6 +25,7 @@ import java.util.StringTokenizer;
 
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
+import org.animotron.Properties;
 import org.apache.log4j.Logger;
 import org.exist.dom.QName;
 import org.exist.xquery.value.Type;
@@ -141,14 +142,14 @@ public class AnimoGraphBuilder {
 					}
 				} else {
 					if (Namespaces.AN.equals(ns)) {
-						active = AnimoGraph.createAN(current, name, element.getAttribute(AnimoGraph.NAME));
+						active = AnimoGraph.createAN(current, name, element.getAttribute(Properties.NAME.name()));
 						current = active;
 					} else if (Namespaces.ANY.equals(ns)) {
-						active = AnimoGraph.createANY(current, name, element.getAttribute(AnimoGraph.NAME));
+						active = AnimoGraph.createANY(current, name, element.getAttribute(Properties.NAME.name()));
 						pushPredicat(active);
 						current = active;
 					}  else if (Namespaces.ALL.equals(ns)) {
-						active = AnimoGraph.createALL(current, name, element.getAttribute(AnimoGraph.NAME));
+						active = AnimoGraph.createALL(current, name, element.getAttribute(Properties.NAME.name()));
 						pushPredicat(active);
 						current = active;
 					} else if (Namespaces.PTRN.equals(ns)) {

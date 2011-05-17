@@ -18,6 +18,7 @@
  */
 package org.animotron.exist.index;
 
+import org.animotron.Properties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -32,12 +33,6 @@ import org.neo4j.kernel.Traversal;
  */
 public class AnimoGraph {
 
-	public static final String NAME = "name";
-	public static final String SOURCE = "source";
-	public static final String NAMESPACE = "namespace";
-	public static final String PREFIX = "prefix";
-	public static final String VALUE = "value";
-	
 	private static Node root = AnimoIndex.graphDb.getReferenceNode();
 	
 	protected static Transaction beginTx() {
@@ -79,9 +74,18 @@ public class AnimoGraph {
 		return getNode(new RelationshipTypeTHE(name));
 	}
 
+	protected static String getProperty(Node node, Properties key) {
+		return node.getProperty(key.name()).toString();
+	};
+	
+	protected static void setProperty(Node node, Properties key, String value) {
+		if (value != null && !value.equals(""));
+			node.setProperty(key.name(), value);
+	};
+	
 	protected static Node createTHE(String name) {
 		Node node = createNode();
-		node.setProperty(NAME, name);
+		setProperty(node, Properties.NAME, name);
 		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
 		return node;
 	}
@@ -98,7 +102,7 @@ public class AnimoGraph {
 	private static Node createNode(Node parent, RelationshipType type, String name, String source) {
 		Node node = createNode(parent, type, name);
 		if (source != null){
-			node.setProperty(SOURCE, source);
+			setProperty(node, Properties.SOURCE, source);
 		}
 		return node;
 	}
@@ -167,16 +171,11 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.XSLT);
 	}
 	
-	private static void setProperty(Node node, String key, String value){
-		if (value != null && !value.equals(""));
-			node.setProperty(key, value);
-	};
-	
 	private static Node createNamedNode (Node parent, String name, String namespace, String prefix, RelationshipType type){
 		Node node = createNode(parent, type);
-		setProperty(node, NAMESPACE, namespace);
-		setProperty(node, NAME, name);
-		setProperty(node, PREFIX, prefix);
+		setProperty(node, Properties.NAMESPACE, namespace);
+		setProperty(node, Properties.NAME, name);
+		setProperty(node, Properties.PREFIX, prefix);
 		return node;
 	}
 
@@ -186,13 +185,13 @@ public class AnimoGraph {
 	
 	protected static Node createAttribute(Node parent, String name, String namespace, String prefix, String value) {
 		Node node = createNamedNode(parent, name, namespace, prefix, RelationshipTypes.ATTRIBUTE);
-		setProperty(node, VALUE, value);
+		setProperty(node, Properties.VALUE, value);
 		return node;
 	}
 	
 	private static Node createCharacterData(Node parent, String text, RelationshipType type) {
 		Node node = createNode(parent, type);
-		setProperty(node, VALUE, text);
+		setProperty(node, Properties.VALUE, text);
 		return node;
 	}
 	
