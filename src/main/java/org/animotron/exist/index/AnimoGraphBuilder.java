@@ -21,12 +21,13 @@ package org.animotron.exist.index;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
-import org.animotron.Sources;
 import org.apache.log4j.Logger;
 import org.exist.dom.QName;
+import org.exist.xquery.value.Type;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.w3c.dom.Attr;
@@ -38,6 +39,8 @@ import org.w3c.dom.Element;
  * 
  */
 public class AnimoGraphBuilder {
+	
+	private static final String NAME = "name";
 
 	private static final Logger LOG = Logger.getLogger(AnimoGraphBuilder.class);
 
@@ -111,7 +114,7 @@ public class AnimoGraphBuilder {
 			nodes.push(current);
 			try {
 				if (_element_) {
-					current = AnimoGraph.createElement(current, element);
+					current = AnimoGraph.createElement(current,  element.getLocalName(), element.getNamespaceURI(), element.getPrefix());
 				} else if (hasPredicat(active)) {
 					if (Namespaces.GT.equals(ns)) {
 						active = AnimoGraph.createGT(current, name);
@@ -140,14 +143,14 @@ public class AnimoGraphBuilder {
 					}
 				} else {
 					if (Namespaces.AN.equals(ns)) {
-						active = AnimoGraph.createAN(current, name, Sources.getSource(element));
+						active = AnimoGraph.createAN(current, name, element.getAttribute(NAME));
 						current = active;
 					} else if (Namespaces.ANY.equals(ns)) {
-						active = AnimoGraph.createANY(current, name, Sources.getSource(element));
+						active = AnimoGraph.createANY(current, name, element.getAttribute(NAME));
 						pushPredicat(active);
 						current = active;
 					}  else if (Namespaces.ALL.equals(ns)) {
-						active = AnimoGraph.createALL(current, name, Sources.getSource(element));
+						active = AnimoGraph.createALL(current, name, element.getAttribute(NAME));
 						pushPredicat(active);
 						current = active;
 					} else if (Namespaces.PTRN.equals(ns)) {
@@ -185,7 +188,7 @@ public class AnimoGraphBuilder {
 							pushSkip();
 						}
 					} else {
-						current = AnimoGraph.createElement(current, element);
+						current = AnimoGraph.createElement(current,  element.getLocalName(), element.getNamespaceURI(), element.getPrefix());
 					}
 				}
 			} catch (Exception e) {
@@ -216,7 +219,7 @@ public class AnimoGraphBuilder {
 		if (!_animo_ || _skip_)
 			return;
 		try {
-			AnimoGraph.createAttribute(current, attribute);
+			AnimoGraph.createAttribute(current, attribute.getLocalName(), attribute.getNamespaceURI(), attribute.getPrefix(), attribute.getNodeValue());
 		} catch (Exception e) {
 			tx.finish();
 			LOG.error("AnimoGraph build error for attribute " + attribute.getNodeName() + " = \"" + attribute.getNodeValue() + "\"" , e);
@@ -227,7 +230,24 @@ public class AnimoGraphBuilder {
 		if (!_animo_ || _skip_)
 			return;
 		try {
-			AnimoGraph.createCharacterData(current, text);
+			if (text.getNodeType() == Type.TEXT) {
+				String value = text.getNodeValue();
+	    		StringBuilder buf = new StringBuilder();
+	    		if (value.length() > 0) {
+	    			StringTokenizer tok = new StringTokenizer(value);
+	    			while (tok.hasMoreTokens()) {
+	                    buf.append(tok.nextToken());
+	    				if (tok.hasMoreTokens()) buf.append(' ');
+	    			}
+	    		}
+	    		if (buf.length() > 0){
+	    			AnimoGraph.createText(current, buf.toString());
+	    		}
+			} else if (text.getNodeType() == Type.COMMENT) {
+				AnimoGraph.createComment(current, text.getNodeValue());
+			} else if (text.getNodeType() == Type.CDATA_SECTION) {
+				AnimoGraph.createCDATA(current, text.getNodeValue());
+			}
 		} catch (Exception e) {
 			tx.finish();
 			LOG.error("AnimoGraph build error for node \"" + text.getNodeValue() + "\"" , e);

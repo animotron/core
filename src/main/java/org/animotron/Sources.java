@@ -21,15 +21,12 @@ package org.animotron;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.w3c.dom.Element;
-
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
  *
  */
 public class Sources {
 	
-	private static String NAME = "source";
 	private static Set<String>SOURCES = new HashSet<String>(5);
 	
 	static {
@@ -39,8 +36,7 @@ public class Sources {
 		SOURCES.add("stack");
 	}
 	
-	public static String getSource(Element element){
-		String src = element.getAttribute(NAME);
-		return SOURCES.contains(src) ? src : null;
+	public static boolean hasSource(String source){
+		return SOURCES.contains(source);
 	}
 }
