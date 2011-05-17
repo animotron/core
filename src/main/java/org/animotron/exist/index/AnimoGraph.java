@@ -79,6 +79,7 @@ public class AnimoGraph {
 
 	protected static Node createTHE(String name) {
 		Node node = createNode();
+		node.setProperty("name", name);
 		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
 		return node;
 	}
