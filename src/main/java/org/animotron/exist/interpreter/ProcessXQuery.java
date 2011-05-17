@@ -38,6 +38,7 @@ import org.xml.sax.SAXException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+@Deprecated //replaced by calculator
 public class ProcessXQuery extends Process {
 	
 	ProcessXQuery(Controller controller) {

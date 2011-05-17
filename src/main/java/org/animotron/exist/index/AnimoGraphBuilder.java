@@ -22,7 +22,6 @@ import java.util.Stack;
 
 import org.animotron.Namespaces;
 import org.apache.log4j.Logger;
-import org.exist.dom.ElementAtExist;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Transaction;
 import org.w3c.dom.Attr;
@@ -51,7 +50,7 @@ public class AnimoGraphBuilder {
 	public void startElement(Element element) {
 		
 		if (level == 0 ){
-			System.out.println("reset");
+			//System.out.println("reset");
 			animo = true;
 			current = null;
 			active = null;
@@ -77,6 +76,7 @@ public class AnimoGraphBuilder {
 				if (the == null){
 					the = AnimoGraph.createTHE(name);
 				} else {
+					//this should be during REMOVE events?
 					AnimoGraph.clear(the);
 				}
 				current = the;

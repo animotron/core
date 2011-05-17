@@ -57,6 +57,7 @@ import org.w3c.dom.Node;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+@Deprecated //replaced by calculator or should be changed to reuse
 public class Controller {
 
 	private XQueryContext queryContext;

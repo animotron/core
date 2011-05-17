@@ -54,10 +54,15 @@ public class AbstractTest {
 	protected static final String ANIMO_NSs = 
 		"xmlns:the='animo/instance' " +
 		"xmlns:an='animo/reference' " +
+		
 		"xmlns:ptrn='animo/pattern' " +
+		
 		"xmlns:have='animo/relation/have' " +
+		"xmlns:use='animo/relation/use' " +
 		"xmlns:is='animo/relation/is' " +
+
 		"xmlns:do='animo/perform' " +
+		
 		"xmlns:get='animo/query/extract' " +
 		"xmlns:any='animo/query/any' " +
 		"xmlns:all='animo/query/all' ";

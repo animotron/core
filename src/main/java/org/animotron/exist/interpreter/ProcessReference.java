@@ -38,6 +38,7 @@ import org.w3c.dom.Node;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+@Deprecated //replaced by calculator
 public class ProcessReference extends AbstractProcessReference {
 	
 	ProcessReference(Controller controller) {
@@ -50,7 +51,7 @@ public class ProcessReference extends AbstractProcessReference {
 		Node input = getCurrentStep();
 		
 		if (source == null) {
-			return AnimoGraph.getNode(input.getLocalName());
+			return null;//AnimoGraph.getNode(input.getLocalName());
 		} else {
 			XQueryContext context = getXQueryContext();
 			LocationStep step = new LocationStep(context, Constants.SELF_AXIS, new NameTest(Type.ELEMENT, new QName (input.getLocalName(), Namespaces.THE.namespace())));

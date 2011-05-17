@@ -16,21 +16,40 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.index;
+package org.animotron.exist.interpreter;
 
-import org.neo4j.graphdb.RelationshipType;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import org.neo4j.graphdb.Node;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public enum RelationshipTypes implements RelationshipType {
-	THE,
-	IS, USE, PTRN,
-	AN, ANY, ALL,
-	HAVE, IC,
-	GET, SELF,
-	DO,
+public class Calculator {
 	
-	ELEMENT, ATTRIBUTE, TEXT, CDATA, COMMENT
+	private static int THREADS_NUMBER = 100;
+	
+	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
+	
+	public static InputStream eval(Node node) {
+		try {
+			//XXX: replace by objects streams
+			PipedInputStream in = new PipedInputStream();
+			PipedOutputStream out = new PipedOutputStream(in);
+			
+			exec.execute(new Evaluator(node, out));
+		
+			return in;
+		} catch (IOException e) {
+			//can't be???
+			e.printStackTrace();
+			return null;
+		}
+	}
 }
