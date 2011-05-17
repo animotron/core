@@ -47,6 +47,7 @@ public class AnimoGraph {
 	
 	protected static void clear (Node node){
 		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
+			root.createRelationshipTo(r.getEndNode(), RelationshipTypes.GC);
 			r.delete();
 		}
 	}
@@ -68,7 +69,7 @@ public class AnimoGraph {
 	
 	private static Node createNode(Node parent, RelationshipType type, String name) {
 		Node node = createNode(parent, type);
-		node.createRelationshipTo(getOrCreateTHE(name), RelationshipTypes.IS);
+		node.createRelationshipTo(getOrCreateTHE(name), RelationshipTypes.REF);
 		return node;
 	}
 	

@@ -25,8 +25,9 @@ import org.neo4j.graphdb.RelationshipType;
  *
  */
 public enum RelationshipTypes implements RelationshipType {
-	THE,
-	IS, USE, PTRN,
+	THE, REF, 
+	IS, USE, 
+	PTRN,
 	AN, ANY, ALL,
 	HAVE, IC,
 	GET, SELF,
@@ -38,5 +39,7 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	SOURCE,
 	
-	GT, GE, EQ, NE, LE, LT
+	GT, GE, EQ, NE, LE, LT,
+	
+	GC
 }
