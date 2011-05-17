@@ -18,9 +18,7 @@
  */
 package org.animotron.exist.index;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -47,36 +45,27 @@ public class AnimoGraphBuilder {
 	private Node the, current, active;
 
 	private Stack<Node> nodes = new Stack<Node>();
-	private Set<Integer> predicates = new HashSet<Integer>();
-	Map<Integer, Sources> sources = new HashMap<Integer, Sources>();
+	private Set<Node> predicates = new HashSet<Node>();
 	
 	private int skip_level, element_level;
 	private int level = 0;
 	private boolean _animo_, _skip_, _element_;
 	private Transaction tx;
 	
-	private void push_element(){
+	private void pushElement(){
 		element_level = level; _element_ = true;
 	}
 	
-	private void push_skip(){
+	private void pushSkip(){
 		skip_level = level; _skip_ = true;
 	}
 	
-	private void push_source(Sources source){
-		sources.put(level, source);
+	private void pushPredicat(Node node){
+		predicates.add(node);
 	}
 	
-	private Sources source(){
-		return sources.get(level-1);
-	}
-	
-	private void push_predicat(){
-		predicates.add(level+1);
-	}
-	
-	private boolean predicat(){
-		return predicates.contains(level);
+	private boolean hasPredicat(Node node){
+		return predicates.contains(node);
 	}
 	
 	public void startElement(Element element) {
@@ -89,17 +78,19 @@ public class AnimoGraphBuilder {
 		
 		level++;
 		
-		if (!_animo_ || _skip_)
+		if (!_animo_)
 			return;
+		
+		if (_skip_ && level <= skip_level) { 
+			skip_level = 0; _skip_ = false;
+		} else { 
+			return;
+		}
 		
 		if (_element_ && level <= element_level) {
 			element_level = 0; _element_ = false;
 		}
 
-		if (_skip_ && level <= skip_level) { 
-			skip_level = 0; _skip_ = false;
-		}
-		
 		String ns = element.getNamespaceURI();
 		String name = element.getLocalName();
 		QName qname = new QName(name, ns);
@@ -125,56 +116,56 @@ public class AnimoGraphBuilder {
 					current = AnimoGraph.createElement(current, element);
 				} else {
 					if (Namespaces.AN.equals(ns)) {
-						active = AnimoGraph.createAN(current, name, source());
+						active = AnimoGraph.createAN(current, name, Sources.getSource(element));
 						current = active;
 					} else if (Namespaces.ANY.equals(ns)) {
-						active = AnimoGraph.createANY(current, name, source());
+						active = AnimoGraph.createANY(current, name, Sources.getSource(element));
+						pushPredicat(active);
 						current = active;
-						push_predicat();
 					}  else if (Namespaces.ALL.equals(ns)) {
-						active = AnimoGraph.createALL(current, name, source());
+						active = AnimoGraph.createALL(current, name, Sources.getSource(element));
+						pushPredicat(active);
 						current = active;
-						push_predicat();
 					} else if (Namespaces.GT.equals(ns)) {
-						if (predicat()) {
+						if (hasPredicat(active)) {
 							active = AnimoGraph.createGT(current, name);
 						} else {
-							active = AnimoGraph.createGT(current, name, source());
+							active = AnimoGraph.createGT(current, name, Sources.getSource(element));
 						}
 						current = active;
 					} else if (Namespaces.GE.equals(ns)) {
-						if (predicat()) {
+						if (hasPredicat(active)) {
 							active = AnimoGraph.createGE(current, name);
 						} else {
-							active = AnimoGraph.createGE(current, name, source());
+							active = AnimoGraph.createGE(current, name, Sources.getSource(element));
 						}
 						current = active;
 					} else if (Namespaces.EQ.equals(ns)) {
-						if (predicat()) {
+						if (hasPredicat(active)) {
 							active = AnimoGraph.createEQ(current, name);
 						} else {
-							active = AnimoGraph.createEQ(current, name, source());
+							active = AnimoGraph.createEQ(current, name, Sources.getSource(element));
 						}
 						current = active;
 					} else if (Namespaces.NE.equals(ns)) {
-						if (predicat()) {
+						if (hasPredicat(active)) {
 							active = AnimoGraph.createNE(current, name);
 						} else {
-							active = AnimoGraph.createNE(current, name, source());
+							active = AnimoGraph.createNE(current, name, Sources.getSource(element));
 						}
 						current = active;
 					} else if (Namespaces.LE.equals(ns)) {
-						if (predicat()) {
+						if (hasPredicat(active)) {
 							active = AnimoGraph.createLE(current, name);
 						} else {
-							active = AnimoGraph.createLE(current, name, source());
+							active = AnimoGraph.createLE(current, name, Sources.getSource(element));
 						}
 						current = active;
 					} else if (Namespaces.LT.equals(ns)) {
-						if (predicat()) {
+						if (hasPredicat(active)) {
 							active = AnimoGraph.createLT(current, name);
 						} else {
-							active = AnimoGraph.createLT(current, name, source());
+							active = AnimoGraph.createLT(current, name, Sources.getSource(element));
 						}
 						current = active;
 					} else if (Namespaces.PTRN.equals(ns)) {
@@ -195,30 +186,21 @@ public class AnimoGraphBuilder {
 					} else if (Keywords.DO_XQUERY.equals(qname)) {
 						active = AnimoGraph.createXQUERY(current);
 						current = active;
-						push_element();
+						pushElement();
 					} else if (Keywords.DO_XSLT.equals(qname)) {
 						active = AnimoGraph.createXSLT(current);
 						current = active;
-						push_element();
+						pushElement();
 					} else if (the != null && Namespaces.IS.equals(ns) && level == 2) {
 						AnimoGraph.addIsRelationship(the, name);
-						push_skip();
+						pushSkip();
 					} else if (Namespaces.USE.equals(ns)) {
-						if (Keywords.USE_GLOBAL_CONTEXT.keyword().equals(name)){
-							push_source(Sources.GLOBAL_CONTEXT);
-						} else if (Keywords.USE_CONTEXT.keyword().equals(name)){
-							push_source(Sources.CONTEXT);
-						} else if (Keywords.USE_LOCAL_CONTEXT.keyword().equals(name)){
-							push_source(Sources.LOCAL_CONTEXT);
-						} else if (Keywords.USE_CONTEXT_STACK.keyword().equals(name)){
-							push_source(Sources.CONTEXT_STACK);
-						} else if (Keywords.USE_FLOW_STACK.keyword().equals(name)){
-							push_source(Sources.FLOW_STACK);
-						} else if (the != null && level == 2) {
+						if (the != null && level == 2) {
 							AnimoGraph.addUseRelationship(the, name);
+							pushSkip();
 						} else {
 							AnimoGraph.addUseRelationship(active, name);
-							push_skip();
+							pushSkip();
 						}
 					} else {
 						current = AnimoGraph.createElement(current, element);
@@ -232,7 +214,7 @@ public class AnimoGraphBuilder {
 	}
 
 	public void endElement(Element element) {
-		if (!_animo_ || _skip_ || sources.containsKey(level--)) 
+		if (!_animo_ || _skip_) 
 			return;
 		if (level > 0) {
 			current = nodes.pop();

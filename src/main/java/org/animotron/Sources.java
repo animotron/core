@@ -18,16 +18,29 @@
  */
 package org.animotron;
 
-import org.exist.dom.QName;
+import java.util.HashSet;
+import java.util.Set;
+
+import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
  *
  */
-public enum Sources {
-	CONTEXT, 
-	GLOBAL_CONTEXT,
-	LOCAL_CONTEXT,
-	CONTEXT_STACK,
-	FLOW_STACK,
+public class Sources {
+	
+	private static String NAME = "source";
+	private static Set<String>SOURCES = new HashSet<String>(5);
+	
+	static {
+		SOURCES.add("flow-stack");
+		SOURCES.add("context");
+		SOURCES.add("CONTEXT");
+		SOURCES.add("stack");
+	}
+	
+	public static String getSource(Element element){
+		String src = element.getAttribute(NAME);
+		return SOURCES.contains(src) ? src : null;
+	}
 }

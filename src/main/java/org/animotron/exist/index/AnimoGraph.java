@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.index;
 
-import org.animotron.Sources;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
@@ -92,25 +91,23 @@ public class AnimoGraph {
 	}
 	
 	//TODO: make deferred linking for every input context;  
-	private static Node createNode(Node parent, RelationshipType type, String name, Sources source) {
+	private static Node createNode(Node parent, RelationshipType type, String name, String source) {
 		Node node = createNode(parent, type, name);
-		if (source == null){
-			node.setProperty("source", Sources.GLOBAL_CONTEXT);
-		} else {
+		if (source != null){
 			node.setProperty("source", source);
 		}
 		return node;
 	}
 
-	protected static Node createAN(Node parent, String name, Sources source) {
+	protected static Node createAN(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.AN, name, source);
 	}
 
-	protected static Node createANY(Node parent, String name, Sources source) {
+	protected static Node createANY(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.ANY, name, source);
 	}
 
-	protected static Node createALL(Node parent, String name, Sources source) {
+	protected static Node createALL(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.ALL, name, source);
 	}
 
@@ -126,7 +123,7 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.IC, name);
 	}
 	
-	protected static Node createGT(Node parent, String name, Sources source) {
+	protected static Node createGT(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.GT, name, source);
 	}
 	
@@ -134,7 +131,7 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.GT, name);
 	}
 	
-	protected static Node createGE(Node parent, String name, Sources source) {
+	protected static Node createGE(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.GE, name, source);
 	}
 	
@@ -142,7 +139,7 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.GE, name);
 	}
 	
-	protected static Node createLT(Node parent, String name, Sources source) {
+	protected static Node createLT(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.LT, name, source);
 	}
 	
@@ -150,7 +147,7 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.LT, name);
 	}
 	
-	protected static Node createLE(Node parent, String name, Sources source) {
+	protected static Node createLE(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.LE, name, source);
 	}
 	
@@ -158,7 +155,7 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.LE, name);
 	}
 	
-	protected static Node createEQ(Node parent, String name, Sources source) {
+	protected static Node createEQ(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.EQ, name, source);
 	}
 	
@@ -166,7 +163,7 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.EQ, name);
 	}
 	
-	protected static Node createNE(Node parent, String name, Sources source) {
+	protected static Node createNE(Node parent, String name, String source) {
 		return createNode(parent, RelationshipTypes.NE, name, source);
 	}
 	

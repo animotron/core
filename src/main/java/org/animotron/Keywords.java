@@ -34,14 +34,8 @@ public enum Keywords {
 	AN_SELF				("self", Namespaces.AN),
 	AN_CONTENT  		("content", Namespaces.AN),
 	
-	SELF_INSTANCE		("instance", Namespaces.SELF),
+	SELF_INSTANCE		("instance", Namespaces.SELF);
 
-	USE_FLOW_STACK		("flow-stack", Namespaces.USE),
-	USE_GLOBAL_CONTEXT	("repository", Namespaces.USE),
-	USE_LOCAL_CONTEXT	("context", Namespaces.USE),
-	USE_CONTEXT			("CONTEXT", Namespaces.USE),
-	USE_CONTEXT_STACK	("stack", Namespaces.USE);
-	
 	private final QName qname; 
 	private final String keyword; 
 	private final Namespaces namespace; 
