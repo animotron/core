@@ -53,20 +53,15 @@ public class SimpleTests extends AbstractTest {
 	
 	private static final String THE_B = 
 		"<the:B "+ANIMO_NSs+">" +
-		"	<is:A/>" +
+		"	<have:A>a@b</have:A>"+
 		"</the:B>";
 
 	private static final String THE_C = 
 		"<the:C "+ANIMO_NSs+">" +
-		"	<is:B/>"+
-		"</the:C>";
-
-	private static final String THE_D = 
-		"<the:D "+ANIMO_NSs+">" +
-		"	<get:B>" +
-		"		<use:C/>" +
+		"	<get:A>" +
+		"		<an:B/>" +
 		"	</get:B>" +
-		"</the:D>";
+		"</the:C>";
 
 	@Test
 	public void testGet() throws IOException {
@@ -76,7 +71,6 @@ public class SimpleTests extends AbstractTest {
         nameDataMap.put("A.xml", THE_A);
         nameDataMap.put("B.xml", THE_B);
         nameDataMap.put("C.xml", THE_C);
-        nameDataMap.put("D.xml", THE_D);
         
         configureAndStore(COLLECTION_CONFIG, nameDataMap);
         
@@ -85,11 +79,13 @@ public class SimpleTests extends AbstractTest {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
             
-            Node node = AnimoGraph.getTHE("D");
+            Node node = AnimoGraph.getTHE("C");
 
-            //System.out.println("get:B");
+            //System.out.println("get:A an:B");
             InputStream instream = Calculator.eval(node);
             toConsole(instream);
+            
+            //RESULT: <the:C><have:A>a@b</have:A></the:C>
             
 //            assertEquals(1, set.getItemCount());
 //            
