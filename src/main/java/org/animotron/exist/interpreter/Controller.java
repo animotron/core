@@ -322,35 +322,35 @@ public class Controller {
 				
 			}
 
-		} else  if (Keywords.USE_FLOW_STACK.equals(name, ns)) {
+		//} else  if (Keywords.USE_FLOW_STACK.equals(name, ns)) {
 			// process use:flow-stack
 			// process children use flow stack as source of instances
-			source = flowStack;
-			processChildNodes(input, builder);
+		//	source = flowStack;
+		//	processChildNodes(input, builder);
 
-		} else if (Keywords.USE_CONTEXT_STACK.equals(name, ns)) {
+		//} else if (Keywords.USE_CONTEXT_STACK.equals(name, ns)) {
 			// process use:stack
 			// process children use context stack as source of instances
-			source = contextStack;
-			processChildNodes(input, builder);
+		//	source = contextStack;
+		//	processChildNodes(input, builder);
 
-		} else if (Keywords.USE_LOCAL_CONTEXT.equals(name, ns)) {
+		//} else if (Keywords.USE_LOCAL_CONTEXT.equals(name, ns)) {
 			// process use:context
 			// process children use local context as source of instances
-			source = localContext;
-			processChildNodes(input, builder);
+		//	source = localContext;
+		//	processChildNodes(input, builder);
 
-		} else if (Keywords.USE_CONTEXT.equals(name, ns)) {
+		//} else if (Keywords.USE_CONTEXT.equals(name, ns)) {
 			// process use:CONTEXT
 			// process children use local context and context source as source of instances
-			source = context;
-			processChildNodes(input, builder);
+		//	source = context;
+		//	processChildNodes(input, builder);
 
-		} else if (Keywords.USE_GLOBAL_CONTEXT.equals(name, ns)) {
+		//} else if (Keywords.USE_GLOBAL_CONTEXT.equals(name, ns)) {
 			// process use:repository
 			// process children use global context (repository) as source of instances
-			source = null;
-			processChildNodes(input, builder);
+		//	source = null;
+		//	processChildNodes(input, builder);
 				
 		} else {
 			// process element()
