@@ -123,48 +123,24 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.IC, name);
 	}
 	
-	protected static Node createGT(Node parent, String name, String source) {
-		return createNode(parent, RelationshipTypes.GT, name, source);
-	}
-	
 	protected static Node createGT(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.GT, name);
-	}
-	
-	protected static Node createGE(Node parent, String name, String source) {
-		return createNode(parent, RelationshipTypes.GE, name, source);
 	}
 	
 	protected static Node createGE(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.GE, name);
 	}
 	
-	protected static Node createLT(Node parent, String name, String source) {
-		return createNode(parent, RelationshipTypes.LT, name, source);
-	}
-	
 	protected static Node createLT(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.LT, name);
-	}
-	
-	protected static Node createLE(Node parent, String name, String source) {
-		return createNode(parent, RelationshipTypes.LE, name, source);
 	}
 	
 	protected static Node createLE(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.LE, name);
 	}
 	
-	protected static Node createEQ(Node parent, String name, String source) {
-		return createNode(parent, RelationshipTypes.EQ, name, source);
-	}
-	
 	protected static Node createEQ(Node parent, String name) {
 		return createNode(parent, RelationshipTypes.EQ, name);
-	}
-	
-	protected static Node createNE(Node parent, String name, String source) {
-		return createNode(parent, RelationshipTypes.NE, name, source);
 	}
 	
 	protected static Node createNE(Node parent, String name) {
