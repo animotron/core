@@ -40,8 +40,6 @@ import org.w3c.dom.Element;
  */
 public class AnimoGraphBuilder {
 	
-	private static final String NAME = "name";
-
 	private static final Logger LOG = Logger.getLogger(AnimoGraphBuilder.class);
 
 	// here because of optimization reasons
@@ -143,14 +141,14 @@ public class AnimoGraphBuilder {
 					}
 				} else {
 					if (Namespaces.AN.equals(ns)) {
-						active = AnimoGraph.createAN(current, name, element.getAttribute(NAME));
+						active = AnimoGraph.createAN(current, name, element.getAttribute(AnimoGraph.NAME));
 						current = active;
 					} else if (Namespaces.ANY.equals(ns)) {
-						active = AnimoGraph.createANY(current, name, element.getAttribute(NAME));
+						active = AnimoGraph.createANY(current, name, element.getAttribute(AnimoGraph.NAME));
 						pushPredicat(active);
 						current = active;
 					}  else if (Namespaces.ALL.equals(ns)) {
-						active = AnimoGraph.createALL(current, name, element.getAttribute(NAME));
+						active = AnimoGraph.createALL(current, name, element.getAttribute(AnimoGraph.NAME));
 						pushPredicat(active);
 						current = active;
 					} else if (Namespaces.PTRN.equals(ns)) {

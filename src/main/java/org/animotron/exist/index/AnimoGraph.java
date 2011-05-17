@@ -32,6 +32,12 @@ import org.neo4j.kernel.Traversal;
  */
 public class AnimoGraph {
 
+	public static final String NAME = "name";
+	public static final String SOURCE = "source";
+	public static final String NAMESPACE = "namespace";
+	public static final String PREFIX = "prefix";
+	public static final String VALUE = "value";
+	
 	private static Node root = AnimoIndex.graphDb.getReferenceNode();
 	
 	protected static Transaction beginTx() {
@@ -72,7 +78,7 @@ public class AnimoGraph {
 
 	protected static Node createTHE(String name) {
 		Node node = createNode();
-		node.setProperty("name", name);
+		node.setProperty(NAME, name);
 		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
 		return node;
 	}
@@ -89,7 +95,7 @@ public class AnimoGraph {
 	private static Node createNode(Node parent, RelationshipType type, String name, String source) {
 		Node node = createNode(parent, type, name);
 		if (source != null){
-			node.setProperty("source", source);
+			node.setProperty(SOURCE, source);
 		}
 		return node;
 	}
@@ -165,9 +171,9 @@ public class AnimoGraph {
 	
 	private static Node createNamedNode (Node parent, String name, String namespace, String prefix, RelationshipType type){
 		Node node = createNode(parent, type);
-		setProperty(node, "namespace", namespace);
-		setProperty(node, "name", name);
-		setProperty(node, "prefix", prefix);
+		setProperty(node, NAMESPACE, namespace);
+		setProperty(node, NAME, name);
+		setProperty(node, PREFIX, prefix);
 		return node;
 	}
 
@@ -177,13 +183,13 @@ public class AnimoGraph {
 	
 	protected static Node createAttribute(Node parent, String name, String namespace, String prefix, String value) {
 		Node node = createNamedNode(parent, name, namespace, prefix, RelationshipTypes.ATTRIBUTE);
-		setProperty(node, "value", value);
+		setProperty(node, VALUE, value);
 		return node;
 	}
 	
 	private static Node createCharacterData(Node parent, String text, RelationshipType type) {
 		Node node = createNode(parent, type);
-		setProperty(node, "value", text);
+		setProperty(node, VALUE, text);
 		return node;
 	}
 	
@@ -240,4 +246,5 @@ public class AnimoGraph {
 	public static Relationship getTHErelation(String name) {
 		return root.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
 	}
+	
 }
