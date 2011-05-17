@@ -127,45 +127,45 @@ public class AnimoGraphBuilder {
 					} else if (Namespaces.GT.equals(ns)) {
 						if (hasPredicat(active)) {
 							active = AnimoGraph.createGT(current, name);
+							current = active;
 						} else {
-							active = AnimoGraph.createGT(current, name, Sources.getSource(element));
+							pushSkip();
 						}
-						current = active;
 					} else if (Namespaces.GE.equals(ns)) {
 						if (hasPredicat(active)) {
 							active = AnimoGraph.createGE(current, name);
+							current = active;
 						} else {
-							active = AnimoGraph.createGE(current, name, Sources.getSource(element));
+							pushSkip();
 						}
-						current = active;
 					} else if (Namespaces.EQ.equals(ns)) {
 						if (hasPredicat(active)) {
 							active = AnimoGraph.createEQ(current, name);
+							current = active;
 						} else {
-							active = AnimoGraph.createEQ(current, name, Sources.getSource(element));
+							pushSkip();
 						}
-						current = active;
 					} else if (Namespaces.NE.equals(ns)) {
 						if (hasPredicat(active)) {
 							active = AnimoGraph.createNE(current, name);
+							current = active;
 						} else {
-							active = AnimoGraph.createNE(current, name, Sources.getSource(element));
+							pushSkip();
 						}
-						current = active;
 					} else if (Namespaces.LE.equals(ns)) {
 						if (hasPredicat(active)) {
 							active = AnimoGraph.createLE(current, name);
+							current = active;
 						} else {
-							active = AnimoGraph.createLE(current, name, Sources.getSource(element));
+							pushSkip();
 						}
-						current = active;
 					} else if (Namespaces.LT.equals(ns)) {
 						if (hasPredicat(active)) {
 							active = AnimoGraph.createLT(current, name);
+							current = active;
 						} else {
-							active = AnimoGraph.createLT(current, name, Sources.getSource(element));
+							pushSkip();
 						}
-						current = active;
 					} else if (Namespaces.PTRN.equals(ns)) {
 						active = AnimoGraph.createPTRN(current, name);
 						current = active;
