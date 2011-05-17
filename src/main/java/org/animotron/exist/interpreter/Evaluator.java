@@ -90,8 +90,6 @@ class Evaluator implements Runnable {
 					
 					case GET:
 						
-						out.write("get ");
-
 						Get.eval(r, out, isLast(it));
 						
 						break;
@@ -100,7 +98,7 @@ class Evaluator implements Runnable {
 						//self:instance
 						//self:*
 						
-						out.write("self ".getBytes());
+						out.write("self ");
 						break;
 	
 					case DO:
@@ -108,11 +106,11 @@ class Evaluator implements Runnable {
 						//do:xquery (perform in-line XQuery)
 						//do:xslt (perform in-line XSLT)
 						
-						out.write("do ".getBytes());
+						out.write("do ");
 						break;
 	
 					default:
-						out.write("? ".getBytes());
+						out.write("? ");
 						break;
 					}
 				} else {
@@ -120,7 +118,7 @@ class Evaluator implements Runnable {
 				}
 			}
 
-			out.write("\n".getBytes());
+			out.write("\n");
 			out.close();
 		
 		} catch (IOException e) {
