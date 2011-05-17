@@ -70,22 +70,20 @@ public class AnimoGraphBuilder {
 	
 	public void startElement(Element element) {
 		
-		if (level == 0 ){
+		level++;
+		
+		if (level == 1 ){
 			current = active = the = null;
 			skip_level = element_level = 0;
 			_animo_ = true; _skip_ =  _element_ = false;
+		} else {
+			if (_skip_ && level <= skip_level) { 
+				skip_level = 0; _skip_ = false;
+			}
 		}
 		
-		level++;
-		
-		if (!_animo_)
+		if (!_animo_ || _skip_)
 			return;
-		
-		if (_skip_ && level <= skip_level) { 
-			skip_level = 0; _skip_ = false;
-		} else { 
-			return;
-		}
 		
 		if (_element_ && level <= element_level) {
 			element_level = 0; _element_ = false;
@@ -214,6 +212,7 @@ public class AnimoGraphBuilder {
 	}
 
 	public void endElement(Element element) {
+		level--;
 		if (!_animo_ || _skip_) 
 			return;
 		if (level > 0) {
@@ -243,7 +242,6 @@ public class AnimoGraphBuilder {
 	public void characters(CharacterData text) {
 		if (!_animo_ || _skip_)
 			return;
-		
 		try {
 			AnimoGraph.createCharacterData(current, text);
 		} catch (Exception e) {

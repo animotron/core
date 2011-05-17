@@ -239,6 +239,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		@Override
 		public void endElement(Txn transaction, ElementImpl element, NodePath path) {
 			if (mode == STORE) 
+				builder.endElement(element);
 			super.endElement(transaction, element, path);
 
 		}
