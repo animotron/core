@@ -18,9 +18,12 @@
  */
 package org.animotron.exist.index;
 
+import java.util.StringTokenizer;
+
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeProxy;
 import org.exist.dom.NodeSet;
+import org.exist.xquery.value.StringValue;
 import org.exist.xquery.value.Type;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -183,20 +186,31 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	private static Node createCharacterData(Node parent, CharacterData text, RelationshipType type) {
+	private static Node createCharacterData(Node parent, String text, RelationshipType type) {
 		Node node = createNode(parent, type);
-		node.setProperty("value", text.getNodeValue());
+		node.setProperty("value", text);
 		return node;
 	}
 	
 	protected static Node createCharacterData(Node parent, CharacterData text) {
 		Node node = null;
 		if (text.getNodeType() == Type.TEXT) {
-			node = createCharacterData(parent, text, RelationshipTypes.TEXT);
+			String value = text.getNodeValue();
+    		StringBuilder buf = new StringBuilder();
+    		if (value.length() > 0) {
+    			StringTokenizer tok = new StringTokenizer(value);
+    			while (tok.hasMoreTokens()) {
+                    buf.append(tok.nextToken());
+    				if (tok.hasMoreTokens()) buf.append(' ');
+    			}
+    		}
+    		if (buf.length() > 0){
+    			node = createCharacterData(parent, buf.toString(), RelationshipTypes.TEXT);
+    		}
 		} else if (text.getNodeType() == Type.COMMENT) {
-			node = createCharacterData(parent, text, RelationshipTypes.COMMENT);
+			node = createCharacterData(parent, text.getNodeValue(), RelationshipTypes.COMMENT);
 		} else if (text.getNodeType() == Type.CDATA_SECTION) {
-			node = createCharacterData(parent, text, RelationshipTypes.CDATA);
+			node = createCharacterData(parent, text.getNodeValue(), RelationshipTypes.CDATA);
 		}
 		return node;
 	}
