@@ -18,28 +18,20 @@
  */
 package org.animotron.exist.interpreter;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 import org.animotron.exist.AbstractTest;
 import org.animotron.exist.index.AnimoGraph;
+import org.animotron.io.PipedInputObjectStream;
 import org.exist.EXistException;
-import org.exist.dom.NodeSet;
 import org.exist.storage.DBBroker;
 import org.junit.Test;
-import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 
 /**
@@ -60,7 +52,7 @@ public class SimpleTests extends AbstractTest {
 		"<the:C "+ANIMO_NSs+">" +
 		"	<get:A>" +
 		"		<an:B/>" +
-		"	</get:B>" +
+		"	</get:A>" +
 		"</the:C>";
 
 	@Test
@@ -79,10 +71,12 @@ public class SimpleTests extends AbstractTest {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
             
-            Node node = AnimoGraph.getTHE("C");
+            Relationship op = AnimoGraph.getTHErelation("C");
+            
+            assertNotNull(op);
 
             //System.out.println("get:A an:B");
-            InputStream instream = Calculator.eval(node);
+            PipedInputObjectStream instream = Calculator.eval(op);
             toConsole(instream);
             
             //RESULT: <the:C><have:A>a@b</have:A></the:C>
@@ -105,17 +99,12 @@ public class SimpleTests extends AbstractTest {
         //System.out.println("done.");
 	}
 	
-	private void toConsole(InputStream instream) throws IOException {
+	private void toConsole(PipedInputObjectStream instream) throws IOException {
 		if (instream == null) return;
 		
-		char[] buffer = new char[1024];
-		
-		Reader reader = new BufferedReader(new InputStreamReader(instream, "UTF-8"));
-		int n; 
-		while ((n = reader.read(buffer)) != -1) {
-			for (int i = 0; i < n; i++) {
-				System.out.print(buffer[i]);
-			}
+		Object n; 
+		while ((n = instream.read()) != null) {
+			System.out.print(n.toString());
 		} 
 	}
 }

@@ -277,7 +277,7 @@ public class AnimoGraph {
 			nodes();
 	}	
 	
-	public static NodeSet evaluate(String string) {
-		return null;
-	}	
+	public static Relationship getTHErelation(String name) {
+		return root.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
+	}
 }

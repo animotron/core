@@ -16,42 +16,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.interpreter;
+package org.animotron.exist.interpreter.op;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
+import org.animotron.exist.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
 /**
+ * Operation 'get'. Return 'have' relations on provided context.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class Calculator {
-	
-	private static int THREADS_NUMBER = 100;
-	
-	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
-	
-	public static PipedInputObjectStream eval(Relationship op) {
-		try {
-			PipedInputObjectStream in = new PipedInputObjectStream();
-			PipedOutputObjectStream out = new PipedOutputObjectStream(in);
-			
-			exec.execute(new Evaluator(op, out));
-		
-			return in;
-		} catch (IOException e) {
-			//can't be???
-			e.printStackTrace();
-			return null;
-		}
-	}
+public class Get {
 
-	public static void eval(Relationship op, PipedOutputObjectStream out) {
-		exec.execute(new Evaluator(op, out));
+	public static void eval(Relationship op, PipedOutputObjectStream out, boolean sameThread) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+
+		Calculator.eval(op, new PipedOutputObjectStream(in));
+		
+		out.write("GET ");
+
+		Object n; 
+		while ((n = in.read()) != null) {
+			out.write(n);
+		} 
 	}
 }

@@ -23,6 +23,8 @@ import java.io.OutputStream;
 import java.util.Iterator;
 
 import org.animotron.exist.index.RelationshipTypes;
+import org.animotron.exist.interpreter.op.Get;
+import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -34,57 +36,64 @@ import org.neo4j.graphdb.RelationshipType;
  */
 class Evaluator implements Runnable {
 	
-	private Node node;
-	private OutputStream out;
+	private Relationship op;
+	private PipedOutputObjectStream out;
 	
-	public Evaluator(Node node, OutputStream out) {
-		this.node = node;
+	public Evaluator(Relationship op, PipedOutputObjectStream out) {
+		this.op = op;
 		this.out = out;
 	}
 
 	@Override
 	public void run() {
+		eval(op, out);
+	}
+	
+	private void eval(Relationship op, PipedOutputObjectStream out) {
 		
 		try {
 			Relationship r = null;
 			
-			Iterator<Relationship> it = node.getRelationships(Direction.OUTGOING).iterator();
+			Iterator<Relationship> it = op.getEndNode().getRelationships(Direction.OUTGOING).iterator();
 			while (it.hasNext()) {
 				
 				r = it.next();
 				RelationshipType type = r.getType();
 				
 				if (type instanceof RelationshipTypes) {
-					RelationshipTypes op = (RelationshipTypes) type;
+					RelationshipTypes oper = (RelationshipTypes) type;
 					
-					switch (op) {
+					switch (oper) {
 					case AN:
 						//an:empty (return nothing)
 						//an:context (process children)
 						//an:self (return root)
 						//an:* (reference)
 						
-						out.write("an ".getBytes());
+						out.write("an ");
 						break;
 	
 					case ANY:
 						
-						out.write("any ".getBytes());
+						out.write("any ");
 						break;
 	
 					case ALL:
 						
-						out.write("all ".getBytes());
+						out.write("all ");
 						break;
 					
 					case PTRN:
 						
-						out.write("ptrn ".getBytes());
+						out.write("ptrn ");
 						break;
 					
 					case GET:
 						
-						out.write("get ".getBytes());
+						out.write("get ");
+
+						Get.eval(r, out, isLast(it));
+						
 						break;
 	
 					case SELF:
@@ -119,5 +128,9 @@ class Evaluator implements Runnable {
 			//XXX: terminate?
 		}
 		
+	}
+	
+	private boolean isLast(Iterator<?> it) {
+		return !it.hasNext();
 	}
 }
