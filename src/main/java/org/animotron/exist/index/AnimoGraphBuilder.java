@@ -63,11 +63,22 @@ public class AnimoGraphBuilder {
 	}
 	
 	private void pushPredicat(Node node){
+		pushActive(node);
 		predicates.add(node);
 	}
 	
 	private boolean hasPredicat(Node node){
 		return predicates.contains(node);
+	}
+	
+	private void pushActive(Node node){
+		pushCurrent(node);
+		active = node;
+	}
+	
+	private void pushCurrent(Node node){
+		nodes.push(current);
+		current = node;
 	}
 	
 	public void startElement(Element element) {
@@ -110,70 +121,47 @@ public class AnimoGraphBuilder {
 				_animo_ = false;
 			}
 		} else {
-			nodes.push(current);
 			try {
 				if (_element_) {
-					current = AnimoGraph.createElement(current,  element.getLocalName(), element.getNamespaceURI(), element.getPrefix());
+					pushCurrent(AnimoGraph.createElement(current, name, ns, element.getPrefix()));
 				} else if (hasPredicat(active)) {
 					if (Namespaces.GT.equals(ns)) {
-						active = AnimoGraph.createGT(current, name);
-						current = active;
+						pushActive(AnimoGraph.createGT(current, name));
 					} else if (Namespaces.GE.equals(ns)) {
-						active = AnimoGraph.createGE(current, name);
-						current = active;
+						pushActive(AnimoGraph.createGE(current, name));
 					} else if (Namespaces.EQ.equals(ns)) {
-						active = AnimoGraph.createEQ(current, name);
-						current = active;
+						pushActive(AnimoGraph.createEQ(current, name));
 					} else if (Namespaces.NE.equals(ns)) {
-						active = AnimoGraph.createNE(current, name);
-						current = active;
+						pushActive(AnimoGraph.createNE(current, name));
 					} else if (Namespaces.LE.equals(ns)) {
-						active = AnimoGraph.createLE(current, name);
-						current = active;
-					} else {
-						pushSkip();
-					}
-				} else if (Namespaces.LT.equals(ns)) {
-					if (hasPredicat(active)) {
-						active = AnimoGraph.createLT(current, name);
-						current = active;
+						pushActive(AnimoGraph.createLE(current, name));
+					} else if (Namespaces.LT.equals(ns)) {
+						pushActive(AnimoGraph.createLT(current, name));
 					} else {
 						pushSkip();
 					}
 				} else {
 					if (Namespaces.AN.equals(ns)) {
-						active = AnimoGraph.createAN(current, name, element.getAttribute(Properties.NAME.name()));
-						current = active;
+						pushActive(AnimoGraph.createAN(current, name, element.getAttribute(Properties.NAME.name())));
 					} else if (Namespaces.ANY.equals(ns)) {
-						active = AnimoGraph.createANY(current, name, element.getAttribute(Properties.NAME.name()));
-						pushPredicat(active);
-						current = active;
+						pushPredicat(AnimoGraph.createANY(current, name, element.getAttribute(Properties.NAME.name())));
 					}  else if (Namespaces.ALL.equals(ns)) {
-						active = AnimoGraph.createALL(current, name, element.getAttribute(Properties.NAME.name()));
-						pushPredicat(active);
-						current = active;
+						pushPredicat(AnimoGraph.createALL(current, name, element.getAttribute(Properties.NAME.name())));
 					} else if (Namespaces.PTRN.equals(ns)) {
-						active = AnimoGraph.createPTRN(current, name);
-						current = active;
+						pushActive(AnimoGraph.createPTRN(current, name));
 					} else if (Namespaces.HAVE.equals(ns)) {
-						active = AnimoGraph.createHAVE(current, name);
-						current = active;
+						pushActive(AnimoGraph.createHAVE(current, name));
 					} else if (Namespaces.IC.equals(ns)) {
-						active = AnimoGraph.createIC(current, name);
-						current = active;
+						pushActive(AnimoGraph.createIC(current, name));
 					} else if (Namespaces.GET.equals(ns)) {
-						active = AnimoGraph.createGET(current, name);
-						current = active;
+						pushActive(AnimoGraph.createGET(current, name));
 					} else if (Namespaces.SELF.equals(ns)) {
-						active = AnimoGraph.createSELF(current, name);
-						current = active;
+						pushActive(AnimoGraph.createSELF(current, name));
 					} else if (Keywords.DO_XQUERY.equals(qname)) {
-						active = AnimoGraph.createXQUERY(current);
-						current = active;
+						pushActive(AnimoGraph.createXQUERY(current));
 						pushElement();
 					} else if (Keywords.DO_XSLT.equals(qname)) {
-						active = AnimoGraph.createXSLT(current);
-						current = active;
+						pushActive(AnimoGraph.createXSLT(current));
 						pushElement();
 					} else if (the != null && Namespaces.IS.equals(ns) && level == 2) {
 						AnimoGraph.addIsRelationship(the, name);
@@ -187,7 +175,7 @@ public class AnimoGraphBuilder {
 							pushSkip();
 						}
 					} else {
-						current = AnimoGraph.createElement(current,  element.getLocalName(), element.getNamespaceURI(), element.getPrefix());
+						pushCurrent(AnimoGraph.createElement(current, name, ns, element.getPrefix()));
 					}
 				}
 			} catch (Exception e) {
@@ -199,18 +187,19 @@ public class AnimoGraphBuilder {
 
 	public void endElement(Element element) {
 		level--;
-		if (!_animo_ || _skip_) 
-			return;
 		if (level > 0) {
+			if (!_animo_ || _skip_) 
+				return;
 			current = nodes.pop();
 		} else {
-			try {
-				tx.success();
-				tx.finish();
-			} catch (Exception e) {
-				tx.finish();
-				LOG.error("AnimoGraph build error for element \"" + element.getNodeName() + "\"" , e);
-			}
+			if (_animo_)
+				try {
+					tx.success();
+					tx.finish();
+				} catch (Exception e) {
+					tx.finish();
+					LOG.error("AnimoGraph build error for element \"" + element.getNodeName() + "\"" , e);
+				}
 		}
 	}
 

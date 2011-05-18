@@ -39,6 +39,16 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.beginTx();
 	}
 	
+	public static String getProperty(Node node, Properties key) {
+		return node.getProperty(key.name()).toString();
+	};
+	
+	public static void setProperty(Node node, Properties key, String value) {
+		if (value != null && !value.equals("")){
+			node.setProperty(key.name(), value);
+		}
+	};
+	
 	protected static void clear (Node node){
 		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
 			Node end = r.getEndNode();
@@ -74,15 +84,6 @@ public class AnimoGraph {
 		return getNode(new RelationshipTypeTHE(name));
 	}
 
-	protected static String getProperty(Node node, Properties key) {
-		return node.getProperty(key.name()).toString();
-	};
-	
-	protected static void setProperty(Node node, Properties key, String value) {
-		if (value != null && !value.equals(""));
-			node.setProperty(key.name(), value);
-	};
-	
 	protected static Node createTHE(String name) {
 		Node node = createNode();
 		setProperty(node, Properties.NAME, name);
