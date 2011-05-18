@@ -18,25 +18,11 @@
  */
 package org.animotron;
 
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
  *
  */
-public class Sources {
-	
-	private static Set<String>SOURCES = new HashSet<String>(5);
-	
-	static {
-		SOURCES.add("flow-stack");
-		SOURCES.add("context");
-		SOURCES.add("CONTEXT");
-		SOURCES.add("stack");
-	}
-	
-	public static boolean hasSource(String source){
-		return SOURCES.contains(source);
-	}
+public enum Properties {
+	NAME, SOURCE, NAMESPACE, PREFIX, VALUE;
 }

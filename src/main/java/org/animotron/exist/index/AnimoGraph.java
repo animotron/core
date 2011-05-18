@@ -18,13 +18,7 @@
  */
 package org.animotron.exist.index;
 
-import java.util.StringTokenizer;
-
-import org.exist.dom.NewArrayNodeSet;
-import org.exist.dom.NodeProxy;
-import org.exist.dom.NodeSet;
-import org.exist.xquery.value.StringValue;
-import org.exist.xquery.value.Type;
+import org.animotron.Properties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -32,9 +26,6 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.kernel.Traversal;
-import org.w3c.dom.Attr;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -48,10 +39,23 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.beginTx();
 	}
 	
+	public static String getProperty(Node node, Properties key) {
+		return node.getProperty(key.name()).toString();
+	};
+	
+	public static void setProperty(Node node, Properties key, String value) {
+		if (value != null && !value.equals("")){
+			node.setProperty(key.name(), value);
+		}
+	};
+	
 	protected static void clear (Node node){
 		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
-			root.createRelationshipTo(r.getEndNode(), RelationshipTypes.GC);
+			Node end = r.getEndNode();
 			r.delete();
+			if (!end.hasRelationship(Direction.INCOMING)) {
+				root.createRelationshipTo(end, RelationshipTypes.GC);
+			}
 		}
 	}
 	
@@ -82,7 +86,7 @@ public class AnimoGraph {
 
 	protected static Node createTHE(String name) {
 		Node node = createNode();
-		node.setProperty("name", name);
+		setProperty(node, Properties.NAME, name);
 		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
 		return node;
 	}
@@ -99,7 +103,7 @@ public class AnimoGraph {
 	private static Node createNode(Node parent, RelationshipType type, String name, String source) {
 		Node node = createNode(parent, type, name);
 		if (source != null){
-			node.setProperty("source", source);
+			setProperty(node, Properties.SOURCE, source);
 		}
 		return node;
 	}
@@ -168,51 +172,40 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.XSLT);
 	}
 	
-	private static Node createNamedNode (Node parent, org.w3c.dom.Node n, RelationshipType type){
+	private static Node createNamedNode (Node parent, String name, String namespace, String prefix, RelationshipType type){
 		Node node = createNode(parent, type);
-		node.setProperty("namespace", n.getNamespaceURI());
-		node.setProperty("name", n.getLocalName());
-		node.setProperty("prefix", n.getPrefix());
+		setProperty(node, Properties.NAMESPACE, namespace);
+		setProperty(node, Properties.NAME, name);
+		setProperty(node, Properties.PREFIX, prefix);
 		return node;
 	}
 
-	protected static Node createElement(Node parent, Element element) {
-		return createNamedNode(parent, element, RelationshipTypes.ELEMENT);
+	protected static Node createElement(Node parent, String name, String namespace, String prefix) {
+		return createNamedNode(parent, name, namespace, prefix, RelationshipTypes.ELEMENT);
 	}
 	
-	protected static Node createAttribute(Node parent, Attr attribute) {
-		Node node = createNamedNode(parent, attribute, RelationshipTypes.ATTRIBUTE);
-		node.setProperty("value", attribute.getNodeValue());
+	protected static Node createAttribute(Node parent, String name, String namespace, String prefix, String value) {
+		Node node = createNamedNode(parent, name, namespace, prefix, RelationshipTypes.ATTRIBUTE);
+		setProperty(node, Properties.VALUE, value);
 		return node;
 	}
 	
 	private static Node createCharacterData(Node parent, String text, RelationshipType type) {
 		Node node = createNode(parent, type);
-		node.setProperty("value", text);
+		setProperty(node, Properties.VALUE, text);
 		return node;
 	}
 	
-	protected static Node createCharacterData(Node parent, CharacterData text) {
-		Node node = null;
-		if (text.getNodeType() == Type.TEXT) {
-			String value = text.getNodeValue();
-    		StringBuilder buf = new StringBuilder();
-    		if (value.length() > 0) {
-    			StringTokenizer tok = new StringTokenizer(value);
-    			while (tok.hasMoreTokens()) {
-                    buf.append(tok.nextToken());
-    				if (tok.hasMoreTokens()) buf.append(' ');
-    			}
-    		}
-    		if (buf.length() > 0){
-    			node = createCharacterData(parent, buf.toString(), RelationshipTypes.TEXT);
-    		}
-		} else if (text.getNodeType() == Type.COMMENT) {
-			node = createCharacterData(parent, text.getNodeValue(), RelationshipTypes.COMMENT);
-		} else if (text.getNodeType() == Type.CDATA_SECTION) {
-			node = createCharacterData(parent, text.getNodeValue(), RelationshipTypes.CDATA);
-		}
-		return node;
+	protected static Node createText(Node parent, String text) {
+		return createCharacterData(parent, text, RelationshipTypes.TEXT);
+	}
+	
+	protected static Node createComment(Node parent, String text) {
+		return createCharacterData(parent, text, RelationshipTypes.COMMENT);
+	}
+	
+	protected static Node createCDATA(Node parent, String text) {
+		return createCharacterData(parent, text, RelationshipTypes.CDATA);
 	}
 	
 	private static void relationshipTo(Node start, Node end, RelationshipType type) {
@@ -235,26 +228,6 @@ public class AnimoGraph {
 		relationshipTo(node, is, RelationshipTypes.USE);
 	}
 	
-	public static NodeSet resolveUpIsLogic(String name) {
-		Node instance = AnimoGraph.getTHE(name);
-		if (instance == null) return NodeSet.EMPTY_SET;
-		NodeSet set = new NewArrayNodeSet(5);
-		resolveUpIsLogic(instance);
-		// TODO: Serialize to NodeSet
-		return set;
-	}
-
-	public static NodeSet resolveUpIsLogic(NodeSet s) {
-		NodeSet result = new NewArrayNodeSet(5);
-		for (NodeProxy node : s) {
-			Node instance = AnimoGraph.getTHE(node.getNode().getLocalName());
-			if (instance == null) continue;
-			resolveUpIsLogic(instance);
-		}
-		// TODO: Serialize to NodeSet
-		return result;
-	}
-
 	private static Iterable<Node> resolveUpIsLogic(Node node) {
 		return Traversal.description().
 			breadthFirst().
@@ -262,26 +235,6 @@ public class AnimoGraph {
 			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
 			traverse(node).
 			nodes();
-	}
-
-	public static NodeSet resolveDownIsLogic(String name) {
-		Node instance = AnimoGraph.getTHE(name);
-		if (instance == null) return NodeSet.EMPTY_SET;
-		NodeSet result = new NewArrayNodeSet(5);
-		resolveDownIsLogic(instance);
-		// TODO: Serialize to NodeSet
-		return result;
-	}
-
-	public static NodeSet resolveDownIsLogic(NodeSet set) {
-		NodeSet result = new NewArrayNodeSet(5);
-		for (NodeProxy node : set) {
-			Node instance = AnimoGraph.getTHE(node.getNode().getLocalName());
-			if (instance == null) continue;
-			resolveDownIsLogic(instance);
-		}
-		// TODO: Serialize to NodeSet
-		return result;
 	}
 
 	private static Iterable<Node> resolveDownIsLogic(Node node) {
@@ -296,4 +249,5 @@ public class AnimoGraph {
 	public static Relationship getTHErelation(String name) {
 		return root.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
 	}
+	
 }

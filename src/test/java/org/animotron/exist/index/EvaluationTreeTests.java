@@ -23,6 +23,7 @@ import static org.junit.Assert.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.animotron.Properties;
 import org.animotron.exist.AbstractTest;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
@@ -75,7 +76,7 @@ public class EvaluationTreeTests extends AbstractTest {
             
             ProcessingFlowIterator it = new ProcessingFlowIterator(node);
             while (it.hasNext()) {
-            	System.out.println(it.next().getProperty("name"));
+            	System.out.println(AnimoGraph.getProperty(it.next(), Properties.NAME));
             	//System.out.println(AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	i++;
