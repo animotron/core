@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.animotron.Properties;
 import org.animotron.exist.AbstractTest;
+import org.animotron.graph.AnimoGraph;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
 import org.junit.Test;

@@ -16,9 +16,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.index;
+package org.animotron.graph;
 
 import org.animotron.Properties;
+import org.animotron.exist.index.AnimoIndex;
+import org.animotron.exist.index.RelationshipTypeTHE;
+import org.animotron.exist.index.RelationshipTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

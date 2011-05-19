@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.index;
+package org.animotron.graph;
 
 import java.util.HashSet;
 import java.util.Set;

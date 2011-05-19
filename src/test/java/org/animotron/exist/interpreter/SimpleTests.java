@@ -29,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.animotron.exist.AbstractTest;
-import org.animotron.exist.index.AnimoGraph;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Reader;
 import org.animotron.io.PipedInputObjectStream;
 import org.exist.EXistException;

@@ -21,6 +21,7 @@ package org.animotron.exist.index;
 import java.util.Map;
 
 import org.animotron.Namespaces;
+import org.animotron.graph.AnimoGraphBuilder;
 import org.exist.collections.Collection;
 import org.exist.dom.AttrImpl;
 import org.exist.dom.CharacterDataImpl;
