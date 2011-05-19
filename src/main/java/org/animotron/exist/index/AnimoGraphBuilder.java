@@ -44,14 +44,13 @@ public class AnimoGraphBuilder {
 	private static final Logger LOG = Logger.getLogger(AnimoGraphBuilder.class);
 
 	// here because of optimization reasons
-	private Node the, current, active;
+	private Node the = null, current = null, active = null;
 
 	private Stack<Node> nodes = new Stack<Node>();
 	private Set<Node> predicates = new HashSet<Node>();
 	
-	private int skip_level, element_level;
-	private int level = 0;
-	private boolean _animo_, _skip_, _element_;
+	private int level = 0, skip_level = 0, element_level = 0;
+	private boolean _animo_ = true, _skip_ = false, _element_ = false;
 	private Transaction tx;
 	
 	private void pushElement(){
@@ -69,7 +68,9 @@ public class AnimoGraphBuilder {
 	
 	private boolean hasPredicat(Node node){
 		return predicates.contains(node);
-	}
+	}	
+	
+
 	
 	private void pushActive(Node node){
 		pushCurrent(node);
@@ -85,14 +86,8 @@ public class AnimoGraphBuilder {
 		
 		level++;
 		
-		if (level == 1 ){
-			current = active = the = null;
-			skip_level = element_level = 0;
-			_animo_ = true; _skip_ =  _element_ = false;
-		} else {
-			if (_skip_ && level <= skip_level) { 
-				skip_level = 0; _skip_ = false;
-			}
+		if (_skip_ && level <= skip_level) { 
+			skip_level = 0; _skip_ = false;
 		}
 		
 		if (!_animo_ || _skip_)

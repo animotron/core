@@ -53,7 +53,8 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	private int mode = 0;
 	private DocumentImpl document = null;
 	private AnimoIndex index;
-
+	private AnimoGraphBuilder builder;
+	
 	public AnimoIndexWorker(AnimoIndex index) {
 		this.index = index;
 	}
@@ -98,6 +99,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 */
 	public void setDocument(DocumentImpl doc) {
 		this.document = doc;
+		builder = new AnimoGraphBuilder();
 		//System.out.println("setDocument doc = " + doc.getDocumentURI());
 	}
 
@@ -110,6 +112,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	public void setDocument(DocumentImpl doc, int mode) {
 		this.document = doc;
 		this.mode = mode;
+		builder = new AnimoGraphBuilder();
 		//System.out.println("setDocument doc = " + doc.getDocumentURI() + " mode = " + mode);
 	}
 
@@ -227,11 +230,9 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	private class AnimoStreamListener extends AbstractStreamListener {
 
-		private AnimoGraphBuilder builder = new AnimoGraphBuilder();
-
 		@Override
 		public void startElement(Txn transaction, ElementImpl element, NodePath path) {
-			if (mode == STORE) 
+			if (mode == STORE)
 				builder.startElement(element);
 			super.startElement(transaction, element, path);
 		}
@@ -246,7 +247,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	    @Override
 	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
-			if (mode == STORE) 
+			if (mode == STORE)
 				builder.attribute(attribute);
 			super.attribute(transaction, attribute, path);
 	    }
