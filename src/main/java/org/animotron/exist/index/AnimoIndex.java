@@ -50,8 +50,8 @@ public class AnimoIndex extends AbstractIndex {
 		return instance;
 	}
 
-	protected static GraphDatabaseService graphDb;
-	protected static IndexService indexService;
+	public static GraphDatabaseService graphDb;
+	public static IndexService indexService;
 
 	public AnimoIndex() {
 		AnimoIndex.instance = this;
