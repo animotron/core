@@ -59,12 +59,14 @@ public class SimpleTests extends AbstractTest {
 	public void testGet() throws IOException {
         System.out.println("Test 'get' ...");
         
-        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
-        nameDataMap.put("A.xml", THE_A);
-        nameDataMap.put("B.xml", THE_B);
-        nameDataMap.put("C.xml", THE_C);
-        
-        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+        if (firstRun) {
+	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
+	        nameDataMap.put("A.xml", THE_A);
+	        nameDataMap.put("B.xml", THE_B);
+	        nameDataMap.put("C.xml", THE_C);
+	        
+	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+        }
         
         DBBroker broker = null;
         try {

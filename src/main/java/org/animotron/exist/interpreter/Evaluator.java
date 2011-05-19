@@ -24,6 +24,7 @@ import java.util.Iterator;
 import org.animotron.exist.index.RelationshipTypes;
 import org.animotron.exist.interpreter.op.An;
 import org.animotron.exist.interpreter.op.Get;
+import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
@@ -45,10 +46,17 @@ class Evaluator implements Runnable {
 
 	@Override
 	public void run() {
-		eval(op, out);
+		try {
+			eval(op, out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private void eval(Relationship op, PipedOutputObjectStream out) {
+	private void eval(Relationship op, PipedOutputObjectStream ot) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
+
 		
 		try {
 			Relationship r = null;
@@ -123,7 +131,13 @@ class Evaluator implements Runnable {
 			e.printStackTrace();
 			//XXX: terminate?
 		}
-		
+
+		Object n; 
+		while ((n = in.read()) != null) {
+			ot.write(n);
+		} 
+		ot.close();
+
 	}
 	
 	private boolean isLast(Iterator<?> it) {
