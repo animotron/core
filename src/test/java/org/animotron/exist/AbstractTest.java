@@ -119,7 +119,8 @@ public class AbstractTest {
 
     protected static BrokerPool pool;
     protected static Collection root;
-    private Boolean savedConfig;
+    protected boolean firstRun = false;
+    private boolean savedConfig;
 
     @Deprecated //use TestConstants.TEST_COLLECTION_URI as soon as it available
 	public static final XmldbURI TEST_COLLECTION_URI = XmldbURI.ROOT_COLLECTION_URI.append("test");
@@ -138,9 +139,13 @@ public class AbstractTest {
             transaction = transact.beginTransaction();
             assertNotNull(transaction);
 
-            root = broker.getOrCreateCollection(transaction, TEST_COLLECTION_URI);
-            assertNotNull(root);
-            broker.saveCollection(transaction, root);
+            root = broker.getCollection(TEST_COLLECTION_URI);
+            if (root == null) {
+            	firstRun = true;
+	            root = broker.getOrCreateCollection(transaction, TEST_COLLECTION_URI);
+	            assertNotNull(root);
+	            broker.saveCollection(transaction, root);
+            }
 
             transact.commit(transaction);
 

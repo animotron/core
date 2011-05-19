@@ -48,7 +48,7 @@ public class An {
 			
 			//get 'THE' relation
 			Node node = r.getEndNode();
-			String name = (String) node.getProperty("name");
+			String name = (String) node.getProperty("NAME");
 			for (Relationship t : node.getRelationships(new RelationshipTypeTHE(name), Direction.INCOMING)) {
 				out.write(t);
 			}

@@ -20,14 +20,17 @@ package org.animotron.exist.interpreter.op;
 
 import java.io.IOException;
 
+import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.RelationshipTypes;
 import org.animotron.exist.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -42,7 +45,36 @@ import org.neo4j.kernel.Traversal;
  */
 public class Get {
 
+	private static TraversalDescription td_res = 
+		Traversal.description().
+			breadthFirst().
+			relationships(RelationshipTypes.RESULT, Direction.OUTGOING );
+			//.evaluator(Evaluators.excludeStartPosition());
+
+	private static TraversalDescription td_eval = 
+		Traversal.description().
+			breadthFirst().
+			relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
+			//.evaluator(Evaluators.excludeStartPosition());
+
 	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+		
+		//check, maybe, result was already calculated
+		boolean haveResult = false;
+		Node node = op.getEndNode();
+		for (Relationship res : td_res.traverse(node).relationships()) {
+			
+			out.write(res);
+			
+			haveResult = true;
+		}
+		
+		if (haveResult) {
+			//close out pipe?
+			return;
+		}
+		
+		//no pre-calculated result, calculate it
 		PipedInputObjectStream in = new PipedInputObjectStream();
 
 		Calculator.eval(op, new PipedOutputObjectStream(in));
@@ -51,14 +83,16 @@ public class Get {
 		while ((n = in.read()) != null) {
 			if (n instanceof Relationship) {
 
-				TraversalDescription td = 
-					Traversal.description().
-						breadthFirst().
-						relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
-						//.evaluator(Evaluators.excludeStartPosition());
-			
-				for (Relationship r : td.traverse(((Relationship) n).getEndNode()).relationships()) {
-					out.write(r);
+				GraphDatabaseService graphdb = node.getGraphDatabase();
+				Transaction tx = graphdb.beginTx();
+				try {
+					for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
+						Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
+						out.write(res);
+					}
+					tx.success();
+				} finally {
+					tx.finish();
 				}
 			}
 		}

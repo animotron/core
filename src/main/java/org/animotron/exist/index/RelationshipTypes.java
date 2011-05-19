@@ -28,7 +28,11 @@ public enum RelationshipTypes implements RelationshipType {
 	THE, REF, 
 	IS, USE, 
 	PTRN,
-	AN, ANY, ALL,
+	
+	AN, 
+	ANY, ALL,
+	
+	GT, GE, EQ, NE, LE, LT,
 	HAVE, IC,
 	GET, SELF,
 	DO,
@@ -39,7 +43,7 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	SOURCE,
 	
-	GT, GE, EQ, NE, LE, LT,
+	RESULT,
 	
 	GC
 }

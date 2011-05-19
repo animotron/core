@@ -21,12 +21,16 @@ package org.animotron.exist.interpreter;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.animotron.exist.AbstractTest;
 import org.animotron.exist.index.AnimoGraph;
+import org.animotron.graph.Reader;
 import org.animotron.io.PipedInputObjectStream;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
@@ -59,12 +63,14 @@ public class SimpleTests extends AbstractTest {
 	public void testGet() throws IOException {
         System.out.println("Test 'get' ...");
         
-        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
-        nameDataMap.put("A.xml", THE_A);
-        nameDataMap.put("B.xml", THE_B);
-        nameDataMap.put("C.xml", THE_C);
-        
-        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+        if (firstRun) {
+	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
+	        nameDataMap.put("A.xml", THE_A);
+	        nameDataMap.put("B.xml", THE_B);
+	        nameDataMap.put("C.xml", THE_C);
+	        
+	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+        }
         
         DBBroker broker = null;
         try {
@@ -76,8 +82,12 @@ public class SimpleTests extends AbstractTest {
             assertNotNull(op);
 
             //System.out.println("get:A an:B");
-            PipedInputObjectStream instream = Calculator.eval(op);
-            toConsole(instream);
+            //PipedInputObjectStream instream = 
+        	Calculator.eval(op);
+            //toConsole(instream);
+            
+        	InputStream stream = Reader.read(op);
+            toConsole(stream);
             
             //RESULT: <the:C><have:A>a@b</have:A></the:C>
             
@@ -105,6 +115,24 @@ public class SimpleTests extends AbstractTest {
 		Object n; 
 		while ((n = instream.read()) != null) {
 			System.out.print(n.toString());
+		} 
+	}
+
+	private void toConsole(InputStream stream) throws IOException {
+		if (stream == null) return;
+		
+		char[] buffer = new char[1024]; 
+		try { 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
+
+			int n; 
+			while ((n = reader.read(buffer)) != -1) {
+				for (int i = 0; i < n; i++) {
+					System.out.print((char)buffer[i]);
+				}
+			} 
+		} finally { 
+			stream.close(); 
 		} 
 	}
 }
