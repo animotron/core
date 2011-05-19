@@ -18,7 +18,8 @@
  */
 package org.animotron.exist.index;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

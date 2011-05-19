@@ -21,16 +21,12 @@ package org.animotron.exist.index;
 import java.io.File;
 
 import org.apache.log4j.Logger;
-import org.exist.dom.DocumentImpl;
 import org.exist.indexing.AbstractIndex;
 import org.exist.indexing.IndexWorker;
-import org.exist.numbering.DLN;
-import org.exist.numbering.NodeId;
 import org.exist.storage.BrokerPool;
 import org.exist.storage.DBBroker;
 import org.exist.storage.btree.DBException;
 import org.exist.util.DatabaseConfigurationException;
-import org.exist.xmldb.XmldbURI;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.index.IndexService;
 import org.neo4j.index.lucene.LuceneIndexService;

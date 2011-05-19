@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.exist.index.AnimoGraph;
 import org.animotron.exist.interpreter.AnimoContext;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;

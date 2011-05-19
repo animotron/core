@@ -20,7 +20,6 @@ package org.animotron.exist.interpreter.op;
 
 import java.io.IOException;
 
-import org.animotron.exist.index.AnimoIndex;
 import org.animotron.exist.index.RelationshipTypes;
 import org.animotron.exist.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
@@ -28,13 +27,9 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 
 /**

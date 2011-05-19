@@ -20,6 +20,7 @@ package org.animotron.exist.index;
 
 import java.util.Map;
 
+import org.animotron.Namespaces;
 import org.exist.collections.Collection;
 import org.exist.dom.AttrImpl;
 import org.exist.dom.CharacterDataImpl;
@@ -53,7 +54,6 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	private int mode = 0;
 	private DocumentImpl document = null;
 	private AnimoIndex index;
-	private AnimoGraphBuilder builder;
 	
 	public AnimoIndexWorker(AnimoIndex index) {
 		this.index = index;
@@ -84,13 +84,12 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 * org.exist.indexing.IndexWorker#configure(org.exist.indexing.IndexController
 	 * , org.w3c.dom.NodeList, java.util.Map)
 	 */
-	public Object configure(IndexController controller, NodeList configNodes,
-			Map<String, String> namespaces)
+	public Object configure(IndexController controller, NodeList configNodes, Map<String, String> namespaces)
 			throws DatabaseConfigurationException {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -99,8 +98,6 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 */
 	public void setDocument(DocumentImpl doc) {
 		this.document = doc;
-		builder = new AnimoGraphBuilder();
-		//System.out.println("setDocument doc = " + doc.getDocumentURI());
 	}
 
 	/*
@@ -112,8 +109,6 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	public void setDocument(DocumentImpl doc, int mode) {
 		this.document = doc;
 		this.mode = mode;
-		builder = new AnimoGraphBuilder();
-		//System.out.println("setDocument doc = " + doc.getDocumentURI() + " mode = " + mode);
 	}
 
 	/*
@@ -150,8 +145,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	 * org.exist.indexing.IndexWorker#getReindexRoot(org.exist.dom.StoredNode,
 	 * org.exist.storage.NodePath, boolean)
 	 */
-	public StoredNode getReindexRoot(StoredNode node, NodePath path,
-			boolean includeSelf) {
+	public StoredNode getReindexRoot(StoredNode node, NodePath path, boolean includeSelf) {
 		System.out.println("getReindexRoot path = " + path);
 		// TODO Auto-generated method stub
 		return null;
@@ -230,31 +224,44 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	private class AnimoStreamListener extends AbstractStreamListener {
 
+		private AnimoGraphBuilder builder = new AnimoGraphBuilder();
+		private boolean doIndex = false;
+		private int level = 0;
+		
 		@Override
 		public void startElement(Txn transaction, ElementImpl element, NodePath path) {
-			if (mode == STORE)
+			level++;
+			if (level == 1) {
+				if (mode == STORE && Namespaces.THE.equals(element.getNamespaceURI())) {
+					builder.startElement(element);
+					doIndex = true;
+				} else {
+					doIndex = false;
+				}
+			} else if (doIndex) {
 				builder.startElement(element);
+			}
 			super.startElement(transaction, element, path);
 		}
 
 		@Override
 		public void endElement(Txn transaction, ElementImpl element, NodePath path) {
-			if (mode == STORE) 
+			level--;
+			if (doIndex) 
 				builder.endElement(element);
 			super.endElement(transaction, element, path);
-
 		}
 
 	    @Override
 	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
-			if (mode == STORE)
+			if (doIndex)
 				builder.attribute(attribute);
 			super.attribute(transaction, attribute, path);
 	    }
 	    
 	    @Override
 	    public void characters(Txn transaction, CharacterDataImpl text, NodePath path) {
-			if (mode == STORE) 
+			if (doIndex) 
 				builder.characters(text);
 			super.characters(transaction, text, path);
 	    }

@@ -18,9 +18,7 @@
  */
 package org.animotron.exist.index;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.HashSet;
@@ -30,7 +28,6 @@ import java.util.Set;
 
 import org.animotron.exist.AbstractTest;
 import org.exist.EXistException;
-import org.exist.dom.NodeSet;
 import org.exist.storage.DBBroker;
 import org.junit.Test;
 
