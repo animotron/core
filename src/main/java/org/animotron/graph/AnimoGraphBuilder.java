@@ -101,7 +101,7 @@ public class AnimoGraphBuilder {
 		
 		try {
 			if (_element_) {
-				pushCurrent(AnimoGraph.createElement(current, name, ns, element.getPrefix()));
+				pushCurrent(AnimoGraph.createElement(current, element.getNodeName(), ns));
 			} else if (hasPredicat(active)) {
 				if (Namespaces.GT.equals(ns)) {
 					pushActive(AnimoGraph.createGT(current, name));
@@ -161,7 +161,7 @@ public class AnimoGraphBuilder {
 						pushSkip();
 					}
 				} else {
-					pushCurrent(AnimoGraph.createElement(current, name, ns, element.getPrefix()));
+					pushCurrent(AnimoGraph.createElement(current, element.getNodeName(), ns));
 				}
 			}
 		} catch (Exception e) {
@@ -191,7 +191,7 @@ public class AnimoGraphBuilder {
 		if (_skip_)
 			return;
 		try {
-			AnimoGraph.createAttribute(current, attribute.getLocalName(), attribute.getNamespaceURI(), attribute.getPrefix(), attribute.getNodeValue());
+			AnimoGraph.createAttribute(current, attribute.getNodeName(), attribute.getNamespaceURI(), attribute.getNodeValue());
 		} catch (Exception e) {
 			tx.finish();
 			LOG.error("AnimoGraph build error for attribute " + attribute.getNodeName() + " = \"" + attribute.getNodeValue() + "\"" , e);

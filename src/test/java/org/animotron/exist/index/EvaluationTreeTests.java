@@ -46,7 +46,7 @@ public class EvaluationTreeTests extends AbstractTest {
 		"<the:B "+ANIMO_NSs+">" +
 		"	<is:A/>" +
 		"	<have:C>" +
-		"		<some/>" +
+		"		<x:some x:a=\"b\" xmlns:x=\"y\" z=\"w\"/>" +
 		"		<another>" +
 		"			<one-more/>" +
 		"		</another>" +

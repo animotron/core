@@ -225,7 +225,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	private class AnimoStreamListener extends AbstractStreamListener {
 
-		private AnimoGraphBuilder builder = new AnimoGraphBuilder();
+		private AnimoGraphBuilder builder;
 		private boolean doIndex = false;
 		private int level = 0;
 		
@@ -234,6 +234,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 			level++;
 			if (level == 1) {
 				if (mode == STORE && Namespaces.THE.equals(element.getNamespaceURI())) {
+					builder = new AnimoGraphBuilder();
 					builder.startElement(element);
 					doIndex = true;
 				} else {

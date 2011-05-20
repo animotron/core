@@ -23,6 +23,6 @@ package org.animotron;
  * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
  *
  */
-public enum Properties {
-	NAME, SOURCE, NAMESPACE, PREFIX, VALUE;
+public enum Properties  {
+	NAME, SOURCE, NAMESPACE, VALUE;
 }

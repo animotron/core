@@ -24,11 +24,13 @@ import org.animotron.exist.index.RelationshipTypeTHE;
 import org.animotron.exist.index.RelationshipTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.kernel.Traversal;
+import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,13 +44,13 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.beginTx();
 	}
 	
-	public static String getProperty(Node node, Properties key) {
-		return node.getProperty(key.name()).toString();
+	public static String getProperty(PropertyContainer container, Properties key) {
+		return container.getProperty(key.name()).toString();
 	};
 	
-	public static void setProperty(Node node, Properties key, String value) {
+	public static void setProperty(PropertyContainer container, Properties key, String value) {
 		if (value != null && !value.equals("")){
-			node.setProperty(key.name(), value);
+			container.setProperty(key.name(), value);
 		}
 	};
 	
@@ -175,20 +177,19 @@ public class AnimoGraph {
 		return createNode(parent, RelationshipTypes.XSLT);
 	}
 	
-	private static Node createNamedNode (Node parent, String name, String namespace, String prefix, RelationshipType type){
+	private static Node createNamedNode (Node parent, String name, String namespace, RelationshipType type){
 		Node node = createNode(parent, type);
 		setProperty(node, Properties.NAMESPACE, namespace);
 		setProperty(node, Properties.NAME, name);
-		setProperty(node, Properties.PREFIX, prefix);
 		return node;
 	}
 
-	protected static Node createElement(Node parent, String name, String namespace, String prefix) {
-		return createNamedNode(parent, name, namespace, prefix, RelationshipTypes.ELEMENT);
+	protected static Node createElement(Node parent, String name, String namespace) {
+		return createNamedNode(parent, name, namespace, RelationshipTypes.ELEMENT);
 	}
 	
-	protected static Node createAttribute(Node parent, String name, String namespace, String prefix, String value) {
-		Node node = createNamedNode(parent, name, namespace, prefix, RelationshipTypes.ATTRIBUTE);
+	protected static Node createAttribute(Node parent, String name, String namespace, String value) {
+		Node node = createNamedNode(parent, name, namespace, RelationshipTypes.ATTRIBUTE);
 		setProperty(node, Properties.VALUE, value);
 		return node;
 	}

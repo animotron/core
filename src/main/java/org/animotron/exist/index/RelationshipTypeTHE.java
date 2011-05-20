@@ -26,15 +26,20 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class RelationshipTypeTHE implements RelationshipType {
 	
+	private final static String prefix = RelationshipTypes.THE + ":"; 
 	private String name;
 	
 	public RelationshipTypeTHE(String name){
-		this.name = RelationshipTypes.THE + ":" + name;
+		this.name = prefix + name;
 	}
 
 	@Override
 	public String name() {
 		return name;
+	}
+	
+	public static boolean isSupertypeOf(RelationshipType type){
+		return type.name().startsWith(prefix);
 	}
 	
 }
