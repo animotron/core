@@ -18,11 +18,24 @@
  */
 package org.animotron;
 
+import org.neo4j.graphdb.PropertyContainer;
+
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
  *
  */
 public enum Properties  {
+	
 	NAME, SOURCE, NAMESPACE, VALUE;
+	
+	public String get(PropertyContainer container) {
+		return container.getProperty(name()).toString();
+	}
+	
+	public void set(PropertyContainer container, String value) {
+		if (value != null && !value.equals("")) 
+			container.setProperty(name(), value);
+	}
+	
 }

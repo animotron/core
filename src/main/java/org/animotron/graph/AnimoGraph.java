@@ -42,16 +42,6 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.beginTx();
 	}
 	
-	public static String getProperty(PropertyContainer container, Properties key) {
-		return container.getProperty(key.name()).toString();
-	};
-	
-	public static void setProperty(PropertyContainer container, Properties key, String value) {
-		if (value != null && !value.equals("")){
-			container.setProperty(key.name(), value);
-		}
-	};
-	
 	protected static void clear (Node node){
 		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
 			Node end = r.getEndNode();
@@ -89,7 +79,7 @@ public class AnimoGraph {
 
 	protected static Node createTHE(String name) {
 		Node node = createNode();
-		setProperty(node, Properties.NAME, name);
+		Properties.NAME.set(node, name);
 		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
 		return node;
 	}
@@ -106,7 +96,7 @@ public class AnimoGraph {
 	private static Node createNode(Node parent, RelationshipType type, String name, String source) {
 		Node node = createNode(parent, type, name);
 		if (source != null){
-			setProperty(node, Properties.SOURCE, source);
+			Properties.SOURCE.set(node, source);
 		}
 		return node;
 	}
@@ -177,8 +167,8 @@ public class AnimoGraph {
 	
 	private static Node createNamedNode (Node parent, String name, String namespace, RelationshipType type){
 		Node node = createNode(parent, type);
-		setProperty(node, Properties.NAMESPACE, namespace);
-		setProperty(node, Properties.NAME, name);
+		Properties.NAMESPACE.set(node, namespace);
+		Properties.NAME.set(node, name);
 		return node;
 	}
 
@@ -188,13 +178,13 @@ public class AnimoGraph {
 	
 	protected static Node createAttribute(Node parent, String name, String namespace, String value) {
 		Node node = createNamedNode(parent, name, namespace, RelationshipTypes.ATTRIBUTE);
-		setProperty(node, Properties.VALUE, value);
+		Properties.VALUE.set(node, value);
 		return node;
 	}
 	
 	private static Node createCharacterData(Node parent, String text, RelationshipType type) {
 		Node node = createNode(parent, type);
-		setProperty(node, Properties.VALUE, text);
+		Properties.VALUE.set(node, text);
 		return node;
 	}
 	

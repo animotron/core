@@ -23,7 +23,6 @@ import org.animotron.Namespaces;
 import org.animotron.Properties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.xml.sax.Attributes;
@@ -46,23 +45,15 @@ public class AnimoGraphSerializer {
 		this.lexicalHandler = lexicalHandler;
 	}
 	
-	private String name(PropertyContainer container){
-		return AnimoGraph.getProperty(container, Properties.NAME);
-	}
-	
-	private String namespace(PropertyContainer container){
-		return AnimoGraph.getProperty(container, Properties.NAMESPACE);
-	}
-	
-	private String value(PropertyContainer container){
-		return AnimoGraph.getProperty(container, Properties.VALUE);
-	}
-	
 	private Attributes attributes(Node node) {
 		AttributesImpl res = new AttributesImpl(); 
 		for (Relationship r : node.getRelationships(RelationshipTypes.ATTRIBUTE, Direction.OUTGOING)){
 			Node attr = r.getEndNode();
-			res.addAttribute(namespace(attr), null, name(attr), null, value(attr));
+			res.addAttribute(
+					Properties.NAMESPACE.get(attr), null, 
+					Properties.NAME.get(attr), null, 
+					Properties.VALUE.get(attr)
+				);
 		}
 		return res;
 	}
@@ -73,15 +64,16 @@ public class AnimoGraphSerializer {
 	
 	private void element(Namespaces ns, Relationship r) throws SAXException {
 		Node node = r.getEndNode();
-		element(ns.namespace(), name(node.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode()), node);
+		Node ref = node.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode(); 
+		element(ns.namespace(), Properties.NAME.get(ref), node);
 	}
 
 	private void element(Namespaces ns, Node node) throws SAXException{
-		element(ns.namespace(), name(node), node);
+		element(ns.namespace(), Properties.NAME.get(node), node);
 	}
 
 	private void element(Node node) throws SAXException{
-		element(namespace(node), name(node), node);
+		element(Properties.NAMESPACE.get(node), Properties.NAME.get(node), node);
 	}
 
 	private void element(String ns, String name, Node node) throws SAXException {
@@ -92,12 +84,12 @@ public class AnimoGraphSerializer {
 	}
 
 	private void text(Node node) throws SAXException{
-		String text = value(node);
+		String text = Properties.VALUE.get(node);
 		contentHandler.characters(text.toCharArray(), 0, text.length());
 	}
 
 	private void comment(Node node) throws SAXException{
-		String text = value(node);
+		String text = Properties.VALUE.get(node);
 		lexicalHandler.comment(text.toCharArray(), 0, text.length());
 	}
 
