@@ -20,8 +20,6 @@ package org.animotron.graph;
 
 import org.animotron.Properties;
 import org.animotron.exist.index.AnimoIndex;
-import org.animotron.exist.index.RelationshipTypeTHE;
-import org.animotron.exist.index.RelationshipTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;

@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.interpreter;
+package org.animotron.interpreter;
 
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
@@ -176,7 +176,7 @@ public class Controller {
 		
 		NodeSet use = getUse(is);
 		for (NodeProxy node : use) {
-			NodeSet useIS = AnimoGraph.resolveDownIsLogic(node);
+			NodeSet useIS = null;//AnimoGraph.resolveDownIsLogic(node);
 
 			if (useIS.isEmpty())
 				continue;

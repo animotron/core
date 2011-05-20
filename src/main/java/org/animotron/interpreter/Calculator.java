@@ -16,34 +16,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.index;
+package org.animotron.interpreter;
 
-import org.neo4j.graphdb.RelationshipType;
+import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import org.animotron.io.PipedInputObjectStream;
+import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public enum RelationshipTypes implements RelationshipType {
-	THE, REF, 
-	IS, USE, 
-	PTRN,
+public class Calculator {
 	
-	AN, 
-	ANY, ALL,
+	private static int THREADS_NUMBER = 100;
 	
-	GT, GE, EQ, NE, LE, LT,
-	HAVE, IC,
-	GET, SELF,
-	DO,
+	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	ELEMENT, ATTRIBUTE, TEXT, CDATA, COMMENT,
-	
-	XQUERY, XSLT,
-	
-	SOURCE,
-	
-	RESULT,
-	
-	GC
+	public static PipedInputObjectStream eval(Relationship op) {
+		try {
+			PipedInputObjectStream in = new PipedInputObjectStream();
+			PipedOutputObjectStream out = new PipedOutputObjectStream(in);
+			
+			exec.execute(new Evaluator(op, out));
+		
+			return in;
+		} catch (IOException e) {
+			//can't be???
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static void eval(Relationship op, PipedOutputObjectStream out) {
+		exec.execute(new Evaluator(op, out));
+	}
 }

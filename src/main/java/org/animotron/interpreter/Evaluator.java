@@ -16,14 +16,14 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.interpreter;
+package org.animotron.interpreter;
 
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.animotron.exist.index.RelationshipTypes;
-import org.animotron.exist.interpreter.op.An;
-import org.animotron.exist.interpreter.op.Get;
+import org.animotron.graph.RelationshipTypes;
+import org.animotron.interpreter.op.An;
+import org.animotron.interpreter.op.Get;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;

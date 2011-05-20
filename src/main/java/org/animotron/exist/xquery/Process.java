@@ -18,7 +18,7 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.exist.interpreter.Controller;
+import org.animotron.interpreter.Controller;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;

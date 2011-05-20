@@ -70,11 +70,11 @@ public class ResolveIsLogic extends BasicFunction {
 		Sequence res = new ValueSequence();
 		if (isCalledAs(UP_NAME)){
 			while (i.hasNext()){
-				res.addAll(AnimoGraph.resolveUpIsLogic(i.nextItem().getStringValue()));
+//				res.addAll(AnimoGraph.resolveUpIsLogic(i.nextItem().getStringValue()));
 			}
 		} else {
 			while (i.hasNext()){
-				res.addAll(AnimoGraph.resolveDownIsLogic(i.nextItem().getStringValue()));
+//				res.addAll(AnimoGraph.resolveDownIsLogic(i.nextItem().getStringValue()));
 			}
 		}
 		return res;
