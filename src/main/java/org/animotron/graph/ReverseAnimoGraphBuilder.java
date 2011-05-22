@@ -20,6 +20,8 @@ package org.animotron.graph;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
 import org.apache.log4j.Logger;
@@ -38,6 +40,7 @@ public class ReverseAnimoGraphBuilder {
 	private int level = 0;
 	
 	private Stack<MessageDigest> hashStack = new Stack<MessageDigest>();
+	private Stack<List<Node>> childrenStack = new Stack<List<Node>>();
 
 	public void startElement(String ns, String name) {
 		level++;
@@ -53,6 +56,9 @@ public class ReverseAnimoGraphBuilder {
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		hashStack.push(md);
+		
+		//create children list
+		childrenStack.push(new LinkedList<Node>());
 	}
 
 	public void endElement(String ns, String name) {
@@ -61,9 +67,18 @@ public class ReverseAnimoGraphBuilder {
 		//current element hash-function value
 		byte[] elementDigest = md.digest();
 		
-		if (level != 1)
+		if (level != 1) {
 			//update parent's
 			hashStack.peek().update(elementDigest);
+		}
+		
+		//current node's children
+		List<Node> children = childrenStack.pop();
+		
+		Node currentNode = findOrCreate(elementDigest, ns, name, children);
+		
+		//add this node as child
+		childrenStack.peek().add(currentNode);
 		
 		level--;
 	}
@@ -80,5 +95,10 @@ public class ReverseAnimoGraphBuilder {
 		MessageDigest md = hashStack.peek();
 		//hash-function depend on characters
 		md.update(text.getBytes());
+	}
+
+	private Node findOrCreate(byte[] elementDigest, String ns, String name, List<Node> children) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
