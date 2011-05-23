@@ -32,13 +32,19 @@ import org.neo4j.graphdb.Transaction;
  */
 public class AnimoGraph {
 
-	private static Node root = AnimoIndex.graphDb.getReferenceNode();
-	private static Node the, hash, calc;
+	private static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
+	private static Node THE, CASH, CALC;
 	
 	static {
-		the = getOrCreateNode(root, RelationshipTypes.THE);
-		hash = getOrCreateNode(root, RelationshipTypes.HASH);
-		calc = getOrCreateNode(root,RelationshipTypes.CALC);
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			THE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.THE);
+			CASH = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CASH);
+			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 	
 	protected static Transaction beginTx() {
@@ -50,7 +56,7 @@ public class AnimoGraph {
 			Node end = r.getEndNode();
 			r.delete();
 			if (!end.hasRelationship(Direction.INCOMING)) {
-				root.createRelationshipTo(end, RelationshipTypes.GC);
+				ROOT.createRelationshipTo(end, RelationshipTypes.GC);
 			}
 		}
 	}
@@ -86,11 +92,11 @@ public class AnimoGraph {
 	}
 	
 	public static Node getTHE(String name) {
-		return getNode(the, new RelationshipTypeTHE(name));
+		return getNode(THE, new RelationshipTypeTHE(name));
 	}
 
 	protected static Node createTHE(String name) {
-		Node node = createNode(the, new RelationshipTypeTHE(name));
+		Node node = createNode(THE, new RelationshipTypeTHE(name));
 		Properties.NAME.set(node, name);
 		return node;
 	}
@@ -103,18 +109,18 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	public static Node getHASH(String name) {
-		return getNode(hash, new RelationshipTypeTHE(name));
+	public static Node getCASH(String name) {
+		return getNode(CASH, new RelationshipTypeTHE(name));
 	}
 
-	protected static Node createHASH(String name) {
-		return createNode(hash, new RelationshipTypeTHE(name));
+	protected static Node createCASH(String name) {
+		return createNode(CASH, new RelationshipTypeTHE(name));
 	}
 
-	protected static Node getOrCreateHASH(String name) {
-		Node node = getHASH(name);
+	protected static Node getOrCreateCASH(String name) {
+		Node node = getCASH(name);
 		if (node == null){
-			node = createHASH(name);
+			node = createCASH(name);
 		}
 		return node;
 	}
@@ -247,7 +253,7 @@ public class AnimoGraph {
 	}
 	
 	public static Relationship getTHErelation(String name) {
-		return root.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
+		return ROOT.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
 	}
 
 }

@@ -37,13 +37,13 @@ import org.neo4j.graphdb.Transaction;
  */
 public class AnimoGraphBuilder {
 	
-	private static final String HASH_ALGOTHIM = "SHA-256";
+	private static final String CASH_ALGOTHIM = "SHA-256";
 	
 	private Transaction tx = AnimoGraph.beginTx();
 	
 	private int level = 0;
 	
-	private Stack<MessageDigest> hashStack = new Stack<MessageDigest>();
+	private Stack<MessageDigest> CASHStack = new Stack<MessageDigest>();
 	private Stack<List<Node>> childrenStack = new Stack<List<Node>>();
 	
 	private Node nodeTHE = null; int levelTHE = 0;
@@ -71,15 +71,15 @@ public class AnimoGraphBuilder {
 			} else {
 				MessageDigest md;
 				try {
-					md = MessageDigest.getInstance(HASH_ALGOTHIM);
+					md = MessageDigest.getInstance(CASH_ALGOTHIM);
 				} catch (NoSuchAlgorithmException e) {
 					//can't be, but throw runtime error
 					throw new RuntimeException(e);
 				}
-				//hash-function depend on namespace & name
+				//CASH-function depend on namespace & name
 				md.update(ns.getBytes());
 				md.update(name.getBytes());
-				hashStack.push(md);
+				CASHStack.push(md);
 				childrenStack.push(new LinkedList<Node>());
 			}
 		} catch (Exception e){
@@ -107,16 +107,16 @@ public class AnimoGraphBuilder {
 				List<Node> children = childrenStack.pop();
 				createHAVE(nodeTHE, name, children);
 			} else {
-				MessageDigest md = hashStack.pop();
-				byte [] hash = md.digest();
+				MessageDigest md = CASHStack.pop();
+				byte [] CASH = md.digest();
 				List<Node> children = childrenStack.pop();
-				Node currentNode = getOrCreateHASH(MessageDigester.byteArrayToHex(hash), ns, name, children);
+				Node currentNode = getOrCreateCASH(MessageDigester.byteArrayToHex(CASH), ns, name, children);
 				if (level > 0) {
 					//add this node as child
 					childrenStack.peek().add(currentNode);
 					//update parent's
 					if (level != levelTHE) {
-						hashStack.peek().update(hash);
+						CASHStack.peek().update(CASH);
 					}
 				}
 			}
@@ -135,8 +135,8 @@ public class AnimoGraphBuilder {
 	public void attribute(String ns, String name, String value) {
 		return;
 //		try {
-//			MessageDigest md = hashStack.peek();
-//			//hash-function depend on namespace, name & value
+//			MessageDigest md = CASHStack.peek();
+//			//CASH-function depend on namespace, name & value
 //			md.update(ns.getBytes());
 //			md.update(name.getBytes());
 //			md.update(value.getBytes());
@@ -148,18 +148,18 @@ public class AnimoGraphBuilder {
 	public void characters(String text) {
 		return;
 //		try {
-//			MessageDigest md = hashStack.peek();
-//			//hash-function depend on characters
+//			MessageDigest md = CASHStack.peek();
+//			//CASH-function depend on characters
 //			md.update(text.getBytes());
 //		} catch (Exception e){
 //			tx.finish();
 //		}
 	}
 
-	private Node getOrCreateHASH(String hash, String ns, String name, List<Node> children) {
-		Node node = AnimoGraph.getHASH(hash);
+	private Node getOrCreateCASH(String CASH, String ns, String name, List<Node> children) {
+		Node node = AnimoGraph.getCASH(CASH);
 		if (node == null){
-			node = AnimoGraph.createHASH(hash);
+			node = AnimoGraph.createCASH(CASH);
 			addChildren(AnimoGraph.createElement(node, name, ns), children);
 		}
 		return node;
