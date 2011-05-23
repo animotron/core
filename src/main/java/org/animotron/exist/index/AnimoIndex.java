@@ -52,7 +52,7 @@ public class AnimoIndex extends AbstractIndex {
 
 	public static GraphDatabaseService graphDb;
 	public static IndexService indexService;
-
+	
 	public AnimoIndex() {
 		AnimoIndex.instance = this;
 	}
@@ -73,8 +73,8 @@ public class AnimoIndex extends AbstractIndex {
 		File folder = new File(getDataDir(), FOLDER_NAME);
 		
 		AnimoIndex.graphDb = new EmbeddedGraphDatabase(folder.getAbsolutePath());
-		AnimoIndex.indexService = new LuceneIndexService( graphDb );
-
+		AnimoIndex.indexService = new LuceneIndexService(graphDb);
+		
 		LOG.debug("Animo index opened at '" + folder.getAbsolutePath() + "' .");
 	}
 
