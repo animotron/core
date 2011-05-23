@@ -16,47 +16,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.operator.compare;
 
 import java.io.IOException;
 
-import org.animotron.graph.RelationshipTypeTHE;
-import org.animotron.graph.RelationshipTypes;
-import org.animotron.interpreter.Calculator;
-import org.animotron.io.PipedInputObjectStream;
+import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
+import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operation 'get'. Return 'have' relations on provided context.
+ * Compare operator 'lt'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class An {
-
+@Namespace(prefix = "lt", uri = "animo/compare/lt")
+public class LT implements Operator {
+	
 	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-
-		if (!isLast)
-			Calculator.eval(op, new PipedOutputObjectStream(in));
-		
-		//go to 'THE' node
-		for (Relationship r : op.getEndNode().getRelationships(RelationshipTypes.REF, Direction.OUTGOING)) {
-			
-			//get 'THE' relation
-			Node node = r.getEndNode();
-			String name = (String) node.getProperty("NAME");
-			for (Relationship t : node.getRelationships(new RelationshipTypeTHE(name), Direction.INCOMING)) {
-				out.write(t);
-			}
-		}
-		//XXX: what do to with that?
-//		Object n; 
-//		while ((n = in.read()) != null) {
-//			out.write(n);
-//		} 
+		//TODO: code
 	}
 }

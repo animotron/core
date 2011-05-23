@@ -27,18 +27,18 @@ public enum Namespaces {
 	
 	ANIMO	(0, "animo", "animo"),
 	 
-	THE		( 1, "the", "animo/instance"),
-	AN		( 2, "an", "animo/reference"),
+	THE		( 1, "the", "animo/instance"), //D
+	AN		( 2, "an", "animo/reference"), //D
 
-	IS		(10, "is", "animo/relation/is"),
-	HAVE	(11, "have", "animo/relation/have"),
-	USE		(12, "use", "animo/relation/use"),
+	IS		(10, "is", "animo/relation/is"), //D
+	HAVE	(11, "have", "animo/relation/have"), //D
+	USE		(12, "use", "animo/relation/use"), //D
 
 	IC		(20, "ic", "animo/connection"),
 
 	ALL		(31, "all", "animo/query/all"),
 	ANY		(32, "any", "animo/query/any"),
-	GET		(33, "get", "animo/query/extract"),
+	GET		(33, "get", "animo/query/extract"), //D
 	SELF	(34, "self", "animo/query/self"),
 
 	PTRN	(40, "ptrn", "animo/pattern"),

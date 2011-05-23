@@ -24,8 +24,8 @@ import java.util.Iterator;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.An;
-import org.animotron.operator.Get;
+import org.animotron.operator.AN;
+import org.animotron.operator.query.Get;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -77,7 +77,7 @@ class Evaluator implements Runnable {
 						//an:self (return root)
 						//an:* (reference)
 						
-						An.eval(r, out, isLast(it));
+						AN.eval(r, out, isLast(it));
 						break;
 	
 					case ANY:
