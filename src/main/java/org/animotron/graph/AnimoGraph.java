@@ -25,8 +25,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.kernel.Traversal;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,6 +33,13 @@ import org.neo4j.kernel.Traversal;
 public class AnimoGraph {
 
 	private static Node root = AnimoIndex.graphDb.getReferenceNode();
+	private static Node the, hash, calc;
+	
+	static {
+		the = getOrCreateNode(root, RelationshipTypes.THE);
+		hash = getOrCreateNode(root, RelationshipTypes.HASH);
+		calc = getOrCreateNode(root,RelationshipTypes.CALC);
+	}
 	
 	protected static Transaction beginTx() {
 		return AnimoIndex.graphDb.beginTx();
@@ -50,8 +55,8 @@ public class AnimoGraph {
 		}
 	}
 	
-	private static Node getNode(RelationshipType type) {
-		Relationship r = root.getSingleRelationship(type, Direction.OUTGOING);
+	private static Node getNode(Node parent, RelationshipType type) {
+		Relationship r = parent.getSingleRelationship(type, Direction.OUTGOING);
 		return r == null ? null : r.getEndNode();
 	};
 	
@@ -65,6 +70,15 @@ public class AnimoGraph {
 		return node;
 	}
 	
+	private static Node getOrCreateNode(Node parent, RelationshipType type) {
+		Relationship r = parent.getSingleRelationship(type, Direction.OUTGOING);
+		if (r != null)
+			return r.getEndNode();
+		Node node = createNode();
+		parent.createRelationshipTo(node, type);
+		return node;
+	}
+	
 	private static Node createNode(Node parent, RelationshipType type, String name) {
 		Node node = createNode(parent, type);
 		node.createRelationshipTo(getOrCreateTHE(name), RelationshipTypes.REF);
@@ -72,17 +86,12 @@ public class AnimoGraph {
 	}
 	
 	public static Node getTHE(String name) {
-		return getNode(new RelationshipTypeTHE(name));
+		return getNode(the, new RelationshipTypeTHE(name));
 	}
 
 	protected static Node createTHE(String name) {
-		return createTHE(name, name);
-	}
-
-	protected static Node createTHE(String hash, String name) {
-		Node node = createNode();
+		Node node = createNode(the, new RelationshipTypeTHE(name));
 		Properties.NAME.set(node, name);
-		root.createRelationshipTo(node, new RelationshipTypeTHE(hash));
 		return node;
 	}
 
@@ -94,7 +103,22 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	//TODO: make deferred linking for every input context;  
+	public static Node getHASH(String name) {
+		return getNode(hash, new RelationshipTypeTHE(name));
+	}
+
+	protected static Node createHASH(String name) {
+		return createNode(hash, new RelationshipTypeTHE(name));
+	}
+
+	protected static Node getOrCreateHASH(String name) {
+		Node node = getHASH(name);
+		if (node == null){
+			node = createHASH(name);
+		}
+		return node;
+	}
+	
 	private static Node createNode(Node parent, RelationshipType type, String name, String source) {
 		Node node = createNode(parent, type, name);
 		if (source != null){
@@ -222,26 +246,8 @@ public class AnimoGraph {
 		relationshipTo(node, is, RelationshipTypes.USE);
 	}
 	
-	private static Iterable<Node> resolveUpIsLogic(Node node) {
-		return Traversal.description().
-			breadthFirst().
-			relationships(RelationshipTypes.IS).
-			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
-			traverse(node).
-			nodes();
-	}
-
-	private static Iterable<Node> resolveDownIsLogic(Node node) {
-		return Traversal.description().
-			breadthFirst().
-			relationships(RelationshipTypes.IS).
-			evaluator(Evaluators.excludeStartPosition()).breadthFirst().
-			traverse(node).
-			nodes();
-	}	
-	
 	public static Relationship getTHErelation(String name) {
 		return root.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
 	}
-	
+
 }
