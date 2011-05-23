@@ -53,7 +53,7 @@ public class AbstractTest {
 	
 	private boolean clean = false;
 	
-	protected static final String ANIMO_NSs = 
+	public static final String ANIMO_NSs = 
 		"xmlns:the='animo/instance' " +
 		"xmlns:an='animo/reference' " +
 		

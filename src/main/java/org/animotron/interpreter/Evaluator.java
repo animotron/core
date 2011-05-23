@@ -22,10 +22,10 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.interpreter.op.An;
-import org.animotron.interpreter.op.Get;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.An;
+import org.animotron.operator.Get;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;

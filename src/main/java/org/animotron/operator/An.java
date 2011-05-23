@@ -16,21 +16,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.interpreter.op;
+package org.animotron.operator;
 
 import java.io.IOException;
 
+import org.animotron.graph.RelationshipTypeTHE;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
 
 /**
  * Operation 'get'. Return 'have' relations on provided context.
@@ -38,58 +35,28 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class Get {
-
-	private static TraversalDescription td_res = 
-		Traversal.description().
-			breadthFirst().
-			relationships(RelationshipTypes.RESULT, Direction.OUTGOING );
-			//.evaluator(Evaluators.excludeStartPosition());
-
-	private static TraversalDescription td_eval = 
-		Traversal.description().
-			breadthFirst().
-			relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
-			//.evaluator(Evaluators.excludeStartPosition());
+public class An {
 
 	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		
-		//check, maybe, result was already calculated
-		boolean haveResult = false;
-		Node node = op.getEndNode();
-		for (Relationship res : td_res.traverse(node).relationships()) {
-			
-			out.write(res);
-			
-			haveResult = true;
-		}
-		
-		if (haveResult) {
-			//close out pipe?
-			return;
-		}
-		
-		//no pre-calculated result, calculate it
 		PipedInputObjectStream in = new PipedInputObjectStream();
 
-		Calculator.eval(op, new PipedOutputObjectStream(in));
+		if (!isLast)
+			Calculator.eval(op, new PipedOutputObjectStream(in));
 		
-		Object n; 
-		while ((n = in.read()) != null) {
-			if (n instanceof Relationship) {
-
-				GraphDatabaseService graphdb = node.getGraphDatabase();
-				Transaction tx = graphdb.beginTx();
-				try {
-					for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
-						Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
-						out.write(res);
-					}
-					tx.success();
-				} finally {
-					tx.finish();
-				}
+		//go to 'THE' node
+		for (Relationship r : op.getEndNode().getRelationships(RelationshipTypes.REF, Direction.OUTGOING)) {
+			
+			//get 'THE' relation
+			Node node = r.getEndNode();
+			String name = (String) node.getProperty("NAME");
+			for (Relationship t : node.getRelationships(new RelationshipTypeTHE(name), Direction.INCOMING)) {
+				out.write(t);
 			}
 		}
+		//XXX: what do to with that?
+//		Object n; 
+//		while ((n = in.read()) != null) {
+//			out.write(n);
+//		} 
 	}
 }
