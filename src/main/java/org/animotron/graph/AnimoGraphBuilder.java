@@ -110,7 +110,7 @@ public class AnimoGraphBuilder {
 				MessageDigest md = hashStack.pop();
 				byte [] hash = md.digest();
 				List<Node> children = childrenStack.pop();
-				Node currentNode = getOrCreateTHE(MessageDigester.byteArrayToHex(hash), ns, name, children);
+				Node currentNode = getOrCreateHASH(MessageDigester.byteArrayToHex(hash), ns, name, children);
 				if (level > 0) {
 					//add this node as child
 					childrenStack.peek().add(currentNode);
@@ -156,10 +156,10 @@ public class AnimoGraphBuilder {
 //		}
 	}
 
-	private Node getOrCreateTHE(String hash, String ns, String name, List<Node> children) {
-		Node node = AnimoGraph.getTHE(hash);
+	private Node getOrCreateHASH(String hash, String ns, String name, List<Node> children) {
+		Node node = AnimoGraph.getHASH(hash);
 		if (node == null){
-			node = AnimoGraph.createTHE(hash, null);
+			node = AnimoGraph.createHASH(hash);
 			addChildren(AnimoGraph.createElement(node, name, ns), children);
 		}
 		return node;

@@ -45,5 +45,9 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	RESULT,
 	
-	GC
+	GC,
+	
+	CALC, TASK,
+	
+	HASH
 }
