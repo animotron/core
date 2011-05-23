@@ -33,13 +33,13 @@ import org.neo4j.graphdb.Transaction;
 public class AnimoGraph {
 
 	private static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
-	private static Node THE, CASH, CALC;
+	private static Node THE, CACHE, CALC;
 	
 	static {
 		Transaction tx = AnimoGraph.beginTx();
 		try {
 			THE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.THE);
-			CASH = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CASH);
+			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
 			tx.success();
 		} finally {
@@ -109,18 +109,18 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	public static Node getCASH(String name) {
-		return getNode(CASH, new RelationshipTypeTHE(name));
+	public static Node getCACHE(String name) {
+		return getNode(CACHE, new RelationshipTypeTHE(name));
 	}
 
-	protected static Node createCASH(String name) {
-		return createNode(CASH, new RelationshipTypeTHE(name));
+	protected static Node createCACHE(String name) {
+		return createNode(CACHE, new RelationshipTypeTHE(name));
 	}
 
-	protected static Node getOrCreateCASH(String name) {
-		Node node = getCASH(name);
+	protected static Node getOrCreateCACHE(String name) {
+		Node node = getCACHE(name);
 		if (node == null){
-			node = createCASH(name);
+			node = createCACHE(name);
 		}
 		return node;
 	}
@@ -252,8 +252,12 @@ public class AnimoGraph {
 		relationshipTo(node, is, RelationshipTypes.USE);
 	}
 	
-	public static Relationship getTHErelation(String name) {
+	public static Relationship getRelationTHE(String name) {
 		return ROOT.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
+	}
+	
+	public static Relationship getRelationCACHE(String name) {
+		return CACHE.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
 	}
 
 }
