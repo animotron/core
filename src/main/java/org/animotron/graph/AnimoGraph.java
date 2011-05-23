@@ -22,13 +22,11 @@ import org.animotron.Properties;
 import org.animotron.exist.index.AnimoIndex;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.kernel.Traversal;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -78,9 +76,13 @@ public class AnimoGraph {
 	}
 
 	protected static Node createTHE(String name) {
+		return createTHE(name, name);
+	}
+
+	protected static Node createTHE(String hash, String name) {
 		Node node = createNode();
 		Properties.NAME.set(node, name);
-		root.createRelationshipTo(node, new RelationshipTypeTHE(name));
+		root.createRelationshipTo(node, new RelationshipTypeTHE(hash));
 		return node;
 	}
 

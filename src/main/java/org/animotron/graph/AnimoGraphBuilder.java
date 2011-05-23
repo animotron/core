@@ -18,22 +18,18 @@
  */
 package org.animotron.graph;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
-import org.animotron.Keywords;
 import org.animotron.Namespaces;
-import org.animotron.Properties;
-import org.apache.log4j.Logger;
-import org.exist.dom.QName;
-import org.exist.xquery.value.Type;
+import org.exist.security.MessageDigester;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.w3c.dom.Attr;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,189 +37,145 @@ import org.w3c.dom.Element;
  */
 public class AnimoGraphBuilder {
 	
-	private static final Logger LOG = Logger.getLogger(AnimoGraphBuilder.class);
-
-	// here because of optimization reasons
-	private Node the = null, current = null, active = null;
-
-	private Stack<Node> nodes = new Stack<Node>();
-	private Set<Node> predicates = new HashSet<Node>();
+	private static final String HASH_ALGOTHIM = "SHA-256";
 	
-	private int level = 0, skip_level = 0, element_level = 0;
-	private boolean _skip_ = false, _element_ = false;
 	private Transaction tx = AnimoGraph.beginTx();
 	
-	private void pushElement(){
-		element_level = level; _element_ = true;
-	}
+	private int level = 0;
 	
-	private void pushSkip(){
-		skip_level = level; _skip_ = true;
-	}
+	private Stack<MessageDigest> hashStack = new Stack<MessageDigest>();
+	private Stack<List<Node>> childrenStack = new Stack<List<Node>>();
 	
-	private void pushPredicat(Node node){
-		pushActive(node);
-		predicates.add(node);
-	}
+	private Node nodeTHE = null; int levelTHE = 0;
+
+	Stack<Node> nodeStackTHE = new Stack<Node>();
+	Stack<Integer> levelStackTHE = new Stack<Integer>();
 	
-	private boolean hasPredicat(Node node){
-		return predicates.contains(node);
-	}	
-	
-	private void pushActive(Node node){
-		pushCurrent(node);
-		active = node;
-	}
-	
-	private void pushCurrent(Node node){
-		nodes.push(current);
-		current = node;
-	}
-	
-	public void startElement(Element element) {
+	public void startElement(String ns, String name) {
 		
 		level++;
 		
-		if (_skip_ && level <= skip_level) { 
-			skip_level = 0; _skip_ = false;
-		}
-		
-		if (_skip_)
-			return;
-		
-		if (_element_ && level <= element_level) {
-			element_level = 0; _element_ = false;
-		}
-
-		String ns = element.getNamespaceURI();
-		String name = element.getLocalName();
-		QName qname = new QName(name, ns);
-		
 		try {
-			if (_element_) {
-				pushCurrent(AnimoGraph.createElement(current, element.getNodeName(), ns));
-			} else if (hasPredicat(active)) {
-				if (Namespaces.GT.equals(ns)) {
-					pushActive(AnimoGraph.createGT(current, name));
-				} else if (Namespaces.GE.equals(ns)) {
-					pushActive(AnimoGraph.createGE(current, name));
-				} else if (Namespaces.EQ.equals(ns)) {
-					pushActive(AnimoGraph.createEQ(current, name));
-				} else if (Namespaces.NE.equals(ns)) {
-					pushActive(AnimoGraph.createNE(current, name));
-				} else if (Namespaces.LE.equals(ns)) {
-					pushActive(AnimoGraph.createLE(current, name));
-				} else if (Namespaces.LT.equals(ns)) {
-					pushActive(AnimoGraph.createLT(current, name));
-				} else {
-					pushSkip();
+			if (Namespaces.THE.equals(ns)){
+				if (level > 1) {
+					levelStackTHE.push(levelTHE);
+					nodeStackTHE.push(nodeTHE);
 				}
+				levelTHE = level;
+				nodeTHE = AnimoGraph.getOrCreateTHE(name);
+				childrenStack.push(new LinkedList<Node>());
+				
+			} else if (Namespaces.IS.equals(ns)) {
+				return;
+				
 			} else {
-				if (Namespaces.THE.equals(ns)) {
-					the = AnimoGraph.getTHE(name);
-					if (the == null){
-						the = AnimoGraph.createTHE(name);
-					} else {
-						AnimoGraph.clear(the);
-					}
-					current = the;
-				} else if (Namespaces.AN.equals(ns)) {
-					pushActive(AnimoGraph.createAN(current, name, element.getAttribute(Properties.NAME.name())));
-				} else if (Namespaces.ANY.equals(ns)) {
-					pushPredicat(AnimoGraph.createANY(current, name, element.getAttribute(Properties.NAME.name())));
-				}  else if (Namespaces.ALL.equals(ns)) {
-					pushPredicat(AnimoGraph.createALL(current, name, element.getAttribute(Properties.NAME.name())));
-				} else if (Namespaces.PTRN.equals(ns)) {
-					pushActive(AnimoGraph.createPTRN(current, name));
-				} else if (Namespaces.HAVE.equals(ns)) {
-					pushActive(AnimoGraph.createHAVE(current, name));
-				} else if (Namespaces.IC.equals(ns)) {
-					pushActive(AnimoGraph.createIC(current, name));
-				} else if (Namespaces.GET.equals(ns)) {
-					pushActive(AnimoGraph.createGET(current, name));
-				} else if (Namespaces.SELF.equals(ns)) {
-					pushActive(AnimoGraph.createSELF(current, name));
-				} else if (Keywords.DO_XQUERY.equals(qname)) {
-					pushActive(AnimoGraph.createXQUERY(current));
-					pushElement();
-				} else if (Keywords.DO_XSLT.equals(qname)) {
-					pushActive(AnimoGraph.createXSLT(current));
-					pushElement();
-				} else if (the != null && Namespaces.IS.equals(ns) && level == 2) {
-					AnimoGraph.addIsRelationship(the, name);
-					pushSkip();
-				} else if (Namespaces.USE.equals(ns)) {
-					if (the != null && level == 2) {
-						AnimoGraph.addUseRelationship(the, name);
-						pushSkip();
-					} else {
-						AnimoGraph.addUseRelationship(active, name);
-						pushSkip();
-					}
-				} else {
-					pushCurrent(AnimoGraph.createElement(current, element.getNodeName(), ns));
+				MessageDigest md;
+				try {
+					md = MessageDigest.getInstance(HASH_ALGOTHIM);
+				} catch (NoSuchAlgorithmException e) {
+					//can't be, but throw runtime error
+					throw new RuntimeException(e);
 				}
+				//hash-function depend on namespace & name
+				md.update(ns.getBytes());
+				md.update(name.getBytes());
+				hashStack.push(md);
+				childrenStack.push(new LinkedList<Node>());
 			}
-		} catch (Exception e) {
+		} catch (Exception e){
 			tx.finish();
-			LOG.error("AnimoGraph build error for element \"" + element.getNodeName() + "\"" , e);
 		}
-			
+		
 	}
 
-	public void endElement(Element element) {
+	public void endElement(String ns, String name) {
+		
 		level--;
-		if (level > 0) {
-			if (!_skip_)
-				current = nodes.pop();
-		} else {
-			try {
+		
+		try {
+			if (Namespaces.THE.equals(ns)){
+				addChildren(nodeTHE, childrenStack.pop());
+				if (level > 0) {
+					nodeTHE = nodeStackTHE.pop();
+					levelTHE = levelStackTHE.pop();
+				}
+			} else if (level == levelTHE && Namespaces.IS.equals(ns)){
+				AnimoGraph.addIsRelationship(nodeTHE, AnimoGraph.getOrCreateTHE(name));
+			} else if (level == levelTHE && Namespaces.USE.equals(ns)){
+				AnimoGraph.addUseRelationship(nodeTHE, AnimoGraph.getOrCreateTHE(name));
+			} else if (level == levelTHE && Namespaces.HAVE.equals(ns)){
+				List<Node> children = childrenStack.pop();
+				createHAVE(nodeTHE, name, children);
+			} else {
+				MessageDigest md = hashStack.pop();
+				byte [] hash = md.digest();
+				List<Node> children = childrenStack.pop();
+				Node currentNode = getOrCreateTHE(MessageDigester.byteArrayToHex(hash), ns, name, children);
+				if (level > 0) {
+					//add this node as child
+					childrenStack.peek().add(currentNode);
+					//update parent's
+					if (level != levelTHE) {
+						hashStack.peek().update(hash);
+					}
+				}
+			}
+			
+			if (level == 0) {
 				tx.success();
 				tx.finish();
-			} catch (Exception e) {
-				tx.finish();
-				LOG.error("AnimoGraph build error for element \"" + element.getNodeName() + "\"" , e);
 			}
-		}
-	}
-
-	public void attribute(Attr attribute) {
-		if (_skip_)
-			return;
-		try {
-			AnimoGraph.createAttribute(current, attribute.getNodeName(), attribute.getNamespaceURI(), attribute.getNodeValue());
-		} catch (Exception e) {
+			
+		} catch (Exception e){
 			tx.finish();
-			LOG.error("AnimoGraph build error for attribute " + attribute.getNodeName() + " = \"" + attribute.getNodeValue() + "\"" , e);
 		}
+		
 	}
 
-	public void characters(CharacterData text) {
-		if (_skip_)
-			return;
-		try {
-			if (text.getNodeType() == Type.TEXT) {
-				String value = text.getNodeValue();
-	    		StringBuilder buf = new StringBuilder();
-	    		if (value.length() > 0) {
-	    			StringTokenizer tok = new StringTokenizer(value);
-	    			while (tok.hasMoreTokens()) {
-	                    buf.append(tok.nextToken());
-	    				if (tok.hasMoreTokens()) buf.append(' ');
-	    			}
-	    		}
-	    		if (buf.length() > 0){
-	    			AnimoGraph.createText(current, buf.toString());
-	    		}
-			} else if (text.getNodeType() == Type.COMMENT) {
-				AnimoGraph.createComment(current, text.getNodeValue());
-			} else if (text.getNodeType() == Type.CDATA_SECTION) {
-				AnimoGraph.createCDATA(current, text.getNodeValue());
-			}
-		} catch (Exception e) {
-			tx.finish();
-			LOG.error("AnimoGraph build error for node \"" + text.getNodeValue() + "\"" , e);
-		}
+	public void attribute(String ns, String name, String value) {
+		return;
+//		try {
+//			MessageDigest md = hashStack.peek();
+//			//hash-function depend on namespace, name & value
+//			md.update(ns.getBytes());
+//			md.update(name.getBytes());
+//			md.update(value.getBytes());
+//		} catch (Exception e){
+//			tx.finish();
+//		}
 	}
 
+	public void characters(String text) {
+		return;
+//		try {
+//			MessageDigest md = hashStack.peek();
+//			//hash-function depend on characters
+//			md.update(text.getBytes());
+//		} catch (Exception e){
+//			tx.finish();
+//		}
+	}
+
+	private Node getOrCreateTHE(String hash, String ns, String name, List<Node> children) {
+		Node node = AnimoGraph.getTHE(hash);
+		if (node == null){
+			node = AnimoGraph.createTHE(hash, null);
+			addChildren(AnimoGraph.createElement(node, name, ns), children);
+		}
+		return node;
+	}
+	
+	private Node createHAVE(Node the, String name, List<Node> children) {
+		Node node = AnimoGraph.createHAVE(the, name);
+		addChildren(node, children);
+		return node;
+	}
+	
+	private void addChildren(Node node, List<Node> children) {
+		for (Node n : children){
+			for (Relationship r : n.getRelationships(Direction.OUTGOING))
+			node.createRelationshipTo(r.getEndNode(), r.getType());
+		}
+	}
+	
 }

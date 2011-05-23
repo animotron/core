@@ -235,13 +235,13 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 			if (level == 1) {
 				if (mode == STORE && Namespaces.THE.equals(element.getNamespaceURI())) {
 					builder = new AnimoGraphBuilder();
-					builder.startElement(element);
+					builder.startElement(element.getNamespaceURI(), element.getLocalName());
 					doIndex = true;
 				} else {
 					doIndex = false;
 				}
 			} else if (doIndex) {
-				builder.startElement(element);
+				builder.startElement(element.getNamespaceURI(), element.getLocalName());
 			}
 			super.startElement(transaction, element, path);
 		}
@@ -250,21 +250,21 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		public void endElement(Txn transaction, ElementImpl element, NodePath path) {
 			level--;
 			if (doIndex) 
-				builder.endElement(element);
+				builder.endElement(element.getNamespaceURI(), element.getLocalName());
 			super.endElement(transaction, element, path);
 		}
 
 	    @Override
 	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
 			if (doIndex)
-				builder.attribute(attribute);
+				builder.attribute(attribute.getNamespaceURI(), attribute.getLocalName(), attribute.getNodeValue());
 			super.attribute(transaction, attribute, path);
 	    }
 	    
 	    @Override
 	    public void characters(Txn transaction, CharacterDataImpl text, NodePath path) {
 			if (doIndex) 
-				builder.characters(text);
+				builder.characters(text.getNodeValue());
 			super.characters(transaction, text, path);
 	    }
 

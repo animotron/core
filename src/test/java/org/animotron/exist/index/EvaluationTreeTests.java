@@ -40,7 +40,9 @@ import org.neo4j.graphdb.Node;
 public class EvaluationTreeTests extends AbstractTest {
 	
 	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+"/>";
+		"<the:A "+ANIMO_NSs+">" +
+		"	<x:some x:a=\"b\" xmlns:x=\"y\" z=\"w\"/>" +
+		"</the:A>";
 	
 	private static final String THE_B = 
 		"<the:B "+ANIMO_NSs+">" +
@@ -78,7 +80,7 @@ public class EvaluationTreeTests extends AbstractTest {
             
             ProcessingFlowIterator it = new ProcessingFlowIterator(node);
             while (it.hasNext()) {
-            	System.out.println(AnimoGraph.getProperty(it.next(), Properties.NAME));
+            	System.out.println(Properties.NAME.get(it.next()));
             	//System.out.println(AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	i++;
