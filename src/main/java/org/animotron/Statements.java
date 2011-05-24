@@ -30,7 +30,14 @@ import javolution.util.FastMap;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.operator.Operator;
-import org.clapper.util.classutil.*;
+import org.clapper.util.classutil.AbstractClassFilter;
+import org.clapper.util.classutil.AndClassFilter;
+import org.clapper.util.classutil.ClassFilter;
+import org.clapper.util.classutil.ClassFinder;
+import org.clapper.util.classutil.ClassInfo;
+import org.clapper.util.classutil.InterfaceOnlyClassFilter;
+import org.clapper.util.classutil.NotClassFilter;
+import org.clapper.util.classutil.SubclassClassFilter;
 import org.neo4j.graphdb.RelationshipType;
 
 /**

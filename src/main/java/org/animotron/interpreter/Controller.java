@@ -21,7 +21,6 @@ package org.animotron.interpreter;
 import org.animotron.Keywords;
 import org.animotron.Namespaces;
 import org.animotron.exist.AnimoSequence;
-import org.animotron.graph.AnimoGraph;
 import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
 import org.exist.dom.NodeHandle;

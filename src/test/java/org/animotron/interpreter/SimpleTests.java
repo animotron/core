@@ -31,7 +31,6 @@ import java.util.Map;
 import org.animotron.exist.AbstractTest;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Reader;
-import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;

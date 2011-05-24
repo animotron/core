@@ -18,7 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.instruction.AbstractContainer;
 
 /**

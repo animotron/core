@@ -27,8 +27,6 @@ import java.util.Stack;
 import org.animotron.Namespaces;
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.operator.Stackable;
-import org.animotron.operator.THE;
 import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;

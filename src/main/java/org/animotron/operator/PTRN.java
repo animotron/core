@@ -18,7 +18,6 @@
  */
 package org.animotron.operator;
 
-import org.animotron.annotation.Namespace;
 
 /**
  * Operator 'ptrn'.

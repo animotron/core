@@ -22,9 +22,6 @@ import java.util.Map;
 
 import javolution.util.FastMap;
 
-import org.animotron.instruction.Instruction;
-import org.animotron.instruction.InstructionContainer;
-
 /**
  * Abstract instructions container.
  * 

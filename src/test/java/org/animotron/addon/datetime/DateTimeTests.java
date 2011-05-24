@@ -18,9 +18,9 @@
  */
 package org.animotron.addon.datetime;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
-import org.animotron.addon.datetime.TimestampNode;
 import org.junit.Test;
 
 

@@ -18,11 +18,7 @@
  */
 package org.animotron.instruction.perform;
 
-import java.io.IOException;
-
 import org.animotron.instruction.AbstractInstruction;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Instruction 'do:xsl', plug XSL language

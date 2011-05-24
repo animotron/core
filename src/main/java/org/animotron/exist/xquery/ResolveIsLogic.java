@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.graph.AnimoGraph;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;
