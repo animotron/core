@@ -30,6 +30,6 @@ public class ATTRIBUTE extends AbstractInstruction {
 	private static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
 	public static ATTRIBUTE getInstance() { return INSTANCE; }
 	
-	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
+	private ATTRIBUTE() { super(ML.getInstance(), "attribute"); }
 	
 }

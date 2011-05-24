@@ -30,6 +30,6 @@ public class CDATA extends AbstractInstruction {
 	private static final CDATA INSTANCE = new CDATA();
 	public static CDATA getInstance() { return INSTANCE; }
 	
-	private CDATA() { super("cdata", "ml", "animo/ml"); }
+	private CDATA() { super(ML.getInstance(), "cdata"); }
 	
 }

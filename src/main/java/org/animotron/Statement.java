@@ -25,7 +25,7 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Statement extends Container{
+public interface Statement extends Container {
 	
 	public RelationshipType relationshipType();
 	

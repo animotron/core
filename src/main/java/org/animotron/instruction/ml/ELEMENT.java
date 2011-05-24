@@ -30,6 +30,6 @@ public class ELEMENT extends AbstractInstruction {
 	private static final ELEMENT INSTANCE = new ELEMENT();
 	public static ELEMENT getInstance() { return INSTANCE; }
 	
-	private ELEMENT() { super("element", "ml", "animo/ml"); }
+	private ELEMENT() { super(ML.getInstance(), "ml"); }
 	
 }

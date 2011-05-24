@@ -25,5 +25,5 @@ import org.animotron.Statement;
  *
  */
 public interface Instruction extends Statement {
-	
+	public String prefix();
 }

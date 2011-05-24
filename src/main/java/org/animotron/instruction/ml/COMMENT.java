@@ -30,6 +30,6 @@ public class COMMENT extends AbstractInstruction {
 	private static final COMMENT INSTANCE = new COMMENT();
 	public static COMMENT getInstance() { return INSTANCE; }
 	
-	private COMMENT() { super("comment", "ml", "animo/ml"); }
+	private COMMENT() { super(ML.getInstance(), "comment"); }
 	
 }

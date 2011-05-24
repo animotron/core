@@ -30,6 +30,6 @@ public class TEXT extends AbstractInstruction {
 	private static final TEXT INSTANCE = new TEXT();
 	public static TEXT getInstance() { return INSTANCE; }
 	
-	private TEXT() { super("text", "ml", "animo/ml"); }
+	private TEXT() { super(ML.getInstance(), "text"); }
 
 }

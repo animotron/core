@@ -19,6 +19,7 @@
 package org.animotron.instruction.perform;
 
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.instruction.ml.ML;
 
 /**
  * Instruction 'do:xquery', plug XQuery language.
@@ -30,6 +31,6 @@ public class XQUERY extends AbstractInstruction {
 	private static final XQUERY INSTANCE = new XQUERY();
 	public static XQUERY getInstance() { return INSTANCE; }
 	
-	private XQUERY() { super("xquery", "do", "animo/perform"); }
+	private XQUERY() { super(DO.getInstance(), "xquery"); }
 
 }

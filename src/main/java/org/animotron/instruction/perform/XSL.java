@@ -19,6 +19,7 @@
 package org.animotron.instruction.perform;
 
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.instruction.ml.ML;
 
 /**
  * Instruction 'do:xsl', plug XSL language
@@ -30,6 +31,6 @@ public class XSL extends AbstractInstruction {
 	private static final XSL INSTANCE = new XSL();
 	public static XSL getInstance() { return INSTANCE; }
 	
-	private XSL() { super("xsl", "do", "animo/perform"); }
+	private XSL() { super(ML.getInstance(), "xsl"); }
 
 }
