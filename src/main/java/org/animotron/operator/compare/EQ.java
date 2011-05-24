@@ -18,11 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Compare operator 'EQ'.
@@ -36,9 +32,5 @@ public class EQ extends AbstractOperator {
 	public static EQ getInstance() { return INSTANCE; }
 	
 	private EQ() { super("eq", "animo/compare/eq"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

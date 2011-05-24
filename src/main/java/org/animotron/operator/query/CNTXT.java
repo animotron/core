@@ -18,11 +18,7 @@
  */
 package org.animotron.operator.query;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Query operator 'CNTXT'.
@@ -37,9 +33,5 @@ public class CNTXT extends AbstractOperator {
 	public static CNTXT getInstance() { return INSTANCE; }
 	
 	private CNTXT() { super("cntxt", "animo/query/context"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

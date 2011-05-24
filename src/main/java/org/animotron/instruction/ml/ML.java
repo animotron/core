@@ -26,11 +26,11 @@ import org.animotron.instruction.AbstractContainer;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "ml", uri = "animo/ml")
 public class ML extends AbstractContainer {
 	
 	public static final ML INSTANCE = new ML();
 	public static ML getInstance() { return INSTANCE; }
 	
 	private ML() { super("ml", "animo/ml"); }
+	
 }

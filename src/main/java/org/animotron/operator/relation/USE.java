@@ -18,11 +18,7 @@
  */
 package org.animotron.operator.relation;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Operator 'USE'.
@@ -36,9 +32,5 @@ public class USE extends AbstractOperator {
 	public static USE getInstance() { return INSTANCE; }
 	
 	private USE() { super("use", "animo/relation/use"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

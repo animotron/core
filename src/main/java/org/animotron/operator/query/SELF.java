@@ -18,11 +18,7 @@
  */
 package org.animotron.operator.query;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Query operator 'self'.
@@ -36,9 +32,5 @@ public class SELF extends AbstractOperator {
 	public static SELF getInstance() { return INSTANCE; }
 	
 	private SELF() { super("self", "animo/query/self"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

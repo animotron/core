@@ -18,11 +18,7 @@
  */
 package org.animotron.operator;
 
-import java.io.IOException;
-
 import org.animotron.annotation.Namespace;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Operator 'IC'.
@@ -30,16 +26,10 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "ic", uri = "animo/connection")
 public class IC extends AbstractOperator {
 	
 	public static final IC INSTANCE = new IC();
 	public static IC getInstance() { return INSTANCE; }
 	
 	private IC() { super("ic", "animo/connection"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
 }

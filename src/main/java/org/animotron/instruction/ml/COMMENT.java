@@ -18,11 +18,7 @@
  */
 package org.animotron.instruction.ml;
 
-import java.io.IOException;
-
 import org.animotron.instruction.AbstractInstruction;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Instruction 'ml:comment'.
@@ -32,12 +28,8 @@ import org.neo4j.graphdb.Relationship;
 public class COMMENT extends AbstractInstruction {
 	
 	public static final COMMENT INSTANCE = new COMMENT();
-	public static COMMENT getInstance() { return INSTANCE; }
 	
+	public static COMMENT getInstance() { return INSTANCE; }
 	private COMMENT() { super("comment", "ml", "animo/ml"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

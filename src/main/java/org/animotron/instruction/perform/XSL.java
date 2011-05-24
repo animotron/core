@@ -36,8 +36,4 @@ public class XSL extends AbstractInstruction {
 	
 	private XSL() { super("xsl", "do", "animo/perform"); }
 
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
 }

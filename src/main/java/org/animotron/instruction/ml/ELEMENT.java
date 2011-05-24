@@ -18,11 +18,7 @@
  */
 package org.animotron.instruction.ml;
 
-import java.io.IOException;
-
 import org.animotron.instruction.AbstractInstruction;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Instruction 'ml:element'.
@@ -35,9 +31,5 @@ public class ELEMENT extends AbstractInstruction {
 	public static ELEMENT getInstance() { return INSTANCE; }
 	
 	private ELEMENT() { super("element", "ml", "animo/ml"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

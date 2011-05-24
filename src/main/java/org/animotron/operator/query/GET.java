@@ -25,6 +25,7 @@ import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
@@ -40,7 +41,7 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends AbstractOperator implements Query {
+public class GET extends AbstractOperator implements Evaluable, Query {
 
 	public static final GET INSTANCE = new GET();
 	public static GET getInstance() { return INSTANCE; }

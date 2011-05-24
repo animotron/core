@@ -18,11 +18,7 @@
  */
 package org.animotron.operator.relation;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Operator 'HAVE'.
@@ -36,9 +32,5 @@ public class HAVE extends AbstractOperator {
 	public static HAVE getInstance() { return INSTANCE; }
 	
 	private HAVE() { super("have", "animo/relation/have"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

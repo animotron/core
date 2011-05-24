@@ -70,7 +70,7 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.createNode();
 	}
 
-	private static Node createNode(Node parent, RelationshipType type) {
+	public static Node createNode(Node parent, RelationshipType type) {
 		Node node = createNode();
 		parent.createRelationshipTo(node, type);
 		return node;

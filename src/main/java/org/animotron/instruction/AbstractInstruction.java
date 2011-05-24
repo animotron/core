@@ -20,6 +20,7 @@ package org.animotron.instruction;
 
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.instruction.Instruction;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -54,4 +55,10 @@ public abstract class AbstractInstruction implements Instruction {
 	public RelationshipType relationshipType() {
 		return relationshipType;
 	}
+	
+	@Override
+	public Node build(Node parent){
+		return null;
+	}
+
 }

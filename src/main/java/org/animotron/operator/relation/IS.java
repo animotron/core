@@ -18,11 +18,7 @@
  */
 package org.animotron.operator.relation;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Operator 'IS'.
@@ -36,9 +32,5 @@ public class IS extends AbstractOperator {
 	public static IS getInstance() { return INSTANCE; }
 	
 	private IS() { super("is", "animo/relation/is"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

@@ -18,12 +18,8 @@
  */
 package org.animotron.operator.query;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Query;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Query operator 'ALL'.
@@ -37,9 +33,5 @@ public class ALL extends AbstractOperator implements Query {
 	public static ALL getInstance() { return INSTANCE; }
 	
 	private ALL() { super("all", "animo/query/all"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }

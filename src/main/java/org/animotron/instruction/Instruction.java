@@ -18,12 +18,8 @@
  */
 package org.animotron.instruction;
 
-import java.io.IOException;
-
 import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Node;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -31,7 +27,6 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public interface Instruction extends Statement {
 	
-	public RelationshipType relationshipType();
+	public Node build(Node parent);
 
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 }

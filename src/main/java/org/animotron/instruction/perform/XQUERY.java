@@ -18,11 +18,7 @@
  */
 package org.animotron.instruction.perform;
 
-import java.io.IOException;
-
 import org.animotron.instruction.AbstractInstruction;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Instruction 'do:xquery', plug XQuery language.
@@ -36,8 +32,4 @@ public class XQUERY extends AbstractInstruction {
 	
 	private XQUERY() { super("xquery", "do", "animo/perform"); }
 
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
 }

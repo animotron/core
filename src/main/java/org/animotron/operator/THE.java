@@ -18,14 +18,10 @@
  */
 package org.animotron.operator;
 
-import java.io.IOException;
-
-import org.animotron.annotation.Namespace;
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.RelationshipTypeTHE;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.graph.AnimoRelationshipType;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'THE'.
@@ -33,8 +29,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "the", uri = "animo/instance")
-public class THE extends AbstractOperator implements Stackable {
+public class THE extends AbstractOperator {
 	
 	public static final THE INSTANCE = new THE();
 	public static THE getInstance() { return INSTANCE; }
@@ -42,17 +37,14 @@ public class THE extends AbstractOperator implements Stackable {
 	private THE() { super("the", "animo/instance"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
-
-	@Override
-	public Node build(String name) {
-		Node node = AnimoGraph.getNode(AnimoGraph.THE, new RelationshipTypeTHE(name));
+	public Node build(Node parent, String name) {
+		RelationshipType type = new AnimoRelationshipType(name(), name);
+		Node node = AnimoGraph.getNode(parent, type);
 		if (node != null) {
 			AnimoGraph.clear(node);
 		}
-		node = AnimoGraph.createTHE(name);
+		node = AnimoGraph.createNode(parent, type);
 		return node;
 	}
+	
 }

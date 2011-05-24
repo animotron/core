@@ -19,6 +19,7 @@
 package org.animotron.operator;
 
 import org.animotron.graph.AnimoRelationshipType;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -37,15 +38,23 @@ public abstract class AbstractOperator implements Operator {
 		this.relationshipType = AnimoRelationshipType.get(prefix.toUpperCase());
 	}
 	
+	@Override
 	public String name() {
 		return prefix;
 	}
 	
+	@Override
 	public String namespace() {
 		return uri;
 	}
 
+	@Override
 	public RelationshipType relationshipType() {
 		return relationshipType;
+	}
+	
+	@Override
+	public Node build(Node parent, String name){
+		return null;
 	}
 }

@@ -18,12 +18,7 @@
  */
 package org.animotron.operator;
 
-import java.io.IOException;
-
 import org.animotron.annotation.Namespace;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'ptrn'.
@@ -31,16 +26,11 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "ptrn", uri = "animo/pattern")
 public class PTRN extends AbstractOperator {
 	
 	public static final PTRN INSTANCE = new PTRN();
 	public static PTRN getInstance() { return INSTANCE; }
 	
 	private PTRN() { super("ptrn", "animo/pattern"); }
-
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
-	}
+	
 }
