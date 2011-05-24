@@ -26,6 +26,7 @@ import java.util.Stack;
 
 import org.animotron.Namespaces;
 import org.exist.security.MessageDigester;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -137,7 +138,7 @@ public class AnimoGraphBuilder {
 					setTHE(AnimoGraph.getRelationCACHE(name));
 				}
 			}
-			
+
 			if (level == 0) {
 				tx.success();
 				tx.finish();
@@ -189,8 +190,10 @@ public class AnimoGraphBuilder {
 	}
 	
 	private void addChildren(Node node, List<Node> children) {
-		for (Node n : children){
-			node.createRelationshipTo(n, RelationshipTypes.CACHE);
+		for (Node n : children) {
+			for (Relationship r : n.getRelationships(Direction.OUTGOING)){
+				node.createRelationshipTo(r.getEndNode(), r.getType());
+			}
 		}
 	}
 	
