@@ -25,7 +25,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AN;
-import org.animotron.operator.query.Get;
+import org.animotron.operator.query.GET;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -77,7 +77,7 @@ class Evaluator implements Runnable {
 						//an:self (return root)
 						//an:* (reference)
 						
-						AN.eval(r, out, isLast(it));
+						AN.getInstance().eval(r, out, isLast(it));
 						break;
 	
 					case ANY:
@@ -97,7 +97,7 @@ class Evaluator implements Runnable {
 					
 					case GET:
 						
-						Get.eval(r, out, isLast(it));
+						GET.getInstance().eval(r, out, isLast(it));
 						break;
 	
 					case SELF:

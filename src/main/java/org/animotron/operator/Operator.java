@@ -18,10 +18,16 @@
  */
 package org.animotron.operator;
 
+import java.io.IOException;
+
+import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Relationship;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public interface Operator {
 
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 }

@@ -31,7 +31,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operation 'get'. Return 'have' relations on provided context.
+ * Operation 'AN'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -39,7 +39,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "an", uri = "animo/reference")
 public class AN implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final AN INSTANCE = new AN();
+	}
+	
+	public static AN getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private AN() {}
+	
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 
 		if (!isLast)

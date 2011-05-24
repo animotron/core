@@ -33,7 +33,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "ptrn", uri = "animo/pattern")
 public class PTRN implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final PTRN INSTANCE = new PTRN();
+	}
+	
+	public static PTRN getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private PTRN() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

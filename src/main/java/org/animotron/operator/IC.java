@@ -25,7 +25,7 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'ic'.
+ * Operator 'IC'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -33,7 +33,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "ic", uri = "animo/connection")
 public class IC implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final IC INSTANCE = new IC();
+	}
+	
+	public static IC getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private IC() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

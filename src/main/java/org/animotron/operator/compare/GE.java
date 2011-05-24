@@ -26,15 +26,25 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Compare operator 'ge'.
+ * Compare operator 'GE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "ge", uri = "animo/compare/ge")
 public class GE implements Operator {
+
+	private static class SingletonHolder { 
+		public static final GE INSTANCE = new GE();
+	}
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public static GE getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private GE() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

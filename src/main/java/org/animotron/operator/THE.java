@@ -25,15 +25,25 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'the'.
+ * Operator 'THE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "have", uri = "animo/instance")
+@Namespace(prefix = "the", uri = "animo/instance")
 public class THE implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final THE INSTANCE = new THE();
+	}
+	
+	public static THE getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private THE() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

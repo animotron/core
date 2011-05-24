@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'use'.
+ * Operator 'USE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -34,7 +34,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "use", uri = "animo/relation/use")
 public class USE implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final USE INSTANCE = new USE();
+	}
+	
+	public static USE getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private USE() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Compare operator 'ne'.
+ * Compare operator 'NE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -34,7 +34,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "ne", uri = "animo/compare/ne")
 public class NE implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final NE INSTANCE = new NE();
+	}
+	
+	public static NE getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private NE() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

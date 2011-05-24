@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Compare operator 'eq'.
+ * Compare operator 'EQ'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -34,7 +34,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "eq", uri = "animo/compare/eq")
 public class EQ implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final EQ INSTANCE = new EQ();
+	}
+	
+	public static EQ getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private EQ() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

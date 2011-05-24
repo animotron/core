@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'have'.
+ * Operator 'HAVE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -34,7 +34,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "have", uri = "animo/relation/have")
 public class HAVE implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final HAVE INSTANCE = new HAVE();
+	}
+	
+	public static HAVE getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private HAVE() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

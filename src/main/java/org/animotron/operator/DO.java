@@ -25,7 +25,7 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'do'.
+ * Operator 'DO'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -33,7 +33,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "do", uri = "animo/perform")
 public class DO implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final DO INSTANCE = new DO();
+	}
+	
+	public static DO getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private DO() {}
+	
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

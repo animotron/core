@@ -26,15 +26,26 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'self'.
+ * Query operator 'self'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "self", uri = "animo/query/self")
-public class SELF implements Operator {
+@Deprecated //???
+@Namespace(prefix = "cntxt", uri = "animo/query/context")
+public class CNTXT implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final CNTXT INSTANCE = new CNTXT();
+	}
+	
+	public static CNTXT getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private CNTXT() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }

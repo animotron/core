@@ -35,13 +35,23 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
 /**
- * Operator 'get'. Return 'have' relations on provided context.
+ * Query operator 'Get'. Return 'have' relations on provided context.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "get", uri = "animo/query/extract")
-public class Get implements Operator {
+public class GET implements Operator {
+
+	private static class SingletonHolder { 
+		public static final GET INSTANCE = new GET();
+	}
+	
+	public static GET getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private GET() {}
 
 	private static TraversalDescription td_res = 
 		Traversal.description().
@@ -55,7 +65,7 @@ public class Get implements Operator {
 			relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		
 		//check, maybe, result was already calculated
 		boolean haveResult = false;

@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Compare operator 'gt'.
+ * Compare operator 'GT'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -34,7 +34,17 @@ import org.neo4j.graphdb.Relationship;
 @Namespace(prefix = "gt", uri = "animo/compare/gt")
 public class GT implements Operator {
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private static class SingletonHolder { 
+		public static final GT INSTANCE = new GT();
+	}
+	
+	public static GT getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private GT() {}
+
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
 }
