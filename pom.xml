@@ -55,6 +55,13 @@
 			<version>4.3.1</version>
 			<scope>test</scope>
 		</dependency>
+		
+		<!-- classes utils -->
+		<dependency>
+			<groupId>org.clapper</groupId>
+			<artifactId>util</artifactId>
+			<version>2.5.1</version>
+		</dependency>
 	</dependencies>
 	
 	<dependencyManagement>
@@ -91,6 +98,17 @@
 			<id>jcurl-snapshots</id>
 			<name>JCurl Maven Snapshots</name>
 			<url>http://www.jcurl.org/m2/repo/</url>
+		</repository>
+		<repository>
+			<id>maven.clapper.org</id>
+			<name>Maven repository for software published by Brian Clapper</name>
+			<url>http://maven.clapper.org</url>
+		</repository>
+
+		<repository>
+			<id>scala-tools.org</id>
+			<name>Scala-tools Maven2 Repository</name>
+			<url>http://scala-tools.org/repo-releases</url>
 		</repository>
 	</repositories>
 	
