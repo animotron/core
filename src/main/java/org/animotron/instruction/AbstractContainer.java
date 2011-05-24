@@ -32,6 +32,22 @@ import org.animotron.instruction.InstructionContainer;
  */
 public abstract class AbstractContainer implements InstructionContainer {
 	
+	private final String prefix;
+	private final String uri;
+	
+	public AbstractContainer(final String prefix, final String uri) {
+		this.prefix = prefix;
+		this.uri = uri;
+	}
+	
+	public String name() {
+		return prefix;
+	}
+	
+	public String namespace() {
+		return uri;
+	}
+	
 	public final Map<String, Instruction> map = 
 		new FastMap<String, Instruction>();
 	

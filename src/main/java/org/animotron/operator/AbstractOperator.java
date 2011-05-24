@@ -41,6 +41,10 @@ public abstract class AbstractOperator implements Operator {
 		return prefix;
 	}
 	
+	public String namespace() {
+		return uri;
+	}
+
 	public RelationshipType relationshipType() {
 		return relationshipType;
 	}

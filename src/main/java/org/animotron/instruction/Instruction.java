@@ -31,8 +31,6 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public interface Instruction extends Statement {
 	
-	public String name();
-	
 	public RelationshipType relationshipType();
 
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;

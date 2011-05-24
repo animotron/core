@@ -20,46 +20,21 @@ package org.animotron.instruction.ml;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
-import org.animotron.instruction.Instruction;
+import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Instruction 'ml:comment'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "ml", uri = "animo/ml")
-public class COMMENT implements Instruction {
+public class COMMENT extends AbstractInstruction {
 	
-	private static class SingletonHolder { 
-		public static final COMMENT INSTANCE = new COMMENT();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "ML:COMMENT";
-			}
-		};  
-	}
+	public static final COMMENT INSTANCE = new COMMENT();
+	public static COMMENT getInstance() { return INSTANCE; }
 	
-	public static COMMENT getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private COMMENT() {}
-
-	@Override
-	public String name() {
-		return "comment";
-	}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private COMMENT() { super("comment", "ml", "animo/ml"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

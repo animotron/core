@@ -26,12 +26,15 @@ import org.neo4j.graphdb.Node;
  */
 public interface Statement {
 
-	Node build(String name);
+	public Node build(String name);
 	
-	Node create();
+	public Node create();
 	
-	Node get();
+	public Node get();
 	
-	Node getOrCreate();
+	public Node getOrCreate();
+
+	public String name();
+	public String namespace();
 	
 }

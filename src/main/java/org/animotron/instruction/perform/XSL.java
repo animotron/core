@@ -20,46 +20,21 @@ package org.animotron.instruction.perform;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
-import org.animotron.instruction.Instruction;
+import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Instruction 'do:xsl', plug XSL language
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "do", uri = "animo/perform")
-public class XSL implements Instruction {
+public class XSL extends AbstractInstruction {
 	
-	private static class SingletonHolder { 
-		public static final XSL INSTANCE = new XSL();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "DO:XSL";
-			}
-		};  
-	}
+	public static final XSL INSTANCE = new XSL();
+	public static XSL getInstance() { return INSTANCE; }
 	
-	public static XSL getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private XSL() {}
-
-	@Override
-	public String name() {
-		return "xsl";
-	}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private XSL() { super("xsl", "do", "animo/perform"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

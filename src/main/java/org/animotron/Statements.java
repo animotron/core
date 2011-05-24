@@ -27,7 +27,6 @@ import java.util.Map.Entry;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.operator.Operator;
@@ -44,6 +43,7 @@ public class Statements {
 	
 	protected static void scan() {
 		Thread scanner = new Thread(new Runnable() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
 				//create class finder
@@ -78,37 +78,34 @@ public class Statements {
 		            Class<? extends Statement> clazz;
 					try {
 						clazz = (Class<? extends Statement>) Class.forName( classInfo.getClassName() );
-			            if (clazz.isAnnotationPresent(Namespace.class) ) {
-			            	Namespace ns = clazz.getAnnotation(Namespace.class);
-			            	
-							try {
-								Method method = clazz.getMethod("getInstance", null);
-				            	Object obj = method.invoke(clazz, null);
 
-				            	if (obj instanceof Instruction) {
-				            		List<Instruction> list = instructions.get(ns.uri());
-				            		if (list == null) {
-				            			list = new FastList<Instruction>();
-				            			instructions.put(ns.uri(), list);
-				            		}
-				            		list.add((Instruction) obj);
-									
-								} else if (obj instanceof InstructionContainer) {
-									statementsByNamespace.put(ns.uri(), (Statement) obj);
-									
-								} else if (obj instanceof Operator) {
-									Operator op = (Operator) obj;
-									statementsByNamespace.put(ns.uri(), op);
-					            	statementsByRelationType.put(op.relationshipType().name(), op);
-					            	
-								} else {
-									//TODO: log?
-								}
-							} catch (Exception e) {
-								//TODO: log
-								e.printStackTrace();
+						try {
+							Method method = clazz.getMethod("getInstance", null);
+							Statement obj = (Statement) method.invoke(clazz, null);
+
+			            	if (obj instanceof Instruction) {
+			            		List<Instruction> list = instructions.get(obj.namespace());
+			            		if (list == null) {
+			            			list = new FastList<Instruction>();
+			            			instructions.put(obj.namespace(), list);
+			            		}
+			            		list.add((Instruction) obj);
+								
+							} else if (obj instanceof InstructionContainer) {
+								statementsByNamespace.put(obj.namespace(), (Statement) obj);
+								
+							} else if (obj instanceof Operator) {
+								Operator op = (Operator) obj;
+								statementsByNamespace.put(obj.namespace(), op);
+				            	statementsByRelationType.put(op.relationshipType().name(), op);
+				            	
+							} else {
+								//TODO: log?
 							}
-			            }
+						} catch (Exception e) {
+							//TODO: log
+							e.printStackTrace();
+						}
 					} catch (ClassNotFoundException e) {
 						//should not happen
 						//TODO: log
