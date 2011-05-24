@@ -47,6 +47,6 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	GC,
 
-	CALC, TASK, CASH
+	CALC, TASK, CACHE
 	
 }

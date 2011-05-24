@@ -37,19 +37,29 @@ import org.neo4j.graphdb.Transaction;
  */
 public class AnimoGraphBuilder {
 	
-	private static final String CASH_ALGOTHIM = "SHA-256";
+	private Relationship the = null;
+	
+	private static final String CACHE_ALGOTHIM = "SHA-256";
 	
 	private Transaction tx = AnimoGraph.beginTx();
 	
 	private int level = 0;
 	
-	private Stack<MessageDigest> CASHStack = new Stack<MessageDigest>();
+	private Stack<MessageDigest> CACHEStack = new Stack<MessageDigest>();
 	private Stack<List<Node>> childrenStack = new Stack<List<Node>>();
 	
 	private Node nodeTHE = null; int levelTHE = 0;
 
 	Stack<Node> nodeStackTHE = new Stack<Node>();
 	Stack<Integer> levelStackTHE = new Stack<Integer>();
+	
+	public Relationship getTHE() {
+		return this.the;
+	}
+	
+	private void setTHE(Relationship the){
+		this.the = the;
+	}
 	
 	public void startElement(String ns, String name) {
 		
@@ -62,7 +72,11 @@ public class AnimoGraphBuilder {
 					nodeStackTHE.push(nodeTHE);
 				}
 				levelTHE = level;
-				nodeTHE = AnimoGraph.getOrCreateTHE(name);
+				nodeTHE = AnimoGraph.getTHE(name);
+				if (nodeTHE != null) {
+					AnimoGraph.clear(nodeTHE);
+				}
+				nodeTHE = AnimoGraph.createTHE(name);
 				childrenStack.push(new LinkedList<Node>());
 				
 			} else if (Namespaces.IS.equals(ns)) {
@@ -71,15 +85,15 @@ public class AnimoGraphBuilder {
 			} else {
 				MessageDigest md;
 				try {
-					md = MessageDigest.getInstance(CASH_ALGOTHIM);
+					md = MessageDigest.getInstance(CACHE_ALGOTHIM);
 				} catch (NoSuchAlgorithmException e) {
 					//can't be, but throw runtime error
 					throw new RuntimeException(e);
 				}
-				//CASH-function depend on namespace & name
+				//CACHE-function depend on namespace & name
 				md.update(ns.getBytes());
 				md.update(name.getBytes());
-				CASHStack.push(md);
+				CACHEStack.push(md);
 				childrenStack.push(new LinkedList<Node>());
 			}
 		} catch (Exception e){
@@ -98,6 +112,8 @@ public class AnimoGraphBuilder {
 				if (level > 0) {
 					nodeTHE = nodeStackTHE.pop();
 					levelTHE = levelStackTHE.pop();
+				} else {
+					setTHE(AnimoGraph.getRelationTHE(name));
 				}
 			} else if (level == levelTHE && Namespaces.IS.equals(ns)){
 				AnimoGraph.addIsRelationship(nodeTHE, AnimoGraph.getOrCreateTHE(name));
@@ -107,20 +123,22 @@ public class AnimoGraphBuilder {
 				List<Node> children = childrenStack.pop();
 				createHAVE(nodeTHE, name, children);
 			} else {
-				MessageDigest md = CASHStack.pop();
-				byte [] CASH = md.digest();
+				MessageDigest md = CACHEStack.pop();
+				byte [] cache = md.digest();
 				List<Node> children = childrenStack.pop();
-				Node currentNode = getOrCreateCASH(MessageDigester.byteArrayToHex(CASH), ns, name, children);
+				Node currentNode = getOrCreateCACHE(MessageDigester.byteArrayToHex(cache), ns, name, children);
 				if (level > 0) {
 					//add this node as child
 					childrenStack.peek().add(currentNode);
 					//update parent's
 					if (level != levelTHE) {
-						CASHStack.peek().update(CASH);
+						CACHEStack.peek().update(cache);
 					}
+				} else {
+					setTHE(AnimoGraph.getRelationCACHE(name));
 				}
 			}
-			
+
 			if (level == 0) {
 				tx.success();
 				tx.finish();
@@ -135,8 +153,8 @@ public class AnimoGraphBuilder {
 	public void attribute(String ns, String name, String value) {
 		return;
 //		try {
-//			MessageDigest md = CASHStack.peek();
-//			//CASH-function depend on namespace, name & value
+//			MessageDigest md = CACHEStack.peek();
+//			//CACHE-function depend on namespace, name & value
 //			md.update(ns.getBytes());
 //			md.update(name.getBytes());
 //			md.update(value.getBytes());
@@ -148,18 +166,18 @@ public class AnimoGraphBuilder {
 	public void characters(String text) {
 		return;
 //		try {
-//			MessageDigest md = CASHStack.peek();
-//			//CASH-function depend on characters
+//			MessageDigest md = CACHEStack.peek();
+//			//CACHE-function depend on characters
 //			md.update(text.getBytes());
 //		} catch (Exception e){
 //			tx.finish();
 //		}
 	}
 
-	private Node getOrCreateCASH(String CASH, String ns, String name, List<Node> children) {
-		Node node = AnimoGraph.getCASH(CASH);
+	private Node getOrCreateCACHE(String cache, String ns, String name, List<Node> children) {
+		Node node = AnimoGraph.getCACHE(cache);
 		if (node == null){
-			node = AnimoGraph.createCASH(CASH);
+			node = AnimoGraph.createCACHE(cache);
 			addChildren(AnimoGraph.createElement(node, name, ns), children);
 		}
 		return node;
@@ -172,9 +190,10 @@ public class AnimoGraphBuilder {
 	}
 	
 	private void addChildren(Node node, List<Node> children) {
-		for (Node n : children){
-			for (Relationship r : n.getRelationships(Direction.OUTGOING))
-			node.createRelationshipTo(r.getEndNode(), r.getType());
+		for (Node n : children) {
+			for (Relationship r : n.getRelationships(Direction.OUTGOING)){
+				node.createRelationshipTo(r.getEndNode(), r.getType());
+			}
 		}
 	}
 	
