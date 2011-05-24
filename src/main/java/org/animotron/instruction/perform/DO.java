@@ -16,26 +16,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.instruction.ml;
+package org.animotron.instruction.perform;
 
 import org.animotron.annotation.Namespace;
 import org.animotron.instruction.AbstractContainer;
 
 /**
- * Instructions container 'ml' - makeup language.
+ * Instructions container 'do' - pluggable programming languages.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "ml", uri = "animo/ml")
-public class ML extends AbstractContainer {
+@Namespace(prefix = "do", uri = "animo/perform")
+public class DO extends AbstractContainer {
 	
 	private static class SingletonHolder { 
-		public static final ML INSTANCE = new ML();
+		public static final DO INSTANCE = new DO();
 	}
 	
-	public static ML getInstance() {
+	public static DO getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private ML() {}
+	private DO() {}
 }

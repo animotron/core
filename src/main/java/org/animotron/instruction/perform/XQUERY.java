@@ -16,26 +16,53 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.instruction.ml;
+package org.animotron.instruction.perform;
+
+import java.io.IOException;
 
 import org.animotron.annotation.Namespace;
-import org.animotron.instruction.AbstractContainer;
+import org.animotron.instruction.Instruction;
+import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
- * Instructions container 'ml' - makeup language.
+ * Instruction 'do:xquery', plug XQuery language.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "ml", uri = "animo/ml")
-public class ML extends AbstractContainer {
+@Namespace(prefix = "do", uri = "animo/perform")
+public class XQUERY implements Instruction {
 	
 	private static class SingletonHolder { 
-		public static final ML INSTANCE = new ML();
+		public static final XQUERY INSTANCE = new XQUERY();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "DO:XQUERY";
+			}
+		};  
 	}
 	
-	public static ML getInstance() {
+	public static XQUERY getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private ML() {}
+	private XQUERY() {}
+
+	@Override
+	public String name() {
+		return "xquery";
+	}
+
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+		//TODO: code
+	}
 }

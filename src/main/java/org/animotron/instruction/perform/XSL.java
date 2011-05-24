@@ -16,41 +16,46 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.instruction.perform;
 
 import java.io.IOException;
 
 import org.animotron.annotation.Namespace;
+import org.animotron.instruction.Instruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
- * Operator 'DO'.
+ * Instruction 'do:xsl', plug XSL language
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "do", uri = "animo/perform")
-public class DO implements Operator {
+public class XSL implements Instruction {
 	
 	private static class SingletonHolder { 
-		public static final DO INSTANCE = new DO();
+		public static final XSL INSTANCE = new XSL();
 
 		public static final RelationshipType relationshipType = new RelationshipType() {
 			@Override
 			public String name() {
-				return "DO";
+				return "DO:XSL";
 			}
 		};  
 	}
 	
-	public static DO getInstance() {
+	public static XSL getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private DO() {}
-	
+	private XSL() {}
+
+	@Override
+	public String name() {
+		return "xsl";
+	}
+
 	@Override
 	public RelationshipType relationshipType() {
 		return SingletonHolder.relationshipType;

@@ -21,24 +21,48 @@ package org.animotron.addon.datetime;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
+import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
- * Operation 'time'. Reference to virtual time object.
+ * Reference on virtual 'time' object.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class TimestampReference {
+@Namespace(prefix = "T", uri = "animo/time")
+public class TimestampReference implements Operator {
 	
-	public static String NS = "animo/time";
-	public static String NS_PREFIX = "T";
+	private static class SingletonHolder { 
+		public static final TimestampReference INSTANCE = new TimestampReference();
+		
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "T";
+			}
+		};  
+	}
 	
-	public static WeakHashMap<String, TimestampNode> pool = new WeakHashMap<String, TimestampNode>(); 
+	public static TimestampReference getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
 	
-	public static void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	private WeakHashMap<String, TimestampNode> pool = new WeakHashMap<String, TimestampNode>(); 
+	
+	private TimestampReference() {}
+	
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		Node node = op.getEndNode();
 		String name = (String) node.getProperty("NAME");
 		
@@ -51,6 +75,7 @@ public class TimestampReference {
 				instance = obj;
 		}
 
+		//UNDERSTAND: use in-memory relations (virtual)
 		out.write(instance);
 		out.close();
 		return;

@@ -16,26 +16,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.instruction.ml;
+package org.animotron.instruction;
 
-import org.animotron.annotation.Namespace;
-import org.animotron.instruction.AbstractContainer;
+import java.util.Map;
+
+import javolution.util.FastMap;
+
+import org.animotron.instruction.Instruction;
+import org.animotron.instruction.InstructionContainer;
 
 /**
- * Instructions container 'ml' - makeup language.
+ * Abstract instructions container.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "ml", uri = "animo/ml")
-public class ML extends AbstractContainer {
+public abstract class AbstractContainer implements InstructionContainer {
 	
-	private static class SingletonHolder { 
-		public static final ML INSTANCE = new ML();
+	public final Map<String, Instruction> map = 
+		new FastMap<String, Instruction>();
+	
+	protected void addInstruction(Instruction instruction) {
+		map.put(instruction.name(), instruction);
 	}
-	
-	public static ML getInstance() {
-		return SingletonHolder.INSTANCE;
+
+	public Instruction getInstruction(String name) {
+		return map.get(name);
 	}
-	
-	private ML() {}
 }
