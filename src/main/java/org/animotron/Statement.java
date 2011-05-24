@@ -24,4 +24,7 @@ package org.animotron;
  */
 public interface Statement {
 
+	public String name();
+	public String namespace();
+	
 }

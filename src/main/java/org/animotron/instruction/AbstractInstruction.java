@@ -16,28 +16,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.instruction.ml;
+package org.animotron.instruction;
 
-import java.io.IOException;
-
-import org.animotron.instruction.AbstractInstruction;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
+import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.instruction.Instruction;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
- * Instruction 'ml:text'.
+ * Abstract instruction.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class TEXT extends AbstractInstruction {
+public abstract class AbstractInstruction implements Instruction {
 	
-	public static final TEXT INSTANCE = new TEXT();
-	public static TEXT getInstance() { return INSTANCE; }
+	private final String name;
+	private final String prefix;
+	private final String uri;
 	
-	private TEXT() { super("text", "ml", "animo/ml"); }
+	private RelationshipType relationshipType;
+	
+	public AbstractInstruction(final String name, final String prefix, final String uri) {
+		this.name = name;
+		this.prefix = prefix;
+		this.uri = uri;
+		this.relationshipType = 
+			AnimoRelationshipType.get(this.prefix.toUpperCase() + ":" + name.toUpperCase());
+	}
+	
+	public String name() {
+		return name;
+	}
 
-	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		//TODO: code
+	public String namespace() {
+		return uri;
+	}
+
+	public RelationshipType relationshipType() {
+		return relationshipType;
 	}
 }

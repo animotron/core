@@ -18,7 +18,6 @@
  */
 package org.animotron.instruction.perform;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.instruction.AbstractContainer;
 
 /**
@@ -27,16 +26,10 @@ import org.animotron.instruction.AbstractContainer;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "do", uri = "animo/perform")
 public class DO extends AbstractContainer {
 	
-	private static class SingletonHolder { 
-		public static final DO INSTANCE = new DO();
-	}
+	public static final DO INSTANCE = new DO();
+	public static DO getInstance() { return INSTANCE; }
 	
-	public static DO getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private DO() {}
+	private DO() { super("do", "animo/perform"); }
 }

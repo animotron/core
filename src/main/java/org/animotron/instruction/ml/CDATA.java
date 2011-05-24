@@ -20,46 +20,21 @@ package org.animotron.instruction.ml;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
-import org.animotron.instruction.Instruction;
+import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Instruction 'ml:cdata'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "ml", uri = "animo/ml")
-public class CDATA implements Instruction {
+public class CDATA extends AbstractInstruction {
 	
-	private static class SingletonHolder { 
-		public static final CDATA INSTANCE = new CDATA();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "ML:CDATA";
-			}
-		};  
-	}
+	public static final CDATA INSTANCE = new CDATA();
+	public static CDATA getInstance() { return INSTANCE; }
 	
-	public static CDATA getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private CDATA() {}
-
-	@Override
-	public String name() {
-		return "cdata";
-	}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private CDATA() { super("cdata", "ml", "animo/ml"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

@@ -20,46 +20,21 @@ package org.animotron.instruction.perform;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
-import org.animotron.instruction.Instruction;
+import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Instruction 'do:xquery', plug XQuery language.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-@Namespace(prefix = "do", uri = "animo/perform")
-public class XQUERY implements Instruction {
+public class XQUERY extends AbstractInstruction {
 	
-	private static class SingletonHolder { 
-		public static final XQUERY INSTANCE = new XQUERY();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "DO:XQUERY";
-			}
-		};  
-	}
+	public static final XQUERY INSTANCE = new XQUERY();
+	public static XQUERY getInstance() { return INSTANCE; }
 	
-	public static XQUERY getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private XQUERY() {}
-
-	@Override
-	public String name() {
-		return "xquery";
-	}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private XQUERY() { super("xquery", "do", "animo/perform"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

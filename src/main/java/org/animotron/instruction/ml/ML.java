@@ -29,13 +29,8 @@ import org.animotron.instruction.AbstractContainer;
 @Namespace(prefix = "ml", uri = "animo/ml")
 public class ML extends AbstractContainer {
 	
-	private static class SingletonHolder { 
-		public static final ML INSTANCE = new ML();
-	}
+	public static final ML INSTANCE = new ML();
+	public static ML getInstance() { return INSTANCE; }
 	
-	public static ML getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private ML() {}
+	private ML() { super("ml", "animo/ml"); }
 }
