@@ -103,7 +103,7 @@ public class AnimoGraphSerializer {
 		
 		RelationshipType type = r.getType();
 		
-		if (RelationshipTypeTHE.isSupertypeOf(type)) {
+		if (AnimoRelationshipType.isSupertypeOf(type)) {
 			element(Namespaces.THE, r.getEndNode());
 			
 		} else if (RelationshipTypes.IS.equals(type)){

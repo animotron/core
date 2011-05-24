@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'THE'.
@@ -32,30 +31,13 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "the", uri = "animo/instance")
-public class THE implements Operator, Stackable {
+public class THE extends AbstractOperator implements Stackable {
 	
-	private static class SingletonHolder { 
-		public static final THE INSTANCE = new THE();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "THE";
-			}
-		};  
-	}
+	public static final THE INSTANCE = new THE();
+	public static THE getInstance() { return INSTANCE; }
 	
-	public static THE getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
+	private THE() { super("the", "animo/instance"); }
 	
-	private THE() {}
-	
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
-
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code

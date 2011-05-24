@@ -20,11 +20,9 @@ package org.animotron.operator.relation;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'USE'.
@@ -32,30 +30,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "use", uri = "animo/relation/use")
-public class USE implements Operator {
+public class USE extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final USE INSTANCE = new USE();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "USE";
-			}
-		};  
-	}
+	public static final USE INSTANCE = new USE();
+	public static USE getInstance() { return INSTANCE; }
 	
-	public static USE getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private USE() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private USE() { super("use", "animo/relation/use"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

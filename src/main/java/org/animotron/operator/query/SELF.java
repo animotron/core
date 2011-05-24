@@ -20,11 +20,9 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Query operator 'self'.
@@ -32,30 +30,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "self", uri = "animo/query/self")
-public class SELF implements Operator {
+public class SELF extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final SELF INSTANCE = new SELF();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "SELF";
-			}
-		};  
-	}
+	public static final SELF INSTANCE = new SELF();
+	public static SELF getInstance() { return INSTANCE; }
 	
-	public static SELF getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private SELF() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private SELF() { super("self", "animo/query/self"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

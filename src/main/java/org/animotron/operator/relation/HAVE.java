@@ -20,11 +20,9 @@ package org.animotron.operator.relation;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'HAVE'.
@@ -32,30 +30,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "have", uri = "animo/relation/have")
-public class HAVE implements Operator {
+public class HAVE extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final HAVE INSTANCE = new HAVE();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "HAVE";
-			}
-		};  
-	}
+	public static final HAVE INSTANCE = new HAVE();
+	public static HAVE getInstance() { return INSTANCE; }
 	
-	public static HAVE getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private HAVE() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private HAVE() { super("have", "animo/relation/have"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

@@ -20,11 +20,9 @@ package org.animotron.operator.compare;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Compare operator 'EQ'.
@@ -32,30 +30,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "eq", uri = "animo/compare/eq")
-public class EQ implements Operator {
+public class EQ extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final EQ INSTANCE = new EQ();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "EQ";
-			}
-		};  
-	}
+	public static final EQ INSTANCE = new EQ();
+	public static EQ getInstance() { return INSTANCE; }
 	
-	public static EQ getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private EQ() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private EQ() { super("eq", "animo/compare/eq"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

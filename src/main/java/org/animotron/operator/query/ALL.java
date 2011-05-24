@@ -20,12 +20,10 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Query;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Query operator 'ALL'.
@@ -33,30 +31,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "all", uri = "animo/query/all")
-public class ALL implements Operator, Query {
+public class ALL extends AbstractOperator implements Query {
 	
-	private static class SingletonHolder { 
-		public static final ALL INSTANCE = new ALL();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "ALL";
-			}
-		};  
-	}
+	public static final ALL INSTANCE = new ALL();
+	public static ALL getInstance() { return INSTANCE; }
 	
-	public static ALL getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private ALL() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private ALL() { super("all", "animo/query/all"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

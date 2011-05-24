@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'IC'.
@@ -32,29 +31,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "ic", uri = "animo/connection")
-public class IC implements Operator {
+public class IC extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final IC INSTANCE = new IC();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "IC";
-			}
-		};  
-	}
+	public static final IC INSTANCE = new IC();
+	public static IC getInstance() { return INSTANCE; }
 	
-	public static IC getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private IC() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private IC() { super("ic", "animo/connection"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
