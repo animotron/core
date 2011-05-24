@@ -21,12 +21,10 @@ package org.animotron.addon.datetime;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Reference on virtual 'time' object.
@@ -34,33 +32,15 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "T", uri = "animo/time")
-public class TimestampReference implements Operator {
+public class TimestampReference extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final TimestampReference INSTANCE = new TimestampReference();
-		
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "T";
-			}
-		};  
-	}
-	
-	public static TimestampReference getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
+	public static final TimestampReference INSTANCE = new TimestampReference();
+	public static TimestampReference getInstance() { return INSTANCE; }
 	
 	private WeakHashMap<String, TimestampNode> pool = new WeakHashMap<String, TimestampNode>(); 
 	
-	private TimestampReference() {}
+	private TimestampReference() { super("T", "animo/time"); }
 	
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
-
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		Node node = op.getEndNode();

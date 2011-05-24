@@ -20,18 +20,16 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Query;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
@@ -42,30 +40,12 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "get", uri = "animo/query/extract")
-public class GET implements Operator, Query {
+public class GET extends AbstractOperator implements Query {
 
-	private static class SingletonHolder { 
-		public static final GET INSTANCE = new GET();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "GET";
-			}
-		};  
-	}
+	public static final GET INSTANCE = new GET();
+	public static GET getInstance() { return INSTANCE; }
 	
-	public static GET getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private GET() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private GET() { super("get", "animo/query/extract"); }
 
 	private static TraversalDescription td_res = 
 		Traversal.description().

@@ -20,8 +20,7 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
-import org.animotron.graph.RelationshipTypeTHE;
+import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
@@ -29,39 +28,20 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
- * Operation 'AN'.
+ * Operation 'AN'. Direct reference to 'the' instance.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "an", uri = "animo/reference")
-public class AN implements Operator {
+public class AN extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final AN INSTANCE = new AN();
-		
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "AN";
-			}
-		};  
-	}
+	private static final AN INSTANCE = new AN();
+	public static AN getInstance() { return INSTANCE; }
 	
-	public static AN getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
+	private AN() { super("an", "animo/reference"); }
 	
-	private AN() {}
-	
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
-
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
@@ -75,7 +55,7 @@ public class AN implements Operator {
 			//get 'THE' relation
 			Node node = r.getEndNode();
 			String name = (String) node.getProperty("NAME");
-			for (Relationship t : node.getRelationships(new RelationshipTypeTHE(name), Direction.INCOMING)) {
+			for (Relationship t : node.getRelationships(new AnimoRelationshipType(name), Direction.INCOMING)) {
 				out.write(t);
 			}
 		}

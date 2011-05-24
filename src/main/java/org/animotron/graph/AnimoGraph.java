@@ -100,11 +100,11 @@ public class AnimoGraph {
 	}
 	
 	public static Node getCACHE(String name) {
-		return getNode(CACHE, new RelationshipTypeTHE(name));
+		return getNode(CACHE, new AnimoRelationshipType(name));
 	}
 
 	protected static Node createCACHE(String name) {
-		return createNode(CACHE, new RelationshipTypeTHE(name));
+		return createNode(CACHE, new AnimoRelationshipType(name));
 	}
 
 	protected static Node getOrCreateCACHE(String name) {
@@ -243,11 +243,11 @@ public class AnimoGraph {
 	}
 	
 	public static Relationship getRelationTHE(String name) {
-		return ROOT.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
+		return ROOT.getSingleRelationship(new AnimoRelationshipType(name), Direction.OUTGOING);
 	}
 	
 	public static Relationship getRelationCACHE(String name) {
-		return CACHE.getSingleRelationship(new RelationshipTypeTHE(name), Direction.OUTGOING);
+		return CACHE.getSingleRelationship(new AnimoRelationshipType(name), Direction.OUTGOING);
 	}
 
 }

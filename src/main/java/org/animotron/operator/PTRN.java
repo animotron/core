@@ -32,29 +32,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "ptrn", uri = "animo/pattern")
-public class PTRN implements Operator {
+public class PTRN extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final PTRN INSTANCE = new PTRN();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "PTRN";
-			}
-		};  
-	}
+	public static final PTRN INSTANCE = new PTRN();
+	public static PTRN getInstance() { return INSTANCE; }
 	
-	public static PTRN getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private PTRN() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private PTRN() { super("ptrn", "animo/pattern"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

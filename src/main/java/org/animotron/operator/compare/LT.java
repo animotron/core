@@ -20,11 +20,9 @@ package org.animotron.operator.compare;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Compare operator 'LT'.
@@ -32,30 +30,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "lt", uri = "animo/compare/lt")
-public class LT implements Operator {
+public class LT extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final LT INSTANCE = new LT();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "LT";
-			}
-		};  
-	}
+	public static final LT INSTANCE = new LT();
+	public static LT getInstance() { return INSTANCE; }
 	
-	public static LT getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private LT() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private LT() { super("lt", "animo/compare/lt"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

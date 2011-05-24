@@ -20,11 +20,9 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
-import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstractOperator;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Query operator 'CNTXT'.
@@ -33,30 +31,12 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Deprecated //???
-@Namespace(prefix = "cntxt", uri = "animo/query/context")
-public class CNTXT implements Operator {
+public class CNTXT extends AbstractOperator {
 	
-	private static class SingletonHolder { 
-		public static final CNTXT INSTANCE = new CNTXT();
-
-		public static final RelationshipType relationshipType = new RelationshipType() {
-			@Override
-			public String name() {
-				return "CNTXT";
-			}
-		};  
-	}
+	public static final CNTXT INSTANCE = new CNTXT();
+	public static CNTXT getInstance() { return INSTANCE; }
 	
-	public static CNTXT getInstance() {
-		return SingletonHolder.INSTANCE;
-	}
-	
-	private CNTXT() {}
-
-	@Override
-	public RelationshipType relationshipType() {
-		return SingletonHolder.relationshipType;
-	}
+	private CNTXT() { super("cntxt", "animo/query/context"); }
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {

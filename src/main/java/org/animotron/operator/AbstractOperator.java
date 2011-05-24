@@ -16,30 +16,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph;
+package org.animotron.operator;
 
+import org.animotron.graph.AnimoRelationshipType;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class RelationshipTypeTHE implements RelationshipType {
+public abstract class AbstractOperator implements Operator {
 	
-	private final static String prefix = RelationshipTypes.THE + ":"; 
-	private String name;
+	private String prefix;
+	private String uri;
+	private RelationshipType relationshipType;
 	
-	public RelationshipTypeTHE(String name){
-		this.name = prefix + name;
+	public AbstractOperator(String prefix, String uri) {
+		this.prefix = prefix;
+		this.uri = uri;
+		this.relationshipType = AnimoRelationshipType.get(prefix.toUpperCase());
 	}
-
-	@Override
+	
 	public String name() {
-		return name;
+		return prefix;
 	}
 	
-	public static boolean isSupertypeOf(RelationshipType type){
-		return type.name().startsWith(prefix);
+	public RelationshipType relationshipType() {
+		return relationshipType;
 	}
-	
 }
