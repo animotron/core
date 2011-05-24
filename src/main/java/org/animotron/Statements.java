@@ -30,7 +30,9 @@ import javolution.util.FastMap;
 import org.animotron.annotation.Namespace;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
+import org.animotron.operator.Operator;
 import org.clapper.util.classutil.*;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -91,8 +93,14 @@ public class Statements {
 				            		}
 				            		list.add((Instruction) obj);
 									
-								} else if (obj instanceof Statement) {
-									statements.put(ns.uri(), (Statement) obj);
+								} else if (obj instanceof InstructionContainer) {
+									statementsByNamespace.put(ns.uri(), (Statement) obj);
+									
+								} else if (obj instanceof Operator) {
+									Operator op = (Operator) obj;
+									statementsByNamespace.put(ns.uri(), op);
+					            	statementsByRelationType.put(op.relationshipType().name(), op);
+					            	
 								} else {
 									//TODO: log?
 								}
@@ -110,7 +118,7 @@ public class Statements {
 				
 				//add instructions to instruction container
 				for (Entry<String, List<Instruction>> entry : instructions.entrySet()) {
-					Statement s = statements.get( entry.getKey() );
+					Statement s = statementsByNamespace.get( entry.getKey() );
 					if (s instanceof InstructionContainer) {
 						InstructionContainer container = (InstructionContainer) s;
 						
@@ -122,6 +130,7 @@ public class Statements {
 							
 							for (Instruction i : entry.getValue()) {
 				            	method.invoke(container, i);
+				            	statementsByRelationType.put(i.relationshipType().name(), i);
 							}
 						} catch (Exception e) {
 							// TODO: log
@@ -136,13 +145,26 @@ public class Statements {
 		scanner.start();
 	}
 	
-	private static Map<String, Statement> statements = 
+	private static Map<String, Statement> statementsByNamespace = 
 		new FastMap<String, Statement>();
 	
-	public static Statement get(String uri) {
+	private static Map<String, Statement> statementsByRelationType = 
+		new FastMap<String, Statement>();
+
+	public static Statement namespace(String uri) {
 		ready();
 		
-		return statements.get(uri);
+		return statementsByNamespace.get(uri);
+	}
+
+	public static Statement relationshipType(RelationshipType type) {
+		return relationshipType(type.name());
+	}
+
+	public static Statement relationshipType(String name) {
+		ready();
+		
+		return statementsByRelationType.get(name);
 	}
 
 	public static void ready() {
