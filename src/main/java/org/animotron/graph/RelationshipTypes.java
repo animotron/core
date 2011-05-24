@@ -26,16 +26,16 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public enum RelationshipTypes implements RelationshipType {
 	THE, REF, 
-	IS, USE, 
-	PTRN,
+	IS, USE, //D
+	PTRN, //D
 	
-	AN, 
-	ANY, ALL,
+	AN, //D 
+	ANY, ALL, //D
 	
-	GT, GE, EQ, NE, LE, LT,
-	HAVE, IC,
-	GET, SELF,
-	DO,
+	GT, GE, EQ, NE, LE, LT, //D
+	HAVE, IC, //D
+	GET, SELF, //D
+	DO, //D
 	
 	ELEMENT, ATTRIBUTE, TEXT, CDATA, COMMENT,
 	

@@ -16,22 +16,53 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.instruction.ml;
 
 import java.io.IOException;
 
-import org.animotron.Statement;
+import org.animotron.annotation.Namespace;
+import org.animotron.instruction.Instruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
+ * Instruction 'ml:text'.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
  */
-public interface Operator extends Statement {
+@Namespace(prefix = "ml", uri = "animo/ml")
+public class TEXT implements Instruction {
 	
-	public RelationshipType relationshipType();
+	private static class SingletonHolder { 
+		public static final TEXT INSTANCE = new TEXT();
 
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "TEXT";
+			}
+		};  
+	}
+	
+	public static TEXT getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	private TEXT() {}
+
+	@Override
+	public String name() {
+		return "text";
+	}
+
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+		//TODO: code
+	}
 }

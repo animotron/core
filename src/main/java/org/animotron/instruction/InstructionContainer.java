@@ -16,22 +16,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
-
-import java.io.IOException;
+package org.animotron.instruction;
 
 import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Operator extends Statement {
+public interface InstructionContainer extends Statement {
 	
-	public RelationshipType relationshipType();
-
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
+	public Instruction getInstruction(String name);
+	
 }

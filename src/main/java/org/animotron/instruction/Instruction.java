@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.instruction;
 
 import java.io.IOException;
 
@@ -29,7 +29,9 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Operator extends Statement {
+public interface Instruction extends Statement {
+	
+	public String name();
 	
 	public RelationshipType relationshipType();
 

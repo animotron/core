@@ -16,22 +16,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.instruction.ml;
 
-import java.io.IOException;
+import java.util.Map;
 
-import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
+import javolution.util.FastMap;
+
+import org.animotron.annotation.Namespace;
+import org.animotron.instruction.Instruction;
+import org.animotron.instruction.InstructionContainer;
 
 /**
+ * Instructions container 'ml'.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
  */
-public interface Operator extends Statement {
+@Namespace(prefix = "ml", uri = "animo/ml")
+public class ML implements InstructionContainer {
 	
-	public RelationshipType relationshipType();
+	private static class SingletonHolder { 
+		public static final ML INSTANCE = new ML();
+	}
+	
+	public static ML getInstance() {
+		return SingletonHolder.INSTANCE;
+	}
+	
+	public static final Map<String, Instruction> map = 
+		new FastMap<String, Instruction>();
+	
+	private ML() {}
+	
+	protected void addInstruction(Instruction instruction) {
+		map.put(instruction.name(), instruction);
+	}
 
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
+	public Instruction getInstruction(String name) {
+		return map.get(name);
+	}
 }

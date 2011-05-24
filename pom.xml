@@ -62,6 +62,13 @@
 			<artifactId>util</artifactId>
 			<version>2.5.1</version>
 		</dependency>
+		
+		<!-- fast map, list ... -->
+		<dependency>
+			<groupId>org.javolution</groupId>
+			<artifactId>javolution</artifactId>
+			<version>5.2.6</version>
+		</dependency>
 	</dependencies>
 	
 	<dependencyManagement>
