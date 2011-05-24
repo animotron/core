@@ -78,7 +78,7 @@ public class SimpleTests extends AbstractTest {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
             
-            Relationship op = AnimoGraph.getTHErelation("C");
+            Relationship op = AnimoGraph.getRelationTHE("C");
             
             assertNotNull(op);
 
