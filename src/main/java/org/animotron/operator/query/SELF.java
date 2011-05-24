@@ -24,6 +24,7 @@ import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Query operator 'self'.
@@ -36,6 +37,13 @@ public class SELF implements Operator {
 	
 	private static class SingletonHolder { 
 		public static final SELF INSTANCE = new SELF();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "SELF";
+			}
+		};  
 	}
 	
 	public static SELF getInstance() {
@@ -44,6 +52,12 @@ public class SELF implements Operator {
 	
 	private SELF() {}
 
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}

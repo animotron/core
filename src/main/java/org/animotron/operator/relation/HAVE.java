@@ -24,6 +24,7 @@ import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'HAVE'.
@@ -36,6 +37,13 @@ public class HAVE implements Operator {
 	
 	private static class SingletonHolder { 
 		public static final HAVE INSTANCE = new HAVE();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "HAVE";
+			}
+		};  
 	}
 	
 	public static HAVE getInstance() {
@@ -44,6 +52,12 @@ public class HAVE implements Operator {
 	
 	private HAVE() {}
 
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}

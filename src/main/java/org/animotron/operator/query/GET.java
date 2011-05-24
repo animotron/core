@@ -31,6 +31,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
@@ -46,6 +47,13 @@ public class GET implements Operator, Query {
 
 	private static class SingletonHolder { 
 		public static final GET INSTANCE = new GET();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "GET";
+			}
+		};  
 	}
 	
 	public static GET getInstance() {
@@ -53,6 +61,11 @@ public class GET implements Operator, Query {
 	}
 	
 	private GET() {}
+
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
 
 	private static TraversalDescription td_res = 
 		Traversal.description().
@@ -66,6 +79,7 @@ public class GET implements Operator, Query {
 			relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		
 		//check, maybe, result was already calculated

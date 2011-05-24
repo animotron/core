@@ -24,6 +24,7 @@ import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Compare operator 'LE'.
@@ -36,6 +37,13 @@ public class LE implements Operator {
 	
 	private static class SingletonHolder { 
 		public static final LE INSTANCE = new LE();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "LE";
+			}
+		};  
 	}
 	
 	public static LE getInstance() {
@@ -44,6 +52,12 @@ public class LE implements Operator {
 	
 	private LE() {}
 
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}

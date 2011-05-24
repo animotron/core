@@ -24,6 +24,7 @@ import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Query operator 'CNTXT'.
@@ -37,6 +38,13 @@ public class CNTXT implements Operator {
 	
 	private static class SingletonHolder { 
 		public static final CNTXT INSTANCE = new CNTXT();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "CNTXT";
+			}
+		};  
 	}
 	
 	public static CNTXT getInstance() {
@@ -45,6 +53,12 @@ public class CNTXT implements Operator {
 	
 	private CNTXT() {}
 
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}

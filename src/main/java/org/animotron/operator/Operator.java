@@ -22,12 +22,15 @@ import java.io.IOException;
 
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public interface Operator {
+	
+	public RelationshipType relationshipType();
 
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 }

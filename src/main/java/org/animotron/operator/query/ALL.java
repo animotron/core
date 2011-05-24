@@ -25,6 +25,7 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Query;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Query operator 'ALL'.
@@ -37,6 +38,13 @@ public class ALL implements Operator, Query {
 	
 	private static class SingletonHolder { 
 		public static final ALL INSTANCE = new ALL();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "ALL";
+			}
+		};  
 	}
 	
 	public static ALL getInstance() {
@@ -45,6 +53,12 @@ public class ALL implements Operator, Query {
 	
 	private ALL() {}
 
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}

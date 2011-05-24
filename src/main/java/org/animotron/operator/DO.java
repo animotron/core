@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'DO'.
@@ -35,6 +36,13 @@ public class DO implements Operator {
 	
 	private static class SingletonHolder { 
 		public static final DO INSTANCE = new DO();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "DO";
+			}
+		};  
 	}
 	
 	public static DO getInstance() {
@@ -43,6 +51,12 @@ public class DO implements Operator {
 	
 	private DO() {}
 	
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}

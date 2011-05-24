@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Operator 'ptrn'.
@@ -35,6 +36,13 @@ public class PTRN implements Operator {
 	
 	private static class SingletonHolder { 
 		public static final PTRN INSTANCE = new PTRN();
+
+		public static final RelationshipType relationshipType = new RelationshipType() {
+			@Override
+			public String name() {
+				return "PTRN";
+			}
+		};  
 	}
 	
 	public static PTRN getInstance() {
@@ -43,6 +51,12 @@ public class PTRN implements Operator {
 	
 	private PTRN() {}
 
+	@Override
+	public RelationshipType relationshipType() {
+		return SingletonHolder.relationshipType;
+	}
+
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
 	}
