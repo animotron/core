@@ -25,6 +25,10 @@ import java.util.List;
 import java.util.Stack;
 
 import org.animotron.Namespaces;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.operator.Stackable;
+import org.animotron.operator.THE;
 import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -48,49 +52,49 @@ public class AnimoGraphBuilder {
 	private Stack<MessageDigest> CACHEStack = new Stack<MessageDigest>();
 	private Stack<List<Node>> childrenStack = new Stack<List<Node>>();
 	
-	private Node nodeTHE = null; int levelTHE = 0;
+	private Node _node_ = null; int _level_ = 0;
 
-	Stack<Node> nodeStackTHE = new Stack<Node>();
-	Stack<Integer> levelStackTHE = new Stack<Integer>();
+	Stack<Node> nodes = new Stack<Node>();
+	Stack<Integer> levels = new Stack<Integer>();
 	
 	public Relationship getTHE() {
 		return this.the;
 	}
 	
-	private void setTHE(Relationship the){
+	private void setTHE(Relationship the) {
 		this.the = the;
+	}
+	
+	private MessageDigest md() {
+		try {
+			return MessageDigest.getInstance(CACHE_ALGOTHIM);
+		} catch (NoSuchAlgorithmException e) {
+			//can't be, but throw runtime error
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public void startElement(String ns, String name) {
 		
 		level++;
 		
+		Statement statement = Statements.namespace(ns);
+		
 		try {
-			if (Namespaces.THE.equals(ns)){
+			if (statement instanceof Stackable){
 				if (level > 1) {
-					levelStackTHE.push(levelTHE);
-					nodeStackTHE.push(nodeTHE);
+					levels.push(_level_);
+					nodes.push(_node_);
 				}
-				levelTHE = level;
-				nodeTHE = AnimoGraph.getTHE(name);
-				if (nodeTHE != null) {
-					AnimoGraph.clear(nodeTHE);
-				}
-				nodeTHE = AnimoGraph.createTHE(name);
+				_level_ = level;
+				_node_ = statement.build(name); 
 				childrenStack.push(new LinkedList<Node>());
 				
 			} else if (Namespaces.IS.equals(ns)) {
 				return;
 				
 			} else {
-				MessageDigest md;
-				try {
-					md = MessageDigest.getInstance(CACHE_ALGOTHIM);
-				} catch (NoSuchAlgorithmException e) {
-					//can't be, but throw runtime error
-					throw new RuntimeException(e);
-				}
-				//CACHE-function depend on namespace & name
+				MessageDigest md = md();
 				md.update(ns.getBytes());
 				md.update(name.getBytes());
 				CACHEStack.push(md);
@@ -108,20 +112,20 @@ public class AnimoGraphBuilder {
 		
 		try {
 			if (Namespaces.THE.equals(ns)){
-				addChildren(nodeTHE, childrenStack.pop());
+				addChildren(_node_, childrenStack.pop());
 				if (level > 0) {
-					nodeTHE = nodeStackTHE.pop();
-					levelTHE = levelStackTHE.pop();
+					_node_ = nodes.pop();
+					_level_ = levels.pop();
 				} else {
 					setTHE(AnimoGraph.getRelationTHE(name));
 				}
-			} else if (level == levelTHE && Namespaces.IS.equals(ns)){
-				AnimoGraph.addIsRelationship(nodeTHE, AnimoGraph.getOrCreateTHE(name));
-			} else if (level == levelTHE && Namespaces.USE.equals(ns)){
-				AnimoGraph.addUseRelationship(nodeTHE, AnimoGraph.getOrCreateTHE(name));
-			} else if (level == levelTHE && Namespaces.HAVE.equals(ns)){
+			} else if (level == _level_ && Namespaces.IS.equals(ns)){
+				AnimoGraph.addIsRelationship(_node_, AnimoGraph.getOrCreateTHE(name));
+			} else if (level == _level_ && Namespaces.USE.equals(ns)){
+				AnimoGraph.addUseRelationship(_node_, AnimoGraph.getOrCreateTHE(name));
+			} else if (level == _level_ && Namespaces.HAVE.equals(ns)){
 				List<Node> children = childrenStack.pop();
-				createHAVE(nodeTHE, name, children);
+				createHAVE(_node_, name, children);
 			} else {
 				MessageDigest md = CACHEStack.pop();
 				byte [] cache = md.digest();
@@ -131,7 +135,7 @@ public class AnimoGraphBuilder {
 					//add this node as child
 					childrenStack.peek().add(currentNode);
 					//update parent's
-					if (level != levelTHE) {
+					if (level != _level_) {
 						CACHEStack.peek().update(cache);
 					}
 				} else {

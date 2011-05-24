@@ -18,10 +18,20 @@
  */
 package org.animotron;
 
+import org.neo4j.graphdb.Node;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public interface Statement {
 
+	Node build(String name);
+	
+	Node create();
+	
+	Node get();
+	
+	Node getOrCreate();
+	
 }

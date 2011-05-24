@@ -32,8 +32,8 @@ import org.neo4j.graphdb.Transaction;
  */
 public class AnimoGraph {
 
-	private static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
-	private static Node THE, CACHE, CALC;
+	public final static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
+	public final static Node THE, CACHE, CALC;
 	
 	static {
 		Transaction tx = AnimoGraph.beginTx();
@@ -51,7 +51,7 @@ public class AnimoGraph {
 		return AnimoIndex.graphDb.beginTx();
 	}
 	
-	protected static void clear (Node node){
+	public static void clear (Node node){
 		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
 			Node end = r.getEndNode();
 			r.delete();
@@ -61,7 +61,7 @@ public class AnimoGraph {
 		}
 	}
 	
-	private static Node getNode(Node parent, RelationshipType type) {
+	public static Node getNode(Node parent, RelationshipType type) {
 		Relationship r = parent.getSingleRelationship(type, Direction.OUTGOING);
 		return r == null ? null : r.getEndNode();
 	};
@@ -91,16 +91,6 @@ public class AnimoGraph {
 		return node;
 	}
 	
-	public static Node getTHE(String name) {
-		return getNode(THE, new RelationshipTypeTHE(name));
-	}
-
-	protected static Node createTHE(String name) {
-		Node node = createNode(THE, new RelationshipTypeTHE(name));
-		Properties.NAME.set(node, name);
-		return node;
-	}
-
 	protected static Node getOrCreateTHE(String name) {
 		Node node = getTHE(name);
 		if (node == null){

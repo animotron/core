@@ -21,7 +21,10 @@ package org.animotron.operator;
 import java.io.IOException;
 
 import org.animotron.annotation.Namespace;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.RelationshipTypeTHE;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -59,5 +62,15 @@ public class THE implements Operator, Stackable {
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
+	}
+
+	@Override
+	public Node build(String name) {
+		Node node = AnimoGraph.getNode(AnimoGraph.THE, new RelationshipTypeTHE(name));
+		if (node != null) {
+			AnimoGraph.clear(node);
+		}
+		node = AnimoGraph.createTHE(name);
+		return node;
 	}
 }
