@@ -26,6 +26,7 @@ import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
+import org.animotron.operator.Query;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -41,7 +42,7 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "get", uri = "animo/query/extract")
-public class GET implements Operator {
+public class GET implements Operator, Query {
 
 	private static class SingletonHolder { 
 		public static final GET INSTANCE = new GET();

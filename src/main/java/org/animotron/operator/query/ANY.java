@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
+import org.animotron.operator.Query;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -32,7 +33,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Namespace(prefix = "any", uri = "animo/query/any")
-public class ANY implements Operator {
+public class ANY implements Operator, Query {
 	
 	private static class SingletonHolder { 
 		public static final ANY INSTANCE = new ANY();

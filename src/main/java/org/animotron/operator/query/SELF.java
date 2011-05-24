@@ -16,32 +16,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.operator.query;
 
 import java.io.IOException;
 
 import org.animotron.annotation.Namespace;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Operator 'THE'.
+ * Query operator 'self'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-@Namespace(prefix = "the", uri = "animo/instance")
-public class THE implements Operator, Stackable {
+@Namespace(prefix = "self", uri = "animo/query/self")
+public class SELF implements Operator {
 	
 	private static class SingletonHolder { 
-		public static final THE INSTANCE = new THE();
+		public static final SELF INSTANCE = new SELF();
 	}
 	
-	public static THE getInstance() {
+	public static SELF getInstance() {
 		return SingletonHolder.INSTANCE;
 	}
 	
-	private THE() {}
+	private SELF() {}
 
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		//TODO: code
