@@ -40,7 +40,7 @@ public class ELEMENT implements Instruction {
 		public static final RelationshipType relationshipType = new RelationshipType() {
 			@Override
 			public String name() {
-				return "ELEMENT";
+				return "ML:ELEMENT";
 			}
 		};  
 	}

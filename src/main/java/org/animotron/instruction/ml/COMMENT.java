@@ -40,7 +40,7 @@ public class COMMENT implements Instruction {
 		public static final RelationshipType relationshipType = new RelationshipType() {
 			@Override
 			public String name() {
-				return "COMMENT";
+				return "ML:COMMENT";
 			}
 		};  
 	}

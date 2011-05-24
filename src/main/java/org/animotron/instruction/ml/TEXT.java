@@ -40,7 +40,7 @@ public class TEXT implements Instruction {
 		public static final RelationshipType relationshipType = new RelationshipType() {
 			@Override
 			public String name() {
-				return "TEXT";
+				return "ML:TEXT";
 			}
 		};  
 	}
