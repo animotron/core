@@ -27,7 +27,7 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class CDATA extends AbstractInstruction {
 	
-	public static final CDATA INSTANCE = new CDATA();
+	private static final CDATA INSTANCE = new CDATA();
 	public static CDATA getInstance() { return INSTANCE; }
 	
 	private CDATA() { super("cdata", "ml", "animo/ml"); }

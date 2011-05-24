@@ -27,9 +27,9 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class COMMENT extends AbstractInstruction {
 	
-	public static final COMMENT INSTANCE = new COMMENT();
-	
+	private static final COMMENT INSTANCE = new COMMENT();
 	public static COMMENT getInstance() { return INSTANCE; }
+	
 	private COMMENT() { super("comment", "ml", "animo/ml"); }
 	
 }

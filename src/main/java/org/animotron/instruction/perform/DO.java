@@ -28,7 +28,7 @@ import org.animotron.instruction.AbstractContainer;
  */
 public class DO extends AbstractContainer {
 	
-	public static final DO INSTANCE = new DO();
+	private static final DO INSTANCE = new DO();
 	public static DO getInstance() { return INSTANCE; }
 	
 	private DO() { super("do", "animo/perform"); }

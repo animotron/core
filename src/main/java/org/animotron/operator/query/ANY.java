@@ -18,8 +18,8 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Query;
+import org.animotron.operator.Reference;
 
 /**
  * Query operator 'ANY'.
@@ -27,9 +27,9 @@ import org.animotron.operator.Query;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ANY extends AbstractOperator implements Query {
+public class ANY extends Reference implements Query {
 	
-	public static final ANY INSTANCE = new ANY();
+	private static final ANY INSTANCE = new ANY();
 	public static ANY getInstance() { return INSTANCE; }
 	
 	private ANY() { super("any", "animo/query/any"); }

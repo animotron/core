@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.relation;
 
-import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Relation;
 
 /**
  * Operator 'IS'.
@@ -26,7 +26,7 @@ import org.animotron.operator.AbstractOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IS extends AbstractOperator {
+public class IS extends Relation {
 	
 	public static final IS INSTANCE = new IS();
 	public static IS getInstance() { return INSTANCE; }

@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Operator;
 
 /**
  * Compare operator 'EQ'.
@@ -26,9 +26,9 @@ import org.animotron.operator.AbstractOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EQ extends AbstractOperator {
+public class EQ extends Operator {
 	
-	public static final EQ INSTANCE = new EQ();
+	private static final EQ INSTANCE = new EQ();
 	public static EQ getInstance() { return INSTANCE; }
 	
 	private EQ() { super("eq", "animo/compare/eq"); }

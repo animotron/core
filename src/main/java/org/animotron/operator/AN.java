@@ -35,7 +35,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends AbstractOperator implements Evaluable{
+public class AN extends Reference implements Evaluable{
 	
 	private static final AN INSTANCE = new AN();
 	public static AN getInstance() { return INSTANCE; }
@@ -55,7 +55,7 @@ public class AN extends AbstractOperator implements Evaluable{
 			//get 'THE' relation
 			Node node = r.getEndNode();
 			String name = (String) node.getProperty("NAME");
-			for (Relationship t : node.getRelationships(new AnimoRelationshipType(name), Direction.INCOMING)) {
+			for (Relationship t : node.getRelationships(AnimoRelationshipType.get(name), Direction.INCOMING)) {
 				out.write(t);
 			}
 		}

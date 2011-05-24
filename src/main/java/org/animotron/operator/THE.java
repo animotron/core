@@ -20,7 +20,9 @@ package org.animotron.operator;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -29,22 +31,33 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstractOperator {
+public class THE extends Operator {
 	
-	public static final THE INSTANCE = new THE();
+	private static final THE INSTANCE = new THE();
 	public static THE getInstance() { return INSTANCE; }
 	
 	private THE() { super("the", "animo/instance"); }
 	
-	@Override
+	public RelationshipType relashionshipType(String name){
+		return AnimoRelationshipType.get(name(), name);
+	}
+	
 	public Node build(Node parent, String name) {
-		RelationshipType type = new AnimoRelationshipType(name(), name);
+		RelationshipType type = relashionshipType(name);
 		Node node = AnimoGraph.getNode(parent, type);
 		if (node != null) {
 			AnimoGraph.clear(node);
 		}
 		node = AnimoGraph.createNode(parent, type);
 		return node;
+	}
+	
+	public Relationship getRelationship(String name){
+		return AnimoGraph.THE.getSingleRelationship(relashionshipType(name), Direction.OUTGOING);
+	}
+	
+	public Node getNode(String name){
+		return getRelationship(name).getEndNode();
 	}
 	
 }

@@ -27,7 +27,7 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class XSL extends AbstractInstruction {
 	
-	public static final XSL INSTANCE = new XSL();
+	private static final XSL INSTANCE = new XSL();
 	public static XSL getInstance() { return INSTANCE; }
 	
 	private XSL() { super("xsl", "do", "animo/perform"); }

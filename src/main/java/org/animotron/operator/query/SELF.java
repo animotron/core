@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Reference;
 
 /**
  * Query operator 'self'.
@@ -26,9 +26,9 @@ import org.animotron.operator.AbstractOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class SELF extends AbstractOperator {
+public class SELF extends Reference {
 	
-	public static final SELF INSTANCE = new SELF();
+	private static final SELF INSTANCE = new SELF();
 	public static SELF getInstance() { return INSTANCE; }
 	
 	private SELF() { super("self", "animo/query/self"); }

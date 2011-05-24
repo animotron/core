@@ -18,7 +18,8 @@
  */
 package org.animotron.operator.relation;
 
-import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Relation;
+
 
 /**
  * Operator 'USE'.
@@ -26,9 +27,9 @@ import org.animotron.operator.AbstractOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class USE extends AbstractOperator {
+public class USE extends Relation {
 	
-	public static final USE INSTANCE = new USE();
+	private static final USE INSTANCE = new USE();
 	public static USE getInstance() { return INSTANCE; }
 	
 	private USE() { super("use", "animo/relation/use"); }

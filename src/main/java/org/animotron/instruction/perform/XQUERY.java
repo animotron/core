@@ -27,7 +27,7 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class XQUERY extends AbstractInstruction {
 	
-	public static final XQUERY INSTANCE = new XQUERY();
+	private static final XQUERY INSTANCE = new XQUERY();
 	public static XQUERY getInstance() { return INSTANCE; }
 	
 	private XQUERY() { super("xquery", "do", "animo/perform"); }

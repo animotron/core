@@ -27,7 +27,7 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class TEXT extends AbstractInstruction {
 	
-	public static final TEXT INSTANCE = new TEXT();
+	private static final TEXT INSTANCE = new TEXT();
 	public static TEXT getInstance() { return INSTANCE; }
 	
 	private TEXT() { super("text", "ml", "animo/ml"); }

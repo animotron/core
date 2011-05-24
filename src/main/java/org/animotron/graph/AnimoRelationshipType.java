@@ -34,8 +34,21 @@ public class AnimoRelationshipType implements RelationshipType {
 	
 	private static Map<String, RelationshipType> map = new WeakHashMap<String, RelationshipType>(); 
 	
+	private final String name;
+	
+	private AnimoRelationshipType(final String name) {
+		this.name = name;
+	}
+
+	private static String name (String name, String prefix) {
+		return prefix + ":" + name;
+	}
+
+	public static RelationshipType get(String name, String prefix) {
+		return get(name(prefix, name));
+	}
+
 	public static RelationshipType get(String name) {
-		
 		RelationshipType rt = map.get(name);
 		if (rt == null) {
 			rt = new AnimoRelationshipType(name);
@@ -43,20 +56,7 @@ public class AnimoRelationshipType implements RelationshipType {
 		}
 		return rt;
 	}
-
-	private final String prefix; 
-	private final String name;
 	
-	public AnimoRelationshipType(final String name) {
-		this.prefix = "";
-		this.name = name;
-	}
-
-	public AnimoRelationshipType(final String prefix, final String name) {
-		this.prefix = prefix + ":";
-		this.name = this.prefix + name;
-	}
-
 	@Override
 	public String name() {
 		return name;

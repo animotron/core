@@ -26,5 +26,7 @@ import org.neo4j.graphdb.RelationshipType;
  *
  */
 public interface Statement extends Container{
+	
 	public RelationshipType relationshipType();
+	
 }

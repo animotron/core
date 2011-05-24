@@ -18,16 +18,39 @@
  */
 package org.animotron.operator;
 
-
 import org.animotron.Statement;
-import org.neo4j.graphdb.Node;
+import org.animotron.graph.AnimoRelationshipType;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Operator extends Statement {
+public abstract class Operator implements Statement {
 	
-	public Node build(Node parent, String name);
+	private String prefix;
+	private String uri;
+	private RelationshipType relationshipType;
+	
+	public Operator(String prefix, String uri) {
+		this.prefix = prefix;
+		this.uri = uri;
+		this.relationshipType = AnimoRelationshipType.get(prefix.toUpperCase());
+	}
+	
+	@Override
+	public String name() {
+		return prefix;
+	}
+	
+	@Override
+	public String namespace() {
+		return uri;
+	}
+
+	@Override
+	public RelationshipType relationshipType() {
+		return relationshipType;
+	}
 	
 }

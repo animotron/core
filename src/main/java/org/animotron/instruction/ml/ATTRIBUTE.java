@@ -27,7 +27,7 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class ATTRIBUTE extends AbstractInstruction {
 	
-	public static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
+	private static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
 	public static ATTRIBUTE getInstance() { return INSTANCE; }
 	
 	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }

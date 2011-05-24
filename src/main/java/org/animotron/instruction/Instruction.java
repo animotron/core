@@ -19,7 +19,6 @@
 package org.animotron.instruction;
 
 import org.animotron.Statement;
-import org.neo4j.graphdb.Node;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -27,6 +26,4 @@ import org.neo4j.graphdb.Node;
  */
 public interface Instruction extends Statement {
 	
-	public Node build(Node parent);
-
 }

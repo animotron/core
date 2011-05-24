@@ -27,7 +27,7 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class ELEMENT extends AbstractInstruction {
 	
-	public static final ELEMENT INSTANCE = new ELEMENT();
+	private static final ELEMENT INSTANCE = new ELEMENT();
 	public static ELEMENT getInstance() { return INSTANCE; }
 	
 	private ELEMENT() { super("element", "ml", "animo/ml"); }

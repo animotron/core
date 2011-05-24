@@ -25,9 +25,9 @@ package org.animotron.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class PTRN extends AbstractOperator {
+public class PTRN extends Operator {
 	
-	public static final PTRN INSTANCE = new PTRN();
+	private static final PTRN INSTANCE = new PTRN();
 	public static PTRN getInstance() { return INSTANCE; }
 	
 	private PTRN() { super("ptrn", "animo/pattern"); }

@@ -16,21 +16,23 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator.compare;
+package org.animotron.operator;
 
-import org.animotron.operator.Operator;
+import org.neo4j.graphdb.Node;
+
 
 /**
- * Compare operator 'LE'.
- * 
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class LE extends Operator {
+public abstract class Relation extends Operator {
 	
-	private static final LE INSTANCE = new LE();
-	public static LE getInstance() { return INSTANCE; }
-	
-	private LE() { super("le", "animo/compare/le"); }
+	public Relation(String prefix, String uri) {
+		super(prefix, uri);
+	}
+
+	public void build(Node node){
+		node.createRelationshipTo(null, relationshipType());
+	}
 	
 }

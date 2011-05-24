@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Operator;
 
 /**
  * Compare operator 'LT'.
@@ -26,9 +26,9 @@ import org.animotron.operator.AbstractOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class LT extends AbstractOperator {
+public class LT extends Operator {
 	
-	public static final LT INSTANCE = new LT();
+	private static final LT INSTANCE = new LT();
 	public static LT getInstance() { return INSTANCE; }
 	
 	private LT() { super("lt", "animo/compare/lt"); }
