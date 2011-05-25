@@ -18,7 +18,6 @@
  */
 package org.animotron.operator;
 
-import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 
 
@@ -34,21 +33,8 @@ public abstract class Relation extends Operator {
 	}
 
 	@Override
-	public Instruction instruction(String name){
-		return new Relation.Instruction(this, name);
-	}
-	
-	public class Instruction extends AbstractInstruction {
-		
-		public Instruction(Operator container, String name) {
-			super(container, name);
-		}
-		
-		@Override
-		public Node build(Node node){
-			node.createRelationshipTo(THE.getInstance().node(name()), relationshipType());
-			return node;
-		}
-		
+	public Node build(Node node, String name){
+		node.createRelationshipTo(THE.getInstance().node(name), relationshipType());
+		return node;
 	}
 }

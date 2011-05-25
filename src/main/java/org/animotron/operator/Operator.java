@@ -19,8 +19,9 @@
 package org.animotron.operator;
 
 import org.animotron.Statement;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
-import org.animotron.instruction.Instruction;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -54,6 +55,8 @@ public abstract class Operator implements Statement {
 		return relationshipType;
 	}
 	
-	public abstract Instruction instruction(String name);
+	public Node build(Node node, String name){
+		return AnimoGraph.createNode(node, relationshipType);
+	}
 	
 }

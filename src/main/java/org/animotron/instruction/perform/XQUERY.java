@@ -19,7 +19,6 @@
 package org.animotron.instruction.perform;
 
 import org.animotron.instruction.AbstractInstruction;
-import org.animotron.instruction.ml.ML;
 
 /**
  * Instruction 'do:xquery', plug XQuery language.

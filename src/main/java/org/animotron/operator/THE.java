@@ -20,8 +20,6 @@ package org.animotron.operator;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
-import org.animotron.instruction.AbstractInstruction;
-import org.animotron.instruction.Instruction;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -53,44 +51,31 @@ public class THE extends Operator {
 	}
 
 	@Override
-	public Instruction instruction(String name) {
-		return new THE.Instruction(this, name);
+	public Node build(Node parent, String name) {
+		Node node = get(parent, name);
+		if (node != null) {
+			AnimoGraph.clear(node);
+		}
+		node = create(parent, name);
+		return node;
 	}
 	
-	public class Instruction extends AbstractInstruction {
-		
-		public Instruction(Operator container, String name) {
-			super(container, name);
+	public Node get(Node parent, String name) {
+		RelationshipType type = relashionshipType(name);
+		Node node = AnimoGraph.getNode(parent, type);
+		return node;
+	}
+	
+	public Node create(Node parent, String name) {
+		return super.build(parent, name);
+	}
+	
+	public Node getOrCreate(Node parent, String name) {
+		Node node = get(parent, name);
+		if (node == null) {
+			node = create(parent, name);
 		}
-		
-		@Override
-		public Node build(Node parent) {
-			Node node = get(parent);
-			if (node != null) {
-				AnimoGraph.clear(node);
-			}
-			node = create(parent);
-			return node;
-		}
-		
-		public Node get(Node parent) {
-			RelationshipType type = relashionshipType(name());
-			Node node = AnimoGraph.getNode(parent, type);
-			return node;
-		}
-		
-		public Node create(Node parent) {
-			return super.build(parent);
-		}
-		
-		public Node getOrCreate(Node parent) {
-			Node node = get(parent);
-			if (node == null) {
-				node = create(parent);
-			}
-			return node;
-		}
-		
+		return node;
 	}
 	
 }
