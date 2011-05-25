@@ -48,7 +48,7 @@ public abstract class Reference extends Operator {
 		
 		@Override
 		public Node build(Node parent){
-			Node node = AnimoGraph.createNode(parent, relationshipType());
+			Node node = super.build(parent);
 			node.createRelationshipTo(THE.getInstance().node(name()), AnimoRelationshipType.get("REF"));
 			return node;
 		}
