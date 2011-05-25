@@ -57,7 +57,7 @@ public class THE extends Operator {
 		return new THE.Instruction(this, name);
 	}
 	
-	private class Instruction extends AbstractInstruction {
+	public class Instruction extends AbstractInstruction {
 		
 		public Instruction(Operator container, String name) {
 			super(container, name);
@@ -65,15 +65,31 @@ public class THE extends Operator {
 		
 		@Override
 		public Node build(Node parent) {
-			RelationshipType type = relashionshipType(name());
-			Node node = AnimoGraph.getNode(parent, type);
+			Node node = get(parent);
 			if (node != null) {
 				AnimoGraph.clear(node);
 			}
-			node = AnimoGraph.createNode(parent, type);
+			node = create(parent);
 			return node;
 		}
 		
+		public Node get(Node parent) {
+			RelationshipType type = relashionshipType(name());
+			Node node = AnimoGraph.getNode(parent, type);
+			return node;
+		}
+		
+		public Node create(Node parent) {
+			return super.build(parent);
+		}
+		
+		public Node getOrCreate(Node parent) {
+			Node node = get(parent);
+			if (node == null) {
+				node = create(parent);
+			}
+			return node;
+		}
 		
 	}
 	

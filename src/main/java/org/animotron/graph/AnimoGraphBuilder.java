@@ -24,12 +24,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import org.animotron.Namespaces;
+import org.animotron.Container;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Operator;
+import org.animotron.operator.Reference;
 import org.animotron.operator.Relation;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
@@ -89,7 +90,6 @@ public class AnimoGraphBuilder {
 		} else {
 			instruction = ELEMENT.getInstance(); 
 		}
-			
 		
 		instractions.push(instruction);
 		
@@ -116,44 +116,72 @@ public class AnimoGraphBuilder {
 		
 		level--;
 		
-		Statement statement = instractions.pop();
-		Statement parent = instractions.peek();
+		Instruction currentInstruction = instractions.pop();
+		Container currentOperator = currentInstruction.container();
+		Instruction parentInstruction = instractions.peek();
+		Container parentOperator = parentInstruction.container();
 		
 		try {
-			if (statement instanceof THE){
-				THE the = (THE) statement;
-				Node node = the.build(AnimoGraph.THE, name);
+			
+			if (currentOperator instanceof THE){
+				THE.Instruction the = (THE.Instruction) currentInstruction; 
+				Node node = the.build(AnimoGraph.THE);
 				addChildren(node, children.pop());
 				if (level == 0) {
-					setTHE(the.relationship(name));
+					//setTHE(the.relationship(name));
 				}
-			} else if (parent instanceof THE && statement instanceof Relation){
-				THE the = (THE) parent;
-				Relation relation = (Relation) statement;
-				relation.build(the.node(name), name);
-				instractions.pop();
-			} else if (statement instanceof USE){
-				THE the = (THE) instractions.pop();
-				USE use = (USE) statement;
-				use.build(the.node(name));
-			} else if (level == _level_ && Namespaces.HAVE.equals(ns)){
-				List<Node> children = children.pop();
-				createHAVE(_node_, name, children);
+				
+			} else if (parentOperator instanceof THE && currentOperator instanceof Relation){
+				Relation.Instruction relation = (Relation.Instruction) currentInstruction; 
+				THE.Instruction the = (THE.Instruction) parentInstruction;
+				Node node = the.getOrCreate(AnimoGraph.THE);
+				relation.build(node);
+				
+			} else if (parentOperator instanceof THE && currentOperator instanceof HAVE){
+				Reference.Instruction have = (Reference.Instruction) currentInstruction; 
+				THE.Instruction the = (THE.Instruction) parentInstruction;
+				Node node = have.build(the.getOrCreate(AnimoGraph.THE));
+				addChildren(node, children.pop());
+				
 			} else {
+				
 				MessageDigest md = mds.pop();
-				byte [] cache = md.digest();
-				List<Node> children = children.pop();
-				Node currentNode = getOrCreateCACHE(MessageDigester.byteArrayToHex(cache), ns, name, children);
+				byte [] hash = md.digest();
+				
+				THE.Instruction the = THE.getInstance().instruction(MessageDigester.byteArrayToHex(hash)); 
+				Node cache = the.get(AnimoGraph.CACHE);
+				
+				if (cache == null){
+					
+					cache = the.create(AnimoGraph.CACHE);
+					
+					Node node;
+					
+					if (currentOperator instanceof USE) {
+						Relation.Instruction use = (Relation.Instruction) currentInstruction; 
+						node = use.build(cache);
+						
+					} else if (currentOperator instanceof Reference) {
+						Reference.Instruction reference = (Reference.Instruction) currentInstruction; 
+						node = reference.build(cache);
+						
+					} else {
+						ELEMENT element = ELEMENT.getInstance();
+						node = element.build(cache, ns, name);
+					}
+						
+					addChildren(node, children.pop());
+				}
+
 				if (level > 0) {
-					//add this node as child
-					children.peek().add(currentNode);
-					//update parent's
-					if (level != _level_) {
-						mds.peek().update(cache);
+					children.peek().add(cache);
+					if (!(parentOperator instanceof THE)) {
+						mds.peek().update(hash);
 					}
 				} else {
-					setTHE(AnimoGraph.getRelationCACHE(name));
+					//setTHE(AnimoGraph.getRelationCACHE(name));
 				}
+				
 			}
 
 			if (level == 0) {
@@ -191,21 +219,6 @@ public class AnimoGraphBuilder {
 //		}
 	}
 
-	private Node getOrCreateCACHE(String cache, String ns, String name, List<Node> children) {
-		Node node = AnimoGraph.getCACHE(cache);
-		if (node == null){
-			node = AnimoGraph.createCACHE(cache);
-			addChildren(AnimoGraph.createElement(node, name, ns), children);
-		}
-		return node;
-	}
-	
-	private Node createHAVE(Node the, String name, List<Node> children) {
-		Node node = AnimoGraph.createHAVE(the, name);
-		addChildren(node, children);
-		return node;
-	}
-	
 	private void addChildren(Node node, List<Node> children) {
 		for (Node n : children) {
 			for (Relationship r : n.getRelationships(Direction.OUTGOING)){

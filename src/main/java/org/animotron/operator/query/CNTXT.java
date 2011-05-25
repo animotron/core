@@ -18,6 +18,7 @@
  */
 package org.animotron.operator.query;
 
+import org.animotron.instruction.Instruction;
 import org.animotron.operator.Operator;
 
 /**
@@ -33,5 +34,11 @@ public class CNTXT extends Operator {
 	public static CNTXT getInstance() { return INSTANCE; }
 	
 	private CNTXT() { super("cntxt", "animo/query/context"); }
+
+	@Override
+	public Instruction instruction(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

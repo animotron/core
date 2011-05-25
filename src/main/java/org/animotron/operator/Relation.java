@@ -38,7 +38,7 @@ public abstract class Relation extends Operator {
 		return new Relation.Instruction(this, name);
 	}
 	
-	private class Instruction extends AbstractInstruction {
+	public class Instruction extends AbstractInstruction {
 		
 		public Instruction(Operator container, String name) {
 			super(container, name);
