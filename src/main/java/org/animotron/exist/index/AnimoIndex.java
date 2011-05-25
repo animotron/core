@@ -20,6 +20,7 @@ package org.animotron.exist.index;
 
 import java.io.File;
 
+import org.animotron.Statements;
 import org.apache.log4j.Logger;
 import org.exist.indexing.AbstractIndex;
 import org.exist.indexing.IndexWorker;
@@ -44,18 +45,8 @@ public class AnimoIndex extends AbstractIndex {
 	public static final String ID = AnimoIndex.class.getName();
 	public static final String FOLDER_NAME = "animo";
 	
-	private static AnimoIndex instance;
-	
-	public static AnimoIndex getInstance() {
-		return instance;
-	}
-
 	public static GraphDatabaseService graphDb;
 	public static IndexService indexService;
-	
-	public AnimoIndex() {
-		AnimoIndex.instance = this;
-	}
 	
 	public void configure(BrokerPool db, String dataDir, Element config) throws DatabaseConfigurationException {
 		super.configure(db, dataDir, config);
