@@ -29,9 +29,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.animotron.exist.AbstractTest;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Reader;
 import org.animotron.io.PipedInputObjectStream;
+import org.animotron.operator.THE;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
 import org.junit.Test;
@@ -77,7 +77,7 @@ public class SimpleTests extends AbstractTest {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
             
-            Relationship op = AnimoGraph.getRelationTHE("C");
+            Relationship op = THE.getInstance().relationship("C");
             
             assertNotNull(op);
 

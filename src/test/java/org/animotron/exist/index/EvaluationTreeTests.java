@@ -27,6 +27,7 @@ import java.util.Map;
 import org.animotron.Properties;
 import org.animotron.exist.AbstractTest;
 import org.animotron.graph.AnimoGraph;
+import org.animotron.operator.THE;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
 import org.junit.Test;
@@ -71,7 +72,7 @@ public class EvaluationTreeTests extends AbstractTest {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
 
-            Node node = AnimoGraph.getTHE("B");
+            Node node = THE.getInstance().node("B");
             
             assertNotNull(node);
             
