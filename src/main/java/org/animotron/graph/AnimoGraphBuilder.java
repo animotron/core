@@ -111,12 +111,10 @@ public class AnimoGraphBuilder {
 		
 		level--;
 		
-		
-		
 		Object[] currentItem = statements.pop();
 		Statement currentOperator = (Statement) currentItem[0];
-		Object[] parentItem = statements.peek();
-		Container parentOperator = (Statement) parentItem[0];
+		Object[] parentItem = level == 0 ? null : statements.peek();
+		Container parentOperator = parentItem == null ? null : (Statement) parentItem[0];
 		
 		try {
 			
@@ -153,22 +151,20 @@ public class AnimoGraphBuilder {
 					
 					cache = the.create(AnimoGraph.CACHE, hash);
 					
-					Node node;
-					
 					if (currentOperator instanceof USE) {
 						Relation use = (Relation) currentOperator; 
-						node = use.build(cache, name);
+						use.build(cache, name);
 						
 					} else if (currentOperator instanceof Reference) {
-						Reference reference = (Reference) currentOperator; 
-						node = reference.build(cache, name);
+						Reference reference = (Reference) currentOperator;
+						addChildren(reference.build(cache, name), children.pop());
 						
 					} else {
 						ELEMENT element = ELEMENT.getInstance();
-						node = element.build(cache, ns, name);
+						addChildren(element.build(cache, ns, name), children.pop());
 					}
 						
-					addChildren(node, children.pop());
+					
 				}
 
 				if (level > 0) {
