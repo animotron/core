@@ -125,7 +125,7 @@ public class AnimoGraphBuilder {
 				Node node = the.build(AnimoGraph.THE, name);
 				addChildren(node, children.pop());
 				if (level == 0) {
-					//setTHE(the.relationship(name));
+					setTHE(THE.getInstance().relationship(AnimoGraph.THE, name));
 				}
 				
 			} else if (parentOperator instanceof THE && currentOperator instanceof Relation){
@@ -177,7 +177,7 @@ public class AnimoGraphBuilder {
 						mds.peek().update(digest);
 					}
 				} else {
-					//setTHE(AnimoGraph.getRelationCACHE(name));
+					setTHE(THE.getInstance().relationship(AnimoGraph.CACHE, name));
 				}
 				
 			}

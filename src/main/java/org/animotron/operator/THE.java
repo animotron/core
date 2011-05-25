@@ -43,9 +43,12 @@ public class THE extends Operator {
 	}
 	
 	public Relationship relationship(String name){
-		return AnimoGraph.THE.getSingleRelationship(relashionshipType(name), Direction.OUTGOING);
+		return relationship(AnimoGraph.THE, name);
 	}
 	
+	public Relationship relationship(Node parent, String name) {
+		return parent.getSingleRelationship(relashionshipType(name), Direction.OUTGOING);
+	}
 	public Node node(String name){
 		return relationship(name).getEndNode();
 	}
@@ -77,5 +80,5 @@ public class THE extends Operator {
 		}
 		return node;
 	}
-	
+
 }
