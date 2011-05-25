@@ -149,6 +149,10 @@ public class Statements {
 		scanner.start();
 	}
 	
+	static {
+		scan();
+	}
+	
 	private static Map<String, Statement> statementsByNamespace = 
 		new FastMap<String, Statement>();
 	
@@ -174,6 +178,7 @@ public class Statements {
 	public static void ready() {
 		while (!ready) {
 			try {
+				//TODO: add timeout
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				return;
