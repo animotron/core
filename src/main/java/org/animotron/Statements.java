@@ -18,6 +18,10 @@
  */
 package org.animotron;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
@@ -46,8 +50,81 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class Statements {
 	
+	private static boolean fast = true;
 	private static boolean ready = false;
+	private static boolean run = false;
 	
+	private static Map<String, Statement> statementsByNamespace = 
+		new FastMap<String, Statement>();
+	
+	private static Map<String, Statement> statementsByRelationType = 
+		new FastMap<String, Statement>();
+
+
+	private static void loadClass(String name, Map<String, List<Instruction>> instructions) {
+        Class<? extends Statement> clazz;
+		try {
+			clazz = (Class<? extends Statement>) Class.forName( name );
+
+			try {
+				Method method = clazz.getMethod("getInstance", null);
+				Statement obj = (Statement) method.invoke(clazz, null);
+
+            	if (obj instanceof Instruction) {
+            		List<Instruction> list = instructions.get(obj.namespace());
+            		if (list == null) {
+            			list = new FastList<Instruction>();
+            			instructions.put(obj.namespace(), list);
+            		}
+            		list.add((Instruction) obj);
+					
+				} else if (obj instanceof InstructionContainer) {
+					statementsByNamespace.put(obj.namespace(), (Statement) obj);
+					
+				} else if (obj instanceof Operator) {
+					Operator op = (Operator) obj;
+					statementsByNamespace.put(obj.namespace(), op);
+	            	statementsByRelationType.put(op.relationshipType().name(), op);
+	            	
+				} else {
+					//TODO: log?
+				}
+			} catch (Exception e) {
+				//TODO: log
+				e.printStackTrace();
+			}
+		} catch (ClassNotFoundException e) {
+			//should not happen
+			//TODO: log
+			e.printStackTrace();
+		}
+	}
+	
+	private static void loadInstructions(Map<String, List<Instruction>> instructions) {
+		for (Entry<String, List<Instruction>> entry : instructions.entrySet()) {
+			Statement s = statementsByNamespace.get( entry.getKey() );
+			if (s instanceof InstructionContainer) {
+				InstructionContainer container = (InstructionContainer) s;
+				
+				Class<?> clazz = container.getClass();
+				
+				try {
+					Method method = clazz.getDeclaredMethod("addInstruction", Instruction.class);
+					method.setAccessible(true);
+					
+					for (Instruction i : entry.getValue()) {
+		            	method.invoke(container, i);
+		            	statementsByRelationType.put(i.relationshipType().name(), i);
+					}
+				} catch (Exception e) {
+					// TODO: log
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+
 	protected static void scan() {
 		Thread scanner = new Thread(new Runnable() {
 			@SuppressWarnings("unchecked")
@@ -82,70 +159,59 @@ public class Statements {
 
 				//scan classes
 				for (ClassInfo classInfo : foundClasses) {
-		            Class<? extends Statement> clazz;
-					try {
-						clazz = (Class<? extends Statement>) Class.forName( classInfo.getClassName() );
-
-						try {
-							Method method = clazz.getMethod("getInstance", null);
-							Statement obj = (Statement) method.invoke(clazz, null);
-
-			            	if (obj instanceof Instruction) {
-			            		List<Instruction> list = instructions.get(obj.namespace());
-			            		if (list == null) {
-			            			list = new FastList<Instruction>();
-			            			instructions.put(obj.namespace(), list);
-			            		}
-			            		list.add((Instruction) obj);
-								
-							} else if (obj instanceof InstructionContainer) {
-								statementsByNamespace.put(obj.namespace(), (Statement) obj);
-								
-							} else if (obj instanceof Operator) {
-								Operator op = (Operator) obj;
-								statementsByNamespace.put(obj.namespace(), op);
-				            	statementsByRelationType.put(op.relationshipType().name(), op);
-				            	
-							} else {
-								//TODO: log?
-							}
-						} catch (Exception e) {
-							//TODO: log
-							e.printStackTrace();
-						}
-					} catch (ClassNotFoundException e) {
-						//should not happen
-						//TODO: log
-						e.printStackTrace();
-					}
+					loadClass( classInfo.getClassName(), instructions );
 				}
 				
 				//add instructions to instruction container
-				for (Entry<String, List<Instruction>> entry : instructions.entrySet()) {
-					Statement s = statementsByNamespace.get( entry.getKey() );
-					if (s instanceof InstructionContainer) {
-						InstructionContainer container = (InstructionContainer) s;
-						
-						Class<?> clazz = container.getClass();
-						
-						try {
-							Method method = clazz.getDeclaredMethod("addInstruction", Instruction.class);
-							method.setAccessible(true);
-							
-							for (Instruction i : entry.getValue()) {
-				            	method.invoke(container, i);
-				            	statementsByRelationType.put(i.relationshipType().name(), i);
-							}
-						} catch (Exception e) {
-							// TODO: log
-							e.printStackTrace();
+				loadInstructions(instructions);
+				
+				if (fast)
+					try {
+						BufferedWriter bw = new BufferedWriter(new FileWriter("statements.ser"));
+						for (Statement s : statementsByNamespace.values()) {
+							bw.write(s.getClass().getName());
+							bw.write("\n");
 						}
+						for (Statement s : statementsByRelationType.values()) {
+							bw.write(s.getClass().getName());
+							bw.write("\n");
+						}
+						bw.close();
+					    
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				}
-				Statements.ready = true;
+
+			    Statements.ready = true;
+			    Statements.run = true;
 			}
 		});
 		
+		if (fast) {
+			try {
+				//instruction will be added to container
+            	Map<String, List<Instruction>> instructions = 
+            		new FastMap<String, List<Instruction>>();
+
+				//load classes
+				BufferedReader br = new BufferedReader(new FileReader("statements.ser"));
+				String strLine;
+				while ((strLine = br.readLine()) != null)   {
+					loadClass( strLine, instructions );
+				}
+				br.close();
+
+				//add instructions to instruction container
+				loadInstructions(instructions);
+				
+			    Statements.ready = true;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+			
+		scanner.setDaemon(true);
+		scanner.setPriority(scanner.MIN_PRIORITY);
 		scanner.start();
 	}
 	
@@ -153,16 +219,14 @@ public class Statements {
 		scan();
 	}
 	
-	private static Map<String, Statement> statementsByNamespace = 
-		new FastMap<String, Statement>();
-	
-	private static Map<String, Statement> statementsByRelationType = 
-		new FastMap<String, Statement>();
-
 	public static Statement namespace(String uri) {
 		ready();
 		
-		return statementsByNamespace.get(uri);
+		Statement s = statementsByNamespace.get(uri);
+//		if (s == null && run())
+//			s = statementsByNamespace.get(uri);
+		
+		return s;
 	}
 
 	public static Statement relationshipType(RelationshipType type) {
@@ -172,17 +236,35 @@ public class Statements {
 	public static Statement relationshipType(String name) {
 		ready();
 		
-		return statementsByRelationType.get(name);
+		Statement s = statementsByRelationType.get(name);
+//		if (s == null && run())
+//			s = statementsByRelationType.get(name);
+		
+		return s;
 	}
 
 	public static void ready() {
 		while (!ready) {
 			try {
+				System.out.println("ready?");
 				//TODO: add timeout
 				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				return;
 			}
 		}
+	}
+
+	public static boolean run() {
+		while (!run) {
+			try {
+				System.out.println("run?");
+				//TODO: add timeout
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
