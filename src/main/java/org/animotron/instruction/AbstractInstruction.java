@@ -19,7 +19,10 @@
 package org.animotron.instruction;
 
 import org.animotron.Container;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.operator.Operator;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -32,31 +35,55 @@ public abstract class AbstractInstruction implements Instruction {
 	private final String name;
 	private final String prefix;
 	private final String uri;
+	private final Container container;
 	
 	private RelationshipType relationshipType;
 	
-	public AbstractInstruction(final Container operator, final String name) {
+	public AbstractInstruction(final Container container, final String name) {
 		this.name = name;
-		this.prefix = operator.name();
-		this.uri = operator.namespace();
+		this.prefix = container.name();
+		this.uri = container.namespace();
+		this.container = container;
 		this.relationshipType = 
-			AnimoRelationshipType.get(this.prefix.toUpperCase() + ":" + this.name.toUpperCase());
+			AnimoRelationshipType.get(prefix.toUpperCase(), name.toUpperCase());
 	}
 	
+	public AbstractInstruction(Operator container, String name) {
+		this.name = name;
+		this.prefix = container.name();
+		this.uri = container.namespace();
+		this.container = container;
+		this.relationshipType = container.relationshipType(); 
+	}
+	
+	@Override
 	public String name() {
 		return name;
 	}
 
+	@Override
 	public String prefix() {
 		return prefix;
 	}
 
+	@Override
 	public String namespace() {
 		return uri;
 	}
 
+	@Override
+	public Container container() {
+		return container;
+	}
+
+	@Override
 	public RelationshipType relationshipType() {
 		return relationshipType;
+	}
+	
+	@Override
+	public Node build(Node parent){
+		return AnimoGraph.createNode(parent, relationshipType);
 	}
 	
 }

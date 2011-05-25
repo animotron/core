@@ -20,6 +20,8 @@ package org.animotron.operator;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.instruction.AbstractInstruction;
+import org.animotron.instruction.Instruction;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -52,12 +54,32 @@ public class THE extends Operator {
 		return node;
 	}
 	
-	public Relationship getRelationship(String name){
+	public Relationship relationship(String name){
 		return AnimoGraph.THE.getSingleRelationship(relashionshipType(name), Direction.OUTGOING);
 	}
 	
-	public Node getNode(String name){
-		return getRelationship(name).getEndNode();
+	public Node node(String name){
+		return relationship(name).getEndNode();
+	}
+
+	@Override
+	public Instruction instruction(String name) {
+		return new THE.Instruction(this, name);
+	}
+	
+	private class Instruction extends AbstractInstruction {
+		
+		public Instruction(Operator container, String name) {
+			super(container, name);
+		}
+		
+		@Override
+		public Node build(Node parent){
+			Node node = AnimoGraph.createNode(parent, relationshipType());
+			node.createRelationshipTo(THE.getInstance().node(name()), AnimoRelationshipType.get("REF"));
+			return node;
+		}
+		
 	}
 	
 }

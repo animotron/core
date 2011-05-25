@@ -20,6 +20,7 @@ package org.animotron.operator;
 
 import org.animotron.Statement;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.instruction.Instruction;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -52,5 +53,7 @@ public abstract class Operator implements Statement {
 	public RelationshipType relationshipType() {
 		return relationshipType;
 	}
+	
+	public abstract Instruction instruction(String name);
 	
 }

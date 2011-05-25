@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.operator.Operator;
+import org.animotron.operator.Reference;
 
 /**
  * Compare operator 'GT'.
@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GT extends Operator {
+public class GT extends Reference {
 	
 	private static final GT INSTANCE = new GT();
 	public static GT getInstance() { return INSTANCE; }

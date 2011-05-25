@@ -18,7 +18,9 @@
  */
 package org.animotron.instruction;
 
+import org.animotron.Container;
 import org.animotron.Statement;
+import org.neo4j.graphdb.Node;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -26,4 +28,6 @@ import org.animotron.Statement;
  */
 public interface Instruction extends Statement {
 	public String prefix();
+	public Container container();
+	public Node build(Node node);
 }

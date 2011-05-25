@@ -27,6 +27,10 @@ import java.util.Stack;
 import org.animotron.Namespaces;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.operator.Relation;
+import org.animotron.operator.THE;
+import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.USE;
 import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -47,13 +51,10 @@ public class AnimoGraphBuilder {
 	
 	private int level = 0;
 	
-	private Stack<MessageDigest> CACHEStack = new Stack<MessageDigest>();
-	private Stack<List<Node>> childrenStack = new Stack<List<Node>>();
+	private Stack<MessageDigest> mds = new Stack<MessageDigest>();
+	private Stack<List<Node>> children = new Stack<List<Node>>();
 	
-	private Node _node_ = null; int _level_ = 0;
-
-	Stack<Node> nodes = new Stack<Node>();
-	Stack<Integer> levels = new Stack<Integer>();
+	Stack<Statement> statements = new Stack<Statement>();
 	
 	public Relationship getTHE() {
 		return this.the;
@@ -76,31 +77,26 @@ public class AnimoGraphBuilder {
 		
 		level++;
 		
+		Statement parent = statements.peek();
 		Statement statement = Statements.namespace(ns);
 		
-		try {
-			if (statement instanceof Stackable){
-				if (level > 1) {
-					levels.push(_level_);
-					nodes.push(_node_);
-				}
-				_level_ = level;
-				_node_ = statement.build(name); 
-				childrenStack.push(new LinkedList<Node>());
-				
-			} else if (Namespaces.IS.equals(ns)) {
-				return;
-				
-			} else {
-				MessageDigest md = md();
-				md.update(ns.getBytes());
-				md.update(name.getBytes());
-				CACHEStack.push(md);
-				childrenStack.push(new LinkedList<Node>());
-			}
-		} catch (Exception e){
-			tx.finish();
-		}
+		statements.push(statement);
+		
+		if (statement instanceof Relation) 
+			return;
+		
+		children.push(new LinkedList<Node>());
+		
+		if (statement instanceof THE)
+			return;
+			
+		if (statement instanceof HAVE && parent instanceof THE)
+			return;
+			
+		MessageDigest md = md();
+		md.update(ns.getBytes());
+		md.update(name.getBytes());
+		mds.push(md);
 		
 	}
 
@@ -108,33 +104,40 @@ public class AnimoGraphBuilder {
 		
 		level--;
 		
+		Statement statement = statements.pop();
+		Statement parent = statements.peek();
+		
 		try {
-			if (Namespaces.THE.equals(ns)){
-				addChildren(_node_, childrenStack.pop());
-				if (level > 0) {
-					_node_ = nodes.pop();
-					_level_ = levels.pop();
-				} else {
-					setTHE(AnimoGraph.getRelationTHE(name));
+			if (statement instanceof THE){
+				THE the = (THE) statement;
+				Node node = the.build(AnimoGraph.THE, name);
+				addChildren(node, children.pop());
+				if (level == 0) {
+					setTHE(the.relationship(name));
 				}
-			} else if (level == _level_ && Namespaces.IS.equals(ns)){
-				AnimoGraph.addIsRelationship(_node_, AnimoGraph.getOrCreateTHE(name));
-			} else if (level == _level_ && Namespaces.USE.equals(ns)){
-				AnimoGraph.addUseRelationship(_node_, AnimoGraph.getOrCreateTHE(name));
+			} else if (parent instanceof THE && statement instanceof Relation){
+				THE the = (THE) parent;
+				Relation relation = (Relation) statement;
+				relation.build(the.node(name), name);
+				statements.pop();
+			} else if (statement instanceof USE){
+				THE the = (THE) statements.pop();
+				USE use = (USE) statement;
+				use.build(the.node(name));
 			} else if (level == _level_ && Namespaces.HAVE.equals(ns)){
-				List<Node> children = childrenStack.pop();
+				List<Node> children = children.pop();
 				createHAVE(_node_, name, children);
 			} else {
-				MessageDigest md = CACHEStack.pop();
+				MessageDigest md = mds.pop();
 				byte [] cache = md.digest();
-				List<Node> children = childrenStack.pop();
+				List<Node> children = children.pop();
 				Node currentNode = getOrCreateCACHE(MessageDigester.byteArrayToHex(cache), ns, name, children);
 				if (level > 0) {
 					//add this node as child
-					childrenStack.peek().add(currentNode);
+					children.peek().add(currentNode);
 					//update parent's
 					if (level != _level_) {
-						CACHEStack.peek().update(cache);
+						mds.peek().update(cache);
 					}
 				} else {
 					setTHE(AnimoGraph.getRelationCACHE(name));

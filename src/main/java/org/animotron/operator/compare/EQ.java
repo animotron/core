@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.operator.Operator;
+import org.animotron.operator.Reference;
 
 /**
  * Compare operator 'EQ'.
@@ -26,7 +26,7 @@ import org.animotron.operator.Operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EQ extends Operator {
+public class EQ extends Reference {
 	
 	private static final EQ INSTANCE = new EQ();
 	public static EQ getInstance() { return INSTANCE; }

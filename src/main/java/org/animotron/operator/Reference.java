@@ -20,10 +20,12 @@ package org.animotron.operator;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 
 
 /**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
@@ -33,10 +35,24 @@ public abstract class Reference extends Operator {
 		super(prefix, uri);
 	}
 
-	public Node build(Node parent, String name){
-		Node node = AnimoGraph.createNode(parent, relationshipType());
-		node.createRelationshipTo(THE.getInstance().getNode(name), AnimoRelationshipType.get("REF"));
-		return node;
+	@Override
+	public Instruction instruction(String name){
+		return new Reference.Instruction(this, name);
+	}
+	
+	private class Instruction extends AbstractInstruction {
+		
+		public Instruction(Operator container, String name) {
+			super(container, name);
+		}
+		
+		@Override
+		public Node build(Node parent){
+			Node node = AnimoGraph.createNode(parent, relationshipType());
+			node.createRelationshipTo(THE.getInstance().node(name()), AnimoRelationshipType.get("REF"));
+			return node;
+		}
+		
 	}
 	
 }

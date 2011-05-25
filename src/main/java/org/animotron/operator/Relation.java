@@ -18,10 +18,12 @@
  */
 package org.animotron.operator;
 
+import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 
 
 /**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
@@ -31,8 +33,22 @@ public abstract class Relation extends Operator {
 		super(prefix, uri);
 	}
 
-	public void build(Node node){
-		node.createRelationshipTo(null, relationshipType());
+	@Override
+	public Instruction instruction(String name){
+		return new Relation.Instruction(this, name);
 	}
 	
+	private class Instruction extends AbstractInstruction {
+		
+		public Instruction(Operator container, String name) {
+			super(container, name);
+		}
+		
+		@Override
+		public Node build(Node node){
+			node.createRelationshipTo(THE.getInstance().node(name()), relationshipType());
+			return node;
+		}
+		
+	}
 }
