@@ -20,6 +20,7 @@ package org.animotron;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.lang.reflect.Method;
@@ -31,6 +32,7 @@ import java.util.Map.Entry;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.animotron.instruction.AbstractContainer;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.operator.Operator;
@@ -60,7 +62,7 @@ public class Statements {
 	private static Map<String, Statement> statementsByRelationType = 
 		new FastMap<String, Statement>();
 
-
+	@SuppressWarnings("unchecked")
 	private static void loadClass(String name, Map<String, List<Instruction>> instructions) {
         Class<? extends Statement> clazz;
 		try {
@@ -104,12 +106,12 @@ public class Statements {
 		for (Entry<String, List<Instruction>> entry : instructions.entrySet()) {
 			Statement s = statementsByNamespace.get( entry.getKey() );
 			if (s instanceof InstructionContainer) {
-				InstructionContainer container = (InstructionContainer) s;
+				AbstractContainer container = (AbstractContainer) s;
 				
-				Class<?> clazz = container.getClass();
+				Class<? extends AbstractContainer> clazz = container.getClass();
 				
 				try {
-					Method method = clazz.getDeclaredMethod("addInstruction", Instruction.class);
+					Method method = clazz.getMethod("addInstruction", Instruction.class);
 					method.setAccessible(true);
 					
 					for (Instruction i : entry.getValue()) {
@@ -127,7 +129,6 @@ public class Statements {
 
 	protected static void scan() {
 		Thread scanner = new Thread(new Runnable() {
-			@SuppressWarnings("unchecked")
 			@Override
 			public void run() {
 				//create class finder
@@ -158,28 +159,34 @@ public class Statements {
             		new FastMap<String, List<Instruction>>();
 
 				//scan classes
-				for (ClassInfo classInfo : foundClasses) {
+				for (ClassInfo classInfo : foundClasses)
 					loadClass( classInfo.getClassName(), instructions );
-				}
 				
 				//add instructions to instruction container
 				loadInstructions(instructions);
 				
 				if (fast)
 					try {
-						BufferedWriter bw = new BufferedWriter(new FileWriter("statements.ser"));
+						File file = new File("statements.ser");
+						file.delete();
+						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
 						for (Statement s : statementsByNamespace.values()) {
+
 							bw.write(s.getClass().getName());
 							bw.write("\n");
-						}
-						for (Statement s : statementsByRelationType.values()) {
-							bw.write(s.getClass().getName());
-							bw.write("\n");
+							
+							if (s instanceof InstructionContainer) {
+								InstructionContainer container = (InstructionContainer) s;
+								
+								for (Instruction i : container.getInstructions()) {
+									bw.write(i.getClass().getName());
+									bw.write("\n");
+								}
+							}
 						}
 						bw.close();
 					    
 					} catch (Exception e) {
-						e.printStackTrace();
 					}
 
 			    Statements.ready = true;
@@ -206,12 +213,10 @@ public class Statements {
 				
 			    Statements.ready = true;
 			} catch (Exception e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 			
-		scanner.setDaemon(true);
-		scanner.setPriority(scanner.MIN_PRIORITY);
 		scanner.start();
 	}
 	
@@ -246,9 +251,9 @@ public class Statements {
 	public static void ready() {
 		while (!ready) {
 			try {
-				System.out.println("ready?");
 				//TODO: add timeout
-				Thread.sleep(500);
+				Thread.sleep(1000);
+				//System.out.println("ready?");
 			} catch (InterruptedException e) {
 				return;
 			}
@@ -258,9 +263,9 @@ public class Statements {
 	public static boolean run() {
 		while (!run) {
 			try {
-				System.out.println("run?");
 				//TODO: add timeout
-				Thread.sleep(500);
+				Thread.sleep(1000);
+				//System.out.println("run?");
 			} catch (InterruptedException e) {
 				return false;
 			}

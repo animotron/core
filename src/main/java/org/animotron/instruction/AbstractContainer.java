@@ -18,7 +18,10 @@
  */
 package org.animotron.instruction;
 
+import java.util.Collection;
 import java.util.Map;
+
+import org.neo4j.graphdb.RelationshipType;
 
 import javolution.util.FastMap;
 
@@ -48,11 +51,20 @@ public abstract class AbstractContainer implements InstructionContainer {
 	public final Map<String, Instruction> map = 
 		new FastMap<String, Instruction>();
 	
-	protected void addInstruction(Instruction instruction) {
+	public void addInstruction(Instruction instruction) {
 		map.put(instruction.name(), instruction);
 	}
 
 	public Instruction getInstruction(String name) {
 		return map.get(name);
+	}
+
+	public Collection<Instruction> getInstructions() {
+		return map.values();
+	}
+	
+	public RelationshipType relationshipType() {
+		//wrong! refactoring!
+		return null;
 	}
 }

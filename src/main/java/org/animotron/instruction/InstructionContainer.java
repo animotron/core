@@ -18,14 +18,20 @@
  */
 package org.animotron.instruction;
 
-import org.animotron.Container;
+import java.util.Collection;
+
+import org.animotron.Statement;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface InstructionContainer extends Container {
+public interface InstructionContainer extends Statement {
+	
+	//public String prefix();
 	
 	public Instruction getInstruction(String name);
+
+	public Collection<Instruction> getInstructions();
 	
 }

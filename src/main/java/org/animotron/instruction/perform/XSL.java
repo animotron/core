@@ -31,6 +31,6 @@ public class XSL extends AbstractInstruction {
 	private static final XSL INSTANCE = new XSL();
 	public static XSL getInstance() { return INSTANCE; }
 	
-	private XSL() { super(ML.getInstance(), "xsl"); }
+	private XSL() { super("xsl", "do", "animo/perform"); }
 
 }

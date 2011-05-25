@@ -30,6 +30,6 @@ public class XQUERY extends AbstractInstruction {
 	private static final XQUERY INSTANCE = new XQUERY();
 	public static XQUERY getInstance() { return INSTANCE; }
 	
-	private XQUERY() { super(DO.getInstance(), "xquery"); }
+	private XQUERY() { super("xquery", "do", "animo/perform"); }
 
 }

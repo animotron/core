@@ -18,7 +18,6 @@
  */
 package org.animotron.instruction;
 
-import org.animotron.Container;
 import org.animotron.Statement;
 import org.neo4j.graphdb.Node;
 
@@ -27,7 +26,10 @@ import org.neo4j.graphdb.Node;
  *
  */
 public interface Instruction extends Statement {
+	
 	public String prefix();
-	public Container container();
+
 	public Node build(Node node);
+
+	//public InstructionContainer container();
 }

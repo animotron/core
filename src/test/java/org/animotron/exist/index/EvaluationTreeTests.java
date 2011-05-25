@@ -65,7 +65,7 @@ public class EvaluationTreeTests extends AbstractTest {
         nameDataMap.put("B.xml", THE_B);
         
         configureAndStore(COLLECTION_CONFIG, nameDataMap);
-        
+        System.out.println("loaded ...");
         
         DBBroker broker = null;
         try {

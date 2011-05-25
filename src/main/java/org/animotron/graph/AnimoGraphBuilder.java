@@ -24,7 +24,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import org.animotron.Container;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
@@ -121,7 +120,7 @@ public class AnimoGraphBuilder {
 			if (!statements.empty()) {
 
 				Object[] parentItem = statements.peek();
-				Container parentOperator = (Statement) parentItem[0];
+				Statement parentOperator = (Statement) parentItem[0];
 				
 				if (parentOperator instanceof THE && currentOperator instanceof Relation){
 					Relation relation = (Relation) currentOperator;

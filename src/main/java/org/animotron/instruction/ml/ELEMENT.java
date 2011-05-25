@@ -33,11 +33,9 @@ public class ELEMENT extends AbstractInstruction {
 	private static final ELEMENT INSTANCE = new ELEMENT();
 	public static ELEMENT getInstance() { return INSTANCE; }
 	
-	private ELEMENT() { super(ML.getInstance(), "ml"); }
+	private ELEMENT() { this("element"); }
 	
-	protected ELEMENT(ML ml, String name) {
-		super(ml, name);
-	}
+	protected ELEMENT(String name) { super(name, "ml", "animo/ml"); }
 
 	public Node build (Node parent, String namespace, String name){
 		Node node = super.build(parent);

@@ -18,10 +18,8 @@
  */
 package org.animotron.instruction;
 
-import org.animotron.Container;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
-import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -35,25 +33,17 @@ public abstract class AbstractInstruction implements Instruction {
 	private final String name;
 	private final String prefix;
 	private final String uri;
-	private final Container container;
+	//private InstructionContainer container;
 	
 	private RelationshipType relationshipType;
 	
-	public AbstractInstruction(final Container container, final String name) {
+	public AbstractInstruction(final String name, final String prefix, final String uri) {
 		this.name = name;
-		this.prefix = container.name();
-		this.uri = container.namespace();
-		this.container = container;
+		this.prefix = prefix;
+		this.uri = uri;
+
 		this.relationshipType = 
 			AnimoRelationshipType.get(prefix.toUpperCase(), name.toUpperCase());
-	}
-	
-	public AbstractInstruction(Operator container, String name) {
-		this.name = name;
-		this.prefix = container.name();
-		this.uri = container.namespace();
-		this.container = container;
-		this.relationshipType = container.relationshipType(); 
 	}
 	
 	@Override
@@ -69,11 +59,6 @@ public abstract class AbstractInstruction implements Instruction {
 	@Override
 	public String namespace() {
 		return uri;
-	}
-
-	@Override
-	public Container container() {
-		return container;
 	}
 
 	@Override

@@ -29,6 +29,6 @@ public class CDATA extends TEXT {
 	private static final CDATA INSTANCE = new CDATA();
 	public static CDATA getInstance() { return INSTANCE; }
 	
-	private CDATA() { super(ML.getInstance(), "cdata"); }
+	private CDATA() { super("cdata"); }
 	
 }

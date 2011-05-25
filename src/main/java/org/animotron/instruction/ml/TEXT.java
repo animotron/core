@@ -33,12 +33,10 @@ public class TEXT extends AbstractInstruction {
 	private static final TEXT INSTANCE = new TEXT();
 	public static TEXT getInstance() { return INSTANCE; }
 	
-	private TEXT() { super(ML.getInstance(), "text"); }
+	private TEXT() { super("text", "ml", "animo/ml"); }
 
-	protected TEXT(ML ml, String name) {
-		super(ml, name);
-	}
-	
+	protected TEXT(String name) { super(name, "ml", "animo/ml"); }
+
 	public Node build (Node parent, String value){
 		Node node = super.build(parent);
 		Properties.VALUE.set(node, value);

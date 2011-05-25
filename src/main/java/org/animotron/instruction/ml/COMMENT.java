@@ -29,6 +29,6 @@ public class COMMENT extends TEXT {
 	private static final COMMENT INSTANCE = new COMMENT();
 	public static COMMENT getInstance() { return INSTANCE; }
 	
-	private COMMENT() { super(ML.getInstance(), "comment"); }
+	private COMMENT() { super("comment"); }
 	
 }

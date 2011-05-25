@@ -67,8 +67,12 @@ public class AbstractTest {
 		
 		"xmlns:get='animo/query/extract' " +
 		"xmlns:any='animo/query/any' " +
-		"xmlns:all='animo/query/all' ";
-	
+		"xmlns:all='animo/query/all' " +
+		
+		"xmlns:op='animo/operation' " +
+		
+		"xmlns:Q='animo/quantity' ";
+
 	protected DocumentSet configureAndStore(String configuration, Map<String, String> nameDataMap) {
         DBBroker broker = null;
         TransactionManager transact = null;

@@ -32,7 +32,7 @@ public class ATTRIBUTE extends ELEMENT {
 	private static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
 	public static ATTRIBUTE getInstance() { return INSTANCE; }
 	
-	private ATTRIBUTE() { super(ML.getInstance(), "attribute"); }
+	private ATTRIBUTE() { super("attribute"); }
 	
 	public Node build (Node parent, String namespace, String name, String value){
 		Node node = super.build(parent, namespace, name);
