@@ -51,8 +51,6 @@ public class AnimoGraphBuilder {
 	
 	private Transaction tx = AnimoGraph.beginTx();
 	
-	private int level = 0;
-	
 	private Stack<MessageDigest> mds = new Stack<MessageDigest>();
 	private Stack<List<Node>> children = new Stack<List<Node>>();
 	
@@ -76,8 +74,6 @@ public class AnimoGraphBuilder {
 	}
 	
 	public void startElement(String ns, String name) {
-		
-		level++;
 		
 		Statement statement = Statements.namespace(ns);
 		
@@ -109,76 +105,71 @@ public class AnimoGraphBuilder {
 
 	public void endElement(String ns, String name) {
 		
-		level--;
-		
-		Object[] currentItem = statements.pop();
-		Statement currentOperator = (Statement) currentItem[0];
-		Object[] parentItem = level == 0 ? null : statements.peek();
-		Container parentOperator = parentItem == null ? null : (Statement) parentItem[0];
-		
+
 		try {
+			
+			Object[] currentItem = statements.pop();
+			Statement currentOperator = (Statement) currentItem[0];
 			
 			if (currentOperator instanceof THE){
 				THE the = (THE) currentOperator;
 				Node node = the.build(AnimoGraph.THE, name);
 				addChildren(node, children.pop());
-				if (level == 0) {
-					setTHE(THE.getInstance().relationship(AnimoGraph.THE, name));
-				}
-				
-			} else if (parentOperator instanceof THE && currentOperator instanceof Relation){
-				Relation relation = (Relation) currentOperator;
-				THE the = (THE) parentOperator;
-				Node node = the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]);
-				relation.build(node, (String) currentItem[1]);
-				
-			} else if (parentOperator instanceof THE && currentOperator instanceof HAVE){
-				Reference have = (Reference) currentOperator; 
-				THE the = (THE) parentOperator;
-				Node node = have.build(the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]), name);
-				addChildren(node, children.pop());
-				
-			} else {
-				
-				MessageDigest md = mds.pop();
-				byte [] digest = md.digest();
-				String hash = MessageDigester.byteArrayToHex(digest);
-				
-				THE the = THE.getInstance(); 
-				Node cache = the.get(AnimoGraph.CACHE, hash);
-				
-				if (cache == null){
-					
-					cache = the.create(AnimoGraph.CACHE, hash);
-					
-					if (currentOperator instanceof USE) {
-						Relation use = (Relation) currentOperator; 
-						use.build(cache, name);
-						
-					} else if (currentOperator instanceof Reference) {
-						Reference reference = (Reference) currentOperator;
-						addChildren(reference.build(cache, name), children.pop());
-						
-					} else {
-						ELEMENT element = ELEMENT.getInstance();
-						addChildren(element.build(cache, ns, name), children.pop());
-					}
-						
-					
-				}
+				return;
+			}
+			
+			if (!statements.empty()) {
 
-				if (level > 0) {
-					children.peek().add(cache);
-					if (!(parentOperator instanceof THE)) {
-						mds.peek().update(digest);
-					}
+				Object[] parentItem = statements.peek();
+				Container parentOperator = (Statement) parentItem[0];
+				
+				if (parentOperator instanceof THE && currentOperator instanceof Relation){
+					Relation relation = (Relation) currentOperator;
+					THE the = (THE) parentOperator;
+					Node node = the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]);
+					relation.build(node, (String) currentItem[1]);
+					return;
+					
+				} else if (parentOperator instanceof THE && currentOperator instanceof HAVE){
+					Reference have = (Reference) currentOperator; 
+					THE the = (THE) parentOperator;
+					Node node = have.build(the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]), name);
+					addChildren(node, children.pop());
+					return;
+					
+				}
+			}
+				
+			MessageDigest md = mds.pop();
+			byte [] digest = md.digest();
+			String hash = MessageDigester.byteArrayToHex(digest);
+			
+			THE the = THE.getInstance(); 
+			Node cache = the.get(AnimoGraph.CACHE, hash);
+			
+			if (cache == null){
+				
+				cache = the.create(AnimoGraph.CACHE, hash);
+				
+				if (currentOperator instanceof USE) {
+					Relation use = (Relation) currentOperator; 
+					use.build(cache, name);
+					
+				} else if (currentOperator instanceof Reference) {
+					Reference reference = (Reference) currentOperator;
+					addChildren(reference.build(cache, name), children.pop());
+					
 				} else {
-					setTHE(THE.getInstance().relationship(AnimoGraph.CACHE, name));
+					ELEMENT element = ELEMENT.getInstance();
+					addChildren(element.build(cache, ns, name), children.pop());
 				}
 				
 			}
+			
+			children.peek().add(cache);
+			mds.peek().update(digest);
 
-			if (level == 0) {
+			if (statements.empty()) {
 				tx.success();
 				tx.finish();
 			}
