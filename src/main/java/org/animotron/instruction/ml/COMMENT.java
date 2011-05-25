@@ -18,14 +18,13 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.instruction.AbstractInstruction;
 
 /**
  * Instruction 'ml:comment'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class COMMENT extends AbstractInstruction {
+public class COMMENT extends TEXT {
 	
 	private static final COMMENT INSTANCE = new COMMENT();
 	public static COMMENT getInstance() { return INSTANCE; }

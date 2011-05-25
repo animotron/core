@@ -18,7 +18,10 @@
  */
 package org.animotron.instruction.ml;
 
+import org.animotron.Properties;
 import org.animotron.instruction.AbstractInstruction;
+import org.neo4j.graphdb.Node;
+
 
 /**
  * Instruction 'ml:text'.
@@ -32,4 +35,14 @@ public class TEXT extends AbstractInstruction {
 	
 	private TEXT() { super(ML.getInstance(), "text"); }
 
+	protected TEXT(ML ml, String name) {
+		super(ml, name);
+	}
+	
+	public Node build (Node parent, String value){
+		Node node = super.build(parent);
+		Properties.VALUE.set(node, value);
+		return node;
+	}
+	
 }

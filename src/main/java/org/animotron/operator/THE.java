@@ -44,16 +44,6 @@ public class THE extends Operator {
 		return AnimoRelationshipType.get(name(), name);
 	}
 	
-	public Node build(Node parent, String name) {
-		RelationshipType type = relashionshipType(name);
-		Node node = AnimoGraph.getNode(parent, type);
-		if (node != null) {
-			AnimoGraph.clear(node);
-		}
-		node = AnimoGraph.createNode(parent, type);
-		return node;
-	}
-	
 	public Relationship relationship(String name){
 		return AnimoGraph.THE.getSingleRelationship(relashionshipType(name), Direction.OUTGOING);
 	}
@@ -74,11 +64,16 @@ public class THE extends Operator {
 		}
 		
 		@Override
-		public Node build(Node parent){
-			Node node = AnimoGraph.createNode(parent, relationshipType());
-			node.createRelationshipTo(THE.getInstance().node(name()), AnimoRelationshipType.get("REF"));
+		public Node build(Node parent) {
+			RelationshipType type = relashionshipType(name());
+			Node node = AnimoGraph.getNode(parent, type);
+			if (node != null) {
+				AnimoGraph.clear(node);
+			}
+			node = AnimoGraph.createNode(parent, type);
 			return node;
 		}
+		
 		
 	}
 	

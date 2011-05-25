@@ -18,18 +18,26 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.instruction.AbstractInstruction;
+import org.animotron.Properties;
+import org.neo4j.graphdb.Node;
+
 
 /**
  * Instruction 'ml:attribute'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class ATTRIBUTE extends AbstractInstruction {
+public class ATTRIBUTE extends ELEMENT {
 	
 	private static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
 	public static ATTRIBUTE getInstance() { return INSTANCE; }
 	
 	private ATTRIBUTE() { super(ML.getInstance(), "attribute"); }
+	
+	public Node build (Node parent, String namespace, String name, String value){
+		Node node = super.build(parent, namespace, name);
+		Properties.VALUE.set(node, value);
+		return node;
+	}
 	
 }

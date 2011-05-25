@@ -27,6 +27,9 @@ import java.util.Stack;
 import org.animotron.Namespaces;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.instruction.Instruction;
+import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.operator.Operator;
 import org.animotron.operator.Relation;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
@@ -54,7 +57,7 @@ public class AnimoGraphBuilder {
 	private Stack<MessageDigest> mds = new Stack<MessageDigest>();
 	private Stack<List<Node>> children = new Stack<List<Node>>();
 	
-	Stack<Statement> statements = new Stack<Statement>();
+	Stack<Instruction> instractions = new Stack<Instruction>();
 	
 	public Relationship getTHE() {
 		return this.the;
@@ -77,10 +80,18 @@ public class AnimoGraphBuilder {
 		
 		level++;
 		
-		Statement parent = statements.peek();
 		Statement statement = Statements.namespace(ns);
 		
-		statements.push(statement);
+		Instruction instruction;
+		
+		if (statement instanceof Operator) {
+			instruction = ((Operator) statement).instruction(name); 
+		} else {
+			instruction = ELEMENT.getInstance(); 
+		}
+			
+		
+		instractions.push(instruction);
 		
 		if (statement instanceof Relation) 
 			return;
@@ -90,6 +101,7 @@ public class AnimoGraphBuilder {
 		if (statement instanceof THE)
 			return;
 			
+		Statement parent = instractions.peek();
 		if (statement instanceof HAVE && parent instanceof THE)
 			return;
 			
@@ -104,8 +116,8 @@ public class AnimoGraphBuilder {
 		
 		level--;
 		
-		Statement statement = statements.pop();
-		Statement parent = statements.peek();
+		Statement statement = instractions.pop();
+		Statement parent = instractions.peek();
 		
 		try {
 			if (statement instanceof THE){
@@ -119,9 +131,9 @@ public class AnimoGraphBuilder {
 				THE the = (THE) parent;
 				Relation relation = (Relation) statement;
 				relation.build(the.node(name), name);
-				statements.pop();
+				instractions.pop();
 			} else if (statement instanceof USE){
-				THE the = (THE) statements.pop();
+				THE the = (THE) instractions.pop();
 				USE use = (USE) statement;
 				use.build(the.node(name));
 			} else if (level == _level_ && Namespaces.HAVE.equals(ns)){
