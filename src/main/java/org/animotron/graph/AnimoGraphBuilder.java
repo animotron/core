@@ -156,7 +156,7 @@ public class AnimoGraphBuilder {
 				tx.success();
 				tx.finish();
 			} else {
-				mds.peek().update(digest);
+				((MessageDigest)statements.peek()[2]).update(digest);
 			}
 			
 		} catch (Exception e){
