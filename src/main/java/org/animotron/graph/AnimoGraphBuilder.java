@@ -144,7 +144,7 @@ public class AnimoGraphBuilder {
 			String hash = MessageDigester.byteArrayToHex(digest);
 			
 			THE the = THE.getInstance(); 
-			Node cache = the.get(AnimoGraph.CACHE, hash);
+			Node cache = the.node(AnimoGraph.CACHE, hash);
 			
 			if (cache == null){
 				

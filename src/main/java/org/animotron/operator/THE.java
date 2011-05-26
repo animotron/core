@@ -47,15 +47,35 @@ public class THE extends Operator {
 	}
 	
 	public Relationship relationship(Node parent, String name) {
-		return parent.getSingleRelationship(relashionshipType(name), Direction.OUTGOING);
+		RelationshipType type = relashionshipType(name);
+		return parent.getSingleRelationship(type, Direction.OUTGOING);
 	}
+	
 	public Node node(String name){
-		return relationship(name).getEndNode();
+		return node(AnimoGraph.THE, name);
 	}
 
+	public Node node(Node parent, String name) {
+		RelationshipType type = relashionshipType(name);
+		Node node = AnimoGraph.getNode(parent, type);
+		return node;
+	}
+	
+	public Node create(Node parent, String name) {
+		RelationshipType type = relashionshipType(name);
+		Node node = AnimoGraph.createNode(parent, type);
+		return node;
+	}
+	
+	public Node getOrCreate(Node parent, String name) {
+		RelationshipType type = relashionshipType(name);
+		Node node = AnimoGraph.getOrCreateNode(parent, type);
+		return node;
+	}
+	
 	@Override
 	public Node build(Node parent, String name) {
-		Node node = get(parent, name);
+		Node node = node(parent, name);
 		if (node != null) {
 			AnimoGraph.clear(node);
 		}
@@ -63,22 +83,5 @@ public class THE extends Operator {
 		return node;
 	}
 	
-	public Node get(Node parent, String name) {
-		RelationshipType type = relashionshipType(name);
-		Node node = AnimoGraph.getNode(parent, type);
-		return node;
-	}
-	
-	public Node create(Node parent, String name) {
-		return super.build(parent, name);
-	}
-	
-	public Node getOrCreate(Node parent, String name) {
-		Node node = get(parent, name);
-		if (node == null) {
-			node = create(parent, name);
-		}
-		return node;
-	}
 
 }
