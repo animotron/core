@@ -99,6 +99,10 @@ public class AnimoGraphBuilder {
 				THE the = (THE) currentOperator;
 				Node node = the.build(AnimoGraph.THE, name);
 				addChildren(node, (List<Node>) currentItem[3]);
+				if (statements.empty()) {
+					tx.success();
+					tx.finish();
+				}
 				return;
 			}
 			
@@ -146,17 +150,20 @@ public class AnimoGraphBuilder {
 				} else {
 					ELEMENT element = ELEMENT.getInstance();
 					addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
+					
 				}
 				
 			}
 			
-			((List<Node>) currentItem[3]).add(cache);
-			
 			if (statements.empty()) {
 				tx.success();
 				tx.finish();
+				
 			} else {
-				((MessageDigest)statements.peek()[2]).update(digest);
+				Object[] parentItem = statements.peek();
+				((MessageDigest) parentItem[2]).update(digest);
+				((List<Node>) parentItem[3]).add(cache);
+				
 			}
 			
 		} catch (Exception e){
