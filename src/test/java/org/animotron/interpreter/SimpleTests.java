@@ -18,8 +18,7 @@
  */
 package org.animotron.interpreter;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,7 +27,10 @@ import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import junit.framework.Assert;
+
 import org.animotron.exist.AbstractTest;
+import org.animotron.exist.index.AnimoIndex;
 import org.animotron.graph.Reader;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.THE;
@@ -36,6 +38,7 @@ import org.exist.EXistException;
 import org.exist.storage.DBBroker;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -72,6 +75,8 @@ public class SimpleTests extends AbstractTest {
 	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
         }
         
+        Transaction tx = AnimoIndex.graphDb.beginTx();
+        
         DBBroker broker = null;
         try {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
@@ -80,30 +85,21 @@ public class SimpleTests extends AbstractTest {
             Relationship op = THE.getInstance().relationship("C");
             
             assertNotNull(op);
+            
+            System.out.println(op);
 
             //System.out.println("get:A an:B");
-            //PipedInputObjectStream instream = 
         	Calculator.eval(op);
-            //toConsole(instream);
             
         	InputStream stream = Reader.read(op);
-            toConsole(stream);
+            assertEquals(stream, "<THE:C><have:A>a@b</have:A></THE:C>");
+            //toConsole(stream);
             
-            //RESULT: <the:C><have:A>a@b</have:A></the:C>
-            
-//            assertEquals(1, set.getItemCount());
-//            
-//            Set<String> expect = new HashSet<String>();
-//            expect.add("C");
-//            
-//            for (int i = 0; i < set.getItemCount(); i++) {
-//            	String name = set.get(i).getNode().getLocalName();
-//            	assertTrue(name, expect.remove(name));
-//            }
         } catch (EXistException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
 		} finally {
+			tx.finish();
         	pool.release(broker);
         }
         //System.out.println("done.");
@@ -134,5 +130,27 @@ public class SimpleTests extends AbstractTest {
 		} finally { 
 			stream.close(); 
 		} 
+	}
+
+	private void assertEquals(InputStream stream, String expecteds) throws IOException {
+		if (stream == null) return;
+		
+		StringBuilder b = new StringBuilder(expecteds.length()); 
+		
+		char[] buffer = new char[1024]; 
+		try { 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
+
+			int n; 
+			while ((n = reader.read(buffer)) != -1) {
+				for (int i = 0; i < n; i++) {
+					b.append((char)buffer[i]);
+				}
+			} 
+		} finally { 
+			stream.close(); 
+		}
+		
+		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 }

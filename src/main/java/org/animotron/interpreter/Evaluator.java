@@ -21,14 +21,20 @@ package org.animotron.interpreter;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.animotron.Statement;
+import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AN;
+import org.animotron.operator.Operator;
 import org.animotron.operator.query.GET;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -57,79 +63,44 @@ class Evaluator implements Runnable {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
 
+		System.out.println("Evaluator op = "+op);
 		
+		GraphDatabaseService graphdb = op.getGraphDatabase();
+		Transaction tx = graphdb.beginTx();
 		try {
 			Relationship r = null;
 			
-			Iterator<Relationship> it = op.getEndNode().getRelationships(Direction.OUTGOING).iterator();
+			Node node = op.getEndNode();
+			System.out.println("Evaluator node = "+node);
+			Iterator<Relationship> it = node.getRelationships(Direction.OUTGOING).iterator();
 			while (it.hasNext()) {
 				
 				r = it.next();
 				RelationshipType type = r.getType();
 				
-				if (type instanceof RelationshipTypes) {
-					RelationshipTypes oper = (RelationshipTypes) type;
-					
-					switch (oper) {
-					case AN:
-						//an:empty (return nothing)
-						//an:context (process children)
-						//an:self (return root)
-						//an:* (reference)
-						
-						AN.getInstance().eval(r, out, isLast(it));
-						break;
-	
-					case ANY:
-						
-						out.write("any ");
-						break;
-	
-					case ALL:
-						
-						out.write("all ");
-						break;
-					
-					case PTRN:
-						
-						out.write("ptrn ");
-						break;
-					
-					case GET:
-						
-						GET.getInstance().eval(r, out, isLast(it));
-						break;
-	
-					case SELF:
-						//self:instance
-						//self:*
-						
-						out.write("self ");
-						break;
-	
-					case DO:
-						//do:skip (return children)
-						//do:xquery (perform in-line XQuery)
-						//do:xslt (perform in-line XSLT)
-						
-						out.write("do ");
-						break;
-	
-					default:
-						out.write("? ");
-						break;
-					}
-				} else {
-					//others
-				}
+				System.out.println(type.name());
+				
+				Statement s = Statements.relationshipType(type);
+
+				if (s == null)
+					;//???
+				else if (s instanceof Operator) {
+					Operator oper = (Operator) s;
+					oper.eval(r, out, isLast(it));
+				} else 
+					;//???
 			}
 
 			out.write("\n");
 			out.close();
+			
+			tx.success();
 		
 		} catch (IOException e) {
 			e.printStackTrace();
 			//XXX: terminate?
+		} finally {
+			tx.finish();
 		}
 
 		Object n; 
