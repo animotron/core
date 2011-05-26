@@ -66,4 +66,8 @@ public class AnimoRelationshipType implements RelationshipType {
 	public static boolean isSupertypeOf(RelationshipType type){
 		return type.name().startsWith("THE:");
 	}
+	
+	public String toString() {
+		return ""+name+"";
+	}
 }

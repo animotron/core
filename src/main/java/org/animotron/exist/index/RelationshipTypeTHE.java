@@ -26,7 +26,7 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class RelationshipTypeTHE implements RelationshipType {
 	
-	private final static String prefix = RelationshipTypes.THE + ":"; 
+	private final static String prefix = "THE:"; 
 	private String name;
 	
 	public RelationshipTypeTHE(String name){

@@ -76,13 +76,17 @@ public class AnimoGraphBuilder {
 		if (statement == null) {
 			statement = ELEMENT.getInstance(); 
 		}
+
+		//move the instance to GC & create new
+		if (statement instanceof THE){
+			((THE) statement).build(AnimoGraph.THE, name);
+		}
 		
 		MessageDigest md = md();
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
 		Object[] item = {statement, name, md, new LinkedList<Node>()};
-		
 		statements.push(item);
 		
 	}
@@ -94,17 +98,6 @@ public class AnimoGraphBuilder {
 			
 			Object[] currentItem = statements.pop();
 			Statement currentOperator = (Statement) currentItem[0];
-			
-			if (currentOperator instanceof THE){
-				THE the = (THE) currentOperator;
-				Node node = the.build(AnimoGraph.THE, name);
-				addChildren(node, (List<Node>) currentItem[3]);
-				if (statements.empty()) {
-					tx.success();
-					tx.finish();
-				}
-				return;
-			}
 			
 			if (!statements.empty()) {
 
@@ -121,7 +114,8 @@ public class AnimoGraphBuilder {
 				} else if (parentOperator instanceof THE && currentOperator instanceof HAVE){
 					Reference have = (Reference) currentOperator; 
 					THE the = (THE) parentOperator;
-					Node node = have.build(the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]), name);
+					Node n = the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]);
+					Node node = have.build(n, name);
 					addChildren(node, (List<Node>) currentItem[3]);
 					return;
 					
@@ -152,10 +146,11 @@ public class AnimoGraphBuilder {
 					addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
 					
 				}
-				
 			}
 			
 			if (statements.empty()) {
+				Node n = the.getOrCreate(AnimoGraph.THE, (String) currentItem[1]);
+				addChildren(n, (List<Node>) currentItem[3]);
 				tx.success();
 				tx.finish();
 				
@@ -163,7 +158,6 @@ public class AnimoGraphBuilder {
 				Object[] parentItem = statements.peek();
 				((MessageDigest) parentItem[2]).update(digest);
 				((List<Node>) parentItem[3]).add(cache);
-				
 			}
 			
 		} catch (Exception e){
