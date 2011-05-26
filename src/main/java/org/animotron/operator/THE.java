@@ -18,6 +18,7 @@
  */
 package org.animotron.operator;
 
+import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.neo4j.graphdb.Direction;
@@ -39,7 +40,7 @@ public class THE extends Operator {
 	private THE() { super("the", "animo/instance"); }
 	
 	public RelationshipType relashionshipType(String name){
-		return AnimoRelationshipType.get(name(), name);
+		return AnimoRelationshipType.get(name().toUpperCase(), name);
 	}
 	
 	public Relationship relationship(String name){
@@ -64,6 +65,7 @@ public class THE extends Operator {
 	public Node create(Node parent, String name) {
 		RelationshipType type = relashionshipType(name);
 		Node node = AnimoGraph.createNode(parent, type);
+		Properties.NAME.set(node, name);
 		return node;
 	}
 	
