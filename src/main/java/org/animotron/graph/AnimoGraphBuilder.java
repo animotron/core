@@ -50,9 +50,6 @@ public class AnimoGraphBuilder {
 	
 	private Transaction tx = AnimoGraph.beginTx();
 	
-	private Stack<MessageDigest> mds = new Stack<MessageDigest>();
-	private Stack<List<Node>> children = new Stack<List<Node>>();
-	
 	Stack<Object[]> statements = new Stack<Object[]>();
 	
 	public Relationship getTHE() {
@@ -80,25 +77,13 @@ public class AnimoGraphBuilder {
 			statement = ELEMENT.getInstance(); 
 		}
 		
-		Object[] item = {statement, name};
-		statements.push(item);
-		
-		if (statement instanceof Relation) 
-			return;
-		
-		children.push(new LinkedList<Node>());
-		
-		if (statement instanceof THE)
-			return;
-			
-		Statement parent = (Statement) statements.peek()[0];
-		if (statement instanceof HAVE && parent instanceof THE)
-			return;
-			
 		MessageDigest md = md();
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
-		mds.push(md);
+		
+		Object[] item = {statement, name, md, new LinkedList<Node>()};
+		
+		statements.push(item);
 		
 	}
 
@@ -113,7 +98,7 @@ public class AnimoGraphBuilder {
 			if (currentOperator instanceof THE){
 				THE the = (THE) currentOperator;
 				Node node = the.build(AnimoGraph.THE, name);
-				addChildren(node, children.pop());
+				addChildren(node, (List<Node>) currentItem[3]);
 				return;
 			}
 			
@@ -133,13 +118,13 @@ public class AnimoGraphBuilder {
 					Reference have = (Reference) currentOperator; 
 					THE the = (THE) parentOperator;
 					Node node = have.build(the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]), name);
-					addChildren(node, children.pop());
+					addChildren(node, (List<Node>) currentItem[3]);
 					return;
 					
 				}
 			}
 				
-			MessageDigest md = mds.pop();
+			MessageDigest md = (MessageDigest) currentItem[2];
 			byte [] digest = md.digest();
 			String hash = MessageDigester.byteArrayToHex(digest);
 			
@@ -156,21 +141,22 @@ public class AnimoGraphBuilder {
 					
 				} else if (currentOperator instanceof Reference) {
 					Reference reference = (Reference) currentOperator;
-					addChildren(reference.build(cache, name), children.pop());
+					addChildren(reference.build(cache, name), (List<Node>) currentItem[3]);
 					
 				} else {
 					ELEMENT element = ELEMENT.getInstance();
-					addChildren(element.build(cache, ns, name), children.pop());
+					addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
 				}
 				
 			}
 			
-			children.peek().add(cache);
-			mds.peek().update(digest);
-
+			((List<Node>) currentItem[3]).add(cache);
+			
 			if (statements.empty()) {
 				tx.success();
 				tx.finish();
+			} else {
+				mds.peek().update(digest);
 			}
 			
 		} catch (Exception e){
