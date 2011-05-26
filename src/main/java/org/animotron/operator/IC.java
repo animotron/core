@@ -25,7 +25,7 @@ package org.animotron.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends Reference {
+public class IC extends Operator {
 	
 	private static final IC INSTANCE = new IC();
 	public static IC getInstance() { return INSTANCE; }

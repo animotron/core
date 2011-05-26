@@ -18,8 +18,8 @@
  */
 package org.animotron.operator.query;
 
+import org.animotron.operator.Operator;
 import org.animotron.operator.Query;
-import org.animotron.operator.Reference;
 
 /**
  * Query operator 'ALL'.
@@ -27,7 +27,7 @@ import org.animotron.operator.Reference;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ALL extends Reference implements Query {
+public class ALL extends Operator implements Query {
 	
 	private static final ALL INSTANCE = new ALL();
 	public static ALL getInstance() { return INSTANCE; }

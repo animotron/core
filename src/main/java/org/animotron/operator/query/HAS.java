@@ -18,9 +18,9 @@
  */
 package org.animotron.operator.query;
 
+import org.animotron.operator.Operator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
-import org.animotron.operator.Reference;
 
 /**
  * Query operator 'HAS'.
@@ -28,7 +28,7 @@ import org.animotron.operator.Reference;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAS extends Reference implements Query, Predicate {
+public class HAS extends Operator implements Query, Predicate {
 	
 	private static final HAS INSTANCE = new HAS();
 	public static HAS getInstance() { return INSTANCE; }

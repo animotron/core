@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.relation;
 
-import org.animotron.operator.Reference;
+import org.animotron.operator.Operator;
 
 /**
  * Operator 'HAVE'.
@@ -26,7 +26,7 @@ import org.animotron.operator.Reference;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAVE extends Reference {
+public class HAVE extends Operator {
 	
 	private static final HAVE INSTANCE = new HAVE();
 	public static HAVE getInstance() { return INSTANCE; }
