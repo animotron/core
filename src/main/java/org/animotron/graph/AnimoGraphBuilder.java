@@ -108,6 +108,7 @@ public class AnimoGraphBuilder {
 					tx.success();
 					tx.finish();
 				}
+				return;
 			}
 			
 			if (!statements.empty()) {
