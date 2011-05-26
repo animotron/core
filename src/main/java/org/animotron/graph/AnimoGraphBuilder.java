@@ -26,6 +26,7 @@ import java.util.Stack;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Reference;
 import org.animotron.operator.Relation;
@@ -51,7 +52,8 @@ public class AnimoGraphBuilder {
 	private Transaction tx = AnimoGraph.beginTx();
 	
 	Stack<Object[]> statements = new Stack<Object[]>();
-	
+	Object[] childItem = {null, null, null, null, null};
+		
 	public Relationship getTHE() {
 		return this.the;
 	}
@@ -107,53 +109,59 @@ public class AnimoGraphBuilder {
 					tx.success();
 					tx.finish();
 				}
+				childItem = currentItem; 
 				return;
 			}
 			
-			if (!statements.empty()) {
-
-				Object[] parentItem = statements.peek();
-				Statement parentOperator = (Statement) parentItem[0];
+			Statement childOperator = (Statement) childItem[0]; 
+			
+			if (currentOperator instanceof THE && childOperator instanceof Relation){
+				Relation relation = (Relation) childOperator;
+				Node the = (Node) currentItem[4];
+				relation.build(the, (String) childItem[1]);
+				return;
 				
-				if (parentOperator instanceof THE && currentOperator instanceof Relation){
-					Relation relation = (Relation) currentOperator;
-					Node the = (Node) parentItem[4];
-					relation.build(the, (String) currentItem[1]);
+			} else if ((currentOperator instanceof Reference|| currentOperator instanceof THE) && childOperator instanceof HAVE) {
+				HAVE have = (HAVE) childOperator; 
+				Node the = (Node) currentItem[4];
+				have.build(the, name);
+				if (currentOperator instanceof THE)
 					return;
-				}
 				
-				if (parentOperator instanceof THE && currentOperator instanceof HAVE){
-					Reference have = (Reference) currentOperator; 
-					Node the = (Node) parentItem[4];
-					Node node = have.build(the, name);
-					addChildren(node, (List<Node>) currentItem[3]);
-					return;
-				}
-				
+			} else if (currentOperator instanceof Reference && childOperator instanceof USE) {
+				USE use = (USE) childOperator;
+				Node the = (Node) currentItem[4];
+				use.build(the, (String) childItem[1]);
 			}
-				
+			
 			MessageDigest md = (MessageDigest) currentItem[2];
 			byte [] digest = md.digest();
 			String hash = MessageDigester.byteArrayToHex(digest);
 			
-			THE the = THE.getInstance(); 
-			Node cache = the.node(AnimoGraph.CACHE, hash);
+			THE the = THE.getInstance();
 			
-			if (cache == null){
+			if (currentOperator instanceof Reference || currentOperator instanceof Instruction){
 				
-				cache = the.create(AnimoGraph.CACHE, hash);
+				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
-				if (currentOperator instanceof USE) {
-					Relation use = (Relation) currentOperator; 
-					use.build(cache, name);
+				if (cache == null){
 					
-				} else if (currentOperator instanceof Reference) {
-					Reference reference = (Reference) currentOperator;
-					addChildren(reference.build(cache, name), (List<Node>) currentItem[3]);
+					cache = the.create(AnimoGraph.CACHE, hash);
 					
-				} else {
-					ELEMENT element = ELEMENT.getInstance();
-					addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
+					if (currentOperator instanceof Reference) {
+						Reference reference = (Reference) currentOperator;
+						addChildren(reference.build(cache, name), (List<Node>) currentItem[3]);
+						
+					} else {
+						ELEMENT element = ELEMENT.getInstance();
+						addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
+						
+					}
+					
+					currentItem[4] = cache;
+			
+					if (!statements.empty())
+						((List<Node>) statements.peek()[3]).add(cache);
 					
 				}
 			}
@@ -163,10 +171,10 @@ public class AnimoGraphBuilder {
 				tx.finish();
 				
 			} else {
-				Object[] parentItem = statements.peek();
-				((MessageDigest) parentItem[2]).update(digest);
-				((List<Node>) parentItem[3]).add(cache);
+				((MessageDigest) statements.peek()[2]).update(digest);
 			}
+			
+			childItem = currentItem;
 			
 		} catch (Exception e){
 			e.printStackTrace(System.out);
