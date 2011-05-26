@@ -67,6 +67,10 @@ public class THE extends Operator {
 		return node;
 	}
 	
+	public Node getOrCreate(String name) {
+		return getOrCreate(AnimoGraph.THE, name);
+	}
+	
 	public Node getOrCreate(Node parent, String name) {
 		RelationshipType type = relashionshipType(name);
 		Node node = AnimoGraph.getOrCreateNode(parent, type);
