@@ -65,15 +65,15 @@ public class ContextTests extends AbstractTest {
 	private static final String THE_E = 
 		"<the:E "+ANIMO_NSs+">" +
 		"	<an:D>" +
-		"		<use:B>" +
+		"		<use:B/>" +
 		"	</an:D>" +
 		"</the:E>";
 
 	private static final String THE_F = 
 		"<the:F "+ANIMO_NSs+">" +
-		"	<an:D/>" +
+		"	<an:D>" +
 		"		<use:C/>" +
-		"	</an:D/>" +
+		"	</an:D>" +
 		"</the:F>";
 
 	@Test
