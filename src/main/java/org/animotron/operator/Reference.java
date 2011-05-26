@@ -36,7 +36,7 @@ public abstract class Reference extends Operator {
 	@Override
 	public Node build(Node parent, String name){
 		Node node = super.build(parent, name);
-		node.createRelationshipTo(THE.getInstance().node(name()), AnimoRelationshipType.get("REF"));
+		node.createRelationshipTo(THE.getInstance().getOrCreate(name()), AnimoRelationshipType.get("REF"));
 		return node;
 	}
 	
