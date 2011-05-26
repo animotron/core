@@ -77,16 +77,17 @@ public class AnimoGraphBuilder {
 			statement = ELEMENT.getInstance(); 
 		}
 
+		Node the = null;
 		//move the instance to GC & create new
 		if (statement instanceof THE){
-			((THE) statement).build(AnimoGraph.THE, name);
+			the = ((THE) statement).build(AnimoGraph.THE, name);
 		}
 		
 		MessageDigest md = md();
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
-		Object[] item = {statement, name, md, new LinkedList<Node>()};
+		Object[] item = {statement, name, md, new LinkedList<Node>(), the};
 		statements.push(item);
 		
 	}
@@ -101,7 +102,7 @@ public class AnimoGraphBuilder {
 			
 			if (currentOperator instanceof THE){
 				THE the = (THE) currentOperator;
-				Node node = the.getOrCreate(AnimoGraph.THE, (String) currentItem[1]);
+				Node node = the.getOrCreate((String) currentItem[1]);
 				addChildren(node, (List<Node>) currentItem[3]);
 				if (statements.empty()) {
 					tx.success();
@@ -116,16 +117,14 @@ public class AnimoGraphBuilder {
 				
 				if (parentOperator instanceof THE && currentOperator instanceof Relation){
 					Relation relation = (Relation) currentOperator;
-					THE the = (THE) parentOperator;
-					Node node = the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]);
-					relation.build(node, (String) currentItem[1]);
+					Node the = (Node) parentItem[4];
+					relation.build(the, (String) currentItem[1]);
 					return;
 					
 				} else if (parentOperator instanceof THE && currentOperator instanceof HAVE){
 					Reference have = (Reference) currentOperator; 
-					THE the = (THE) parentOperator;
-					Node n = the.getOrCreate(AnimoGraph.THE, (String) parentItem[1]);
-					Node node = have.build(n, name);
+					Node the = (Node) parentItem[4];
+					Node node = have.build(the, name);
 					addChildren(node, (List<Node>) currentItem[3]);
 					return;
 					
