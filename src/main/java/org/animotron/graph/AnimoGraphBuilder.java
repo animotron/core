@@ -160,6 +160,7 @@ public class AnimoGraphBuilder {
 			}
 			
 		} catch (Exception e){
+			System.out.println(e);
 			tx.finish();
 		}
 		
