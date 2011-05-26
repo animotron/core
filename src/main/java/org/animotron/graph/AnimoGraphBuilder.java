@@ -120,15 +120,16 @@ public class AnimoGraphBuilder {
 					Node the = (Node) parentItem[4];
 					relation.build(the, (String) currentItem[1]);
 					return;
-					
-				} else if (parentOperator instanceof THE && currentOperator instanceof HAVE){
+				}
+				
+				if (parentOperator instanceof THE && currentOperator instanceof HAVE){
 					Reference have = (Reference) currentOperator; 
 					Node the = (Node) parentItem[4];
 					Node node = have.build(the, name);
 					addChildren(node, (List<Node>) currentItem[3]);
 					return;
-					
 				}
+				
 			}
 				
 			MessageDigest md = (MessageDigest) currentItem[2];
