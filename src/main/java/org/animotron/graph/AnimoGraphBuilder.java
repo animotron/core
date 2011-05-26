@@ -99,6 +99,16 @@ public class AnimoGraphBuilder {
 			Object[] currentItem = statements.pop();
 			Statement currentOperator = (Statement) currentItem[0];
 			
+			if (currentOperator instanceof THE){
+				THE the = (THE) currentOperator;
+				Node node = the.getOrCreate(AnimoGraph.THE, (String) currentItem[1]);
+				addChildren(node, (List<Node>) currentItem[3]);
+				if (statements.empty()) {
+					tx.success();
+					tx.finish();
+				}
+			}
+			
 			if (!statements.empty()) {
 
 				Object[] parentItem = statements.peek();
@@ -149,8 +159,6 @@ public class AnimoGraphBuilder {
 			}
 			
 			if (statements.empty()) {
-				Node n = the.getOrCreate(AnimoGraph.THE, (String) currentItem[1]);
-				addChildren(n, (List<Node>) currentItem[3]);
 				tx.success();
 				tx.finish();
 				
