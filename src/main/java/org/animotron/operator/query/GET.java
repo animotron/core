@@ -65,40 +65,53 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		//check, maybe, result was already calculated
 		boolean haveResult = false;
+
+		GraphDatabaseService graphdb = op.getGraphDatabase();
+		
 		Node node = op.getEndNode();
-		for (Relationship res : td_res.traverse(node).relationships()) {
-			
-			out.write(res);
-			
-			haveResult = true;
+
+		Transaction tx = graphdb.beginTx();
+		try {
+			for (Relationship res : td_res.traverse(node).relationships()) {
+				
+				System.out.println("GET result = "+res);
+				
+				out.write(res);
+				
+				haveResult = true;
+			}
+			tx.success();
+		} finally {
+			tx.finish();
 		}
 		
-		if (haveResult) {
-			//close out pipe?
-			return;
-		}
-		
-		//no pre-calculated result, calculate it
-		PipedInputObjectStream in = new PipedInputObjectStream();
+		if (!haveResult) {
+			//no pre-calculated result, calculate it
+			PipedInputObjectStream in = new PipedInputObjectStream();
+	
+			Calculator.eval(op, new PipedOutputObjectStream(in));
+			
+			Object n; 
+			while ((n = in.read()) != null) {
+				if (n instanceof Relationship) {
+	
+					tx = graphdb.beginTx();
+					try {
+						for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
+							
+							System.out.println("GET eval = "+r);
 
-		Calculator.eval(op, new PipedOutputObjectStream(in));
-		
-		Object n; 
-		while ((n = in.read()) != null) {
-			if (n instanceof Relationship) {
-
-				GraphDatabaseService graphdb = node.getGraphDatabase();
-				Transaction tx = graphdb.beginTx();
-				try {
-					for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
-						Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
-						out.write(res);
+							Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
+							out.write(res);
+						}
+						tx.success();
+					} finally {
+						tx.finish();
 					}
-					tx.success();
-				} finally {
-					tx.finish();
 				}
 			}
 		}
+		
+		out.close();
 	}
 }

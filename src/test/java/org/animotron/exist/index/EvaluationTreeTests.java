@@ -81,7 +81,7 @@ public class EvaluationTreeTests extends AbstractTest {
             
             ProcessingFlowIterator it = new ProcessingFlowIterator(node);
             while (it.hasNext()) {
-            	System.out.println(Properties.NAME.get(it.next()));
+            	System.out.println(it.next());
             	//System.out.println(AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	i++;

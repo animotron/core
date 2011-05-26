@@ -76,6 +76,13 @@ public class ContextTests extends AbstractTest {
 		"	</an:D>" +
 		"</the:F>";
 
+	private static final String THE_G = 
+		"<the:G "+ANIMO_NSs+">" +
+		"	<an:E>" +
+		"		<use:A/>" +
+		"	</an:E>" +
+		"</the:G>";
+
 	@Test
 	public void testGet() throws IOException {
         System.out.println("Test 'get' ...");
@@ -88,6 +95,7 @@ public class ContextTests extends AbstractTest {
 	        nameDataMap.put("D.xml", THE_D);
 	        nameDataMap.put("E.xml", THE_E);
 	        nameDataMap.put("F.xml", THE_F);
+	        nameDataMap.put("G.xml", THE_G);
 	        
 	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
         }
@@ -101,7 +109,7 @@ public class ContextTests extends AbstractTest {
             
             assertNotNull(op);
 
-            //System.out.println("get:A an:B");
+            //System.out.println("any:A");
             //PipedInputObjectStream instream = 
         	Calculator.eval(op);
             //toConsole(instream);
@@ -109,7 +117,7 @@ public class ContextTests extends AbstractTest {
         	InputStream stream = Reader.read(op);
             toConsole(stream);
             
-            //RESULT: <the:C><have:A>a@b</have:A></the:C>
+            //RESULT: <the:D><the:A/></the:D>
             
 //            assertEquals(1, set.getItemCount());
 //            

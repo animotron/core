@@ -18,10 +18,14 @@
  */
 package org.animotron.operator;
 
+import java.io.IOException;
+
 import org.animotron.Statement;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -57,6 +61,10 @@ public abstract class Operator implements Statement {
 	
 	public Node build(Node node, String name){
 		return AnimoGraph.createNode(node, relationshipType);
+	}
+	
+	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		System.out.println("empty eval @"+this.getClass());
 	}
 	
 }

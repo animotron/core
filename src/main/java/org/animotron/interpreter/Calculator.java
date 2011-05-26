@@ -42,6 +42,7 @@ public class Calculator {
 			PipedOutputObjectStream out = new PipedOutputObjectStream(in);
 			
 			exec.execute(new Evaluator(op, out));
+			System.out.println("run op = "+op);
 		
 			return in;
 		} catch (IOException e) {
