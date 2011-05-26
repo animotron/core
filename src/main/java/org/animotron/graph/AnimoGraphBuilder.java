@@ -101,9 +101,8 @@ public class AnimoGraphBuilder {
 			Statement currentOperator = (Statement) currentItem[0];
 			
 			if (currentOperator instanceof THE){
-				THE the = (THE) currentOperator;
-				Node node = the.getOrCreate((String) currentItem[1]);
-				addChildren(node, (List<Node>) currentItem[3]);
+				Node the = (Node) currentItem[4];
+				addChildren(the, (List<Node>) currentItem[3]);
 				if (statements.empty()) {
 					tx.success();
 					tx.finish();
