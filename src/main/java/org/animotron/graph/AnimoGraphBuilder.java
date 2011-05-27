@@ -27,6 +27,7 @@ import java.util.Stack;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.operator.Evaluable;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Property;
 import org.animotron.operator.Reference;
@@ -108,8 +109,8 @@ public class AnimoGraphBuilder {
 			Statement currentOperator = (Statement) currentItem[0];
 			
 			if (currentOperator instanceof THE){
-				Node the = (Node) currentItem[4];
-				addChildren(the, (List<Node>) currentItem[3]);
+				Node node = (Node) currentItem[4];
+				addChildren(node, (List<Node>) currentItem[3]);
 				childItem = currentItem; 
 				return;
 			}
@@ -119,8 +120,8 @@ public class AnimoGraphBuilder {
 				Statement parentOperator = (Statement) parentItem[0]; 
 				if (parentOperator instanceof THE || parentOperator instanceof Reference || parentOperator instanceof Property) {
 					Operator operator = (Operator) currentOperator;
-					Node the = (Node) parentItem[4];
-					addChildren(operator.build(the, (String) currentItem[1]), (List<Node>) currentItem[3]);
+					Node node = (Node) parentItem[4];
+					addChildren(operator.build(node, (String) currentItem[1]), (List<Node>) currentItem[3]);
 					return;
 				}
 			}
@@ -129,8 +130,8 @@ public class AnimoGraphBuilder {
 			
 			if ((currentOperator instanceof Reference || currentOperator instanceof THE) && childOperator instanceof Relation){
 				Operator operator = (Operator) childOperator;
-				Node the = (Node) currentItem[4];
-				operator.build(the, (String) childItem[1]);
+				Node node = (Node) currentItem[4];
+				operator.build(node, (String) childItem[1]);
 				
 				if (currentOperator instanceof THE)
 					return;
@@ -153,12 +154,17 @@ public class AnimoGraphBuilder {
 					
 					if (currentOperator instanceof Operator) {
 						Operator operator = (Operator) currentOperator;
-						addChildren(operator.build(cache, name), (List<Node>) currentItem[3]);
+						Node node = operator.build(cache, name);
+						addChildren(node, (List<Node>) currentItem[3]);
 						
 					} else {
 						ELEMENT element = ELEMENT.getInstance();
 						addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
 						
+					}
+					
+					if (currentOperator instanceof Evaluable){
+						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
 					}
 					
 					currentItem[4] = cache;
