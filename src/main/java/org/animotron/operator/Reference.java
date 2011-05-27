@@ -27,17 +27,4 @@ import org.neo4j.graphdb.Node;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Reference extends Operator {
-	
-	public Reference(String prefix, String uri) {
-		super(prefix, uri);
-	}
-
-	@Override
-	public Node build(Node parent, String name){
-		Node node = super.build(parent, name);
-		node.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
-		return node;
-	}
-	
-}
+public interface Reference {}

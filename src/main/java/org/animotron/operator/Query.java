@@ -22,6 +22,4 @@ package org.animotron.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Query {
-
-}
+public interface Query {}

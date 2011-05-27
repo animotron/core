@@ -26,8 +26,8 @@ import java.util.Stack;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.operator.Operator;
 import org.animotron.operator.Reference;
 import org.animotron.operator.Relation;
 import org.animotron.operator.THE;
@@ -95,7 +95,6 @@ public class AnimoGraphBuilder {
 	}
 
 	public void endElement(String ns, String name) {
-		
 
 		try {
 			
@@ -121,7 +120,7 @@ public class AnimoGraphBuilder {
 				relation.build(the, (String) childItem[1]);
 				return;
 				
-			} else if ((currentOperator instanceof Reference|| currentOperator instanceof THE) && childOperator instanceof HAVE) {
+			} else if ((currentOperator instanceof Reference || currentOperator instanceof THE) && childOperator instanceof HAVE) {
 				HAVE have = (HAVE) childOperator; 
 				Node the = (Node) currentItem[4];
 				have.build(the, name);
@@ -140,7 +139,7 @@ public class AnimoGraphBuilder {
 			
 			THE the = THE.getInstance();
 			
-			if (currentOperator instanceof Reference || currentOperator instanceof Instruction){
+			if (!(currentOperator instanceof Relation)){
 				
 				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
@@ -148,9 +147,9 @@ public class AnimoGraphBuilder {
 					
 					cache = the.create(AnimoGraph.CACHE, hash);
 					
-					if (currentOperator instanceof Reference) {
-						Reference reference = (Reference) currentOperator;
-						addChildren(reference.build(cache, name), (List<Node>) currentItem[3]);
+					if (currentOperator instanceof Operator) {
+						Operator operator = (Operator) currentOperator;
+						addChildren(operator.build(cache, name), (List<Node>) currentItem[3]);
 						
 					} else {
 						ELEMENT element = ELEMENT.getInstance();

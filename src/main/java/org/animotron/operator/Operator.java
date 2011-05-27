@@ -59,9 +59,12 @@ public abstract class Operator implements Statement {
 		return relationshipType;
 	}
 	
-	public Node build(Node node, String name){
-		return AnimoGraph.createNode(node, relationshipType);
+	public Node build(Node parent, String name){
+		Node node = AnimoGraph.createNode(parent, relationshipType);
+		node.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
+		return node;
 	}
+
 	
 	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		System.out.println("empty eval @"+this.getClass());

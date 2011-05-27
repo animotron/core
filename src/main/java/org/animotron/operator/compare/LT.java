@@ -18,7 +18,8 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.operator.Reference;
+import org.animotron.operator.Operator;
+import org.animotron.operator.Predicate;
 
 /**
  * Compare operator 'LT'.
@@ -26,7 +27,7 @@ import org.animotron.operator.Reference;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class LT extends Reference {
+public class LT extends Operator implements Predicate {
 	
 	private static final LT INSTANCE = new LT();
 	public static LT getInstance() { return INSTANCE; }
