@@ -26,8 +26,10 @@ import java.util.Stack;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.External;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Property;
 import org.animotron.operator.Reference;
@@ -52,7 +54,7 @@ public class AnimoGraphBuilder {
 	private Transaction tx;
 	
 	Stack<Object[]> statements;
-	Object[] item = {null, null, null, null, null};
+	Object[] item = {null, null, null, null, null, null};
 	Object[] childItem;
 		
 	public Relationship getTHE() {
@@ -92,11 +94,14 @@ public class AnimoGraphBuilder {
 			the = ((THE) statement).build(AnimoGraph.THE, name);
 		}
 		
+		boolean external = statement instanceof External;
+		
+		
 		MessageDigest md = md();
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
-		Object[] item = {statement, name, md, new LinkedList<Node>(), the};
+		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external};
 		statements.push(item);
 		
 	}
@@ -106,20 +111,20 @@ public class AnimoGraphBuilder {
 		try {
 			
 			Object[] currentItem = statements.pop();
-			Statement currentOperator = (Statement) currentItem[0];
+			Statement currentStatement = (Statement) currentItem[0];
 			
-			if (currentOperator instanceof THE){
+			if (currentStatement instanceof THE){
 				Node node = (Node) currentItem[4];
 				addChildren(node, (List<Node>) currentItem[3]);
 				childItem = currentItem; 
 				return;
 			}
 			
-			if (currentOperator instanceof Property && !statements.empty()){
+			if (currentStatement instanceof Property && !statements.empty()){
 				Object[] parentItem = statements.peek(); 
 				Statement parentOperator = (Statement) parentItem[0]; 
 				if (parentOperator instanceof THE || parentOperator instanceof Reference || parentOperator instanceof Property) {
-					Operator operator = (Operator) currentOperator;
+					Operator operator = (Operator) currentStatement;
 					Node node = (Node) parentItem[4];
 					addChildren(operator.build(node, (String) currentItem[1]), (List<Node>) currentItem[3]);
 					return;
@@ -128,12 +133,12 @@ public class AnimoGraphBuilder {
 			
 			Statement childOperator = (Statement) childItem[0]; 
 			
-			if ((currentOperator instanceof Reference || currentOperator instanceof THE) && childOperator instanceof Relation){
+			if ((currentStatement instanceof Reference || currentStatement instanceof THE) && childOperator instanceof Relation){
 				Operator operator = (Operator) childOperator;
 				Node node = (Node) currentItem[4];
 				operator.build(node, (String) childItem[1]);
 				
-				if (currentOperator instanceof THE)
+				if (currentStatement instanceof THE)
 					return;
 				
 			}
@@ -144,7 +149,7 @@ public class AnimoGraphBuilder {
 			
 			THE the = THE.getInstance();
 			
-			if (!(currentOperator instanceof Relation || currentOperator instanceof Property)){
+			if (!(currentStatement instanceof Relation || currentStatement instanceof Property)){
 				
 				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
@@ -152,9 +157,14 @@ public class AnimoGraphBuilder {
 					
 					cache = the.create(AnimoGraph.CACHE, hash);
 					
-					if (currentOperator instanceof Operator) {
-						Operator operator = (Operator) currentOperator;
+					if (currentStatement instanceof Operator) {
+						Operator operator = (Operator) currentStatement;
 						Node node = operator.build(cache, name);
+						addChildren(node, (List<Node>) currentItem[3]);
+						
+					} else if (currentStatement instanceof Instruction) {
+						Instruction operator = (Instruction) currentStatement;
+						Node node = operator.build(cache);
 						addChildren(node, (List<Node>) currentItem[3]);
 						
 					} else {
@@ -163,14 +173,20 @@ public class AnimoGraphBuilder {
 						
 					}
 					
-					if (currentOperator instanceof Evaluable){
-						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
+					boolean external = false; 
+					
+					if (!statements.empty()) {
+						Object[] parentItem = statements.peek(); 
+						((List<Node>) parentItem[3]).add(cache);
+						external = (Boolean) parentItem[5];
 					}
 					
 					currentItem[4] = cache;
-			
-					if (!statements.empty())
-						((List<Node>) statements.peek()[3]).add(cache);
+					currentItem[5] = external;
+
+					if (currentStatement instanceof Evaluable && !external){
+						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
+					}
 					
 				}
 				
