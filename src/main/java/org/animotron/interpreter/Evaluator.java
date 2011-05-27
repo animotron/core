@@ -23,12 +23,9 @@ import java.util.Iterator;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.AN;
 import org.animotron.operator.Operator;
-import org.animotron.operator.query.GET;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -60,9 +57,6 @@ class Evaluator implements Runnable {
 	}
 	
 	private void eval(Relationship op, PipedOutputObjectStream ot) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
-
 		System.out.println("Evaluator op = "+op);
 		
 		GraphDatabaseService graphdb = op.getGraphDatabase();
@@ -86,7 +80,17 @@ class Evaluator implements Runnable {
 					;//???
 				else if (s instanceof Operator) {
 					Operator oper = (Operator) s;
-					oper.eval(r, out, isLast(it));
+
+					PipedInputObjectStream in = new PipedInputObjectStream();
+
+					oper.eval(r, new PipedOutputObjectStream(in), isLast(it));
+					
+					Object n; 
+					while ((n = in.read()) != null) {
+						ot.write(n);
+					} 
+					ot.close();
+					
 				} else 
 					;//???
 			}
@@ -99,13 +103,6 @@ class Evaluator implements Runnable {
 		} finally {
 			tx.finish();
 		}
-
-		Object n; 
-		while ((n = in.read()) != null) {
-			ot.write(n);
-		} 
-		ot.close();
-
 	}
 	
 	private boolean isLast(Iterator<?> it) {

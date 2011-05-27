@@ -57,19 +57,16 @@ public class AN extends Operator implements Reference, Evaluable {
 		
 			Node node = op.getEndNode();
 			//go to 'THE' node
-			for (Relationship r : node.getRelationships(RelationshipTypes.REF, Direction.OUTGOING)) {
-				
-				//get 'THE' relation
-				Node n = r.getEndNode();
-				String name = (String) n.getProperty("NAME");
-				for (Relationship t : n.getRelationships(AnimoRelationshipType.get(name), Direction.INCOMING)) {
-					out.write(t);
-				}
-			}
+			out.write(
+					node.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING)
+					);
+			//get 'THE' relation - ???
+
 			tx.success();
 		} finally {
 			tx.finish();
 		}
+		out.close();
 	}
 
 }
