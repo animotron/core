@@ -21,10 +21,17 @@ package org.animotron.exist;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import junit.framework.Assert;
+
+import org.animotron.io.PipedInputObjectStream;
 import org.exist.Indexer;
 import org.exist.collections.Collection;
 import org.exist.collections.CollectionConfigurationManager;
@@ -113,6 +120,56 @@ public class AbstractTest {
         }
         return docs;
     }
+	
+	protected void toConsole(PipedInputObjectStream instream) throws IOException {
+		if (instream == null) return;
+		
+		Object n; 
+		while ((n = instream.read()) != null) {
+			System.out.print(n.toString());
+		} 
+	}
+
+	protected void toConsole(InputStream stream) throws IOException {
+		if (stream == null) return;
+		
+		char[] buffer = new char[1024]; 
+		try { 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
+
+			int n; 
+			while ((n = reader.read(buffer)) != -1) {
+				for (int i = 0; i < n; i++) {
+					System.out.print((char)buffer[i]);
+				}
+			} 
+		} finally { 
+			stream.close(); 
+		} 
+	}
+
+	protected void assertEquals(InputStream stream, String expecteds) throws IOException {
+		if (stream == null) return;
+		
+		StringBuilder b = new StringBuilder(expecteds.length()); 
+		
+		char[] buffer = new char[1024]; 
+		try { 
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
+
+			int n; 
+			while ((n = reader.read(buffer)) != -1) {
+				for (int i = 0; i < n; i++) {
+					b.append((char)buffer[i]);
+				}
+			} 
+		} finally { 
+			stream.close(); 
+		}
+		
+		Assert.assertEquals("check evaluation result", expecteds, b.toString());
+	}
+
 	
 	protected static String COLLECTION_CONFIG =
         "<collection xmlns=\"http://exist-db.org/collection-config/1.0\">" +

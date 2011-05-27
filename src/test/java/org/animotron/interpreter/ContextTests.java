@@ -21,16 +21,13 @@ package org.animotron.interpreter;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.animotron.exist.AbstractTest;
 import org.animotron.graph.Reader;
-import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.THE;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
@@ -106,16 +103,15 @@ public class ContextTests extends AbstractTest {
             assertNotNull(broker);
             
             Relationship op = THE.getInstance().relationship("D");
-            
             assertNotNull(op);
 
             //System.out.println("any:A");
-            //PipedInputObjectStream instream = 
-        	Calculator.eval(op);
-            //toConsole(instream);
+            toConsole(
+        		Calculator.eval(op)
+    		);
             
         	InputStream stream = Reader.read(op);
-            toConsole(stream);
+            assertEquals(stream, "<the:D><the:A></the:A></the:D>");
             
             //RESULT: <the:D><the:A/></the:D>
             
@@ -135,32 +131,5 @@ public class ContextTests extends AbstractTest {
         	pool.release(broker);
         }
         //System.out.println("done.");
-	}
-	
-	private void toConsole(PipedInputObjectStream instream) throws IOException {
-		if (instream == null) return;
-		
-		Object n; 
-		while ((n = instream.read()) != null) {
-			System.out.print(n.toString());
-		} 
-	}
-
-	private void toConsole(InputStream stream) throws IOException {
-		if (stream == null) return;
-		
-		char[] buffer = new char[1024]; 
-		try { 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
-
-			int n; 
-			while ((n = reader.read(buffer)) != -1) {
-				for (int i = 0; i < n; i++) {
-					System.out.print((char)buffer[i]);
-				}
-			} 
-		} finally { 
-			stream.close(); 
-		} 
 	}
 }

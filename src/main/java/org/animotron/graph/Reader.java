@@ -57,6 +57,7 @@ public class Reader implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("READER");
 		try {
 			process(position);
 			out.close();
@@ -68,8 +69,36 @@ public class Reader implements Runnable {
 	private void process(Relationship position) throws IOException {
 		String typeName = position.getType().toString();
 		Node eNode = position.getEndNode();
+		System.out.println(position);
 		
-		if (typeName.startsWith("THE:")) {
+		if (RelationshipTypes.RESULT.name().equals(typeName)) {
+			
+			String name = typeName;
+			for (Relationship r : eNode.getRelationships(Direction.INCOMING)) {
+				String tmp = r.getType().toString();
+				if (tmp.equals("HAVE")) {
+					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
+					eNode = ref.getEndNode();
+					name = "have:"+eNode.getProperty("NAME");
+					break;
+				} else if (tmp.startsWith("the:")) {
+					eNode = r.getEndNode();
+					name = "the:"+eNode.getProperty("NAME");
+					break;
+				}
+					
+			}
+
+			//how to find type???
+			out.write(("<"+name+">").getBytes());
+			
+			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
+				process(r);
+			}
+
+			out.write(("</"+name+">").getBytes());
+			
+		} else if (typeName.startsWith("the:")) {
 			out.write(("<"+typeName+">").getBytes());
 			
 			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
@@ -97,9 +126,7 @@ public class Reader implements Runnable {
 			
 		} else {
 			for (Relationship r : eNode.getRelationships(RelationshipTypes.RESULT, Direction.OUTGOING)) {
-				for (Relationship have : r.getEndNode().getRelationships(RelationshipTypes.HAVE, Direction.INCOMING)) {
-					process(have);
-				}
+				process(r);
 			}
 		}
 	}
