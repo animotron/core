@@ -54,6 +54,13 @@ public class EvaluationTreeTests extends AbstractTest {
 		"			<one-more/>" +
 		"		</another>" +
 		"	</have:C>" +
+		"	<an:D>" +
+		"		<is:A/>" +
+		"		<use:B/>" +
+		"		<have:C>" +
+		"			<x:some x:a=\"b\" xmlns:x=\"y\" z=\"w\"/>" +
+		"		</have:C>" +
+		"	</an:D>" +
 		"</the:B>";
 
 	@Test
