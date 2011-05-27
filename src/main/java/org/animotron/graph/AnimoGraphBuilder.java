@@ -49,10 +49,11 @@ public class AnimoGraphBuilder {
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
 	
-	private Transaction tx = AnimoGraph.beginTx();
+	private Transaction tx;
 	
-	Stack<Object[]> statements = new Stack<Object[]>();
-	Object[] childItem = {null, null, null, null, null};
+	Stack<Object[]> statements;
+	Object[] item = {null, null, null, null, null};
+	Object[] childItem;
 		
 	public Relationship getTHE() {
 		return this.the;
@@ -70,6 +71,12 @@ public class AnimoGraphBuilder {
 			throw new RuntimeException(e);
 		}
 	}
+	
+	public void startDocument(){
+		statements = new Stack<Object[]>();
+		childItem = item;
+		tx = AnimoGraph.beginTx();
+	};
 	
 	public void startElement(String ns, String name) {
 		
@@ -104,10 +111,6 @@ public class AnimoGraphBuilder {
 			if (currentOperator instanceof THE){
 				Node the = (Node) currentItem[4];
 				addChildren(the, (List<Node>) currentItem[3]);
-				if (statements.empty()) {
-					tx.success();
-					tx.finish();
-				}
 				childItem = currentItem; 
 				return;
 			}
@@ -165,11 +168,7 @@ public class AnimoGraphBuilder {
 				}
 			}
 			
-			if (statements.empty()) {
-				tx.success();
-				tx.finish();
-				
-			} else {
+			if (!statements.empty()) {
 				((MessageDigest) statements.peek()[2]).update(digest);
 			}
 			
@@ -204,6 +203,11 @@ public class AnimoGraphBuilder {
 //		} catch (Exception e){
 //			tx.finish();
 //		}
+	}
+	
+	public void endDocument(){
+		tx.success();
+		tx.finish();
 	}
 
 	private void addChildren(Node node, List<Node> children) {
