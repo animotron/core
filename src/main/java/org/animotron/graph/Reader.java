@@ -24,6 +24,7 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
+import org.animotron.instruction.ml.TEXT;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -66,6 +67,12 @@ public class Reader implements Runnable {
 		}
 	}
 	
+	private void subprocess(Node node) throws IOException {
+		for (Relationship r : node.getRelationships(Direction.OUTGOING)) {
+			process(r);
+		}
+	}
+
 	private void process(Relationship position) throws IOException {
 		String typeName = position.getType().toString();
 		Node eNode = position.getEndNode();
@@ -78,12 +85,12 @@ public class Reader implements Runnable {
 				String tmp = r.getType().toString();
 				if (tmp.equals("HAVE")) {
 					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
-					eNode = ref.getEndNode();
-					name = "have:"+eNode.getProperty("NAME");
+
+					name = "have:"+ref.getEndNode().getProperty("NAME");
 					break;
 				} else if (tmp.startsWith("the:")) {
-					eNode = r.getEndNode();
-					name = "the:"+eNode.getProperty("NAME");
+
+					name = "the:"+r.getEndNode().getProperty("NAME");
 					break;
 				}
 					
@@ -92,18 +99,14 @@ public class Reader implements Runnable {
 			//how to find type???
 			out.write(("<"+name+">").getBytes());
 			
-			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
-				process(r);
-			}
+			subprocess(eNode);
 
 			out.write(("</"+name+">").getBytes());
 			
 		} else if (typeName.startsWith("the:")) {
 			out.write(("<"+typeName+">").getBytes());
 			
-			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
-				process(r);
-			}
+			subprocess(eNode);
 
 			out.write(("</"+typeName+">").getBytes());
 		
@@ -115,14 +118,13 @@ public class Reader implements Runnable {
 
 			out.write(("<have:"+name+">").getBytes());
 			
-			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
-				process(r);
-			}
+			subprocess(eNode);
 
 			out.write(("</have:"+name+">").getBytes());
 		
-		} else if (RelationshipTypes.TEXT.name().equals(typeName)) {
+		} else if (TEXT.getInstance().name().toUpperCase().equals(typeName)) {
 			out.write(((String)eNode.getProperty("VALUE")).getBytes());
+			subprocess(eNode);
 			
 		} else {
 			for (Relationship r : eNode.getRelationships(RelationshipTypes.RESULT, Direction.OUTGOING)) {

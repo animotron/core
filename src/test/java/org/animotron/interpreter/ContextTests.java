@@ -113,17 +113,6 @@ public class ContextTests extends AbstractTest {
         	InputStream stream = Reader.read(op);
             assertEquals(stream, "<the:D><the:A></the:A></the:D>");
             
-            //RESULT: <the:D><the:A/></the:D>
-            
-//            assertEquals(1, set.getItemCount());
-//            
-//            Set<String> expect = new HashSet<String>();
-//            expect.add("C");
-//            
-//            for (int i = 0; i < set.getItemCount(); i++) {
-//            	String name = set.get(i).getNode().getLocalName();
-//            	assertTrue(name, expect.remove(name));
-//            }
         } catch (EXistException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
