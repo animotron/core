@@ -120,7 +120,7 @@ public class AnimoGraphBuilder {
 				if (parentOperator instanceof THE || parentOperator instanceof Reference || parentOperator instanceof Property) {
 					Operator operator = (Operator) currentOperator;
 					Node the = (Node) parentItem[4];
-					addChildren(operator.build(the, (String) childItem[1]), (List<Node>) currentItem[3]);
+					addChildren(operator.build(the, (String) currentItem[1]), (List<Node>) currentItem[3]);
 					return;
 				}
 			}
