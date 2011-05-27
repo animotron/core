@@ -86,8 +86,9 @@ public class THE extends Operator {
 		Node node = node(parent, name);
 		if (node != null) {
 			AnimoGraph.clear(node);
+		} else {
+			node = create(parent, name);
 		}
-		node = create(parent, name);
 		return node;
 	}
 	
