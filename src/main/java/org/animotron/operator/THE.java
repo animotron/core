@@ -40,7 +40,7 @@ public class THE extends Operator {
 	private THE() { super("the", "animo/instance"); }
 	
 	public RelationshipType relashionshipType(String name){
-		return AnimoRelationshipType.get(name().toUpperCase(), name);
+		return AnimoRelationshipType.get(name(), name);
 	}
 	
 	public Relationship relationship(String name){
