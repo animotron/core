@@ -67,11 +67,9 @@ public class GET extends Operator implements Evaluable, Query {
 		boolean haveResult = false;
 
 		GraphDatabaseService graphdb = op.getGraphDatabase();
-		
-		Node node = op.getEndNode();
-
 		Transaction tx = graphdb.beginTx();
 		try {
+			Node node = op.getEndNode();
 			for (Relationship res : td_res.traverse(node).relationships()) {
 				
 				System.out.println("GET result = "+res);
@@ -80,23 +78,17 @@ public class GET extends Operator implements Evaluable, Query {
 				
 				haveResult = true;
 			}
-			tx.success();
-		} finally {
-			tx.finish();
-		}
 		
-		if (!haveResult) {
-			//no pre-calculated result, calculate it
-			PipedInputObjectStream in = new PipedInputObjectStream();
-	
-			Calculator.eval(op, new PipedOutputObjectStream(in));
-			
-			Object n; 
-			while ((n = in.read()) != null) {
-				if (n instanceof Relationship) {
-	
-					tx = graphdb.beginTx();
-					try {
+			if (!haveResult) {
+				//no pre-calculated result, calculate it
+				PipedInputObjectStream in = new PipedInputObjectStream();
+		
+				Calculator.eval(op, new PipedOutputObjectStream(in));
+				
+				Object n; 
+				while ((n = in.read()) != null) {
+					if (n instanceof Relationship) {
+		
 						for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
 							
 							System.out.println("GET eval = "+r);
@@ -104,12 +96,12 @@ public class GET extends Operator implements Evaluable, Query {
 							Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
 							out.write(res);
 						}
-						tx.success();
-					} finally {
-						tx.finish();
 					}
 				}
 			}
+			tx.success();
+		} finally {
+			tx.finish();
 		}
 		
 		out.close();

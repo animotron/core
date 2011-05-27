@@ -91,9 +91,6 @@ class Evaluator implements Runnable {
 					;//???
 			}
 
-			out.write("\n");
-			out.close();
-			
 			tx.success();
 		
 		} catch (IOException e) {

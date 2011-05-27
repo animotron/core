@@ -26,8 +26,10 @@ import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -49,21 +51,25 @@ public class AN extends Operator implements Reference, Evaluable {
 		if (!isLast)
 			Calculator.eval(op, new PipedOutputObjectStream(in));
 		
-		//go to 'THE' node
-		for (Relationship r : op.getEndNode().getRelationships(RelationshipTypes.REF, Direction.OUTGOING)) {
-			
-			//get 'THE' relation
-			Node node = r.getEndNode();
-			String name = (String) node.getProperty("NAME");
-			for (Relationship t : node.getRelationships(AnimoRelationshipType.get(name), Direction.INCOMING)) {
-				out.write(t);
+		GraphDatabaseService graphdb = op.getGraphDatabase();
+		Transaction tx = graphdb.beginTx();
+		try {
+		
+			Node node = op.getEndNode();
+			//go to 'THE' node
+			for (Relationship r : node.getRelationships(RelationshipTypes.REF, Direction.OUTGOING)) {
+				
+				//get 'THE' relation
+				Node n = r.getEndNode();
+				String name = (String) n.getProperty("NAME");
+				for (Relationship t : n.getRelationships(AnimoRelationshipType.get(name), Direction.INCOMING)) {
+					out.write(t);
+				}
 			}
+			tx.success();
+		} finally {
+			tx.finish();
 		}
-		//XXX: what do to with that?
-//		Object n; 
-//		while ((n = in.read()) != null) {
-//			out.write(n);
-//		} 
 	}
 
 }
