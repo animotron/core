@@ -20,7 +20,6 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
-import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
