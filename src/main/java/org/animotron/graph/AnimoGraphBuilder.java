@@ -117,7 +117,7 @@ public class AnimoGraphBuilder {
 			if (currentOperator instanceof Property && !statements.empty()){
 				Object[] parentItem = statements.peek(); 
 				Statement parentOperator = (Statement) parentItem[0]; 
-				if (parentOperator instanceof THE || parentOperator instanceof Reference) {
+				if (parentOperator instanceof THE || parentOperator instanceof Reference || parentOperator instanceof Property) {
 					Operator operator = (Operator) currentOperator;
 					Node the = (Node) parentItem[4];
 					addChildren(operator.build(the, (String) childItem[1]), (List<Node>) currentItem[3]);
