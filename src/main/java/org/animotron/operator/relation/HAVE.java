@@ -19,6 +19,7 @@
 package org.animotron.operator.relation;
 
 import org.animotron.operator.Operator;
+import org.animotron.operator.Property;
 
 /**
  * Operator 'HAVE'.
@@ -26,7 +27,7 @@ import org.animotron.operator.Operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAVE extends Operator {
+public class HAVE extends Operator implements Property {
 	
 	private static final HAVE INSTANCE = new HAVE();
 	public static HAVE getInstance() { return INSTANCE; }

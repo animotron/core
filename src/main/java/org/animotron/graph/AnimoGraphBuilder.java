@@ -28,11 +28,10 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Operator;
+import org.animotron.operator.Property;
 import org.animotron.operator.Reference;
 import org.animotron.operator.Relation;
 import org.animotron.operator.THE;
-import org.animotron.operator.relation.HAVE;
-import org.animotron.operator.relation.USE;
 import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -115,25 +114,27 @@ public class AnimoGraphBuilder {
 				return;
 			}
 			
+			if (currentOperator instanceof Property && !statements.empty()){
+				Object[] parentItem = statements.peek(); 
+				Statement parentOperator = (Statement) parentItem[0]; 
+				if (parentOperator instanceof THE || parentOperator instanceof Reference) {
+					Operator operator = (Operator) currentOperator;
+					Node the = (Node) parentItem[4];
+					addChildren(operator.build(the, (String) childItem[1]), (List<Node>) currentItem[3]);
+					return;
+				}
+			}
+			
 			Statement childOperator = (Statement) childItem[0]; 
 			
-			if (currentOperator instanceof THE && childOperator instanceof Relation){
-				Relation relation = (Relation) childOperator;
+			if ((currentOperator instanceof Reference || currentOperator instanceof THE) && childOperator instanceof Relation){
+				Operator operator = (Operator) childOperator;
 				Node the = (Node) currentItem[4];
-				relation.build(the, (String) childItem[1]);
-				return;
+				operator.build(the, (String) childItem[1]);
 				
-			} else if ((currentOperator instanceof Reference || currentOperator instanceof THE) && childOperator instanceof HAVE) {
-				HAVE have = (HAVE) childOperator; 
-				Node the = (Node) currentItem[4];
-				have.build(the, name);
 				if (currentOperator instanceof THE)
 					return;
 				
-			} else if (currentOperator instanceof Reference && childOperator instanceof USE) {
-				USE use = (USE) childOperator;
-				Node the = (Node) currentItem[4];
-				use.build(the, (String) childItem[1]);
 			}
 			
 			MessageDigest md = (MessageDigest) currentItem[2];
@@ -142,7 +143,7 @@ public class AnimoGraphBuilder {
 			
 			THE the = THE.getInstance();
 			
-			if (!(currentOperator instanceof Relation)){
+			if (!(currentOperator instanceof Relation || currentOperator instanceof Property)){
 				
 				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
@@ -166,6 +167,7 @@ public class AnimoGraphBuilder {
 						((List<Node>) statements.peek()[3]).add(cache);
 					
 				}
+				
 			}
 			
 			if (!statements.empty()) {
