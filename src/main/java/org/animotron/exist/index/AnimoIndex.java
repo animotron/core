@@ -76,6 +76,7 @@ public class AnimoIndex extends AbstractIndex {
 	 */
 	@Override
 	public void close() throws DBException {
+		System.out.println("shutdown graphDb @ close");
 		graphDb.shutdown();
 	}
 
@@ -95,6 +96,7 @@ public class AnimoIndex extends AbstractIndex {
 	 */
 	@Override
 	public void remove() throws DBException {
+		System.out.println("shutdown graphDb @ remove");
 		graphDb.shutdown();
 
 		File folder = new File(getDataDir(), FOLDER_NAME);
