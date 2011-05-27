@@ -50,12 +50,10 @@ public class AnimoGraphBuilder {
 	private Relationship the = null;
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
+	private static final Object[] NULL = {null, null, null, null, null, null, null};
 	
 	private Transaction tx;
-	
-	Stack<Object[]> statements;
-	Object[] item = {null, null, null, null, null, null};
-	Object[] childItem;
+	private Stack<Object[]> statements;
 		
 	public Relationship getTHE() {
 		return this.the;
@@ -76,7 +74,6 @@ public class AnimoGraphBuilder {
 	
 	public void startDocument(){
 		statements = new Stack<Object[]>();
-		childItem = item;
 		tx = AnimoGraph.beginTx();
 	};
 	
@@ -101,7 +98,7 @@ public class AnimoGraphBuilder {
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
-		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external};
+		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external, NULL};
 		statements.push(item);
 		
 	}
@@ -116,31 +113,34 @@ public class AnimoGraphBuilder {
 			if (currentStatement instanceof THE){
 				Node node = (Node) currentItem[4];
 				addChildren(node, (List<Node>) currentItem[3]);
-				childItem = currentItem; 
+				currentItem[6] = currentItem; 
 				return;
 			}
 			
 			if (currentStatement instanceof Property && !statements.empty()){
 				Object[] parentItem = statements.peek(); 
-				Statement parentOperator = (Statement) parentItem[0]; 
-				if (parentOperator instanceof THE || parentOperator instanceof Reference || parentOperator instanceof Property) {
-					Operator operator = (Operator) currentStatement;
-					Node node = (Node) parentItem[4];
-					addChildren(operator.build(node, (String) currentItem[1]), (List<Node>) currentItem[3]);
+				Statement parentStatement = (Statement) parentItem[0]; 
+				Operator operator = (Operator) currentStatement;
+				Node node = (Node) parentItem[4];
+				addChildren(operator.build(node, (String) currentItem[1]), (List<Node>) currentItem[3]);
+				if (parentStatement instanceof THE) {
+					currentItem[6] = currentItem; 
 					return;
 				}
 			}
 			
+			Object[] childItem = (Object[]) currentItem[6];
 			Statement childOperator = (Statement) childItem[0]; 
 			
-			if ((currentStatement instanceof Reference || currentStatement instanceof THE) && childOperator instanceof Relation){
+			if (childOperator instanceof Relation){
 				Operator operator = (Operator) childOperator;
 				Node node = (Node) currentItem[4];
 				operator.build(node, (String) childItem[1]);
 				
-				if (currentStatement instanceof THE)
+				if (currentStatement instanceof THE) {
+					currentItem[6] = currentItem; 
 					return;
-				
+				}
 			}
 			
 			MessageDigest md = (MessageDigest) currentItem[2];
@@ -149,7 +149,7 @@ public class AnimoGraphBuilder {
 			
 			THE the = THE.getInstance();
 			
-			if (!(currentStatement instanceof Relation || currentStatement instanceof Property)){
+			if (statements.empty() || !(currentStatement instanceof Relation || currentStatement instanceof Property)){
 				
 				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
@@ -196,7 +196,7 @@ public class AnimoGraphBuilder {
 				((MessageDigest) statements.peek()[2]).update(digest);
 			}
 			
-			childItem = currentItem;
+			currentItem[6] = currentItem; 
 			
 		} catch (Exception e){
 			e.printStackTrace(System.out);
