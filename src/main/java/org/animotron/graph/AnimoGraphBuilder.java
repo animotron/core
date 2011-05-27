@@ -29,6 +29,7 @@ import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.External;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Property;
 import org.animotron.operator.Reference;
@@ -53,7 +54,7 @@ public class AnimoGraphBuilder {
 	private Transaction tx;
 	
 	Stack<Object[]> statements;
-	Object[] item = {null, null, null, null, null};
+	Object[] item = {null, null, null, null, null, null};
 	Object[] childItem;
 		
 	public Relationship getTHE() {
@@ -93,11 +94,14 @@ public class AnimoGraphBuilder {
 			the = ((THE) statement).build(AnimoGraph.THE, name);
 		}
 		
+		boolean external = statement instanceof External;
+		
+		
 		MessageDigest md = md();
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
-		Object[] item = {statement, name, md, new LinkedList<Node>(), the};
+		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external};
 		statements.push(item);
 		
 	}
@@ -164,20 +168,25 @@ public class AnimoGraphBuilder {
 						addChildren(node, (List<Node>) currentItem[3]);
 						
 					} else {
-
 						ELEMENT element = ELEMENT.getInstance();
 						addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
 						
 					}
 					
-					if (currentStatement instanceof Evaluable){
-						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
+					boolean external = false; 
+					
+					if (!statements.empty()) {
+						Object[] parentItem = statements.peek(); 
+						((List<Node>) parentItem[3]).add(cache);
+						external = (Boolean) parentItem[5];
 					}
 					
 					currentItem[4] = cache;
-			
-					if (!statements.empty())
-						((List<Node>) statements.peek()[3]).add(cache);
+					currentItem[5] = external;
+
+					if (currentStatement instanceof Evaluable && !external){
+						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
+					}
 					
 				}
 				

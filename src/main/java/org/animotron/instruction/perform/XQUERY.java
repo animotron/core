@@ -19,13 +19,14 @@
 package org.animotron.instruction.perform;
 
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.operator.External;
 
 /**
  * Instruction 'do:xquery', plug XQuery language.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class XQUERY extends AbstractInstruction {
+public class XQUERY extends AbstractInstruction implements External {
 	
 	private static final XQUERY INSTANCE = new XQUERY();
 	public static XQUERY getInstance() { return INSTANCE; }
