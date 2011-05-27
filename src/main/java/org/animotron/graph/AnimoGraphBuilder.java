@@ -51,7 +51,6 @@ public class AnimoGraphBuilder {
 	private Relationship the = null;
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
-	private static final Object[] NULL = {null, null, null, null, null, null, null};
 	
 	private Transaction tx;
 	private Stack<Object[]> statements;
@@ -101,7 +100,7 @@ public class AnimoGraphBuilder {
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
-		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external, NULL};
+		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external};
 		statements.push(item);
 		
 	}
@@ -112,9 +111,6 @@ public class AnimoGraphBuilder {
 			
 			Object[] currentItem = statements.pop();
 			Statement currentStatement = (Statement) currentItem[0];
-			
-			if (!statements.empty())
-				statements.peek()[6] = currentItem; 
 			
 			if (currentStatement instanceof THE){
 				Node node = (Node) currentItem[4];
@@ -128,21 +124,20 @@ public class AnimoGraphBuilder {
 				Operator operator = (Operator) currentStatement;
 				Node node = (Node) parentItem[4];
 				addChildren(operator.build(node, (String) currentItem[1]), (List<Node>) currentItem[3]);
+				
 				if (parentStatement instanceof THE) 
 					return;
 			}
 			
-			Object[] childItem = (Object[]) currentItem[6];
-			Statement childStatement = (Statement) childItem[0]; 
-			
-			if (childStatement instanceof Relation){
-				Operator operator = (Operator) childStatement;
-				Node node = (Node) currentItem[4];
-				operator.build(node, (String) childItem[1]);
+			if (currentStatement instanceof Relation && !statements.empty()){
+				Object[] parentItem = statements.peek(); 
+				Statement parentStatement = (Statement) parentItem[0]; 
+				Operator operator = (Operator) currentStatement;
+				Node node = (Node) parentItem[4];
+				operator.build(node, (String) currentItem[1]);
 				
-				if (currentStatement instanceof THE) {
+				if (parentStatement instanceof THE) 
 					return;
-				}
 			}
 			
 			MessageDigest md = (MessageDigest) currentItem[2];
