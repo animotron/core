@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Transaction;
 public class AnimoGraph {
 
 	public final static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
-	public final static Node THE, CACHE, CALC;
+	public final static Node THE, CACHE, CALC, EMPTY;
 	
 	static {
 		Transaction tx = AnimoGraph.beginTx();
@@ -40,6 +40,7 @@ public class AnimoGraph {
 			THE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.THE);
 			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
+			EMPTY = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			tx.success();
 		} finally {
 			tx.finish();
