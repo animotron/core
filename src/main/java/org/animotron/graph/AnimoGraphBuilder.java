@@ -118,77 +118,52 @@ public class AnimoGraphBuilder {
 				return;
 			}
 			
-			if (currentStatement instanceof Property && !statements.empty()){
-				Object[] parentItem = statements.peek(); 
-				Statement parentStatement = (Statement) parentItem[0]; 
-				Operator operator = (Operator) currentStatement;
-				Node node = (Node) parentItem[4];
-				addChildren(operator.build(node, (String) currentItem[1]), (List<Node>) currentItem[3]);
-				
-				if (parentStatement instanceof THE) 
-					return;
-			}
-			
-			if (currentStatement instanceof Relation && !statements.empty()){
-				Object[] parentItem = statements.peek(); 
-				Statement parentStatement = (Statement) parentItem[0]; 
-				Operator operator = (Operator) currentStatement;
-				Node node = (Node) parentItem[4];
-				operator.build(node, (String) currentItem[1]);
-				
-				if (parentStatement instanceof THE) 
-					return;
-			}
-			
 			MessageDigest md = (MessageDigest) currentItem[2];
 			byte [] digest = md.digest();
 			String hash = MessageDigester.byteArrayToHex(digest);
 			
 			THE the = THE.getInstance();
 			
-			if (!(currentStatement instanceof Relation || currentStatement instanceof Property) || statements.empty()){
+			Node cache = the.node(AnimoGraph.CACHE, hash);
+			
+			if (cache == null) {
 				
-				Node cache = the.node(AnimoGraph.CACHE, hash);
+				cache = the.create(AnimoGraph.CACHE, hash);
 				
-				if (cache == null) {
+				if (currentStatement instanceof Relation) {
+					Operator operator = (Operator) currentStatement;
+					operator.build(cache, name);
 					
-					cache = the.create(AnimoGraph.CACHE, hash);
-					
-					if (currentStatement instanceof Operator) {
-						Operator operator = (Operator) currentStatement;
-						Node node = operator.build(cache, name);
-						addChildren(node, (List<Node>) currentItem[3]);
+				}if (currentStatement instanceof Operator) {
+					Operator operator = (Operator) currentStatement;
+					Node node = operator.build(cache, name);
+					addChildren(node, (List<Node>) currentItem[3]);
 						
-					} else if (currentStatement instanceof ELEMENT) {
-						ELEMENT element = ELEMENT.getInstance();
-						addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
-						
-					} else {
-						Instruction operator = (Instruction) currentStatement;
-						Node node = operator.build(cache);
-						addChildren(node, (List<Node>) currentItem[3]);
-						
-					}
+				} else if (currentStatement instanceof ELEMENT) {
+					ELEMENT element = ELEMENT.getInstance();
+					addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
 					
-					boolean external = false; 
-					
-					if (!statements.empty()) {
-						external = (Boolean) statements.peek()[5];
-					}
-
-					if (currentStatement instanceof Evaluable && !external){
-						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
-					}
+				} else {
+					Instruction operator = (Instruction) currentStatement;
+					Node node = operator.build(cache);
+					addChildren(node, (List<Node>) currentItem[3]);
 					
 				}
 				
+				boolean external = false; 
+				
 				if (!statements.empty()) {
-					((List<Node>) statements.peek()[3]).add(cache);
+					external = (Boolean) statements.peek()[5];
+				}
+
+				if (currentStatement instanceof Evaluable && !external){
+					AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
 				}
 				
 			}
 			
 			if (!statements.empty()) {
+				((List<Node>) statements.peek()[3]).add(cache);
 				((MessageDigest) statements.peek()[2]).update(digest);
 			}
 			
