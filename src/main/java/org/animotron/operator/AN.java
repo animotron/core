@@ -55,11 +55,14 @@ public class AN extends Operator implements Reference, Evaluable {
 		try {
 		
 			Node node = op.getEndNode();
+
 			//go to 'THE' node
-			out.write(
-					node.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING)
-					);
+			Node the = Utils.getByREF(node); 
+
 			//get 'THE' relation - ???
+			Relationship res = node.createRelationshipTo(the, RelationshipTypes.RESULT);
+			
+			out.write(res);
 
 			tx.success();
 		} finally {
@@ -67,5 +70,4 @@ public class AN extends Operator implements Reference, Evaluable {
 		}
 		out.close();
 	}
-
 }

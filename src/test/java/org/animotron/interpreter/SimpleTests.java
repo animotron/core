@@ -20,19 +20,14 @@ package org.animotron.interpreter;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import junit.framework.Assert;
 
 import org.animotron.exist.AbstractTest;
 import org.animotron.exist.index.AnimoIndex;
 import org.animotron.graph.Reader;
-import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.THE;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
@@ -92,8 +87,7 @@ public class SimpleTests extends AbstractTest {
             toConsole(Calculator.eval(op));
             
         	InputStream stream = Reader.read(op);
-            assertEquals(stream, "<THE:C><have:A>a@b</have:A></THE:C>");
-            //toConsole(stream);
+            assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
             
         } catch (EXistException e) {
 			e.printStackTrace();
@@ -105,52 +99,4 @@ public class SimpleTests extends AbstractTest {
         //System.out.println("done.");
 	}
 	
-	private void toConsole(PipedInputObjectStream instream) throws IOException {
-		if (instream == null) return;
-		
-		Object n; 
-		while ((n = instream.read()) != null) {
-			System.out.print(n.toString());
-		} 
-	}
-
-	private void toConsole(InputStream stream) throws IOException {
-		if (stream == null) return;
-		
-		char[] buffer = new char[1024]; 
-		try { 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
-
-			int n; 
-			while ((n = reader.read(buffer)) != -1) {
-				for (int i = 0; i < n; i++) {
-					System.out.print((char)buffer[i]);
-				}
-			} 
-		} finally { 
-			stream.close(); 
-		} 
-	}
-
-	private void assertEquals(InputStream stream, String expecteds) throws IOException {
-		if (stream == null) return;
-		
-		StringBuilder b = new StringBuilder(expecteds.length()); 
-		
-		char[] buffer = new char[1024]; 
-		try { 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
-
-			int n; 
-			while ((n = reader.read(buffer)) != -1) {
-				for (int i = 0; i < n; i++) {
-					b.append((char)buffer[i]);
-				}
-			} 
-		} finally { 
-			stream.close(); 
-		}
-		
-		Assert.assertEquals("check evaluation result", expecteds, b.toString());
-	}
 }

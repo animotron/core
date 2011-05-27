@@ -27,8 +27,8 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Query;
+import org.animotron.operator.Utils;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -48,12 +48,6 @@ public class GET extends Operator implements Evaluable, Query {
 	
 	private GET() { super("get", "animo/query/extract"); }
 
-	private static TraversalDescription td_res = 
-		Traversal.description().
-			breadthFirst().
-			relationships(RelationshipTypes.RESULT, Direction.OUTGOING );
-			//.evaluator(Evaluators.excludeStartPosition());
-
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
@@ -63,23 +57,12 @@ public class GET extends Operator implements Evaluable, Query {
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		
-		//check, maybe, result was already calculated
-		boolean haveResult = false;
-
-		GraphDatabaseService graphdb = op.getGraphDatabase();
-		Transaction tx = graphdb.beginTx();
+		Transaction tx = op.getGraphDatabase().beginTx();
 		try {
 			Node node = op.getEndNode();
-			for (Relationship res : td_res.traverse(node).relationships()) {
-				
-				System.out.println("GET result = "+res);
-				
-				out.write(res);
-				
-				haveResult = true;
-			}
-		
-			if (!haveResult) {
+			
+			//check, maybe, result was already calculated
+			if (!Utils.results(node, out)) {
 				//no pre-calculated result, calculate it
 				PipedInputObjectStream in = new PipedInputObjectStream();
 		

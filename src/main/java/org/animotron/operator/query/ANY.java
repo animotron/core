@@ -18,8 +18,16 @@
  */
 package org.animotron.operator.query;
 
+import java.io.IOException;
+
+import org.animotron.graph.RelationshipTypes;
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Query;
+import org.animotron.operator.Utils;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Query operator 'ANY'.
@@ -34,4 +42,33 @@ public class ANY extends Operator implements Query {
 	
 	private ANY() { super("any", "animo/query/any"); }
 	
+	@Override
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+//		PipedInputObjectStream in = new PipedInputObjectStream();
+
+//		if (!isLast)
+//			Calculator.eval(op, new PipedOutputObjectStream(in));
+		
+		Transaction tx = op.getGraphDatabase().beginTx();
+		try {
+			Node node = op.getEndNode();
+
+			//check, maybe, result was already calculated
+			if (!Utils.results(node, out)) {
+
+				//go to 'THE' node
+				Node the = Utils.getByREF(node); 
+	
+				//get 'THE' relation - ???
+				Relationship res = node.createRelationshipTo(the, RelationshipTypes.RESULT);
+	
+				out.write(res);
+			}
+
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		out.close();
+	}
 }
