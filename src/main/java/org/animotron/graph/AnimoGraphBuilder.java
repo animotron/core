@@ -30,6 +30,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
 import org.animotron.operator.Operator;
@@ -256,8 +257,7 @@ public class AnimoGraphBuilder {
 				
 				if (cache == null){
 					cache = the.create(AnimoGraph.CACHE, hash);
-					Node node = AnimoGraph.createNode(cache, RelationshipTypes.TEXT);
-					Properties.VALUE.set(node, value);
+					TEXT.getInstance().build(cache, value);
 				}
 				
 				if (!statements.empty()) {
