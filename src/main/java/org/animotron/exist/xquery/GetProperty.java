@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.interpreter.AnimoContext;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;
@@ -64,11 +63,11 @@ public class GetProperty extends BasicFunction {
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 		SequenceIterator i = args[0].iterate();
 		Sequence res = new ValueSequence();
-		AnimoContext source = new AnimoContext(args[1], context);  
+		//AnimoContext source = new AnimoContext(args[1], context);  
 		while (i.hasNext()){
 			String name = i.nextItem().getStringValue();
-			Sequence set = source.getProperty(name);
-			res.addAll(set);
+			//Sequence set = source.getProperty(name);
+			//res.addAll(set);
 		}
 		return res;
 	}

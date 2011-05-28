@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.interpreter.AnimoContext;
 import org.exist.dom.NodeSet;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
@@ -77,11 +76,11 @@ public class ResolveReference extends BasicFunction {
 				res.addAll(set);
 			}
 		} else {
-			AnimoContext source = new AnimoContext(args[1].toNodeSet(), context);
+			//AnimoContext source = new AnimoContext(args[1].toNodeSet(), context);
 			while (i.hasNext()){
 				String name = i.nextItem().getStringValue();
-				Sequence set = source.resolveReference(name);
-				res.addAll(set);
+				//Sequence set = source.resolveReference(name);
+				//res.addAll(set);
 			}
 		}
 		return res;

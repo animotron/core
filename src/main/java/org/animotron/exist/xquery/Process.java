@@ -18,7 +18,6 @@
  */
 package org.animotron.exist.xquery;
 
-import org.animotron.interpreter.Controller;
 import org.exist.dom.QName;
 import org.exist.xquery.BasicFunction;
 import org.exist.xquery.Cardinality;
@@ -65,9 +64,9 @@ public class Process extends BasicFunction {
 
 	@Override
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
-		Controller controller = args.length == 1 ? new Controller(context, args[0]) : new Controller(context, args[0], args[1]);
-		Sequence res = controller.process();
-		return res;
+		//Controller controller = args.length == 1 ? new Controller(context, args[0]) : new Controller(context, args[0], args[1]);
+		//Sequence res = controller.process();
+		return null;
 	}
 
 }
