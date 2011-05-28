@@ -18,7 +18,6 @@
  */
 package org.animotron.interpreter;
 
-import org.animotron.Namespaces;
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.xquery.AnalyzeContextInfo;

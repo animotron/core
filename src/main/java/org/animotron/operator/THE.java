@@ -32,7 +32,7 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends Operator {
+public class THE extends AbstarctOperator {
 	
 	private static final THE INSTANCE = new THE();
 	public static THE getInstance() { return INSTANCE; }

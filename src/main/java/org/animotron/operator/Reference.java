@@ -18,8 +18,6 @@
  */
 package org.animotron.operator;
 
-import org.animotron.graph.AnimoRelationshipType;
-import org.neo4j.graphdb.Node;
 
 
 /**

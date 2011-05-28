@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.WeakHashMap;
 
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;
-import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,7 +33,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class TimestampReference extends Operator implements Evaluable {
+public class TimestampReference extends AbstarctOperator implements Evaluable {
 	
 	private static final TimestampReference INSTANCE = new TimestampReference();
 	public static TimestampReference getInstance() { return INSTANCE; }

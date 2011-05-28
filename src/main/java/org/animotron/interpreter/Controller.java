@@ -18,8 +18,6 @@
  */
 package org.animotron.interpreter;
 
-import org.animotron.Keywords;
-import org.animotron.Namespaces;
 import org.animotron.exist.AnimoSequence;
 import org.exist.dom.ElementAtExist;
 import org.exist.dom.NewArrayNodeSet;
@@ -50,6 +48,8 @@ import org.exist.xquery.value.SequenceIterator;
 import org.exist.xquery.value.Type;
 import org.exist.xquery.value.ValueSequence;
 import org.w3c.dom.Node;
+
+import com.sun.org.apache.xpath.internal.compiler.Keywords;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -18,60 +18,19 @@
  */
 package org.animotron.operator;
 
-import java.io.IOException;
-
 import org.animotron.Statement;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.AnimoRelationshipType;
-import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
+
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * 
  */
-public abstract class Operator implements Statement {
-	
-	private String prefix;
-	private String uri;
-	private RelationshipType relationshipType;
-	
-	public Operator(String prefix, String uri) {
-		this.prefix = prefix;
-		this.uri = uri;
-		this.relationshipType = AnimoRelationshipType.get(prefix.toUpperCase());
-	}
-	
-	@Override
-	public String name() {
-		return prefix;
-	}
-	
-	@Override
-	public String namespace() {
-		return uri;
-	}
+public interface Operator extends Statement {
 
-	@Override
-	public RelationshipType relationshipType() {
-		return relationshipType;
-	}
-	
-	public Node build(Node parent, String name) {
-		return build(parent, AnimoGraph.createNode(), name);
-	}
-	
-	public Node build(Node parent, Node child, String name) {
-		parent.createRelationshipTo(child, relationshipType);
-		child.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
-		return child;
-	}
+	public abstract Node build(Node parent, String name);
 
-	
-	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		System.out.println("empty eval @"+this.getClass());
-	}
-	
+	public abstract Node build(Node parent, Node child, String name);
+
 }

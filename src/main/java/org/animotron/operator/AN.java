@@ -24,7 +24,6 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -36,7 +35,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends Operator implements Reference, Evaluable {
+public class AN extends AbstarctOperator implements Reference, Evaluable {
 	
 	private static final AN INSTANCE = new AN();
 	public static AN getInstance() { return INSTANCE; }

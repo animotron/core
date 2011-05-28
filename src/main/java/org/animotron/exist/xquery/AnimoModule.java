@@ -21,7 +21,6 @@ package org.animotron.exist.xquery;
 import java.util.List;
 import java.util.Map;
 
-import org.animotron.Namespaces;
 import org.exist.xquery.AbstractInternalModule;
 import org.exist.xquery.FunctionDef;
 
@@ -31,9 +30,9 @@ import org.exist.xquery.FunctionDef;
  */
 public class AnimoModule extends AbstractInternalModule {
 
-    public static final String NAMESPACE_URI = Namespaces.ANIMO.namespace();
+    public static final String NAMESPACE_URI = "animo";
     
-    public static final String PREFIX = Namespaces.ANIMO.prefix();
+    public static final String PREFIX = "animo";
     public final static String INCLUSION_DATE = "2011-04-09";
     public final static String RELEASED_IN_VERSION = "eXist-1.5";
     

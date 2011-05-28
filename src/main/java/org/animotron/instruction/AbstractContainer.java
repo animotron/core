@@ -21,9 +21,9 @@ package org.animotron.instruction;
 import java.util.Collection;
 import java.util.Map;
 
-import org.neo4j.graphdb.RelationshipType;
-
 import javolution.util.FastMap;
+
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * Abstract instructions container.

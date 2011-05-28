@@ -18,7 +18,6 @@
  */
 package org.animotron.operator;
 
-import org.animotron.graph.AnimoRelationshipType;
 import org.neo4j.graphdb.Node;
 
 
@@ -27,7 +26,7 @@ import org.neo4j.graphdb.Node;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Relation extends Operator {
+public abstract class Relation extends AbstarctOperator {
 	
 	public Relation(String prefix, String uri) {
 		super(prefix, uri);

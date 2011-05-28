@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 
 /**
@@ -27,7 +27,7 @@ import org.animotron.operator.Predicate;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class NE extends Operator implements Predicate {
+public class NE extends AbstarctOperator implements Predicate {
 	
 	private static final NE INSTANCE = new NE();
 	public static NE getInstance() { return INSTANCE; }

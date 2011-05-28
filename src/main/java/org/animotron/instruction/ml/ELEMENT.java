@@ -19,7 +19,6 @@
 package org.animotron.instruction.ml;
 
 import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 

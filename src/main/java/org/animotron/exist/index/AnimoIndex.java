@@ -20,7 +20,6 @@ package org.animotron.exist.index;
 
 import java.io.File;
 
-import org.animotron.Statements;
 import org.apache.log4j.Logger;
 import org.exist.indexing.AbstractIndex;
 import org.exist.indexing.IndexWorker;

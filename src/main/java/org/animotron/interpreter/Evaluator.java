@@ -25,7 +25,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Operator;
+import org.animotron.operator.AbstarctOperator;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -78,8 +78,8 @@ class Evaluator implements Runnable {
 
 				if (s == null)
 					;//???
-				else if (s instanceof Operator) {
-					Operator oper = (Operator) s;
+				else if (s instanceof AbstarctOperator) {
+					AbstarctOperator oper = (AbstarctOperator) s;
 
 					PipedInputObjectStream in = new PipedInputObjectStream();
 

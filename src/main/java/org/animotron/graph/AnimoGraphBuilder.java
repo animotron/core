@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
@@ -107,7 +106,7 @@ public class AnimoGraphBuilder {
 		statements.push(item);
 		
 	}
-
+	
 	public void endElement(String ns, String name) {
 
 		try {
@@ -230,7 +229,7 @@ public class AnimoGraphBuilder {
 //		}
 	}
 
-	public void characters(String text) {
+	public Node characters(String text) {
 		
 		StringBuilder buf = new StringBuilder();
 		if (text.length() > 0) {
@@ -266,11 +265,22 @@ public class AnimoGraphBuilder {
 					((List<Node>) item[3]).add(cache);				
 				}
 				
+				return cache;
+				
 			} catch (Exception e){
 				e.printStackTrace(System.out);
 				tx.finish();
 			}
 			
+			return null;
+			
+	}
+	
+	public void cdata (String text) {
+		Node node = characters(text);
+		if (node != null) {
+			//CDATA.getInstance().build(parent, node);
+		}
 	}
 		
 	public void endDocument(){

@@ -27,7 +27,6 @@ import java.util.Map;
 
 import net.sf.saxon.type.Type;
 
-import org.animotron.Namespaces;
 import org.exist.dom.QName;
 import org.exist.xquery.AnalyzeContextInfo;
 import org.exist.xquery.Constants;

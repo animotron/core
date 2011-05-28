@@ -24,8 +24,8 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;
-import org.animotron.operator.Operator;
 import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
@@ -42,7 +42,7 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends Operator implements Evaluable, Query {
+public class GET extends AbstarctOperator implements Evaluable, Query {
 
 	private static final GET INSTANCE = new GET();
 	public static GET getInstance() { return INSTANCE; }

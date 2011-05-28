@@ -19,7 +19,6 @@
 package org.animotron.instruction.perform;
 
 import org.animotron.instruction.AbstractInstruction;
-import org.animotron.instruction.ml.ML;
 import org.animotron.operator.External;
 
 /**
