@@ -84,13 +84,13 @@ public class EvaluationTreeTests extends AbstractTest {
             String[] must = new String[] {"the:B", "have:B", "some", "another"};
             int i = 0;
             
-            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
-            while (it.hasNext()) {
-            	System.out.println(it.next());
+//            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
+//            while (it.hasNext()) {
+//            	System.out.println(it.next());
             	//System.out.println(AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
-            	i++;
-            }
+//            	i++;
+//            }
             
         } catch (EXistException e) {
 			e.printStackTrace();

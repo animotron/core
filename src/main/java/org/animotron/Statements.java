@@ -35,7 +35,7 @@ import javolution.util.FastMap;
 import org.animotron.instruction.AbstractContainer;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.Operator;
 import org.clapper.util.classutil.AbstractClassFilter;
 import org.clapper.util.classutil.AndClassFilter;
 import org.clapper.util.classutil.ClassFilter;
@@ -83,8 +83,8 @@ public class Statements {
 				} else if (obj instanceof InstructionContainer) {
 					statementsByNamespace.put(obj.namespace(), (Statement) obj);
 					
-				} else if (obj instanceof AbstarctOperator) {
-					AbstarctOperator op = (AbstarctOperator) obj;
+				} else if (obj instanceof Operator) {
+					Operator op = (Operator) obj;
 					statementsByNamespace.put(obj.namespace(), op);
 	            	statementsByRelationType.put(op.relationshipType().name(), op);
 	            	
