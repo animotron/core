@@ -34,7 +34,7 @@ public abstract class Relation extends AbstarctOperator {
 
 	@Override
 	public Node build(Node node, String name){
-		return build(node, THE.getInstance().node(name), name);
+		return build(node, THE.getInstance().getOrCreate(name), name);
 	}
 	
 	@Override
