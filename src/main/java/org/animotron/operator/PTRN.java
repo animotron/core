@@ -25,7 +25,7 @@ package org.animotron.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class PTRN extends AbstarctOperator {
+public class PTRN extends AbstarctOperator implements Property{
 	
 	private static final PTRN INSTANCE = new PTRN();
 	public static PTRN getInstance() { return INSTANCE; }
