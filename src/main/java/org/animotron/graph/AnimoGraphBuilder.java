@@ -257,8 +257,7 @@ public class AnimoGraphBuilder {
 				
 				if (cache == null){
 					cache = the.create(AnimoGraph.CACHE, hash);
-					Node node = AnimoGraph.createNode(cache, TEXT.getInstance().relationshipType());
-					Properties.VALUE.set(node, value);
+					TEXT.getInstance().build(cache, value);
 				}
 				
 				if (!statements.empty()) {
