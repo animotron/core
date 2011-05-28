@@ -92,5 +92,11 @@ public class THE extends Operator {
 		return node;
 	}
 	
+	@Override
+	public Node build(Node parent, Node child, String name) {
+		// TODO: throw exception
+		return null; 
+	}
+	
 
 }

@@ -32,15 +32,16 @@ import org.neo4j.graphdb.Transaction;
 public class AnimoGraph {
 
 	public final static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
-	public final static Node THE, CACHE, CALC, EMPTY;
+	public final static Node THE, CACHE, CALC, EMPTY, GC;
 	
 	static {
 		Transaction tx = AnimoGraph.beginTx();
 		try {
+			GC = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.GC);
 			THE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.THE);
-			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
 			EMPTY = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
+			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			tx.success();
 		} finally {
 			tx.finish();
@@ -56,7 +57,7 @@ public class AnimoGraph {
 			Node end = r.getEndNode();
 			r.delete();
 			if (!end.hasRelationship(Direction.INCOMING)) {
-				ROOT.createRelationshipTo(end, RelationshipTypes.GC);
+				GC.createRelationshipTo(end, RelationshipTypes.GARBAGE);
 			}
 		}
 	}
@@ -66,7 +67,7 @@ public class AnimoGraph {
 		return r == null ? null : r.getEndNode();
 	};
 	
-	private static Node createNode(){
+	public static Node createNode(){
 		return AnimoIndex.graphDb.createNode();
 	}
 

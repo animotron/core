@@ -54,6 +54,7 @@ public class AnimoGraphBuilder {
 	
 	private Transaction tx;
 	private Stack<Object[]> statements;
+	private Node tmp;
 		
 	public Relationship getTHE() {
 		return this.the;
@@ -75,6 +76,7 @@ public class AnimoGraphBuilder {
 	public void startDocument(){
 		statements = new Stack<Object[]>();
 		tx = AnimoGraph.beginTx();
+		the = null;
 	};
 	
 	public void startElement(String ns, String name) {
@@ -118,52 +120,92 @@ public class AnimoGraphBuilder {
 				return;
 			}
 			
+			boolean isProperty = currentStatement instanceof Property;
+			boolean isRelation = currentStatement instanceof Relation;
+			boolean isCachable = !((isProperty || isRelation) && !statements.empty());
+			
+			if (!isCachable){
+				
+				Node node;
+				Object[] parentItem = statements.peek();
+				Statement parentStatement = (Statement) parentItem[0];
+				
+				boolean isTHE = parentStatement instanceof THE;
+				
+				if (isTHE) {
+					node = (Node) parentItem[4]; 
+				} else {
+					if (tmp == null) {
+						node = tmp = AnimoGraph.createNode();
+					} else {
+						node = tmp;
+					}
+				}
+				
+				Operator operator = (Operator) currentStatement;
+				Node res = operator.build(node, (String) currentItem[1]);
+				
+				if (isProperty)
+					addChildren(res, (List<Node>) currentItem[3]);
+				
+				if (isTHE)
+					return;
+				
+			} 
+			
 			MessageDigest md = (MessageDigest) currentItem[2];
 			byte [] digest = md.digest();
 			String hash = MessageDigester.byteArrayToHex(digest);
 			
 			THE the = THE.getInstance();
 			
-			Node cache = the.node(AnimoGraph.CACHE, hash);
+			if (isCachable){
+				
+				Node cache = the.node(AnimoGraph.CACHE, hash);
+				
+				if (cache == null) {
+					
+					cache = the.create(AnimoGraph.CACHE, hash);
+					
+					if (currentStatement instanceof Operator) {
+						Operator operator = (Operator) currentStatement;
+						Node node = tmp != null ? operator.build(cache, tmp, name) : operator.build(cache, name);
+						addChildren(node, (List<Node>) currentItem[3]);
+						tmp = null;
 			
-			if (cache == null) {
-				
-				cache = the.create(AnimoGraph.CACHE, hash);
-				
-				if (currentStatement instanceof Relation) {
-					Operator operator = (Operator) currentStatement;
-					operator.build(cache, name);
-					
-				}if (currentStatement instanceof Operator) {
-					Operator operator = (Operator) currentStatement;
-					Node node = operator.build(cache, name);
-					addChildren(node, (List<Node>) currentItem[3]);
+					} else if (currentStatement instanceof ELEMENT) {
+						ELEMENT element = ELEMENT.getInstance();
+						Node node = tmp != null ? element.build(cache, tmp, ns, name) : element.build(cache, ns, name); 
+						addChildren(node, (List<Node>) currentItem[3]);
+						tmp = null;
 						
-				} else if (currentStatement instanceof ELEMENT) {
-					ELEMENT element = ELEMENT.getInstance();
-					addChildren(element.build(cache, ns, name), (List<Node>) currentItem[3]);
+					} else {
+						Instruction instruction = (Instruction) currentStatement;
+						Node node = tmp != null ? instruction.build(cache, tmp) : instruction.build(cache);
+						addChildren(node, (List<Node>) currentItem[3]);
+						tmp = null;
+						
+					}
 					
-				} else {
-					Instruction operator = (Instruction) currentStatement;
-					Node node = operator.build(cache);
-					addChildren(node, (List<Node>) currentItem[3]);
+					boolean external = false; 
+					
+					if (!statements.empty()) {
+						external = (Boolean) statements.peek()[5];
+					}
+
+					if (currentStatement instanceof Evaluable && !external){
+						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.CALCULATE);
+					}
 					
 				}
-				
-				boolean external = false; 
 				
 				if (!statements.empty()) {
-					external = (Boolean) statements.peek()[5];
-				}
-
-				if (currentStatement instanceof Evaluable && !external){
-					AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.TASK);
+					((List<Node>) statements.peek()[3]).add(cache);
 				}
 				
 			}
 			
 			if (!statements.empty()) {
-				((List<Node>) statements.peek()[3]).add(cache);
 				((MessageDigest) statements.peek()[2]).update(digest);
 			}
 			

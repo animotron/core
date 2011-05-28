@@ -43,4 +43,10 @@ public class TEXT extends AbstractInstruction {
 		return node;
 	}
 	
+	public Node build (Node parent, Node child, String value){
+		Node node = super.build(parent, child);
+		Properties.VALUE.set(node, value);
+		return node;
+	}
+	
 }

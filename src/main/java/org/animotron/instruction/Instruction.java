@@ -31,5 +31,7 @@ public interface Instruction extends Statement {
 
 	public Node build(Node node);
 
+	Node build(Node parent, Node child);
+
 	//public InstructionContainer container();
 }

@@ -59,10 +59,14 @@ public abstract class Operator implements Statement {
 		return relationshipType;
 	}
 	
-	public Node build(Node parent, String name){
-		Node node = AnimoGraph.createNode(parent, relationshipType);
-		node.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
-		return node;
+	public Node build(Node parent, String name) {
+		return build(parent, AnimoGraph.createNode(), name);
+	}
+	
+	public Node build(Node parent, Node child, String name) {
+		parent.createRelationshipTo(child, relationshipType);
+		child.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
+		return child;
 	}
 
 	

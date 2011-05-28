@@ -19,6 +19,7 @@
 package org.animotron.instruction.ml;
 
 import org.animotron.Properties;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 
@@ -39,6 +40,13 @@ public class ELEMENT extends AbstractInstruction {
 
 	public Node build (Node parent, String namespace, String name){
 		Node node = super.build(parent);
+		Properties.NAME.set(node, name);
+		Properties.NAME.set(node, namespace);
+		return node;
+	}
+	
+	public Node build (Node parent, Node child, String namespace, String name){
+		Node node = super.build(parent, child);
 		Properties.NAME.set(node, name);
 		Properties.NAME.set(node, namespace);
 		return node;

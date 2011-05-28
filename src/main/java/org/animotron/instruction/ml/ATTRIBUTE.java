@@ -40,4 +40,10 @@ public class ATTRIBUTE extends ELEMENT {
 		return node;
 	}
 	
+	public Node build (Node parent, Node child, String namespace, String name, String value){
+		Node node = super.build(parent, child, namespace, name);
+		Properties.VALUE.set(node, value);
+		return node;
+	}
+	
 }
