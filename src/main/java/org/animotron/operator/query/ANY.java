@@ -32,6 +32,8 @@ import org.neo4j.graphdb.Transaction;
 /**
  * Query operator 'ANY'.
  * 
+ * Retrun 'all' or first 'perfect' USE
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
