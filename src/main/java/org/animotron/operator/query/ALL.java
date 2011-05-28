@@ -24,6 +24,8 @@ import org.animotron.operator.Query;
 /**
  * Query operator 'ALL'.
  * 
+ * Return nothing (if no USE) or 'all' USE. 
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
