@@ -54,7 +54,6 @@ public class AnimoGraphBuilder {
 	
 	private Transaction tx;
 	private Stack<Object[]> statements;
-	private Node tmp;
 		
 	public Relationship getTHE() {
 		return this.the;
@@ -102,7 +101,7 @@ public class AnimoGraphBuilder {
 		md.update(ns.getBytes());
 		md.update(name.getBytes());
 		
-		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external};
+		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external, null};
 		statements.push(item);
 		
 	}
@@ -126,24 +125,22 @@ public class AnimoGraphBuilder {
 			
 			if (!isCachable){
 				
-				Node node;
 				Object[] parentItem = statements.peek();
 				Statement parentStatement = (Statement) parentItem[0];
-				
+				Node tmp = (Node) parentItem[6];
 				boolean isTHE = parentStatement instanceof THE;
 				
 				if (isTHE) {
-					node = (Node) parentItem[4]; 
+					tmp = (Node) parentItem[4]; 
 				} else {
 					if (tmp == null) {
-						node = tmp = AnimoGraph.createNode();
-					} else {
-						node = tmp;
+						tmp = AnimoGraph.createNode();
+						parentItem[6] = tmp;
 					}
 				}
 				
 				Operator operator = (Operator) currentStatement;
-				Node res = operator.build(node, (String) currentItem[1]);
+				Node res = operator.build(tmp, (String) currentItem[1]);
 				
 				if (isProperty)
 					addChildren(res, (List<Node>) currentItem[3]);
@@ -169,21 +166,21 @@ public class AnimoGraphBuilder {
 					
 					if (currentStatement instanceof Operator) {
 						Operator operator = (Operator) currentStatement;
+						Node tmp = (Node) currentItem[6];
 						Node node = tmp != null ? operator.build(cache, tmp, name) : operator.build(cache, name);
 						addChildren(node, (List<Node>) currentItem[3]);
-						tmp = null;
 			
 					} else if (currentStatement instanceof ELEMENT) {
 						ELEMENT element = ELEMENT.getInstance();
+						Node tmp = (Node) currentItem[6];
 						Node node = tmp != null ? element.build(cache, tmp, ns, name) : element.build(cache, ns, name); 
 						addChildren(node, (List<Node>) currentItem[3]);
-						tmp = null;
 						
 					} else {
 						Instruction instruction = (Instruction) currentStatement;
+						Node tmp = (Node) currentItem[6];
 						Node node = tmp != null ? instruction.build(cache, tmp) : instruction.build(cache);
 						addChildren(node, (List<Node>) currentItem[3]);
-						tmp = null;
 						
 					}
 					
