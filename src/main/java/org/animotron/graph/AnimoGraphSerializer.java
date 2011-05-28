@@ -18,8 +18,6 @@
  */
 package org.animotron.graph;
 
-import org.animotron.Keywords;
-import org.animotron.Namespaces;
 import org.animotron.Properties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
