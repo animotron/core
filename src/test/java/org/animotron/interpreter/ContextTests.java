@@ -102,17 +102,12 @@ public class ContextTests extends AbstractTest {
             broker = pool.get(pool.getSecurityManager().getSystemSubject());
             assertNotNull(broker);
             
-            Relationship op = THE.getInstance().relationship("D");
-            assertNotNull(op);
-
             //System.out.println("any:A");
-            toConsole(
-        		Calculator.eval(op)
-    		);
-            
-        	InputStream stream = Reader.read(op);
-            assertEquals(stream, "<the:D><the:A></the:A></the:D>");
-            
+            assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
+
+            //System.out.println("an:D use:B");
+            assertEquals("E", "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
+
         } catch (EXistException e) {
 			e.printStackTrace();
 			fail(e.getMessage());
@@ -120,5 +115,17 @@ public class ContextTests extends AbstractTest {
         	pool.release(broker);
         }
         //System.out.println("done.");
+	}
+	
+	private void assertEquals(String the, String expecteds) throws IOException {
+        Relationship op = THE.getInstance().relationship(the);
+        assertNotNull(op);
+
+        toConsole(
+    		Calculator.eval(op)
+		);
+        
+    	InputStream stream = Reader.read(op);
+        assertEquals(stream, expecteds);
 	}
 }
