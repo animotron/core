@@ -31,15 +31,5 @@ public enum RelationshipTypes implements RelationshipType {
 	CACHE, 
 	EMPTY, 
 	REF, RESULT,
-	IS, USE, //D
-	PTRN, //D
-	AN, //D 
-	ANY, ALL, //D
-	GT, GE, EQ, NE, LE, LT, //D
-	HAVE, IC, //D
-	GET, SELF, //D
-	DO, //D
-	ELEMENT, ATTRIBUTE, TEXT, CDATA, COMMENT, //D
-	XQUERY, XSLT, //D
 	SOURCE
 }

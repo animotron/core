@@ -110,7 +110,7 @@ public class Reader implements Runnable {
 
 			out.write(("</"+typeName+">").getBytes());
 		
-		} else if (RelationshipTypes.HAVE.name().equals(typeName)) {
+		} else if ("HAVE".equals(typeName)) {
 			String name = null;
 			for (Relationship r : td_have_name.traverse(eNode).relationships()) {
 				name = (String) r.getEndNode().getProperty("NAME");
