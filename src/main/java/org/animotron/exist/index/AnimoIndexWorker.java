@@ -20,8 +20,8 @@ package org.animotron.exist.index;
 
 import java.util.Map;
 
-import org.animotron.Namespaces;
 import org.animotron.graph.AnimoGraphBuilder;
+import org.animotron.operator.THE;
 import org.exist.collections.Collection;
 import org.exist.dom.AttrImpl;
 import org.exist.dom.CharacterDataImpl;
@@ -233,7 +233,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		public void startElement(Txn transaction, ElementImpl element, NodePath path) {
 			level++;
 			if (level == 1) {
-				if (mode == STORE && Namespaces.THE.equals(element.getNamespaceURI())) {
+				if (mode == STORE && THE.getInstance().namespace().equals(element.getNamespaceURI())) {
 					builder.startDocument();
 					builder.startElement(element.getNamespaceURI(), element.getLocalName());
 					doIndex = true;

@@ -28,6 +28,7 @@ import org.animotron.operator.Evaluable;
 import org.animotron.operator.Operator;
 import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
+import org.animotron.operator.relation.HAVE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -51,7 +52,7 @@ public class GET extends Operator implements Evaluable, Query {
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
-			relationships(RelationshipTypes.HAVE, Direction.OUTGOING );
+			relationships(HAVE.getInstance().relationshipType(), Direction.OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
 	@Override
