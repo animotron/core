@@ -28,6 +28,7 @@ import java.util.StringTokenizer;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
+import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Evaluable;
@@ -81,6 +82,10 @@ public class AnimoGraphBuilder {
 	public void startElement(String ns, String name) {
 		
 		Statement statement = Statements.namespace(ns);
+		
+		if (statement instanceof InstructionContainer) {
+			statement = ((InstructionContainer) statement).getInstruction(name);
+		}
 		
 		if (statement == null) {
 			statement = ELEMENT.getInstance(); 
