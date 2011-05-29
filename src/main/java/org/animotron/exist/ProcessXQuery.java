@@ -18,21 +18,6 @@
  */
 package org.animotron.exist;
 
-import org.exist.dom.NodeHandle;
-import org.exist.dom.NodeProxy;
-import org.exist.memtree.NodeImpl;
-import org.exist.security.PermissionDeniedException;
-import org.exist.storage.serializers.Serializer;
-import org.exist.util.serializer.SAXSerializer;
-import org.exist.util.serializer.SerializerPool;
-import org.exist.xquery.CompiledXQuery;
-import org.exist.xquery.XPathException;
-import org.exist.xquery.XQuery;
-import org.exist.xquery.XQueryContext;
-import org.exist.xquery.value.NodeValue;
-import org.exist.xquery.value.Sequence;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

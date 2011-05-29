@@ -24,7 +24,9 @@ import org.animotron.graph.AnimoGraphBuilder;
 import org.animotron.operator.THE;
 import org.exist.collections.Collection;
 import org.exist.dom.AttrImpl;
+import org.exist.dom.CDATASectionImpl;
 import org.exist.dom.CharacterDataImpl;
+import org.exist.dom.CommentImpl;
 import org.exist.dom.DocumentImpl;
 import org.exist.dom.DocumentSet;
 import org.exist.dom.ElementImpl;
@@ -267,7 +269,13 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	    @Override
 	    public void characters(Txn transaction, CharacterDataImpl text, NodePath path) {
 			if (doIndex) 
-				builder.characters(text.getNodeValue());
+				if (text instanceof CommentImpl) {
+					builder.comment(text.getNodeValue());
+				} else if (text instanceof CDATASectionImpl){
+					builder.cdata(text.getNodeValue());
+				} else {
+					builder.text(text.getNodeValue());
+				}
 			super.characters(transaction, text, path);
 	    }
 
