@@ -212,6 +212,7 @@ public class AnimoGraphBuilder {
 			}
 			
 		} catch (Exception e){
+			System.out.println("Error building element " + name);
 			e.printStackTrace(System.out);
 			tx.finish();
 		}
@@ -231,7 +232,7 @@ public class AnimoGraphBuilder {
 //		}
 	}
 
-	public Node characters(String text) {
+	public void characters(String text) {
 		
 		StringBuilder buf = new StringBuilder();
 		if (text.length() > 0) {
@@ -267,22 +268,18 @@ public class AnimoGraphBuilder {
 					((List<Node>) item[3]).add(cache);				
 				}
 				
-				return cache;
-				
 			} catch (Exception e){
 				e.printStackTrace(System.out);
 				tx.finish();
 			}
 			
-			return null;
-			
 	}
 	
 	public void cdata (String text) {
-		Node node = characters(text);
-		if (node != null) {
+		//Node node = characters(text);
+		//if (node != null) {
 			//CDATA.getInstance().build(parent, node);
-		}
+		//}
 	}
 		
 	public void endDocument(){
