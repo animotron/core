@@ -18,8 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.Properties;
-import org.neo4j.graphdb.Node;
 
 
 /**
@@ -27,23 +25,11 @@ import org.neo4j.graphdb.Node;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class ATTRIBUTE extends ELEMENT {
+public class ATTRIBUTE extends MLInstruction {
 	
 	private static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
 	public static ATTRIBUTE getInstance() { return INSTANCE; }
 	
 	private ATTRIBUTE() { super("attribute"); }
-	
-	public Node build (Node parent, String namespace, String name, String value){
-		Node node = super.build(parent, namespace, name);
-		Properties.VALUE.set(node, value);
-		return node;
-	}
-	
-	public Node build (Node parent, Node child, String namespace, String name, String value){
-		Node node = super.build(parent, child, namespace, name);
-		Properties.VALUE.set(node, value);
-		return node;
-	}
 	
 }

@@ -25,11 +25,16 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
+import org.animotron.instruction.ml.ATTRIBUTE;
+import org.animotron.instruction.ml.CDATA;
+import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.instruction.ml.MLInstruction;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
@@ -87,10 +92,17 @@ public class AnimoGraphBuilder {
 			statement = ((InstructionContainer) statement).getInstruction(name);
 		}
 		
+		MessageDigest md = md();
+		
 		if (statement == null) {
 			statement = ELEMENT.getInstance(); 
+			md.update(statement.namespace().getBytes());
+			md.update(statement.name().getBytes());
 		}
 
+		md.update(ns.getBytes());
+		md.update(name.getBytes());
+		
 		Node the = null;
 		//move the instance to GC & create new
 		if (statement instanceof THE){
@@ -101,10 +113,6 @@ public class AnimoGraphBuilder {
 		
 		if (!statements.empty()) 
 			external |= (Boolean) statements.peek()[5];
-		
-		MessageDigest md = md();
-		md.update(ns.getBytes());
-		md.update(name.getBytes());
 		
 		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external, null};
 		statements.push(item);
@@ -220,19 +228,22 @@ public class AnimoGraphBuilder {
 	}
 
 	public void attribute(String ns, String name, String value) {
-		return;
-//		try {
-//			MessageDigest md = CACHEStack.peek();
-//			//CACHE-function depend on namespace, name & value
-//			md.update(ns.getBytes());
-//			md.update(name.getBytes());
-//			md.update(value.getBytes());
-//		} catch (Exception e){
-//			tx.finish();
-//		}
+		
+		MLInstruction instruction = ATTRIBUTE.getInstance(); 
+		
+		Node node = parentNode();
+		Node target = valueNode(value);
+		instruction.build(node, target, ns, name);
+		
+		MessageDigest md = (MessageDigest) statements.peek()[2]; 
+		md.update(instruction.namespace().getBytes());
+		md.update(instruction.name().getBytes());
+		md.update(ns.getBytes());
+		md.update(name.getBytes());
+		
 	}
 
-	public void characters(String text) {
+	public void text (String text) {
 		
 		StringBuilder buf = new StringBuilder();
 		if (text.length() > 0) {
@@ -243,43 +254,30 @@ public class AnimoGraphBuilder {
 			}
 		}
 		
-		if (buf.length() > 0)
+		if (buf.length() > 0) {
+			characters(TEXT.getInstance(), text);
+		}
 			
-			try {
-				
-				String value = buf.toString();
-
-				MessageDigest md = md();
-				md.update(value.getBytes());
-				byte[] digest = md.digest();
-				String hash = MessageDigester.byteArrayToHex(digest);
-				
-				THE the = THE.getInstance();
-				Node cache = the.node(AnimoGraph.CACHE, hash);
-				
-				if (cache == null){
-					cache = the.create(AnimoGraph.CACHE, hash);
-					TEXT.getInstance().build(cache, value);
-				}
-				
-				if (!statements.empty()) {
-					Object[] item = statements.peek();
-					((MessageDigest) item[2]).update(digest);
-					((List<Node>) item[3]).add(cache);				
-				}
-				
-			} catch (Exception e){
-				e.printStackTrace(System.out);
-				tx.finish();
-			}
-			
+	}
+		
+	public void comment(String text) {
+		characters(COMMENT.getInstance(), text);
 	}
 	
 	public void cdata (String text) {
-		//Node node = characters(text);
-		//if (node != null) {
-			//CDATA.getInstance().build(parent, node);
-		//}
+		characters(CDATA.getInstance(), text);
+	}
+	
+	private void characters (MLInstruction instruction, String value){
+
+		Node node = parentNode();
+		Node target = valueNode(value);
+		instruction.build(node, target);
+		
+		MessageDigest md = (MessageDigest) statements.peek()[2]; 
+		md.update(instruction.namespace().getBytes());
+		md.update(instruction.name().getBytes());
+	
 	}
 		
 	public void endDocument(){
@@ -292,6 +290,42 @@ public class AnimoGraphBuilder {
 			for (Relationship r : n.getRelationships(Direction.OUTGOING)){
 				node.createRelationshipTo(r.getEndNode(), r.getType());
 			}
+		}
+	}
+	
+	private Node valueNode(String value) {
+		
+		MessageDigest md = md();
+		md.update(value.getBytes());
+		byte[] digest = md.digest();
+		String hash = MessageDigester.byteArrayToHex(digest);
+		
+		THE the = THE.getInstance();
+		Node cache = the.node(AnimoGraph.CACHE, hash);
+		
+		if (cache == null){
+			cache = the.create(AnimoGraph.CACHE, hash);
+			Properties.VALUE.set(cache, value);
+		}
+		
+		if (!statements.empty()) {
+			((MessageDigest) statements.peek()[2]).update(digest);
+		}
+		
+		return cache;
+	}
+
+	private Node parentNode(){
+		Object[] item = statements.peek();
+		if (item[0] instanceof THE) {
+			return (Node) item[4];
+		} else {
+			Node tmp = (Node) item[6];
+			if (tmp == null){
+				tmp = AnimoGraph.createNode();
+				item[6] = tmp;
+			}
+			return tmp;
 		}
 	}
 	

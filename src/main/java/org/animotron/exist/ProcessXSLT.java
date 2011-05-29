@@ -18,31 +18,6 @@
  */
 package org.animotron.exist;
 
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.sax.SAXResult;
-import javax.xml.transform.sax.SAXTransformerFactory;
-import javax.xml.transform.sax.TemplatesHandler;
-import javax.xml.transform.sax.TransformerHandler;
-
-import org.exist.dom.NodeHandle;
-import org.exist.dom.NodeProxy;
-import org.exist.memtree.DocumentBuilderReceiver;
-import org.exist.memtree.MemTreeBuilder;
-import org.exist.memtree.NodeImpl;
-import org.exist.storage.serializers.Serializer;
-import org.exist.util.serializer.Receiver;
-import org.exist.util.serializer.ReceiverToSAX;
-import org.exist.xquery.XPathException;
-import org.exist.xquery.XQueryContext;
-import org.exist.xquery.value.NodeValue;
-import org.exist.xquery.value.Sequence;
-import org.exist.xquery.value.ValueSequence;
-import org.exist.xslt.TransformerFactoryAllocator;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

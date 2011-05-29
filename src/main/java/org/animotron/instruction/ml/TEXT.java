@@ -18,9 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.Properties;
-import org.animotron.instruction.AbstractInstruction;
-import org.neo4j.graphdb.Node;
 
 
 /**
@@ -28,25 +25,11 @@ import org.neo4j.graphdb.Node;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class TEXT extends AbstractInstruction {
+public class TEXT extends MLInstruction {
 	
 	private static final TEXT INSTANCE = new TEXT();
 	public static TEXT getInstance() { return INSTANCE; }
 	
-	private TEXT() { super("text", "ml", "animo/ml"); }
+	private TEXT() { super("text"); }
 
-	protected TEXT(String name) { super(name, "ml", "animo/ml"); }
-
-	public Node build (Node parent, String value){
-		Node node = super.build(parent);
-		Properties.VALUE.set(node, value);
-		return node;
-	}
-	
-	public Node build (Node parent, Node child, String value){
-		Node node = super.build(parent, child);
-		Properties.VALUE.set(node, value);
-		return node;
-	}
-	
 }
