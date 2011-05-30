@@ -18,6 +18,11 @@
  */
 package org.animotron.instruction.ml;
 
+import org.animotron.Properties;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.instruction.AbstractInstruction;
+import org.neo4j.graphdb.Node;
+
 
 
 /**
@@ -25,11 +30,22 @@ package org.animotron.instruction.ml;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class ELEMENT extends MLInstruction {
+public class ELEMENT extends AbstractInstruction {
 	
 	private static final ELEMENT INSTANCE = new ELEMENT();
 	public static ELEMENT getInstance() { return INSTANCE; }
 	
-	private ELEMENT() { super("element"); }
+	private ELEMENT() { super("element", "ml", "animo/ml"); }
 	
+	public Node build(Node parent, String ns, String name){
+		return build(parent, AnimoGraph.createNode(), ns, name);
+	}
+	
+	public Node build(Node parent, Node child, String ns, String name){
+		parent.createRelationshipTo(child, relationshipType());
+		Properties.NAMESPACE.set(child, ns);
+		Properties.NAME.set(child, name);
+		return child;
+	}
+
 }

@@ -18,6 +18,8 @@
  */
 package org.animotron.instruction.ml;
 
+import org.animotron.instruction.AbstractInstruction;
+
 
 
 /**
@@ -25,11 +27,11 @@ package org.animotron.instruction.ml;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class TEXT extends MLInstruction {
+public class TEXT extends AbstractInstruction {
 	
 	private static final TEXT INSTANCE = new TEXT();
 	public static TEXT getInstance() { return INSTANCE; }
 	
-	private TEXT() { super("text"); }
+	private TEXT() { super("text", "ml", "animo/ml"); }
 
 }

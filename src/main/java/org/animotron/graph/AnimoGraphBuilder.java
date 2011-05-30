@@ -34,7 +34,6 @@ import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.MLInstruction;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
@@ -138,25 +137,28 @@ public class AnimoGraphBuilder {
 			
 			if (!isCachable){
 				
+				Node tmp;
 				Object[] parentItem = statements.peek();
 				Statement parentStatement = (Statement) parentItem[0];
-				Node tmp = (Node) parentItem[6];
 				boolean isTHE = parentStatement instanceof THE;
 				
 				if (isTHE) {
 					tmp = (Node) parentItem[4]; 
 				} else {
+					tmp = (Node) parentItem[6];
 					if (tmp == null) {
 						tmp = AnimoGraph.createNode();
 						parentItem[6] = tmp;
 					}
 				}
 				
+				Node child = (Node) currentItem[6];
 				Operator operator = (Operator) currentStatement;
-				Node res = operator.build(tmp, (String) currentItem[1]);
+				Node res = child != null ? operator.build(tmp, child, name) : operator.build(tmp, name);
 				
 				if (isProperty)
 					addChildren(res, (List<Node>) currentItem[3]);
+				
 				
 				if (isTHE)
 					return;
@@ -169,7 +171,7 @@ public class AnimoGraphBuilder {
 			
 			THE the = THE.getInstance();
 			
-			if (isCachable){
+			if (isCachable) {
 				
 				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
@@ -229,17 +231,25 @@ public class AnimoGraphBuilder {
 
 	public void attribute(String ns, String name, String value) {
 		
-		MLInstruction instruction = ATTRIBUTE.getInstance(); 
-		
-		Node node = parentNode();
-		Node target = valueNode(value);
-		instruction.build(node, target, ns, name);
-		
-		MessageDigest md = (MessageDigest) statements.peek()[2]; 
-		md.update(instruction.namespace().getBytes());
-		md.update(instruction.name().getBytes());
-		md.update(ns.getBytes());
-		md.update(name.getBytes());
+		try {
+
+			ATTRIBUTE instruction = ATTRIBUTE.getInstance(); 
+			
+			Node node = parentNode();
+			Node target = valueNode(value);
+			instruction.build(node, target, ns, name);
+			
+			MessageDigest md = (MessageDigest) statements.peek()[2]; 
+			md.update(instruction.namespace().getBytes());
+			md.update(instruction.name().getBytes());
+			md.update(ns.getBytes());
+			md.update(name.getBytes());
+			
+		} catch (Exception e){
+			System.out.println("Error building attribute " + name);
+			e.printStackTrace(System.out);
+			tx.finish();
+		}
 		
 	}
 
@@ -268,16 +278,24 @@ public class AnimoGraphBuilder {
 		characters(CDATA.getInstance(), text);
 	}
 	
-	private void characters (MLInstruction instruction, String value){
-
-		Node node = parentNode();
-		Node target = valueNode(value);
-		instruction.build(node, target);
+	private void characters (Instruction instruction, String value){
 		
-		MessageDigest md = (MessageDigest) statements.peek()[2]; 
-		md.update(instruction.namespace().getBytes());
-		md.update(instruction.name().getBytes());
-	
+		try {
+		
+			Node node = parentNode();
+			Node target = valueNode(value);
+			instruction.build(node, target);
+			
+			MessageDigest md = (MessageDigest) statements.peek()[2]; 
+			md.update(instruction.namespace().getBytes());
+			md.update(instruction.name().getBytes());
+		
+		} catch (Exception e){
+			System.out.println("Error building " + instruction.name());
+			e.printStackTrace(System.out);
+			tx.finish();
+		}
+		
 	}
 		
 	public void endDocument(){
@@ -308,11 +326,10 @@ public class AnimoGraphBuilder {
 			Properties.VALUE.set(cache, value);
 		}
 		
-		if (!statements.empty()) {
-			((MessageDigest) statements.peek()[2]).update(digest);
-		}
+		((MessageDigest) statements.peek()[2]).update(digest);
 		
 		return cache;
+		
 	}
 
 	private Node parentNode(){
