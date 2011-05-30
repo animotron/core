@@ -152,14 +152,13 @@ public class AnimoGraphBuilder {
 		Object[] currentItem = statements.pop();
 		
 		Statement currentStatement = (Statement) currentItem[0];
-		String name = (String) currentItem[1];
-		String ns = (String) currentItem[7];
 		
 		MessageDigest md = (MessageDigest) currentItem[2];
 		byte [] digest = md.digest();
-		String hash = MessageDigester.byteArrayToHex(digest);
-		THE the = THE.getInstance();
-		Node cache = the.node(AnimoGraph.CACHE, hash);
+		
+		String name = (String) currentItem[1];
+		String ns = (String) currentItem[7];
+		
 		
 		try {
 			
@@ -189,7 +188,7 @@ public class AnimoGraphBuilder {
 				} else {
 					tmp = (Node) parentItem[6];
 					if (tmp == null) {
-						tmp = cache != null ? cache : AnimoGraph.createNode();
+						tmp = AnimoGraph.createNode();
 						parentItem[6] = tmp;
 					}
 				}
@@ -217,6 +216,10 @@ public class AnimoGraphBuilder {
 					return;
 				
 			} else {
+				
+				String hash = MessageDigester.byteArrayToHex(digest);
+				THE the = THE.getInstance();
+				Node cache = the.node(AnimoGraph.CACHE, hash);
 				
 				if (cache == null) {
 					
