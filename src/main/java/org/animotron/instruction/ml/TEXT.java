@@ -18,7 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.instruction.AbstractInstruction;
 
 
 
@@ -27,7 +26,7 @@ import org.animotron.instruction.AbstractInstruction;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class TEXT extends AbstractInstruction {
+public class TEXT extends ValueInstruction {
 	
 	private static final TEXT INSTANCE = new TEXT();
 	public static TEXT getInstance() { return INSTANCE; }

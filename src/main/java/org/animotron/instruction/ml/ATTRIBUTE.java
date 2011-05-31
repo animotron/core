@@ -19,7 +19,6 @@
 package org.animotron.instruction.ml;
 
 import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -38,15 +37,11 @@ public class ATTRIBUTE extends AbstractInstruction {
 	
 	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
 	
-	public Node build(Node parent, String ns, String name){
-		return build(parent, AnimoGraph.createNode(), ns, name);
-	}
-	
-	public Node build(Node parent, Node child, String ns, String name){
-		Relationship relationship = parent.createRelationshipTo(child, relationshipType());
+	public Node build(Node node, Node value, String ns, String name){
+		Relationship relationship = node.createRelationshipTo(value, relationshipType());
 		Properties.NAMESPACE.set(relationship, ns);
 		Properties.NAME.set(relationship, name);
-		return child;
+		return null;
 	}
 
 }

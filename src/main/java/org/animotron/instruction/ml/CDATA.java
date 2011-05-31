@@ -18,7 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.instruction.AbstractInstruction;
 
 
 
@@ -27,7 +26,7 @@ import org.animotron.instruction.AbstractInstruction;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class CDATA extends AbstractInstruction {
+public class CDATA extends ValueInstruction {
 	
 	private static final CDATA INSTANCE = new CDATA();
 	public static CDATA getInstance() { return INSTANCE; }

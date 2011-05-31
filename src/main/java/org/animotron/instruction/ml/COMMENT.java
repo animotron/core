@@ -18,7 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.instruction.AbstractInstruction;
 
 
 
@@ -27,7 +26,7 @@ import org.animotron.instruction.AbstractInstruction;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class COMMENT extends AbstractInstruction {
+public class COMMENT extends ValueInstruction {
 	
 	private static final COMMENT INSTANCE = new COMMENT();
 	public static COMMENT getInstance() { return INSTANCE; }

@@ -68,11 +68,7 @@ public abstract class AbstractInstruction implements Instruction {
 	
 	@Override
 	public Node build(Node parent){
-		return build(parent, AnimoGraph.createNode());
-	}
-	
-	@Override
-	public Node build(Node parent, Node child){
+		Node child = AnimoGraph.createNode();
 		parent.createRelationshipTo(child, relationshipType);
 		return child;
 	}

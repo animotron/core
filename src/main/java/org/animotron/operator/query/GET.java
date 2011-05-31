@@ -25,6 +25,7 @@ import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
@@ -42,7 +43,7 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends AbstarctOperator implements Evaluable, Query {
+public class GET extends AbstarctOperator implements Evaluable, Query, Cachable {
 
 	private static final GET INSTANCE = new GET();
 	public static GET getInstance() { return INSTANCE; }

@@ -52,51 +52,48 @@ public class THE extends AbstarctOperator {
 		return parent.getSingleRelationship(type, Direction.OUTGOING);
 	}
 	
-	public Node node(String name){
-		return node(AnimoGraph.THE, name);
-	}
-
-	public Node node(Node parent, String name) {
+	public Node node(String name) {
 		RelationshipType type = relashionshipType(name);
-		Node node = AnimoGraph.getNode(parent, type);
-		return node;
+		return AnimoGraph.getNode(AnimoGraph.THE, type);
 	}
 	
-	public Node create(Node parent, String name) {
+	private Node create(String name) {
+		Node node = AnimoGraph.createNode();
 		RelationshipType type = relashionshipType(name);
-		Node node = AnimoGraph.createNode(parent, type);
+		AnimoGraph.THE.createRelationshipTo(node, type);
 		Properties.NAME.set(node, name);
 		return node;
 	}
 	
 	public Node getOrCreate(String name) {
-		return getOrCreate(AnimoGraph.THE, name);
-	}
-	
-	public Node getOrCreate(Node parent, String name) {
-		Node node = node(parent, name);
+		Node node = node(name);
 		if (node == null) {
-			node = create(parent, name);
+			node = create(name);
 		}
 		return node;
 	}
 	
 	@Override
 	public Node build(Node parent, String name) {
-		Node node = node(parent, name);
-		if (node != null) {
-			AnimoGraph.clear(node);
-		} else {
-			node = create(parent, name);
-		}
-		return node;
-	}
-	
-	@Override
-	public Node build(Node parent, Node child, String name) {
 		// TODO: throw exception
 		return null; 
 	}
 	
+	public Node build(String name, String hash) {
+		Node node = node(name);
+		if (node != null) {
+			String h = Properties.HASH.get(node);
+			if (h == null) {
+				Properties.HASH.set(node, hash);
+			} else if (!h.equals(hash)) {
+				AnimoGraph.clear(node);
+				Properties.HASH.set(node, hash);
+			}
+		} else {
+			node = create(name);
+			Properties.HASH.set(node, hash);
+		}
+		return node;
+	}
 
 }
