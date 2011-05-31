@@ -34,16 +34,14 @@ import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.MLInstruction;
 import org.animotron.instruction.ml.TEXT;
-import org.animotron.operator.Evaluable;
+import org.animotron.instruction.ml.ValueInstruction;
+import org.animotron.operator.CACHE;
+import org.animotron.operator.Cachable;
 import org.animotron.operator.External;
 import org.animotron.operator.Operator;
-import org.animotron.operator.Property;
-import org.animotron.operator.Relation;
 import org.animotron.operator.THE;
 import org.exist.security.MessageDigester;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -57,9 +55,10 @@ public class AnimoGraphBuilder {
 	private Relationship the = null;
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
+	private static final CACHE CACHE_FACTORY = CACHE.getInstance();
 	
-	private Transaction tx;
 	private Stack<Object[]> statements;
+	private List<Object[]> flow;
 		
 	public Relationship getTHE() {
 		return this.the;
@@ -80,8 +79,7 @@ public class AnimoGraphBuilder {
 	
 	public void startDocument(){
 		statements = new Stack<Object[]>();
-		tx = AnimoGraph.beginTx();
-		the = null;
+		flow = new LinkedList<Object[]>();
 	};
 	
 	public void startElement(String ns, String name) {
@@ -92,155 +90,16 @@ public class AnimoGraphBuilder {
 			statement = ((InstructionContainer) statement).getInstruction(name);
 		}
 		
-		MessageDigest md = md();
+		if (statement == null) 
+			statement = ELEMENT.getInstance();
 		
-		if (statement == null) {
-			statement = ELEMENT.getInstance(); 
-			md.update(statement.namespace().getBytes());
-			md.update(statement.name().getBytes());
-		}
-
-		md.update(ns.getBytes());
-		md.update(name.getBytes());
-		
-		Node the = null;
-		//move the instance to GC & create new
-		if (statement instanceof THE){
-			the = ((THE) statement).build(AnimoGraph.THE, name);
-		}
-		
-		boolean external = statement instanceof External;
-		
-		if (!statements.empty()) 
-			external |= (Boolean) statements.peek()[5];
-		
-		Object[] item = {statement, name, md, new LinkedList<Node>(), the, external, null};
-		statements.push(item);
+		start(statement, ns, name, null);
 		
 	}
 	
-	public void endElement(String ns, String name) {
-
-		try {
-			
-			Object[] currentItem = statements.pop();
-			Statement currentStatement = (Statement) currentItem[0];
-			
-			if (currentStatement instanceof THE){
-				Node node = (Node) currentItem[4];
-				addChildren(node, (List<Node>) currentItem[3]);
-				return;
-			}
-			
-			boolean isProperty = currentStatement instanceof Property;
-			boolean isRelation = currentStatement instanceof Relation;
-			boolean isCachable = !((isProperty || isRelation) && !statements.empty());
-			
-			if (!isCachable){
-				
-				Object[] parentItem = statements.peek();
-				Statement parentStatement = (Statement) parentItem[0];
-				Node tmp = (Node) parentItem[6];
-				boolean isTHE = parentStatement instanceof THE;
-				
-				if (isTHE) {
-					tmp = (Node) parentItem[4]; 
-				} else {
-					if (tmp == null) {
-						tmp = AnimoGraph.createNode();
-						parentItem[6] = tmp;
-					}
-				}
-				
-				Operator operator = (Operator) currentStatement;
-				Node res = operator.build(tmp, (String) currentItem[1]);
-				
-				if (isProperty)
-					addChildren(res, (List<Node>) currentItem[3]);
-				
-				if (isTHE)
-					return;
-				
-			} 
-			
-			MessageDigest md = (MessageDigest) currentItem[2];
-			byte [] digest = md.digest();
-			String hash = MessageDigester.byteArrayToHex(digest);
-			
-			THE the = THE.getInstance();
-			
-			if (isCachable){
-				
-				Node cache = the.node(AnimoGraph.CACHE, hash);
-				
-				if (cache == null) {
-					
-					cache = the.create(AnimoGraph.CACHE, hash);
-					
-					if (currentStatement instanceof Operator) {
-						Operator operator = (Operator) currentStatement;
-						Node tmp = (Node) currentItem[6];
-						Node node = tmp != null ? operator.build(cache, tmp, name) : operator.build(cache, name);
-						addChildren(node, (List<Node>) currentItem[3]);
-			
-					} else if (currentStatement instanceof ELEMENT) {
-						ELEMENT element = ELEMENT.getInstance();
-						Node tmp = (Node) currentItem[6];
-						Node node = tmp != null ? element.build(cache, tmp, ns, name) : element.build(cache, ns, name); 
-						addChildren(node, (List<Node>) currentItem[3]);
-						
-					} else {
-						Instruction instruction = (Instruction) currentStatement;
-						Node tmp = (Node) currentItem[6];
-						Node node = tmp != null ? instruction.build(cache, tmp) : instruction.build(cache);
-						addChildren(node, (List<Node>) currentItem[3]);
-						
-					}
-					
-					boolean external = false; 
-					
-					if (!statements.empty()) {
-						external = (Boolean) statements.peek()[5];
-					}
-
-					if (currentStatement instanceof Evaluable && !external){
-						AnimoGraph.CALC.createRelationshipTo(cache, RelationshipTypes.CALCULATE);
-					}
-					
-				}
-				
-				if (!statements.empty()) {
-					((List<Node>) statements.peek()[3]).add(cache);
-				}
-				
-			}
-			
-			if (!statements.empty()) {
-				((MessageDigest) statements.peek()[2]).update(digest);
-			}
-			
-		} catch (Exception e){
-			System.out.println("Error building element " + name);
-			e.printStackTrace(System.out);
-			tx.finish();
-		}
-		
-	}
-
 	public void attribute(String ns, String name, String value) {
-		
-		MLInstruction instruction = ATTRIBUTE.getInstance(); 
-		
-		Node node = parentNode();
-		Node target = valueNode(value);
-		instruction.build(node, target, ns, name);
-		
-		MessageDigest md = (MessageDigest) statements.peek()[2]; 
-		md.update(instruction.namespace().getBytes());
-		md.update(instruction.name().getBytes());
-		md.update(ns.getBytes());
-		md.update(name.getBytes());
-		
+		start(ATTRIBUTE.getInstance(), ns, name, value);
+		end();
 	}
 
 	public void text (String text) {
@@ -255,78 +114,192 @@ public class AnimoGraphBuilder {
 		}
 		
 		if (buf.length() > 0) {
-			characters(TEXT.getInstance(), text);
+			start(TEXT.getInstance(), null, null, buf.toString());
+			end();
 		}
 			
 	}
 		
 	public void comment(String text) {
-		characters(COMMENT.getInstance(), text);
+		start(COMMENT.getInstance(), null, null, text);
+		end();
 	}
 	
 	public void cdata (String text) {
-		characters(CDATA.getInstance(), text);
+		start(CDATA.getInstance(), null, null, text);
+		end();
 	}
 	
-	private void characters (MLInstruction instruction, String value){
-
-		Node node = parentNode();
-		Node target = valueNode(value);
-		instruction.build(node, target);
-		
-		MessageDigest md = (MessageDigest) statements.peek()[2]; 
-		md.update(instruction.namespace().getBytes());
-		md.update(instruction.name().getBytes());
-	
+	public void endElement(String ns, String name) {
+		end();
 	}
-		
+	
 	public void endDocument(){
-		tx.success();
-		tx.finish();
-	}
-
-	private void addChildren(Node node, List<Node> children) {
-		for (Node n : children) {
-			for (Relationship r : n.getRelationships(Direction.OUTGOING)){
-				node.createRelationshipTo(r.getEndNode(), r.getType());
-			}
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			build();
+			tx.success();
+		} finally {
+			tx.finish();
 		}
 	}
-	
-	private Node valueNode(String value) {
+
+	private void start(Statement statement, String ns, String name, String value) {
 		
 		MessageDigest md = md();
-		md.update(value.getBytes());
-		byte[] digest = md.digest();
-		String hash = MessageDigester.byteArrayToHex(digest);
 		
-		THE the = THE.getInstance();
-		Node cache = the.node(AnimoGraph.CACHE, hash);
+		if (ns != null) 
+			md.update(ns.getBytes());
 		
-		if (cache == null){
-			cache = the.create(AnimoGraph.CACHE, hash);
-			Properties.VALUE.set(cache, value);
+		if (name != null)
+			md.update(name.getBytes());
+		
+		if (!statement.namespace().equals(ns)) 
+			md.update(statement.namespace().getBytes());
+
+		if (!statement.name().equals(name)) 
+			md.update(statement.name().getBytes());
+
+		byte[] bytes = null; 
+		if (value != null) {
+			bytes = value.getBytes();
+			md.update(bytes);
 		}
 		
+		boolean external = statement instanceof External;
 		if (!statements.empty()) {
-			((MessageDigest) statements.peek()[2]).update(digest);
+			external |= (Boolean) statements.peek()[6];
 		}
 		
+		Node current = null;
+		boolean passed = false; 
+		List<Object[]> children = new LinkedList<Object[]>();
+		
+		Object[] item = {	
+				statement,	// 0 	
+				ns, 		// 1
+				name, 		// 2
+				value, 		// 3
+				bytes, 		// 4
+				md, 		// 5
+				external, 	// 6
+				current,	// 7
+				children, 	// 8
+				passed		// 9
+			};
+		
+		statements.push(item);
+		
+	}
+	
+	private void end(){
+		Object[] current = statements.pop();
+		if (!statements.empty()) {
+			Object[] parent = statements.peek();
+			((MessageDigest) parent[5]).update(((MessageDigest) current[5]).digest());
+			((List<Object>) parent[8]).add(current);
+		} else {
+			flow.add(current);
+		}
+	}
+	
+	private void build() {
+		for (Object[] item : flow) {
+			build(null, item);
+		}
+	}
+	
+	private void build(Node parent, List<Object[]> item) {
+		for (Object[] child : item){
+			build(parent, child);
+		}
+	}
+	
+	private void build(Node parent, Object[] item){
+		if ((Boolean) item[9])
+			return;
+		Node node;
+		Statement statement = (Statement) item[0];
+		if (statement instanceof THE) {
+			THE the = (THE) statement;
+			String name = (String) item[2];
+			node = the.build((String) name, hash(item));
+		} else {
+			if (parent == null) {
+				//TODO Fire exception
+				return;
+			}
+			if (statement instanceof Cachable) {
+				String hash = hash(item);
+				node = CACHE_FACTORY.node(hash);
+				if (node == null) {
+					if (statement instanceof Operator) {
+						Operator operator = (Operator) statement;
+						String name = (String) item[2];
+						node = operator.build(parent, name); 
+					} else if (statement instanceof ELEMENT) {
+						ELEMENT element = (ELEMENT) statement;
+						String ns = (String) item[1];
+						String name = (String) item[2];
+						node = element.build(parent, ns, name); 
+					} else {
+						Instruction instruction = (Instruction) statement;
+						node = instruction.build(parent);
+					}
+					CACHE_FACTORY.build(node, hash);
+				} else {
+					parent.createRelationshipTo(node, statement.relationshipType());
+					item[7] = node;
+					item[9] = true;
+					return;
+				}
+			} else {
+				if (statement instanceof Operator) {
+					Operator operator = (Operator) statement;
+					String name = (String) item[2];
+					node = operator.build(parent, name); 
+				} else if (statement instanceof ATTRIBUTE) {
+					ATTRIBUTE attribute = (ATTRIBUTE) statement;
+					String ns = (String) item[1];
+					String name = (String) item[2];
+					Node value = value(item);
+					node = attribute.build(parent, value, ns, name);
+				} else if (statement instanceof ValueInstruction) {
+					ValueInstruction instruction = (ValueInstruction) statement;
+					Node value = value(item);
+					node = instruction.build(parent, value);
+				} else {
+					Instruction instruction = (Instruction) statement;
+					node = instruction.build(parent);
+				}
+			}
+		}
+		build(node, (List<Object[]>) item[8]);
+		item[7] = node;
+		item[9] = true;
+	}
+	
+	private String hash (MessageDigest md) {
+		return MessageDigester.byteArrayToHex(md.digest()); 
+	}
+	
+	private String hash(Object[] item) {
+		return hash((MessageDigest) item[5]);
+	}
+	
+	private Node value(Object[] item) {
+		if (item[4] == null)
+			return null;
+		byte[] bytes = (byte[]) item[4];
+		MessageDigest md = md();
+		md.update(bytes);
+		String hash = hash(md);
+		Node cache = CACHE_FACTORY.node(hash);
+		if (cache == null) {
+			cache = CACHE_FACTORY.build(hash);
+			Properties.VALUE.set(cache, (String) item[3]);
+		}
 		return cache;
 	}
 
-	private Node parentNode(){
-		Object[] item = statements.peek();
-		if (item[0] instanceof THE) {
-			return (Node) item[4];
-		} else {
-			Node tmp = (Node) item[6];
-			if (tmp == null){
-				tmp = AnimoGraph.createNode();
-				item[6] = tmp;
-			}
-			return tmp;
-		}
-	}
-	
 }

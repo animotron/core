@@ -20,16 +20,17 @@ package org.animotron.instruction.ml;
 
 
 
+
 /**
  * Instruction 'ml:cdata'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class CDATA extends MLInstruction {
+public class CDATA extends ValueInstruction {
 	
 	private static final CDATA INSTANCE = new CDATA();
 	public static CDATA getInstance() { return INSTANCE; }
 	
-	private CDATA() { super("cdata"); }
+	private CDATA() { super("cdata", "ml", "animo/ml"); }
 	
 }

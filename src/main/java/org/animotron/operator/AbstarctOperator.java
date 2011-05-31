@@ -59,18 +59,11 @@ public abstract class AbstarctOperator implements Operator {
 	}
 	
 	/* (non-Javadoc)
-	 * @see org.animotron.operator.Operator#build(org.neo4j.graphdb.Node, java.lang.String)
-	 */
-	@Override
-	public Node build(Node parent, String name) {
-		return build(parent, AnimoGraph.createNode(), name);
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.animotron.operator.Operator#build(org.neo4j.graphdb.Node, org.neo4j.graphdb.Node, java.lang.String)
 	 */
 	@Override
-	public Node build(Node parent, Node child, String name) {
+	public Node build(Node parent, String name) {
+		Node child = AnimoGraph.createNode();
 		parent.createRelationshipTo(child, relationshipType);
 		child.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
 		return child;

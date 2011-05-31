@@ -31,4 +31,5 @@ public interface Statement {
 	public String namespace();
 
 	public RelationshipType relationshipType();
+	
 }

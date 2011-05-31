@@ -31,6 +31,4 @@ public interface Operator extends Statement {
 
 	public abstract Node build(Node parent, String name);
 
-	public abstract Node build(Node parent, Node child, String name);
-
 }
