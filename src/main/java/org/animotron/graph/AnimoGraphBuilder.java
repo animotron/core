@@ -101,7 +101,6 @@ public class AnimoGraphBuilder {
 	}
 
 	public void text (String text) {
-		
 		StringBuilder buf = new StringBuilder();
 		if (text.length() > 0) {
 			StringTokenizer tok = new StringTokenizer(text);
@@ -174,8 +173,6 @@ public class AnimoGraphBuilder {
 		Node current = null;
 		boolean passed = false; 
 		
-		System.out.println("start "+md.hashCode());
-
 		Object[] item = {	
 				statement,	// 0 	
 				ns, 		// 1
@@ -194,9 +191,15 @@ public class AnimoGraphBuilder {
 	
 	private void end(){
 		Object[] current = statements.pop();
+
+		byte[] hash = ((MessageDigest) current[5]).digest();
+		
 		if (!statements.empty()) {
-			((MessageDigest) statements.peek()[4]).update(((MessageDigest) current[4]).digest());
+			((MessageDigest) statements.peek()[5]).update(hash);
 		}
+
+		current[5] = hash;
+		
 		flow.add(current);
 	}
 	
@@ -242,20 +245,19 @@ public class AnimoGraphBuilder {
 		}
 	}
 	
-	private String hash (MessageDigest md) {
-		System.out.println("hash (MessageDigest md) "+md.hashCode());
-		return MessageDigester.byteArrayToHex(md.digest()); 
+	private String hash (byte[] md) {
+		return MessageDigester.byteArrayToHex(md); 
 	}
 	
 	private String hash(Object[] item) {
-		return hash((MessageDigest) item[5]);
+		return hash((byte[]) item[5]);
 	}
 	
 	private Node value(String value, byte[] bytes) {
 		try{
 			MessageDigest md = md();
 			md.update(bytes);
-			String hash = hash(md);
+			String hash = hash(md.digest());
 			Node cache = AnimoGraph.getCache(hash);
 			if (cache == null) {
 				cache = AnimoGraph.createCache(hash);
