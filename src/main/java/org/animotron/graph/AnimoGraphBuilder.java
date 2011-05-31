@@ -176,6 +176,8 @@ public class AnimoGraphBuilder {
 		Node current = null;
 		boolean passed = false; 
 		
+		System.out.println("start "+md.hashCode());
+
 		Object[] item = {	
 				statement,	// 0 	
 				ns, 		// 1
@@ -268,6 +270,7 @@ public class AnimoGraphBuilder {
 	}
 	
 	private String hash (MessageDigest md) {
+		System.out.println("hash (MessageDigest md) "+md.hashCode());
 		return MessageDigester.byteArrayToHex(md.digest()); 
 	}
 	
