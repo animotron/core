@@ -33,6 +33,7 @@ public class AnimoGraph {
 
 	public final static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
 	public final static Node THE, CACHE, CALC, EMPTY, GC;
+	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
 	static {
 		Transaction tx = AnimoGraph.beginTx();
@@ -83,6 +84,21 @@ public class AnimoGraph {
 			return r.getEndNode();
 		Node node = createNode(parent, type);
 		return node;
+	}
+
+	public static Node createCache(String hash) {
+		return createCache(AnimoGraph.createNode(), hash);
+	}
+
+	public static Node createCache(Node node, String hash) {
+		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
+		AnimoGraph.CACHE.createRelationshipTo(node, type);
+		return node;
+	}
+
+	public static Node getCache(String hash) {
+		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
+		return AnimoGraph.getNode(AnimoGraph.CACHE, type);
 	}
 
 }

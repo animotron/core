@@ -20,13 +20,13 @@ package org.animotron.instruction;
 
 import java.util.Collection;
 
-import org.animotron.Statement;
+import org.animotron.Container;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface InstructionContainer extends Statement {
+public interface InstructionContainer extends Container {
 	
 	//public String prefix();
 	

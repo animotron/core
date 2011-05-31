@@ -74,11 +74,16 @@ public class THE extends AbstarctOperator {
 	}
 	
 	@Override
-	public Node build(Node parent, String name) {
-		// TODO: throw exception
-		return null; 
+	public Node build(Node parent, String ns, String name, Node value) {
+		Node node = node(name);
+		if (node != null) {
+			AnimoGraph.clear(node);
+		} else {
+			node = create(name);
+		}
+		return node;
 	}
-	
+
 	public Node build(String name, String hash) {
 		Node node = node(name);
 		if (node != null) {
@@ -95,5 +100,4 @@ public class THE extends AbstarctOperator {
 		}
 		return node;
 	}
-
 }

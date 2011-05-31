@@ -18,18 +18,17 @@
  */
 package org.animotron;
 
-import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Node;
+
 
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Statement {
+public interface Statement extends Container {
 	
-	public String name();
-	public String namespace();
-
-	public RelationshipType relationshipType();
+	public Node build(Node parent, String ns, String name, Node value);
 	
 }

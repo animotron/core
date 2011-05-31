@@ -37,8 +37,9 @@ public class ATTRIBUTE extends AbstractInstruction {
 	
 	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
 	
-	public Node build(Node node, Node value, String ns, String name){
-		Relationship relationship = node.createRelationshipTo(value, relationshipType());
+	@Override
+	public Node build(Node parent, String ns, String name, Node value) {
+		Relationship relationship = parent.createRelationshipTo(value, relationshipType());
 		Properties.NAMESPACE.set(relationship, ns);
 		Properties.NAME.set(relationship, name);
 		return null;

@@ -19,7 +19,6 @@
 package org.animotron.operator;
 
 import org.animotron.Statement;
-import org.neo4j.graphdb.Node;
 
 
 /**
@@ -28,7 +27,5 @@ import org.neo4j.graphdb.Node;
  * 
  */
 public interface Operator extends Statement {
-
-	public abstract Node build(Node parent, String name);
 
 }

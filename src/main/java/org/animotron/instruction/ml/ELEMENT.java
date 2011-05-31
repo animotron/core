@@ -38,7 +38,8 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 	
 	private ELEMENT() { super("element", "ml", "animo/ml"); }
 	
-	public Node build(Node parent, String ns, String name){
+	@Override
+	public Node build(Node parent, String ns, String name, Node value) {
 		Node child = AnimoGraph.createNode();
 		parent.createRelationshipTo(child, relationshipType());
 		Properties.NAMESPACE.set(child, ns);

@@ -21,7 +21,7 @@ package org.animotron.interpreter;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.animotron.Statement;
+import org.animotron.Container;
 import org.animotron.Statements;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
@@ -74,7 +74,7 @@ class Evaluator implements Runnable {
 				
 				System.out.println(type.name());
 				
-				Statement s = Statements.relationshipType(type);
+				Container s = Statements.relationshipType(type);
 
 				if (s == null)
 					;//???

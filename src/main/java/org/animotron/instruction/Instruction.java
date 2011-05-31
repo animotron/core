@@ -29,7 +29,4 @@ public interface Instruction extends Statement {
 	
 	public String prefix();
 
-	public Node build(Node parent);
-
-	//public InstructionContainer container();
 }

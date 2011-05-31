@@ -34,8 +34,9 @@ public abstract class ValueInstruction extends AbstractInstruction {
 		super(name, prefix, uri);
 	}
 	
-	public Node build(Node node, Node value){
-		node.createRelationshipTo(value, relationshipType());
+	@Override
+	public Node build(Node parent, String ns, String name, Node value) {
+		parent.createRelationshipTo(value, relationshipType());
 		return null;
 	}
 
