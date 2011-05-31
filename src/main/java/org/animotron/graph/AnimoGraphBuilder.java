@@ -87,7 +87,7 @@ public class AnimoGraphBuilder {
 		Container container = Statements.namespace(ns);
 		
 		if (container instanceof InstructionContainer) {
-			statement = container.getInstruction(name);
+			statement = ((InstructionContainer) container).getInstruction(name);
 		} else {
 			statement = (Statement) container;
 		}

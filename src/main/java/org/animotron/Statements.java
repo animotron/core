@@ -224,10 +224,10 @@ public class Statements {
 		scan();
 	}
 	
-	public static Statement namespace(String uri) {
+	public static Container namespace(String uri) {
 		ready();
 		
-		Statement s = statementsByNamespace.get(uri);
+		Container s = statementsByNamespace.get(uri);
 //		if (s == null && run())
 //			s = statementsByNamespace.get(uri);
 		
