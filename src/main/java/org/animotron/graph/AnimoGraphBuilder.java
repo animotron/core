@@ -166,14 +166,15 @@ public class AnimoGraphBuilder {
 			md.update(bytes);
 		}
 		
+		Object[] parent = null;
 		boolean external = statement instanceof External;
 		if (!statements.empty()) {
-			external |= (Boolean) statements.peek()[6];
+			parent = statements.peek();
+			external |= (Boolean) parent[6];
 		}
 		
 		Node current = null;
 		boolean passed = false; 
-		List<Object[]> children = new LinkedList<Object[]>();
 		
 		Object[] item = {	
 				statement,	// 0 	
@@ -184,7 +185,7 @@ public class AnimoGraphBuilder {
 				md, 		// 5
 				external, 	// 6
 				current,	// 7
-				children, 	// 8
+				parent, 	// 8
 				passed		// 9
 			};
 		
@@ -195,29 +196,20 @@ public class AnimoGraphBuilder {
 	private void end(){
 		Object[] current = statements.pop();
 		if (!statements.empty()) {
-			Object[] parent = statements.peek();
-			((MessageDigest) parent[5]).update(((MessageDigest) current[5]).digest());
-			((List<Object>) parent[8]).add(current);
-		} else {
-			flow.add(current);
+			((MessageDigest) statements.peek()[5]).update(((MessageDigest) current[5]).digest());
 		}
+		flow.add(current);
 	}
 	
 	private void build() {
 		for (Object[] item : flow) {
-			build(null, item);
+			build(item);
 		}
 	}
 	
-	private void build(Node parent, List<Object[]> item) {
-		for (Object[] child : item){
-			build(parent, child);
-		}
-	}
-	
-	private void build(Node parent, Object[] item){
+	private Node build(Object[] item){
 		if ((Boolean) item[9])
-			return;
+			return (Node) item[7];
 		Node node;
 		Statement statement = (Statement) item[0];
 		if (statement instanceof THE) {
@@ -225,9 +217,10 @@ public class AnimoGraphBuilder {
 			String name = (String) item[2];
 			node = the.build((String) name, hash(item));
 		} else {
+			Node parent = build((Object[])item[8]);
 			if (parent == null) {
 				//TODO Fire exception
-				return;
+				return null;
 			}
 			if (statement instanceof Cachable) {
 				String hash = hash(item);
@@ -247,11 +240,6 @@ public class AnimoGraphBuilder {
 						node = instruction.build(parent);
 					}
 					CACHE_FACTORY.build(node, hash);
-				} else {
-					parent.createRelationshipTo(node, statement.relationshipType());
-					item[7] = node;
-					item[9] = true;
-					return;
 				}
 			} else {
 				if (statement instanceof Operator) {
@@ -274,9 +262,9 @@ public class AnimoGraphBuilder {
 				}
 			}
 		}
-		build(node, (List<Object[]>) item[8]);
 		item[7] = node;
 		item[9] = true;
+		return node;
 	}
 	
 	private String hash (MessageDigest md) {
