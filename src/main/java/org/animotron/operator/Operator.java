@@ -26,6 +26,4 @@ import org.animotron.Statement;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public interface Operator extends Statement {
-
-}
+public interface Operator extends Statement {}
