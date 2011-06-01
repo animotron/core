@@ -105,6 +105,7 @@ public class AnimoGraphBuilder {
 	}
 
 	public void text (String text) {
+		
 		StringBuilder buf = new StringBuilder();
 		if (text.length() > 0) {
 			StringTokenizer tok = new StringTokenizer(text);
@@ -186,25 +187,21 @@ public class AnimoGraphBuilder {
 				external, 	// 5
 				current,	// 6
 				parent, 	// 7
-				passed		// 8
+				false		// 8
 			};
 		
 		statements.push(item);
+		flow.add(item);
 		
 	}
 	
 	private void end(){
 		Object[] current = statements.pop();
-
 		byte[] hash = ((MessageDigest) current[4]).digest();
-		
 		if (!statements.empty()) {
 			((MessageDigest) statements.peek()[4]).update(hash);
 		}
-
 		current[4] = hash;
-		
-		flow.add(current);
 	}
 	
 	private void build() {
@@ -213,21 +210,41 @@ public class AnimoGraphBuilder {
 		}
 	}
 	
-	private Node build(Object[] item){
+	private void build(Object[] item){
+		Object[] p =  (Object[]) item[7];
+		if (p != null) {
+			if ((Boolean) p[8]) {
+				item[8] = true; 
+				return;
+			}
+		}
 		try {
-			if ((Boolean) item[8])
-				return (Node) item[6];
 			Node node;
 			Statement statement = (Statement) item[0];
 			if (statement instanceof THE) {
 				THE the = (THE) statement;
 				String name = (String) item[2];
-				node = the.build((String) name, hash(item));
+				String hash = hash(item);
+				node = the.node(name);
+				if (node != null) {
+					String h = Properties.HASH.get(node);
+					if (h == null) {
+						Properties.HASH.set(node, hash);
+					} else if (!h.equals(hash)) {
+						AnimoGraph.clear(node);
+						Properties.HASH.set(node, hash);
+					} else {
+						item[8] = true;
+					}
+				} else {
+					node = the.create(name);
+					Properties.HASH.set(node, hash);
+				}
 			} else {
-				Node parent = build((Object[])item[7]);
+				Node parent = (Node) p[6];
 				if (parent == null) {
 					//TODO Fire exception
-					return null;
+					return;
 				}
 				if (statement instanceof Cachable) {
 					String hash = hash(item);
@@ -235,17 +252,17 @@ public class AnimoGraphBuilder {
 					if (node == null) {
 						node = statement.build(parent, (String) item[1], (String) item[2], (Node) item[3]); 
 						AnimoGraph.createCache(node, hash);
+					} else {
+						parent.createRelationshipTo(node, statement.relationshipType());
+						item[8] = true;
 					}
 				} else {
 					node = statement.build(parent, (String) item[1], (String) item[2], (Node) item[3]); 
 				}
 			}
 			item[6] = node;
-			item[8] = true;
-			return node;
 		} catch (Exception e){
 			tx.finish();
-			return null;
 		}
 	}
 	

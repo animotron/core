@@ -57,7 +57,7 @@ public class THE extends AbstarctOperator {
 		return AnimoGraph.getNode(AnimoGraph.THE, type);
 	}
 	
-	private Node create(String name) {
+	public Node create(String name) {
 		Node node = AnimoGraph.createNode();
 		RelationshipType type = relashionshipType(name);
 		AnimoGraph.THE.createRelationshipTo(node, type);
@@ -84,20 +84,4 @@ public class THE extends AbstarctOperator {
 		return node;
 	}
 
-	public Node build(String name, String hash) {
-		Node node = node(name);
-		if (node != null) {
-			String h = Properties.HASH.get(node);
-			if (h == null) {
-				Properties.HASH.set(node, hash);
-			} else if (!h.equals(hash)) {
-				AnimoGraph.clear(node);
-				Properties.HASH.set(node, hash);
-			}
-		} else {
-			node = create(name);
-			Properties.HASH.set(node, hash);
-		}
-		return node;
-	}
 }
