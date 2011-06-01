@@ -16,24 +16,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
+package org.animotron.operator.query;
 
-import org.neo4j.graphdb.RelationshipType;
-
-
+import org.animotron.operator.AbstarctOperator;
 
 /**
+ * Abstract class for query operators.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- *
  */
-public interface Container {
-
-	public abstract String name();
-
-	public abstract String namespace();
-
-	public abstract RelationshipType relationshipType();
-
-	public abstract RelationshipType resultRelationshipType();
+public abstract class Query extends AbstarctOperator implements org.animotron.operator.Query {
+	
+	protected Query(String prefix, String uri) { 
+		super(prefix, uri, "QUERY:"+prefix.toUpperCase(), "RESULT:"+prefix.toUpperCase()); 
+	}
+	
 }

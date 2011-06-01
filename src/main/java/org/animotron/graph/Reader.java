@@ -24,7 +24,12 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
+import org.animotron.Container;
+import org.animotron.Statements;
 import org.animotron.instruction.ml.TEXT;
+import org.animotron.operator.query.ALL;
+import org.animotron.operator.query.ANY;
+import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -58,6 +63,7 @@ public class Reader implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("");
 		System.out.println("READER");
 		try {
 			process(position);
@@ -74,12 +80,27 @@ public class Reader implements Runnable {
 	}
 
 	private void process(Relationship position) throws IOException {
+		
+		Container st = Statements.resultRelationshipType(position.getType());
+		
 		String typeName = position.getType().toString();
 		Node eNode = position.getEndNode();
 		System.out.println(position);
 		
-		if (RelationshipTypes.RESULT.name().equals(typeName)) {
+		if (st instanceof ANY) {
+			Node sNode = position.getStartNode();
+			System.out.println("eNode = "+eNode);
+			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
+				process( new InMemoryRelationship(sNode, r.getEndNode(), RelationshipTypes.RESULT) );
+			}
+		} else if (st instanceof ALL) {
+			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
+				System.out.println("ALL is down = "+r.getEndNode());
+			}
 			
+		} else if (RelationshipTypes.RESULT.name().equals(typeName)) {
+			
+			//how to find type???
 			String name = typeName;
 			for (Relationship r : eNode.getRelationships(Direction.INCOMING)) {
 				String tmp = r.getType().toString();
@@ -93,10 +114,8 @@ public class Reader implements Runnable {
 					name = "the:"+r.getEndNode().getProperty("NAME");
 					break;
 				}
-					
 			}
 
-			//how to find type???
 			out.write(("<"+name+">").getBytes());
 			
 			subprocess(eNode);
@@ -127,8 +146,10 @@ public class Reader implements Runnable {
 			subprocess(eNode);
 			
 		} else {
-			for (Relationship r : eNode.getRelationships(RelationshipTypes.RESULT, Direction.OUTGOING)) {
-				process(r);
+			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
+				String type = r.getType().name();
+				if (type.startsWith("RESULT") || type.startsWith("QUERY"))
+					process(r);
 			}
 		}
 	}
@@ -137,5 +158,10 @@ public class Reader implements Runnable {
 		Traversal.description().
 			breadthFirst().
 			relationships(RelationshipTypes.REF, Direction.OUTGOING );
+
+	private static TraversalDescription td_is_down = 
+		Traversal.description().
+			breadthFirst().
+			relationships(IS.getInstance().relationshipType(), Direction.INCOMING );
 
 }

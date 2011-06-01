@@ -36,13 +36,25 @@ public abstract class AbstarctOperator implements Operator {
 	private String prefix;
 	private String uri;
 	private RelationshipType relationshipType;
+	private RelationshipType resultRelationshipType = null;
 	
 	public AbstarctOperator(String prefix, String uri) {
-		this.prefix = prefix;
-		this.uri = uri;
-		this.relationshipType = AnimoRelationshipType.get(prefix.toUpperCase());
+		this(prefix, uri, prefix.toUpperCase());
 	}
 	
+	public AbstarctOperator(String prefix, String uri, String relationshipType) {
+		this.prefix = prefix;
+		this.uri = uri;
+		this.relationshipType = AnimoRelationshipType.get(relationshipType);
+	}
+
+	public AbstarctOperator(String prefix, String uri, String relationshipType, String resultRelationshipType) {
+		this.prefix = prefix;
+		this.uri = uri;
+		this.relationshipType = AnimoRelationshipType.get(relationshipType);
+		this.resultRelationshipType = AnimoRelationshipType.get(resultRelationshipType);
+	}
+
 	@Override
 	public String name() {
 		return prefix;
@@ -58,6 +70,11 @@ public abstract class AbstarctOperator implements Operator {
 		return relationshipType;
 	}
 	
+	@Override
+	public RelationshipType resultRelationshipType() {
+		return resultRelationshipType;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.animotron.operator.Operator#build(org.neo4j.graphdb.Node, org.neo4j.graphdb.Node, java.lang.String)
 	 */

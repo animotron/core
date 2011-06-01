@@ -52,13 +52,15 @@ public class Utils {
 	public static boolean results(Node node, PipedOutputObjectStream out) throws IOException {
 		
 		boolean haveSome = false;
-		for (Relationship res : Utils.td_RESULT.traverse(node).relationships()) {
+		for (Relationship res : node.getRelationships(Direction.OUTGOING)) {
 			
-			System.out.println("GET result = "+res);
-			
-			out.write(res);
-			
-			haveSome = true;
+			if (res.getType().name().startsWith("RESULT:")) {
+				System.out.println("GET result = "+res);
+				
+				out.write(res);
+				
+				haveSome = true;
+			}
 		}
 		return haveSome;
 	}

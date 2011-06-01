@@ -30,6 +30,11 @@ public enum RelationshipTypes implements RelationshipType {
 	CALC, CALCULATE, 
 	CACHE, 
 	EMPTY, 
-	REF, RESULT,
+	REF, 
+	
+	RESULT,
+	RESULT_ALL,
+	RESULT_ANY,
+	
 	SOURCE
 }

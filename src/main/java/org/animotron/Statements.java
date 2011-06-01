@@ -62,6 +62,9 @@ public class Statements {
 	private static Map<String, Statement> statementsByRelationType = 
 		new FastMap<String, Statement>();
 
+	private static Map<String, Statement> statementsByResultRelationType = 
+		new FastMap<String, Statement>();
+
 	@SuppressWarnings("unchecked")
 	private static void loadClass(String name, Map<String, List<Instruction>> instructions) {
         Class<? extends Statement> clazz;
@@ -87,6 +90,10 @@ public class Statements {
 					Operator op = (Operator) obj;
 					statementsByNamespace.put(obj.namespace(), op);
 	            	statementsByRelationType.put(op.relationshipType().name(), op);
+	            	
+	            	RelationshipType resultType = op.resultRelationshipType();
+	            	if (resultType != null)
+	            		statementsByResultRelationType.put(resultType.name(), op);
 	            	
 				} else {
 					//TODO: log?
@@ -141,7 +148,7 @@ public class Statements {
 				ClassFilter filter = 
 					new AndClassFilter(
 						// Must implement the Statement interface
-						new SubclassClassFilter (Statement.class),
+						new SubclassClassFilter (Container.class),
 
 						// Must not be an interface
 						new NotClassFilter (new InterfaceOnlyClassFilter()),
@@ -234,14 +241,28 @@ public class Statements {
 		return s;
 	}
 
-	public static Statement relationshipType(RelationshipType type) {
+	public static Container relationshipType(RelationshipType type) {
 		return relationshipType(type.name());
 	}
 
-	public static Statement relationshipType(String name) {
+	public static Container relationshipType(String name) {
 		ready();
 		
 		Statement s = statementsByRelationType.get(name);
+//		if (s == null && run())
+//			s = statementsByRelationType.get(name);
+		
+		return s;
+	}
+
+	public static Container resultRelationshipType(RelationshipType type) {
+		return resultRelationshipType(type.name());
+	}
+
+	public static Container resultRelationshipType(String name) {
+		ready();
+		
+		Statement s = statementsByResultRelationType.get(name);
 //		if (s == null && run())
 //			s = statementsByRelationType.get(name);
 		

@@ -24,7 +24,6 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
-import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -38,7 +37,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ANY extends AbstarctOperator implements Query, Cachable {
+public class ANY extends Query implements Cachable {
 	
 	private static final ANY INSTANCE = new ANY();
 	public static ANY getInstance() { return INSTANCE; }
@@ -63,7 +62,7 @@ public class ANY extends AbstarctOperator implements Query, Cachable {
 				Node the = Utils.getByREF(node); 
 	
 				//get 'THE' relation - ???
-				Relationship res = node.createRelationshipTo(the, RelationshipTypes.RESULT);
+				Relationship res = node.createRelationshipTo(the, resultRelationshipType());
 	
 				out.write(res);
 			}

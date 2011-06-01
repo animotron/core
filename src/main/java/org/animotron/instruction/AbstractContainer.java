@@ -64,7 +64,12 @@ public abstract class AbstractContainer implements InstructionContainer {
 	}
 	
 	public RelationshipType relationshipType() {
-		//wrong! refactoring!
+		//wrong?! refactoring?!
+		return null;
+	}
+
+	public RelationshipType resultRelationshipType() {
+		//wrong?! refactoring?!
 		return null;
 	}
 }

@@ -171,7 +171,7 @@ public class AnimoGraphBuilder {
 		boolean external = statement instanceof External;
 		if (!statements.empty()) {
 			parent = statements.peek();
-			external |= (Boolean) parent[6];
+			external |= (Boolean) parent[5];
 		}
 		
 		Node current = null;
@@ -196,13 +196,13 @@ public class AnimoGraphBuilder {
 	private void end(){
 		Object[] current = statements.pop();
 
-		byte[] hash = ((MessageDigest) current[5]).digest();
+		byte[] hash = ((MessageDigest) current[4]).digest();
 		
 		if (!statements.empty()) {
-			((MessageDigest) statements.peek()[5]).update(hash);
+			((MessageDigest) statements.peek()[4]).update(hash);
 		}
 
-		current[5] = hash;
+		current[4] = hash;
 		
 		flow.add(current);
 	}
@@ -254,7 +254,7 @@ public class AnimoGraphBuilder {
 	}
 	
 	private String hash(Object[] item) {
-		return hash((byte[]) item[5]);
+		return hash((byte[]) item[4]);
 	}
 	
 	private Node value(String value, byte[] bytes) {
