@@ -56,24 +56,24 @@ public class Statements {
 	private static boolean ready = false;
 	private static boolean run = false;
 	
-	private static Map<String, Statement> statementsByNamespace = 
-		new FastMap<String, Statement>();
+	private static Map<String, Container> statementsByNamespace = 
+		new FastMap<String, Container>();
 	
-	private static Map<String, Statement> statementsByRelationType = 
-		new FastMap<String, Statement>();
+	private static Map<String, Container> statementsByRelationType = 
+		new FastMap<String, Container>();
 
-	private static Map<String, Statement> statementsByResultRelationType = 
-		new FastMap<String, Statement>();
+	private static Map<String, Container> statementsByResultRelationType = 
+		new FastMap<String, Container>();
 
 	@SuppressWarnings("unchecked")
 	private static void loadClass(String name, Map<String, List<Instruction>> instructions) {
-        Class<? extends Statement> clazz;
+        Class<? extends Container> clazz;
 		try {
-			clazz = (Class<? extends Statement>) Class.forName( name );
+			clazz = (Class<? extends Container>) Class.forName( name );
 
 			try {
 				Method method = clazz.getMethod("getInstance", null);
-				Statement obj = (Statement) method.invoke(clazz, null);
+				Container obj = (Container) method.invoke(clazz, null);
 
             	if (obj instanceof Instruction) {
             		List<Instruction> list = instructions.get(obj.namespace());
@@ -84,7 +84,7 @@ public class Statements {
             		list.add((Instruction) obj);
 					
 				} else if (obj instanceof InstructionContainer) {
-					statementsByNamespace.put(obj.namespace(), (Statement) obj);
+					statementsByNamespace.put(obj.namespace(), (Container) obj);
 					
 				} else if (obj instanceof Operator) {
 					Operator op = (Operator) obj;
@@ -111,7 +111,7 @@ public class Statements {
 	
 	private static void loadInstructions(Map<String, List<Instruction>> instructions) {
 		for (Entry<String, List<Instruction>> entry : instructions.entrySet()) {
-			Statement s = statementsByNamespace.get( entry.getKey() );
+			Container s = statementsByNamespace.get( entry.getKey() );
 			if (s instanceof InstructionContainer) {
 				AbstractContainer container = (AbstractContainer) s;
 				
@@ -144,10 +144,10 @@ public class Statements {
 				//add class paths as seaching place
 				finder.addClassPath();
 				
-				//create filter for 'Statement' implementations
+				//create filter for 'Container' implementations
 				ClassFilter filter = 
 					new AndClassFilter(
-						// Must implement the Statement interface
+						// Must implement the Container interface
 						new SubclassClassFilter (Container.class),
 
 						// Must not be an interface
@@ -177,7 +177,7 @@ public class Statements {
 						File file = new File("statements.ser");
 						file.delete();
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-						for (Statement s : statementsByNamespace.values()) {
+						for (Container s : statementsByNamespace.values()) {
 
 							bw.write(s.getClass().getName());
 							bw.write("\n");
@@ -248,7 +248,7 @@ public class Statements {
 	public static Container relationshipType(String name) {
 		ready();
 		
-		Statement s = statementsByRelationType.get(name);
+		Container s = statementsByRelationType.get(name);
 //		if (s == null && run())
 //			s = statementsByRelationType.get(name);
 		
@@ -262,7 +262,7 @@ public class Statements {
 	public static Container resultRelationshipType(String name) {
 		ready();
 		
-		Statement s = statementsByResultRelationType.get(name);
+		Container s = statementsByResultRelationType.get(name);
 //		if (s == null && run())
 //			s = statementsByRelationType.get(name);
 		
