@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import org.animotron.Quanta;
 import org.animotron.Properties;
+import org.animotron.Quanta;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.InstructionContainer;
@@ -36,6 +36,7 @@ import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Cachable;
+import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
 import org.animotron.operator.THE;
 import org.exist.security.MessageDigester;
@@ -250,14 +251,14 @@ public class AnimoGraphBuilder {
 					String hash = hash(item);
 					node = AnimoGraph.getCache(hash);
 					if (node == null) {
-						node = statement.build(parent, (String) item[1], (String) item[2], (Node) item[3]); 
+						node = build(statement, parent, item, p);
 						AnimoGraph.createCache(node, hash);
 					} else {
 						parent.createRelationshipTo(node, statement.relationshipType());
 						item[8] = true;
 					}
 				} else {
-					node = statement.build(parent, (String) item[1], (String) item[2], (Node) item[3]); 
+					node = build(statement, parent, item, p); 
 				}
 			}
 			item[6] = node;
@@ -289,6 +290,14 @@ public class AnimoGraphBuilder {
 			tx.finish();
 			return null;
 		}
+	}
+	
+	private Node build(Statement statement, Node parent, Object[] item, Object[] p){
+		Node node = statement.build(parent, (String) item[1], (String) item[2], (Node) item[3]);
+		if (statement instanceof Evaluable && !(Boolean) p[5]) {
+			AnimoGraph.CACHE.createRelationshipTo(node, RelationshipTypes.CALCULATE);
+		}
+		return node;
 	}
 	
 }
