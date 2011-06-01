@@ -20,13 +20,13 @@ package org.animotron.instruction;
 
 import java.util.Collection;
 
-import org.animotron.Container;
+import org.animotron.Quanta;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface InstructionContainer extends Container {
+public interface InstructionContainer extends Quanta {
 	
 	//public String prefix();
 	

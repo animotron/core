@@ -27,7 +27,7 @@ import org.neo4j.graphdb.Node;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Statement extends Container {
+public interface Statement extends Quanta {
 	
 	public Node build(Node parent, String ns, String name, Node value);
 	

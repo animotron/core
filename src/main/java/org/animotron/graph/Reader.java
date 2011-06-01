@@ -24,7 +24,7 @@ import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.animotron.Container;
+import org.animotron.Quanta;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.query.ALL;
@@ -81,7 +81,7 @@ public class Reader implements Runnable {
 
 	private void process(Relationship position) throws IOException {
 		
-		Container st = Statements.resultRelationshipType(position.getType());
+		Quanta st = Statements.resultRelationshipType(position.getType());
 		
 		String typeName = position.getType().toString();
 		Node eNode = position.getEndNode();

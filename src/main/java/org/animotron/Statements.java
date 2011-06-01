@@ -56,24 +56,24 @@ public class Statements {
 	private static boolean ready = false;
 	private static boolean run = false;
 	
-	private static Map<String, Container> statementsByNamespace = 
-		new FastMap<String, Container>();
+	private static Map<String, Quanta> quantasByNamespace = 
+		new FastMap<String, Quanta>();
 	
-	private static Map<String, Container> statementsByRelationType = 
-		new FastMap<String, Container>();
+	private static Map<String, Statement> statementsByRelationType = 
+		new FastMap<String, Statement>();
 
-	private static Map<String, Container> statementsByResultRelationType = 
-		new FastMap<String, Container>();
+	private static Map<String, Statement> statementsByResultRelationType = 
+		new FastMap<String, Statement>();
 
 	@SuppressWarnings("unchecked")
 	private static void loadClass(String name, Map<String, List<Instruction>> instructions) {
-        Class<? extends Container> clazz;
+        Class<? extends Quanta> clazz;
 		try {
-			clazz = (Class<? extends Container>) Class.forName( name );
+			clazz = (Class<? extends Quanta>) Class.forName( name );
 
 			try {
 				Method method = clazz.getMethod("getInstance", null);
-				Container obj = (Container) method.invoke(clazz, null);
+				Quanta obj = (Quanta) method.invoke(clazz, null);
 
             	if (obj instanceof Instruction) {
             		List<Instruction> list = instructions.get(obj.namespace());
@@ -84,11 +84,11 @@ public class Statements {
             		list.add((Instruction) obj);
 					
 				} else if (obj instanceof InstructionContainer) {
-					statementsByNamespace.put(obj.namespace(), (Container) obj);
+					quantasByNamespace.put(obj.namespace(), (Quanta) obj);
 					
 				} else if (obj instanceof Operator) {
 					Operator op = (Operator) obj;
-					statementsByNamespace.put(obj.namespace(), op);
+					quantasByNamespace.put(obj.namespace(), op);
 	            	statementsByRelationType.put(op.relationshipType().name(), op);
 	            	
 	            	RelationshipType resultType = op.resultRelationshipType();
@@ -111,7 +111,7 @@ public class Statements {
 	
 	private static void loadInstructions(Map<String, List<Instruction>> instructions) {
 		for (Entry<String, List<Instruction>> entry : instructions.entrySet()) {
-			Container s = statementsByNamespace.get( entry.getKey() );
+			Quanta s = quantasByNamespace.get( entry.getKey() );
 			if (s instanceof InstructionContainer) {
 				AbstractContainer container = (AbstractContainer) s;
 				
@@ -144,11 +144,11 @@ public class Statements {
 				//add class paths as seaching place
 				finder.addClassPath();
 				
-				//create filter for 'Container' implementations
+				//create filter for 'Quanta' implementations
 				ClassFilter filter = 
 					new AndClassFilter(
-						// Must implement the Container interface
-						new SubclassClassFilter (Container.class),
+						// Must implement the Quanta interface
+						new SubclassClassFilter (Quanta.class),
 
 						// Must not be an interface
 						new NotClassFilter (new InterfaceOnlyClassFilter()),
@@ -174,10 +174,10 @@ public class Statements {
 				
 				if (fast)
 					try {
-						File file = new File("statements.ser");
+						File file = new File("quantas.ser");
 						file.delete();
 						BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-						for (Container s : statementsByNamespace.values()) {
+						for (Quanta s : quantasByNamespace.values()) {
 
 							bw.write(s.getClass().getName());
 							bw.write("\n");
@@ -208,7 +208,7 @@ public class Statements {
             		new FastMap<String, List<Instruction>>();
 
 				//load classes
-				BufferedReader br = new BufferedReader(new FileReader("statements.ser"));
+				BufferedReader br = new BufferedReader(new FileReader("quantas.ser"));
 				String strLine;
 				while ((strLine = br.readLine()) != null)   {
 					loadClass( strLine, instructions );
@@ -231,38 +231,38 @@ public class Statements {
 		scan();
 	}
 	
-	public static Container namespace(String uri) {
+	public static Quanta namespace(String uri) {
 		ready();
 		
-		Container s = statementsByNamespace.get(uri);
+		Quanta s = quantasByNamespace.get(uri);
 //		if (s == null && run())
 //			s = statementsByNamespace.get(uri);
 		
 		return s;
 	}
 
-	public static Container relationshipType(RelationshipType type) {
+	public static Statement relationshipType(RelationshipType type) {
 		return relationshipType(type.name());
 	}
 
-	public static Container relationshipType(String name) {
+	public static Statement relationshipType(String name) {
 		ready();
 		
-		Container s = statementsByRelationType.get(name);
+		Statement s = statementsByRelationType.get(name);
 //		if (s == null && run())
 //			s = statementsByRelationType.get(name);
 		
 		return s;
 	}
 
-	public static Container resultRelationshipType(RelationshipType type) {
+	public static Statement resultRelationshipType(RelationshipType type) {
 		return resultRelationshipType(type.name());
 	}
 
-	public static Container resultRelationshipType(String name) {
+	public static Statement resultRelationshipType(String name) {
 		ready();
 		
-		Container s = statementsByResultRelationType.get(name);
+		Statement s = statementsByResultRelationType.get(name);
 //		if (s == null && run())
 //			s = statementsByRelationType.get(name);
 		

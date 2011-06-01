@@ -23,11 +23,14 @@ import org.neo4j.graphdb.RelationshipType;
 
 
 /**
+ * The minimum amount of any physical entity involved in an interaction 
+ * at animo world.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Container {
+public interface Quanta {
 
 	public abstract String name();
 

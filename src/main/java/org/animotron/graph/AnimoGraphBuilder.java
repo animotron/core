@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import org.animotron.Container;
+import org.animotron.Quanta;
 import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
@@ -84,7 +84,7 @@ public class AnimoGraphBuilder {
 	public void startElement(String ns, String name) {
 		
 		Statement statement;
-		Container container = Statements.namespace(ns);
+		Quanta container = Statements.namespace(ns);
 		
 		if (container instanceof InstructionContainer) {
 			statement = ((InstructionContainer) container).getInstruction(name);
