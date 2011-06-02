@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.animotron.exist.AbstractTest;
-import org.animotron.exist.index.AnimoIndex;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Reader;
 import org.animotron.operator.THE;
 import org.exist.EXistException;
@@ -71,7 +71,7 @@ public class SimpleTests extends AbstractTest {
 	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
         }
         
-        Transaction tx = AnimoIndex.graphDb.beginTx();
+        Transaction tx = AnimoGraph.graphDb.beginTx();
         
         DBBroker broker = null;
         try {

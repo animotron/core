@@ -21,6 +21,7 @@ package org.animotron.operator;
 import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.graph.RelationshipTypes;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -37,14 +38,19 @@ public class THE extends AbstarctOperator {
 	private static final THE INSTANCE = new THE();
 	public static THE getInstance() { return INSTANCE; }
 	
-	private THE() { super("the", "animo/instance"); }
-	
+	protected final Node THE_NODE;
+
+	private THE() { 
+		super("the", "animo/instance"); 
+		THE_NODE = AnimoGraph.getOrCreateNode(AnimoGraph.getROOT(), RelationshipTypes.THE);
+	}
+
 	public RelationshipType relashionshipType(String name){
 		return AnimoRelationshipType.get(name(), name);
 	}
 	
 	public Relationship relationship(String name){
-		return relationship(AnimoGraph.THE, name);
+		return relationship(THE_NODE, name);
 	}
 	
 	public Relationship relationship(Node parent, String name) {
@@ -54,13 +60,13 @@ public class THE extends AbstarctOperator {
 	
 	public Node node(String name) {
 		RelationshipType type = relashionshipType(name);
-		return AnimoGraph.getNode(AnimoGraph.THE, type);
+		return AnimoGraph.getNode(THE_NODE, type);
 	}
 	
 	public Node create(String name) {
 		Node node = AnimoGraph.createNode();
 		RelationshipType type = relashionshipType(name);
-		AnimoGraph.THE.createRelationshipTo(node, type);
+		THE_NODE.createRelationshipTo(node, type);
 		Properties.NAME.set(node, name);
 		return node;
 	}

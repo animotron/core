@@ -59,6 +59,9 @@ public class Statements {
 	private static Map<String, Quanta> quantasByNamespace = 
 		new FastMap<String, Quanta>();
 	
+	private static Map<String, Quanta> quantasByPrefix = 
+		new FastMap<String, Quanta>();
+
 	private static Map<String, Statement> statementsByRelationType = 
 		new FastMap<String, Statement>();
 
@@ -85,10 +88,12 @@ public class Statements {
 					
 				} else if (obj instanceof InstructionContainer) {
 					quantasByNamespace.put(obj.namespace(), (Quanta) obj);
+					quantasByPrefix.put(obj.name(), (Quanta) obj);
 					
 				} else if (obj instanceof Operator) {
 					Operator op = (Operator) obj;
 					quantasByNamespace.put(obj.namespace(), op);
+					quantasByPrefix.put(obj.name(), op);
 	            	statementsByRelationType.put(op.relationshipType().name(), op);
 	            	
 	            	RelationshipType resultType = op.resultRelationshipType();
@@ -235,6 +240,16 @@ public class Statements {
 		ready();
 		
 		Quanta s = quantasByNamespace.get(uri);
+//		if (s == null && run())
+//			s = statementsByNamespace.get(uri);
+		
+		return s;
+	}
+
+	public static Quanta prefix(String name) {
+		ready();
+		
+		Quanta s = quantasByPrefix.get(name);
 //		if (s == null && run())
 //			s = statementsByNamespace.get(uri);
 		
