@@ -19,8 +19,18 @@
 package org.animotron.exist.index;
 
 import java.util.Map;
+import java.util.StringTokenizer;
 
-import org.animotron.graph.XMLGraphBuilder;
+import org.animotron.Quanta;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.graph.GraphBuilder;
+import org.animotron.instruction.InstructionContainer;
+import org.animotron.instruction.ml.ATTRIBUTE;
+import org.animotron.instruction.ml.CDATA;
+import org.animotron.instruction.ml.COMMENT;
+import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.THE;
 import org.exist.collections.Collection;
 import org.exist.dom.AttrImpl;
@@ -227,7 +237,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	private class AnimoStreamListener extends AbstractStreamListener {
 
-		private XMLGraphBuilder builder = new XMLGraphBuilder();
+		private GraphBuilder builder = new GraphBuilder();
 		private boolean doIndex = false;
 		private int level = 0;
 		
@@ -237,13 +247,13 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 			if (level == 1) {
 				if (mode == STORE && THE.getInstance().namespace().equals(element.getNamespaceURI())) {
 					builder.startDocument();
-					builder.startElement(element.getNamespaceURI(), element.getLocalName());
+					startElement(element);
 					doIndex = true;
 				} else {
 					doIndex = false;
 				}
 			} else if (doIndex) {
-				builder.startElement(element.getNamespaceURI(), element.getLocalName());
+				startElement(element);
 			}
 			super.startElement(transaction, element, path);
 		}
@@ -252,7 +262,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		public void endElement(Txn transaction, ElementImpl element, NodePath path) {
 			level--;
 			if (doIndex) { 
-				builder.endElement(element.getNamespaceURI(), element.getLocalName());
+				builder.end();
 				if (level == 0)
 					builder.endDocument();
 			}
@@ -261,21 +271,38 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	    @Override
 	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
-			if (doIndex)
-				builder.attribute(attribute.getNamespaceURI(), attribute.getLocalName(), attribute.getNodeValue());
+			if (doIndex) {
+				builder.start(ATTRIBUTE.getInstance(), attribute.getNamespaceURI(), attribute.getName(), attribute.getValue());
+				builder.end();
+			}
 			super.attribute(transaction, attribute, path);
 	    }
 	    
 	    @Override
 	    public void characters(Txn transaction, CharacterDataImpl text, NodePath path) {
-			if (doIndex) 
+			if (doIndex) {
+				String value = text.getNodeValue();
 				if (text instanceof CommentImpl) {
-					builder.comment(text.getNodeValue());
+					builder.start(COMMENT.getInstance(), null, null, value);
+					builder.end();
 				} else if (text instanceof CDATASectionImpl){
-					builder.cdata(text.getNodeValue());
+					builder.start(CDATA.getInstance(), null, null, value);
+					builder.end();
 				} else {
-					builder.text(text.getNodeValue());
+					StringBuilder buf = new StringBuilder();
+					if (value.length() > 0) {
+						StringTokenizer tok = new StringTokenizer(value);
+						while (tok.hasMoreTokens()) {
+			                buf.append(tok.nextToken());
+							if (tok.hasMoreTokens()) buf.append(' ');
+						}
+					}
+					if (buf.length() > 0) {
+						builder.start(TEXT.getInstance(), null, null, buf.toString());
+						builder.end();
+					}
 				}
+			}
 			super.characters(transaction, text, path);
 	    }
 
@@ -283,7 +310,24 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		public IndexWorker getWorker() {
 			return AnimoIndexWorker.this;
 		}
-
+		
+		private void startElement(ElementImpl element) {
+			Statement statement;
+			String ns = element.getNamespaceURI();
+			String name = element.getLocalName();
+			Quanta container = Statements.namespace(ns);
+			if (container instanceof InstructionContainer) {
+				statement = ((InstructionContainer) container).getInstruction(name);
+			} else {
+				statement = (Statement) container;
+			}
+			if (statement == null) {
+				statement = ELEMENT.getInstance();
+				name = element.getNodeName();
+			}
+			builder.start(statement, ns, name, null);
+		}
+		
 	}
 
 }

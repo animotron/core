@@ -131,7 +131,7 @@ public class GraphBuilder {
 		
 	}
 	
-	final protected void end(){
+	public final void end(){
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {

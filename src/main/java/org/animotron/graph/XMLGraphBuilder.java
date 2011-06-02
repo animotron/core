@@ -36,59 +36,5 @@ import org.animotron.instruction.ml.TEXT;
  */
 public class XMLGraphBuilder extends GraphBuilder {
 	
-	public void startElement(String ns, String name) {
-		
-		Statement statement;
-		Quanta container = Statements.namespace(ns);
-		
-		if (container instanceof InstructionContainer) {
-			statement = ((InstructionContainer) container).getInstruction(name);
-		} else {
-			statement = (Statement) container;
-		}
-		
-		if (statement == null) 
-			statement = ELEMENT.getInstance();
-		
-		start(statement, ns, name, null);
-		
-	}
-	
-	public void attribute(String ns, String name, String value) {
-		start(ATTRIBUTE.getInstance(), ns, name, value);
-		end();
-	}
-
-	public void text (String text) {
-		
-		StringBuilder buf = new StringBuilder();
-		if (text.length() > 0) {
-			StringTokenizer tok = new StringTokenizer(text);
-			while (tok.hasMoreTokens()) {
-                buf.append(tok.nextToken());
-				if (tok.hasMoreTokens()) buf.append(' ');
-			}
-		}
-		
-		if (buf.length() > 0) {
-			start(TEXT.getInstance(), null, null, buf.toString());
-			end();
-		}
-			
-	}
-		
-	public void comment(String text) {
-		start(COMMENT.getInstance(), null, null, text);
-		end();
-	}
-	
-	public void cdata (String text) {
-		start(CDATA.getInstance(), null, null, text);
-		end();
-	}
-	
-	public void endElement(String ns, String name) {
-		end();
-	}
 	
 }
