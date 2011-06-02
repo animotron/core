@@ -245,7 +245,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		public void startElement(Txn transaction, ElementImpl element, NodePath path) {
 			level++;
 			if (level == 1) {
-				if (mode == STORE && THE.getInstance().namespace().equals(element.getNamespaceURI())) {
+				if (mode == STORE && THE.NAMESPACE.equals(element.getNamespaceURI())) {
 					builder.startDocument();
 					startElement(element);
 					doIndex = true;

@@ -33,6 +33,7 @@ import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipExpander;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
@@ -162,6 +163,20 @@ public class Reader implements Runnable {
 	private static TraversalDescription td_is_down = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS.getInstance().relationshipType(), Direction.INCOMING );
+			relationships(IS.getInstance().relationshipType(), Direction.INCOMING ).
+			expand(new RelationshipExpander() {
+				
+				@Override
+				public RelationshipExpander reversed() {
+					// TODO Auto-generated method stub
+					return null;
+				}
+				
+				@Override
+				public Iterable<Relationship> expand(Node node) {
+					// TODO Auto-generated method stub
+					return null;
+				}
+			});
 
 }

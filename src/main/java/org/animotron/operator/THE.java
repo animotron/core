@@ -26,6 +26,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * Operator 'THE'.
@@ -35,6 +36,8 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class THE extends AbstarctOperator {
 	
+	public static String NAMESPACE = "animo/instance";
+
 	private static final THE INSTANCE = new THE();
 	public static THE getInstance() { return INSTANCE; }
 	
@@ -42,7 +45,13 @@ public class THE extends AbstarctOperator {
 
 	private THE() { 
 		super("the", "animo/instance"); 
-		THE_NODE = AnimoGraph.getOrCreateNode(AnimoGraph.getROOT(), RelationshipTypes.THE);
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			THE_NODE = AnimoGraph.getOrCreateNode(AnimoGraph.getROOT(), RelationshipTypes.THE);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
 	}
 
 	public RelationshipType relashionshipType(String name){

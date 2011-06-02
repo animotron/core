@@ -62,7 +62,7 @@ public class AnimoGraph {
 		graphDb.shutdown();
 	}
 	
-	protected static Transaction beginTx() {
+	public static Transaction beginTx() {
 		return graphDb.beginTx();
 	}
 	
