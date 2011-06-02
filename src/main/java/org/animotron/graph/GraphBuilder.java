@@ -39,7 +39,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public abstract class AbstractGraphBuilder implements GraphHandler {
+public class GraphBuilder {
 	
 	private Relationship the = null;
 	
@@ -67,14 +67,12 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 		}
 	}
 	
-	@Override
 	final public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
 	};
 	
-	@Override
 	final public void endDocument(){
 		try {
 			build();
@@ -84,7 +82,6 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 		}
 	}
 
-	@Override
 	final public void start(Statement statement, String ns, String name, String value) {
 		
 		MessageDigest md = md();
@@ -200,7 +197,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 				}
 			}
 			item[6] = node;
-		} catch (Exception e){
+		} catch (Exception e){ 
 			tx.finish();
 		}
 	}
@@ -213,7 +210,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 		return hash((byte[]) item[4]);
 	}
 	
-	final public Node value(String value, byte[] bytes) {
+	final private Node value(String value, byte[] bytes) {
 		try{
 			MessageDigest md = md();
 			md.update(bytes);
@@ -238,9 +235,4 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 		return node;
 	}
 
-	@Override
-	final public void end(Statement statement, String ns, String name, String value) {
-		end();
-	}
-	
 }

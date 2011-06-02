@@ -34,7 +34,7 @@ import org.animotron.instruction.ml.TEXT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public class XMLGraphBuilder extends AbstractGraphBuilder {
+public class XMLGraphBuilder extends GraphBuilder {
 	
 	public void startElement(String ns, String name) {
 		
