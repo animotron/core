@@ -18,8 +18,10 @@
  */
 package org.animotron.instruction.ml;
 
+import org.animotron.Properties;
 import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 
 
@@ -38,6 +40,21 @@ public abstract class ValueInstruction extends AbstractInstruction {
 	public Node build(Node parent, String ns, String name, Node value) {
 		parent.createRelationshipTo(value, relationshipType());
 		return null;
+	}
+	
+	@Override
+	public String name(Relationship r){
+		return null;
+	}
+	
+	@Override
+	public String namespace(Relationship r){
+		return null;
+	}
+	
+	@Override
+	public String value(Relationship r){
+		return Properties.VALUE.get(r.getEndNode());
 	}
 
 }

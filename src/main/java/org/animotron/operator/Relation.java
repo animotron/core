@@ -18,7 +18,9 @@
  */
 package org.animotron.operator;
 
+import org.animotron.Properties;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 
 /**
@@ -40,5 +42,10 @@ public abstract class Relation extends AbstarctOperator {
 		}
 		return null;
 	}
-
+	
+	@Override
+	public String name(Relationship r){
+		return Properties.NAME.get(r.getEndNode());
+	}
+	
 }

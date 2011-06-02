@@ -20,9 +20,11 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
+import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -32,6 +34,8 @@ import org.neo4j.graphdb.RelationshipType;
  *
  */
 public abstract class AbstarctOperator implements Operator {
+	
+	private static final RelationshipType REF = AnimoRelationshipType.get("REF"); 
 	
 	private String prefix;
 	private String uri;
@@ -82,13 +86,29 @@ public abstract class AbstarctOperator implements Operator {
 	public Node build(Node parent, String ns, String name, Node value) {
 		Node child = AnimoGraph.createNode();
 		parent.createRelationshipTo(child, relationshipType);
-		child.createRelationshipTo(THE.getInstance().getOrCreate(name), AnimoRelationshipType.get("REF"));
+		child.createRelationshipTo(THE.getInstance().getOrCreate(name), REF);
 		return child;
 	}
 
 	
 	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		System.out.println("empty eval @"+this.getClass());
+	}
+	
+	@Override
+	public String name(Relationship r){
+		Node node = r.getEndNode().getSingleRelationship(REF, Direction.OUTGOING).getEndNode(); 
+		return Properties.NAME.get(node);
+	}
+	
+	@Override
+	public String namespace(Relationship r){
+		return namespace();
+	}
+	
+	@Override
+	public String value(Relationship r){
+		return null;
 	}
 	
 }

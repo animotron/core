@@ -44,5 +44,21 @@ public class ATTRIBUTE extends AbstractInstruction {
 		Properties.NAME.set(relationship, name);
 		return null;
 	}
+	
+	@Override
+	public String name(Relationship r){
+		return Properties.NAME.get(r);
+	}
+	
+	@Override
+	public String namespace(Relationship r){
+		return Properties.NAMESPACE.get(r);
+	}
+	
+	@Override
+	public String value(Relationship r){
+		return Properties.VALUE.get(r.getEndNode());
+	}
+
 
 }

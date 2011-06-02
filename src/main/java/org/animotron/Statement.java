@@ -19,6 +19,7 @@
 package org.animotron;
 
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 
 
@@ -30,5 +31,11 @@ import org.neo4j.graphdb.Node;
 public interface Statement extends Quanta {
 	
 	public Node build(Node parent, String ns, String name, Node value);
+	
+	public String namespace(Relationship r);
+	
+	public String name(Relationship r);
+	
+	public String value(Relationship r);
 	
 }

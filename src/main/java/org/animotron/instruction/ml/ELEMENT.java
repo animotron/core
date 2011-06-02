@@ -23,6 +23,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.operator.Cachable;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 
 
@@ -45,6 +46,16 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 		Properties.NAMESPACE.set(child, ns);
 		Properties.NAME.set(child, name);
 		return child;
+	}
+	
+	@Override
+	public String name(Relationship r){
+		return Properties.NAME.get(r.getEndNode());
+	}
+	
+	@Override
+	public String namespace(Relationship r){
+		return Properties.NAMESPACE.get(r.getEndNode());
 	}
 
 }
