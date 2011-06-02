@@ -20,7 +20,7 @@ package org.animotron.exist.index;
 
 import java.util.Map;
 
-import org.animotron.graph.AnimoGraphBuilder;
+import org.animotron.graph.XMLGraphBuilder;
 import org.animotron.operator.THE;
 import org.exist.collections.Collection;
 import org.exist.dom.AttrImpl;
@@ -227,7 +227,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 
 	private class AnimoStreamListener extends AbstractStreamListener {
 
-		private AnimoGraphBuilder builder = new AnimoGraphBuilder();
+		private XMLGraphBuilder builder = new XMLGraphBuilder();
 		private boolean doIndex = false;
 		private int level = 0;
 		

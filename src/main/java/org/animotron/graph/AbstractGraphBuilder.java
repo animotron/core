@@ -23,18 +23,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 import org.animotron.Properties;
-import org.animotron.Quanta;
 import org.animotron.Statement;
-import org.animotron.Statements;
-import org.animotron.instruction.InstructionContainer;
-import org.animotron.instruction.ml.ATTRIBUTE;
-import org.animotron.instruction.ml.CDATA;
-import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
@@ -48,7 +39,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public class AnimoGraphBuilder {
+public abstract class AbstractGraphBuilder implements GraphHandler {
 	
 	private Relationship the = null;
 	
@@ -76,67 +67,14 @@ public class AnimoGraphBuilder {
 		}
 	}
 	
+	@Override
 	public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
 	};
 	
-	public void startElement(String ns, String name) {
-		
-		Statement statement;
-		Quanta container = Statements.namespace(ns);
-		
-		if (container instanceof InstructionContainer) {
-			statement = ((InstructionContainer) container).getInstruction(name);
-		} else {
-			statement = (Statement) container;
-		}
-		
-		if (statement == null) 
-			statement = ELEMENT.getInstance();
-		
-		start(statement, ns, name, null);
-		
-	}
-	
-	public void attribute(String ns, String name, String value) {
-		start(ATTRIBUTE.getInstance(), ns, name, value);
-		end();
-	}
-
-	public void text (String text) {
-		
-		StringBuilder buf = new StringBuilder();
-		if (text.length() > 0) {
-			StringTokenizer tok = new StringTokenizer(text);
-			while (tok.hasMoreTokens()) {
-                buf.append(tok.nextToken());
-				if (tok.hasMoreTokens()) buf.append(' ');
-			}
-		}
-		
-		if (buf.length() > 0) {
-			start(TEXT.getInstance(), null, null, buf.toString());
-			end();
-		}
-			
-	}
-		
-	public void comment(String text) {
-		start(COMMENT.getInstance(), null, null, text);
-		end();
-	}
-	
-	public void cdata (String text) {
-		start(CDATA.getInstance(), null, null, text);
-		end();
-	}
-	
-	public void endElement(String ns, String name) {
-		end();
-	}
-	
+	@Override
 	public void endDocument(){
 		try {
 			build();
@@ -146,7 +84,8 @@ public class AnimoGraphBuilder {
 		}
 	}
 
-	private void start(Statement statement, String ns, String name, String value) {
+	@Override
+	public void start(Statement statement, String ns, String name, String value) {
 		
 		MessageDigest md = md();
 		
@@ -177,7 +116,6 @@ public class AnimoGraphBuilder {
 		}
 		
 		Node current = null;
-		boolean passed = false; 
 		
 		Object[] item = {	
 				statement,	// 0 	
@@ -196,7 +134,7 @@ public class AnimoGraphBuilder {
 		
 	}
 	
-	private void end(){
+	protected void end(){
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {
@@ -275,7 +213,11 @@ public class AnimoGraphBuilder {
 		return hash((byte[]) item[4]);
 	}
 	
-	private Node value(String value, byte[] bytes) {
+	/* (non-Javadoc)
+	 * @see org.animotron.graph.GraphHandler#value(java.lang.String, byte[])
+	 */
+	@Override
+	public Node value(String value, byte[] bytes) {
 		try{
 			MessageDigest md = md();
 			md.update(bytes);
@@ -298,6 +240,11 @@ public class AnimoGraphBuilder {
 			AnimoGraph.CACHE.createRelationshipTo(node, RelationshipTypes.CALCULATE);
 		}
 		return node;
+	}
+
+	@Override
+	public void end(Statement statement, String ns, String name, String value) {
+		end();
 	}
 	
 }
