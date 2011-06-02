@@ -20,9 +20,7 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Utils;
 import org.neo4j.graphdb.Node;

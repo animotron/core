@@ -20,6 +20,7 @@ package org.animotron.exist.index;
 
 import java.io.File;
 
+import org.animotron.graph.AnimoGraph;
 import org.apache.log4j.Logger;
 import org.exist.indexing.AbstractIndex;
 import org.exist.indexing.IndexWorker;
@@ -27,10 +28,6 @@ import org.exist.storage.BrokerPool;
 import org.exist.storage.DBBroker;
 import org.exist.storage.btree.DBException;
 import org.exist.util.DatabaseConfigurationException;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.index.IndexService;
-import org.neo4j.index.lucene.LuceneIndexService;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
 import org.w3c.dom.Element;
 
 /**
@@ -43,9 +40,6 @@ public class AnimoIndex extends AbstractIndex {
 
 	public static final String ID = AnimoIndex.class.getName();
 	public static final String FOLDER_NAME = "animo";
-	
-	public static GraphDatabaseService graphDb;
-	public static IndexService indexService;
 	
 	public void configure(BrokerPool db, String dataDir, Element config) throws DatabaseConfigurationException {
 		super.configure(db, dataDir, config);
@@ -62,8 +56,7 @@ public class AnimoIndex extends AbstractIndex {
 	public void open() throws DatabaseConfigurationException {
 		File folder = new File(getDataDir(), FOLDER_NAME);
 		
-		AnimoIndex.graphDb = new EmbeddedGraphDatabase(folder.getAbsolutePath());
-		AnimoIndex.indexService = new LuceneIndexService(graphDb);
+		new AnimoGraph(folder.getAbsolutePath());
 		
 		LOG.debug("Animo index opened at '" + folder.getAbsolutePath() + "' .");
 	}
@@ -76,7 +69,7 @@ public class AnimoIndex extends AbstractIndex {
 	@Override
 	public void close() throws DBException {
 		System.out.println("shutdown graphDb @ close");
-		graphDb.shutdown();
+		AnimoGraph.shutdownDB();
 	}
 
 	/*
@@ -96,7 +89,7 @@ public class AnimoIndex extends AbstractIndex {
 	@Override
 	public void remove() throws DBException {
 		System.out.println("shutdown graphDb @ remove");
-		graphDb.shutdown();
+		AnimoGraph.shutdownDB();
 
 		File folder = new File(getDataDir(), FOLDER_NAME);
 		deleteFolder(folder);

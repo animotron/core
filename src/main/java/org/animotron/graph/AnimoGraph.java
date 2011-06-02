@@ -18,12 +18,10 @@
  */
 package org.animotron.graph;
 
-import org.animotron.exist.index.AnimoIndex;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.*;
+import org.neo4j.index.IndexService;
+import org.neo4j.index.lucene.LuceneIndexService;
+import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -31,15 +29,22 @@ import org.neo4j.graphdb.Transaction;
  */
 public class AnimoGraph {
 
-	public final static Node ROOT = AnimoIndex.graphDb.getReferenceNode();
-	public final static Node THE, CACHE, CALC, EMPTY, GC;
+	public static GraphDatabaseService graphDb;
+	public static IndexService indexService;
+	
+	protected static Node ROOT;
+	protected static Node CACHE, CALC, EMPTY, GC;
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
-	static {
+	public AnimoGraph(String folder) {
+		graphDb = new EmbeddedGraphDatabase(folder);
+		indexService = new LuceneIndexService(graphDb);
+
+		ROOT = graphDb.getReferenceNode();
+		
 		Transaction tx = AnimoGraph.beginTx();
 		try {
 			GC = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.GC);
-			THE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.THE);
 			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
 			EMPTY = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
@@ -49,8 +54,16 @@ public class AnimoGraph {
 		}
 	}
 	
+	public static Node getROOT() {
+		return ROOT;
+	}
+	
+	public static void shutdownDB() {
+		graphDb.shutdown();
+	}
+	
 	protected static Transaction beginTx() {
-		return AnimoIndex.graphDb.beginTx();
+		return graphDb.beginTx();
 	}
 	
 	public static void clear (Node node){
@@ -69,7 +82,7 @@ public class AnimoGraph {
 	};
 	
 	public static Node createNode(){
-		return AnimoIndex.graphDb.createNode();
+		return graphDb.createNode();
 	}
 
 	public static Node createNode(Node parent, RelationshipType type) {
