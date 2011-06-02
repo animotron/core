@@ -50,7 +50,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 
 	private Transaction tx;
 		
-	public Relationship getTHE() {
+	final public Relationship getTHE() {
 		return this.the;
 	}
 	
@@ -68,14 +68,14 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 	}
 	
 	@Override
-	public void startDocument(){
+	final public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
 	};
 	
 	@Override
-	public void endDocument(){
+	final public void endDocument(){
 		try {
 			build();
 			tx.success();
@@ -85,7 +85,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 	}
 
 	@Override
-	public void start(Statement statement, String ns, String name, String value) {
+	final public void start(Statement statement, String ns, String name, String value) {
 		
 		MessageDigest md = md();
 		
@@ -134,7 +134,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 		
 	}
 	
-	protected void end(){
+	final protected void end(){
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {
@@ -213,11 +213,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 		return hash((byte[]) item[4]);
 	}
 	
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#value(java.lang.String, byte[])
-	 */
-	@Override
-	public Node value(String value, byte[] bytes) {
+	final public Node value(String value, byte[] bytes) {
 		try{
 			MessageDigest md = md();
 			md.update(bytes);
@@ -243,7 +239,7 @@ public abstract class AbstractGraphBuilder implements GraphHandler {
 	}
 
 	@Override
-	public void end(Statement statement, String ns, String name, String value) {
+	final public void end(Statement statement, String ns, String name, String value) {
 		end();
 	}
 	

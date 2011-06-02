@@ -18,41 +18,26 @@
  */
 package org.animotron.graph;
 
-import org.animotron.Properties;
-import org.animotron.operator.relation.HAVE;
+import org.animotron.Statement;
+import org.animotron.Statements;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.kernel.Traversal;
-import org.xml.sax.Attributes;
-import org.xml.sax.ContentHandler;
-import org.xml.sax.SAXException;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.AttributesImpl;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class AnimoGraphSerializer {
+public abstract class AbstractGraphSerializer implements GraphHandler {
 	
-	ContentHandler contentHandler;
-	LexicalHandler lexicalHandler;
-
-	public AnimoGraphSerializer(ContentHandler contentHandler, LexicalHandler lexicalHandler) {
-		this.contentHandler = contentHandler;
-		this.lexicalHandler = lexicalHandler;
-	}
-	
-	public void serialize(Relationship r) throws SAXException{
-		
-		Traversal.description().
-		depthFirst().
-		relationships(HAVE.getInstance().relationshipType(), Direction.OUTGOING);
-
-		
-	
+	final public void serialize(Relationship r) {
+		Statement statement = Statements.relationshipType(r.getType());
+		if (statement == null)
+			return;
+		start(statement, statement.namespace(r), statement.name(r), statement.value(r));
+		for(Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)){
+			serialize(i);
+		}
+		end(statement, statement.namespace(r), statement.name(r), statement.value(r));
 	}
 		
 }
