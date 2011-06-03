@@ -32,10 +32,14 @@ import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipExpander;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -90,9 +94,11 @@ public class Reader implements Runnable {
 		
 		if (st instanceof ANY) {
 			Node sNode = position.getStartNode();
-			System.out.println("eNode = "+eNode);
+
+			process( new InMemoryRelationship(sNode, eNode, RelationshipTypes.RESULT) );
+			
 			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
-				process( new InMemoryRelationship(sNode, r.getEndNode(), RelationshipTypes.RESULT) );
+				process( new InMemoryRelationship(sNode, r.getStartNode(), RelationshipTypes.RESULT) );
 			}
 		} else if (st instanceof ALL) {
 			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
@@ -164,19 +170,14 @@ public class Reader implements Runnable {
 		Traversal.description().
 			breadthFirst().
 			relationships(IS.getInstance().relationshipType(), Direction.INCOMING ).
-			expand(new RelationshipExpander() {
-				
+			evaluator(new Evaluator() {
+
 				@Override
-				public RelationshipExpander reversed() {
-					// TODO Auto-generated method stub
-					return null;
+				public Evaluation evaluate(Path path) {
+					System.out.println("path = "+path);
+					return Evaluation.INCLUDE_AND_CONTINUE;
 				}
-				
-				@Override
-				public Iterable<Relationship> expand(Node node) {
-					// TODO Auto-generated method stub
-					return null;
-				}
-			});
+			}).
+			uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
 
 }
