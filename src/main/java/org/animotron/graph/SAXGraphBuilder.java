@@ -18,20 +18,16 @@
  */
 package org.animotron.graph;
 
-import org.animotron.Quanta;
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.instruction.Instruction;
-import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.xml.sax.Attributes;
+import org.xml.sax.ContentHandler;
+import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.DefaultHandler;
 
 
 /**
@@ -39,25 +35,9 @@ import org.xml.sax.helpers.DefaultHandler;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class SAXGraphBuilder extends DefaultHandler implements LexicalHandler {
+public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, LexicalHandler {
 	
 	private Instruction value = TEXT.getInstance();
-	
-	private GraphBuilder builder;
-	
-	public SAXGraphBuilder(GraphBuilder builder) {
-		this.builder = builder;
-	}
-	
-	@Override
-	public void startDocument() {
-		builder.startDocument();
-	}
-	
-	@Override
-	public void endDocument() {
-		builder.endDocument();
-	}
 	
 	private String[] qname (String name, String qname){
 		String[] tmp = {null, name};
@@ -74,13 +54,13 @@ public class SAXGraphBuilder extends DefaultHandler implements LexicalHandler {
 	@Override
 	public void startElement (String ns, String name, String qname, Attributes attributes) throws SAXException {
 		String[] tmp = qname(name, qname);
-		builder.start(tmp[0], ns, tmp[1], null);
+		start(tmp[0], ns, tmp[1], null);
 		for (int i = 0; i < attributes.getLength(); i++) {
 			if ("CDATA".equals(attributes.getType(i))) {
 				tmp = qname(attributes.getLocalName(i), attributes.getQName(i));
-				builder.start(ATTRIBUTE.getInstance(), 
+				start(ATTRIBUTE.getInstance(), 
 						tmp[0], attributes.getURI(i), tmp[1], attributes.getValue(i));
-				builder.end();
+				end();
 			}
 		}
 
@@ -88,19 +68,19 @@ public class SAXGraphBuilder extends DefaultHandler implements LexicalHandler {
 	
 	@Override
 	public void endElement (String ns, String name, String qname) throws SAXException {
-    	builder.end();
+    	end();
 	}
 	
 	@Override
     public void characters (char ch[], int start, int length) throws SAXException {
-		builder.start(value, null, null, null, new String(ch, start, length));
-		builder.end();
+		start(value, null, null, null, new String(ch, start, length));
+		end();
     }
 
 	@Override
 	public void comment(char ch[], int start, int length) throws SAXException {
-		builder.start(COMMENT.getInstance(), null, null, null, new String(ch, start, length));
-		builder.end();
+		start(COMMENT.getInstance(), null, null, null, new String(ch, start, length));
+		end();
 	}
 
 	@Override
@@ -130,6 +110,36 @@ public class SAXGraphBuilder extends DefaultHandler implements LexicalHandler {
 
 	@Override
 	public void startEntity(String arg0) throws SAXException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void endPrefixMapping(String arg0) throws SAXException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void ignorableWhitespace(char[] arg0, int arg1, int arg2) throws SAXException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void processingInstruction(String arg0, String arg1) throws SAXException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void setDocumentLocator(Locator arg0) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void skippedEntity(String arg0) throws SAXException {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void startPrefixMapping(String arg0, String arg1) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 	

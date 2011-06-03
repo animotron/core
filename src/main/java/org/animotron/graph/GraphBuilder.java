@@ -71,13 +71,13 @@ public class GraphBuilder {
 		}
 	}
 	
-	final public void startDocument(){
+	public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
 	};
 	
-	final public void endDocument(){
+	public void endDocument(){
 		try {
 			for (Object[] item : flow) {
 				build(item);
