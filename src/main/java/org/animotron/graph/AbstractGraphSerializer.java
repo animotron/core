@@ -20,6 +20,7 @@ package org.animotron.graph;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 
@@ -43,8 +44,10 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 			return;
 		
 		start(statement, r);
-		for(Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)){
-			build(i);
+		if (!(r instanceof Relation)) {
+			for(Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)){
+				build(i);
+			}
 		}
 		
 		end(statement, r);

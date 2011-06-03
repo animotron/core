@@ -44,7 +44,7 @@ public class THE extends AbstarctOperator {
 	protected final Node THE_NODE;
 
 	private THE() { 
-		super("the", "animo/instance"); 
+		super("the", NAMESPACE); 
 		Transaction tx = AnimoGraph.beginTx();
 		try {
 			THE_NODE = AnimoGraph.getOrCreateNode(AnimoGraph.getROOT(), RelationshipTypes.THE);
