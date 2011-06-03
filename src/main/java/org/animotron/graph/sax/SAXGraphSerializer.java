@@ -16,9 +16,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph;
+package org.animotron.graph.sax;
 
 import org.animotron.Statement;
+import org.animotron.graph.AbstractGraphSerializer;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
