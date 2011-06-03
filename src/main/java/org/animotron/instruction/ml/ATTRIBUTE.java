@@ -39,10 +39,21 @@ public class ATTRIBUTE extends AbstractInstruction {
 	
 	@Override
 	public Node build(Node parent, String ns, String name, Node value) {
-		Relationship relationship = parent.createRelationshipTo(value, relationshipType());
-		Properties.NAMESPACE.set(relationship, ns);
-		Properties.NAME.set(relationship, name);
+		Relationship r = parent.createRelationshipTo(value, relationshipType());
+		int colon = name.indexOf(":");
+        if (colon > 0) {
+    		Properties.PREFIX.set(r, name.substring(0, colon));
+    		Properties.NAME.set(r, name.substring(colon + 1));
+        } else {
+    		Properties.NAME.set(r, name);
+        }
+		Properties.NAMESPACE.set(r, ns);
 		return null;
+	}
+	
+	@Override
+	public String prefix(Relationship r){
+		return Properties.PREFIX.has(r) ? Properties.PREFIX.get(r) : null;
 	}
 	
 	@Override

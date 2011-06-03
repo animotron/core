@@ -37,14 +37,14 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class XMLGraphSerializer extends AbstractGraphSerializer {
+public class SAXGraphSerializer extends AbstractGraphSerializer {
 	
 	private static final ATTRIBUTE ATTR = ATTRIBUTE.getInstance();
 	private static final RelationshipType ATTR_RELATIONSHIPTYPE = ATTR.relationshipType();
 	private ContentHandler contentHandler;
 	private LexicalHandler lexicalHandler;
 	
-	public XMLGraphSerializer(ContentHandler c, LexicalHandler l){
+	public SAXGraphSerializer(ContentHandler c, LexicalHandler l){
 		contentHandler = c;
 		lexicalHandler = l;
 	}
@@ -71,17 +71,17 @@ public class XMLGraphSerializer extends AbstractGraphSerializer {
 				
 			} else if (statement instanceof ELEMENT){
 				String ns = statement.namespace(r);
-				String name = statement.name(r);
+				String qname = statement.qname(r);
 				AttributesImpl attributes = new AttributesImpl();
 				for (Relationship i : r.getEndNode().getRelationships(ATTR_RELATIONSHIPTYPE, Direction.OUTGOING)){
-					attributes.addAttribute(ATTR.namespace(i), null, ATTR.name(i), "CDATA", ATTR.value(i));
+					attributes.addAttribute(ATTR.namespace(i), null, ATTR.qname(i), "CDATA", ATTR.value(i));
 				}
-				contentHandler.startElement(ns, null, name, attributes);
+				contentHandler.startElement(ns, null, qname, attributes);
 				
 			} else {
 				String ns = statement.namespace(r);
-				String name = statement.name(r);
-				contentHandler.startElement(ns, null, name, null);
+				String qname = statement.qname(r);
+				contentHandler.startElement(ns, null, qname, null);
 				
 			}
 		} catch (SAXException e) {

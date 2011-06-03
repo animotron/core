@@ -82,20 +82,28 @@ public abstract class AbstractInstruction implements Instruction {
 	}
 	
 	@Override
-	public String name(Relationship r){
+	public String name(Relationship r) {
 		return name();
 	}
 	
 	@Override
-	public String namespace(Relationship r){
+	public String namespace(Relationship r) {
 		return namespace();
 	}
 	
 	@Override
-	public String value(Relationship r){
+	public String value(Relationship r) {
 		return null;
 	}
 	
+	@Override
+	public String prefix(Relationship r) {
+		return prefix();
+	}
 
-	
+	@Override
+	public String qname(Relationship r) {
+		return prefix(r) + ":" + name(r);
+	}
+
 }

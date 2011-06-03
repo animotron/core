@@ -22,6 +22,9 @@ import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.operator.Cachable;
+import org.exist.dom.QName;
+import org.exist.util.XMLChar;
+import org.exist.xquery.Constants;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -43,8 +46,14 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 	public Node build(Node parent, String ns, String name, Node value) {
 		Node child = AnimoGraph.createNode();
 		parent.createRelationshipTo(child, relationshipType());
+		int colon = name.indexOf(':');
+        if (colon > 0) {
+    		Properties.PREFIX.set(child, name.substring(0, colon));
+    		Properties.NAME.set(child, name.substring(colon + 1));
+        } else {
+    		Properties.NAME.set(child, name);
+        }
 		Properties.NAMESPACE.set(child, ns);
-		Properties.NAME.set(child, name);
 		return child;
 	}
 	
@@ -57,5 +66,12 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 	public String namespace(Relationship r){
 		return Properties.NAMESPACE.get(r.getEndNode());
 	}
+	
+	@Override
+	public String prefix(Relationship r){
+		Node node = r.getEndNode();
+		return Properties.PREFIX.has(node) ? Properties.PREFIX.get(node) : null;
+	}
+
 
 }

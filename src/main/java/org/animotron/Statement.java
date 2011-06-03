@@ -37,5 +37,9 @@ public interface Statement extends Quanta {
 	public String name(Relationship r);
 	
 	public String value(Relationship r);
-	
+
+	public String prefix(Relationship r);
+
+	public String qname(Relationship r);
+
 }
