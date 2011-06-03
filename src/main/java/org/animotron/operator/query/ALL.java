@@ -19,7 +19,6 @@
 package org.animotron.operator.query;
 
 import org.animotron.operator.Cachable;
-import org.animotron.operator.query.Query;
 
 /**
  * Query operator 'ALL'.

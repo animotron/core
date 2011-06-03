@@ -21,7 +21,6 @@ package org.animotron.interpreter;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.animotron.Quanta;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.io.PipedInputObjectStream;

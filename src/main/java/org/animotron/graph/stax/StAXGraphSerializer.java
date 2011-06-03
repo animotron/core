@@ -26,10 +26,8 @@ import org.animotron.graph.AbstractGraphSerializer;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.instruction.ml.ValueInstruction;
-import org.animotron.operator.Operator;
 import org.neo4j.graphdb.Relationship;
 
 /**

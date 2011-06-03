@@ -22,9 +22,6 @@ import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.operator.Cachable;
-import org.exist.dom.QName;
-import org.exist.util.XMLChar;
-import org.exist.xquery.Constants;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 

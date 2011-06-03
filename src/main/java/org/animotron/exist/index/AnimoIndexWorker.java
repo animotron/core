@@ -21,15 +21,10 @@ package org.animotron.exist.index;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.animotron.Quanta;
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.graph.GraphBuilder;
-import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.THE;
 import org.exist.collections.Collection;
