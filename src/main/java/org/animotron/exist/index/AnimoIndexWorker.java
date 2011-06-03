@@ -272,7 +272,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 	    @Override
 	    public void attribute(Txn transaction, AttrImpl attribute, NodePath path) {
 			if (doIndex) {
-				builder.start(ATTRIBUTE.getInstance(), attribute.getNamespaceURI(), attribute.getName(), attribute.getValue());
+				builder.start(ATTRIBUTE.getInstance(), attribute.getPrefix(), attribute.getNamespaceURI(), attribute.getLocalName(), attribute.getValue());
 				builder.end();
 			}
 			super.attribute(transaction, attribute, path);
@@ -283,10 +283,10 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 			if (doIndex) {
 				String value = text.getNodeValue();
 				if (text instanceof CommentImpl) {
-					builder.start(COMMENT.getInstance(), null, null, value);
+					builder.start(COMMENT.getInstance(), null, null, null, value);
 					builder.end();
 				} else if (text instanceof CDATASectionImpl){
-					builder.start(CDATA.getInstance(), null, null, value);
+					builder.start(CDATA.getInstance(), null, null, null, value);
 					builder.end();
 				} else {
 					StringBuilder buf = new StringBuilder();
@@ -298,7 +298,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 						}
 					}
 					if (buf.length() > 0) {
-						builder.start(TEXT.getInstance(), null, null, buf.toString());
+						builder.start(TEXT.getInstance(), null, null, null, buf.toString());
 						builder.end();
 					}
 				}
@@ -312,20 +312,7 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 		}
 		
 		private void startElement(ElementImpl element) {
-			Statement statement;
-			String ns = element.getNamespaceURI();
-			String name = element.getLocalName();
-			Quanta container = Statements.namespace(ns);
-			if (container instanceof InstructionContainer) {
-				statement = ((InstructionContainer) container).getInstruction(name);
-			} else {
-				statement = (Statement) container;
-			}
-			if (statement == null) {
-				statement = ELEMENT.getInstance();
-				name = element.getNodeName();
-			}
-			builder.start(statement, ns, name, null);
+			builder.start(element.getPrefix(), element.getNamespaceURI(), element.getLocalName(), null);
 		}
 		
 	}

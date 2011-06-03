@@ -38,16 +38,11 @@ public class ATTRIBUTE extends AbstractInstruction {
 	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
 	
 	@Override
-	public Node build(Node parent, String ns, String name, Node value) {
+	public Node build(Node parent, String prefix, String ns, String name, Node value) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
-		int colon = name.indexOf(":");
-        if (colon > 0) {
-    		Properties.PREFIX.set(r, name.substring(0, colon));
-    		Properties.NAME.set(r, name.substring(colon + 1));
-        } else {
-    		Properties.NAME.set(r, name);
-        }
+		Properties.PREFIX.set(r, prefix);
 		Properties.NAMESPACE.set(r, ns);
+		Properties.NAME.set(r, name);
 		return null;
 	}
 	

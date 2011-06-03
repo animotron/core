@@ -59,23 +59,27 @@ public class SAXGraphBuilder extends DefaultHandler implements LexicalHandler {
 		builder.endDocument();
 	}
 	
+	private String[] qname (String name, String qname){
+		String[] tmp = {null, name};
+		if (qname != null) {
+			int colon = qname.indexOf(":");
+			if (colon > 0) {
+				tmp[0] = qname.substring(0, colon); 
+				tmp[1] = qname.substring(colon+1); 
+			}
+		}
+		return tmp;
+	}
+	
 	@Override
 	public void startElement (String ns, String name, String qname, Attributes attributes) throws SAXException {
-		Statement statement;
-		Quanta container = Statements.namespace(ns);
-		if (container instanceof InstructionContainer) {
-			statement = ((InstructionContainer) container).getInstruction(name);
-		} else {
-			statement = (Statement) container;
-		}
-		if (statement == null) {
-			statement = ELEMENT.getInstance();
-			name = qname;
-		}
-		builder.start(statement, ns, name, null);
+		String[] tmp = qname(name, qname);
+		builder.start(tmp[0], ns, tmp[1], null);
 		for (int i = 0; i < attributes.getLength(); i++) {
 			if ("CDATA".equals(attributes.getType(i))) {
-				builder.start(ATTRIBUTE.getInstance(), attributes.getURI(i), attributes.getQName(i), attributes.getValue(i));
+				tmp = qname(attributes.getLocalName(i), attributes.getQName(i));
+				builder.start(ATTRIBUTE.getInstance(), 
+						tmp[0], attributes.getURI(i), tmp[1], attributes.getValue(i));
 				builder.end();
 			}
 		}
@@ -89,13 +93,13 @@ public class SAXGraphBuilder extends DefaultHandler implements LexicalHandler {
 	
 	@Override
     public void characters (char ch[], int start, int length) throws SAXException {
-		builder.start(value, null, null, new String(ch, start, length));
+		builder.start(value, null, null, null, new String(ch, start, length));
 		builder.end();
     }
 
 	@Override
 	public void comment(char ch[], int start, int length) throws SAXException {
-		builder.start(COMMENT.getInstance(), null, null, new String(ch, start, length));
+		builder.start(COMMENT.getInstance(), null, null, null, new String(ch, start, length));
 		builder.end();
 	}
 

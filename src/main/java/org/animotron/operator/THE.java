@@ -89,7 +89,7 @@ public class THE extends AbstarctOperator {
 	}
 	
 	@Override
-	public Node build(Node parent, String ns, String name, Node value) {
+	public Node build(Node parent, String prefix, String ns, String name, Node value) {
 		Node node = node(name);
 		if (node != null) {
 			AnimoGraph.clear(node);

@@ -46,7 +46,6 @@ public class StAXGraphSerializer extends AbstractGraphSerializer {
 	@Override
 	public void start(Statement statement, Relationship r) {
 		try {
-
 			if (statement instanceof ATTRIBUTE) {
 				writer.writeAttribute(statement.prefix(r), statement.namespace(r), statement.name(r), statement.value(r));
 				

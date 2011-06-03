@@ -25,7 +25,11 @@ import java.util.List;
 import java.util.Stack;
 
 import org.animotron.Properties;
+import org.animotron.Quanta;
 import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.instruction.InstructionContainer;
+import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
@@ -75,14 +79,33 @@ public class GraphBuilder {
 	
 	final public void endDocument(){
 		try {
-			build();
+			for (Object[] item : flow) {
+				build(item);
+			}
 			tx.success();
 		} finally {
 			tx.finish();
 		}
 	}
 
-	final public void start(Statement statement, String ns, String name, String value) {
+	final public void start(String prefix, String ns, String name, String value) {
+		
+		Statement statement;
+		Quanta container = Statements.namespace(ns);
+		if (container instanceof InstructionContainer) {
+			statement = ((InstructionContainer) container).getInstruction(name);
+		} else {
+			statement = (Statement) container;
+		}
+		if (statement == null) {
+			statement = ELEMENT.getInstance();
+		}
+		
+		start(statement, prefix, ns, name, value);
+		
+	}
+	
+	final public void start(Statement statement, String prefix, String ns, String name, String value) {
 		
 		MessageDigest md = md();
 		
@@ -123,7 +146,8 @@ public class GraphBuilder {
 				external, 	// 5
 				current,	// 6
 				parent, 	// 7
-				false		// 8
+				false,		// 8
+				prefix		// 9
 			};
 		
 		statements.push(item);
@@ -138,12 +162,6 @@ public class GraphBuilder {
 			((MessageDigest) statements.peek()[4]).update(hash);
 		}
 		current[4] = hash;
-	}
-	
-	private void build() {
-		for (Object[] item : flow) {
-			build(item);
-		}
 	}
 	
 	private void build(Object[] item){
@@ -228,7 +246,7 @@ public class GraphBuilder {
 	}
 	
 	private Node build(Statement statement, Node parent, Object[] item, Object[] p){
-		Node node = statement.build(parent, (String) item[1], (String) item[2], (Node) item[3]);
+		Node node = statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3]);
 		if (statement instanceof Evaluable && !(Boolean) p[5]) {
 			AnimoGraph.CACHE.createRelationshipTo(node, RelationshipTypes.CALCULATE);
 		}
