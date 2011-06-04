@@ -84,8 +84,11 @@ public class StAXGraphBuilder extends GraphBuilder {
 	}
 
 	private void text(XMLStreamReader reader) {
-		start(TEXT.getInstance(), null, null, null, reader.getText());
-		end();
+		String value = removeWS(reader.getText());
+		if (value != null) {
+			start(TEXT.getInstance(), null, null, null, value);
+			end();
+		}
 	}
 
 	private void comment(XMLStreamReader reader) {

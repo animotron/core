@@ -32,6 +32,7 @@ import org.animotron.graph.stax.StAXGraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -76,6 +77,7 @@ public class StoreTests extends ATest {
         store(nameDataMap);
         System.out.println("loaded ...");
         
+        Transaction tx = AnimoGraph.beginTx();
         try { 
 	        Relationship r = THE.getInstance().relationship("B");
 	            
@@ -96,9 +98,13 @@ public class StoreTests extends ATest {
 //            	i++;
 //            }
 	        
+	        tx.success();
+	        
         } catch (XMLStreamException e) {
         	e.printStackTrace();
 			fail(e.toString());
+        } finally {
+        	tx.finish();
         }
             
         System.out.println("done.");

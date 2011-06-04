@@ -129,26 +129,9 @@ public class GraphBuilder {
 		
 		Node val = null;
 		if (value != null) {
-			StringBuilder buf = new StringBuilder();
-			if (statement instanceof TEXT) {
-				if (value.length() > 0) {
-					StringTokenizer tok = new StringTokenizer(value);
-					while (tok.hasMoreTokens()) {
-		                buf.append(tok.nextToken());
-						if (tok.hasMoreTokens()) buf.append(' ');
-					}
-				}
-				if (buf.length() > 0) {
-					value = buf.toString();
-					byte[] bytes = value.getBytes();
-					val = value(value, bytes);
-					md.update(bytes);
-				}
-			} else {
-				byte[] bytes = value.getBytes();
-				val = value(value, bytes);
-				md.update(bytes);
-			}
+			byte[] bytes = value.getBytes();
+			val = value(value, bytes);
+			md.update(bytes);
 		}
 		
 		Object[] parent = null;
@@ -178,13 +161,32 @@ public class GraphBuilder {
 		
 	}
 	
-	final public void end(){
+	final public void end() {
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {
 			((MessageDigest) statements.peek()[4]).update(hash);
 		}
 		current[4] = hash;
+	}
+	
+	final public String removeWS(String value) {
+		
+		StringBuilder buf = new StringBuilder();
+		
+		if (value.length() > 0) {
+			StringTokenizer tok = new StringTokenizer(value);
+			while (tok.hasMoreTokens()) {
+                buf.append(tok.nextToken());
+				if (tok.hasMoreTokens()) buf.append(' ');
+			}
+		}
+		
+		if (buf.length() > 0)
+			return buf.toString();
+			
+		return null;
+		
 	}
 	
 	private void build(Object[] item){
@@ -238,8 +240,8 @@ public class GraphBuilder {
 				}
 			}
 			item[6] = node;
-		} catch (Exception e){ 
-			tx.finish();
+		} catch (Exception e){
+			fail(e);
 		}
 	}
 	
@@ -263,7 +265,7 @@ public class GraphBuilder {
 			}
 			return cache;
 		} catch (Exception e){
-			tx.finish();
+			fail(e);
 			return null;
 		}
 	}
@@ -274,5 +276,10 @@ public class GraphBuilder {
 			AnimoGraph.CALC.createRelationshipTo(node, RelationshipTypes.CALCULATE);
 		}
 		return node;
+	}
+	
+	private void fail(Exception e){
+		e.printStackTrace(System.out);
+		tx.finish();
 	}
 }
