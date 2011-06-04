@@ -160,6 +160,7 @@ public class ATest {
 
     @BeforeClass
     public static void startDB() {
+    	new AnimoGraph("data");
     }
 
     @AfterClass
