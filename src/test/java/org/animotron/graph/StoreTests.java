@@ -19,16 +19,21 @@
 package org.animotron.graph;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
+import org.animotron.graph.stax.StAXGraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 
@@ -64,7 +69,7 @@ public class StoreTests extends ATest {
 		"</the:B>";
 
 	@Test
-	public void processingFlowInterator() throws XMLStreamException {
+	public void storeAndSerialize() throws XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
         Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
@@ -77,13 +82,18 @@ public class StoreTests extends ATest {
         Transaction tx = AnimoGraph.beginTx();
         
         try { 
-	        Node node = THE.getInstance().node("B");
+	        Relationship r = THE.getInstance().relationship("B");
 	            
-	        assertNotNull(node);
+	        assertNotNull(r);
+	        
+	        XMLOutputFactory factory = XMLOutputFactory.newInstance();
+	        XMLStreamWriter writer = factory.createXMLStreamWriter(System.out);
+	        
+	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
+	        serializer.serialize(r);
 	            
-	        String[] must = new String[] {"the:B", "have:B", "some", "another"};
-	        int i = 0;
-            
+//	        String[] must = new String[] {"the:B", "have:B", "some", "another"};
+//	        int i = 0;
 //            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
 //            while (it.hasNext()) {
 //            	System.out.println(it.next());
@@ -91,6 +101,10 @@ public class StoreTests extends ATest {
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
 //            	i++;
 //            }
+	        
+        } catch (XMLStreamException e) {
+        	e.printStackTrace();
+			fail(e.toString());
         } finally {
         	tx.finish();
         }
