@@ -21,15 +21,15 @@ package org.animotron.instruction.math;
 import org.animotron.instruction.AbstractInstruction;
 
 /**
- * Math instruction 'SUMMATION'.
+ * Math instruction 'SUM'. (aka summation)
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUMMATION extends AbstractInstruction {
+public class SUM extends AbstractInstruction {
 	
-	private static final SUMMATION INSTANCE = new SUMMATION();
-	public static SUMMATION getInstance() { return INSTANCE; }
+	private static final SUM INSTANCE = new SUM();
+	public static SUM getInstance() { return INSTANCE; }
 	
-	private SUMMATION() { super("summation", "math", "animo/math"); }
+	private SUM() { super("sum", "math", "animo/math"); }
 	
 }

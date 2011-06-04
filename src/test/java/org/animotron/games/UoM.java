@@ -63,18 +63,18 @@ public class UoM extends ATest {
 
 	private static final String THE_A = 
 		"<the:A "+ANIMO_NSs+">" +
-		"	<math:summation>" +
+		"	<math:sum>" +
 		"		<an:m-10m/>" +
 		"		<an:m-5m/>" +
-		"	</math:summation>" +
+		"	</math:sum>" +
 		"</the:A>";
 
 	private static final String THE_B = 
 		"<the:B "+ANIMO_NSs+">" +
-		"	<math:summation>" +
+		"	<math:sum>" +
 		"		<an:m-5m/>" +
 		"		<an:m-10m/>" +
-		"	</math:summation>" +
+		"	</math:sum>" +
 		"</the:B>";
 
 	@Test
