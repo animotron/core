@@ -21,8 +21,10 @@ package org.animotron.graph;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
+import org.animotron.operator.THE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -38,12 +40,14 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 	
 	private void build(Relationship r) {
 		
-		Statement statement = Statements.relationshipType(r.getType());
+		RelationshipType type = r.getType();
+		Statement statement = type.name().startsWith(THE.PREFIX + ":") ? THE.getInstance() : Statements.relationshipType(type);
 		
 		if (statement == null)
 			return;
 		
 		start(statement, r);
+		
 		if (!(r instanceof Relation)) {
 			for(Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)){
 				build(i);

@@ -284,18 +284,8 @@ public class AnimoIndexWorker implements OrderedValuesIndex, QNamedKeysIndex {
 					builder.start(CDATA.getInstance(), null, null, null, value);
 					builder.end();
 				} else {
-					StringBuilder buf = new StringBuilder();
-					if (value.length() > 0) {
-						StringTokenizer tok = new StringTokenizer(value);
-						while (tok.hasMoreTokens()) {
-			                buf.append(tok.nextToken());
-							if (tok.hasMoreTokens()) buf.append(' ');
-						}
-					}
-					if (buf.length() > 0) {
-						builder.start(TEXT.getInstance(), null, null, null, buf.toString());
-						builder.end();
-					}
+					builder.start(TEXT.getInstance(), null, null, null, value);
+					builder.end();
 				}
 			}
 			super.characters(transaction, text, path);

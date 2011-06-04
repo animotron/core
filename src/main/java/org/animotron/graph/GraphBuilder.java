@@ -23,6 +23,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 import org.animotron.Properties;
 import org.animotron.Quanta;
@@ -30,6 +31,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
@@ -127,9 +129,26 @@ public class GraphBuilder {
 		
 		Node val = null;
 		if (value != null) {
-			byte[] bytes = value.getBytes();
-			val = value(value, bytes);
-			md.update(bytes);
+			StringBuilder buf = new StringBuilder();
+			if (statement instanceof TEXT) {
+				if (value.length() > 0) {
+					StringTokenizer tok = new StringTokenizer(value);
+					while (tok.hasMoreTokens()) {
+		                buf.append(tok.nextToken());
+						if (tok.hasMoreTokens()) buf.append(' ');
+					}
+				}
+				if (buf.length() > 0) {
+					value = buf.toString();
+					byte[] bytes = value.getBytes();
+					val = value(value, bytes);
+					md.update(bytes);
+				}
+			} else {
+				byte[] bytes = value.getBytes();
+				val = value(value, bytes);
+				md.update(bytes);
+			}
 		}
 		
 		Object[] parent = null;
@@ -252,7 +271,7 @@ public class GraphBuilder {
 	private Node build(Statement statement, Node parent, Object[] item, Object[] p){
 		Node node = statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3]);
 		if (statement instanceof Evaluable && !(Boolean) p[5]) {
-			AnimoGraph.CACHE.createRelationshipTo(node, RelationshipTypes.CALCULATE);
+			AnimoGraph.CALC.createRelationshipTo(node, RelationshipTypes.CALCULATE);
 		}
 		return node;
 	}

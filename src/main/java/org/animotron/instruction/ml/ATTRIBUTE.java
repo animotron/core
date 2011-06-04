@@ -58,7 +58,7 @@ public class ATTRIBUTE extends AbstractInstruction {
 	
 	@Override
 	public String namespace(Relationship r){
-		return Properties.NAMESPACE.get(r);
+		return Properties.NAMESPACE.has(r) ? Properties.NAMESPACE.get(r) : null;
 	}
 	
 	@Override

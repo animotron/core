@@ -70,7 +70,8 @@ public class StAXGraphSerializer extends AbstractGraphSerializer {
 	@Override
 	public void end(Statement statement, Relationship r) {
 		try {
-			if (statement instanceof ValueInstruction) {
+			if (statement instanceof ValueInstruction ||
+					statement instanceof ATTRIBUTE) {
 				return;
 			} else {
 				writer.writeEndElement();

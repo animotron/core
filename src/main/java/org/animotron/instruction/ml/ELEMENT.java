@@ -54,7 +54,8 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 	
 	@Override
 	public String namespace(Relationship r){
-		return Properties.NAMESPACE.get(r.getEndNode());
+		Node node = r.getEndNode();
+		return Properties.NAMESPACE.has(node) ? Properties.NAMESPACE.get(node) : null;
 	}
 	
 	@Override

@@ -37,6 +37,7 @@ import org.neo4j.graphdb.Transaction;
 public class THE extends AbstarctOperator {
 	
 	public static String NAMESPACE = "animo/instance";
+	public static String PREFIX = "the";
 
 	private static final THE INSTANCE = new THE();
 	public static THE getInstance() { return INSTANCE; }
@@ -44,7 +45,7 @@ public class THE extends AbstarctOperator {
 	protected final Node THE_NODE;
 
 	private THE() { 
-		super("the", NAMESPACE); 
+		super(PREFIX, NAMESPACE); 
 		Transaction tx = AnimoGraph.beginTx();
 		try {
 			THE_NODE = AnimoGraph.getOrCreateNode(AnimoGraph.getROOT(), RelationshipTypes.THE);
@@ -98,5 +99,11 @@ public class THE extends AbstarctOperator {
 		}
 		return node;
 	}
+	
+	@Override
+	public String name(Relationship r) {
+		return Properties.NAME.get(r.getEndNode());
+	}
+
 
 }
