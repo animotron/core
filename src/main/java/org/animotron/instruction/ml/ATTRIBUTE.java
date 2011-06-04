@@ -65,6 +65,4 @@ public class ATTRIBUTE extends AbstractInstruction {
 	public String value(Relationship r){
 		return Properties.VALUE.get(r.getEndNode());
 	}
-
-
 }

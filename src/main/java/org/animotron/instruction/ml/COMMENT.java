@@ -18,9 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-
-
-
 /**
  * Instruction 'ml:comment'.
  * 
@@ -32,5 +29,4 @@ public class COMMENT extends ValueInstruction {
 	public static COMMENT getInstance() { return INSTANCE; }
 	
 	private COMMENT() { super("comment", "ml", "animo/ml"); }
-	
 }

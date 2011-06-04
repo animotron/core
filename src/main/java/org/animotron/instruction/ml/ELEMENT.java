@@ -25,8 +25,6 @@ import org.animotron.operator.Cachable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-
-
 /**
  * Instruction 'ml:element'.
  * 
@@ -64,6 +62,4 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 		Node node = r.getEndNode();
 		return Properties.PREFIX.has(node) ? Properties.PREFIX.get(node) : null;
 	}
-
-
 }

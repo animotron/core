@@ -23,8 +23,6 @@ import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-
-
 /**
  * Instruction 'ml:attribute'.
  * 
@@ -56,5 +54,4 @@ public abstract class ValueInstruction extends AbstractInstruction {
 	public String value(Relationship r){
 		return Properties.VALUE.get(r.getEndNode());
 	}
-
 }

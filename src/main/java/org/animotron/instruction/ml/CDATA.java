@@ -18,9 +18,6 @@
  */
 package org.animotron.instruction.ml;
 
-
-
-
 /**
  * Instruction 'ml:cdata'.
  * 
@@ -32,5 +29,4 @@ public class CDATA extends ValueInstruction {
 	public static CDATA getInstance() { return INSTANCE; }
 	
 	private CDATA() { super("cdata", "ml", "animo/ml"); }
-	
 }
