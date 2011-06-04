@@ -100,7 +100,7 @@ public class StoreTests extends ATest {
 	        
 	        tx.success();
 	        
-        } catch (XMLStreamException e) {
+        } catch (Exception e) {
         	e.printStackTrace();
 			fail(e.toString());
         } finally {

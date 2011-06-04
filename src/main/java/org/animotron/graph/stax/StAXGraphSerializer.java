@@ -26,6 +26,7 @@ import org.animotron.graph.AbstractGraphSerializer;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
+import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.instruction.ml.ValueInstruction;
 import org.neo4j.graphdb.Relationship;
@@ -41,12 +42,22 @@ public class StAXGraphSerializer extends AbstractGraphSerializer {
 	public StAXGraphSerializer(XMLStreamWriter writer) {
 		this.writer = writer;
 	}
-
+	
 	@Override
 	public void start(Statement statement, Relationship r) {
 		try {
 			if (statement instanceof ATTRIBUTE) {
-				writer.writeAttribute(statement.prefix(r), statement.namespace(r), statement.name(r), statement.value(r));
+				String prefix = statement.prefix(r);
+				String ns = statement.namespace(r);
+				String name = statement.name(r);
+				String value = statement.value(r);
+				if (prefix == null && ns == null) {
+					writer.writeAttribute(name, value);
+				} else if (prefix == null) {
+					writer.writeAttribute(ns, name, value);
+				} else {
+					writer.writeAttribute(prefix, ns, name, value);
+				}
 				
 			} else if (statement instanceof TEXT) {
 				writer.writeCharacters(statement.value(r));
@@ -57,8 +68,21 @@ public class StAXGraphSerializer extends AbstractGraphSerializer {
 			} else if (statement instanceof CDATA){
 				writer.writeCData(statement.value(r));
 				
+			} else if (statement instanceof ELEMENT) {
+				String prefix = statement.prefix(r);
+				String ns = statement.namespace(r);
+				String name = statement.name(r);
+				if (prefix == null && ns == null) {
+					writer.writeStartElement(name);
+				} else if (prefix == null) {
+					writer.writeStartElement(ns, name);
+				} else {
+					writer.writeStartElement(prefix, name, ns);
+				}
+				
 			} else {
-				writer.writeStartElement(statement.prefix(r), statement.namespace(r), statement.name(r));				
+				writer.writeStartElement(statement.prefix(r), statement.name(r), statement.namespace(r));
+				
 			}
 			
 		} catch (XMLStreamException e) {

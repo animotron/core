@@ -33,9 +33,9 @@ import org.neo4j.graphdb.RelationshipType;
 public abstract class AbstractGraphSerializer implements GraphHandler {
 	
 	final public void serialize(Relationship r) {
-	//	startDocument();
+		startDocument();
 		build(r);
-	//	endDocument();
+		endDocument();
 	}
 	
 	private void build(Relationship r) {
@@ -46,8 +46,7 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 		if (statement == null)
 			return;
 		
-		//start(statement, r);
-		System.out.print("[" + statement.name() + " " + statement.name(r));
+		start(statement, r);
 		
 		if (!(statement instanceof Relation)) {
 			for(Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)){
@@ -55,8 +54,7 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 			}
 		}
 		
-		System.out.print("]");
-		//end(statement, r);
+		end(statement, r);
 	}
 		
 }
