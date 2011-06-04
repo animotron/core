@@ -88,7 +88,6 @@ public class ATest {
         	data = entry.getValue(); 
         	
         	XMLStreamReader streamReader = INPUT_FACTORY.createXMLStreamReader(new StringReader(data));
-        	
         	new StAXGraphBuilder(streamReader).build();
         }
     }

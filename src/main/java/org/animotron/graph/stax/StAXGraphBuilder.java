@@ -45,17 +45,11 @@ public class StAXGraphBuilder extends GraphBuilder {
 
 	public void build() throws XMLStreamException {
 		
+		startDocument();
+		
 		while (reader.hasNext()) {
 			
 			switch (reader.getEventType()) {
-			
-			case XMLStreamConstants.START_DOCUMENT :
-				startDocument();
-				break;
-			
-			case XMLStreamConstants.END_DOCUMENT :
-				endDocument();
-				break;
 			
 			case XMLStreamConstants.START_ELEMENT : 
 				startElement(reader);
@@ -80,6 +74,8 @@ public class StAXGraphBuilder extends GraphBuilder {
 			
 			reader.next();
 		}
+		
+		endDocument();
 		
 	}
 
