@@ -24,7 +24,6 @@ import static org.junit.Assert.fail;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -32,7 +31,6 @@ import org.animotron.ATest;
 import org.animotron.graph.stax.StAXGraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
@@ -86,8 +84,7 @@ public class StoreTests extends ATest {
 	            
 	        assertNotNull(r);
 	        
-	        XMLOutputFactory factory = XMLOutputFactory.newInstance();
-	        XMLStreamWriter writer = factory.createXMLStreamWriter(System.out);
+	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
 	        
 	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
 	        serializer.serialize(r);

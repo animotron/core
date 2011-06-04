@@ -28,7 +28,6 @@ import java.io.StringReader;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
@@ -40,18 +39,28 @@ import org.animotron.graph.stax.StAXGraphBuilder;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.THE;
-import org.junit.*;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.neo4j.graphdb.Relationship;
 
+import com.ctc.wstx.stax.WstxInputFactory;
+import com.ctc.wstx.stax.WstxOutputFactory;
 
-/**
+
+/**factory
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public class ATest {
 	
-	private static boolean cleanAfterTest = false;
+	public static final WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
+	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 	
+	private static boolean cleanAfterTest = false;
+
+
 	public static final String ANIMO_NSs = 
 		"xmlns:the='animo/instance' " +
 		"xmlns:an='animo/reference' " +
@@ -74,13 +83,11 @@ public class ATest {
 
 	protected void store(Map<String, String> nameDataMap) throws XMLStreamException {
 		
-		XMLInputFactory factory = XMLInputFactory.newInstance();
-
     	String data = null; 
         for (Entry<String, String> entry : nameDataMap.entrySet()) {
         	data = entry.getValue(); 
         	
-        	XMLStreamReader streamReader = factory.createXMLStreamReader(new StringReader(data));
+        	XMLStreamReader streamReader = INPUT_FACTORY.createXMLStreamReader(new StringReader(data));
         	
         	new StAXGraphBuilder(streamReader).build();
         }
