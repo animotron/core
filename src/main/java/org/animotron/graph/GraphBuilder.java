@@ -36,16 +36,28 @@ import org.animotron.operator.External;
 import org.animotron.operator.THE;
 import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * Animo graph builder, it do optimization/compression and 
+ * inform listeners on store/delete events.
  * 
+ * Direct graph as input from top element to bottom processing strategy.
+ * 
+ * Methods to use:
+ * 
+ * startDocument()
+ * endDocument()
+ * 
+ * start(String prefix, String ns, String name, String value)
+ * start(Statement statement, String prefix, String ns, String name, String value)
+ * end()
+ * 
+ * 
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 public class GraphBuilder {
-	
-	private Relationship the = null;
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
 	
@@ -54,14 +66,6 @@ public class GraphBuilder {
 
 	private Transaction tx;
 		
-	final public Relationship getTHE() {
-		return this.the;
-	}
-	
-	private void setTHE(Relationship the) {
-		this.the = the;
-	}
-	
 	private MessageDigest md() {
 		try {
 			return MessageDigest.getInstance(CACHE_ALGOTHIM);
@@ -71,13 +75,13 @@ public class GraphBuilder {
 		}
 	}
 	
-	public void startDocument(){
+	final public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
 	};
 	
-	public void endDocument(){
+	final public void endDocument(){
 		try {
 			for (Object[] item : flow) {
 				build(item);
@@ -155,7 +159,7 @@ public class GraphBuilder {
 		
 	}
 	
-	public final void end(){
+	final public void end(){
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {
@@ -228,7 +232,7 @@ public class GraphBuilder {
 		return hash((byte[]) item[4]);
 	}
 	
-	final private Node value(String value, byte[] bytes) {
+	private Node value(String value, byte[] bytes) {
 		try{
 			MessageDigest md = md();
 			md.update(bytes);
@@ -252,5 +256,4 @@ public class GraphBuilder {
 		}
 		return node;
 	}
-
 }

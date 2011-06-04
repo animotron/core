@@ -21,9 +21,9 @@ package org.animotron.graph;
 import org.animotron.Statement;
 import org.neo4j.graphdb.Relationship;
 
-
-
 /**
+ * Parse animo structure and generate events for output formator.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
