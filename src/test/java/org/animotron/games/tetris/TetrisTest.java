@@ -21,7 +21,9 @@ package org.animotron.games.tetris;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.animotron.exist.AbstractTest;
+import javax.xml.stream.XMLStreamException;
+
+import org.animotron.ATest;
 import org.junit.Test;
 
 
@@ -29,7 +31,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class TetrisTest extends AbstractTest {
+public class TetrisTest extends ATest {
 	
 	//players
 	private static final String THE_PLAYER = 
@@ -181,7 +183,7 @@ public class TetrisTest extends AbstractTest {
 		"</the:tetris>";
 
 	@Test
-	public void game() {
+	public void game() throws XMLStreamException {
 		
 		if (firstRun) {
 	        Map<String, String> data = new LinkedHashMap<String, String>();
@@ -226,7 +228,7 @@ public class TetrisTest extends AbstractTest {
 	        Utils.the(data, T, TETROMINOES);
 	        Utils.the(data, Z, TETROMINOES);
 
-	        configureAndStore(COLLECTION_CONFIG, data);
+	        store(data);
 		}
 
 //		http://tetrisapp.appspot.com/

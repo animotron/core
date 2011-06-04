@@ -16,27 +16,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist.index;
+package org.animotron.graph;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.animotron.exist.AbstractTest;
+import javax.xml.stream.XMLStreamException;
+
+import org.animotron.ATest;
 import org.animotron.operator.THE;
-import org.exist.EXistException;
-import org.exist.storage.DBBroker;
 import org.junit.Test;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class EvaluationTreeTests extends AbstractTest {
+public class StoreTests extends ATest {
 	
 	private static final String THE_A = 
 		"<the:A "+ANIMO_NSs+">" +
@@ -64,27 +64,25 @@ public class EvaluationTreeTests extends AbstractTest {
 		"</the:B>";
 
 	@Test
-	public void processingFlowInterator() {
+	public void processingFlowInterator() throws XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
         Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
         nameDataMap.put("A.xml", THE_A);
         nameDataMap.put("B.xml", THE_B);
         
-        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+        store(nameDataMap);
         System.out.println("loaded ...");
         
-        DBBroker broker = null;
-        try {
-            broker = pool.get(pool.getSecurityManager().getSystemSubject());
-            assertNotNull(broker);
-
-            Node node = THE.getInstance().node("B");
-            
-            assertNotNull(node);
-            
-            String[] must = new String[] {"the:B", "have:B", "some", "another"};
-            int i = 0;
+        Transaction tx = AnimoGraph.beginTx();
+        
+        try { 
+	        Node node = THE.getInstance().node("B");
+	            
+	        assertNotNull(node);
+	            
+	        String[] must = new String[] {"the:B", "have:B", "some", "another"};
+	        int i = 0;
             
 //            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
 //            while (it.hasNext()) {
@@ -93,13 +91,10 @@ public class EvaluationTreeTests extends AbstractTest {
             	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
 //            	i++;
 //            }
-            
-        } catch (EXistException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} finally {
-        	pool.release(broker);
+        } finally {
+        	tx.finish();
         }
+            
         System.out.println("done.");
 	}
 }

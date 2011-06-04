@@ -26,7 +26,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.animotron.exist.AbstractTest;
 import org.exist.EXistException;
 import org.exist.storage.DBBroker;
 import org.junit.Test;

@@ -20,7 +20,7 @@ package org.animotron.games.tetris;
 
 import java.util.Map;
 
-import org.animotron.exist.AbstractTest;
+import org.animotron.ATest;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -30,12 +30,12 @@ public class Utils {
 	
 	public static void the(Map<String, String> map, String id) {
 		map.put(id+".xml", 
-			"<the:"+id+" "+AbstractTest.ANIMO_NSs+"/>");
+			"<the:"+id+" "+ATest.ANIMO_NSs+"/>");
 	}
 
 	public static void the(Map<String, String> map, String id, String is) {
 		map.put(id+".xml", 
-			"<the:"+id+" "+AbstractTest.ANIMO_NSs+">" +
+			"<the:"+id+" "+ATest.ANIMO_NSs+">" +
 			"	<is:"+is+"/>" +
 			"</the:"+id+">");
 	}

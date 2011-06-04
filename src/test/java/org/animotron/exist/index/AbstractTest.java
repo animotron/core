@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.exist;
+package org.animotron.exist.index;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
@@ -26,12 +26,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import junit.framework.Assert;
 
+import org.animotron.graph.Reader;
+import org.animotron.graph.stax.StAXGraphBuilder;
+import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
+import org.animotron.operator.THE;
 import org.exist.Indexer;
 import org.exist.collections.Collection;
 import org.exist.collections.CollectionConfigurationManager;
@@ -50,6 +59,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.neo4j.graphdb.Relationship;
 
 
 /**
@@ -79,6 +89,20 @@ public class AbstractTest {
 		"xmlns:op='animo/operation' " +
 		
 		"xmlns:Q='animo/quantity' ";
+
+	protected void store(Map<String, String> nameDataMap) throws XMLStreamException {
+		
+		XMLInputFactory factory = XMLInputFactory.newInstance();
+
+    	String data = null; 
+        for (Entry<String, String> entry : nameDataMap.entrySet()) {
+        	data = entry.getValue(); 
+        	
+        	XMLStreamReader streamReader = factory.createXMLStreamReader(new StringReader(data));
+        	
+        	new StAXGraphBuilder(streamReader).build();
+        }
+    }
 
 	protected DocumentSet configureAndStore(String configuration, Map<String, String> nameDataMap) {
         DBBroker broker = null;
@@ -170,6 +194,17 @@ public class AbstractTest {
 		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 
+	protected void assertEquals(String the, String expecteds) throws IOException {
+        Relationship op = THE.getInstance().relationship(the);
+        assertNotNull(op);
+
+        toConsole(
+    		Calculator.eval(op)
+		);
+        
+    	InputStream stream = Reader.read(op);
+        assertEquals(stream, expecteds);
+	}
 	
 	protected static String COLLECTION_CONFIG =
         "<collection xmlns=\"http://exist-db.org/collection-config/1.0\">" +

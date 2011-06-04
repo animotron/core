@@ -19,19 +19,18 @@
 package org.animotron.interpreter;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.animotron.exist.AbstractTest;
+import javax.xml.stream.XMLStreamException;
+
+import org.animotron.ATest;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Reader;
 import org.animotron.operator.THE;
-import org.exist.EXistException;
-import org.exist.storage.DBBroker;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -41,7 +40,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class SimpleTests extends AbstractTest {
+public class SimpleTests extends ATest {
 	
 	private static final String THE_A = 
 		"<the:A "+ANIMO_NSs+"/>";
@@ -59,7 +58,7 @@ public class SimpleTests extends AbstractTest {
 		"</the:C>";
 
 	@Test
-	public void testGet() throws IOException {
+	public void testGet() throws IOException, XMLStreamException {
         System.out.println("Test 'get' ...");
         
         if (firstRun) {
@@ -68,35 +67,28 @@ public class SimpleTests extends AbstractTest {
 	        nameDataMap.put("B.xml", THE_B);
 	        nameDataMap.put("C.xml", THE_C);
 	        
-	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+	        store(nameDataMap);
         }
         
-        Transaction tx = AnimoGraph.graphDb.beginTx();
+        Transaction tx = AnimoGraph.beginTx();
         
-        DBBroker broker = null;
         try {
-            broker = pool.get(pool.getSecurityManager().getSystemSubject());
-            assertNotNull(broker);
-            
-            Relationship op = THE.getInstance().relationship("C");
-            
-            assertNotNull(op);
-            
-            System.out.println(op);
-
-            //System.out.println("get:A an:B");
-            toConsole(Calculator.eval(op));
-            
-        	InputStream stream = Reader.read(op);
-            assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
-            
-        } catch (EXistException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} finally {
-			tx.finish();
-        	pool.release(broker);
+	        Relationship op = THE.getInstance().relationship("C");
+	        
+	        assertNotNull(op);
+	        
+	        System.out.println(op);
+	
+	        //System.out.println("get:A an:B");
+	        toConsole(Calculator.eval(op));
+	        
+	    	InputStream stream = Reader.read(op);
+	        assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
+        
+        } finally {
+        	tx.finish();
         }
+            
         //System.out.println("done.");
 	}
 	

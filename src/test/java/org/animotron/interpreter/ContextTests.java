@@ -18,28 +18,20 @@
  */
 package org.animotron.interpreter;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.animotron.exist.AbstractTest;
-import org.animotron.graph.Reader;
-import org.animotron.operator.THE;
-import org.exist.EXistException;
-import org.exist.storage.DBBroker;
-import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
+import javax.xml.stream.XMLStreamException;
 
+import org.animotron.ATest;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ContextTests extends AbstractTest {
+public class ContextTests extends ATest {
 	
 	private static final String THE_A = 
 		"<the:A "+ANIMO_NSs+"/>";
@@ -81,7 +73,7 @@ public class ContextTests extends AbstractTest {
 		"</the:G>";
 
 	@Test
-	public void testGet() throws IOException {
+	public void testGet() throws IOException, XMLStreamException {
         System.out.println("Test 'get' ...");
         
         if (firstRun) {
@@ -94,38 +86,16 @@ public class ContextTests extends AbstractTest {
 	        nameDataMap.put("F.xml", THE_F);
 	        nameDataMap.put("G.xml", THE_G);
 	        
-	        configureAndStore(COLLECTION_CONFIG, nameDataMap);
+	        store(nameDataMap);
         }
         
-        DBBroker broker = null;
-        try {
-            broker = pool.get(pool.getSecurityManager().getSystemSubject());
-            assertNotNull(broker);
-            
-            //System.out.println("any:A");
-            assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
+        //System.out.println("any:A");
+        //assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
 
-            //System.out.println("an:D use:B");
-            assertEquals("E", "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
+        //System.out.println("an:D use:B");
+        assertEquals("E", "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
 
-        } catch (EXistException e) {
-			e.printStackTrace();
-			fail(e.getMessage());
-		} finally {
-        	pool.release(broker);
-        }
         //System.out.println("done.");
 	}
 	
-	private void assertEquals(String the, String expecteds) throws IOException {
-        Relationship op = THE.getInstance().relationship(the);
-        assertNotNull(op);
-
-        toConsole(
-    		Calculator.eval(op)
-		);
-        
-    	InputStream stream = Reader.read(op);
-        assertEquals(stream, expecteds);
-	}
 }
