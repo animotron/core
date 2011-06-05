@@ -18,14 +18,16 @@
  */
 package org.animotron.graph;
 
+import org.animotron.Properties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.index.IndexService;
-import org.neo4j.index.lucene.LuceneIndexService;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 /**
@@ -35,17 +37,19 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
 public class AnimoGraph {
 
 	public static GraphDatabaseService graphDb;
-	public static IndexService indexService;
 	
 	protected static Node ROOT;
 	protected static Node CACHE, CALC, EMPTY, GC;
+	protected static RelationshipIndex ORDER;
+	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
 	public AnimoGraph(String folder) {
 		graphDb = new EmbeddedGraphDatabase(folder);
-		indexService = new LuceneIndexService(graphDb);
-
 		ROOT = graphDb.getReferenceNode();
+		
+		IndexManager INDEX = graphDb.index();
+		ORDER = INDEX.forRelationships(Properties.ORDER.name());
 		
 		Transaction tx = AnimoGraph.beginTx();
 		try {
@@ -118,5 +122,10 @@ public class AnimoGraph {
 		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
 		return AnimoGraph.getNode(AnimoGraph.CACHE, type);
 	}
-
+	
+	public static void order (Relationship r, int order) {
+		ORDER.add(r, Properties.ORDER.name(), order);
+		r.setProperty(Properties.ORDER.name(), order);
+	}
+	
 }

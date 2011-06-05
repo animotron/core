@@ -73,9 +73,10 @@ public abstract class AbstractInstruction implements Instruction {
 	}
 
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value) {
+	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Node child = AnimoGraph.createNode();
-		parent.createRelationshipTo(child, relationshipType);
+		Relationship r = parent.createRelationshipTo(child, relationshipType);
+		AnimoGraph.order(r, order);
 		return child;
 	}
 	

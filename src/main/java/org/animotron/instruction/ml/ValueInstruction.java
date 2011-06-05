@@ -19,6 +19,7 @@
 package org.animotron.instruction.ml;
 
 import org.animotron.Properties;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -35,8 +36,9 @@ public abstract class ValueInstruction extends AbstractInstruction {
 	}
 	
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value) {
-		parent.createRelationshipTo(value, relationshipType());
+	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
+		Relationship r = parent.createRelationshipTo(value, relationshipType());
+		AnimoGraph.order(r, order);
 		return null;
 	}
 	

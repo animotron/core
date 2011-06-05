@@ -27,7 +27,7 @@ import org.neo4j.graphdb.PropertyContainer;
  */
 public enum Properties  {
 	
-	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX;
+	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, ORDER;
 	
 	public String get(PropertyContainer container) {
 		return container.getProperty(name()).toString();

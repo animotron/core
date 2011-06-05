@@ -18,19 +18,33 @@
  */
 package org.animotron.graph;
 
+import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
 import org.animotron.operator.THE;
-import org.neo4j.graphdb.Direction;
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.index.lucene.QueryContext;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
 public abstract class AbstractGraphSerializer implements GraphHandler {
+	
+	private static final String ORDER = Properties.ORDER.name();
+	private static final QueryContext SORT;
+	
+	static {
+		QueryContext q = new QueryContext( "*" );
+        SortField[] sortFields = new SortField[1];
+        sortFields[0] = new SortField(ORDER, SortField.LONG );
+        SORT = q.sort( new Sort( sortFields ) );
+	}
 	
 	final public void serialize(Relationship r) {
 		startDocument();
@@ -48,13 +62,22 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 		
 		start(statement, r);
 		
+		
 		if (!(statement instanceof Relation)) {
-			for(Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)){
-				build(i);
+			
+			IndexHits<Relationship> q = AnimoGraph.ORDER.query(ORDER, SORT, r.getEndNode(), null);
+			
+			try {
+				for (Relationship i : q) {
+					build(i);
+				}
+			} finally {
+				q.close();
 			}
+			
 		}
 		
 		end(statement, r);
 	}
-		
+	
 }

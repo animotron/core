@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Statement extends Quanta {
 	
-	public Node build(Node parent, String prefix, String ns, String name, Node value);
+	public Node build(Node parent, String prefix, String ns, String name, Node value, int order);
 	
 	public String namespace(Relationship r);
 	

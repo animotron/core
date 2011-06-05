@@ -31,13 +31,13 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
 import org.animotron.operator.THE;
 import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 /**
@@ -85,8 +85,9 @@ public class GraphBuilder {
 	
 	final public void endDocument(){
 		try {
+			int i = 0;
 			for (Object[] item : flow) {
-				build(item);
+				build(item, i++);
 			}
 			tx.success();
 		} finally {
@@ -189,7 +190,7 @@ public class GraphBuilder {
 		
 	}
 	
-	private void build(Object[] item){
+	private void build(Object[] item, int order){
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
 			if ((Boolean) p[8]) {
@@ -229,14 +230,15 @@ public class GraphBuilder {
 					String hash = hash(item);
 					node = AnimoGraph.getCache(hash);
 					if (node == null) {
-						node = build(statement, parent, item, p);
+						node = build(statement, parent, item, p, order);
 						AnimoGraph.createCache(node, hash);
 					} else {
-						parent.createRelationshipTo(node, statement.relationshipType());
+						Relationship r = parent.createRelationshipTo(node, statement.relationshipType());
+						AnimoGraph.order(r, order);
 						item[8] = true;
 					}
 				} else {
-					node = build(statement, parent, item, p); 
+					node = build(statement, parent, item, p, order); 
 				}
 			}
 			item[6] = node;
@@ -270,8 +272,8 @@ public class GraphBuilder {
 		}
 	}
 	
-	private Node build(Statement statement, Node parent, Object[] item, Object[] p){
-		Node node = statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3]);
+	private Node build(Statement statement, Node parent, Object[] item, Object[] p, int order){
+		Node node = statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
 		if (statement instanceof Evaluable && !(Boolean) p[5]) {
 			AnimoGraph.CALC.createRelationshipTo(node, RelationshipTypes.CALCULATE);
 		}
