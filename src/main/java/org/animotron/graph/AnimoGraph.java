@@ -25,7 +25,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
@@ -73,6 +72,27 @@ public class AnimoGraph {
 	
 	public static Transaction beginTx() {
 		return graphDb.beginTx();
+	}
+	
+	/**
+	 * Execute operation with transaction.
+	 * @param <T>
+	 * 
+	 * @param operation
+	 * @return 
+	 */
+	public static <T> T execute(GraphOperation<T> operation) {
+		T result = null;
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			result = operation.execute();
+			
+			tx.success();
+			
+			return result;
+		} finally {
+			tx.finish();
+		}
 	}
 	
 	public static void clear (Node node){
