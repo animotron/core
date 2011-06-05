@@ -20,15 +20,16 @@ package org.animotron;
 
 import java.util.List;
 
-import org.animotron.instruction.ml.ELEMENT;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
+import org.neo4j.index.lucene.QueryContext;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 
@@ -60,7 +61,7 @@ public class OrderTest {
 		
 				ROOT = graphDb.getReferenceNode();
 				
-				List<Node> children = createChild(ROOT, 10);
+				List<Node> children = createChild(ROOT, 25);
 				
 				tx.success();
 			} finally {
@@ -74,8 +75,15 @@ public class OrderTest {
 			order = index.forRelationships( ORDER );
 
 			System.out.println("reading ...");
-			for (Relationship r : order.query(ORDER+":*", ROOT, null) ) {
-				System.out.println(r.getEndNode().getProperty(ORDER));
+			IndexHits<Relationship> q = order.query(ORDER, new QueryContext( "*" ).sort( ORDER ), ROOT, null);
+			try {
+				for (Relationship r : q ) {
+					
+					System.out.print(q.currentScore() + " ");
+					System.out.println(r.getEndNode().getProperty(ORDER+"-P"));
+				}
+			} finally {
+				q.close();
 			}
 		} finally {
 			tx.finish();
@@ -86,7 +94,7 @@ public class OrderTest {
 		
 		for (int i = 1; i <= num; i++) {
 			Node child = graphDb.createNode();
-			child.setProperty(ORDER, i);
+			child.setProperty(ORDER+"-P", i);
 			
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
 			
