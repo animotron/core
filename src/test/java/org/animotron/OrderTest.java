@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
+import org.junit.Assert;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -57,14 +58,14 @@ public class OrderTest {
 		
 		Transaction tx;
 		
-		if (false) {
+		if (true) {
 			tx = graphDb.beginTx();
 			try {
 				order = index.forRelationships( ORDER );
 		
 				ROOT = graphDb.getReferenceNode();
 				
-				List<Node> children = createChild(ROOT, 25);
+				createChild(ROOT, 10000);
 				
 				tx.success();
 			} finally {
@@ -78,14 +79,16 @@ public class OrderTest {
 			order = index.forRelationships( ORDER );
 
 			System.out.println("reading ...");
-//			IndexHits<Relationship> q = order.query(ORDER, new QueryContext( "*" ).sort( ORDER ), ROOT, null);
-//			IndexHits<Relationship> q = order.query(QueryContext.numericRange( ORDER, 8.0, 9.0, true, false ), ROOT, null);
 			IndexHits<Relationship> q = order.query(ORDER, sort( ORDER ), ROOT, null);
 			try {
+				int i = 1;
 				for (Relationship r : q ) {
 					
-					System.out.print(q.currentScore() + " ");
-					System.out.println(r.getEndNode().getProperty(ORDER+"-P"));
+//					System.out.print(q.currentScore() + " ");
+//					System.out.println(r.getEndNode().getProperty(ORDER+"-P"));
+					
+					Assert.assertEquals(i, r.getEndNode().getProperty(ORDER+"-P"));
+					i++;
 				}
 			} finally {
 				q.close();
@@ -103,7 +106,7 @@ public class OrderTest {
 			
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
 			
-			order.add(r, ORDER, ValueContext.numeric(i));
+			order.add(r, ORDER, i);
 		}
 
 		return null;
