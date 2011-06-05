@@ -20,6 +20,8 @@ package org.animotron;
 
 import java.util.List;
 
+import org.apache.lucene.search.Sort;
+import org.apache.lucene.search.SortField;
 import org.junit.Test;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -30,6 +32,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.index.lucene.QueryContext;
+import org.neo4j.index.lucene.ValueContext;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 
@@ -75,7 +78,9 @@ public class OrderTest {
 			order = index.forRelationships( ORDER );
 
 			System.out.println("reading ...");
-			IndexHits<Relationship> q = order.query(ORDER, new QueryContext( "*" ).sort( ORDER ), ROOT, null);
+//			IndexHits<Relationship> q = order.query(ORDER, new QueryContext( "*" ).sort( ORDER ), ROOT, null);
+//			IndexHits<Relationship> q = order.query(QueryContext.numericRange( ORDER, 8.0, 9.0, true, false ), ROOT, null);
+			IndexHits<Relationship> q = order.query(ORDER, sort( ORDER ), ROOT, null);
 			try {
 				for (Relationship r : q ) {
 					
@@ -98,11 +103,29 @@ public class OrderTest {
 			
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
 			
-			order.add(r, ORDER, i);
+			order.add(r, ORDER, ValueContext.numeric(i));
 		}
 
 		return null;
 	}
+	
+	public QueryContext sort( String key, String... additionalKeys ) {
+		QueryContext q = new QueryContext( "*" );
+		
+        SortField firstSortField = new SortField( key, SortField.LONG );
+        if ( additionalKeys.length == 0 )
+        {
+            return q.sort( new Sort( firstSortField ) );
+        }
+        
+        SortField[] sortFields = new SortField[1+additionalKeys.length];
+        sortFields[0] = firstSortField;
+        for ( int i = 0; i < additionalKeys.length; i++ )
+        {
+            sortFields[1+i] = new SortField( additionalKeys[i], SortField.LONG );
+        }
+        return q.sort( new Sort( sortFields ) );
+    }
 
 	enum RT implements RelationshipType {
 		CHILD
