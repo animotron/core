@@ -54,6 +54,10 @@ public class THE extends AbstarctOperator {
 			tx.finish();
 		}
 	}
+	
+	public Node NODE() {
+		return THE_NODE;
+	}
 
 	public RelationshipType relashionshipType(String name){
 		return AnimoRelationshipType.get(name(), name);
