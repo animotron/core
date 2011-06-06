@@ -26,6 +26,7 @@ import javax.xml.stream.XMLStreamWriter;
 import org.animotron.graph.stax.StAXGraphSerializer;
 import org.neo4j.graphdb.Relationship;
 
+import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
 /**
@@ -36,8 +37,15 @@ import com.ctc.wstx.stax.WstxOutputFactory;
 public abstract class GraphSerializer {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+	static {
+		WriterConfig conf = OUTPUT_FACTORY.getConfig();
+		conf.doSupportNamespaces(true);
+		conf.enableAutomaticNamespaces(true);
+	}
 
 	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+		
+		
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         
         StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
