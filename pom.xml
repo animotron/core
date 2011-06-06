@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
-			<version>1.3</version>
+			<version>1.4.M02</version>
 		</dependency>
 		<!-- ??? do we need this ??? -->
 		<!-- 
@@ -62,7 +62,7 @@
 			<version>5.2.6</version>
 		</dependency>
 
-		<!-- XStream is a simple library to serialize objects to XML and back again. -->
+		<!-- library to serialize objects to XML and back again. -->
 		<dependency>
 			<groupId>org.codehaus.woodstox</groupId>
 			<artifactId>woodstox-core-asl</artifactId>
