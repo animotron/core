@@ -204,6 +204,9 @@ public class GraphBuilder {
 		
 	}
 	
+	//TODO: Store hash for every node as byte[]
+	//TODO: Build graph via single thread in sync and async modes 
+	
 	private void build(Object[] item, int order){
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
