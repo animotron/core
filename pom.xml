@@ -14,6 +14,7 @@
 		</developer>
 		<developer>
 			<name>Evgeny Gazdovsky</name>
+			<email>gazdovsky@gmail.com</email>
 		</developer>
 	</developers>
 	
@@ -21,11 +22,6 @@
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
-			<version>1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j-lucene-index</artifactId>
 			<version>1.3</version>
 		</dependency>
 		<!-- ??? do we need this ??? -->
