@@ -221,18 +221,21 @@ public class GraphBuilder {
 				String hash = hash(item);
 				node = the.node(name);
 				if (node != null) {
-					String h = Properties.HASH.get(node);
-					if (h == null) {
-						Properties.HASH.set(node, hash);
-					} else if (!h.equals(hash)) {
-						AnimoGraph.clear(node);
-						Properties.HASH.set(node, hash);
+					if (Properties.HASH.has(node)) {
+						String h = Properties.HASH.get(node);
+						if (h == null) {
+							Properties.HASH.set(node, hash);
+						} else if (!h.equals(hash)) {
+							AnimoGraph.clear(node);
+							Properties.HASH.set(node, hash);
+						} else {
+							item[8] = true;
+						}
 					} else {
-						item[8] = true;
+						Properties.HASH.set(node, hash);
 					}
 				} else {
-					node = the.create(name);
-					Properties.HASH.set(node, hash);
+					node = the.create(name, hash);
 				}
 			} else {
 				Node parent = (Node) p[6];

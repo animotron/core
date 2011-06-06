@@ -77,6 +77,12 @@ public class THE extends AbstarctOperator {
 		return AnimoGraph.getNode(THE_NODE, type);
 	}
 	
+	public Node create(String name, String hash) {
+		Node node = create(name);
+		Properties.HASH.set(node, hash);
+		return node;
+	}
+	
 	public Node create(String name) {
 		Node node = AnimoGraph.createNode();
 		RelationshipType type = relashionshipType(name);
