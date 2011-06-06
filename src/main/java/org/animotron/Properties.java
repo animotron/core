@@ -42,4 +42,8 @@ public enum Properties  {
 		return container.hasProperty(name());
 	}
 
+	public void set(PropertyContainer container, int value) {
+		container.setProperty(name(), value);
+	}
+
 }
