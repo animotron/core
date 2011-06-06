@@ -145,7 +145,7 @@ public class AnimoGraph {
 	
 	public static void order (Relationship r, int order) {
 		ORDER.add(r, Properties.ORDER.name(), order);
-		r.setProperty(Properties.ORDER.name(), order);
+		Properties.ORDER.set(r, order);
 	}
 	
 }
