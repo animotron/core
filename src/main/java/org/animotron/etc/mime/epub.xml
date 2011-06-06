@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <the:epub xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:extension/>
+    <is:file-extension/>
     <is:application-epub-zip/>
     <have:name>epub</have:name>
 </the:epub>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <the:mp4 xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:extension/>
+    <is:file-extension/>
     <is:video-mp4/>
     <have:name>mp4</have:name>
 </the:mp4>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <the:dtd xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:extension/>
+    <is:file-extension/>
     <is:text-plain/>
     <have:name>dtd</have:name>
 </the:dtd>

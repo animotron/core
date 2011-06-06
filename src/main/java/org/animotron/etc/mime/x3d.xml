@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <the:x3d xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:extension/>
+    <is:file-extension/>
     <is:application-xml/>
     <have:name>x3d</have:name>
 </the:x3d>
