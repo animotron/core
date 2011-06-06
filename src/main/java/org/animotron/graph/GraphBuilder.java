@@ -29,6 +29,7 @@ import java.util.StringTokenizer;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.animotron.MessageDigester;
 import org.animotron.Properties;
 import org.animotron.Quanta;
 import org.animotron.Statement;
@@ -40,7 +41,6 @@ import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
 import org.animotron.operator.THE;
-import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;

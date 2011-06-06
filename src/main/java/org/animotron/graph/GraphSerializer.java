@@ -45,10 +45,10 @@ public abstract class GraphSerializer {
 
 	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
 		
-		
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         
         StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
         serializer.serialize(r);
 	}
+	
 }
