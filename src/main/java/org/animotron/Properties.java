@@ -34,7 +34,7 @@ public enum Properties  {
 	}
 	
 	public void set(PropertyContainer container, String value) {
-		if (value != null && !value.equals("")) 
+		if (value != null) 
 			container.setProperty(name(), value);
 	}
 	
