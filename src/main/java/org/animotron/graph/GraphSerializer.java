@@ -18,23 +18,29 @@
  */
 package org.animotron.graph;
 
-import org.animotron.Statement;
+import java.io.OutputStream;
+
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import org.animotron.graph.stax.StAXGraphSerializer;
 import org.neo4j.graphdb.Relationship;
 
+import com.ctc.wstx.stax.WstxOutputFactory;
+
 /**
- * Parse animo structure and generate events for output formater.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface GraphHandler {
+public abstract class GraphSerializer {
 	
-	public abstract void start(Statement statement, Relationship r);
+	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-	public abstract void end(Statement statement, Relationship r);
-
-	void startDocument();
-
-	void endDocument();
+	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+        
+        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
+        serializer.serialize(r);
+	}
 }

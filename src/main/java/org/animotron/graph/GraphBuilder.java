@@ -18,6 +18,7 @@
  */
 package org.animotron.graph;
 
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
@@ -25,10 +26,14 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
+
 import org.animotron.Properties;
 import org.animotron.Quanta;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.stax.StAXGraphBuilder;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Cachable;
@@ -39,6 +44,8 @@ import org.exist.security.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+
+import com.ctc.wstx.stax.WstxInputFactory;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -62,6 +69,13 @@ import org.neo4j.graphdb.Transaction;
 public class GraphBuilder {
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
+	
+	public static final WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
+
+	public static void build(InputStream in) throws XMLStreamException {
+    	XMLStreamReader streamReader = INPUT_FACTORY.createXMLStreamReader(in);
+    	new StAXGraphBuilder(streamReader).build();
+	}
 	
 	private Stack<Object[]> statements;
 	private List<Object[]> flow;
