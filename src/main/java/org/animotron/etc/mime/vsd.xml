@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:vsd xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:extension/>
+    <is:application-vnd.visio/>
+    <have:name>vsd</have:name>
+</the:vsd>

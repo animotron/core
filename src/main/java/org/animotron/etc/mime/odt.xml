@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:odt xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:extension/>
+    <is:application-vnd.oasis.opendocument.text/>
+    <have:name>odt</have:name>
+</the:odt>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:xml xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:extension/>
+    <is:application-xml/>
+    <have:name>xml</have:name>
+</the:xml>

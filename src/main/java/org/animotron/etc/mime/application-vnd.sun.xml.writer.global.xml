@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-vnd.sun.xml.writer.global xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/vnd.sun.xml.writer.global</have:type>
+    <have:name>OpenOffice.org Document</have:name>
+</the:application-vnd.sun.xml.writer.global>

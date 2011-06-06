@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:sti xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:extension/>
+    <is:application-vnd.sun.xml.impress.template/>
+    <have:name>sti</have:name>
+</the:sti>

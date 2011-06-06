@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:txt xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:extension/>
+    <is:text-plain/>
+    <have:name>txt</have:name>
+</the:txt>
