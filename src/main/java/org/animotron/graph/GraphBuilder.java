@@ -68,6 +68,8 @@ import com.ctc.wstx.stax.WstxInputFactory;
  */
 public class GraphBuilder {
 	
+	private Relationship the = null;
+	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
 	
 	public static final WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
@@ -91,6 +93,10 @@ public class GraphBuilder {
 		}
 	}
 	
+	public final Relationship getRelationship() {
+		return the;
+	}
+	
 	final public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
@@ -98,14 +104,33 @@ public class GraphBuilder {
 	};
 	
 	final public void endDocument(){
+		Object[] first = flow.get(0);
 		try {
 			int i = 0;
+			if (!(first[0] instanceof THE)) {
+				Object[] item = {	
+						THE.getInstance(),	// 0 	
+						THE.NAMESPACE,		// 1
+						hash(first),		// 2
+						first[3], 			// 3
+						first[4], 			// 4
+						first[5],			// 5
+						null,				// 6
+						null,	 			// 7
+						false,				// 8
+						THE.PREFIX			// 9
+					};
+				first[7] = item; 
+				build(item, i++);
+				first = item;
+			}
 			for (Object[] item : flow) {
 				build(item, i++);
 			}
 			tx.success();
 		} finally {
 			tx.finish();
+			the = THE.getInstance().relationship((String) first[2]);
 		}
 	}
 
@@ -165,10 +190,10 @@ public class GraphBuilder {
 				val, 		// 3
 				md, 		// 4
 				external, 	// 5
-				current,	// 6
-				parent, 	// 7
-				false,		// 8
-				prefix		// 9
+				null,		// 6 
+				parent, 	// 7  
+				false,		// 8 
+				prefix		// 9 	
 			};
 		
 		statements.push(item);
