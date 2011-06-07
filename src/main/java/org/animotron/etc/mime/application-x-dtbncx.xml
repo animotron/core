@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-x-dtbncx xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/x-dtbncx+xml</have:type>
+    <have:name>Navigation Control file for XML (NCX) Document</have:name>
+</the:application-x-dtbncx>

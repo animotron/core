@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:sxm xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:file-extension/>
+    <is:application-vnd.sun.xml.math/>
+    <have:name>sxm</have:name>
+</the:sxm>

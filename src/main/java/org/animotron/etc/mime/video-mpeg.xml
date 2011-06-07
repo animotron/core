@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:video-mpeg xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:video/>
+    <have:type>video/mpeg</have:type>
+    <have:name>MPEG Video</have:name>
+</the:video-mpeg>

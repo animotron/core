@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:xltx xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:file-extension/>
+    <is:application-vnd.openxmlformats-officedocument.spreadsheetml.template/>
+    <have:name>xltx</have:name>
+</the:xltx>
