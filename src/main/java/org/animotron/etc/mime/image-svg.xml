@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:image-svg xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:image/>
-    <have:type>image/svg+xml</have:type>
-    <have:name>SVG image</have:name>
-</the:image-svg>

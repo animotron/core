@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:odi xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:file-extension/>
-    <is:application-vnd.oasis.opendocument.image/>
-    <have:name>odi</have:name>
-</the:odi>

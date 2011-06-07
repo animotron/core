@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:xq xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:file-extension/>
-    <is:application-xquery/>
-    <have:name>xq</have:name>
-</the:xq>

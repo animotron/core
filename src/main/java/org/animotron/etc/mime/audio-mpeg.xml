@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:audio-mpeg xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:audio/>
-    <have:type>audio/mpeg</have:type>
-    <have:name>MPEG Audio</have:name>
-</the:audio-mpeg>

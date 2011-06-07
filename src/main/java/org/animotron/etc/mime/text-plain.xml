@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:text-plain xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:text/>
-    <have:type>text/plain</have:type>
-    <have:name>Plain text</have:name>
-</the:text-plain>

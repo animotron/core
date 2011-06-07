@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:image-x-portable-bitmap xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:image/>
-    <have:type>image/x-portable-bitmap</have:type>
-    <have:name>PBM Bitmap Format</have:name>
-</the:image-x-portable-bitmap>

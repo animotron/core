@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:ico xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:file-extension/>
-    <is:image-vnd.microsoft.icon/>
-    <have:name>ico</have:name>
-</the:ico>

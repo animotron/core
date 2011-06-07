@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:owl xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:file-extension/>
-    <is:application-xml/>
-    <have:name>owl</have:name>
-</the:owl>

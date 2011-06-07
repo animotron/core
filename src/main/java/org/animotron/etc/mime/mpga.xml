@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:mpga xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:file-extension/>
-    <is:audio-mpeg/>
-    <have:name>mpga</have:name>
-</the:mpga>

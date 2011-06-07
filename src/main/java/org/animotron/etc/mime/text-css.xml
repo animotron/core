@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:text-css xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:text/>
-    <have:type>text/css</have:type>
-    <have:name>CSS stylesheet</have:name>
-</the:text-css>
