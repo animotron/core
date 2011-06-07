@@ -44,4 +44,8 @@ public class IntervalNode extends TimestampNode {
 		
 		//XXX: get sub-nodes somehow!
 	}
+	
+	public Interval getValue() {
+		return interval;
+	}
 }

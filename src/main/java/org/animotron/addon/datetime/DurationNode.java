@@ -42,4 +42,8 @@ public class DurationNode extends TimestampNode {
 
 		duration = new Duration(name); 
 	}
+	
+	public Duration getValue() {
+		return duration;
+	}
 }

@@ -46,4 +46,8 @@ public class DateNode extends TimestampNode {
 		
 		date = matcher.parseDateTime(name.substring(1));
 	}
+	
+	public DateTime getValue() {
+		return date;
+	}
 }

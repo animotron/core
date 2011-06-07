@@ -41,4 +41,8 @@ public class DateNodeYear extends TimestampNode {
 
 		year = Integer.valueOf(name.substring(1));
 	}
+	
+	public int getValue() {
+		return year;
+	}
 }
