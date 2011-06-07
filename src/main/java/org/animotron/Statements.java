@@ -75,8 +75,8 @@ public class Statements {
 			clazz = (Class<? extends Quanta>) Class.forName( name );
 
 			try {
-				Method method = clazz.getMethod("getInstance", null);
-				Quanta obj = (Quanta) method.invoke(clazz, null);
+				Method method = clazz.getMethod("getInstance");
+				Quanta obj = (Quanta) method.invoke(clazz);
 
             	if (obj instanceof Instruction) {
             		List<Instruction> list = instructions.get(obj.namespace());
