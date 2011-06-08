@@ -69,17 +69,21 @@ public class BinanyBuilder extends GraphBuilder {
 			}
 			
 			String hash = MessageDigester.byteArrayToHex(md.digest());
-			System.out.println(hash);
 			
 			out.close();
 			stream.close();
 			
-			File bin = new File(STORAGE, hash);
+			File l1  = new File(STORAGE, hash.substring(1, 3));  
+			File l2  = new File(l1, hash.substring(1, 5));  
+			File bin = new File(l2,  hash);
 			
 			if (bin.exists()) {
 				tmp.delete();
+				System.out.println("File \"" + bin.getPath() + "\" already stored");
 			} else {
+				l2.mkdirs();
 				tmp.renameTo(bin);
+				System.out.println("Store the file \"" + bin.getPath() + "\"");
 			}
 			
 		} catch (IOException e) {
