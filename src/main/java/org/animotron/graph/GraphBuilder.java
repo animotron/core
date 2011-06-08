@@ -98,7 +98,7 @@ public abstract class GraphBuilder {
 				Object[] item = {	
 						THE.getInstance(),	// 0 	
 						THE.NAMESPACE,		// 1
-						hash(first),		// 2
+						first[2],			// 2
 						first[3], 			// 3
 						first[4], 			// 4
 						first[5],			// 5
