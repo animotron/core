@@ -18,6 +18,10 @@
  */
 package org.animotron.graph;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import javax.xml.stream.XMLStreamException;
@@ -43,11 +47,19 @@ public class CommonGraphBuilder {
 		return INPUT_FACTORY.createXMLStreamReader(stream);
 	}
 	
+	public static Relationship build(String data) throws XMLStreamException {
+		return build(new ByteArrayInputStream(data.getBytes()));
+	}
+	
+	public static Relationship build(File path) throws FileNotFoundException {
+		return build(new FileInputStream(path), path.getPath());
+	}
+	
 	public static Relationship build(InputStream stream) throws XMLStreamException {
 		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
 	}
 	
-	public static Relationship Relationship(InputStream stream, String path) {
+	public static Relationship build(InputStream stream, String path) {
 		try {
 			return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
 		} catch (XMLStreamException e) {
