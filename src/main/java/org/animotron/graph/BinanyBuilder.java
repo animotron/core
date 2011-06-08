@@ -26,6 +26,7 @@ import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.UUID;
 
+import org.animotron.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -37,6 +38,10 @@ public class BinanyBuilder extends GraphBuilder {
 	
 	private final static File STORAGE = new File(AnimoGraph.STORAGE, "binany");
 	
+	static {
+		STORAGE.mkdir();
+	}
+	
 	private InputStream stream;
 	private String path;
 	
@@ -46,28 +51,36 @@ public class BinanyBuilder extends GraphBuilder {
 	}
 	
 	public Relationship build() {
+		
 		String txID = UUID.randomUUID().toString();
 		
 		try {
-			File f = new File(STORAGE, txID);
-			f.createNewFile();
-			OutputStream out = new FileOutputStream(f);
+			File tmp = new File(STORAGE, txID);
+			tmp.createNewFile();
+			OutputStream out = new FileOutputStream(tmp);
 			
 			byte buf[]=new byte[1024 * 4];
 			int len;
-			
 			MessageDigest md = md();
 			
 			while((len=stream.read(buf))>0) {
 				out.write(buf,0,len);
-				
 				md.update(buf,0,len);
 			}
 			
-			System.out.println(md.digest());
+			String hash = MessageDigester.byteArrayToHex(md.digest());
+			System.out.println(hash);
 			
 			out.close();
 			stream.close();
+			
+			File bin = new File(STORAGE, hash);
+			
+			if (bin.exists()) {
+				tmp.delete();
+			} else {
+				tmp.renameTo(bin);
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
