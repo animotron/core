@@ -73,8 +73,8 @@ public class BinanyBuilder extends GraphBuilder {
 			out.close();
 			stream.close();
 			
-			File l1  = new File(STORAGE, hash.substring(1, 3));  
-			File l2  = new File(l1, hash.substring(1, 5));  
+			File l1  = new File(STORAGE, hash.substring(0, 2));  
+			File l2  = new File(l1, hash.substring(0, 4));  
 			File bin = new File(l2,  hash);
 			
 			if (bin.exists()) {
