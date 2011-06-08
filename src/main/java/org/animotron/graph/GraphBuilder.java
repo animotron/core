@@ -169,16 +169,16 @@ public abstract class GraphBuilder {
 		}
 		
 		Object[] item = {	
-				statement,	// 0 	
-				ns, 		// 1
-				name, 		// 2
-				val, 		// 3
-				md, 		// 4
-				external, 	// 5
-				null,		// 6 
-				parent, 	// 7  
-				false,		// 8 
-				prefix		// 9 	
+				statement,	// 0  statement 	
+				ns, 		// 1  namespace
+				name, 		// 2  name
+				val, 		// 3  balue
+				md, 		// 4  message gigest
+				external, 	// 5  is exteral sentense
+				null,		// 6  current node
+				parent, 	// 7  parent item
+				false,		// 8  builded
+				prefix		// 9  prefix
 			};
 		
 		statements.push(item);
