@@ -22,14 +22,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
-import org.animotron.graph.stax.StAXGraphSerializer;
-import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -81,7 +80,20 @@ public class StoreBinaryTest extends ATest {
         }
         
         assertNotNull(r);
-            
+        
+        try {
+	   		PipedInputStream in = new PipedInputStream();
+			PipedOutputStream out = new PipedOutputStream(in);
+	
+			//TODO: change???
+	        GraphSerializer.serialize(r, out);
+	            
+	        assertEquals(in, TXT);
+        } catch (IOException e) {
+        	e.printStackTrace();
+			fail(e.toString());
+		}
+
         System.out.println("done.");
 	}
 }
