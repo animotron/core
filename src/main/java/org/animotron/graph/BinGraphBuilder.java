@@ -16,38 +16,38 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
+package org.animotron.graph;
 
-import org.neo4j.graphdb.PropertyContainer;
+import java.io.File;
+import java.io.InputStream;
+
+import org.neo4j.graphdb.Relationship;
+
+import com.ctc.wstx.stax.WstxInputFactory;
+
 
 
 /**
- * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
- *
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * 
  */
-public enum Properties  {
+public class BinGraphBuilder extends GraphBuilder {
 	
-	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, ORDER, CONTENT;
+	private final static WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
+	private final static File STORAGE = new File(AnimoGraph.STORAGE, "bin");
 	
-	public String get(PropertyContainer container) {
-		return container.getProperty(name()).toString();
+	private InputStream stream;
+	private String path;
+	
+	public BinGraphBuilder(InputStream stream, String path) {
+		this.stream = stream;
+		this.path = path;
 	}
 	
-	public void set(PropertyContainer container, String value) {
-		if (value != null) 
-			container.setProperty(name(), value);
-	}
-	
-	public boolean has(PropertyContainer container) {
-		return container.hasProperty(name());
-	}
-
-	public void set(PropertyContainer container, int value) {
-		container.setProperty(name(), value);
-	}
-
-	public void set(PropertyContainer container, byte[] value) {
-		container.setProperty(name(), value);
+	public Relationship build() {
+		//TODO: Store binary and build graph for one
+		return getRelationship();
 	}
 
 }

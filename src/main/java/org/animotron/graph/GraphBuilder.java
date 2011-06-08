@@ -66,18 +66,11 @@ import com.ctc.wstx.stax.WstxInputFactory;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GraphBuilder {
+public abstract class GraphBuilder {
 	
 	private Relationship the = null;
 	
 	private static final String CACHE_ALGOTHIM = "SHA-256";
-	
-	public static final WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
-
-	public static void build(InputStream in) throws XMLStreamException {
-    	XMLStreamReader streamReader = INPUT_FACTORY.createXMLStreamReader(in);
-    	new StAXGraphBuilder(streamReader).build();
-	}
 	
 	private Stack<Object[]> statements;
 	private List<Object[]> flow;
@@ -97,13 +90,13 @@ public class GraphBuilder {
 		return the;
 	}
 	
-	final public void startDocument(){
+	final protected void startGraph(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
 	};
 	
-	final public void endDocument(){
+	final protected void endGraph(){
 		Object[] first = flow.get(0);
 		try {
 			int i = 0;
@@ -134,7 +127,7 @@ public class GraphBuilder {
 		}
 	}
 
-	final public void start(String prefix, String ns, String name, String value) {
+	final protected void start(String prefix, String ns, String name, String value) {
 		
 		Statement statement;
 		Quanta container = Statements.namespace(ns);
@@ -151,7 +144,7 @@ public class GraphBuilder {
 		
 	}
 	
-	final public void start(Statement statement, String prefix, String ns, String name, String value) {
+	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
 		
 		MessageDigest md = md();
 		
@@ -180,8 +173,6 @@ public class GraphBuilder {
 			parent = statements.peek();
 			external |= (Boolean) parent[5];
 		}
-		
-		Node current = null;
 		
 		Object[] item = {	
 				statement,	// 0 	

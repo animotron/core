@@ -52,6 +52,16 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 		return tmp;
 	}
 	
+	@Override 
+	public void startDocument () throws SAXException {
+		startGraph();
+	}
+	
+	@Override 
+	public void endDocument () throws SAXException {
+		endGraph();
+	}
+	
 	@Override
 	public void startElement (String ns, String name, String qname, Attributes attributes) throws SAXException {
 		String[] tmp = qname(name, qname);

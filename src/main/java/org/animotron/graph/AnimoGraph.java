@@ -37,6 +37,8 @@ public class AnimoGraph {
 
 	public static GraphDatabaseService graphDb;
 	
+	protected static String STORAGE;
+	
 	protected static Node ROOT;
 	protected static Node CACHE, CALC, EMPTY, GC;
 	protected static RelationshipIndex ORDER;
@@ -44,13 +46,17 @@ public class AnimoGraph {
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
 	public AnimoGraph(String folder) {
-		graphDb = new EmbeddedGraphDatabase(folder);
+		
+		STORAGE = folder;
+		graphDb = new EmbeddedGraphDatabase(STORAGE);
+		
 		ROOT = graphDb.getReferenceNode();
 		
 		IndexManager INDEX = graphDb.index();
 		ORDER = INDEX.forRelationships(Properties.ORDER.name());
 		
 		Transaction tx = AnimoGraph.beginTx();
+		
 		try {
 			GC = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.GC);
 			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
@@ -60,6 +66,7 @@ public class AnimoGraph {
 		} finally {
 			tx.finish();
 		}
+		
 	}
 	
 	public static Node getROOT() {

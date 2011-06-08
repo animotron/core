@@ -27,6 +27,7 @@ import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.TEXT;
+import org.neo4j.graphdb.Relationship;
 
 
 
@@ -43,9 +44,9 @@ public class StAXGraphBuilder extends GraphBuilder {
 		this.reader = reader;
 	}
 
-	public void build() throws XMLStreamException {
+	public Relationship build() throws XMLStreamException {
 		
-		startDocument();
+		startGraph();
 		
 		while (reader.hasNext()) {
 			
@@ -75,7 +76,9 @@ public class StAXGraphBuilder extends GraphBuilder {
 			reader.next();
 		}
 		
-		endDocument();
+		endGraph();
+		
+		return getRelationship();
 		
 	}
 

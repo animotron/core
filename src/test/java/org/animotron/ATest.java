@@ -21,21 +21,20 @@ package org.animotron;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 
 import junit.framework.Assert;
 
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.CommonGraphBuilder;
 import org.animotron.graph.Reader;
-import org.animotron.graph.stax.StAXGraphBuilder;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.THE;
@@ -45,7 +44,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.neo4j.graphdb.Relationship;
 
-import com.ctc.wstx.stax.WstxInputFactory;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
 
@@ -55,7 +53,6 @@ import com.ctc.wstx.stax.WstxOutputFactory;
  */
 public class ATest {
 	
-	public static final WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 	
 	private static boolean cleanAfterTest = false;
@@ -86,9 +83,7 @@ public class ATest {
     	String data = null; 
         for (Entry<String, String> entry : nameDataMap.entrySet()) {
         	data = entry.getValue(); 
-        	
-        	XMLStreamReader streamReader = INPUT_FACTORY.createXMLStreamReader(new StringReader(data));
-        	new StAXGraphBuilder(streamReader).build();
+        	CommonGraphBuilder.build(new ByteArrayInputStream(data.getBytes()));
         }
     }
 
