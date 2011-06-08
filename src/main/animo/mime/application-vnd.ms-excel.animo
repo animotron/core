@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-vnd.ms-excel xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/vnd.ms-excel</have:type>
+    <have:name>Microsoft Excel Document</have:name>
+    <have:extension>xls</have:extension>
+</the:application-vnd.ms-excel>

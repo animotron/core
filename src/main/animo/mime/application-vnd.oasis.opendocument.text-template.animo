@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-vnd.oasis.opendocument.text-template xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/vnd.oasis.opendocument.text-template</have:type>
+    <have:name>OpenOffice.org formatted Text model</have:name>
+    <have:extension>ott</have:extension>
+</the:application-vnd.oasis.opendocument.text-template>

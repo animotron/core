@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:image-gif xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:image/>
+    <have:type>image/gif</have:type>
+    <have:name>GIF image</have:name>
+    <have:extension>gif</have:extension>
+</the:image-gif>

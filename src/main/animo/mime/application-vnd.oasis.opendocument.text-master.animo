@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-vnd.oasis.opendocument.text-master xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/vnd.oasis.opendocument.text-master</have:type>
+    <have:name>OpenOffice.org Main Document</have:name>
+    <have:extension>odm</have:extension>
+</the:application-vnd.oasis.opendocument.text-master>

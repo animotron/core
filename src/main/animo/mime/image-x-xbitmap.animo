@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:image-x-xbitmap xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:image/>
+    <have:type>image/x-xbitmap</have:type>
+    <have:name>X Bitmap Graphic</have:name>
+    <have:extension>xbm</have:extension>
+</the:image-x-xbitmap>

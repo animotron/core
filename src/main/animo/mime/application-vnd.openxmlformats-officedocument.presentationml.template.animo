@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-vnd.openxmlformats-officedocument.presentationml.template xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/vnd.openxmlformats-officedocument.presentationml.template</have:type>
+    <have:name>OOXML Presentation Template</have:name>
+    <have:extension>potx</have:extension>
+</the:application-vnd.openxmlformats-officedocument.presentationml.template>

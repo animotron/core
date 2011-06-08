@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-xquery xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/xquery</have:type>
+    <have:name>XQuery script</have:name>
+    <have:extension>xq</have:extension>
+    <have:extension>xql</have:extension>
+    <have:extension>xqm</have:extension>
+    <have:extension>xquery</have:extension>
+    <have:extension>xqy</have:extension>
+    <have:extension>xqws</have:extension>
+</the:application-xquery>

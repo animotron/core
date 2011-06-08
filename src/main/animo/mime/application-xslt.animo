@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:application-xslt xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:application/>
+    <have:type>application/xslt+xml</have:type>
+    <have:name>XSL document</have:name>
+    <have:extension>xsl</have:extension>
+    <have:extension>xslt</have:extension>
+</the:application-xslt>

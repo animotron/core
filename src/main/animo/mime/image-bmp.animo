@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<the:image-bmp xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
+    <is:mime-type/>
+    <is:image/>
+    <have:type>image/bmp</have:type>
+    <have:name>Windows Bitmap Image</have:name>
+    <have:extension>bmp</have:extension>
+</the:image-bmp>
