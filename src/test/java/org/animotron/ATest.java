@@ -80,10 +80,8 @@ public class ATest {
 
 	protected void store(Map<String, String> nameDataMap) throws XMLStreamException {
 		
-    	String data = null; 
         for (Entry<String, String> entry : nameDataMap.entrySet()) {
-        	data = entry.getValue(); 
-        	CommonGraphBuilder.build(new ByteArrayInputStream(data.getBytes()));
+        	CommonGraphBuilder.build(entry.getValue());
         }
     }
 
