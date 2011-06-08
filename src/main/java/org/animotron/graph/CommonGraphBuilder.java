@@ -79,7 +79,7 @@ public class CommonGraphBuilder {
 	}
 
 	private static Relationship storeBinary(InputStream stream, String path) {
-		return new BinGraphBuilder(stream, path).build();
+		return new BinanyBuilder(stream, path).build();
 	}
 
 }

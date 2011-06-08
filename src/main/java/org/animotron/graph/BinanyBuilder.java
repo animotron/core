@@ -19,33 +19,60 @@
 package org.animotron.graph;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.security.MessageDigest;
+import java.util.UUID;
 
 import org.neo4j.graphdb.Relationship;
-
-import com.ctc.wstx.stax.WstxInputFactory;
-
-
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinGraphBuilder extends GraphBuilder {
+public class BinanyBuilder extends GraphBuilder {
 	
-	private final static WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
-	private final static File STORAGE = new File(AnimoGraph.STORAGE, "bin");
+	private final static File STORAGE = new File(AnimoGraph.STORAGE, "binany");
 	
 	private InputStream stream;
 	private String path;
 	
-	public BinGraphBuilder(InputStream stream, String path) {
+	public BinanyBuilder(InputStream stream, String path) {
 		this.stream = stream;
 		this.path = path;
 	}
 	
 	public Relationship build() {
+		String txID = UUID.randomUUID().toString();
+		
+		try {
+			File f = new File(STORAGE, txID);
+			f.createNewFile();
+			OutputStream out = new FileOutputStream(f);
+			
+			byte buf[]=new byte[1024 * 4];
+			int len;
+			
+			MessageDigest md = md();
+			
+			while((len=stream.read(buf))>0) {
+				out.write(buf,0,len);
+				
+				md.update(buf,0,len);
+			}
+			
+			System.out.println(md.digest());
+			
+			out.close();
+			stream.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		//TODO: Store binary and build graph for one
 		return getRelationship();
 	}

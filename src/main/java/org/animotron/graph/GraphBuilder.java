@@ -71,7 +71,7 @@ public abstract class GraphBuilder {
 
 	private Transaction tx;
 		
-	private MessageDigest md() {
+	protected MessageDigest md() {
 		try {
 			return MessageDigest.getInstance(CACHE_ALGOTHIM);
 		} catch (NoSuchAlgorithmException e) {
