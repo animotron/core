@@ -18,20 +18,28 @@
  */
 package org.animotron.graph;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
+import org.animotron.graph.stax.StAXGraphSerializer;
+import org.animotron.operator.THE;
 import org.junit.Test;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class StoreBinaryTest extends ATest {
+public class MimeTest extends ATest {
 	
 	private static final String MIME = 
 		"<the:text-plain " + ATest.ANIMO_NSs + ">" +
@@ -42,33 +50,18 @@ public class StoreBinaryTest extends ATest {
 		"   <have:extension>txt</have:extension>" +
 		"</the:text-plain>";
 	
-	private static final String TXT = 
-		"Lorem ipsum dolor sit amet, consectetur adipiscing elit." +
-		" Phasellus rutrum gravida ante nec consectetur. Sed maur" +
-		"is libero, vulputate a viverra nec, porta at purus. Done" +
-		"c sed consequat lorem. Donec lacinia metus euismod mi el" +
-		"eifend mattis. Mauris porttitor risus sed risus tempor a" +
-		"uctor. Curabitur quam augue, vestibulum ut aliquam eget," +
-		" tincidunt vitae nisi. Donec libero purus, convallis non" +
-		" semper non, molestie adipiscing sapien. Sed facilisis e" +
-		"rat in ligula aliquet consectetur. Nulla luctus, velit a" +
-		"c faucibus tincidunt, justo sem aliquam elit, eu mattis " +
-		"arcu nunc eu diam. Fusce vulputate nunc imperdiet diam c" +
-		"onvallis ultrices eu sit amet velit. Lorem ipsum dolor s" +
-		"it amet, consectetur adipiscing elit. Curabitur eget sem" +
-		" eu nisl luctus feugiat a eget enim. Nulla ut dui purus," +
-		" sit amet cursus est. Suspendisse potenti.";
-
-	private static final String PATH = "test.txt";
+	private static final String STATEMENT = 
+		"<any:mime-type " + ATest.ANIMO_NSs + ">" +
+		"  	<eq:extension>txt</eq:extension>" +
+		"</any:mime-type>";
 	
 	@Test
-	public void storeAndSerialize() throws XMLStreamException {
+	public void storeAndSerializeResult() throws XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
         CommonGraphBuilder.build(MIME);
+        CommonGraphBuilder.build(STATEMENT);
 
-        InputStream stream = new ByteArrayInputStream(TXT.getBytes());
-        CommonGraphBuilder.build(stream, PATH);
         
         System.out.println("loaded ...");
         

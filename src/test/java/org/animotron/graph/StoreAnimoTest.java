@@ -39,7 +39,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class StoreAnimo extends ATest {
+public class StoreAnimoTest extends ATest {
 	
 	private static final String THE_A = 
 		"<the:A "+ANIMO_NSs+">" +
