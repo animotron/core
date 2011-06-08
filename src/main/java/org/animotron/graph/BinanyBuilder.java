@@ -83,8 +83,12 @@ public class BinanyBuilder extends GraphBuilder {
 				tmp.delete();
 				System.out.println("File \"" + bin.getPath() + "\" already stored");
 			} else {
+
 				l2.mkdirs();
-				tmp.renameTo(bin);
+				
+				boolean success = tmp.renameTo(bin);
+				if (!success) throw new IOException("transaction can not be finished");
+				
 				System.out.println("Store the file \"" + bin.getPath() + "\"");
 			}
 			
