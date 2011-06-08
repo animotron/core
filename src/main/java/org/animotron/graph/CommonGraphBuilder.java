@@ -56,15 +56,30 @@ public class CommonGraphBuilder {
 	}
 	
 	public static Relationship build(InputStream stream) throws XMLStreamException {
-		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
+		return storeAnimo(stream);
 	}
 	
 	public static Relationship build(InputStream stream, String path) {
 		try {
-			return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
+			return 
+				isAnimo(path) ? storeAnimo(stream) : storeBinary(stream, path);
+			
 		} catch (XMLStreamException e) {
-			return new BinGraphBuilder(stream, path).build();
+			return 
+				storeBinary(stream, path);
 		}
+	}
+	
+	private static boolean isAnimo(String path) {
+		return path.endsWith(".animo");
+	}
+	
+	private static Relationship storeAnimo(InputStream stream) throws XMLStreamException {
+		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
+	}
+
+	private static Relationship storeBinary(InputStream stream, String path) {
+		return new BinGraphBuilder(stream, path).build();
 	}
 
 }
