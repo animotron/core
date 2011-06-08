@@ -70,12 +70,7 @@ public class FSBridgeTest extends ATest {
         
         System.out.println("loaded ...");
         
-        check("language");
-        check("lang-en");
-        check("lang-en_GB");
-        check("lang-en_US");
-        check("lang-la");
-        check("lang-ru");
+        check("application-animo");
             
         System.out.println("done.");
         
