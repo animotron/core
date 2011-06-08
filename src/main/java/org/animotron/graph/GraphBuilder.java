@@ -18,7 +18,6 @@
  */
 package org.animotron.graph;
 
-import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
@@ -26,15 +25,11 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
 import org.animotron.MessageDigester;
 import org.animotron.Properties;
 import org.animotron.Quanta;
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.stax.StAXGraphBuilder;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.operator.Cachable;
@@ -45,8 +40,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
-import com.ctc.wstx.stax.WstxInputFactory;
-
 /**
  * Animo graph builder, it do optimization/compression and 
  * inform listeners on store/delete events.
@@ -55,13 +48,14 @@ import com.ctc.wstx.stax.WstxInputFactory;
  * 
  * Methods to use:
  * 
- * startDocument()
- * endDocument()
+ * startGraph()
+ * endGraph()
  * 
  * start(String prefix, String ns, String name, String value)
  * start(Statement statement, String prefix, String ns, String name, String value)
  * end()
  * 
+ * getRelationship()
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
