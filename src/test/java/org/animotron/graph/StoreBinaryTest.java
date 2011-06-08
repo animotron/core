@@ -18,13 +18,20 @@
  */
 package org.animotron.graph;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.io.ByteArrayInputStream;
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.junit.Test;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -63,31 +70,41 @@ public class StoreBinaryTest extends ATest {
 	
 	@Test
 	public void storeAndSerialize() throws XMLStreamException {
-        System.out.println("Test processing flow interator ...");
+        System.out.println("Test binary stream ...");
         
         CommonGraphBuilder.build(MIME);
 
-        InputStream stream = new ByteArrayInputStream(TXT.getBytes());
-        CommonGraphBuilder.build(stream, PATH);
+        Relationship r = null;
         
-        System.out.println("loaded ...");
+        Transaction tx = AnimoGraph.beginTx();
+        try {
+        	
+        	r = CommonGraphBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
+
+        	tx.success();
+
+        } catch (Exception e) {
+        	e.printStackTrace();
+			fail(e.toString());
+        } finally {
+        	tx.finish();
+        }
         
-//        Transaction tx = AnimoGraph.beginTx();
-//        try { 
-//	        Relationship r = THE.getInstance().relationship("B");
-//	        assertNotNull(r);
-//	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
-//	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
-//	        serializer.serialize(r);
-//	        tx.success();
-//	        
-//        } catch (Exception e) {
-//        	e.printStackTrace();
-//			fail(e.toString());
-//        } finally {
-//        	tx.finish();
-//        }
-            
+        assertNotNull(r);
+        
+        try {
+	   		PipedInputStream in = new PipedInputStream();
+			PipedOutputStream out = new PipedOutputStream(in);
+	
+			//TODO: change???
+	        GraphSerializer.serialize(r, out);
+	            
+	        assertEquals(in, TXT);
+        } catch (IOException e) {
+        	e.printStackTrace();
+			fail(e.toString());
+		}
+
         System.out.println("done.");
 	}
 }

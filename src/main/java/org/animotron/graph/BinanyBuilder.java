@@ -37,9 +37,11 @@ import org.neo4j.graphdb.Relationship;
 public class BinanyBuilder extends GraphBuilder {
 	
 	private final static File STORAGE = new File(AnimoGraph.STORAGE, "binany");
+	private final static File TMP = new File(STORAGE, "tmp");
 	
 	static {
 		STORAGE.mkdir();
+		TMP.mkdirs();
 	}
 	
 	private InputStream stream;
@@ -55,11 +57,11 @@ public class BinanyBuilder extends GraphBuilder {
 		String txID = UUID.randomUUID().toString();
 		
 		try {
-			File tmp = new File(STORAGE, txID);
+			File tmp = new File(TMP, txID);
 			tmp.createNewFile();
 			OutputStream out = new FileOutputStream(tmp);
 			
-			byte buf[]=new byte[1024 * 4];
+			byte buf[] = new byte[1024 * 4];
 			int len;
 			MessageDigest md = md();
 			
@@ -68,10 +70,10 @@ public class BinanyBuilder extends GraphBuilder {
 				md.update(buf,0,len);
 			}
 			
-			String hash = MessageDigester.byteArrayToHex(md.digest());
-			
 			out.close();
 			stream.close();
+			
+			String hash = MessageDigester.byteArrayToHex(md.digest());
 			
 			File l1  = new File(STORAGE, hash.substring(0, 2));  
 			File l2  = new File(l1, hash.substring(0, 4));  
@@ -81,8 +83,12 @@ public class BinanyBuilder extends GraphBuilder {
 				tmp.delete();
 				System.out.println("File \"" + bin.getPath() + "\" already stored");
 			} else {
+
 				l2.mkdirs();
-				tmp.renameTo(bin);
+				
+				boolean success = tmp.renameTo(bin);
+				if (!success) throw new IOException("transaction can not be finished");
+				
 				System.out.println("Store the file \"" + bin.getPath() + "\"");
 			}
 			
