@@ -84,7 +84,7 @@ public abstract class GraphBuilder {
 		return the;
 	}
 	
-	final protected void startGraph(){
+	final protected void startGraph() {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
@@ -186,7 +186,7 @@ public abstract class GraphBuilder {
 		
 	}
 	
-	final public void end() {
+	final protected void end() {
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {
@@ -195,7 +195,7 @@ public abstract class GraphBuilder {
 		current[4] = hash;
 	}
 	
-	final public String removeWS(String value) {
+	final protected String removeWS(String value) {
 		
 		StringBuilder buf = new StringBuilder();
 		
