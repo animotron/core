@@ -109,47 +109,47 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 	}
 
 	@Override
-	public void endEntity(String arg0) throws SAXException {
+	public void endEntity(String name) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startDTD(String arg0, String arg1, String arg2) throws SAXException {
+	public void startDTD(String name, String publicId, String systemId) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startEntity(String arg0) throws SAXException {
+	public void startEntity(String name) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void endPrefixMapping(String arg0) throws SAXException {
+	public void endPrefixMapping(String prefix) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void ignorableWhitespace(char[] arg0, int arg1, int arg2) throws SAXException {
+	public void ignorableWhitespace(char ch[], int start, int length) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void processingInstruction(String arg0, String arg1) throws SAXException {
+	public void processingInstruction(String target, String data) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void setDocumentLocator(Locator arg0) {
+	public void setDocumentLocator(Locator locator) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void skippedEntity(String arg0) throws SAXException {
+	public void skippedEntity(String name) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void startPrefixMapping(String arg0, String arg1) throws SAXException {
+	public void startPrefixMapping(String prefix, String uri) throws SAXException {
 		// TODO Auto-generated method stub
 	}
 	

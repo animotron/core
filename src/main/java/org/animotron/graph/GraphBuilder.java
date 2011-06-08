@@ -97,6 +97,7 @@ public class GraphBuilder {
 		return the;
 	}
 	
+	//XXX: change name to startBuilding/endBulding & make it protected
 	final public void startDocument(){
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
@@ -134,7 +135,7 @@ public class GraphBuilder {
 		}
 	}
 
-	final public void start(String prefix, String ns, String name, String value) {
+	final protected void start(String prefix, String ns, String name, String value) {
 		
 		Statement statement;
 		Quanta container = Statements.namespace(ns);
@@ -151,7 +152,7 @@ public class GraphBuilder {
 		
 	}
 	
-	final public void start(Statement statement, String prefix, String ns, String name, String value) {
+	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
 		
 		MessageDigest md = md();
 		
@@ -181,7 +182,7 @@ public class GraphBuilder {
 			external |= (Boolean) parent[5];
 		}
 		
-		Node current = null;
+		//Node current = null;
 		
 		Object[] item = {	
 				statement,	// 0 	
@@ -201,7 +202,7 @@ public class GraphBuilder {
 		
 	}
 	
-	final public void end() {
+	final protected void end() {
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
 		if (!statements.empty()) {
@@ -210,7 +211,7 @@ public class GraphBuilder {
 		current[4] = hash;
 	}
 	
-	final public String removeWS(String value) {
+	final protected String removeWS(String value) {
 		
 		StringBuilder buf = new StringBuilder();
 		
