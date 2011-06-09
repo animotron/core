@@ -67,13 +67,19 @@ public class ATest {
 		"xmlns:use='animo/relation/use' " +
 		"xmlns:is='animo/relation/is' " +
 
+		"xmlns:ic='animo/connection' " +
+		
 		"xmlns:do='animo/perform' " +
 		
 		"xmlns:get='animo/query/extract' " +
 		"xmlns:any='animo/query/any' " +
 		"xmlns:all='animo/query/all' " +
 		
+		"xmlns:eq='animo/compare/eq' " +
+
 		"xmlns:op='animo/operation' " +
+		"xmlns:string='animo/string' " +
+		"xmlns:ml='animo/ml' " +
 		
 		"xmlns:Q='animo/quantity' ";
 
