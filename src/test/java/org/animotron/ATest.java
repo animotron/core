@@ -21,7 +21,6 @@ package org.animotron;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,7 +46,7 @@ import org.neo4j.graphdb.Relationship;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
 
-/**factory
+/**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
@@ -159,7 +158,7 @@ public class ATest {
 
     @BeforeClass
     public static void startDB() {
-    	new AnimoGraph("data");
+    	AnimoGraph.startDB("data");
     }
 
     @AfterClass

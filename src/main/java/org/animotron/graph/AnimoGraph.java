@@ -45,7 +45,7 @@ public class AnimoGraph {
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
-	public AnimoGraph(String folder) {
+	public static void startDB(String folder) {
 		
 		STORAGE = folder;
 		graphDb = new EmbeddedGraphDatabase(STORAGE);
