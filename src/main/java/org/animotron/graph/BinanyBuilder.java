@@ -27,6 +27,10 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 import org.animotron.MessageDigester;
+import org.animotron.instruction.ml.TEXT;
+import org.animotron.operator.THE;
+import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -52,52 +56,65 @@ public class BinanyBuilder extends GraphBuilder {
 		this.path = path;
 	}
 	
-	public Relationship build() {
+	public Relationship build() throws IOException {
 		
 		String txID = UUID.randomUUID().toString();
 		
-		try {
-			File tmp = new File(TMP, txID);
-			tmp.createNewFile();
-			OutputStream out = new FileOutputStream(tmp);
-			
-			byte buf[] = new byte[1024 * 4];
-			int len;
-			MessageDigest md = md();
-			
-			while((len=stream.read(buf))>0) {
-				out.write(buf,0,len);
-				md.update(buf,0,len);
-			}
-			
-			out.close();
-			stream.close();
-			
-			String hash = MessageDigester.byteArrayToHex(md.digest());
-			
-			File l1  = new File(STORAGE, hash.substring(0, 2));  
-			File l2  = new File(l1, hash.substring(0, 4));  
-			File bin = new File(l2,  hash);
-			
-			if (bin.exists()) {
-				tmp.delete();
-				System.out.println("File \"" + bin.getPath() + "\" already stored");
-			} else {
-
-				l2.mkdirs();
-				
-				boolean success = tmp.renameTo(bin);
-				if (!success) throw new IOException("transaction can not be finished");
-				
-				System.out.println("Store the file \"" + bin.getPath() + "\"");
-			}
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+		File tmp = new File(TMP, txID);
+		tmp.createNewFile();
+		OutputStream out = new FileOutputStream(tmp);
+		
+		byte buf[] = new byte[1024 * 4];
+		int len;
+		MessageDigest md = md();
+		
+		while((len=stream.read(buf))>0) {
+			out.write(buf,0,len);
+			md.update(buf,0,len);
 		}
+		
+		out.close();
+		stream.close();
+		
+		String hash = MessageDigester.byteArrayToHex(md.digest());
+		
+		File l1  = new File(STORAGE, hash.substring(0, 2));  
+		File l2  = new File(l1, hash.substring(0, 4));  
+		File bin = new File(l2,  hash);
+		
+		if (bin.exists()) {
+			tmp.delete();
+			System.out.println("File \"" + bin.getPath() + "\" already stored");
+			return (THE.getInstance().relationship(hash));
+		} else {
 
-		//TODO: Store binary and build graph for one
-		return getRelationship();
+			l2.mkdirs();
+			
+			boolean success = tmp.renameTo(bin);
+			if (!success) {
+				tmp.delete();
+				throw new IOException("transaction can not be finished");
+			} else {
+				startGraph();
+					start(THE.getInstance(), null, null, hash, null);
+						start(IS.getInstance(), null, null, "file", null);
+						end();
+						start(HAVE.getInstance(), null, null, "path", null);
+							start(TEXT.getInstance(), null, null, null, path);
+							end();
+						end();
+					end();
+				if (!endGraph()) {
+					tmp.delete();
+				}
+			}
+			
+			System.out.println("Store the file \"" + bin.getPath() + "\"");
+			
+			return getRelationship();
+
+		}
+			
 	}
 
 }

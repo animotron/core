@@ -21,7 +21,7 @@ package org.animotron.bridge;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -62,7 +62,7 @@ public class FSBridgeTest extends ATest {
 	}
 	
 	@Test
-	public void loadAndSerialize() throws XMLStreamException, FileNotFoundException {
+	public void loadAndSerialize() throws XMLStreamException, IOException {
 		
         System.out.println("Test repository loader ...");
         

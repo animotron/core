@@ -21,7 +21,7 @@ package org.animotron.graph;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.stream.XMLStreamException;
@@ -51,7 +51,7 @@ public class CommonGraphBuilder {
 		return build(new ByteArrayInputStream(data.getBytes()));
 	}
 	
-	public static Relationship build(File path) throws FileNotFoundException {
+	public static Relationship build(File path) throws IOException {
 		return build(new FileInputStream(path), path.getPath());
 	}
 	
@@ -59,7 +59,7 @@ public class CommonGraphBuilder {
 		return storeAnimo(stream);
 	}
 	
-	public static Relationship build(InputStream stream, String path) {
+	public static Relationship build(InputStream stream, String path) throws IOException {
 		try {
 			return 
 				isAnimo(path) ? storeAnimo(stream) : storeBinary(stream, path);
@@ -78,7 +78,7 @@ public class CommonGraphBuilder {
 		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
 	}
 
-	private static Relationship storeBinary(InputStream stream, String path) {
+	private static Relationship storeBinary(InputStream stream, String path) throws IOException {
 		return new BinanyBuilder(stream, path).build();
 	}
 

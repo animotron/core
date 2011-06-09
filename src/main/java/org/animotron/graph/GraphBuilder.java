@@ -90,7 +90,8 @@ public abstract class GraphBuilder {
 		tx = AnimoGraph.beginTx();
 	};
 	
-	final protected void endGraph(){
+	final protected boolean endGraph(){
+		boolean succes = false;
 		Object[] first = flow.get(0);
 		try {
 			int i = 0;
@@ -115,10 +116,12 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 			tx.success();
+			succes = true;
 		} finally {
 			tx.finish();
 			the = THE.getInstance().relationship((String) first[2]);
 		}
+		return succes;
 	}
 
 	final protected void start(String prefix, String ns, String name, String value) {
@@ -310,7 +313,7 @@ public abstract class GraphBuilder {
 		return node;
 	}
 	
-	private void fail(Exception e){
+	protected void fail(Exception e){
 		e.printStackTrace(System.out);
 		tx.finish();
 	}
