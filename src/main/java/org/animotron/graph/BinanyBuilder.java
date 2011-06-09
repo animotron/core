@@ -50,15 +50,7 @@ public class BinanyBuilder {
 		TMP.mkdirs();
 	}
 	
-	private InputStream stream;
-	private String path;
-	
-	public BinanyBuilder(InputStream stream, String path) {
-		this.stream = stream;
-		this.path = path;
-	}
-	
-	public Relationship build() throws IOException {
+	public static Relationship build(InputStream stream, String path) throws IOException {
 		
 		String txID = UUID.randomUUID().toString();
 		
