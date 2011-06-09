@@ -44,19 +44,19 @@ public class ConnectionTests extends ATest {
 		"	<have:path/>"+
 
 		"	<ic:extension>"+
-		"		<string:after>"+
-		"			<type:string>.</type:string>"+
+		"		<string:after-last>"+
+		"			<ml:text>.</ml:text>"+
 		"			<get:path/>"+
-		"		</string:after>"+
+		"		</string:after-last>"+
 		"	</ic:extension>"+
 		"	<ic:mime-type>"+
 		"		<any:mime-type>"+
 		"			<eq:extension>"+
-		"				<get:extension>"+
+		"				<get:extension/>"+
 		"			</eq:extension>"+
 		"		</any:mime-type>"+
 		"	</ic:mime-type>"+
-		"</the:B>";
+		"</the:file>";
 
 	private static final String THE_FILEA = 
 		"<the:fileA "+ANIMO_NSs+">" +
@@ -81,15 +81,15 @@ public class ConnectionTests extends ATest {
 		"<the:A "+ANIMO_NSs+">" +
 		"	<get:type>" +
 		"		<get:mime-type>" +
-		"			<an:fileA>" +
+		"			<an:fileA/>" +
 		"		</get:mime-type>" +
 		"	</get:type>" +
 		"</the:A>";
 
 	
 	@Test
-	public void testGet() throws IOException, XMLStreamException {
-        System.out.println("Test 'get' ...");
+	public void mimeType_usecase() throws IOException, XMLStreamException {
+        System.out.println("Mime type use case ...");
         
         if (firstRun) {
 	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
@@ -103,7 +103,7 @@ public class ConnectionTests extends ATest {
         }
         
         //System.out.println("");
-        assertEquals("A", "<have:type>text/plain</have:type>");
+        assertEquals("A", "<the:A><have:type>text/plain</have:type></the:A>");
 
         //System.out.println("done.");
 	}
