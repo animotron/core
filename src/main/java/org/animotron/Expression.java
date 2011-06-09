@@ -10,7 +10,7 @@
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Lesser General Public License for more details.
+ *  GNU Lesser General Public License for more detailstatement.
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
@@ -35,48 +35,50 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Expression extends GraphBuilder {
 	
-	Object[] e;
+	Object[][] e;
 	
-	public Expression(Object[] e) {
+	public Expression(Object[]... e) {
 		this.e = e;
 	}
 	
 	public Relationship build() {
 		startGraph();
-		build(e);
+		for(Object[] i : e) {
+			buildExpression(i);
+		}
 		endGraph();
 		return getRelationship();
 	}
-
-	private void build(Object[] e) {
-		if (e == null)
-			return;
+	
+	private void buildExpression(Object[]... e) {
+		if (e != null)
+			for (Object i : e) 
+				buildStatement((Object[]) i);
+	}
+	
+	private void buildStatement(Object[] e) {
 		start((Statement) e[0], (String) e[1], (String) e[2], (String) e[3], (String) e[4]);
-		build((Object[]) e[5]);
+		buildExpression((Object[][]) e[5]);
 		end();
 	}
 	
-	public static Object[] s(Class<? extends Operator> statement, String name) {
-		Operator s = (Operator) Statements.clazz(statement); 
-		Object[] e = {s, s.name(), s.namespace(), name, null, null};
+	public static Object[] s(Operator statement, String name) {
+		Object[] e = {statement, statement.name(), statement.namespace(), name, null, null};
 		return e;
 	}
 
-	public static Object[] s(Class<? extends Operator> statement, String name, Object... p) {
-		Operator s = (Operator) Statements.clazz(statement); 
-		Object[] e = {s, s.name(), s.namespace(), name, null, p};
+	public static Object[] s(Operator statement, String name, Object[]... p) {
+		Object[] e = {statement, statement.name(), statement.namespace(), name, null, p};
 		return e;
 	}
 
-	public static Object[] s(Class<? extends Instruction> statement) {
-		Instruction s = (Instruction) Statements.clazz(statement); 
-		Object[] e = {s, s.prefix(), s.namespace(), s.name(), null, null};
+	public static Object[] s(Instruction statement) {
+		Object[] e = {statement, statement.prefix(), statement.namespace(), statement.name(), null, null};
 		return e;
 	}
 
-	public static Object[] s(Class<? extends Instruction> statement, Object... p) {
-		Instruction s = (Instruction) Statements.clazz(statement); 
-		Object[] e = {s, s.prefix(), s.namespace(), s.name(), null, p};
+	public static Object[] s(Instruction statement, Object[]... p) {
+		Object[] e = {statement, statement.prefix(), statement.namespace(), statement.name(), null, p};
 		return e;
 	}
 
@@ -92,13 +94,13 @@ public class Expression extends GraphBuilder {
 		return e;
 	}
 
-	public static Object[] element(String name, Object... p) {
+	public static Object[] element(String name, Object[]... p) {
 		String[] qname = qname(name);
 		Object[] e = {ELEMENT.getInstance(), qname[0], null, qname[1], null, p};
 		return e;
 	}
 	
-	public static Object[] element(String name, String ns, Object... p) {
+	public static Object[] element(String name, String ns, Object[]... p) {
 		String[] qname = qname(name);
 		Object[] e = {ELEMENT.getInstance(), qname[0], ns, qname[1], null, p};
 		return e;

@@ -64,8 +64,6 @@ public abstract class GraphBuilder {
 	
 	private Relationship the = null;
 	
-	private static final String CACHE_ALGOTHIM = "SHA-256";
-	
 	private Stack<Object[]> statements;
 	private List<Object[]> flow;
 
@@ -73,15 +71,6 @@ public abstract class GraphBuilder {
 
 	private boolean success;
 		
-	protected MessageDigest md() {
-		try {
-			return MessageDigest.getInstance(CACHE_ALGOTHIM);
-		} catch (NoSuchAlgorithmException e) {
-			//can't be, but throw runtime error
-			throw new RuntimeException(e);
-		}
-	}
-	
 	public final Relationship getRelationship() {
 		return the;
 	}
@@ -89,9 +78,9 @@ public abstract class GraphBuilder {
 	final protected void startGraph() {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
-		tx = AnimoGraph.beginTx();
 		success = false;
 		the = null;
+		tx = AnimoGraph.beginTx();
 	};
 	
 	final public boolean successful(){
@@ -143,7 +132,7 @@ public abstract class GraphBuilder {
 	
 	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
 		
-		MessageDigest md = md();
+		MessageDigest md = MessageDigester.md();
 		
 		if (ns != null) 
 			md.update(ns.getBytes());
@@ -290,7 +279,7 @@ public abstract class GraphBuilder {
 	
 	private Node value(String value, byte[] bytes) {
 		try{
-			MessageDigest md = md();
+			MessageDigest md = MessageDigester.md();
 			md.update(bytes);
 			String hash = hash(md.digest());
 			Node cache = AnimoGraph.getCache(hash);

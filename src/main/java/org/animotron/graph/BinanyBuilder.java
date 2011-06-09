@@ -30,7 +30,6 @@ import java.util.UUID;
 
 import org.animotron.Expression;
 import org.animotron.MessageDigester;
-import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
@@ -41,7 +40,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinanyBuilder extends GraphBuilder {
+public class BinanyBuilder {
 	
 	private final static File STORAGE = new File(AnimoGraph.STORAGE, "binany");
 	private final static File TMP = new File(STORAGE, "tmp");
@@ -69,7 +68,7 @@ public class BinanyBuilder extends GraphBuilder {
 		
 		byte buf[] = new byte[1024 * 4];
 		int len;
-		MessageDigest md = md();
+		MessageDigest md = MessageDigester.md();
 		
 		while((len=stream.read(buf))>0) {
 			out.write(buf,0,len);
@@ -86,33 +85,40 @@ public class BinanyBuilder extends GraphBuilder {
 		File bin = new File(l2,  hash);
 		
 		if (bin.exists()) {
+			
 			tmp.delete();
 			System.out.println("File \"" + bin.getPath() + "\" already stored");
+			
 			return (THE.getInstance().relationship(hash));
+			
 		} else {
-
+			
+			Relationship r = null;
 			l2.mkdirs();
 			
-			boolean success = tmp.renameTo(bin);
-			if (!success) {
+			if (!tmp.renameTo(bin)) {
 				tmp.delete();
 				throw new IOException("transaction can not be finished");
+				
 			} else {
-				new Expression(
-						s(THE.class, hash,
-							s(IS.class, "file"),
-							s(HAVE.class, "path", text(path))
+				Expression e = new Expression(
+						s(THE.getInstance(), hash,
+							s(IS.getInstance(), "file"),
+							s(HAVE.getInstance(), "path", text(path))
 						)
-						).build();
-				if (!successful()) {
+					);
+				r = e.build();
+				
+				if (!e.successful()) {
 					tmp.delete();
 				}
+				
 			}
 			
 			System.out.println("Store the file \"" + bin.getPath() + "\"");
 			
-			return getRelationship();
-
+			return r;
+			
 		}
 			
 	}
