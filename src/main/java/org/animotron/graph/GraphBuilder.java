@@ -126,13 +126,7 @@ public abstract class GraphBuilder {
 
 	final protected void start(String prefix, String ns, String name, String value) {
 		
-		Statement statement;
-		Quanta container = Statements.namespace(ns);
-		if (container instanceof InstructionContainer) {
-			statement = ((InstructionContainer) container).getInstruction(name);
-		} else {
-			statement = (Statement) container;
-		}
+		Statement statement = Statements.namespace(ns, name);
 		if (statement == null) {
 			statement = ELEMENT.getInstance();
 		}

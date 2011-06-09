@@ -238,16 +238,34 @@ public class Statements {
 	
 	public static Quanta namespace(String uri) {
 		ready();
-		
-		Quanta s = quantasByNamespace.get(uri);
-		
+		return quantasByNamespace.get(uri);
+	}
+
+	public static Statement namespace(String uri, String name) {
+		Statement s;
+		Quanta q = namespace (uri);
+		if (q instanceof InstructionContainer) {
+			s = ((InstructionContainer) q).getInstruction(name);
+		} else {
+			s = (Statement) q;
+		}
 		return s;
 	}
 
 	public static Quanta prefix(String name) {
 		ready();
-		
 		return quantasByPrefix.get(name);
+	}
+
+	public static Statement prefix(String uri, String name) {
+		Statement s;
+		Quanta q = prefix (uri);
+		if (q instanceof InstructionContainer) {
+			s = ((InstructionContainer) q).getInstruction(name);
+		} else {
+			s = (Statement) q;
+		}
+		return s;
 	}
 
 	public static Statement clazz(Class<? extends Statement> clazz) {
