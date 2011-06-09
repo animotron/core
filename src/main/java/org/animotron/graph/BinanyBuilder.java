@@ -18,6 +18,8 @@
  */
 package org.animotron.graph;
 
+import static org.animotron.Expression.*;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,6 +28,7 @@ import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.util.UUID;
 
+import org.animotron.Expression;
 import org.animotron.MessageDigester;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.THE;
@@ -95,16 +98,13 @@ public class BinanyBuilder extends GraphBuilder {
 				tmp.delete();
 				throw new IOException("transaction can not be finished");
 			} else {
-				startGraph();
-					start(THE.getInstance(), null, null, hash, null);
-						start(IS.getInstance(), null, null, "file", null);
-						end();
-						start(HAVE.getInstance(), null, null, "path", null);
-							start(TEXT.getInstance(), null, null, null, path);
-							end();
-						end();
-					end();
-				if (!endGraph()) {
+				new Expression(
+						s(THE.class, hash,
+							s(IS.class, "file"),
+							s(HAVE.class, "path", text(path))
+						)
+						).build();
+				if (!successful()) {
 					tmp.delete();
 				}
 			}

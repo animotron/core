@@ -56,14 +56,13 @@ public class Expression extends GraphBuilder {
 		end();
 	}
 	
-	
 	public static Object[] s(Class<? extends Operator> statement, String name) {
 		Operator s = (Operator) Statements.clazz(statement); 
 		Object[] e = {s, s.name(), s.namespace(), name, null, null};
 		return e;
 	}
 
-	public static Object[] s(Class<? extends Operator> statement, String name, Object[] p) {
+	public static Object[] s(Class<? extends Operator> statement, String name, Object... p) {
 		Operator s = (Operator) Statements.clazz(statement); 
 		Object[] e = {s, s.name(), s.namespace(), name, null, p};
 		return e;
@@ -75,7 +74,7 @@ public class Expression extends GraphBuilder {
 		return e;
 	}
 
-	public static Object[] s(Class<? extends Instruction> statement, Object[] p) {
+	public static Object[] s(Class<? extends Instruction> statement, Object... p) {
 		Instruction s = (Instruction) Statements.clazz(statement); 
 		Object[] e = {s, s.prefix(), s.namespace(), s.name(), null, p};
 		return e;
@@ -93,13 +92,13 @@ public class Expression extends GraphBuilder {
 		return e;
 	}
 
-	public static Object[] element(String name, Object[] p) {
+	public static Object[] element(String name, Object... p) {
 		String[] qname = qname(name);
 		Object[] e = {ELEMENT.getInstance(), qname[0], null, qname[1], null, p};
 		return e;
 	}
 	
-	public static Object[] element(String name, String ns, Object[] p) {
+	public static Object[] element(String name, String ns, Object... p) {
 		String[] qname = qname(name);
 		Object[] e = {ELEMENT.getInstance(), qname[0], ns, qname[1], null, p};
 		return e;

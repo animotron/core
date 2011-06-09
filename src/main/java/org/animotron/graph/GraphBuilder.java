@@ -70,6 +70,8 @@ public abstract class GraphBuilder {
 	private List<Object[]> flow;
 
 	private Transaction tx;
+
+	private boolean success;
 		
 	protected MessageDigest md() {
 		try {
@@ -88,10 +90,15 @@ public abstract class GraphBuilder {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		tx = AnimoGraph.beginTx();
+		success = false;
+		the = null;
 	};
 	
-	final protected boolean endGraph(){
-		boolean succes = false;
+	final public boolean successful(){
+		return success;
+	}
+	
+	final protected void endGraph(){
 		Object[] first = flow.get(0);
 		try {
 			int i = 0;
@@ -116,12 +123,11 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 			tx.success();
-			succes = true;
+			success = true;
 		} finally {
 			tx.finish();
 			the = THE.getInstance().relationship((String) first[2]);
 		}
-		return succes;
 	}
 
 	final protected void start(String prefix, String ns, String name, String value) {
