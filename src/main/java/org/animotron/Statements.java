@@ -240,8 +240,6 @@ public class Statements {
 		ready();
 		
 		Quanta s = quantasByNamespace.get(uri);
-//		if (s == null && run())
-//			s = statementsByNamespace.get(uri);
 		
 		return s;
 	}
@@ -249,13 +247,19 @@ public class Statements {
 	public static Quanta prefix(String name) {
 		ready();
 		
-		Quanta s = quantasByPrefix.get(name);
-//		if (s == null && run())
-//			s = statementsByNamespace.get(uri);
-		
-		return s;
+		return quantasByPrefix.get(name);
 	}
 
+	public static Statement clazz(Class<? extends Statement> clazz) {
+		Method method;
+		try {
+			method = clazz.getMethod("getInstance");
+			return (Statement) method.invoke(clazz);
+		} catch (Exception e) {
+			return null; //or RuntimeException?
+		}
+	}
+	
 	public static Statement relationshipType(RelationshipType type) {
 		return relationshipType(type.name());
 	}
