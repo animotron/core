@@ -19,7 +19,7 @@
 package org.animotron.bridge;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -33,11 +33,11 @@ import org.animotron.graph.CommonGraphBuilder;
  */
 public class FSBridge {
 	
-	public static void load (String path) throws XMLStreamException, FileNotFoundException {
+	public static void load (String path) throws XMLStreamException, IOException {
 		load(new File(path));
 	}
 	
-	public static void load (File path) throws XMLStreamException, FileNotFoundException {
+	public static void load (File path) throws XMLStreamException, IOException {
 		
 		if (path.isDirectory()) {
 			for (File file : path.listFiles()) {
