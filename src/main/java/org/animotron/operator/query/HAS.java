@@ -30,8 +30,7 @@ import org.animotron.operator.Query;
  */
 public class HAS extends AbstarctOperator implements Query, Predicate {
 	
-	private static final HAS _ = new HAS();
-	public static HAS getInstance() { return _; }
+	public static final HAS _ = new HAS();
 	
 	private HAS() { super("has", "animo/query/has"); }
 	

@@ -46,7 +46,7 @@ public class FSBridgeTest extends ATest {
 	private void check(String the){
         Transaction tx = AnimoGraph.beginTx();
         try { 
-	        Relationship r = THE.getInstance().relationship(the);
+	        Relationship r = THE._.relationship(the);
 	        assertNotNull(r);
 	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
 	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);

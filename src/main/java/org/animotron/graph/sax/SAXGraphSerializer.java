@@ -40,7 +40,7 @@ import org.xml.sax.helpers.AttributesImpl;
  */
 public class SAXGraphSerializer extends AbstractGraphSerializer {
 	
-	private static final ATTRIBUTE ATTR = ATTRIBUTE.getInstance();
+	private static final ATTRIBUTE ATTR = ATTRIBUTE._;
 	private static final RelationshipType ATTR_RELATIONSHIPTYPE = ATTR.relationshipType();
 	private ContentHandler contentHandler;
 	private LexicalHandler lexicalHandler;

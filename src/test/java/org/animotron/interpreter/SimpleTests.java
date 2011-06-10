@@ -73,7 +73,7 @@ public class SimpleTests extends ATest {
         Transaction tx = AnimoGraph.beginTx();
         
         try {
-	        Relationship op = THE.getInstance().relationship("C");
+	        Relationship op = THE._.relationship("C");
 	        
 	        assertNotNull(op);
 	        

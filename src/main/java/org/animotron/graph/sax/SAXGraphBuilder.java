@@ -38,7 +38,7 @@ import org.xml.sax.ext.LexicalHandler;
  */
 public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, LexicalHandler {
 	
-	private Instruction valueStatement = TEXT.getInstance();
+	private Instruction valueStatement = TEXT._;
 	
 	private String[] qname (String name, String qname){
 		String[] tmp = {null, name};
@@ -69,7 +69,7 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 		for (int i = 0; i < attributes.getLength(); i++) {
 			if ("CDATA".equals(attributes.getType(i))) {
 				tmp = qname(attributes.getLocalName(i), attributes.getQName(i));
-				start(ATTRIBUTE.getInstance(), 
+				start(ATTRIBUTE._, 
 						tmp[0], attributes.getURI(i), tmp[1], attributes.getValue(i));
 				end();
 			}
@@ -99,18 +99,18 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 
 	@Override
 	public void comment(char ch[], int start, int length) throws SAXException {
-		start(COMMENT.getInstance(), null, null, null, new String(ch, start, length));
+		start(COMMENT._, null, null, null, new String(ch, start, length));
 		end();
 	}
 
 	@Override
 	public void startCDATA() throws SAXException {
-		valueStatement = CDATA.getInstance();
+		valueStatement = CDATA._;
 	}
 
 	@Override
 	public void endCDATA() throws SAXException {
-		valueStatement = TEXT.getInstance();
+		valueStatement = TEXT._;
 	}
 
 	@Override

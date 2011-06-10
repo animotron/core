@@ -25,8 +25,7 @@ package org.animotron.instruction.ml;
  */
 public class CDATA extends ValueInstruction {
 	
-	private static final CDATA _ = new CDATA();
-	public static CDATA getInstance() { return _; }
+	public static final CDATA _ = new CDATA();
 	
 	private CDATA() { super("cdata", "ml", "animo/ml"); }
 }

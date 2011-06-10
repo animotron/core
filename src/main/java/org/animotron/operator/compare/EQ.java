@@ -29,8 +29,7 @@ import org.animotron.operator.Predicate;
  */
 public class EQ extends AbstarctOperator implements Predicate {
 	
-	private static final EQ _ = new EQ();
-	public static EQ getInstance() { return _; }
+	public static final EQ _ = new EQ();
 	
 	private EQ() { super("eq", "animo/compare/eq"); }
 	

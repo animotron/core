@@ -93,7 +93,7 @@ public abstract class GraphBuilder {
 			int i = 0;
 			if (!(first[0] instanceof THE)) {
 				Object[] item = {	
-						THE.getInstance(),	// 0 	
+						THE._,	// 0 	
 						THE.NAMESPACE,		// 1
 						first[2],			// 2
 						null, 				// 3
@@ -115,7 +115,7 @@ public abstract class GraphBuilder {
 			success = true;
 		} finally {
 			tx.finish();
-			the = THE.getInstance().relationship((String) first[2]);
+			the = THE._.relationship((String) first[2]);
 		}
 	}
 
@@ -123,7 +123,7 @@ public abstract class GraphBuilder {
 		
 		Statement statement = Statements.namespace(ns, name);
 		if (statement == null) {
-			statement = ELEMENT.getInstance();
+			statement = ELEMENT._;
 		}
 		
 		start(statement, prefix, ns, name, value);

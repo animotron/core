@@ -45,15 +45,14 @@ import org.neo4j.kernel.Traversal;
  */
 public class GET extends AbstarctOperator implements Evaluable, Query, Cachable {
 
-	private static final GET _ = new GET();
-	public static GET getInstance() { return _; }
+	public static final GET _ = new GET();
 	
 	private GET() { super("get", "animo/query/extract"); }
 
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
-			relationships(HAVE.getInstance().relationshipType(), Direction.OUTGOING );
+			relationships(HAVE._.relationshipType(), Direction.OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
 	@Override

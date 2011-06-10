@@ -29,8 +29,7 @@ import org.animotron.operator.Relation;
  */
 public class USE extends Relation {
 	
-	private static final USE _ = new USE();
-	public static USE getInstance() { return _; }
+	public static final USE _ = new USE();
 	
 	private USE() { super("use", "animo/relation/use"); }
 	

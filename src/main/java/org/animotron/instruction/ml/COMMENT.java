@@ -25,8 +25,7 @@ package org.animotron.instruction.ml;
  */
 public class COMMENT extends ValueInstruction {
 	
-	private static final COMMENT _ = new COMMENT();
-	public static COMMENT getInstance() { return _; }
+	public static final COMMENT _ = new COMMENT();
 	
 	private COMMENT() { super("comment", "ml", "animo/ml"); }
 }

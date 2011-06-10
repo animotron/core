@@ -29,8 +29,7 @@ import org.animotron.operator.Predicate;
  */
 public class GT extends AbstarctOperator implements Predicate {
 	
-	private static final GT _ = new GT();
-	public static GT getInstance() { return _; }
+	public static final GT _ = new GT();
 	
 	private GT() { super("gt", "animo/compare/gt"); }
 	

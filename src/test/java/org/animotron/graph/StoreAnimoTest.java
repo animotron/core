@@ -79,7 +79,7 @@ public class StoreAnimoTest extends ATest {
         
         Transaction tx = AnimoGraph.beginTx();
         try { 
-	        Relationship r = THE.getInstance().relationship("B");
+	        Relationship r = THE._.relationship("B");
 	            
 	        assertNotNull(r);
 	        

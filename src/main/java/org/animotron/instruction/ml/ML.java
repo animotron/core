@@ -27,8 +27,7 @@ import org.animotron.instruction.AbstractContainer;
  */
 public class ML extends AbstractContainer {
 	
-	private static final ML INSTANCE = new ML();
-	public static ML getInstance() { return INSTANCE; }
+	public static final ML _ = new ML();
 	
 	private ML() { super("ml", "animo/ml"); }
 }

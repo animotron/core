@@ -85,25 +85,25 @@ public class StAXGraphBuilder extends GraphBuilder {
 	private void text(XMLStreamReader reader) {
 		String value = removeWS(reader.getText());
 		if (value != null) {
-			start(TEXT.getInstance(), null, null, null, value);
+			start(TEXT._, null, null, null, value);
 			end();
 		}
 	}
 
 	private void comment(XMLStreamReader reader) {
-		start(COMMENT.getInstance(), null, null, null, reader.getText());
+		start(COMMENT._, null, null, null, reader.getText());
 		end();
 	}
 
 	private void cdata(XMLStreamReader reader) {
-		start(CDATA.getInstance(), null, null, null, reader.getText());
+		start(CDATA._, null, null, null, reader.getText());
 		end();
 	}
 
 	private void startElement(XMLStreamReader reader) {
 		start(reader.getPrefix(), reader.getNamespaceURI(), reader.getLocalName(), null);
 		for (int i = 0; i < reader.getAttributeCount(); i++) {
-			start(ATTRIBUTE.getInstance(),
+			start(ATTRIBUTE._,
 					reader.getAttributePrefix(i),
 					reader.getAttributeNamespace(i), 
 					reader.getAttributeLocalName(i), 

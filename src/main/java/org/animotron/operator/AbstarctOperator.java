@@ -84,7 +84,7 @@ public abstract class AbstarctOperator implements Operator {
 		Node child = AnimoGraph.createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);
 		AnimoGraph.order(r, order);
-		child.createRelationshipTo(THE.getInstance().getOrCreate(name), REF);
+		child.createRelationshipTo(THE._.getOrCreate(name), REF);
 		return child;
 	}
 

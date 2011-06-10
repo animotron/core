@@ -29,8 +29,7 @@ import org.animotron.operator.Predicate;
  */
 public class GE extends AbstarctOperator implements Predicate {
 	
-	private static final GE _ = new GE();
-	public static GE getInstance() { return _; }
+	public static final GE _ = new GE();
 	
 	private GE() { super("ge", "animo/compare/ge"); }
 	

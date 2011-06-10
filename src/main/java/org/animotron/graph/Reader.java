@@ -147,7 +147,7 @@ public class Reader implements Runnable {
 
 			out.write(("</have:"+name+">").getBytes());
 		
-		} else if (TEXT.getInstance().name().toUpperCase().equals(typeName)) {
+		} else if (TEXT._.name().toUpperCase().equals(typeName)) {
 			out.write(((String)eNode.getProperty("VALUE")).getBytes());
 			subprocess(eNode);
 			
@@ -168,7 +168,7 @@ public class Reader implements Runnable {
 	private static TraversalDescription td_is_down = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS.getInstance().relationshipType(), Direction.INCOMING ).
+			relationships(IS._.relationshipType(), Direction.INCOMING ).
 			evaluator(new Evaluator() {
 
 				@Override

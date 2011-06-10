@@ -35,8 +35,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class TimestampReference extends AbstarctOperator implements Evaluable {
 	
-	private static final TimestampReference INSTANCE = new TimestampReference();
-	public static TimestampReference getInstance() { return INSTANCE; }
+	public static final TimestampReference _ = new TimestampReference();
 	
 	private WeakHashMap<String, TimestampNode> pool = new WeakHashMap<String, TimestampNode>(); 
 	

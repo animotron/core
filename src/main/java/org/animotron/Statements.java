@@ -23,6 +23,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.List;
@@ -75,8 +76,8 @@ public class Statements {
 			clazz = (Class<? extends Quanta>) Class.forName( name );
 
 			try {
-				Method method = clazz.getMethod("getInstance");
-				Quanta obj = (Quanta) method.invoke(clazz);
+				Field field = clazz.getField("_");
+				Quanta obj = (Quanta) field.get(clazz);
 
             	if (obj instanceof Instruction) {
             		List<Instruction> list = instructions.get(obj.namespace());
@@ -269,10 +270,10 @@ public class Statements {
 	}
 
 	public static Statement clazz(Class<? extends Statement> clazz) {
-		Method method;
+		Field field;
 		try {
-			method = clazz.getMethod("getInstance");
-			return (Statement) method.invoke(clazz);
+			field = clazz.getField("_");
+			return (Statement) field.get(clazz);
 		} catch (Exception e) {
 			return null; //or RuntimeException?
 		}

@@ -31,8 +31,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class ATTRIBUTE extends AbstractInstruction {
 	
-	private static final ATTRIBUTE _ = new ATTRIBUTE();
-	public static ATTRIBUTE getInstance() { return _; }
+	public static final ATTRIBUTE _ = new ATTRIBUTE();
 	
 	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
 	

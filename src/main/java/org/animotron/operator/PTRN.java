@@ -27,8 +27,7 @@ package org.animotron.operator;
  */
 public class PTRN extends AbstarctOperator implements Property{
 	
-	private static final PTRN _ = new PTRN();
-	public static PTRN getInstance() { return _; }
+	public static final PTRN _ = new PTRN();
 	
 	private PTRN() { super("ptrn", "animo/pattern"); }
 	

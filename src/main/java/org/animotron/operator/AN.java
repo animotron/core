@@ -37,8 +37,7 @@ import org.neo4j.graphdb.Transaction;
  */
 public class AN extends AbstarctOperator implements Reference, Evaluable, Cachable {
 	
-	private static final AN _ = new AN();
-	public static AN getInstance() { return _; }
+	public static final AN _ = new AN();
 	
 	private AN() { super("an", "animo/reference"); }
 	

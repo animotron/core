@@ -29,8 +29,7 @@ import org.animotron.operator.Predicate;
  */
 public class LE extends AbstarctOperator implements Predicate {
 	
-	private static final LE _ = new LE();
-	public static LE getInstance() { return _; }
+	public static final LE _ = new LE();
 	
 	private LE() { super("le", "animo/compare/le"); }
 	

@@ -82,7 +82,7 @@ public class BinanyBuilder {
 			tmp.delete();
 			System.out.println("File \"" + bin.getPath() + "\" already stored");
 			
-			return (THE.getInstance().relationship(hash));
+			return (THE._.relationship(hash));
 			
 		} else {
 			
@@ -95,9 +95,9 @@ public class BinanyBuilder {
 				
 			} else {
 				Expression e = new Expression(
-						s(THE.getInstance(), HASH_PREFIX + hash,
-							s(IS.getInstance(), "file"),
-							s(HAVE.getInstance(), "path", text(path))
+						s(THE._, HASH_PREFIX + hash,
+							s(IS._, "file"),
+							s(HAVE._, "path", text(path))
 						)
 					);
 				r = e.build();

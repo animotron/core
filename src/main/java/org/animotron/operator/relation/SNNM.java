@@ -29,7 +29,6 @@ import org.animotron.operator.AbstarctOperator;
 public class SNNM extends AbstarctOperator {
 	
 	public static final SNNM _ = new SNNM();
-	public static SNNM getInstance() { return _; }
 	
 	private SNNM() { super("snnm", "animo/relation/synonym"); }
 

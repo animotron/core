@@ -27,8 +27,7 @@ import org.animotron.instruction.AbstractContainer;
  */
 public class Math extends AbstractContainer {
 	
-	private static final Math INSTANCE = new Math();
-	public static Math getInstance() { return INSTANCE; }
+	public static final Math _ = new Math();
 	
 	private Math() { super("math", "animo/math"); }
 	

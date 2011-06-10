@@ -67,7 +67,7 @@ public class MimeTest extends ATest {
         
 //        Transaction tx = AnimoGraph.beginTx();
 //        try { 
-//	        Relationship r = THE.getInstance().relationship("B");
+//	        Relationship r = THE._.relationship("B");
 //	        assertNotNull(r);
 //	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
 //	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);

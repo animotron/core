@@ -37,7 +37,7 @@ public abstract class Relation extends AbstarctOperator {
 
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node target = THE.getInstance().getOrCreate(name);
+		Node target = THE._.getOrCreate(name);
 		if (!parent.equals(target)) {
 			Relationship r = parent.createRelationshipTo(target, relationshipType());
 			AnimoGraph.order(r, order);

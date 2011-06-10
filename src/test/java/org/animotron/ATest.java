@@ -140,7 +140,7 @@ public class ATest {
 	}
 
 	protected void assertEquals(String the, String expecteds) throws IOException {
-        Relationship op = THE.getInstance().relationship(the);
+        Relationship op = THE._.relationship(the);
         assertNotNull(op);
 
         toConsole(
