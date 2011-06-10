@@ -19,7 +19,6 @@
 package org.animotron.graph;
 
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -27,11 +26,10 @@ import java.util.StringTokenizer;
 
 import org.animotron.MessageDigester;
 import org.animotron.Properties;
-import org.animotron.Quanta;
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.instruction.InstructionContainer;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.interpreter.Calculator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
@@ -296,15 +294,17 @@ public abstract class GraphBuilder {
 	
 	private Node build(Statement statement, Node parent, Object[] item, Object[] p, int order){
 		Node node = statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
-		if (statement instanceof Evaluable && !(Boolean) p[5]) {
-			AnimoGraph.CALC.createRelationshipTo(node, RelationshipTypes.CALCULATE);
-		}
 		return node;
 	}
 	
 	protected void fail(Exception e){
 		e.printStackTrace(System.out);
 		tx.finish();
+	}
+	
+	protected void success(){
+		success = true;
+		Calculator.onStore(getRelationship());
 	}
 	
 }

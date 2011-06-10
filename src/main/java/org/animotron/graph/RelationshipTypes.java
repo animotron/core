@@ -27,9 +27,7 @@ import org.neo4j.graphdb.RelationshipType;
 public enum RelationshipTypes implements RelationshipType {
 	THE,
 	GC, GARBAGE,
-	CALC, CALCULATE, 
-	CACHE, 
-	EMPTY, 
+	CALC, CACHE, EMPTY, TOP, 
 	REF, 
 	
 	RESULT,

@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
@@ -54,5 +56,9 @@ public class Calculator {
 
 	public static void eval(Relationship op, PipedOutputObjectStream out) {
 		exec.execute(new Evaluator(op, out));
+	}
+	
+	public static void onStore(Relationship op) {
+		AnimoGraph.CALC.createRelationshipTo(op.getEndNode(), op.getType());
 	}
 }

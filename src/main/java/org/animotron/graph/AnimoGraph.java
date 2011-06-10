@@ -40,7 +40,11 @@ public class AnimoGraph {
 	protected static String STORAGE;
 	
 	protected static Node ROOT;
-	protected static Node CACHE, CALC, EMPTY, GC;
+	protected static Node CACHE;
+
+	public static Node CALC;
+
+	protected static Node EMPTY, GC, TOP;
 	protected static RelationshipIndex ORDER;
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
@@ -59,6 +63,7 @@ public class AnimoGraph {
 		
 		try {
 			GC = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.GC);
+			TOP = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.TOP);
 			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
 			EMPTY = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
