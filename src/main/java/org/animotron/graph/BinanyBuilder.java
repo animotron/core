@@ -86,7 +86,7 @@ public class BinanyBuilder {
 			
 		} else {
 			
-			Relationship r = null;
+			Expression e = null;
 			l2.mkdirs();
 			
 			if (!tmp.renameTo(bin)) {
@@ -94,13 +94,12 @@ public class BinanyBuilder {
 				throw new IOException("transaction can not be finished");
 				
 			} else {
-				Expression e = new Expression(
+				e = new Expression(
 						s(THE._, HASH_PREFIX + hash,
 							s(IS._, "file"),
 							s(HAVE._, "path", text(path))
 						)
 					);
-				r = e.build();
 				
 				if (!e.successful()) {
 					tmp.delete();
@@ -110,7 +109,7 @@ public class BinanyBuilder {
 			
 			System.out.println("Store the file \"" + bin.getPath() + "\"");
 			
-			return r;
+			return e;
 			
 		}
 			

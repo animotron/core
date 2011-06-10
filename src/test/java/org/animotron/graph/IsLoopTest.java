@@ -37,13 +37,13 @@ import org.neo4j.graphdb.Relationship;
 public class IsLoopTest extends ATest {
 	
 	private static final Relationship A = 
-		new Expression(s(THE._, "A", s(IS._, "C"))).build();
+		new Expression(s(THE._, "A", s(IS._, "C")));
 	
 	private static final Relationship B = 
-		new Expression(s(THE._, "B", s(IS._, "A"))).build();
+		new Expression(s(THE._, "B", s(IS._, "A")));
 	
 	private static final Relationship C = 
-		new Expression(s(THE._, "C", s(IS._, "B"))).build();
+		new Expression(s(THE._, "C", s(IS._, "B")));
 	
 	@Test
 	public void storeAndSerializeResult() throws XMLStreamException {
