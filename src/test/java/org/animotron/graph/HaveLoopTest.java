@@ -18,13 +18,14 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.Expression.*;
+import static org.animotron.Expression.s;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.THE;
+import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,16 +34,16 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class TopTest extends ATest {
+public class HaveLoopTest extends ATest {
 	
 	private static final Relationship A = 
-		new Expression(s(THE._, "A")).build();
+		new Expression(s(THE._, "A", s(HAVE._, "C"))).build();
 	
 	private static final Relationship B = 
-		new Expression(s(THE._, "B")).build();
+		new Expression(s(THE._, "B", s(HAVE._, "A"))).build();
 	
 	private static final Relationship C = 
-		new Expression(s(THE._, "C")).build();
+		new Expression(s(THE._, "C", s(HAVE._, "B"))).build();
 	
 	@Test
 	public void storeAndSerializeResult() throws XMLStreamException {
