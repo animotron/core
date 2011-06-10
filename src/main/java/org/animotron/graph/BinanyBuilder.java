@@ -42,6 +42,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class BinanyBuilder {
 	
+	private final static String HASH_PREFIX = "file-";
 	private final static File STORAGE = new File(AnimoGraph.STORAGE, "binany");
 	private final static File TMP = new File(STORAGE, "tmp");
 	
@@ -94,7 +95,7 @@ public class BinanyBuilder {
 				
 			} else {
 				Expression e = new Expression(
-						s(THE.getInstance(), hash,
+						s(THE.getInstance(), HASH_PREFIX + hash,
 							s(IS.getInstance(), "file"),
 							s(HAVE.getInstance(), "path", text(path))
 						)
