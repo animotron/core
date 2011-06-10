@@ -25,7 +25,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Instruction 'ml:attribute'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */

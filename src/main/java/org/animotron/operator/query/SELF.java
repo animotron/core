@@ -28,8 +28,8 @@ import org.animotron.operator.AbstarctOperator;
  */
 public class SELF extends AbstarctOperator {
 	
-	private static final SELF INSTANCE = new SELF();
-	public static SELF getInstance() { return INSTANCE; }
+	private static final SELF _ = new SELF();
+	public static SELF getInstance() { return _; }
 	
 	private SELF() { super("self", "animo/query/self"); }
 	

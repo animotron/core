@@ -74,6 +74,7 @@ public class AnimoGraph {
 	}
 	
 	public static void shutdownDB() {
+		System.out.println("shotdown");
 		graphDb.shutdown();
 	}
 	

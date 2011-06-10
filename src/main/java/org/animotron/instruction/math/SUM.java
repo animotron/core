@@ -27,8 +27,8 @@ import org.animotron.instruction.AbstractInstruction;
  */
 public class SUM extends AbstractInstruction {
 	
-	private static final SUM INSTANCE = new SUM();
-	public static SUM getInstance() { return INSTANCE; }
+	private static final SUM _ = new SUM();
+	public static SUM getInstance() { return _; }
 	
 	private SUM() { super("sum", "math", "animo/math"); }
 	

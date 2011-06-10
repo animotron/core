@@ -28,8 +28,8 @@ import org.animotron.operator.External;
  */
 public class XSL extends AbstractInstruction implements External {
 	
-	private static final XSL INSTANCE = new XSL();
-	public static XSL getInstance() { return INSTANCE; }
+	private static final XSL _ = new XSL();
+	public static XSL getInstance() { return _; }
 	
 	private XSL() { super("xsl", "do", "animo/perform"); }
 

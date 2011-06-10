@@ -37,8 +37,8 @@ import org.neo4j.graphdb.Transaction;
  */
 public class ANY extends Query implements Cachable {
 	
-	private static final ANY INSTANCE = new ANY();
-	public static ANY getInstance() { return INSTANCE; }
+	private static final ANY _ = new ANY();
+	public static ANY getInstance() { return _; }
 	
 	private ANY() { super("any", "animo/query/any"); }
 	

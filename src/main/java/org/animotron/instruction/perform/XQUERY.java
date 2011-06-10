@@ -28,8 +28,8 @@ import org.animotron.operator.External;
  */
 public class XQUERY extends AbstractInstruction implements External {
 	
-	private static final XQUERY INSTANCE = new XQUERY();
-	public static XQUERY getInstance() { return INSTANCE; }
+	private static final XQUERY _ = new XQUERY();
+	public static XQUERY getInstance() { return _; }
 	
 	private XQUERY() { super("xquery", "do", "animo/perform"); }
 

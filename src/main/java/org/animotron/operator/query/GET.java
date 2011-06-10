@@ -45,8 +45,8 @@ import org.neo4j.kernel.Traversal;
  */
 public class GET extends AbstarctOperator implements Evaluable, Query, Cachable {
 
-	private static final GET INSTANCE = new GET();
-	public static GET getInstance() { return INSTANCE; }
+	private static final GET _ = new GET();
+	public static GET getInstance() { return _; }
 	
 	private GET() { super("get", "animo/query/extract"); }
 

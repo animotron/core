@@ -29,8 +29,8 @@ import org.animotron.operator.Predicate;
  */
 public class LT extends AbstarctOperator implements Predicate {
 	
-	private static final LT INSTANCE = new LT();
-	public static LT getInstance() { return INSTANCE; }
+	private static final LT _ = new LT();
+	public static LT getInstance() { return _; }
 	
 	private LT() { super("lt", "animo/compare/lt"); }
 	

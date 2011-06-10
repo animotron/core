@@ -25,8 +25,8 @@ package org.animotron.instruction.ml;
  */
 public class TEXT extends ValueInstruction {
 	
-	private static final TEXT INSTANCE = new TEXT();
-	public static TEXT getInstance() { return INSTANCE; }
+	private static final TEXT _ = new TEXT();
+	public static TEXT getInstance() { return _; }
 	
 	private TEXT() { super("text", "ml", "animo/ml"); }
 }

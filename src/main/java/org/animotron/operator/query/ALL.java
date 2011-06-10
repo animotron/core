@@ -30,8 +30,8 @@ import org.animotron.operator.Cachable;
  */
 public class ALL extends Query implements Cachable {
 	
-	private static final ALL INSTANCE = new ALL();
-	public static ALL getInstance() { return INSTANCE; }
+	private static final ALL _ = new ALL();
+	public static ALL getInstance() { return _; }
 	
 	private ALL() { super("all", "animo/query/all"); }
 	

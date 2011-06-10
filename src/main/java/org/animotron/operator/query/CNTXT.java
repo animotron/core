@@ -29,8 +29,8 @@ import org.animotron.operator.AbstarctOperator;
 @Deprecated //???
 public class CNTXT extends AbstarctOperator {
 	
-	private static final CNTXT INSTANCE = new CNTXT();
-	public static CNTXT getInstance() { return INSTANCE; }
+	private static final CNTXT _ = new CNTXT();
+	public static CNTXT getInstance() { return _; }
 	
 	private CNTXT() { super("cntxt", "animo/query/context"); }
 

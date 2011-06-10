@@ -29,9 +29,8 @@ import org.animotron.operator.Property;
  */
 public class HAVE extends AbstarctOperator implements Property {
 	
-	private static final HAVE INSTANCE = new HAVE();
-	public static HAVE getInstance() { return INSTANCE; }
-	
+	public static final HAVE _ = new HAVE();
+	public static HAVE getInstance() { return _; }
+
 	private HAVE() { super("have", "animo/relation/have"); }
-	
 }

@@ -24,8 +24,6 @@ import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-
-
 /**
  * Instruction 'ml:attribute'.
  * 
@@ -33,8 +31,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public class ATTRIBUTE extends AbstractInstruction {
 	
-	private static final ATTRIBUTE INSTANCE = new ATTRIBUTE();
-	public static ATTRIBUTE getInstance() { return INSTANCE; }
+	private static final ATTRIBUTE _ = new ATTRIBUTE();
+	public static ATTRIBUTE getInstance() { return _; }
 	
 	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
 	

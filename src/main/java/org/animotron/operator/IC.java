@@ -27,8 +27,8 @@ package org.animotron.operator;
  */
 public class IC extends AbstarctOperator {
 	
-	private static final IC INSTANCE = new IC();
-	public static IC getInstance() { return INSTANCE; }
+	private static final IC _ = new IC();
+	public static IC getInstance() { return _; }
 	
 	private IC() { super("ic", "animo/connection"); }
 }

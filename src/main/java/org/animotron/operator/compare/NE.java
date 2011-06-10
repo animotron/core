@@ -29,8 +29,8 @@ import org.animotron.operator.Predicate;
  */
 public class NE extends AbstarctOperator implements Predicate {
 	
-	private static final NE INSTANCE = new NE();
-	public static NE getInstance() { return INSTANCE; }
+	private static final NE _ = new NE();
+	public static NE getInstance() { return _; }
 	
 	private NE() { super("ne", "animo/compare/ne"); }
 	

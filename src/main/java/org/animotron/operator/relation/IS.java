@@ -28,9 +28,8 @@ import org.animotron.operator.Relation;
  */
 public class IS extends Relation {
 	
-	public static final IS INSTANCE = new IS();
-	public static IS getInstance() { return INSTANCE; }
+	public static final IS _ = new IS();
+	public static IS getInstance() { return _; }
 	
 	private IS() { super("is", "animo/relation/is"); }
-	
 }

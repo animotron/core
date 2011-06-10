@@ -32,8 +32,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public class ELEMENT extends AbstractInstruction implements Cachable {
 	
-	private static final ELEMENT INSTANCE = new ELEMENT();
-	public static ELEMENT getInstance() { return INSTANCE; }
+	private static final ELEMENT _ = new ELEMENT();
+	public static ELEMENT getInstance() { return _; }
 	
 	private ELEMENT() { super("element", "ml", "animo/ml"); }
 	

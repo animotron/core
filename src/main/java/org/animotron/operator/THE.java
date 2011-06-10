@@ -39,8 +39,8 @@ public class THE extends AbstarctOperator {
 	public static String NAMESPACE = "animo/instance";
 	public static String PREFIX = "the";
 
-	private static final THE INSTANCE = new THE();
-	public static THE getInstance() { return INSTANCE; }
+	private static final THE _ = new THE();
+	public static THE getInstance() { return _; }
 	
 	protected final Node THE_NODE;
 
