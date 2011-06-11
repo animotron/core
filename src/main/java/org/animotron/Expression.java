@@ -45,7 +45,7 @@ public class Expression extends GraphBuilder implements Relationship {
 		build();
 	}
 	
-	public void build() {
+	private void build() {
 		startGraph();
 		for(Object[] i : e) {
 			buildExpression(i);
@@ -65,22 +65,22 @@ public class Expression extends GraphBuilder implements Relationship {
 		end();
 	}
 	
-	public static Object[] s(Operator statement, String name) {
+	public static Object[] _(Operator statement, String name) {
 		Object[] e = {statement, statement.name(), statement.namespace(), name, null, null};
 		return e;
 	}
 
-	public static Object[] s(Operator statement, String name, Object[]... p) {
+	public static Object[] _(Operator statement, String name, Object[]... p) {
 		Object[] e = {statement, statement.name(), statement.namespace(), name, null, p};
 		return e;
 	}
 
-	public static Object[] s(Instruction statement) {
+	public static Object[] _(Instruction statement) {
 		Object[] e = {statement, statement.prefix(), statement.namespace(), statement.name(), null, null};
 		return e;
 	}
 
-	public static Object[] s(Instruction statement, Object[]... p) {
+	public static Object[] _(Instruction statement, Object[]... p) {
 		Object[] e = {statement, statement.prefix(), statement.namespace(), statement.name(), null, p};
 		return e;
 	}

@@ -18,7 +18,7 @@
  */
 package org.animotron.interpreter;
 
-import static org.animotron.Expression.s;
+import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
 
 import java.io.IOException;
@@ -43,13 +43,13 @@ public class ICTests extends ATest {
 	
 	private static final Expression THE_A = 
 		new Expression(
-				s(THE._, "A")
+				_(THE._, "A")
 			);
 	
 	private static final Expression THE_B = 
 		new Expression(
-				s(THE._, "B", 
-					s(IC._, "A", 
+				_(THE._, "B", 
+					_(IC._, "A", 
 						text(".")
 					)
 				)
@@ -57,16 +57,16 @@ public class ICTests extends ATest {
 
 	private static final Expression THE_C = 
 		new Expression(
-				s(THE._, "C", 
-					s(IS._, "B")
+				_(THE._, "C", 
+					_(IS._, "B")
 				)
 			);
 
 	private static final Expression THE_D = 
 		new Expression(
-				s(THE._, "D", 
-					s(GET._, "A", 
-						s(AN._, "C")
+				_(THE._, "D", 
+					_(GET._, "A", 
+						_(AN._, "C")
 					)
 				)
 			);

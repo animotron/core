@@ -95,9 +95,9 @@ public class BinanyBuilder {
 				
 			} else {
 				e = new Expression(
-						s(THE._, HASH_PREFIX + hash,
-							s(IS._, "file"),
-							s(HAVE._, "path", text(path))
+						_(THE._, HASH_PREFIX + hash,
+							_(IS._, "file"),
+							_(HAVE._, "path", text(path))
 						)
 					);
 				
