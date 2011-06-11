@@ -52,7 +52,6 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 		if (!(statement instanceof Relation)) {
 			
 			IndexHits<Relationship> q = AnimoGraph.getORDER().query(r.getEndNode());
-			
 			try {
 				for (Relationship i : q) {
 					build(i);
