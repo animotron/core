@@ -23,7 +23,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;

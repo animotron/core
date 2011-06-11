@@ -18,16 +18,24 @@
  */
 package org.animotron.serializer;
 
+import org.animotron.Properties;
 import org.animotron.Statement;
-import org.animotron.graph.AbstractGraphSerializer;
+import org.animotron.Statements;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.ml.TEXT;
+import org.animotron.operator.THE;
+import org.animotron.operator.Query;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.index.IndexHits;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class StringSerializer extends AbstractGraphSerializer {
+public class StringSerializer {
 	
 	private StringBuilder builder;
 	private String result;
@@ -36,10 +44,16 @@ public class StringSerializer extends AbstractGraphSerializer {
 		return result;
 	}
 
+	final public void serialize(Relationship r) {
+		startDocument();
+		build(r);
+		endDocument();
+	}
+
 	/* (non-Javadoc)
 	 * @see org.animotron.graph.GraphHandler#start(org.animotron.Statement, org.neo4j.graphdb.Relationship)
 	 */
-	@Override
+//	@Override
 	public void start(Statement statement, Relationship r) {
 		System.out.println(r);
 		if (statement instanceof TEXT) {
@@ -52,14 +66,14 @@ public class StringSerializer extends AbstractGraphSerializer {
 	/* (non-Javadoc)
 	 * @see org.animotron.graph.GraphHandler#end(org.animotron.Statement, org.neo4j.graphdb.Relationship)
 	 */
-	@Override
+//	@Override
 	public void end(Statement statement, Relationship r) {
 	}
 
 	/* (non-Javadoc)
 	 * @see org.animotron.graph.GraphHandler#startDocument()
 	 */
-	@Override
+//	@Override
 	public void startDocument() {
 		builder = new StringBuilder(1024);
 		result = null;
@@ -68,10 +82,70 @@ public class StringSerializer extends AbstractGraphSerializer {
 	/* (non-Javadoc)
 	 * @see org.animotron.graph.GraphHandler#endDocument()
 	 */
-	@Override
+//	@Override
 	public void endDocument() {
 		result = builder.toString();
 		builder = null;
 	}
 
+	protected void build(Relationship r) {
+		
+		RelationshipType type = r.getType();
+		String typeName = type.name();
+		
+		Statement s = Statements.relationshipType(typeName);
+		
+		if (typeName.startsWith(THE._.name())) {
+			s = THE._;
+		}
+		
+		if (s != null) {
+			if (s instanceof Query) {
+				result(r);
+
+			} else {
+				start(s, r);
+				
+				IndexHits<Relationship> q = AnimoGraph.getORDER().query(r.getEndNode());
+				try {
+					for (Relationship i : q) {
+						build(i);
+					}
+				} finally {
+					q.close();
+				}
+			
+				end(s, r);
+			}
+		}
+		
+		System.out.print(r);
+		System.out.print(" ");
+		System.out.println(r.getType().name());
+//			IndexHits<Relationship> q = AnimoGraph.getORDER().query(r.getEndNode());
+//			try {
+//				for (Relationship i : q) {
+//					build(i);
+//				}
+//			} finally {
+//				q.close();
+//			}
+//		}
+//		end(statement, r);
+	}
+
+	protected boolean result(Relationship r) {
+		boolean found = false;
+		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, Direction.OUTGOING);
+		for ( Relationship n : i ) {
+			build( 
+				AnimoGraph.graphDb.getRelationshipById(
+					(Long)n.getProperty(Properties.RID.name())
+				) 
+			);
+			found = true;
+		}
+		
+		return found;
+	}
 }

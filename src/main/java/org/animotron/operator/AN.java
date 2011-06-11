@@ -24,6 +24,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -54,11 +55,9 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		
 			Node node = op.getEndNode();
 
-			//go to 'THE' node
-			Node the = Utils.getByREF(node); 
-
-			//get 'THE' relation - ???
-			Relationship res = node.createRelationshipTo(the, RelationshipTypes.RESULT);
+			Relationship res = node.getSingleRelationship(
+				RelationshipTypes.REF, Direction.OUTGOING
+			);
 			
 			out.write(res);
 

@@ -27,13 +27,13 @@ import org.neo4j.graphdb.PropertyContainer;
  */
 public enum Properties  {
 	
-	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT;
+	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT, RID;
 	
 	public String get(PropertyContainer container) {
 		return container.getProperty(name()).toString();
 	}
 	
-	public void set(PropertyContainer container, String value) {
+	public void set(PropertyContainer container, Object value) {
 		if (value != null) 
 			container.setProperty(name(), value);
 	}
