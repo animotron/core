@@ -20,16 +20,18 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
+import org.animotron.Statement;
+import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
-import org.animotron.io.PipedInputObjectStream;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.*;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.IC;
 import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
-import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.*;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -55,6 +57,12 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			relationships(HAVE._.relationshipType(), Direction.OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
+	private static TraversalDescription td_eval_ic = 
+		Traversal.description().
+			breadthFirst().
+			relationships(IS._.relationshipType(), Direction.OUTGOING ).
+			relationships(IC._.relationshipType(), Direction.OUTGOING );
+
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		
@@ -69,16 +77,45 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 		
 				Calculator.eval(op, new PipedOutputObjectStream(in));
 				
+				String name = name(op);
+				
 				Object n; 
 				while ((n = in.read()) != null) {
 					if (n instanceof Relationship) {
-		
+						boolean found = false;
 						for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
 							
 							System.out.println("GET eval = "+r);
 
 							Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
 							out.write(res);
+							
+							found = true;
+						}
+						
+						if (!found) {
+							for (Relationship r : td_eval_ic.traverse(((Relationship) n).getEndNode()).relationships()) {
+								
+								Statement st = Statements.relationshipType( r.getType() );
+								if (st instanceof IS) {
+									System.out.println("GET IC -> IS "+r);
+								} else if (st instanceof IC) {
+									System.out.println("GET IC -> FOUND "+r);
+									
+									if ( name.equals( IC._.name(r) ) ) {
+									
+										PipedInputObjectStream pipe = Calculator.eval(r);
+										Object k; 
+										while ((k = pipe.read()) != null) {
+											if (k instanceof Relationship) {
+												Relationship res = node.createRelationshipTo(((Relationship) k).getStartNode(), RelationshipTypes.RESULT);
+												out.write(res);
+											}
+										}
+									}
+								}
+
+							}
 						}
 					}
 				}

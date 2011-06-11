@@ -38,7 +38,7 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 		endDocument();
 	}
 	
-	private void build(Relationship r) {
+	protected void build(Relationship r) {
 		
 		RelationshipType type = r.getType();
 		Statement statement = type.name().startsWith(THE.PREFIX + ":") ? THE._ : Statements.relationshipType(type);

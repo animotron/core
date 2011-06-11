@@ -52,7 +52,7 @@ public class PipedOutputObjectStream implements Cloneable {
         
     	if (connection == null) throw new IOException("Pipe not connected");
 
-    	System.out.println("pipe write "+obj);
+    	//System.out.println("pipe write "+obj);
     	
         connection.receive(obj);
     }

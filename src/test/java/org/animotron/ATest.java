@@ -33,10 +33,12 @@ import junit.framework.Assert;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.CommonGraphBuilder;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.Reader;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.THE;
+import org.animotron.serializer.StringSerializer;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -83,11 +85,22 @@ public class ATest {
 		
 		"xmlns:Q='animo/quantity' ";
 
-	protected void store(Map<String, String> nameDataMap) throws XMLStreamException {
-		
-        for (Entry<String, String> entry : nameDataMap.entrySet()) {
-        	CommonGraphBuilder.build(entry.getValue());
-        }
+	protected void store(final Map<String, String> nameDataMap) throws XMLStreamException {
+		XMLStreamException e = 
+			AnimoGraph.execute(new GraphOperation<XMLStreamException>() {
+				@Override
+				public XMLStreamException execute() {
+			        for (Entry<String, String> entry : nameDataMap.entrySet()) {
+			        	try {
+							CommonGraphBuilder.build(entry.getValue());
+						} catch (XMLStreamException e) {
+							return e;
+						}
+			        }
+			        return null;
+				}
+			});
+		if (e != null) throw e;
     }
 
 	protected void toConsole(PipedInputObjectStream instream) throws IOException {
@@ -151,7 +164,21 @@ public class ATest {
         assertEquals(stream, expecteds);
 	}
 	
-    protected boolean firstRun = false;
+	protected void assertString(String the, String expecteds) throws IOException {
+        Relationship op = THE._.relationship(the);
+        assertNotNull(op);
+
+        toConsole(
+    		Calculator.eval(op)
+		);
+        
+        System.out.println("String serializer...");
+        StringSerializer serializer = new StringSerializer();
+        serializer.serialize(op);
+        Assert.assertEquals(serializer.getString(), expecteds);
+	}
+
+	protected boolean firstRun = false;
 
     @Before
     public void setup() {

@@ -44,10 +44,7 @@ public class ConnectionTests extends ATest {
 		"	<have:path/>"+
 
 		"	<ic:extension>"+
-		"		<string:after-last>"+
-		"			<ml:text>.</ml:text>"+
-		"			<get:path/>"+
-		"		</string:after-last>"+
+		"		<string:after-last>.<get:path/></string:after-last>"+
 		"	</ic:extension>"+
 		"	<ic:mime-type>"+
 		"		<any:mime-type>"+

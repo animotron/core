@@ -41,8 +41,11 @@ public class StringSerializer extends AbstractGraphSerializer {
 	 */
 	@Override
 	public void start(Statement statement, Relationship r) {
+		System.out.println(r);
 		if (statement instanceof TEXT) {
 			builder.append(statement.value(r));
+		} else {
+			//build(r);
 		}
 	}
 

@@ -110,7 +110,13 @@ public class Reader implements Runnable {
 			String name = typeName;
 			for (Relationship r : eNode.getRelationships(Direction.INCOMING)) {
 				String tmp = r.getType().toString();
-				if (tmp.equals("HAVE")) {
+				if (tmp.equals("IC")) {
+					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
+
+					name = "have:"+ref.getEndNode().getProperty("NAME");
+					break;
+
+				} else if (tmp.equals("HAVE")) {
 					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
 
 					name = "have:"+ref.getEndNode().getProperty("NAME");

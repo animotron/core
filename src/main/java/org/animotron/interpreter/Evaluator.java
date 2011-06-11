@@ -89,10 +89,9 @@ class Evaluator implements Runnable {
 					while ((n = in.read()) != null) {
 						ot.write(n);
 					} 
-					ot.close();
 					
-				} else 
-					;//???
+				} else
+					ot.write(r);
 			}
 
 			tx.success();
@@ -103,6 +102,8 @@ class Evaluator implements Runnable {
 		} finally {
 			tx.finish();
 		}
+
+		ot.close();
 	}
 	
 	private boolean isLast(Iterator<?> it) {
