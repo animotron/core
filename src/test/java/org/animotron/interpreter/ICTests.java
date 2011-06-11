@@ -18,13 +18,21 @@
  */
 package org.animotron.interpreter;
 
+import static org.animotron.Expression.s;
+import static org.animotron.Expression.text;
+
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
+import org.animotron.Expression;
+import org.animotron.graph.GraphSerializer;
+import org.animotron.operator.AN;
+import org.animotron.operator.IC;
+import org.animotron.operator.THE;
+import org.animotron.operator.query.GET;
+import org.animotron.operator.relation.IS;
 import org.junit.Test;
 
 /**
@@ -33,40 +41,48 @@ import org.junit.Test;
  */
 public class ICTests extends ATest {
 	
-	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+"/>";
+	private static final Expression THE_A = 
+		new Expression(
+				s(THE._, "A")
+			);
 	
-	private static final String THE_B = 
-		"<the:B "+ANIMO_NSs+">" +
-		"	<ic:A>.</ic:A>" +
-		"</the:B>";
+	private static final Expression THE_B = 
+		new Expression(
+				s(THE._, "B", 
+					s(IC._, "A", 
+						text(".")
+					)
+				)
+			);
 
-	private static final String THE_C = 
-		"<the:C "+ANIMO_NSs+">" +
-		"	<is:B/>" +
-		"</the:C>";
+	private static final Expression THE_C = 
+		new Expression(
+				s(THE._, "C", 
+					s(IS._, "B")
+				)
+			);
 
-	private static final String THE_D = 
-		"<the:D "+ANIMO_NSs+">" +
-		"	<get:A>" +
-		"		<an:C/>" +
-		"	</get:A>" +
-		"</the:D>";
+	private static final Expression THE_D = 
+		new Expression(
+				s(THE._, "D", 
+					s(GET._, "A", 
+						s(AN._, "C")
+					)
+				)
+			);
 
 
 	@Test
 	public void testIC() throws IOException, XMLStreamException {
         System.out.println("Test 'IC' ...");
         
-        if (firstRun) {
-	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
-	        nameDataMap.put("A.xml", THE_A);
-	        nameDataMap.put("B.xml", THE_B);
-	        nameDataMap.put("C.xml", THE_C);
-	        nameDataMap.put("D.xml", THE_D);
-	        
-	        store(nameDataMap);
-        }
+        GraphSerializer.serialize(THE_A, System.out);
+        System.out.println();
+        GraphSerializer.serialize(THE_B, System.out);
+        System.out.println();
+        GraphSerializer.serialize(THE_C, System.out);
+        System.out.println();
+        GraphSerializer.serialize(THE_D, System.out);
         
         //System.out.println("get:A an:C");
         assertString("D", ".");
