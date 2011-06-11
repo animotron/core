@@ -18,8 +18,11 @@
  */
 package org.animotron.instruction;
 
+import java.io.IOException;
+
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -45,6 +48,10 @@ public abstract class AbstractInstruction implements Instruction {
 
 		this.relationshipType = 
 			AnimoRelationshipType.get(prefix.toUpperCase(), name.toUpperCase());
+	}
+	
+	public AbstractInstruction(final String name, final InstructionContainer container) {
+		this(name, container.name(), container.namespace());
 	}
 	
 	@Override
@@ -105,4 +112,7 @@ public abstract class AbstractInstruction implements Instruction {
 		return prefix(r) + ":" + name(r);
 	}
 
+	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		System.out.println("empty eval @"+this.getClass());
+	}
 }

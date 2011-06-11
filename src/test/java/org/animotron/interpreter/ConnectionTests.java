@@ -51,9 +51,9 @@ public class ConnectionTests extends ATest {
 		"	</ic:extension>"+
 		"	<ic:mime-type>"+
 		"		<any:mime-type>"+
-		"			<eq:extension>"+
+		"			<have:extension>"+
 		"				<get:extension/>"+
-		"			</eq:extension>"+
+		"			</have:extension>"+
 		"		</any:mime-type>"+
 		"	</ic:mime-type>"+
 		"</the:file>";

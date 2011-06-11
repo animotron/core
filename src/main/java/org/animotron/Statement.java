@@ -18,6 +18,9 @@
  */
 package org.animotron;
 
+import java.io.IOException;
+
+import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -40,4 +43,5 @@ public interface Statement extends Quanta {
 
 	public String qname(Relationship r);
 
+	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;
 }

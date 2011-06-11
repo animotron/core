@@ -18,7 +18,6 @@
  */
 package org.animotron.graph;
 
-import org.animotron.Properties;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
@@ -26,7 +25,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 /**
@@ -45,7 +43,7 @@ public class AnimoGraph {
 	public static Node CALC;
 
 	protected static Node EMPTY, GC, TOP;
-	protected static RelationshipIndex ORDER;
+	protected static OrderIndex ORDER;
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
@@ -57,7 +55,7 @@ public class AnimoGraph {
 		ROOT = graphDb.getReferenceNode();
 		
 		IndexManager INDEX = graphDb.index();
-		ORDER = INDEX.forRelationships(Properties.ORDER.name());
+		ORDER = new OrderIndex(INDEX);
 		
 		Transaction tx = AnimoGraph.beginTx();
 		
@@ -78,6 +76,10 @@ public class AnimoGraph {
 		return ROOT;
 	}
 	
+	public static OrderIndex getORDER() {
+		return ORDER;
+	}
+
 	public static void shutdownDB() {
 		System.out.println("shotdown");
 		graphDb.shutdown();
@@ -157,8 +159,7 @@ public class AnimoGraph {
 	}
 	
 	public static void order (Relationship r, int order) {
-		ORDER.add(r, Properties.ORDER.name(), order);
-		Properties.ORDER.set(r, order);
+		ORDER.add(r, order);
+		//Properties.ORDER.set(r, order);
 	}
-	
 }
