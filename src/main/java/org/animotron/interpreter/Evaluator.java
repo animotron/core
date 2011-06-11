@@ -37,26 +37,14 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Evaluator implements Runnable {
-	
-	private Relationship op;
-	private PipedOutputObjectStream out;
+class Evaluator extends Walker {
 	
 	public Evaluator(Relationship op, PipedOutputObjectStream out) {
-		this.op = op;
-		this.out = out;
+		super(op, out);
 	}
 
 	@Override
-	public void run() {
-		try {
-			eval(op, out);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	private void eval(Relationship op, PipedOutputObjectStream ot) throws IOException {
+	protected void eval(Relationship op, PipedOutputObjectStream ot) throws IOException {
 		System.out.println("Evaluator op = "+op);
 		
 		GraphDatabaseService graphdb = op.getGraphDatabase();
@@ -106,7 +94,4 @@ class Evaluator implements Runnable {
 		ot.close();
 	}
 	
-	private boolean isLast(Iterator<?> it) {
-		return !it.hasNext();
-	}
 }
