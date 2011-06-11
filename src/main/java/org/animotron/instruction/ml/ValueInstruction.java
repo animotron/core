@@ -21,6 +21,7 @@ package org.animotron.instruction.ml;
 import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.instruction.InstructionContainer;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -34,6 +35,10 @@ public abstract class ValueInstruction extends AbstractInstruction {
 		super(name, prefix, uri);
 	}
 	
+	public ValueInstruction(String name, InstructionContainer container) {
+		super(name, container);
+	}
+
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());

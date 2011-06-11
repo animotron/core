@@ -25,10 +25,10 @@ import org.animotron.instruction.AbstractContainer;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class Math extends AbstractContainer {
+public class MATH extends AbstractContainer {
 	
-	public static final Math _ = new Math();
+	public static final MATH _ = new MATH();
 	
-	private Math() { super("math", "animo/math"); }
+	private MATH() { super("math", "animo/math"); }
 	
 }

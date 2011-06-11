@@ -27,5 +27,5 @@ public class TEXT extends ValueInstruction {
 	
 	public static final TEXT _ = new TEXT();
 	
-	private TEXT() { super("text", "ml", "animo/ml"); }
+	private TEXT() { super("text", ML._); }
 }

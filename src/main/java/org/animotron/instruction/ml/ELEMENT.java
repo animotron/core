@@ -34,7 +34,7 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 	
 	public static final ELEMENT _ = new ELEMENT();
 	
-	private ELEMENT() { super("element", "ml", "animo/ml"); }
+	private ELEMENT() { super("element", ML._); }
 	
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {

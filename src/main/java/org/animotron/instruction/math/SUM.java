@@ -29,6 +29,6 @@ public class SUM extends AbstractInstruction {
 	
 	public static final SUM _ = new SUM();
 	
-	private SUM() { super("sum", "math", "animo/math"); }
+	private SUM() { super("sum", MATH._); }
 	
 }

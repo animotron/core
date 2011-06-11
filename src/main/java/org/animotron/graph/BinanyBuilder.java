@@ -47,7 +47,7 @@ public class BinanyBuilder {
 	private final static File TMP = new File(STORAGE, "tmp");
 	
 	static {
-		STORAGE.mkdir();
+		STORAGE.mkdirs();
 		TMP.mkdirs();
 	}
 	
@@ -82,7 +82,7 @@ public class BinanyBuilder {
 			tmp.delete();
 			System.out.println("File \"" + bin.getPath() + "\" already stored");
 			
-			return (THE._.relationship(hash));
+			return THE._.relationship(hash);
 			
 		} else {
 			

@@ -30,6 +30,6 @@ public class XSL extends AbstractInstruction implements External {
 	
 	public static final XSL _ = new XSL();
 	
-	private XSL() { super("xsl", "do", "animo/perform"); }
+	private XSL() { super("xsl", DO._); }
 
 }

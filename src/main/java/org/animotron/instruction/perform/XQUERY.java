@@ -30,6 +30,6 @@ public class XQUERY extends AbstractInstruction implements External {
 	
 	public static final XQUERY _ = new XQUERY();
 	
-	private XQUERY() { super("xquery", "do", "animo/perform"); }
+	private XQUERY() { super("xquery", DO._); }
 
 }

@@ -33,7 +33,7 @@ public class ATTRIBUTE extends AbstractInstruction {
 	
 	public static final ATTRIBUTE _ = new ATTRIBUTE();
 	
-	private ATTRIBUTE() { super("attribute", "ml", "animo/ml"); }
+	private ATTRIBUTE() { super("attribute", ML._); }
 	
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {

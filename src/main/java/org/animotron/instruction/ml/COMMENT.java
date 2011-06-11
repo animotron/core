@@ -27,5 +27,5 @@ public class COMMENT extends ValueInstruction {
 	
 	public static final COMMENT _ = new COMMENT();
 	
-	private COMMENT() { super("comment", "ml", "animo/ml"); }
+	private COMMENT() { super("comment", ML._); }
 }

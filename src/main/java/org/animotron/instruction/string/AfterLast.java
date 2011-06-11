@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.Evaluable;
 import org.animotron.serializer.StringSerializer;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,12 +34,13 @@ import org.neo4j.graphdb.Relationship;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class AfterLast extends AbstractInstruction {
+public class AfterLast extends AbstractInstruction implements Evaluable {
 	
 	public static final AfterLast _ = new AfterLast();
 	
 	private AfterLast() { super("after-last", STRING._); }
 	
+	@Override
 	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		
 		//UNDERSTAND: if we have more that 2 params, what to do?

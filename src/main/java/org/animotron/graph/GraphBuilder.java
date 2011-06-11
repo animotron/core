@@ -67,8 +67,6 @@ public abstract class GraphBuilder {
 
 	private Transaction tx;
 
-	private boolean success;
-		
 	public final Relationship getRelationship() {
 		return the;
 	}
@@ -76,13 +74,12 @@ public abstract class GraphBuilder {
 	final protected void startGraph() {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
-		success = false;
 		the = null;
 		tx = AnimoGraph.beginTx();
 	};
 	
 	final public boolean successful(){
-		return success;
+		return the != null;
 	}
 	
 	final protected void endGraph(){
@@ -110,7 +107,6 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 			tx.success();
-			success = true;
 		} finally {
 			tx.finish();
 			the = THE._.relationship((String) first[2]);
@@ -303,7 +299,6 @@ public abstract class GraphBuilder {
 	}
 	
 	protected void success(){
-		success = true;
 		Calculator.onStore(getRelationship());
 	}
 	

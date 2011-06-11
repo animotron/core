@@ -27,5 +27,5 @@ public class CDATA extends ValueInstruction {
 	
 	public static final CDATA _ = new CDATA();
 	
-	private CDATA() { super("cdata", "ml", "animo/ml"); }
+	private CDATA() { super("cdata", ML._); }
 }
