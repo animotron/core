@@ -18,8 +18,12 @@
  */
 package org.animotron.operator.compare;
 
+import java.io.IOException;
+
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Compare operator 'GT'.
@@ -32,5 +36,12 @@ public class GT extends AbstarctOperator implements Predicate {
 	public static final GT _ = new GT();
 	
 	private GT() { super("gt", "animo/compare/gt"); }
+
+	@Override
+	public void filter(Relationship op, PipedOutputObjectStream out,
+			boolean isLast) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

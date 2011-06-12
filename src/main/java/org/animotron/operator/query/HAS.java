@@ -18,9 +18,13 @@
  */
 package org.animotron.operator.query;
 
+import java.io.IOException;
+
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Query operator 'HAS'.
@@ -33,5 +37,12 @@ public class HAS extends AbstarctOperator implements Query, Predicate {
 	public static final HAS _ = new HAS();
 	
 	private HAS() { super("has", "animo/query/has"); }
+
+	@Override
+	public void filter(Relationship op, PipedOutputObjectStream out,
+			boolean isLast) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

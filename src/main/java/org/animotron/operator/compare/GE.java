@@ -18,8 +18,12 @@
  */
 package org.animotron.operator.compare;
 
+import java.io.IOException;
+
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Compare operator 'GE'.
@@ -32,5 +36,12 @@ public class GE extends AbstarctOperator implements Predicate {
 	public static final GE _ = new GE();
 	
 	private GE() { super("ge", "animo/compare/ge"); }
+
+	@Override
+	public void filter(Relationship op, PipedOutputObjectStream out,
+			boolean isLast) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
