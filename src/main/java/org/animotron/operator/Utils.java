@@ -54,7 +54,7 @@ public class Utils {
 		boolean haveSome = false;
 		for (Relationship res : node.getRelationships(Direction.OUTGOING)) {
 			
-			if (res.getType().name().startsWith("RESULT:")) {
+			if (res.getType().name().startsWith("RESULT")) {
 				System.out.println("GET result = "+res);
 				
 				out.write(res);

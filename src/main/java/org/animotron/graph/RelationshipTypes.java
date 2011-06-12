@@ -31,8 +31,6 @@ public enum RelationshipTypes implements RelationshipType {
 	REF, 
 	
 	RESULT,
-	RESULT_ALL,
-	RESULT_ANY,
 	
 	SOURCE
 }

@@ -20,6 +20,7 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
+import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
@@ -102,17 +103,11 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 								} else if (st instanceof IC) {
 									System.out.println("GET IC -> FOUND "+r);
 									
-									if ( name.equals( IC._.name(r) ) ) {
+									Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
+									//store to relationsip arrow 
+									Properties.RID.set(res, r.getId());
 									
-										PipedInputObjectStream pipe = Calculator.eval(r);
-										Object k; 
-										while ((k = pipe.read()) != null) {
-											if (k instanceof Relationship) {
-												Relationship res = node.createRelationshipTo(((Relationship) k).getStartNode(), RelationshipTypes.RESULT);
-												out.write(res);
-											}
-										}
-									}
+									out.write(res);
 								}
 
 							}

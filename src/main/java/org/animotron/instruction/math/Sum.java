@@ -25,10 +25,10 @@ import org.animotron.instruction.AbstractInstruction;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUM extends AbstractInstruction {
+public class Sum extends AbstractInstruction {
 	
-	public static final SUM _ = new SUM();
+	public static final Sum _ = new Sum();
 	
-	private SUM() { super("sum", MATH._); }
+	private Sum() { super("sum", MATH._); }
 	
 }

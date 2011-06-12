@@ -41,49 +41,27 @@ import org.junit.Test;
  */
 public class ICTests extends ATest {
 	
-	private static final Expression THE_A = 
-		new Expression(
-				_(THE._, "A")
-			);
-	
-	private static final Expression THE_B = 
-		new Expression(
-				_(THE._, "B", 
-					_(IC._, "A", 
-						text(".")
-					)
-				)
-			);
-
-	private static final Expression THE_C = 
-		new Expression(
-				_(THE._, "C", 
-					_(IS._, "B")
-				)
-			);
-
-	private static final Expression THE_D = 
-		new Expression(
-				_(THE._, "D", 
-					_(GET._, "A", 
-						_(AN._, "C")
-					)
-				)
-			);
-
 
 	@Test
 	public void testIC() throws IOException, XMLStreamException {
         System.out.println("Test 'IC' ...");
         
-        GraphSerializer.serialize(THE_A, System.out);
-        System.out.println();
-        GraphSerializer.serialize(THE_B, System.out);
-        System.out.println();
-        GraphSerializer.serialize(THE_C, System.out);
-        System.out.println();
-        GraphSerializer.serialize(THE_D, System.out);
-        
+    	final Expression THE_A = new Expression(
+			_(THE._, "A")
+		);
+	
+    	final Expression THE_B = new Expression(
+			_(THE._, "B", _(IC._, "A", text(".")))
+		);
+
+    	final Expression THE_C = new Expression(
+			_(THE._, "C", _(IS._, "B") )
+		);
+
+    	final Expression THE_D = new Expression(
+			_(THE._, "D", _(GET._, "A", _(AN._, "C")))
+		);
+
         //System.out.println("get:A an:C");
         assertString("D", ".");
 //        assertEquals("D", "<the:D><have:A>.</have:A></the:D>");
