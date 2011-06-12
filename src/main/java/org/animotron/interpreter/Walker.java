@@ -18,17 +18,28 @@
  */
 package org.animotron.interpreter;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Iterator;
 
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.Evaluable;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-abstract class Walker implements Runnable {
+class Walker <T extends Statement, M extends Method> implements Runnable {
 	
 	private Relationship op;
 	private PipedOutputObjectStream out;
@@ -41,13 +52,63 @@ abstract class Walker implements Runnable {
 	@Override
 	public void run() {
 		try {
-			eval(op, out);
+			go(op, out);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	protected abstract void eval(Relationship op, PipedOutputObjectStream ot) throws IOException;
+	protected void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
+		
+		System.out.println("Walk op = "+op);
+		
+		GraphDatabaseService graphdb = op.getGraphDatabase();
+		Transaction tx = graphdb.beginTx();
+		try {
+			Relationship r = null;
+			
+			Node node = op.getEndNode();
+			System.out.println("Walk node = "+node);
+			Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
+			while (it.hasNext()) {
+				
+				r = it.next();
+				RelationshipType type = r.getType();
+				
+				System.out.println(type.name());
+				
+				Statement s = Statements.relationshipType(type);
+
+				if (s == null)
+					;//???
+				else if (s instanceof T) {
+					T expr = (T) s;
+
+					PipedInputObjectStream in = new PipedInputObjectStream();
+
+					M.invoke(expr, r, new PipedOutputObjectStream(in), isLast(it));
+					//expr.eval(r, new PipedOutputObjectStream(in), isLast(it));
+					
+					for (Object n : in) {
+						ot.write(n);
+					} 
+					
+				} else {
+					System.out.println("Not evaled "+r);
+					ot.write(r);
+				}
+			}
+			tx.success();
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+			ot.write(e);
+		} finally {
+			tx.finish();
+		}
+
+		ot.close();
+	}
 		
 	protected boolean isLast(Iterator<?> it) {
 		return !it.hasNext();
