@@ -21,6 +21,7 @@ package org.animotron.interpreter;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
@@ -28,7 +29,6 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Evaluable;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -39,12 +39,18 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Walker <T extends Statement, M extends Method> implements Runnable {
+class Walker implements Runnable {
 	
 	private Relationship op;
 	private PipedOutputObjectStream out;
 	
-	public Walker(Relationship op, PipedOutputObjectStream out) {
+	private Class<? extends Statement> clazz;
+	private Method method;
+	
+	public Walker(Class<? extends Statement> clazz, Method method, Relationship op, PipedOutputObjectStream out) {
+		this.clazz = clazz;
+		this.method = method;
+
 		this.op = op;
 		this.out = out;
 	}
@@ -81,12 +87,21 @@ class Walker <T extends Statement, M extends Method> implements Runnable {
 
 				if (s == null)
 					;//???
-				else if (s instanceof T) {
-					T expr = (T) s;
+				else if (implementsInterface(s.getClass(), clazz)) {
 
 					PipedInputObjectStream in = new PipedInputObjectStream();
 
-					M.invoke(expr, r, new PipedOutputObjectStream(in), isLast(it));
+					try {
+						method.invoke(s, r, new PipedOutputObjectStream(in), isLast(it));
+					
+						//XXX: what to do on exception???
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
 					//expr.eval(r, new PipedOutputObjectStream(in), isLast(it));
 					
 					for (Object n : in) {
@@ -113,4 +128,14 @@ class Walker <T extends Statement, M extends Method> implements Runnable {
 	protected boolean isLast(Iterator<?> it) {
 		return !it.hasNext();
 	}
+	
+    private static Boolean implementsInterface(Class<?> object, Class<?> intrfc){
+        for (Class<?> c : object.getInterfaces()) {
+            if (c.equals(intrfc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
