@@ -18,6 +18,8 @@
  */
 package org.animotron.operator;
 
+import static org.animotron.graph.RelationshipTypes.RESULT;
+
 import java.io.IOException;
 
 import org.animotron.Properties;
@@ -93,6 +95,14 @@ public abstract class AbstarctOperator implements Operator {
 		System.out.println("empty eval @"+this.getClass());
 		ot.write(op);
 		ot.close();
+	}
+	
+	protected Relationship createResult(Node node, Relationship r) {
+		Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
+		//store to relationship arrow 
+		Properties.RID.set(res, r.getId());
+		
+		return res;
 	}
 	
 	@Override

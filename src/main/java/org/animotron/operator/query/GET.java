@@ -23,7 +23,6 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
-import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.interpreter.Calculator;
@@ -114,11 +113,11 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 								} else if (st instanceof IC) {
 									System.out.print("GET IC -> "+tdR);
 									
-									Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
-									//store to relationsip arrow 
-									Properties.RID.set(res, r.getId());
-									
-									out.write(res);
+									if (name.equals(name(tdR))) {
+										System.out.print(" MATCH");
+										out.write(createResult(node, tdR));
+									}
+
 									System.out.println();
 								}
 							}
@@ -132,13 +131,5 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 		}
 		
 		out.close();
-	}
-
-	private Relationship createResult(Node node, Relationship r) {
-		Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
-		//store to relationship arrow 
-		Properties.RID.set(res, r.getId());
-		
-		return res;
 	}
 }

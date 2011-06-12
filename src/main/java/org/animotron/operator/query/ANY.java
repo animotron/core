@@ -18,14 +18,18 @@
  */
 package org.animotron.operator.query;
 
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
 
+import org.animotron.graph.InMemoryRelationship;
+import org.animotron.interpreter.ResultOnContext;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
-import org.animotron.operator.Utils;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
@@ -52,24 +56,26 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 		
 		Transaction tx = op.getGraphDatabase().beginTx();
 		try {
-			Node node = op.getEndNode();
-
-			//check, maybe, result was already calculated
-			if (!Utils.results(node, out)) {
-
-				//go to 'THE' node
-				Node the = Utils.getByREF(node); 
-	
-				//get 'THE' relation - ???
-				Relationship res = node.createRelationshipTo(the, resultRelationshipType());
-	
-				out.write(res);
-			}
+			Relationship res = new ResultANY( 
+				op.getEndNode().getSingleRelationship( REF, OUTGOING )
+			);
+			out.write(res);
 
 			tx.success();
 		} finally {
 			tx.finish();
 		}
 		out.close();
+	}
+	
+	class ResultANY extends InMemoryRelationship implements ResultOnContext {
+
+		protected ResultANY(Relationship r) {
+			super(r.getStartNode(), r.getEndNode(), RESULT);
+		}
+		
+		public String toString() {
+			return "RESULT:ANY";
+		}
 	}
 }
