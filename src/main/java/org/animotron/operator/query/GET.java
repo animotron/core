@@ -18,22 +18,24 @@
  */
 package org.animotron.operator.query;
 
+import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
 
 import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
-import org.animotron.io.*;
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.IC;
 import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
-import org.animotron.operator.relation.*;
-import org.neo4j.graphdb.Direction;
+import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -55,14 +57,14 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
-			relationships(HAVE._.relationshipType(), Direction.OUTGOING );
+			relationships(HAVE._.relationshipType(), OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
 	private static TraversalDescription td_eval_ic = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS._.relationshipType(), Direction.OUTGOING ).
-			relationships(IC._.relationshipType(), Direction.OUTGOING );
+			relationships(IS._.relationshipType(), OUTGOING ).
+			relationships(IC._.relationshipType(), OUTGOING );
 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
@@ -74,42 +76,51 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, out)) {
 				//no pre-calculated result, calculate it
-				PipedInputObjectStream in = new PipedInputObjectStream();
-		
-				Calculator.eval(op, new PipedOutputObjectStream(in));
 				
 				String name = name(op);
 				
-				Object n; 
-				while ((n = in.read()) != null) {
-					if (n instanceof Relationship) {
+				for (Object n : Calculator.eval(op)) {
+					if (n instanceof IOException) {
+						throw (IOException)n;
+						
+					} else if (n instanceof Relationship) {
+						
+						final Relationship r = (Relationship)n;
+						
 						boolean found = false;
-						for (Relationship r : td_eval.traverse(((Relationship) n).getEndNode()).relationships()) {
+						if (RESULT.equals(r.getType().name())) {
+							System.out.println("GET get-result "+r);
+							continue;
+						} 
+						
+						for (Relationship tdR : td_eval.traverse(r.getEndNode()).relationships()) {
 							
-							System.out.println("GET eval = "+r);
-
-							Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
-							out.write(res);
+							System.out.println("GET eval = "+tdR);
 							
-							found = true;
+							if (name.equals(name(tdR))) {
+								out.write(createResult(node, tdR));
+								
+								found = true;
+							}
 						}
 						
 						if (!found) {
-							for (Relationship r : td_eval_ic.traverse(((Relationship) n).getEndNode()).relationships()) {
+							for (Relationship tdR : td_eval_ic.traverse(r.getEndNode()).relationships()) {
 								
-								Statement st = Statements.relationshipType( r.getType() );
+								Statement st = Statements.relationshipType( tdR.getType() );
 								if (st instanceof IS) {
-									System.out.println("GET IC -> IS "+r);
-								} else if (st instanceof IC) {
-									System.out.println("GET IC -> FOUND "+r);
+									System.out.println("GET IC -> IS "+tdR);
 									
-									Relationship res = node.createRelationshipTo(r.getEndNode(), RelationshipTypes.RESULT);
+								} else if (st instanceof IC) {
+									System.out.print("GET IC -> "+tdR);
+									
+									Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
 									//store to relationsip arrow 
 									Properties.RID.set(res, r.getId());
 									
 									out.write(res);
+									System.out.println();
 								}
-
 							}
 						}
 					}
@@ -121,5 +132,13 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 		}
 		
 		out.close();
+	}
+
+	private Relationship createResult(Node node, Relationship r) {
+		Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
+		//store to relationship arrow 
+		Properties.RID.set(res, r.getId());
+		
+		return res;
 	}
 }

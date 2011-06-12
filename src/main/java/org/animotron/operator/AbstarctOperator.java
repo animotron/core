@@ -120,6 +120,4 @@ public abstract class AbstarctOperator implements Operator {
 	public String qname(Relationship r) {
 		return prefix(r) + ":" + name(r);
 	}
-
-	
 }

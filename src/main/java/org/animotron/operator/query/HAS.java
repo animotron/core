@@ -29,6 +29,8 @@ import org.neo4j.graphdb.Relationship;
 /**
  * Query operator 'HAS'.
  * 
+ * Has HAVE relation?
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */

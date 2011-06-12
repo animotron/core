@@ -31,7 +31,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Evaluable {
 	
-	public abstract void eval(Relationship op, PipedOutputObjectStream out,
-			boolean isLast) throws IOException;
+	void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 	
 }

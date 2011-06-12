@@ -19,12 +19,21 @@
 package org.animotron.interpreter;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
+import static org.animotron.Expression.*;
+
 import org.animotron.ATest;
+import org.animotron.Expression;
+import org.animotron.instruction.string.AfterLast;
+import org.animotron.operator.AN;
+import org.animotron.operator.IC;
+import org.animotron.operator.THE;
+import org.animotron.operator.query.ANY;
+import org.animotron.operator.query.GET;
+import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
 import org.junit.Test;
 
 /**
@@ -33,74 +42,55 @@ import org.junit.Test;
  */
 public class ConnectionTests extends ATest {
 	
-	private static final String THE_MIME_TYPE = 
-		"<the:mime-type "+ANIMO_NSs+">" +
-		"	<have:extension/>" +
-		"</the:mime-type>";
-	
-	private static final String THE_FILE = 
-		"<the:file "+ANIMO_NSs+">" +
-		"	<have:name>file</have:name>"+
-		"	<have:path/>"+
-
-		"	<ic:extension>"+
-		"		<string:after-last>.<get:path/></string:after-last>"+
-		"	</ic:extension>"+
-		"	<ic:mime-type>"+
-		"		<any:mime-type>"+
-		"			<have:extension>"+
-		"				<get:extension/>"+
-		"			</have:extension>"+
-		"		</any:mime-type>"+
-		"	</ic:mime-type>"+
-		"</the:file>";
-
-	private static final String THE_FILEA = 
-		"<the:fileA "+ANIMO_NSs+">" +
-		"	<is:file/>" +
-		
-		"	<have:path>/home/test.txt</have:path>" +
-		
-		"</the:fileA>";
-	
-	private static final String THE_TEXT_PLAIN = 
-		"<the:text-plain "+ANIMO_NSs+">" +
-		"	<is:mime-type/>" +
-		
-		"	<have:type>text/plain</have:type>" +
-
-	    "	<have:extension>txt</have:extension>" +
-		"	<have:extension>text</have:extension>" +
-		
-		"</the:text-plain>";
-
-	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+">" +
-		"	<get:type>" +
-		"		<get:mime-type>" +
-		"			<an:fileA/>" +
-		"		</get:mime-type>" +
-		"	</get:type>" +
-		"</the:A>";
-
-	
 	@Test
 	public void mimeType_usecase() throws IOException, XMLStreamException {
         System.out.println("Mime type use case ...");
         
-        if (firstRun) {
-	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
-	        nameDataMap.put("mime-type.xml", THE_MIME_TYPE);
-	        nameDataMap.put("file.xml", THE_FILE);
-	        nameDataMap.put("fileA.xml", THE_FILEA);
-	        nameDataMap.put("text-plain.xml", THE_TEXT_PLAIN);
-	        nameDataMap.put("A.xml", THE_A);
-	        
-	        store(nameDataMap);
-        }
-        
+    	new Expression(
+		_(THE._, "mime-type", 
+			_(HAVE._, "extension")
+		));
+
+    	new Expression(
+		_(THE._, "file", 
+			_(HAVE._, "name", text("file")),
+			_(HAVE._, "path"),
+
+			_(IC._, "extension", 
+				_(AfterLast._, 
+					text("."),
+					_(GET._, "path"))),
+
+			_(IC._, "mime-type", 
+				_(ANY._, "mime-type", 
+					_(HAVE._, "extension"),
+						_(GET._, "extension")))
+		));
+
+
+    	new Expression(
+		_(THE._, "fileA", 
+			_(IS._, "file"), 
+			_(HAVE._, "path", text("/home/test.txt"))
+		));
+
+    	new Expression(
+		_(THE._, "text-plain", 
+			_(IS._, "mime-type"), 
+			_(HAVE._, "type", text("text/plain")),
+			_(HAVE._, "extension", text("txt"), text("text"))
+		));
+
+    	new Expression(
+		_(THE._, "A", 
+			_(GET._, "type", 
+				_(GET._, "mime-type", 
+					_(AN._, "fileA")
+		))));
+
         //System.out.println("");
-        assertEquals("A", "<the:A><have:type>text/plain</have:type></the:A>");
+        assertString("A", "text/plain");
+        //assertEquals("A", "<the:A><have:type>text/plain</have:type></the:A>");
 
         //System.out.println("done.");
 	}

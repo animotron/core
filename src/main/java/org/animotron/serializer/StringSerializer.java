@@ -55,8 +55,9 @@ public class StringSerializer {
 	 */
 //	@Override
 	public void start(Statement statement, Relationship r) {
-		System.out.println(r);
+		//System.out.println(r);
 		if (statement instanceof TEXT) {
+			System.out.println("TEXT found");
 			builder.append(statement.value(r));
 		} else {
 			//build(r);
