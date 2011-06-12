@@ -113,6 +113,9 @@ public class THE extends AbstarctOperator {
 	public String name(Relationship r) {
 		return Properties.NAME.get(r.getEndNode());
 	}
+	
+	public void prepare(){
+	}
 
 
 }

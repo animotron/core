@@ -61,4 +61,5 @@ public class Calculator {
 	public static void onStore(Relationship op) {
 		AnimoGraph.CALC.createRelationshipTo(op.getEndNode(), op.getType());
 	}
+	
 }
