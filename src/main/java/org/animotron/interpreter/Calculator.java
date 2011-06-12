@@ -37,20 +37,12 @@ public class Calculator {
 	
 	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	public static PipedInputObjectStream eval(Relationship op) {
-		try {
-			PipedInputObjectStream in = new PipedInputObjectStream();
-			PipedOutputObjectStream out = new PipedOutputObjectStream(in);
-			
-			exec.execute(new Evaluator(op, out));
-			System.out.println("run op = "+op);
+	public static PipedInputObjectStream eval(Relationship op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
 		
-			return in;
-		} catch (IOException e) {
-			//can't be???
-			e.printStackTrace();
-			return null;
-		}
+		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+	
+		return in;
 	}
 
 	public static void eval(Relationship op, PipedOutputObjectStream out) {

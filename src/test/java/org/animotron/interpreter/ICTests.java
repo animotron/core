@@ -27,7 +27,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.graph.GraphSerializer;
 import org.animotron.operator.AN;
 import org.animotron.operator.IC;
 import org.animotron.operator.THE;

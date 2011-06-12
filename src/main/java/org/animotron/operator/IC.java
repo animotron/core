@@ -18,6 +18,11 @@
  */
 package org.animotron.operator;
 
+import java.io.IOException;
+
+import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Relationship;
+
 
 /**
  * Operator 'IC'.
@@ -25,9 +30,14 @@ package org.animotron.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends AbstarctOperator {
+public class IC extends AbstarctOperator implements Evaluable {
 	
 	public static final IC _ = new IC();
 	
 	private IC() { super("ic", "animo/connection"); }
+	
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+		System.out.println("IC "+op);
+		out.close();
+	}
 }
