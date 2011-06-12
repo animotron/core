@@ -18,6 +18,7 @@
  */
 package org.animotron.graph;
 
+import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -77,7 +78,7 @@ public class StoreAnimoTest extends ATest {
         store(nameDataMap);
         System.out.println("loaded ...");
         
-        Transaction tx = AnimoGraph.beginTx();
+        Transaction tx = beginTx();
         try { 
 	        Relationship r = THE._.relationship("B");
 	            
@@ -93,8 +94,8 @@ public class StoreAnimoTest extends ATest {
 //            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
 //            while (it.hasNext()) {
 //            	System.out.println(it.next());
-            	//System.out.println(AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
-            	//assertEquals("on "+i+" step", must[i], AnimoGraph.getNodeProxy(it.next()).getNode().getNodeName());
+            	//System.out.println(getNodeProxy(it.next()).getNode().getNodeName());
+            	//assertEquals("on "+i+" step", must[i], getNodeProxy(it.next()).getNode().getNodeName());
 //            	i++;
 //            }
 	        

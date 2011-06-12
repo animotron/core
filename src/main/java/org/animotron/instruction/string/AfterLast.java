@@ -18,9 +18,10 @@
  */
 package org.animotron.instruction.string;
 
+import static org.animotron.graph.AnimoGraph.getORDER;
+
 import java.io.IOException;
 
-import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
@@ -45,7 +46,7 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 		
 		//UNDERSTAND: if we have more that 2 params, what to do?
 		
-		Relationship[] params = AnimoGraph.getORDER().first(2, op.getEndNode());
+		Relationship[] params = getORDER().first(2, op.getEndNode());
 		
 		//pattern
 		StringSerializer szer = new StringSerializer();

@@ -18,8 +18,12 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
+import static org.animotron.Properties.NAME;
+import static org.animotron.Properties.NAMESPACE;
+import static org.animotron.Properties.PREFIX;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.order;
+
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.operator.Cachable;
 import org.neo4j.graphdb.Node;
@@ -38,29 +42,29 @@ public class ELEMENT extends AbstractInstruction implements Cachable {
 	
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node child = AnimoGraph.createNode();
+		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType());
-		AnimoGraph.order(r, order);
-		Properties.PREFIX.set(child, prefix);
-		Properties.NAMESPACE.set(child, ns);
-		Properties.NAME.set(child, name);
+		order(r, order);
+		PREFIX.set(child, prefix);
+		NAMESPACE.set(child, ns);
+		NAME.set(child, name);
 		return child;
 	}
 	
 	@Override
 	public String name(Relationship r){
-		return Properties.NAME.get(r.getEndNode());
+		return NAME.get(r.getEndNode());
 	}
 	
 	@Override
 	public String namespace(Relationship r){
 		Node node = r.getEndNode();
-		return Properties.NAMESPACE.has(node) ? Properties.NAMESPACE.get(node) : null;
+		return NAMESPACE.has(node) ? NAMESPACE.get(node) : null;
 	}
 	
 	@Override
 	public String prefix(Relationship r){
 		Node node = r.getEndNode();
-		return Properties.PREFIX.has(node) ? Properties.PREFIX.get(node) : null;
+		return PREFIX.has(node) ? PREFIX.get(node) : null;
 	}
 }

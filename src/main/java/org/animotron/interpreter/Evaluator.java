@@ -18,16 +18,21 @@
  */
 package org.animotron.interpreter;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
 import java.util.Iterator;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.io.*;
+import org.animotron.io.PipedInputObjectStream;
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
-
-import static org.neo4j.graphdb.Direction.OUTGOING;
-import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -18,6 +18,8 @@
  */
 package org.animotron.graph;
 
+import static org.animotron.graph.AnimoGraph.getORDER;
+
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
@@ -51,7 +53,7 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 		
 		if (!(statement instanceof Relation)) {
 			
-			IndexHits<Relationship> q = AnimoGraph.getORDER().query(r.getEndNode());
+			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
 					build(i);

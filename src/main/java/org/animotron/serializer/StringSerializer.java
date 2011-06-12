@@ -18,15 +18,17 @@
  */
 package org.animotron.serializer;
 
-import org.animotron.Properties;
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.animotron.graph.AnimoGraph.graphDb;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.ml.TEXT;
-import org.animotron.operator.THE;
 import org.animotron.operator.Query;
-import org.neo4j.graphdb.Direction;
+import org.animotron.operator.THE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
@@ -107,7 +109,7 @@ public class StringSerializer {
 			} else {
 				start(s, r);
 				
-				IndexHits<Relationship> q = AnimoGraph.getORDER().query(r.getEndNode());
+				IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 				try {
 					for (Relationship i : q) {
 						build(i);
@@ -123,7 +125,7 @@ public class StringSerializer {
 		System.out.print(r);
 		System.out.print(" ");
 		System.out.println(r.getType().name());
-//			IndexHits<Relationship> q = AnimoGraph.getORDER().query(r.getEndNode());
+//			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 //			try {
 //				for (Relationship i : q) {
 //					build(i);
@@ -137,11 +139,11 @@ public class StringSerializer {
 
 	protected boolean result(Relationship r) {
 		boolean found = false;
-		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, Direction.OUTGOING);
+		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
 		for ( Relationship n : i ) {
 			build( 
-				AnimoGraph.graphDb.getRelationshipById(
-					(Long)n.getProperty(Properties.RID.name())
+				graphDb.getRelationshipById(
+					(Long)n.getProperty(RID.name())
 				) 
 			);
 			found = true;

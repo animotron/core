@@ -18,15 +18,17 @@
  */
 package org.animotron.operator;
 
+import static org.animotron.Properties.NAME;
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.order;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -83,9 +85,9 @@ public abstract class AbstarctOperator implements Operator {
 
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node child = AnimoGraph.createNode();
+		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);
-		AnimoGraph.order(r, order);
+		order(r, order);
 		child.createRelationshipTo(THE._.getOrCreate(name), REF);
 		return child;
 	}
@@ -100,15 +102,15 @@ public abstract class AbstarctOperator implements Operator {
 	protected Relationship createResult(Node node, Relationship r) {
 		Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
 		//store to relationship arrow 
-		Properties.RID.set(res, r.getId());
+		RID.set(res, r.getId());
 		
 		return res;
 	}
 	
 	@Override
 	public String name(Relationship r) {
-		Node node = r.getEndNode().getSingleRelationship(REF, Direction.OUTGOING).getEndNode(); 
-		return Properties.NAME.get(node);
+		Node node = r.getEndNode().getSingleRelationship(REF, OUTGOING).getEndNode(); 
+		return NAME.get(node);
 	}
 	
 	@Override

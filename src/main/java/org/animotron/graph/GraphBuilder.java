@@ -18,6 +18,14 @@
  */
 package org.animotron.graph;
 
+import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.clear;
+import static org.animotron.graph.AnimoGraph.createCache;
+import static org.animotron.graph.AnimoGraph.getCache;
+import static org.animotron.graph.AnimoGraph.order;
+
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,13 +33,11 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 import org.animotron.MessageDigester;
-import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.interpreter.Calculator;
 import org.animotron.operator.Cachable;
-import org.animotron.operator.Evaluable;
 import org.animotron.operator.External;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -75,7 +81,7 @@ public abstract class GraphBuilder {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		the = null;
-		tx = AnimoGraph.beginTx();
+		tx = beginTx();
 	};
 	
 	final public boolean successful(){
@@ -220,18 +226,18 @@ public abstract class GraphBuilder {
 				String hash = hash(item);
 				node = the.node(name);
 				if (node != null) {
-					if (Properties.HASH.has(node)) {
-						String h = Properties.HASH.get(node);
+					if (HASH.has(node)) {
+						String h = HASH.get(node);
 						if (h == null) {
-							Properties.HASH.set(node, hash);
+							HASH.set(node, hash);
 						} else if (!h.equals(hash)) {
-							AnimoGraph.clear(node);
-							Properties.HASH.set(node, hash);
+							clear(node);
+							HASH.set(node, hash);
 						} else {
 							item[8] = true;
 						}
 					} else {
-						Properties.HASH.set(node, hash);
+						HASH.set(node, hash);
 					}
 				} else {
 					node = the.create(name, hash);
@@ -244,13 +250,13 @@ public abstract class GraphBuilder {
 				}
 				if (statement instanceof Cachable) {
 					String hash = hash(item);
-					node = AnimoGraph.getCache(hash);
+					node = getCache(hash);
 					if (node == null) {
 						node = build(statement, parent, item, p, order);
-						AnimoGraph.createCache(node, hash);
+						createCache(node, hash);
 					} else {
 						Relationship r = parent.createRelationshipTo(node, statement.relationshipType());
-						AnimoGraph.order(r, order);
+						order(r, order);
 						item[8] = true;
 					}
 				} else {
@@ -276,10 +282,10 @@ public abstract class GraphBuilder {
 			MessageDigest md = MessageDigester.md();
 			md.update(bytes);
 			String hash = hash(md.digest());
-			Node cache = AnimoGraph.getCache(hash);
+			Node cache = getCache(hash);
 			if (cache == null) {
-				cache = AnimoGraph.createCache(hash);
-				Properties.VALUE.set(cache, value);
+				cache = createCache(hash);
+				VALUE.set(cache, value);
 			}
 			return cache;
 		} catch (Exception e){

@@ -18,6 +18,9 @@
  */
 package org.animotron.graph;
 
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,7 +33,6 @@ import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -78,7 +80,7 @@ public class Reader implements Runnable {
 	}
 	
 	private void subprocess(Node node) throws IOException {
-		for (Relationship r : node.getRelationships(Direction.OUTGOING)) {
+		for (Relationship r : node.getRelationships(OUTGOING)) {
 			process(r);
 		}
 	}
@@ -108,16 +110,16 @@ public class Reader implements Runnable {
 			
 			//how to find type???
 			String name = typeName;
-			for (Relationship r : eNode.getRelationships(Direction.INCOMING)) {
+			for (Relationship r : eNode.getRelationships(INCOMING)) {
 				String tmp = r.getType().toString();
 				if (tmp.equals("IC")) {
-					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
+					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
 
 					name = "have:"+ref.getEndNode().getProperty("NAME");
 					break;
 
 				} else if (tmp.equals("HAVE")) {
-					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
+					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
 
 					name = "have:"+ref.getEndNode().getProperty("NAME");
 					break;
@@ -158,7 +160,7 @@ public class Reader implements Runnable {
 			subprocess(eNode);
 			
 		} else {
-			for (Relationship r : eNode.getRelationships(Direction.OUTGOING)) {
+			for (Relationship r : eNode.getRelationships(OUTGOING)) {
 				String type = r.getType().name();
 				if (type.startsWith("RESULT") || type.startsWith("QUERY"))
 					process(r);
@@ -169,12 +171,12 @@ public class Reader implements Runnable {
 	private static TraversalDescription td_have_name = 
 		Traversal.description().
 			breadthFirst().
-			relationships(RelationshipTypes.REF, Direction.OUTGOING );
+			relationships(RelationshipTypes.REF, OUTGOING );
 
 	private static TraversalDescription td_is_down = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS._.relationshipType(), Direction.INCOMING ).
+			relationships(IS._.relationshipType(), INCOMING ).
 			evaluator(new Evaluator() {
 
 				@Override

@@ -18,6 +18,7 @@
  */
 package org.animotron.bridge;
 
+import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
@@ -27,7 +28,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.stax.StAXGraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class FSBridgeTest extends ATest {
 	private static final String PATH = "src/main/animo/mime/application-animo.animo";
 	
 	private void check(String the){
-        Transaction tx = AnimoGraph.beginTx();
+        Transaction tx = beginTx();
         try { 
 	        Relationship r = THE._.relationship(the);
 	        assertNotNull(r);

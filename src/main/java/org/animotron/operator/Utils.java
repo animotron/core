@@ -18,11 +18,12 @@
  */
 package org.animotron.operator;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -37,7 +38,7 @@ public class Utils {
 	public static TraversalDescription td_RESULT = 
 		Traversal.description().
 			breadthFirst().
-			relationships(RelationshipTypes.RESULT, Direction.OUTGOING );
+			relationships(RelationshipTypes.RESULT, OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
 
@@ -45,14 +46,14 @@ public class Utils {
 		return 
 			node.getSingleRelationship(
 				RelationshipTypes.REF, 
-				Direction.OUTGOING
+				OUTGOING
 			).getEndNode();
 	}
 	
 	public static boolean results(Node node, PipedOutputObjectStream out) throws IOException {
 		
 		boolean haveSome = false;
-		for (Relationship res : node.getRelationships(Direction.OUTGOING)) {
+		for (Relationship res : node.getRelationships(OUTGOING)) {
 			
 			if (res.getType().name().startsWith("RESULT")) {
 				System.out.println("GET result = "+res);

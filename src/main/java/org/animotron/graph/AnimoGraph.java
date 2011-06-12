@@ -18,7 +18,9 @@
  */
 package org.animotron.graph;
 
-import org.neo4j.graphdb.Direction;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -57,14 +59,14 @@ public class AnimoGraph {
 		IndexManager INDEX = graphDb.index();
 		ORDER = new OrderIndex(INDEX);
 		
-		Transaction tx = AnimoGraph.beginTx();
+		Transaction tx = beginTx();
 		
 		try {
-			GC = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.GC);
-			TOP = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.TOP);
-			CALC = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.CALC);
-			EMPTY = AnimoGraph.getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
-			CACHE = AnimoGraph.getOrCreateNode(ROOT, RelationshipTypes.CACHE);
+			GC = getOrCreateNode(ROOT, RelationshipTypes.GC);
+			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
+			CALC = getOrCreateNode(ROOT,RelationshipTypes.CALC);
+			EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
+			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			tx.success();
 		} finally {
 			tx.finish();
@@ -98,7 +100,7 @@ public class AnimoGraph {
 	 */
 	public static <T> T execute(GraphOperation<T> operation) {
 		T result = null;
-		Transaction tx = AnimoGraph.beginTx();
+		Transaction tx = beginTx();
 		try {
 			result = operation.execute();
 			
@@ -111,17 +113,17 @@ public class AnimoGraph {
 	}
 	
 	public static void clear (Node node){
-		for (Relationship r : node.getRelationships(Direction.OUTGOING)){
+		for (Relationship r : node.getRelationships(OUTGOING)){
 			Node end = r.getEndNode();
 			r.delete();
-			if (!end.hasRelationship(Direction.INCOMING)) {
+			if (!end.hasRelationship(INCOMING)) {
 				GC.createRelationshipTo(end, RelationshipTypes.GARBAGE);
 			}
 		}
 	}
 	
 	public static Node getNode(Node parent, RelationshipType type) {
-		Relationship r = parent.getSingleRelationship(type, Direction.OUTGOING);
+		Relationship r = parent.getSingleRelationship(type, OUTGOING);
 		return r == null ? null : r.getEndNode();
 	};
 	
@@ -136,7 +138,7 @@ public class AnimoGraph {
 	}
 	
 	public static Node getOrCreateNode(Node parent, RelationshipType type) {
-		Relationship r = parent.getSingleRelationship(type, Direction.OUTGOING);
+		Relationship r = parent.getSingleRelationship(type, OUTGOING);
 		if (r != null)
 			return r.getEndNode();
 		Node node = createNode(parent, type);
@@ -144,22 +146,22 @@ public class AnimoGraph {
 	}
 
 	public static Node createCache(String hash) {
-		return createCache(AnimoGraph.createNode(), hash);
+		return createCache(createNode(), hash);
 	}
 
 	public static Node createCache(Node node, String hash) {
 		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
-		AnimoGraph.CACHE.createRelationshipTo(node, type);
+		CACHE.createRelationshipTo(node, type);
 		return node;
 	}
 
 	public static Node getCache(String hash) {
 		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
-		return AnimoGraph.getNode(AnimoGraph.CACHE, type);
+		return getNode(CACHE, type);
 	}
 	
 	public static void order (Relationship r, int order) {
 		ORDER.add(r, order);
-		//Properties.ORDER.set(r, order);
+		//ORDER.set(r, order);
 	}
 }

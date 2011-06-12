@@ -18,21 +18,10 @@
  */
 package org.animotron.graph;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
-import org.animotron.graph.stax.StAXGraphSerializer;
-import org.animotron.operator.THE;
 import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -65,7 +54,7 @@ public class MimeTest extends ATest {
         
         System.out.println("loaded ...");
         
-//        Transaction tx = AnimoGraph.beginTx();
+//        Transaction tx = beginTx();
 //        try { 
 //	        Relationship r = THE._.relationship("B");
 //	        assertNotNull(r);

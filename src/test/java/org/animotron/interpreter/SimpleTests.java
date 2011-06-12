@@ -18,6 +18,7 @@
  */
 package org.animotron.interpreter;
 
+import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -28,7 +29,6 @@ import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Reader;
 import org.animotron.operator.THE;
 import org.junit.Test;
@@ -70,7 +70,7 @@ public class SimpleTests extends ATest {
 	        store(nameDataMap);
         }
         
-        Transaction tx = AnimoGraph.beginTx();
+        Transaction tx = beginTx();
         
         try {
 	        Relationship op = THE._.relationship("C");

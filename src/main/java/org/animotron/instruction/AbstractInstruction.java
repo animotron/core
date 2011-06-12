@@ -18,9 +18,11 @@
  */
 package org.animotron.instruction;
 
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.order;
+
 import java.io.IOException;
 
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
@@ -81,9 +83,9 @@ public abstract class AbstractInstruction implements Instruction {
 
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node child = AnimoGraph.createNode();
+		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);
-		AnimoGraph.order(r, order);
+		order(r, order);
 		return child;
 	}
 	

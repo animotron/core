@@ -18,11 +18,12 @@
  */
 package org.animotron.interpreter;
 
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
+
 import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
-
-import static org.animotron.Expression.*;
 
 import org.animotron.ATest;
 import org.animotron.Expression;

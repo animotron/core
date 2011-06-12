@@ -18,7 +18,9 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.Expression.*;
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
+import static org.animotron.graph.AnimoGraph.STORAGE;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -35,6 +37,7 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Relationship;
 
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -43,19 +46,19 @@ import org.neo4j.graphdb.Relationship;
 public class BinanyBuilder {
 	
 	private final static String HASH_PREFIX = "file-";
-	private final static File STORAGE = new File(AnimoGraph.STORAGE, "binany");
-	private final static File TMP = new File(STORAGE, "tmp");
+	private final static File BIN_STORAGE = new File(STORAGE, "binany");
+	private final static File TMP_STORAGE = new File(STORAGE, "tmp");
 	
 	static {
-		STORAGE.mkdirs();
-		TMP.mkdirs();
+		BIN_STORAGE.mkdirs();
+		TMP_STORAGE.mkdirs();
 	}
 	
 	public static Relationship build(InputStream stream, String path) throws IOException {
 		
 		String txID = UUID.randomUUID().toString();
 		
-		File tmp = new File(TMP, txID);
+		File tmp = new File(TMP_STORAGE, txID);
 		tmp.createNewFile();
 		OutputStream out = new FileOutputStream(tmp);
 		
@@ -73,7 +76,7 @@ public class BinanyBuilder {
 		
 		String hash = MessageDigester.byteArrayToHex(md.digest());
 		
-		File l1  = new File(STORAGE, hash.substring(0, 2));  
+		File l1  = new File(BIN_STORAGE, hash.substring(0, 2));  
 		File l2  = new File(l1, hash.substring(0, 4));  
 		File bin = new File(l2,  hash);
 		

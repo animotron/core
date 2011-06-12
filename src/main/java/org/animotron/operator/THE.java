@@ -18,11 +18,18 @@
  */
 package org.animotron.operator;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
+import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.NAME;
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.clear;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getNode;
+import static org.animotron.graph.AnimoGraph.getOrCreateNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -45,9 +52,9 @@ public class THE extends AbstarctOperator {
 
 	private THE() { 
 		super(PREFIX, NAMESPACE); 
-		Transaction tx = AnimoGraph.beginTx();
+		Transaction tx = beginTx();
 		try {
-			THE_NODE = AnimoGraph.getOrCreateNode(AnimoGraph.getROOT(), RelationshipTypes.THE);
+			THE_NODE = getOrCreateNode(getROOT(), RelationshipTypes.THE);
 			tx.success();
 		} finally {
 			tx.finish();
@@ -68,25 +75,25 @@ public class THE extends AbstarctOperator {
 	
 	public Relationship relationship(Node parent, String name) {
 		RelationshipType type = relashionshipType(name);
-		return parent.getSingleRelationship(type, Direction.OUTGOING);
+		return parent.getSingleRelationship(type, OUTGOING);
 	}
 	
 	public Node node(String name) {
 		RelationshipType type = relashionshipType(name);
-		return AnimoGraph.getNode(THE_NODE, type);
+		return getNode(THE_NODE, type);
 	}
 	
 	public Node create(String name, String hash) {
 		Node node = create(name);
-		Properties.HASH.set(node, hash);
+		HASH.set(node, hash);
 		return node;
 	}
 	
 	public Node create(String name) {
-		Node node = AnimoGraph.createNode();
+		Node node = createNode();
 		RelationshipType type = relashionshipType(name);
 		THE_NODE.createRelationshipTo(node, type);
-		Properties.NAME.set(node, name);
+		NAME.set(node, name);
 		return node;
 	}
 	
@@ -102,7 +109,7 @@ public class THE extends AbstarctOperator {
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Node node = node(name);
 		if (node != null) {
-			AnimoGraph.clear(node);
+			clear(node);
 		} else {
 			node = create(name);
 		}
@@ -111,7 +118,7 @@ public class THE extends AbstarctOperator {
 	
 	@Override
 	public String name(Relationship r) {
-		return Properties.NAME.get(r.getEndNode());
+		return NAME.get(r.getEndNode());
 	}
 	
 	public void prepare(){

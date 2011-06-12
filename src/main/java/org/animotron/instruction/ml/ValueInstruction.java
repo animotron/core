@@ -18,8 +18,9 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
+import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.order;
+
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.instruction.InstructionContainer;
 import org.neo4j.graphdb.Node;
@@ -42,7 +43,7 @@ public abstract class ValueInstruction extends AbstractInstruction {
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
-		AnimoGraph.order(r, order);
+		order(r, order);
 		return null;
 	}
 	
@@ -58,6 +59,6 @@ public abstract class ValueInstruction extends AbstractInstruction {
 	
 	@Override
 	public String value(Relationship r){
-		return Properties.VALUE.get(r.getEndNode());
+		return VALUE.get(r.getEndNode());
 	}
 }

@@ -18,6 +18,8 @@
  */
 package org.animotron.graph.sax;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import org.animotron.Statement;
 import org.animotron.graph.AbstractGraphSerializer;
 import org.animotron.instruction.ml.ATTRIBUTE;
@@ -26,7 +28,6 @@ import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.instruction.ml.ValueInstruction;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.xml.sax.ContentHandler;
@@ -74,7 +75,7 @@ public class SAXGraphSerializer extends AbstractGraphSerializer {
 				String ns = statement.namespace(r);
 				String qname = statement.qname(r);
 				AttributesImpl attributes = new AttributesImpl();
-				for (Relationship i : r.getEndNode().getRelationships(ATTR_RELATIONSHIPTYPE, Direction.OUTGOING)){
+				for (Relationship i : r.getEndNode().getRelationships(ATTR_RELATIONSHIPTYPE, OUTGOING)){
 					attributes.addAttribute(ATTR.namespace(i), null, ATTR.qname(i), "CDATA", ATTR.value(i));
 				}
 				contentHandler.startElement(ns, null, qname, attributes);

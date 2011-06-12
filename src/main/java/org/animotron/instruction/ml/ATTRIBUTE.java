@@ -18,8 +18,12 @@
  */
 package org.animotron.instruction.ml;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
+import static org.animotron.Properties.NAME;
+import static org.animotron.Properties.NAMESPACE;
+import static org.animotron.Properties.PREFIX;
+import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.order;
+
 import org.animotron.instruction.AbstractInstruction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -38,30 +42,30 @@ public class ATTRIBUTE extends AbstractInstruction {
 	@Override
 	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
-		AnimoGraph.order(r, order);
-		Properties.PREFIX.set(r, prefix);
-		Properties.NAMESPACE.set(r, ns);
-		Properties.NAME.set(r, name);
+		order(r, order);
+		PREFIX.set(r, prefix);
+		NAMESPACE.set(r, ns);
+		NAME.set(r, name);
 		return null;
 	}
 	
 	@Override
 	public String prefix(Relationship r){
-		return Properties.PREFIX.has(r) ? Properties.PREFIX.get(r) : null;
+		return PREFIX.has(r) ? PREFIX.get(r) : null;
 	}
 	
 	@Override
 	public String name(Relationship r){
-		return Properties.NAME.get(r);
+		return NAME.get(r);
 	}
 	
 	@Override
 	public String namespace(Relationship r){
-		return Properties.NAMESPACE.has(r) ? Properties.NAMESPACE.get(r) : null;
+		return NAMESPACE.has(r) ? NAMESPACE.get(r) : null;
 	}
 	
 	@Override
 	public String value(Relationship r){
-		return Properties.VALUE.get(r.getEndNode());
+		return VALUE.get(r.getEndNode());
 	}
 }

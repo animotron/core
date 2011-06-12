@@ -18,13 +18,11 @@
  */
 package org.animotron.graph;
 
+import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -67,7 +65,7 @@ public class StoreBinaryTest extends ATest {
     	
     	assertNotNull(r);
     	
-        Transaction tx = AnimoGraph.beginTx();
+        Transaction tx = beginTx();
         try {
 //	   		PipedInputStream in = new PipedInputStream();
 //			PipedOutputStream out = new PipedOutputStream(in);

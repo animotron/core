@@ -61,7 +61,7 @@ public class HaveLoopTest extends ATest {
 		System.out.println();
 		
         
-//        Transaction tx = AnimoGraph.beginTx();
+//        Transaction tx = beginTx();
 //        try { 
 //	        Relationship r = THE._.relationship("B");
 //	        assertNotNull(r);

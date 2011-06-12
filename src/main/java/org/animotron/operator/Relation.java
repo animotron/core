@@ -18,8 +18,9 @@
  */
 package org.animotron.operator;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
+import static org.animotron.Properties.NAME;
+import static org.animotron.graph.AnimoGraph.order;
+
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -40,7 +41,7 @@ public abstract class Relation extends AbstarctOperator {
 		Node target = THE._.getOrCreate(name);
 		if (!parent.equals(target)) {
 			Relationship r = parent.createRelationshipTo(target, relationshipType());
-			AnimoGraph.order(r, order);
+			order(r, order);
 
 		}
 		return null;
@@ -48,7 +49,7 @@ public abstract class Relation extends AbstarctOperator {
 	
 	@Override
 	public String name(Relationship r){
-		return Properties.NAME.get(r.getEndNode());
+		return NAME.get(r.getEndNode());
 	}
 	
 }

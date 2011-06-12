@@ -18,13 +18,14 @@
  */
 package org.animotron.operator;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -56,7 +57,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 			Node node = op.getEndNode();
 
 			Relationship res = node.getSingleRelationship(
-				RelationshipTypes.REF, Direction.OUTGOING
+				RelationshipTypes.REF, OUTGOING
 			);
 			
 			out.write(res);

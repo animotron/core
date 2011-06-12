@@ -18,6 +18,8 @@
  */
 package org.animotron;
 
+import static org.animotron.graph.AnimoGraph.execute;
+import static org.animotron.graph.AnimoGraph.shutdownDB;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
@@ -87,7 +89,7 @@ public class ATest {
 
 	protected void store(final Map<String, String> nameDataMap) throws XMLStreamException {
 		XMLStreamException e = 
-			AnimoGraph.execute(new GraphOperation<XMLStreamException>() {
+			execute(new GraphOperation<XMLStreamException>() {
 				@Override
 				public XMLStreamException execute() {
 			        for (Entry<String, String> entry : nameDataMap.entrySet()) {
@@ -196,7 +198,7 @@ public class ATest {
 
     @AfterClass
     public static void stopDB() {
-    	AnimoGraph.shutdownDB();
+    	shutdownDB();
     	
     	if (cleanAfterTest) {
     		;//delete folder?
