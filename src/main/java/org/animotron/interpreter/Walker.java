@@ -21,8 +21,6 @@ package org.animotron.interpreter;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import org.animotron.Statement;

@@ -22,28 +22,28 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Evaluable;
+import org.animotron.operator.Prepare;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Evaluator extends Walker {
+class Preparator extends Walker {
 
-	public Evaluator(Relationship op, PipedOutputObjectStream out) {
+	public Preparator(Relationship op, PipedOutputObjectStream out) {
 		super(op, out);
 	}
 
 	@Override
 	protected boolean canGo(Statement statement) {
-		return statement instanceof Evaluable;
+		return statement instanceof Prepare;
 	}
 
 	@Override
 	protected void go(Statement statement, Relationship op,
 			PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		((Evaluable) statement).eval(op, ot, isLast);
+		((Prepare) statement).prepare(op, ot, isLast);
 	}
 	
 }
