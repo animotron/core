@@ -84,12 +84,12 @@ public abstract class AbstarctOperator implements Operator {
 	}
 
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);
 		order(r, order);
-		child.createRelationshipTo(THE._.getOrCreate(name), REF);
-		return child;
+		child.createRelationshipTo(THE._.getOrCreate(name).getEndNode(), REF);
+		return r;
 	}
 
 	

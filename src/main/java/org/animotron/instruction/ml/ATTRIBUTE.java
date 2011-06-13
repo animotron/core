@@ -40,13 +40,13 @@ public class ATTRIBUTE extends AbstractInstruction {
 	private ATTRIBUTE() { super("attribute", ML._); }
 	
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
 		order(r, order);
 		PREFIX.set(r, prefix);
 		NAMESPACE.set(r, ns);
 		NAME.set(r, name);
-		return null;
+		return r;
 	}
 	
 	@Override

@@ -70,6 +70,7 @@ public abstract class GraphBuilder {
 	private Relationship the = null;
 	
 	private Stack<Object[]> statements;
+	private List<Relationship> thes;
 	private List<Object[]> flow;
 
 	private Transaction tx;
@@ -81,6 +82,7 @@ public abstract class GraphBuilder {
 	final protected void startGraph() {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
+		thes = new LinkedList<Relationship>();
 		the = null;
 		tx = beginTx();
 	};
@@ -120,9 +122,10 @@ public abstract class GraphBuilder {
 			the = THE._.relationship((String) first[2]);
 		}
 		
-		if (!((Boolean) first[10])) {
-			Calculator.onStore(the);
+		for (Relationship i : thes) {
+			THE._.prepare(i);
 		}
+		
 	}
 
 	final protected void start(String prefix, String ns, String name, String value) {
@@ -225,29 +228,31 @@ public abstract class GraphBuilder {
 			}
 		}
 		try {
-			Node node;
+			Relationship r;
 			Statement statement = (Statement) item[0];
 			if (statement instanceof THE) {
 				THE the = (THE) statement;
 				String name = (String) item[2];
 				String hash = hash(item);
-				node = the.node(name);
-				if (node != null) {
-					if (HASH.has(node)) {
-						String h = HASH.get(node);
+				r = the.relationship(name);
+				if (r != null) {
+					if (HASH.has(r)) {
+						String h = HASH.get(r);
 						if (h == null) {
-							HASH.set(node, hash);
+							HASH.set(r, hash);
 						} else if (!h.equals(hash)) {
-							clear(node);
-							HASH.set(node, hash);
+							clear(r);
+							HASH.set(r, hash);
+							thes.add(r);
 						} else {
 							item[8] = item[10] = true;
 						}
 					} else {
-						HASH.set(node, hash);
+						HASH.set(r, hash);
 					}
 				} else {
-					node = the.create(name, hash);
+					r = the.create(name, hash);
+					thes.add(r);
 				}
 			} else {
 				Node parent = (Node) p[6];
@@ -257,20 +262,20 @@ public abstract class GraphBuilder {
 				}
 				if (statement instanceof Cachable) {
 					String hash = hash(item);
-					node = getCache(hash);
+					Node node = getCache(hash);
 					if (node == null) {
-						node = build(statement, parent, item, p, order);
-						createCache(node, hash);
+						r = build(statement, parent, item, p, order);
+						createCache(r.getEndNode(), hash);
 					} else {
-						Relationship r = parent.createRelationshipTo(node, statement.relationshipType());
+						r = parent.createRelationshipTo(node, statement.relationshipType());
 						order(r, order);
 						item[8] = item [10] = true;
 					}
 				} else {
-					node = build(statement, parent, item, p, order); 
+					r = build(statement, parent, item, p, order); 
 				}
 			}
-			item[6] = node;
+			item[6] = r.getEndNode();
 		} catch (Exception e){
 			fail(e);
 		}
@@ -301,9 +306,8 @@ public abstract class GraphBuilder {
 		}
 	}
 	
-	private Node build(Statement statement, Node parent, Object[] item, Object[] p, int order){
-		Node node = statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
-		return node;
+	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order){
+		return statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
 	}
 	
 	protected void fail(Exception e){

@@ -37,12 +37,12 @@ public abstract class Relation extends AbstarctOperator {
 	}
 
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node target = THE._.getOrCreate(name);
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
+		Node target = THE._.getOrCreate(name).getEndNode();
 		if (!parent.equals(target)) {
 			Relationship r = parent.createRelationshipTo(target, relationshipType());
 			order(r, order);
-
+			return r;
 		}
 		return null;
 	}

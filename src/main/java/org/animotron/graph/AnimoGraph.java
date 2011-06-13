@@ -150,10 +150,10 @@ public class AnimoGraph {
 		}
 	}
 	
-	public static void clear (Node node){
-		for (Relationship r : node.getRelationships(OUTGOING)){
-			Node end = r.getEndNode();
-			r.delete();
+	public static void clear (Relationship r){
+		for (Relationship i : r.getEndNode().getRelationships(OUTGOING)){
+			Node end = i.getEndNode();
+			i.delete();
 			if (!end.hasRelationship(INCOMING)) {
 				GC.createRelationshipTo(end, RelationshipTypes.GARBAGE);
 			}

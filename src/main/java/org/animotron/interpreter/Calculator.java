@@ -90,8 +90,4 @@ public class Calculator {
 		CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
 	}
 	
-	public static void onStore(Relationship op) {
-		THE._.prepare(op);
-	}
-	
 }

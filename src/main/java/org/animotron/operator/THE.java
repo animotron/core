@@ -89,38 +89,37 @@ public class THE extends AbstarctOperator {
 		return getNode(THE_NODE, type);
 	}
 	
-	public Node create(String name, String hash) {
-		Node node = create(name);
-		HASH.set(node, hash);
-		return node;
+	public Relationship create(String name, String hash) {
+		Relationship r = create(name);
+		HASH.set(r, hash);
+		return r;
 	}
 	
-	public Node create(String name) {
+	public Relationship create(String name) {
 		Node node = createNode();
 		RelationshipType type = relashionshipType(name);
-		THE_NODE.createRelationshipTo(node, type);
+		Relationship r = THE_NODE.createRelationshipTo(node, type);
 		NAME.set(node, name);
-		return node;
+		return r;
 	}
 	
-	public Node getOrCreate(String name) {
-		Node node = node(name);
-		if (node == null) {
-			node = create(name);
-			getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
+	public Relationship getOrCreate(String name) {
+		Relationship r = relationship(name);
+		if (r == null) {
+			r = create(name);
 		}
-		return node;
+		return r;
 	}
 	
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node node = node(name);
-		if (node != null) {
-			clear(node);
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
+		Relationship r = relationship(name);
+		if (r != null) {
+			clear(r);
 		} else {
-			node = create(name);
+			r = create(name);
 		}
-		return node;
+		return r;
 	}
 	
 	@Override

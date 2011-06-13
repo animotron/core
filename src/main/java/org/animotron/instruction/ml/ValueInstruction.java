@@ -41,10 +41,10 @@ public abstract class ValueInstruction extends AbstractInstruction {
 	}
 
 	@Override
-	public Node build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
 		order(r, order);
-		return null;
+		return r;
 	}
 	
 	@Override
