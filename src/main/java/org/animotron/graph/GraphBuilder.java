@@ -26,6 +26,7 @@ import static org.animotron.graph.AnimoGraph.createCache;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.order;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
@@ -304,7 +305,7 @@ public abstract class GraphBuilder {
 		tx.finish();
 	}
 	
-	protected void success(){
+	protected void success() throws IOException{
 		Calculator.onStore(getRelationship());
 	}
 	

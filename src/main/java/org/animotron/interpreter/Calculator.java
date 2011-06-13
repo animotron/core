@@ -40,9 +40,7 @@ public class Calculator {
 	
 	public static PipedInputObjectStream eval(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		
 		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
-	
 		return in;
 	}
 
@@ -50,8 +48,29 @@ public class Calculator {
 		exec.execute(new Evaluator(op, out));
 	}
 	
-	public static void onStore(Relationship op) {
+	public static PipedInputObjectStream prepare(Relationship op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		exec.execute(new Preparator(op, new PipedOutputObjectStream(in)));
+		return in;
+	}
+
+	public static void prepare(Relationship op, PipedOutputObjectStream out) {
+		exec.execute(new Preparator(op, out));
+	}
+	
+	public static PipedInputObjectStream filter(Relationship op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		exec.execute(new Filter(op, new PipedOutputObjectStream(in)));
+		return in;
+	}
+
+	public static void filter(Relationship op, PipedOutputObjectStream out) {
+		exec.execute(new Filter(op, out));
+	}
+	
+	public static void onStore(Relationship op) throws IOException {
 		CALC.createRelationshipTo(op.getEndNode(), op.getType());
+		prepare(op);
 	}
 	
 }
