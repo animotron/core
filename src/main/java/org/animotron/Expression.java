@@ -181,6 +181,7 @@ public class Expression extends GraphBuilder implements Relationship {
 		return getRelationship().getPropertyKeys();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public Iterable<Object> getPropertyValues() {
 		return getRelationship().getPropertyValues();

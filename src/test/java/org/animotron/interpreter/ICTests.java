@@ -45,19 +45,19 @@ public class ICTests extends ATest {
 	public void testIC() throws IOException, XMLStreamException {
         System.out.println("Test 'IC' ...");
         
-    	final Expression THE_A = new Expression(
+    	new Expression(
 			_(THE._, "A")
 		);
 	
-    	final Expression THE_B = new Expression(
+    	new Expression(
 			_(THE._, "B", _(IC._, "A", text(".")))
 		);
 
-    	final Expression THE_C = new Expression(
+    	new Expression(
 			_(THE._, "C", _(IS._, "B") )
 		);
 
-    	final Expression THE_D = new Expression(
+    	new Expression(
 			_(THE._, "D", _(GET._, "A", _(AN._, "C")))
 		);
 
