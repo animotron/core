@@ -37,7 +37,7 @@ class Evaluator extends Walker {
 	}
 
 	@Override
-	protected boolean isInstance(Statement statement) {
+	protected boolean canGo(Statement statement) {
 		return statement instanceof Evaluable;
 	}
 

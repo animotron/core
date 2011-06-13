@@ -58,7 +58,7 @@ abstract class Walker implements Runnable {
 		}
 	}
 
-	protected abstract boolean isInstance(Statement statement);
+	protected abstract boolean canGo(Statement statement);
 
 	protected abstract void go(Statement statement, Relationship op,
 			PipedOutputObjectStream ot, boolean isLast) throws IOException;
@@ -85,7 +85,7 @@ abstract class Walker implements Runnable {
 
 				Statement s = Statements.relationshipType(type);
 
-				if (isInstance(s)) {
+				if (canGo(s)) {
 
 					PipedInputObjectStream in = new PipedInputObjectStream();
 
