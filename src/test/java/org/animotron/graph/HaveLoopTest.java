@@ -28,6 +28,7 @@ import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -36,47 +37,33 @@ import org.neo4j.graphdb.Relationship;
  */
 public class HaveLoopTest extends ATest {
 	
-	private static final Relationship A = 
-		new Expression(_(THE._, "A", _(HAVE._, "C")));
-	
-	private static final Relationship B = 
-		new Expression(_(THE._, "B", _(HAVE._, "A")));
-	
-	private static final Relationship C = 
-		new Expression(_(THE._, "C", _(HAVE._, "B")));
-	
 	@Test
 	public void storeAndSerializeResult() throws XMLStreamException {
 		
-		System.out.println("Prepare");
-		System.out.print("The a: ");
-		GraphSerializer.serialize(A, System.out);
-		System.out.println();
-		System.out.print("The b: ");
-		GraphSerializer.serialize(B, System.out);
-		System.out.println();
-		System.out.print("The c: ");
-		GraphSerializer.serialize(C, System.out);
-		System.out.println();
-		System.out.println();
+		Relationship A = new Expression(_(THE._, "A", _(HAVE._, "C")));
+		Relationship B = new Expression(_(THE._, "B", _(HAVE._, "A")));
+		Relationship C = new Expression(_(THE._, "C", _(HAVE._, "B")));
+
 		
-        
-//        Transaction tx = beginTx();
-//        try { 
-//	        Relationship r = THE._.relationship("B");
-//	        assertNotNull(r);
-//	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
-//	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
-//	        serializer.serialize(r);
-//	        tx.success();
-//	        
-//        } catch (Exception e) {
-//        	e.printStackTrace();
-//			fail(e.toString());
-//        } finally {
-//        	tx.finish();
-//        }
-            
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			System.out.println("Prepare");
+			System.out.print("The a: ");
+			GraphSerializer.serialize(A, System.out);
+			System.out.println();
+			System.out.print("The b: ");
+			GraphSerializer.serialize(B, System.out);
+			System.out.println();
+			System.out.print("The c: ");
+			GraphSerializer.serialize(C, System.out);
+			System.out.println();
+			System.out.println();
+			
+			tx.success();
+		} finally {
+			AnimoGraph.finishTx(tx);
+		}
+		
         System.out.println("done.");
 	}
 }

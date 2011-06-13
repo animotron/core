@@ -60,7 +60,6 @@ public class IsLoopTest extends ATest {
 			
 			tx.success();
 		} finally {
-			System.out.println("end transaction");
 			AnimoGraph.finishTx(tx);
 		}
 		
