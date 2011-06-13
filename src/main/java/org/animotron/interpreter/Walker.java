@@ -44,11 +44,9 @@ class Walker implements Runnable {
 	private Relationship op;
 	private PipedOutputObjectStream out;
 	
-	private Class<? extends Statement> clazz;
 	private Method method;
 	
-	public Walker(Class<? extends Statement> clazz, Method method, Relationship op, PipedOutputObjectStream out) {
-		this.clazz = clazz;
+	public Walker(Method method, Relationship op, PipedOutputObjectStream out) {
 		this.method = method;
 
 		this.op = op;
@@ -87,7 +85,10 @@ class Walker implements Runnable {
 
 				if (s == null)
 					;//???
-				else if (implementsInterface(s.getClass(), clazz)) {
+				else {
+					
+				}
+				if (implementsInterface(s.getClass(), method.getDeclaringClass())) {
 
 					PipedInputObjectStream in = new PipedInputObjectStream();
 
