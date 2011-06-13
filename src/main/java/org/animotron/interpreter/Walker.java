@@ -18,8 +18,9 @@
  */
 package org.animotron.interpreter;
 
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
-import static org.animotron.graph.AnimoGraph.*;
 
 import java.io.IOException;
 import java.util.Iterator;

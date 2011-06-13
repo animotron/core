@@ -19,8 +19,8 @@
 package org.animotron.serializer;
 
 import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.AnimoGraph.getDb;
+import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Statement;

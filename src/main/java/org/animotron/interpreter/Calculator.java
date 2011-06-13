@@ -18,7 +18,10 @@
  */
 package org.animotron.interpreter;
 
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.animotron.graph.AnimoGraph.getOrCreateNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;

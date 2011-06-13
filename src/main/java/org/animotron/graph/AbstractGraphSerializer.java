@@ -23,9 +23,7 @@ import static org.animotron.graph.AnimoGraph.getORDER;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
-import org.animotron.operator.THE;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 
 /**

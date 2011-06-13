@@ -18,7 +18,8 @@
  */
 package org.animotron.bridge;
 
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
