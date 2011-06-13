@@ -83,7 +83,8 @@ public class Calculator {
 	}
 
 	public static void filter(Relationship op, PipedOutputObjectStream out) {
-		exec.execute(new Filter(op, out));
+//		exec.execute(new Filter(op, out));
+		new Filter(op, out).run();
 	}
 	
 	public static void push(Relationship op) {

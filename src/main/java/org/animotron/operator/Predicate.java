@@ -29,7 +29,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Predicate {
 	
-	public void filter(Relationship op, PipedOutputObjectStream out,
-			boolean isLast) throws IOException;
+	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
+
+	public boolean filter(Relationship op);
 
 }

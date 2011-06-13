@@ -85,12 +85,20 @@ abstract class Walker implements Runnable {
 
 				if (canGo(s)) {
 
-					PipedInputObjectStream in = new PipedInputObjectStream();
+					PipedInputObjectStream in = null;
+					PipedOutputObjectStream out = ot;
 
-					go(s, r, new PipedOutputObjectStream(in), isLast(it));
+					if (isPiped()) {
+						in = new PipedInputObjectStream();
+						out = new PipedOutputObjectStream(in);
+					}
 
-					for (Object n : in) {
-						ot.write(n);
+					go(s, r, out, isLast(it));
+
+					if (isPiped()) {
+						for (Object n : in) {
+							ot.write(n);
+						}
 					}
 
 				} else {
@@ -114,4 +122,8 @@ abstract class Walker implements Runnable {
 		return !it.hasNext();
 	}
 
+	//for debug needs
+	public boolean isPiped() {
+		return true;
+	}
 }

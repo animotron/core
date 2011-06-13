@@ -27,11 +27,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.AN;
-import org.animotron.operator.IC;
 import org.animotron.operator.THE;
+import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.ANY;
-import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
@@ -60,7 +58,7 @@ public class ANYTests extends ATest {
 		);
 
     	new Expression(
-			_(THE._, "D", _(ANY._, "A", _(HAVE._, "value", text("B"))))
+			_(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
 		);
 
         //System.out.println("any:A have:value B");

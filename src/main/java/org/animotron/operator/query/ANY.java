@@ -22,18 +22,24 @@ import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.Direction.*;
 
 import java.io.IOException;
 
 import org.animotron.graph.InMemoryRelationship;
+import org.animotron.interpreter.Calculator;
 import org.animotron.interpreter.ResultOnContext;
+import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.relation.IS;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.kernel.Traversal;
 
 /**
  * Query operator 'ANY'.
@@ -50,24 +56,35 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 	private ANY() { super("any", "animo/query/any"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-//		PipedInputObjectStream in = new PipedInputObjectStream();
-
-//		if (!isLast)
-//			Calculator.eval(op, new PipedOutputObjectStream(in));
+	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
+		Calculator.filter(op, out);
 		
 		Transaction tx = beginTx();
 		try {
-			Relationship res = new ResultANY( 
-				op.getEndNode().getSingleRelationship( REF, OUTGOING )
-			);
-			out.write(res);
+			Node node = op.getEndNode();
+			Relationship ref = node.getSingleRelationship( REF, OUTGOING );
+			
+			if (out.filter(ref)) {
+				ot.write(new ResultANY( ref ));
+			} else {
+				
+				for (Relationship tdR : td_eval.traverse(ref.getEndNode()).relationships()) {
+					System.out.println("ANY get next "+tdR);
+					if (out.filter(tdR)) {
+						ot.write(new ResultANY( tdR ));
+						break;
+					}
+				}
+			}
 
 			tx.success();
 		} finally {
 			finishTx(tx);
 		}
-		out.close();
+		ot.close();
 	}
 	
 	class ResultANY extends InMemoryRelationship implements ResultOnContext {
@@ -76,8 +93,14 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 			super(r.getStartNode(), r.getEndNode(), RESULT);
 		}
 		
-		public String toString() {
-			return "RESULT:ANY";
-		}
+//		public String toString() {
+//			return "RESULT:ANY";
+//		}
 	}
+	
+	private static TraversalDescription td_eval = 
+		Traversal.description().
+			breadthFirst().
+			relationships(IS._.relationshipType(), INCOMING );
+
 }

@@ -38,10 +38,15 @@ public class EQ extends AbstarctOperator implements Predicate {
 	private EQ() { super("eq", "animo/compare/eq"); }
 
 	@Override
-	public void filter(Relationship op, PipedOutputObjectStream out,
-			boolean isLast) throws IOException {
+	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean filter(Relationship op) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 	
 }

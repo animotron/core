@@ -19,6 +19,12 @@
 package org.animotron.io;
 
 import java.io.IOException;
+import java.util.List;
+
+import javolution.util.FastList;
+
+import org.animotron.operator.Predicate;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -62,4 +68,19 @@ public class PipedOutputObjectStream implements Cloneable {
     		connection.receivedLast();
     	}
     }
+    
+    List<Predicate> filters = new FastList<Predicate>();
+
+	public boolean filter(Relationship r) {
+		for (Predicate filter : filters) {
+			if (!filter.filter(r)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void subscribeFilter(Predicate filter) {
+		filters.add(filter);
+	}
 }

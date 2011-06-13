@@ -26,26 +26,25 @@ import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Compare operator 'LT'.
+ * Compare operator 'WITH'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class LT extends AbstarctOperator implements Predicate {
+public class WITH extends AbstarctOperator implements Predicate {
 	
-	public static final LT _ = new LT();
+	public static final WITH _ = new WITH();
 	
-	private LT() { super("lt", "animo/compare/lt"); }
+	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
 	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		// TODO Auto-generated method stub
-		
+		out.subscribeFilter(this);
 	}
 
 	@Override
 	public boolean filter(Relationship op) {
-		// TODO Auto-generated method stub
+		System.out.println("TOUCH WITH !!!!");
 		return false;
 	}
 	
