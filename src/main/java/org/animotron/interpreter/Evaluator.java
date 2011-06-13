@@ -18,98 +18,33 @@
  */
 package org.animotron.interpreter;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.animotron.Statement;
-import org.animotron.Statements;
-import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Evaluator implements Runnable {
-	
-	private Relationship op;
-	private PipedOutputObjectStream out;
-	
+class Evaluator extends Walker {
+
 	public Evaluator(Relationship op, PipedOutputObjectStream out) {
-		this.op = op;
-		this.out = out;
+		super(op, out);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public void run() {
-		try {
-			eval(op, out);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	protected void eval(Relationship op, PipedOutputObjectStream ot) throws IOException {
-		System.out.println("Evaluator op = "+op);
-		
-		GraphDatabaseService graphdb = op.getGraphDatabase();
-		Transaction tx = graphdb.beginTx();
-		try {
-			Relationship r = null;
-			
-			Node node = op.getEndNode();
-			System.out.println("Evaluator node = "+node);
-			Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
-			while (it.hasNext()) {
-				
-				r = it.next();
-				RelationshipType type = r.getType();
-				
-				System.out.println(type.name());
-				
-				Statement s = Statements.relationshipType(type);
-
-				if (s == null)
-					;//???
-				else if (s instanceof Evaluable) {
-					Evaluable expr = (Evaluable) s;
-
-					PipedInputObjectStream in = new PipedInputObjectStream();
-
-					expr.eval(r, new PipedOutputObjectStream(in), isLast(it));
-					
-					for (Object n : in) {
-						ot.write(n);
-					} 
-					
-				} else {
-					System.out.println("Evaluator not evaled "+r);
-					ot.write(r);
-				}
-			}
-			tx.success();
-		
-		} catch (IOException e) {
-			e.printStackTrace();
-			ot.write(e);
-		} finally {
-			tx.finish();
-		}
-
-		ot.close();
-	}
-	
-	protected boolean isLast(Iterator<?> it) {
-		return !it.hasNext();
+	protected boolean isInstance(Statement statement) {
+		return statement instanceof Evaluable;
 	}
 
+	@Override
+	protected void go(Statement statement, Relationship op,
+			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		statement.eval(op, ot, isLast);
+	}
 	
 }

@@ -37,6 +37,7 @@ import org.animotron.instruction.AbstractContainer;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.InstructionContainer;
 import org.animotron.operator.Operator;
+import org.animotron.operator.THE;
 import org.clapper.util.classutil.AbstractClassFilter;
 import org.clapper.util.classutil.AndClassFilter;
 import org.clapper.util.classutil.ClassFilter;
@@ -280,7 +281,8 @@ public class Statements {
 	}
 	
 	public static Statement relationshipType(RelationshipType type) {
-		return relationshipType(type.name());
+		String name = type.name();
+		return name.startsWith(THE.PREFIX + ":") ? THE._ : relationshipType(name);
 	}
 
 	public static Statement relationshipType(String name) {

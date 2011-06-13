@@ -37,18 +37,14 @@ import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
+ * 
  */
-class Walker implements Runnable {
-	
+abstract class Walker implements Runnable {
+
 	private Relationship op;
 	private PipedOutputObjectStream out;
-	
-	private Method method;
-	
-	public Walker(Method method, Relationship op, PipedOutputObjectStream out) {
-		this.method = method;
 
+	public Walker(Relationship op, PipedOutputObjectStream out) {
 		this.op = op;
 		this.out = out;
 	}
@@ -61,61 +57,51 @@ class Walker implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
-	protected void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
-		
-		System.out.println("Walk op = "+op);
-		
+
+	protected abstract boolean isInstance(Statement statement);
+
+	protected abstract void go(Statement statement, Relationship op,
+			PipedOutputObjectStream ot, boolean isLast) throws IOException;
+
+	protected void go(Relationship op, PipedOutputObjectStream ot)
+			throws IOException {
+
+		System.out.println("Walk op = " + op);
+
 		GraphDatabaseService graphdb = op.getGraphDatabase();
 		Transaction tx = graphdb.beginTx();
 		try {
 			Relationship r = null;
-			
+
 			Node node = op.getEndNode();
-			System.out.println("Walk node = "+node);
+			System.out.println("Walk node = " + node);
 			Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
 			while (it.hasNext()) {
-				
+
 				r = it.next();
 				RelationshipType type = r.getType();
-				
+
 				System.out.println(type.name());
-				
+
 				Statement s = Statements.relationshipType(type);
 
-				if (s == null)
-					;//???
-				else {
-					
-				}
-				if (implementsInterface(s.getClass(), method.getDeclaringClass())) {
+				if (isInstance(s)) {
 
 					PipedInputObjectStream in = new PipedInputObjectStream();
 
-					try {
-						method.invoke(s, r, new PipedOutputObjectStream(in), isLast(it));
-					
-						//XXX: what to do on exception???
-					} catch (IllegalArgumentException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					} catch (InvocationTargetException e) {
-						e.printStackTrace();
-					}
-					//expr.eval(r, new PipedOutputObjectStream(in), isLast(it));
-					
+					go(s, r, new PipedOutputObjectStream(in), isLast(it));
+
 					for (Object n : in) {
 						ot.write(n);
-					} 
-					
+					}
+
 				} else {
-					System.out.println("Not evaled "+r);
+					System.out.println("Not evaled " + r);
 					ot.write(r);
 				}
 			}
 			tx.success();
-		
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			ot.write(e);
@@ -125,18 +111,9 @@ class Walker implements Runnable {
 
 		ot.close();
 	}
-		
+
 	protected boolean isLast(Iterator<?> it) {
 		return !it.hasNext();
 	}
-	
-    private static Boolean implementsInterface(Class<?> object, Class<?> intrfc){
-        for (Class<?> c : object.getInterfaces()) {
-            if (c.equals(intrfc)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }
