@@ -44,7 +44,12 @@ public class IS extends Relation implements Prepare {
 	public void prepare(Relationship op, PipedOutputObjectStream out,
 			boolean isLast) throws IOException {
 		
-		op.getStartNode().getSingleRelationship(RelationshipTypes.TOP, INCOMING).delete();
+		Relationship r = op.getStartNode().getSingleRelationship(RelationshipTypes.TOP, INCOMING);
+		if (r != null) {
+			//TODO: Can't be 
+			r.delete();
+		}
 		
 	}
+	
 }
