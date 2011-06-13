@@ -35,17 +35,12 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
  */
 public class AnimoGraph {
 
-	public static GraphDatabaseService graphDb;
+	private static GraphDatabaseService graphDb;
 	
-	protected static String STORAGE;
+	private static String STORAGE;
 	
-	protected static Node ROOT;
-	protected static Node CACHE;
-
-	public static Node CALC;
-
-	protected static Node EMPTY, GC, TOP;
-	protected static OrderIndex ORDER;
+	private static Node ROOT, CACHE, EMPTY, GC, TOP;
+	private static OrderIndex ORDER;
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
@@ -64,7 +59,6 @@ public class AnimoGraph {
 		try {
 			GC = getOrCreateNode(ROOT, RelationshipTypes.GC);
 			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
-			CALC = getOrCreateNode(ROOT,RelationshipTypes.CALC);
 			EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			tx.success();
@@ -74,8 +68,20 @@ public class AnimoGraph {
 		
 	}
 	
+	public static GraphDatabaseService getDb() {
+		return graphDb;
+	}
+	
+	public static String getStorage() {
+		return STORAGE;
+	}
+	
 	public static Node getROOT() {
 		return ROOT;
+	}
+	
+	public static Node getTOP() {
+		return TOP;
 	}
 	
 	public static OrderIndex getORDER() {

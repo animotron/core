@@ -18,15 +18,19 @@
  */
 package org.animotron.interpreter;
 
-import static org.animotron.graph.AnimoGraph.CALC;
+import static org.animotron.graph.AnimoGraph.*;
 
 import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.relation.IS;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,6 +39,17 @@ import org.neo4j.graphdb.Relationship;
 public class Calculator {
 	
 	private static int THREADS_NUMBER = 100;
+	private static final Node CALC;
+	
+	static {
+		Transaction tx = beginTx();
+		try {
+			CALC = getOrCreateNode(getROOT() ,RelationshipTypes.CALC);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+	}
 	
 	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
@@ -68,9 +83,19 @@ public class Calculator {
 		exec.execute(new Filter(op, out));
 	}
 	
-	public static void onStore(Relationship op) throws IOException {
-		CALC.createRelationshipTo(op.getEndNode(), op.getType());
-		prepare(op);
+	public static void onStore(Relationship op) {
+		Transaction tx = beginTx();
+		try {
+			CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
+			tx.success();
+		} finally {
+			tx.finish();
+		}
+		try {
+			prepare(op);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 }

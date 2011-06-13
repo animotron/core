@@ -18,7 +18,15 @@
  */
 package org.animotron.operator.relation;
 
+import static org.neo4j.graphdb.Direction.INCOMING;
+
+import java.io.IOException;
+
+import org.animotron.graph.RelationshipTypes;
+import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Operator 'IS'.
@@ -26,9 +34,17 @@ import org.animotron.operator.Relation;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IS extends Relation {
+public class IS extends Relation implements Prepare {
 	
 	public static final IS _ = new IS();
 	
 	private IS() { super("is", "animo/relation/is"); }
+
+	@Override
+	public void prepare(Relationship op, PipedOutputObjectStream out,
+			boolean isLast) throws IOException {
+		
+		op.getStartNode().getSingleRelationship(RelationshipTypes.TOP, INCOMING).delete();
+		
+	}
 }

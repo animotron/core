@@ -26,6 +26,7 @@ import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getNode;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
+import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.AnimoRelationshipType;
@@ -93,6 +94,7 @@ public class THE extends AbstarctOperator {
 		Node node = createNode();
 		RelationshipType type = relashionshipType(name);
 		THE_NODE.createRelationshipTo(node, type);
+		getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
 		NAME.set(node, name);
 		return node;
 	}

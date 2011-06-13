@@ -20,7 +20,7 @@ package org.animotron.serializer;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getORDER;
-import static org.animotron.graph.AnimoGraph.graphDb;
+import static org.animotron.graph.AnimoGraph.getDb;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Statement;
@@ -142,7 +142,7 @@ public class StringSerializer {
 		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
 		for ( Relationship n : i ) {
 			build( 
-				graphDb.getRelationshipById(
+				getDb().getRelationshipById(
 					(Long)n.getProperty(RID.name())
 				) 
 			);

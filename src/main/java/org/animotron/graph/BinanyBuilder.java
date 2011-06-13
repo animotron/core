@@ -20,7 +20,7 @@ package org.animotron.graph;
 
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
-import static org.animotron.graph.AnimoGraph.STORAGE;
+import static org.animotron.graph.AnimoGraph.getStorage;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,8 +46,8 @@ import org.neo4j.graphdb.Relationship;
 public class BinanyBuilder {
 	
 	private final static String HASH_PREFIX = "file-";
-	private final static File BIN_STORAGE = new File(STORAGE, "binany");
-	private final static File TMP_STORAGE = new File(STORAGE, "tmp");
+	private final static File BIN_STORAGE = new File(getStorage(), "binany");
+	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
 	
 	static {
 		BIN_STORAGE.mkdirs();

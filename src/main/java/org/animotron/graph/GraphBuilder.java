@@ -26,7 +26,6 @@ import static org.animotron.graph.AnimoGraph.createCache;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.order;
 
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,7 +94,7 @@ public abstract class GraphBuilder {
 			int i = 0;
 			if (!(first[0] instanceof THE)) {
 				Object[] item = {	
-						THE._,	// 0 	
+						THE._,				// 0 	
 						THE.NAMESPACE,		// 1
 						first[2],			// 2
 						null, 				// 3
@@ -104,7 +103,8 @@ public abstract class GraphBuilder {
 						null,				// 6
 						null,	 			// 7
 						false,				// 8
-						THE.PREFIX			// 9
+						THE.PREFIX,			// 9
+						false				// 10
 					};
 				first[7] = item; 
 				build(item, i++);
@@ -117,6 +117,10 @@ public abstract class GraphBuilder {
 		} finally {
 			tx.finish();
 			the = THE._.relationship((String) first[2]);
+		}
+		
+		if (!((Boolean) first[10])) {
+			Calculator.onStore(the);
 		}
 	}
 
@@ -171,7 +175,8 @@ public abstract class GraphBuilder {
 				null,		// 6  current node
 				parent, 	// 7  parent item
 				false,		// 8  builded
-				prefix		// 9  prefix
+				prefix,		// 9  prefix
+				false		//10  cached
 			};
 		
 		statements.push(item);
@@ -235,7 +240,7 @@ public abstract class GraphBuilder {
 							clear(node);
 							HASH.set(node, hash);
 						} else {
-							item[8] = true;
+							item[8] = item[10] = true;
 						}
 					} else {
 						HASH.set(node, hash);
@@ -258,7 +263,7 @@ public abstract class GraphBuilder {
 					} else {
 						Relationship r = parent.createRelationshipTo(node, statement.relationshipType());
 						order(r, order);
-						item[8] = true;
+						item[8] = item [10] = true;
 					}
 				} else {
 					node = build(statement, parent, item, p, order); 
@@ -303,10 +308,6 @@ public abstract class GraphBuilder {
 	protected void fail(Exception e){
 		e.printStackTrace(System.out);
 		tx.finish();
-	}
-	
-	protected void success() throws IOException{
-		Calculator.onStore(getRelationship());
 	}
 	
 }
