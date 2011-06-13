@@ -74,7 +74,7 @@ public class SimpleTests extends ATest {
         Transaction tx = beginTx();
         
         try {
-	        Relationship op = THE._.relationship("C");
+	        Relationship op = THE._.get("C");
 	        
 	        assertNotNull(op);
 	        
