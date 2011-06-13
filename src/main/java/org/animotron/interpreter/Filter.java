@@ -43,7 +43,10 @@ class Filter extends Walker {
 	@Override
 	protected void go(Statement statement, Relationship op,
 			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		
 		((Predicate) statement).filter(op, ot, isLast);
+		
+		ot.close();
 	}
 	
 }

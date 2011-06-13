@@ -27,7 +27,7 @@ import org.animotron.Expression;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -36,29 +36,38 @@ import org.neo4j.graphdb.Relationship;
  */
 public class IsLoopTest extends ATest {
 	
-	private static final Relationship A = 
-		new Expression(_(THE._, "A", _(IS._, "C")));
-	
-	private static final Relationship B = 
-		new Expression(_(THE._, "B", _(IS._, "A")));
-	
-	private static final Relationship C = 
-		new Expression(_(THE._, "C", _(IS._, "B")));
-	
 	@Test
 	public void storeAndSerializeResult() throws XMLStreamException {
 		
-		System.out.println("Prepare");
-		System.out.print("The a: ");
-		GraphSerializer.serialize(A, System.out);
-		System.out.println();
-		System.out.print("The b: ");
-		GraphSerializer.serialize(B, System.out);
-		System.out.println();
-		System.out.print("The c: ");
-		GraphSerializer.serialize(C, System.out);
-		System.out.println();
-		System.out.println();
+		Expression A = new Expression(_(THE._, "A", _(IS._, "C")));
+		Expression B = new Expression(_(THE._, "B", _(IS._, "A")));
+		Expression C = new Expression(_(THE._, "C", _(IS._, "B")));
+
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+
+			System.out.println("Prepare");
+			System.out.print("The a: ");
+			GraphSerializer.serialize(A, System.out);
+			System.out.println();
+			System.out.print("The b: ");
+			GraphSerializer.serialize(B, System.out);
+			System.out.println();
+			System.out.print("The c: ");
+			GraphSerializer.serialize(C, System.out);
+			System.out.println();
+			System.out.println();
+			
+			tx.success();
+		} finally {
+			System.out.println("end transaction");
+			AnimoGraph.finishTx(tx);
+		}
+		
+		try {
+			Thread.sleep(5 * 1000);
+		} catch (InterruptedException e) {
+		}
 		
         
 //        Transaction tx = beginTx();

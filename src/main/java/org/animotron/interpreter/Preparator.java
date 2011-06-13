@@ -43,7 +43,10 @@ class Preparator extends Walker {
 	@Override
 	protected void go(Statement statement, Relationship op,
 			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		
 		((Prepare) statement).prepare(op, ot, isLast);
+		
+		ot.close();
 	}
 	
 }

@@ -21,6 +21,11 @@ package org.animotron.graph;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import java.io.IOException;
+import java.util.Map.Entry;
+
+import javolution.util.FastMap;
+
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -55,7 +60,6 @@ public class AnimoGraph {
 		ORDER = new OrderIndex(INDEX);
 		
 		Transaction tx = beginTx();
-		
 		try {
 			GC = getOrCreateNode(ROOT, RelationshipTypes.GC);
 			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
@@ -63,7 +67,7 @@ public class AnimoGraph {
 			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
 			tx.success();
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 		
 	}
@@ -90,13 +94,48 @@ public class AnimoGraph {
 
 	public static void shutdownDB() {
 		System.out.println("shotdown");
+		
+		System.out.println("Active transactions "+countTx);
+		if (countTx > 0) {
+			for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
+				e.getValue().printStackTrace();
+			}
+		}
 		graphDb.shutdown();
 	}
 	
-	public static Transaction beginTx() {
-		return graphDb.beginTx();
+	static FastMap<Transaction, Exception> activeTx = new FastMap<Transaction, Exception>();
+	
+	static int countTx = 0;
+	
+	static synchronized void inc() {
+		countTx++;
 	}
 	
+	static synchronized void dec() {
+		countTx--;
+	}
+	
+	public static Transaction beginTx() {
+		
+		Transaction tx = graphDb.beginTx();
+		
+		activeTx.put(tx, new IOException());
+		
+		inc();
+
+		return tx;
+	}
+	
+	public static void finishTx(Transaction tx) {
+		
+		activeTx.remove(tx);
+		
+		dec();
+
+		tx.finish();
+	}
+
 	/**
 	 * Execute operation with transaction.
 	 * @param <T>

@@ -43,7 +43,10 @@ class Evaluator extends Walker {
 	@Override
 	protected void go(Statement statement, Relationship op,
 			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		
 		((Evaluable) statement).eval(op, ot, isLast);
+		
+		ot.close();
 	}
 	
 }

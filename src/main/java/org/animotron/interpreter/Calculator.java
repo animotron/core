@@ -27,7 +27,6 @@ import java.util.concurrent.Executors;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -47,7 +46,7 @@ public class Calculator {
 			CALC = getOrCreateNode(getROOT() ,RelationshipTypes.CALC);
 			tx.success();
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 	}
 	
@@ -89,7 +88,7 @@ public class Calculator {
 			CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
 			tx.success();
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 		try {
 			prepare(op);

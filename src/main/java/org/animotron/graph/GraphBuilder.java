@@ -115,7 +115,7 @@ public abstract class GraphBuilder {
 			}
 			tx.success();
 		} finally {
-			tx.finish();
+			AnimoGraph.finishTx(tx);
 			the = THE._.relationship((String) first[2]);
 		}
 		
