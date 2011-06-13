@@ -85,7 +85,7 @@ public class BinanyBuilder {
 			tmp.delete();
 			System.out.println("File \"" + bin.getPath() + "\" already stored");
 			
-			return THE._.relationship(hash);
+			return THE._.get(hash);
 			
 		} else {
 			

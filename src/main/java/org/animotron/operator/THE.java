@@ -24,7 +24,6 @@ import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.clear;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.AnimoGraph.getNode;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
@@ -75,18 +74,9 @@ public class THE extends AbstarctOperator {
 		return AnimoRelationshipType.get(name(), name);
 	}
 	
-	public Relationship relationship(String name){
-		return relationship(THE_NODE, name);
-	}
-	
-	public Relationship relationship(Node parent, String name) {
+	public Relationship get(String name) {
 		RelationshipType type = relashionshipType(name);
-		return parent.getSingleRelationship(type, OUTGOING);
-	}
-	
-	public Node node(String name) {
-		RelationshipType type = relashionshipType(name);
-		return getNode(THE_NODE, type);
+		return THE_NODE.getSingleRelationship(type, OUTGOING);
 	}
 	
 	public Relationship create(String name, String hash) {
@@ -95,16 +85,17 @@ public class THE extends AbstarctOperator {
 		return r;
 	}
 	
-	public Relationship create(String name) {
+	private Relationship create(String name) {
 		Node node = createNode();
 		RelationshipType type = relashionshipType(name);
 		Relationship r = THE_NODE.createRelationshipTo(node, type);
 		NAME.set(node, name);
+		getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
 		return r;
 	}
 	
 	public Relationship getOrCreate(String name) {
-		Relationship r = relationship(name);
+		Relationship r = get(name);
 		if (r == null) {
 			r = create(name);
 		}
@@ -113,7 +104,7 @@ public class THE extends AbstarctOperator {
 	
 	@Override
 	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Relationship r = relationship(name);
+		Relationship r = get(name);
 		if (r != null) {
 			clear(r);
 		} else {

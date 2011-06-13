@@ -37,9 +37,7 @@ import org.animotron.MessageDigester;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.interpreter.Calculator;
 import org.animotron.operator.Cachable;
-import org.animotron.operator.External;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -102,12 +100,11 @@ public abstract class GraphBuilder {
 						first[2],			// 2
 						null, 				// 3
 						first[4], 			// 4
-						false,				// 5
+						null,				// 5
 						null,				// 6
 						null,	 			// 7
 						false,				// 8
-						THE.PREFIX,			// 9
-						false				// 10
+						THE.PREFIX			// 9
 					};
 				first[7] = item; 
 				build(item, i++);
@@ -119,7 +116,7 @@ public abstract class GraphBuilder {
 			tx.success();
 		} finally {
 			AnimoGraph.finishTx(tx);
-			the = THE._.relationship((String) first[2]);
+			the = (Relationship) first[5];
 		}
 		
 		for (Relationship i : thes) {
@@ -163,24 +160,21 @@ public abstract class GraphBuilder {
 		}
 		
 		Object[] parent = null;
-		boolean external = statement instanceof External;
 		if (!statements.empty()) {
 			parent = statements.peek();
-			external |= (Boolean) parent[5];
 		}
 		
 		Object[] item = {	
 				statement,	// 0  statement 	
 				ns, 		// 1  namespace
 				name, 		// 2  name
-				val, 		// 3  balue
-				md, 		// 4  message gigest
-				external, 	// 5  is exteral sentense
+				val, 		// 3  value
+				md, 		// 4  message digest
+				null,	 	// 5  current relationship
 				null,		// 6  current node
 				parent, 	// 7  parent item
 				false,		// 8  builded
-				prefix,		// 9  prefix
-				false		//10  cached
+				prefix		// 9  prefix
 			};
 		
 		statements.push(item);
@@ -234,21 +228,23 @@ public abstract class GraphBuilder {
 				THE the = (THE) statement;
 				String name = (String) item[2];
 				String hash = hash(item);
-				r = the.relationship(name);
+				r = the.get(name);
 				if (r != null) {
 					if (HASH.has(r)) {
 						String h = HASH.get(r);
 						if (h == null) {
 							HASH.set(r, hash);
+							thes.add(r);
 						} else if (!h.equals(hash)) {
 							clear(r);
 							HASH.set(r, hash);
 							thes.add(r);
 						} else {
-							item[8] = item[10] = true;
+							item[8] = true;
 						}
 					} else {
 						HASH.set(r, hash);
+						thes.add(r);
 					}
 				} else {
 					r = the.create(name, hash);
@@ -269,12 +265,13 @@ public abstract class GraphBuilder {
 					} else {
 						r = parent.createRelationshipTo(node, statement.relationshipType());
 						order(r, order);
-						item[8] = item [10] = true;
+						item[8] = true;
 					}
 				} else {
 					r = build(statement, parent, item, p, order); 
 				}
 			}
+			item[5] = r;
 			item[6] = r.getEndNode();
 		} catch (Exception e){
 			fail(e);

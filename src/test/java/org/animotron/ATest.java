@@ -155,7 +155,7 @@ public class ATest {
 	}
 
 	protected void assertEquals(String the, String expecteds) throws IOException {
-        Relationship op = THE._.relationship(the);
+        Relationship op = THE._.get(the);
         assertNotNull(op);
 
         toConsole(
@@ -167,7 +167,7 @@ public class ATest {
 	}
 	
 	protected void assertString(String the, String expecteds) throws IOException {
-        Relationship op = THE._.relationship(the);
+        Relationship op = THE._.get(the);
         assertNotNull(op);
 
         toConsole(
