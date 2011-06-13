@@ -104,35 +104,28 @@ public class AnimoGraph {
 		graphDb.shutdown();
 	}
 	
-	static FastMap<Transaction, Exception> activeTx = new FastMap<Transaction, Exception>();
+	private static FastMap<Transaction, Exception> activeTx = new FastMap<Transaction, Exception>();
 	
-	static int countTx = 0;
+	private static int countTx = 0;
 	
-	static synchronized void inc() {
+	private static synchronized void inc() {
 		countTx++;
 	}
 	
-	static synchronized void dec() {
+	private static synchronized void dec() {
 		countTx--;
 	}
 	
 	public static Transaction beginTx() {
-		
 		Transaction tx = graphDb.beginTx();
-		
 		activeTx.put(tx, new IOException());
-		
 		inc();
-
 		return tx;
 	}
 	
 	public static void finishTx(Transaction tx) {
-		
 		activeTx.remove(tx);
-		
 		dec();
-
 		tx.finish();
 	}
 
@@ -153,7 +146,7 @@ public class AnimoGraph {
 			
 			return result;
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 	}
 	

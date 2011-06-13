@@ -18,6 +18,8 @@
  */
 package org.animotron.operator.query;
 
+import static org.animotron.graph.AnimoGraph.*;
+
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -54,7 +56,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 //		if (!isLast)
 //			Calculator.eval(op, new PipedOutputObjectStream(in));
 		
-		Transaction tx = op.getGraphDatabase().beginTx();
+		Transaction tx = beginTx();
 		try {
 			Relationship res = new ResultANY( 
 				op.getEndNode().getSingleRelationship( REF, OUTGOING )
@@ -63,7 +65,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 
 			tx.success();
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 		out.close();
 	}

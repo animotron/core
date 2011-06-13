@@ -18,7 +18,7 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
@@ -78,7 +78,7 @@ public class StoreBinaryTest extends ATest {
 //        	e.printStackTrace();
 //			fail(e.toString());
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 
         System.out.println("done.");

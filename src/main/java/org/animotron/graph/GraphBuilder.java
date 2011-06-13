@@ -20,11 +20,7 @@ package org.animotron.graph;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.clear;
-import static org.animotron.graph.AnimoGraph.createCache;
-import static org.animotron.graph.AnimoGraph.getCache;
-import static org.animotron.graph.AnimoGraph.order;
+import static org.animotron.graph.AnimoGraph.*;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
@@ -307,7 +303,7 @@ public abstract class GraphBuilder {
 	
 	protected void fail(Exception e){
 		e.printStackTrace(System.out);
-		tx.finish();
+		finishTx(tx);
 	}
 	
 }

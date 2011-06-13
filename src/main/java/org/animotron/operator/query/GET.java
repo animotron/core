@@ -18,6 +18,7 @@
  */
 package org.animotron.operator.query;
 
+import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -68,7 +69,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		
-		Transaction tx = op.getGraphDatabase().beginTx();
+		Transaction tx = beginTx();
 		try {
 			Node node = op.getEndNode();
 			
@@ -127,7 +128,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			}
 			tx.success();
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 		
 		out.close();

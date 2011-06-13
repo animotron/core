@@ -18,7 +18,7 @@
  */
 package org.animotron.interpreter;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.IOException;
@@ -86,7 +86,7 @@ public class SimpleTests extends ATest {
 	        assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
         
         } finally {
-        	tx.finish();
+        	finishTx(tx);
         }
             
         //System.out.println("done.");

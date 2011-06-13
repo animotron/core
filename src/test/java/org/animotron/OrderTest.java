@@ -18,6 +18,8 @@
  */
 package org.animotron;
 
+import static org.animotron.graph.AnimoGraph.*;
+
 import java.util.List;
 
 import org.apache.lucene.search.Sort;
@@ -58,7 +60,7 @@ public class OrderTest {
 		Transaction tx;
 		
 		if (true) {
-			tx = graphDb.beginTx();
+			tx = beginTx();
 			try {
 				order = index.forRelationships( ORDER );
 		
@@ -68,11 +70,11 @@ public class OrderTest {
 				
 				tx.success();
 			} finally {
-				tx.finish();
+				finishTx(tx);
 			}
 		}
 		
-		tx = graphDb.beginTx();
+		tx = beginTx();
 		try {
 			ROOT = graphDb.getReferenceNode();
 			order = index.forRelationships( ORDER );
@@ -93,7 +95,7 @@ public class OrderTest {
 				q.close();
 			}
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 	}
 

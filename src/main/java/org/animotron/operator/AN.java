@@ -18,6 +18,7 @@
  */
 package org.animotron.operator;
 
+import static org.animotron.graph.AnimoGraph.*;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
@@ -50,8 +51,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		if (!isLast)
 			Calculator.eval(op, new PipedOutputObjectStream(in));
 		
-		GraphDatabaseService graphdb = op.getGraphDatabase();
-		Transaction tx = graphdb.beginTx();
+		Transaction tx = beginTx();
 		try {
 		
 			Node node = op.getEndNode();
@@ -64,7 +64,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 
 			tx.success();
 		} finally {
-			tx.finish();
+			finishTx(tx);
 		}
 		out.close();
 	}

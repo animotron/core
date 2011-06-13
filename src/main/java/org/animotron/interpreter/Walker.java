@@ -19,13 +19,13 @@
 package org.animotron.interpreter;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.animotron.graph.AnimoGraph.*;
 
 import java.io.IOException;
 import java.util.Iterator;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
@@ -66,7 +66,7 @@ abstract class Walker implements Runnable {
 
 		System.out.println("Walk op = " + op);
 
-		Transaction tx = AnimoGraph.beginTx();
+		Transaction tx = beginTx();
 		try {
 			Relationship r = null;
 
@@ -103,7 +103,7 @@ abstract class Walker implements Runnable {
 			e.printStackTrace();
 			ot.write(e);
 		} finally {
-			AnimoGraph.finishTx(tx);
+			finishTx(tx);
 		}
 
 		ot.close();
