@@ -60,7 +60,13 @@ public class IS extends Relation implements Prepare {
 	private Predicate<Path> predicate(final Node node) {
 		return new Predicate<Path>() {
             public boolean accept(Path pos) {
-                return pos.endNode().equals(node); 
+            	if (pos.endNode().equals(node)){
+            		return false;
+            	} else if (pos.endNode().hasRelationship(relationshipType(), OUTGOING)) {
+            		return false;
+            	} else {
+            		return true;
+            	}
             }
         };
 	}
@@ -72,9 +78,9 @@ public class IS extends Relation implements Prepare {
 		Node start = op.getStartNode();
 		
 		@SuppressWarnings("deprecation")
-		Traverser td = TD.filter(predicate(start)).traverse(start);
+		Traverser t = TD.filter(predicate(start)).traverse(start);
 		
-		if (!td.iterator().hasNext()) {
+		if (t.iterator().hasNext()) {
 			Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
 			if (r != null) {
 				//TODO: r is null sometime. why?
