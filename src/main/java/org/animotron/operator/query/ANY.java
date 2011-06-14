@@ -99,18 +99,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 		}
 		
 		public String toString() {
-			return "ANY:RESULT s "+getStartNode()+" e "+getEndNode();
-		}
-	}
-	
-	class ANY_REF extends InMemoryRelationship implements ResultOnContext {
-
-		protected ANY_REF(Node sNode, Node eNode) {
-			super(sNode, eNode, REF);
-		}
-		
-		public String toString() {
-			return "ANY:REF";
+			return "ANY:RESULT "+getStartNode()+" -> "+getEndNode();
 		}
 	}
 
