@@ -124,38 +124,40 @@ public class Calculator {
 
 	public static void push(final Relationship op) {
 		
-//		Transaction tx = beginTx(); 
-//		try {
-//			CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
-//			tx.success();
-//		} finally {
-//			finishTx(tx);
-//		}
+		System.out.println("Prepare the relationship " + op);
 		
+        HashSet<Relationship> set = new HashSet<Relationship>();
+		
+		Transaction tx = beginTx();
 		try {
-			System.out.println("Prepare the relationship " + op);
 			
-            HashSet<Relationship> set = new HashSet<Relationship>();
-            
+//			CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
+		
             Iterator<Path> pi = TD.traverse(op.getEndNode()).iterator();
+            
+			System.out.println("Found paths:");
 			while (pi.hasNext()) {
 				Path path = pi.next();
-				System.out.println("Found path " + path);
+				System.out.println("	" + path);
 				set.add(path.lastRelationship());
 			}
 			
-			System.out.print("Found relationship:");
+			tx.success();
+
+		} finally {
+			finishTx(tx);
+		}
+			
+		try {
+			System.out.println("Found relationships:");
 			for (Relationship r : set) {
-				System.out.print(" " + r);
+				System.out.println("	" + r);
 				prepare(r);
 			}
-			System.out.println();
-            
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
 	
 }
