@@ -25,6 +25,7 @@ import static org.animotron.graph.AnimoGraph.clear;
 import static org.animotron.graph.AnimoGraph.createCache;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
+import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.animotron.graph.AnimoGraph.order;
 
 import java.security.MessageDigest;
@@ -37,6 +38,7 @@ import org.animotron.MessageDigester;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.interpreter.Calculator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -119,8 +121,8 @@ public abstract class GraphBuilder {
 			the = (Relationship) first[5];
 		}
 		
-		for (Relationship i : thes) {
-			THE._.prepare(i);
+		for (Relationship r : thes) {
+			Calculator.push(r);
 		}
 		
 	}
@@ -237,6 +239,7 @@ public abstract class GraphBuilder {
 							thes.add(r);
 						} else if (!h.equals(hash)) {
 							clear(r);
+							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
 							thes.add(r);
 						} else {

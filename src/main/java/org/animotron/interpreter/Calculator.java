@@ -22,17 +22,25 @@ import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
+import static org.animotron.graph.AnimoGraph.getTOP;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.helpers.Predicate;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -82,12 +90,64 @@ public class Calculator {
 	}
 
 	public static void filter(Relationship op, PipedOutputObjectStream out) {
-//		exec.execute(new Filter(op, out));
-		new Filter(op, out).run();
+		exec.execute(new Filter(op, out));
 	}
 	
-	public static void push(Relationship op) {
-		CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
+	private static Predicate<Path> endsWith(final Node node) {
+		return new Predicate<Path>() {
+            public boolean accept(Path pos) {
+                return pos.endNode().equals(node);
+            }
+        };
+	}
+
+	private static Predicate<Path> notContains(final Node node) {
+		return new Predicate<Path>() {
+            public boolean accept(Path pos) {
+            	for (Node i : pos.nodes()) {
+            		if (i.equals(node))
+            			return false;
+            	}
+            	return true;
+            }
+        };
+	}
+
+	public static void push(final Relationship op) {
+		
+//		Transaction tx = beginTx(); 
+//		try {
+//			CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
+//			tx.success();
+//		} finally {
+//			finishTx(tx);
+//		}
+		
+		try {
+			System.out.println("Prepare the relationship " + op);
+			
+            @SuppressWarnings("deprecation")
+			Traverser td = Traversal.description()
+			.depthFirst()
+			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
+			.filter(endsWith(op.getEndNode()))
+			.filter(notContains(getROOT()))
+			.filter(notContains(getTOP()))
+			.filter(notContains(CALC))
+			.traverse(THE._.NODE());
+            
+            Iterator<Path> pi = td.iterator();
+			while (pi.hasNext()) {
+				Path path = pi.next();
+				System.out.println("Found path " + path);
+				prepare(path.relationships().iterator().next());
+			}
+            
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 }

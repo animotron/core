@@ -29,12 +29,8 @@ import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import java.io.IOException;
-
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.interpreter.Calculator;
-import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -118,26 +114,4 @@ public class THE extends AbstarctOperator {
 		return NAME.get(r.getEndNode());
 	}
 	
-	public void prepare(Relationship op) {
-		
-		Transaction tx = beginTx();
-		try {
-			Node the = op.getEndNode(); 
-			if (!the.hasRelationship(IS._.relationshipType(), OUTGOING)) {
-				getTOP().createRelationshipTo(the, RelationshipTypes.TOP);
-			}
-			Calculator.push(op);
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
-		
-		try {
-			Calculator.prepare(op);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-
 }

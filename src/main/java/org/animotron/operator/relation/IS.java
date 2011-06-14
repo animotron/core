@@ -19,6 +19,7 @@
 package org.animotron.operator.relation;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
@@ -26,7 +27,14 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.helpers.Predicate;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * Operator 'IS'.
@@ -39,12 +47,37 @@ public class IS extends Relation implements Prepare {
 	public static final IS _ = new IS();
 	
 	private IS() { super("is", "animo/relation/is"); }
-
+	
+	private Predicate<Path> predicate(final Node node) {
+		return new Predicate<Path>() {
+            public boolean accept(Path pos) {
+                return pos.endNode().equals(node); 
+            }
+        };
+	}
+	
 	@Override
 	public void prepare(Relationship op, PipedOutputObjectStream out,
 			boolean isLast) throws IOException {
 		
-		op.getStartNode().getSingleRelationship(RelationshipTypes.TOP, INCOMING).delete();
+		Node start = op.getStartNode();
+		
+		@SuppressWarnings("deprecation")
+		Traverser td = Traversal.description()
+		.depthFirst()
+		.relationships(relationshipType(), OUTGOING)
+		.evaluator(Evaluators.fromDepth(1))
+		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
+		.filter(predicate(start))
+		.traverse(start);
+		
+		if (!td.iterator().hasNext()) {
+			Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
+			if (r != null) {
+				r.delete();
+			}
+		}
+		
 		
 	}
 	

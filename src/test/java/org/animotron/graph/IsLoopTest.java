@@ -27,7 +27,6 @@ import org.animotron.Expression;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -39,35 +38,11 @@ public class IsLoopTest extends ATest {
 	@Test
 	public void storeAndSerializeResult() throws XMLStreamException {
 		
-		Expression A = new Expression(_(THE._, "A", _(IS._, "C")));
-		Expression B = new Expression(_(THE._, "B", _(IS._, "A")));
-		Expression C = new Expression(_(THE._, "C", _(IS._, "B")));
+		new Expression(_(THE._, "A", _(IS._, "C")));
+		new Expression(_(THE._, "B", _(IS._, "A")));
+		new Expression(_(THE._, "C", _(IS._, "B")));
+		//new Expression(_(THE._, "A"));
 
-		Transaction tx = AnimoGraph.beginTx();
-		try {
-
-			System.out.println("Prepare");
-			System.out.print("The a: ");
-			GraphSerializer.serialize(A, System.out);
-			System.out.println();
-			System.out.print("The b: ");
-			GraphSerializer.serialize(B, System.out);
-			System.out.println();
-			System.out.print("The c: ");
-			GraphSerializer.serialize(C, System.out);
-			System.out.println();
-			System.out.println();
-			
-			tx.success();
-		} finally {
-			AnimoGraph.finishTx(tx);
-		}
-		
-		try {
-			Thread.sleep(5 * 1000);
-		} catch (InterruptedException e) {
-		}
-		
         
 //        Transaction tx = beginTx();
 //        try { 
