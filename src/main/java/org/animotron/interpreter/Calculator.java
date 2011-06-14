@@ -25,6 +25,7 @@ import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -37,7 +38,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.Traverser;
+import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
@@ -93,25 +94,33 @@ public class Calculator {
 		exec.execute(new Filter(op, out));
 	}
 	
-	private static Predicate<Path> endsWith(final Node node) {
-		return new Predicate<Path>() {
-            public boolean accept(Path pos) {
-                return pos.endNode().equals(node);
-            }
-        };
-	}
+    private static class Rule implements Predicate<Path> {
 
-	private static Predicate<Path> notContains(final Node node) {
-		return new Predicate<Path>() {
-            public boolean accept(Path pos) {
-            	for (Node i : pos.nodes()) {
-            		if (i.equals(node))
-            			return false;
-            	}
-            	return true;
-            }
-        };
-	}
+		private final static HashSet<Node> set = new HashSet<Node>();
+		static {
+			set.add(getROOT());
+			set.add(getTOP());
+			set.add(CALC);
+		}
+		
+		@Override
+		public boolean accept(Path pos) {
+			if(pos.endNode().equals(THE._.NODE())) {
+	        	for (Node i : pos.nodes()) {
+	        		if (set.contains(i))
+	        			return false;
+	        	}
+	        	return true;
+			} else {
+				return false;
+			}
+		}
+    	
+    }
+    
+    @SuppressWarnings("deprecation")
+    private static final TraversalDescription TD = Traversal.description()
+    	.depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH).filter(new Rule());
 
 	public static void push(final Relationship op) {
 		
@@ -126,22 +135,21 @@ public class Calculator {
 		try {
 			System.out.println("Prepare the relationship " + op);
 			
-            @SuppressWarnings("deprecation")
-			Traverser td = Traversal.description()
-			.depthFirst()
-			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-			.filter(endsWith(op.getEndNode()))
-			.filter(notContains(getROOT()))
-			.filter(notContains(getTOP()))
-			.filter(notContains(CALC))
-			.traverse(THE._.NODE());
+            HashSet<Relationship> set = new HashSet<Relationship>();
             
-            Iterator<Path> pi = td.iterator();
+            Iterator<Path> pi = TD.traverse(op.getEndNode()).iterator();
 			while (pi.hasNext()) {
 				Path path = pi.next();
 				System.out.println("Found path " + path);
-				prepare(path.relationships().iterator().next());
+				set.add(path.lastRelationship());
 			}
+			
+			System.out.print("Found relationship:");
+			for (Relationship r : set) {
+				System.out.print(" " + r);
+				prepare(r);
+			}
+			System.out.println();
             
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
