@@ -24,6 +24,7 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -47,7 +48,7 @@ public class HAS extends AbstarctOperator implements Query, Predicate {
 	}
 
 	@Override
-	public boolean filter(Relationship op) {
+	public boolean filter(Node op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

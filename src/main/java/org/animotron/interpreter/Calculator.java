@@ -91,6 +91,20 @@ public class Calculator {
 		return result;
 	}
 	
+	public static List<Relationship> evalGetResult(Node op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+		
+		List<Relationship> result = new FastList<Relationship>();
+		for (Object obj : in) {
+			if (obj instanceof Relationship) {
+				result.add((Relationship) obj);
+			} else
+				System.out.println("evalGetResult");
+		}
+		return result;
+	}
+
 	public static PipedInputObjectStream prepare(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(new Preparator(op, new PipedOutputObjectStream(in)));

@@ -21,6 +21,7 @@ package org.animotron.operator;
 import java.io.IOException;
 
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -31,6 +32,6 @@ public interface Predicate {
 	
 	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 
-	public boolean filter(Relationship op);
+	public boolean filter(Node op, Node ref) throws IOException;
 
 }

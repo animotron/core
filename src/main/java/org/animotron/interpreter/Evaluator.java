@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -31,8 +32,12 @@ import org.neo4j.graphdb.Relationship;
  */
 class Evaluator extends Walker {
 
+	public Evaluator(Node node, PipedOutputObjectStream out) {
+		super(node, null, out);
+	}
+
 	public Evaluator(Relationship op, PipedOutputObjectStream out) {
-		super(op, out);
+		super(null, op, out);
 	}
 
 	@Override

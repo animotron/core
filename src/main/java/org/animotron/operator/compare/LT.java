@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -44,7 +45,7 @@ public class LT extends AbstarctOperator implements Predicate {
 	}
 
 	@Override
-	public boolean filter(Relationship op) {
+	public boolean filter(Node op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

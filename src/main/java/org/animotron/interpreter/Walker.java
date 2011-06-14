@@ -27,6 +27,7 @@ import java.util.Iterator;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
@@ -40,10 +41,12 @@ import org.neo4j.graphdb.Transaction;
  */
 abstract class Walker implements Runnable {
 
+	private Node node;
 	private Relationship op;
 	private PipedOutputObjectStream out;
 
-	public Walker(Relationship op, PipedOutputObjectStream out) {
+	public Walker(Node node, Relationship op, PipedOutputObjectStream out) {
+		this.node = node;
 		this.op = op;
 		this.out = out;
 	}
@@ -51,7 +54,10 @@ abstract class Walker implements Runnable {
 	@Override
 	public void run() {
 		try {
-			go(op, out);
+			if (node != null)
+				go(node, out);
+			else
+				go(op, out);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -62,24 +68,29 @@ abstract class Walker implements Runnable {
 	protected abstract void go(Statement statement, Relationship op,
 			PipedOutputObjectStream ot, boolean isLast) throws IOException;
 
-	protected void go(Relationship op, PipedOutputObjectStream ot)
-			throws IOException {
+	protected void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
 
-		System.out.println("Walk op = " + op);
+		//System.out.println("Walk op = " + op);
+
+		go(op.getEndNode(), ot);
+	}
+
+	protected void go(Node node, PipedOutputObjectStream ot) throws IOException {
+
+		//System.out.println("Walk node = " + node);
 
 		Transaction tx = beginTx();
 		try {
 			Relationship r = null;
 
-			Node node = op.getEndNode();
-			System.out.println("Walk node = " + node);
-			Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
+			Iterator<Relationship> it = node.getRelationships(OUTGOING)
+					.iterator();
 			while (it.hasNext()) {
 
 				r = it.next();
 				RelationshipType type = r.getType();
 
-				System.out.println(type.name());
+				//System.out.println(type.name());
 
 				Statement s = Statements.relationshipType(type);
 
@@ -100,7 +111,10 @@ abstract class Walker implements Runnable {
 							ot.write(n);
 						}
 					}
-
+					
+				//XXX:find better solution
+				} else if (type.name().equals(RelationshipTypes.REF.name())) {
+					//ignore
 				} else {
 					System.out.println("Not evaled " + r);
 					ot.write(r);
@@ -122,7 +136,7 @@ abstract class Walker implements Runnable {
 		return !it.hasNext();
 	}
 
-	//for debug needs
+	// for debug needs
 	public boolean isPiped() {
 		return true;
 	}

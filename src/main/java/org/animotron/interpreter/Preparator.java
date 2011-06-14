@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Relationship;
 class Preparator extends Walker {
 
 	public Preparator(Relationship op, PipedOutputObjectStream out) {
-		super(op, out);
+		super(null, op, out);
 	}
 
 	@Override

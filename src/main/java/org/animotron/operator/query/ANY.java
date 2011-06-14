@@ -38,6 +38,7 @@ import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
@@ -62,19 +63,23 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
 		Calculator.filter(op, out);
 		
+		while (in.read()!= null) ;
+		
 		Transaction tx = beginTx();
 		try {
-			Node node = op.getEndNode();
-			Relationship ref = node.getSingleRelationship( REF, OUTGOING );
+			Node n = op.getEndNode();
+			Relationship ref = n.getSingleRelationship( REF, OUTGOING );
 			
-			if (out.filter(ref)) {
-				ot.write(new ResultANY( ref ));
+			Node node = ref.getEndNode();
+			
+			if (out.filter(node)) {
+				ot.write(new ResultANY( n, node ));
 			} else {
 				
-				for (Relationship tdR : td_eval.traverse(ref.getEndNode()).relationships()) {
+				for (Relationship tdR : td_eval.traverse(node).relationships()) {
 					System.out.println("ANY get next "+tdR);
-					if (out.filter(tdR)) {
-						ot.write(new ResultANY( tdR ));
+					if (out.filter(tdR.getEndNode() )) {
+						ot.write(new ResultANY( n, tdR.getEndNode() ));
 						break;
 					}
 				}
@@ -89,18 +94,30 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable {
 	
 	class ResultANY extends InMemoryRelationship implements ResultOnContext {
 
-		protected ResultANY(Relationship r) {
-			super(r.getStartNode(), r.getEndNode(), RESULT);
+		protected ResultANY(Node sNode, Node eNode) {
+			super(sNode, eNode, RESULT);
 		}
 		
-//		public String toString() {
-//			return "RESULT:ANY";
-//		}
+		public String toString() {
+			return "ANY:RESULT s "+getStartNode()+" e "+getEndNode();
+		}
 	}
 	
+	class ANY_REF extends InMemoryRelationship implements ResultOnContext {
+
+		protected ANY_REF(Node sNode, Node eNode) {
+			super(sNode, eNode, REF);
+		}
+		
+		public String toString() {
+			return "ANY:REF";
+		}
+	}
+
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS._.relationshipType(), INCOMING );
+			relationships(IS._.relationshipType(), INCOMING ).
+			evaluator(Evaluators.excludeStartPosition());
 
 }

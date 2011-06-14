@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Relationship;
 class Filter extends Walker {
 
 	public Filter(Relationship op, PipedOutputObjectStream out) {
-		super(op, out);
+		super(null, op, out);
 	}
 
 	@Override

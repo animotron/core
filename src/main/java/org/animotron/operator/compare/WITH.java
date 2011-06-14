@@ -19,10 +19,15 @@
 package org.animotron.operator.compare;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
+import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
+import org.animotron.operator.query.GET;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -39,12 +44,39 @@ public class WITH extends AbstarctOperator implements Predicate {
 
 	@Override
 	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		out.subscribeFilter(this);
+		out.subscribeFilter(op, this);
 	}
 
 	@Override
-	public boolean filter(Relationship op) {
-		System.out.println("TOUCH WITH !!!!");
+	public boolean filter(Node op, Node ref) throws IOException {
+		
+		System.out.println("WITH op "+op);
+		//XXX: fix
+		String name = "value";
+
+		Relationship have = GET._.get(ref, name);
+		if (have == null) return false;
+		
+		//TODO: improve
+		System.out.println("================================== actual");
+		List<Relationship> actual = Calculator.evalGetResult(have);
+		System.out.println("================================== actual result");
+		System.out.println(Arrays.toString(actual.toArray()));
+		System.out.println("================================== expected");
+		List<Relationship> expected = Calculator.evalGetResult(op);
+		System.out.println("================================== expected result");
+		System.out.println(Arrays.toString(expected.toArray()));
+		
+		if (actual.size() == 1 && expected.size() == 1) {
+			Relationship e = actual.get(0);
+			Relationship g = expected.get(0);
+			if (
+			       e.getType().name().equals(g.getType().name()) 
+				&& e.getEndNode().equals(g.getEndNode()))
+				
+				return true;
+		}
+
 		return false;
 	}
 	

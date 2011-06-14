@@ -20,7 +20,6 @@ package org.animotron.operator.query;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
@@ -86,44 +85,11 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 						
 					} else if (n instanceof Relationship) {
 						
-						final Relationship r = (Relationship)n;
+						Relationship res = get(((Relationship)n).getEndNode(), name);
 						
-						boolean found = false;
-						if (RESULT.equals(r.getType().name())) {
-							System.out.println("GET get-result "+r);
-							continue;
-						} 
+						if (res != null)
+							out.write(createResult(node, res));
 						
-						for (Relationship tdR : td_eval.traverse(r.getEndNode()).relationships()) {
-							
-							System.out.println("GET eval = "+tdR);
-							
-							if (name.equals(name(tdR))) {
-								out.write(createResult(node, tdR));
-								
-								found = true;
-							}
-						}
-						
-						if (!found) {
-							for (Relationship tdR : td_eval_ic.traverse(r.getEndNode()).relationships()) {
-								
-								Statement st = Statements.relationshipType( tdR.getType() );
-								if (st instanceof IS) {
-									System.out.println("GET IC -> IS "+tdR);
-									
-								} else if (st instanceof IC) {
-									System.out.print("GET IC -> "+tdR);
-									
-									if (name.equals(name(tdR))) {
-										System.out.print(" MATCH");
-										out.write(createResult(node, tdR));
-									}
-
-									System.out.println();
-								}
-							}
-						}
 					}
 				}
 			}
@@ -133,5 +99,37 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 		}
 		
 		out.close();
+	}
+
+	public Relationship get(final Node context, final String name) {
+		
+		//search local 'HAVE'
+		for (Relationship tdR : td_eval.traverse(context).relationships()) {
+			
+			System.out.println("GET get = "+tdR);
+			
+			if (name.equals(name(tdR)))
+				return tdR;
+		}
+		
+		//search 'IC' by 'IS' topology
+		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
+			
+			Statement st = Statements.relationshipType( tdR.getType() );
+			if (st instanceof IS) {
+				System.out.println("GET IC -> IS "+tdR);
+				
+			} else if (st instanceof IC) {
+				System.out.print("GET IC -> "+tdR);
+				
+				if (name.equals(name(tdR))) {
+					System.out.println(" MATCH");
+					return tdR;
+				}
+				System.out.println();
+			}
+		}
+		
+		return null;
 	}
 }
