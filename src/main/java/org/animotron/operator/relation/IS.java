@@ -18,12 +18,10 @@
  */
 package org.animotron.operator.relation;
 
-import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
@@ -31,6 +29,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
@@ -44,9 +43,17 @@ import org.neo4j.kernel.Uniqueness;
  */
 public class IS extends Relation implements Prepare {
 	
+	private static TraversalDescription TD;
 	public static final IS _ = new IS();
 	
-	private IS() { super("is", "animo/relation/is"); }
+	private IS() { 
+		super("is", "animo/relation/is"); 
+//		 TD = Traversal.description()
+//			.depthFirst()
+//			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
+//			.relationships(relationshipType(), OUTGOING)
+//			.evaluator(Evaluators.fromDepth(1));
+	}
 	
 	private Predicate<Path> predicate(final Node node) {
 		return new Predicate<Path>() {
@@ -60,23 +67,17 @@ public class IS extends Relation implements Prepare {
 	public void prepare(Relationship op, PipedOutputObjectStream out,
 			boolean isLast) throws IOException {
 		
-		Node start = op.getStartNode();
+//		Node start = op.getStartNode();
 		
-		@SuppressWarnings("deprecation")
-		Traverser td = Traversal.description()
-		.depthFirst()
-		.relationships(relationshipType(), OUTGOING)
-		.evaluator(Evaluators.fromDepth(1))
-		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-		.filter(predicate(start))
-		.traverse(start);
+//		@SuppressWarnings("deprecation")
+//		Traverser td = TD.filter(predicate(start)).traverse(start);
 		
-		if (!td.iterator().hasNext()) {
-			Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
-			if (r != null) {
-				r.delete();
-			}
-		}
+//		if (!td.iterator().hasNext()) {
+//			Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
+//			if (r != null) {
+//				r.delete();
+//			}
+//		}
 		
 		
 	}
