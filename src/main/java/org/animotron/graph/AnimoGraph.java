@@ -95,11 +95,16 @@ public class AnimoGraph {
 	public static void shutdownDB() {
 		System.out.println("shotdown");
 		
-		System.out.println("Active transactions "+countTx);
-		if (countTx > 0) {
-			for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
-				e.getValue().printStackTrace();
+		while (!activeTx.isEmpty()) {
+		
+			System.out.println("Active transactions "+countTx);
+			if (countTx > 0) {
+				for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
+					e.getValue().printStackTrace();
+				}
 			}
+			
+			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
 		graphDb.shutdown();
 	}
