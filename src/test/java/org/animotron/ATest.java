@@ -158,9 +158,9 @@ public class ATest {
         Relationship op = THE._.get(the);
         assertNotNull(op);
 
-        toConsole(
-    		Calculator.eval(op)
-		);
+//        toConsole(
+//    		Calculator.eval(op)
+//		);
         
     	InputStream stream = Reader.read(op);
         assertEquals(stream, expecteds);

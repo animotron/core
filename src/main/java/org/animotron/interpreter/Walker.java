@@ -117,7 +117,7 @@ abstract class Walker implements Runnable {
 					//ignore
 				} else {
 					System.out.println("Not evaled " + r);
-					ot.write(r);
+					//ot.write(r);
 				}
 			}
 			tx.success();

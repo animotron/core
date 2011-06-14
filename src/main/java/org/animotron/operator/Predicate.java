@@ -32,6 +32,6 @@ public interface Predicate {
 	
 	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 
-	public boolean filter(Node op, Node ref) throws IOException;
+	public boolean filter(Relationship op, Node ref) throws IOException;
 
 }

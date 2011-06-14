@@ -73,6 +73,12 @@ public class Calculator {
 		return in;
 	}
 
+	public static PipedInputObjectStream eval(Node op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+		return in;
+	}
+
 	public static void eval(Relationship op, PipedOutputObjectStream out) {
 		exec.execute(new Evaluator(op, out));
 	}

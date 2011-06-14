@@ -30,6 +30,8 @@ import java.io.PipedOutputStream;
 import org.animotron.Quanta;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.TEXT;
+import org.animotron.interpreter.Calculator;
+import org.animotron.io.PipedInputObjectStream;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
@@ -87,20 +89,22 @@ public class Reader implements Runnable {
 
 	private void process(Relationship position) throws IOException {
 		
-		Quanta st = Statements.resultRelationshipType(position.getType());
+		Quanta st = Statements.relationshipType(position.getType());
 		
 		String typeName = position.getType().toString();
 		Node eNode = position.getEndNode();
 		System.out.println(position);
 		
 		if (st instanceof ANY) {
-			Node sNode = position.getStartNode();
-
-			process( new InMemoryRelationship(sNode, eNode, RelationshipTypes.RESULT) );
 			
-			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
-				process( new InMemoryRelationship(sNode, r.getStartNode(), RelationshipTypes.RESULT) );
+			PipedInputObjectStream in = Calculator.eval(position.getStartNode());
+			for (Object n : in) {
+				if (n instanceof Relationship) {
+					process( (Relationship) n );
+				} else
+					System.out.println("UNPROCESSED on ANY - "+n);
 			}
+
 		} else if (st instanceof ALL) {
 			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
 				System.out.println("ALL is down = "+r.getEndNode());

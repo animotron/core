@@ -61,7 +61,8 @@ public class ANYTests extends ATest {
 			_(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
 		);
 
-        //System.out.println("any:A have:value B");
+        System.out.println("****************************************************");
+        System.out.println("any:A have:value B");
         assertEquals("D", "<the:D><the:B><have:value>B</have:value></the:B></the:D>");
 
         //System.out.println("done.");

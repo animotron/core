@@ -76,7 +76,7 @@ public class PipedOutputObjectStream implements Cloneable {
 		for (Object[] filterTube : filters) {
 			if (!((Predicate)filterTube[1]).
 					filter(
-						((Relationship)filterTube[0]).getEndNode(), 
+						(Relationship)filterTube[0], 
 						ref)
 					) 
 			{

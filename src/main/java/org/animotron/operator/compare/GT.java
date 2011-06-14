@@ -45,7 +45,7 @@ public class GT extends AbstarctOperator implements Predicate {
 	}
 
 	@Override
-	public boolean filter(Node op, Node ref) {
+	public boolean filter(Relationship op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}
