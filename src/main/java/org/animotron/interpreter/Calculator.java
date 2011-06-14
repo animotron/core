@@ -21,6 +21,7 @@ package org.animotron.interpreter;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
+import static org.animotron.graph.AnimoGraph.getCACHE;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
 
@@ -131,6 +132,7 @@ public class Calculator {
 		static {
 			set.add(getROOT());
 			set.add(getTOP());
+			set.add(getCACHE());
 			set.add(CALC);
 		}
 		

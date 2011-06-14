@@ -84,6 +84,10 @@ public class AnimoGraph {
 		return ROOT;
 	}
 	
+	public static Node getCACHE() {
+		return CACHE;
+	}
+	
 	public static Node getTOP() {
 		return TOP;
 	}
