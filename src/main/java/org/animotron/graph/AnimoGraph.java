@@ -133,9 +133,9 @@ public class AnimoGraph {
 	}
 	
 	public static void finishTx(Transaction tx) {
+		tx.finish();
 		activeTx.remove(tx);
 		dec();
-		tx.finish();
 	}
 
 	/**
