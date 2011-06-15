@@ -30,9 +30,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Manipulator {
 
-	public void push(final Relationship op);
-	
-
 	public boolean canGo(Statement statement);
 
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;

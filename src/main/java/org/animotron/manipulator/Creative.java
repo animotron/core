@@ -18,43 +18,14 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Filter implements Manipulator {
+public interface Creative {
 
-	public static Filter _ = new Filter(); 
+	public void creativePush(Relationship op);
 	
-	private Filter() {}
-
-	@Override
-	public boolean canGo(Statement statement) {
-		return statement instanceof Predicate;
-	}
-
-	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		
-		((Predicate) statement).filter(op, ot, isLast);
-		
-		if (isPiped())
-			ot.close();
-	}
-	
-	public boolean isPiped() {
-		return false;
-	}
-
-	public Runnable walk(Relationship op, PipedOutputObjectStream out) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

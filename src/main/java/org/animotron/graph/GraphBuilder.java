@@ -122,7 +122,7 @@ public abstract class GraphBuilder {
 		}
 		
 		for (Relationship r : thes) {
-			Manipulators._.push(r);
+			Manipulators._.creativePush(r);
 		}
 		
 	}

@@ -52,7 +52,7 @@ import org.neo4j.kernel.Uniqueness;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Calculator implements Manipulator {
+public class Calculator implements Manipulator, Creative {
 	
 	protected static Calculator _ = new Calculator();
 	
@@ -164,7 +164,7 @@ public class Calculator implements Manipulator {
     private static final TraversalDescription TD = Traversal.description()
     	.depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH).filter(new Rule());
 
-	public void push(final Relationship op) {
+	public void creativePush(final Relationship op) {
 		
 		if (true) return;
 		

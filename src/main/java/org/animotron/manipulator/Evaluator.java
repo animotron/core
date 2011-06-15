@@ -49,12 +49,6 @@ class Evaluator implements Manipulator {
 		ot.close();
 	}
 
-	@Override
-	public void push(Relationship op) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public Walker<Evaluator> walk(Node op, PipedOutputObjectStream out) {
 		return new Walker<Evaluator>(this, op, null, out);
 	}

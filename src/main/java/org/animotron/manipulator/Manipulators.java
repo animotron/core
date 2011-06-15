@@ -32,18 +32,25 @@ public class Manipulators {
 	
 	public static Manipulators _ = new Manipulators(); 
 	
-	private static List<Manipulator> manipulators = new FastList<Manipulator>();
+	private static List<Creative> creative = new FastList<Creative>();
+	private static List<Destructive> descructive = new FastList<Destructive>();
 	
 	static {
-		manipulators.add(Calculator._);
-		manipulators.add(GC._);
+		creative.add(Calculator._);
+		descructive.add(GC._);
 	}
 	
 	private Manipulators() {}
 
-	public void push(Relationship op) {
-		for (Manipulator m : manipulators) {
-			m.push(op);
+	public void creativePush(Relationship op) {
+		for (Creative m : creative) {
+			m.creativePush(op);
+		}
+	}
+
+	public void destructivePush(Relationship op) {
+		for (Destructive m : descructive) {
+			m.destructivePush(op);
 		}
 	}
 

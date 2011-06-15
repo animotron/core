@@ -49,13 +49,7 @@ class Preparator implements Manipulator {
 	}
 	
 	//Walker<Preparator>
-	public Runnable walk(Relationship op, PipedOutputObjectStream out) {
+	public Walker<Preparator> walk(Relationship op, PipedOutputObjectStream out) {
 		return new Walker<Preparator>(this, null, op, out);
-	}
-
-	@Override
-	public void push(Relationship op) {
-		// TODO Auto-generated method stub
-		
 	}
 }

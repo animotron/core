@@ -38,7 +38,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GC implements Manipulator {
+public class GC implements Manipulator, Destructive {
 	
 	protected static GC _ = new GC();
 	
@@ -57,7 +57,7 @@ public class GC implements Manipulator {
 	
 	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	public void push(final Relationship op) {
+	public void destructivePush(final Relationship op) {
 		
 		System.out.println("GC the relationship " + op);
 		
