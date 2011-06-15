@@ -52,4 +52,9 @@ class Preparator implements Manipulator {
 	public Walker<Preparator> walk(Relationship op, PipedOutputObjectStream out) {
 		return new Walker<Preparator>(this, null, op, out);
 	}
+
+	// for debug needs
+	public boolean isPiped() {
+		return false;
+	}
 }

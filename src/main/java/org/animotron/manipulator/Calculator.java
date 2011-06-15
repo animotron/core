@@ -217,4 +217,8 @@ public class Calculator implements Manipulator, Creative {
 		
 	}
 	
+	// for debug needs
+	public boolean isPiped() {
+		return true;
+	}
 }

@@ -33,4 +33,7 @@ public interface Manipulator {
 	public boolean canGo(Statement statement);
 
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;
+
+	// for debug needs
+	public boolean isPiped();
 }

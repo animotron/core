@@ -56,4 +56,9 @@ class Evaluator implements Manipulator {
 	public Walker<Evaluator> walk(Relationship op, PipedOutputObjectStream out) {
 		return new Walker<Evaluator>(this, null, op, out);
 	}
+	
+	// for debug needs
+	public boolean isPiped() {
+		return true;
+	}
 }

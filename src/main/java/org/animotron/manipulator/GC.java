@@ -75,4 +75,9 @@ public class GC implements Manipulator, Destructive {
 		// TODO Auto-generated method stub
 		
 	}
+
+	// for debug needs
+	public boolean isPiped() {
+		return true;
+	}
 }

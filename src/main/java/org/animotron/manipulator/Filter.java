@@ -54,7 +54,6 @@ class Filter implements Manipulator {
 	}
 
 	public Runnable walk(Relationship op, PipedOutputObjectStream out) {
-		// TODO Auto-generated method stub
-		return null;
+		return new Walker<Filter>(this, null, op, out);
 	}
 }

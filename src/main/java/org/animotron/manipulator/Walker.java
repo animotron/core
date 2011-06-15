@@ -80,8 +80,7 @@ class Walker<T extends Manipulator> implements Runnable {
 		try {
 			Relationship r = null;
 
-			Iterator<Relationship> it = node.getRelationships(OUTGOING)
-					.iterator();
+			Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
 			while (it.hasNext()) {
 
 				r = it.next();
@@ -96,14 +95,14 @@ class Walker<T extends Manipulator> implements Runnable {
 					PipedInputObjectStream in = null;
 					PipedOutputObjectStream out = ot;
 
-					if (isPiped()) {
+					if (m.isPiped()) {
 						in = new PipedInputObjectStream();
 						out = new PipedOutputObjectStream(in);
 					}
 
 					m.go(s, r, out, isLast(it));
 
-					if (isPiped()) {
+					if (m.isPiped()) {
 						for (Object n : in) {
 							ot.write(n);
 						}
@@ -131,10 +130,5 @@ class Walker<T extends Manipulator> implements Runnable {
 
 	protected boolean isLast(Iterator<?> it) {
 		return !it.hasNext();
-	}
-
-	// for debug needs
-	public boolean isPiped() {
-		return true;
 	}
 }

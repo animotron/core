@@ -26,10 +26,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
 
 import junit.framework.Assert;
 
@@ -171,9 +174,20 @@ public class ATest {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
-        StringResultSerializer serializer = new StringResultSerializer();
+        
+		PipedInputStream in = new PipedInputStream();
+		PipedOutputStream out = new PipedOutputStream(in);
+
+        XMLStreamWriter writer;
+		try {
+			writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+		} catch (XMLStreamException e) {
+			throw new IOException(e);
+		}
+        
+        AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
         serializer.serialize(op);
-        Assert.assertEquals(serializer.getString(), expecteds);
+        Assert.assertEquals(in, expecteds);
 	}
 
 	protected void assertString(String the, String expecteds) throws IOException {
