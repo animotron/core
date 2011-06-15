@@ -38,7 +38,7 @@ import org.animotron.MessageDigester;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Manipulators;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -122,7 +122,7 @@ public abstract class GraphBuilder {
 		}
 		
 		for (Relationship r : thes) {
-			Calculator.push(r);
+			Manipulators._.push(r);
 		}
 		
 	}
