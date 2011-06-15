@@ -39,13 +39,15 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-abstract class Walker implements Runnable {
+class Walker<T extends Manipulator> implements Runnable {
 
+	private T m;
 	private Node node;
 	private Relationship op;
 	private PipedOutputObjectStream out;
 
-	public Walker(Node node, Relationship op, PipedOutputObjectStream out) {
+	public Walker(T m, Node node, Relationship op, PipedOutputObjectStream out) {
+		this.m = m;
 		this.node = node;
 		this.op = op;
 		this.out = out;
@@ -62,11 +64,6 @@ abstract class Walker implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
-	protected abstract boolean canGo(Statement statement);
-
-	protected abstract void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException;
 
 	protected void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
 
@@ -94,7 +91,7 @@ abstract class Walker implements Runnable {
 
 				Statement s = Statements.relationshipType(type);
 
-				if (canGo(s)) {
+				if (m.canGo(s)) {
 
 					PipedInputObjectStream in = null;
 					PipedOutputObjectStream out = ot;
@@ -104,7 +101,7 @@ abstract class Walker implements Runnable {
 						out = new PipedOutputObjectStream(in);
 					}
 
-					go(s, r, out, isLast(it));
+					m.go(s, r, out, isLast(it));
 
 					if (isPiped()) {
 						for (Object n : in) {

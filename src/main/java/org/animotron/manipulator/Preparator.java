@@ -29,24 +29,33 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Preparator extends Walker {
-
-	public Preparator(Relationship op, PipedOutputObjectStream out) {
-		super(null, op, out);
-	}
+class Preparator implements Manipulator {
+	
+	static Preparator _ = new Preparator();
+	
+	private Preparator() {}
 
 	@Override
-	protected boolean canGo(Statement statement) {
+	public boolean canGo(Statement statement) {
 		return statement instanceof Prepare;
 	}
 
 	@Override
-	protected void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		
 		((Prepare) statement).prepare(op, ot, isLast);
 		
 		ot.close();
 	}
 	
+	//Walker<Preparator>
+	public Runnable walk(Relationship op, PipedOutputObjectStream out) {
+		return new Walker<Preparator>(this, null, op, out);
+	}
+
+	@Override
+	public void push(Relationship op) {
+		// TODO Auto-generated method stub
+		
+	}
 }

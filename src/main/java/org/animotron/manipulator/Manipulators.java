@@ -28,21 +28,19 @@ import javolution.util.FastList;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Manipulators implements Manipulator {
+public class Manipulators {
 	
 	public static Manipulators _ = new Manipulators(); 
 	
-	static List<Manipulator> manipulators = new FastList<Manipulator>();
+	private static List<Manipulator> manipulators = new FastList<Manipulator>();
 	
 	static {
 		manipulators.add(Calculator._);
 		manipulators.add(GC._);
 	}
 	
-	private Manipulators() {
-	}
+	private Manipulators() {}
 
-	@Override
 	public void push(Relationship op) {
 		for (Manipulator m : manipulators) {
 			m.push(op);

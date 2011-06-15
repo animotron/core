@@ -116,12 +116,12 @@ public class Calculator implements Manipulator {
 
 	public static PipedInputObjectStream prepare(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(new Preparator(op, new PipedOutputObjectStream(in)));
+		exec.execute(Preparator._.walker(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
 	public static void prepare(Relationship op, PipedOutputObjectStream out) {
-		exec.execute(new Preparator(op, out));
+		exec.execute(Preparator._.walker(op, out));
 	}
 	
 	public static PipedInputObjectStream filter(Relationship op) throws IOException {
