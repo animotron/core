@@ -28,6 +28,7 @@ import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.instruction.ml.ValueInstruction;
+import org.codehaus.stax2.XMLStreamWriter2;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -122,7 +123,12 @@ public class AnimoResultSerializer extends AbstractResultSerializer {
 	public void endDocument() {
 		try {
 			writer.writeEndDocument();
-			writer.close();
+			writer.flush();
+			if (writer instanceof XMLStreamWriter2) {
+				((XMLStreamWriter2) writer).closeCompletely();
+			} else {
+				writer.close();
+			}
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
