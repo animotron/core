@@ -26,7 +26,6 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Relationship;
@@ -37,59 +36,21 @@ import org.neo4j.graphdb.index.IndexHits;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class StringSerializer {
+public abstract class AbstractResultSerializer {
 	
-	private StringBuilder builder;
-	private String result;
-	
-	public String getString() {
-		return result;
-	}
-
 	final public void serialize(Relationship r) {
 		startDocument();
 		build(r);
 		endDocument();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#start(org.animotron.Statement, org.neo4j.graphdb.Relationship)
-	 */
-//	@Override
-	public void start(Statement statement, Relationship r) {
-		//System.out.println(r);
-		if (statement instanceof TEXT) {
-			System.out.println("TEXT found");
-			builder.append(statement.value(r));
-		} else {
-			//build(r);
-		}
-	}
+	public abstract void start(Statement statement, Relationship r);
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#end(org.animotron.Statement, org.neo4j.graphdb.Relationship)
-	 */
-//	@Override
-	public void end(Statement statement, Relationship r) {
-	}
+	public abstract void end(Statement statement, Relationship r);
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#startDocument()
-	 */
-//	@Override
-	public void startDocument() {
-		builder = new StringBuilder(1024);
-		result = null;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#endDocument()
-	 */
-//	@Override
-	public void endDocument() {
-		result = builder.toString();
-		builder = null;
-	}
+	public abstract void startDocument();
+	
+	public abstract void endDocument();
 
 	protected void build(Relationship r) {
 		
