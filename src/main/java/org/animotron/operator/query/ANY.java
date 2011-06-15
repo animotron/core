@@ -27,10 +27,10 @@ import static org.neo4j.graphdb.Direction.*;
 import java.io.IOException;
 
 import org.animotron.graph.InMemoryRelationship;
-import org.animotron.interpreter.Calculator;
-import org.animotron.interpreter.ResultOnContext;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.ResultOnContext;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;

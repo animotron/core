@@ -26,8 +26,8 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Calculator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;

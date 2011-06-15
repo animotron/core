@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.interpreter;
+package org.animotron.manipulator;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
@@ -163,6 +163,8 @@ public class Calculator {
 
 	public static void push(final Relationship op) {
 		
+		if (true) return;
+		
 		System.out.println("Prepare the relationship " + op);
 		
         HashSet<Relationship> set = new HashSet<Relationship>();
@@ -174,10 +176,10 @@ public class Calculator {
 		
             Iterator<Path> pi = TD.traverse(op.getEndNode()).iterator();
             
-			System.out.println("Found paths:");
+			//System.out.println("Found paths:");
 			while (pi.hasNext()) {
 				Path path = pi.next();
-				System.out.println("	" + path);
+				//System.out.println("	" + path);
 				set.add(path.lastRelationship());
 			}
 			
@@ -188,9 +190,9 @@ public class Calculator {
 		}
 			
 		try {
-			System.out.println("Found relationships:");
+			//System.out.println("Found relationships:");
 			for (Relationship r : set) {
-				System.out.println("	" + r);
+				//System.out.println("	" + r);
 				prepare(r);
 			}
 		} catch (IOException e) {

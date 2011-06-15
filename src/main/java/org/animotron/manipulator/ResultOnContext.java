@@ -16,42 +16,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.interpreter;
-
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Evaluable;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+package org.animotron.manipulator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Evaluator extends Walker {
+public interface ResultOnContext {
 
-	public Evaluator(Node node, PipedOutputObjectStream out) {
-		super(node, null, out);
-	}
-
-	public Evaluator(Relationship op, PipedOutputObjectStream out) {
-		super(null, op, out);
-	}
-
-	@Override
-	protected boolean canGo(Statement statement) {
-		return statement instanceof Evaluable;
-	}
-
-	@Override
-	protected void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		
-		((Evaluable) statement).eval(op, ot, isLast);
-		
-		ot.close();
-	}
-	
 }

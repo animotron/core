@@ -16,37 +16,40 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.interpreter;
+package org.animotron.manipulator;
 
 import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Prepare;
+import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Preparator extends Walker {
+class Filter extends Walker {
 
-	public Preparator(Relationship op, PipedOutputObjectStream out) {
+	public Filter(Relationship op, PipedOutputObjectStream out) {
 		super(null, op, out);
 	}
 
 	@Override
 	protected boolean canGo(Statement statement) {
-		return statement instanceof Prepare;
+		return statement instanceof Predicate;
 	}
 
 	@Override
-	protected void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	protected void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		
-		((Prepare) statement).prepare(op, ot, isLast);
+		((Predicate) statement).filter(op, ot, isLast);
 		
-		ot.close();
+		if (isPiped())
+			ot.close();
 	}
 	
+	public boolean isPiped() {
+		return false;
+	}
 }

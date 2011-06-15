@@ -25,7 +25,7 @@ import java.io.IOException;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
-import org.animotron.serializer.StringSerializer;
+import org.animotron.serializer.StringResultSerializer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -49,7 +49,7 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 		Relationship[] params = getORDER().first(2, op.getEndNode());
 		
 		//pattern
-		StringSerializer szer = new StringSerializer();
+		StringResultSerializer szer = new StringResultSerializer();
 		szer.serialize(params[0]);
 		String pattern = szer.getString();
 

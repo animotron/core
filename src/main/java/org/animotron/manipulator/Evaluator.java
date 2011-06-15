@@ -16,40 +16,42 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.interpreter;
+package org.animotron.manipulator;
 
 import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Predicate;
+import org.animotron.operator.Evaluable;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Filter extends Walker {
+class Evaluator extends Walker {
 
-	public Filter(Relationship op, PipedOutputObjectStream out) {
+	public Evaluator(Node node, PipedOutputObjectStream out) {
+		super(node, null, out);
+	}
+
+	public Evaluator(Relationship op, PipedOutputObjectStream out) {
 		super(null, op, out);
 	}
 
 	@Override
 	protected boolean canGo(Statement statement) {
-		return statement instanceof Predicate;
+		return statement instanceof Evaluable;
 	}
 
 	@Override
-	protected void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	protected void go(Statement statement, Relationship op,
+			PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		
-		((Predicate) statement).filter(op, ot, isLast);
+		((Evaluable) statement).eval(op, ot, isLast);
 		
-		if (isPiped())
-			ot.close();
+		ot.close();
 	}
 	
-	public boolean isPiped() {
-		return false;
-	}
 }

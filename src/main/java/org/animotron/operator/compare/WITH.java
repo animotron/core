@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.animotron.interpreter.Calculator;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Calculator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.query.GET;
