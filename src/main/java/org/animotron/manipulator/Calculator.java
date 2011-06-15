@@ -51,7 +51,9 @@ import org.neo4j.kernel.Uniqueness;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Calculator {
+public class Calculator implements Manipulator {
+	
+	protected static Calculator _ = new Calculator();
 	
 	private static int THREADS_NUMBER = 100;
 	private static final Node CALC;
@@ -161,7 +163,7 @@ public class Calculator {
     private static final TraversalDescription TD = Traversal.description()
     	.depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH).filter(new Rule());
 
-	public static void push(final Relationship op) {
+	public void push(final Relationship op) {
 		
 		if (true) return;
 		

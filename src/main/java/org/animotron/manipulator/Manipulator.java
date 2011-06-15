@@ -18,45 +18,14 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.AnimoGraph.getOrCreateNode;
-import static org.animotron.graph.AnimoGraph.getROOT;
-
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
-import org.animotron.graph.RelationshipTypes;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GC implements Manipulator {
+public interface Manipulator {
+
+	public void push(final Relationship op);
 	
-	protected static GC _ = new GC();
-	
-	private static int THREADS_NUMBER = 10;
-	private static final Node GC;
-	
-	static {
-		Transaction tx = beginTx();
-		try {
-			GC = getOrCreateNode(getROOT() ,RelationshipTypes.GC);
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
-	}
-	
-	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
-	
-	public void push(final Relationship op) {
-		
-		System.out.println("GC the relationship " + op);
-		
-	}
 }
