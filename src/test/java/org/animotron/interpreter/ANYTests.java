@@ -57,13 +57,13 @@ public class ANYTests extends ATest {
 			_(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
 		);
 
-    	new Expression(
+    	Expression D = new Expression(
 			_(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
 		);
 
         System.out.println("****************************************************");
         System.out.println("any:A have:value B");
-        assertEquals("D", "<the:D><the:B><have:value>B</have:value></the:B></the:D>");
+        assertAnimo(D, "<the:D><the:B><have:value>B</have:value></the:B></the:D>");
 
         //System.out.println("done.");
 	}

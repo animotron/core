@@ -122,6 +122,7 @@ public class AnimoResultSerializer extends AbstractResultSerializer {
 	public void endDocument() {
 		try {
 			writer.writeEndDocument();
+			writer.close();
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

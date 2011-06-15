@@ -148,6 +148,7 @@ public class ATest {
 			int n; 
 			while ((n = reader.read(buffer)) != -1) {
 				for (int i = 0; i < n; i++) {
+					System.out.print((char)buffer[i]);
 					b.append((char)buffer[i]);
 				}
 			} 
@@ -187,7 +188,7 @@ public class ATest {
         
         AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
         serializer.serialize(op);
-        Assert.assertEquals(in, expecteds);
+        assertEquals(in, expecteds);
 	}
 
 	protected void assertString(String the, String expecteds) throws IOException {
