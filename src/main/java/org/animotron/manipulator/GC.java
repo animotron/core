@@ -23,10 +23,13 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 
+import java.io.IOException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -57,6 +60,19 @@ public class GC implements Manipulator {
 	public void push(final Relationship op) {
 		
 		System.out.println("GC the relationship " + op);
+		
+	}
+
+	@Override
+	public boolean canGo(Statement statement) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void go(Statement statement, Relationship op,
+			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		// TODO Auto-generated method stub
 		
 	}
 }

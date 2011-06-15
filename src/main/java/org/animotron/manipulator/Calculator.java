@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 
 import javolution.util.FastList;
 
+import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
@@ -72,23 +73,23 @@ public class Calculator implements Manipulator {
 	
 	public static PipedInputObjectStream eval(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
 	public static PipedInputObjectStream eval(Node op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
 	public static void eval(Relationship op, PipedOutputObjectStream out) {
-		exec.execute(new Evaluator(op, out));
+		exec.execute(Evaluator._.walk(op, out));
 	}
 	
 	public static List<Relationship> evalGetResult(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {
@@ -102,7 +103,7 @@ public class Calculator implements Manipulator {
 	
 	public static List<Relationship> evalGetResult(Node op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(new Evaluator(op, new PipedOutputObjectStream(in)));
+		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {
@@ -116,22 +117,22 @@ public class Calculator implements Manipulator {
 
 	public static PipedInputObjectStream prepare(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(Preparator._.walker(op, new PipedOutputObjectStream(in)));
+		exec.execute(Preparator._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
 	public static void prepare(Relationship op, PipedOutputObjectStream out) {
-		exec.execute(Preparator._.walker(op, out));
+		exec.execute(Preparator._.walk(op, out));
 	}
 	
 	public static PipedInputObjectStream filter(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		exec.execute(new Filter(op, new PipedOutputObjectStream(in)));
+		exec.execute(Filter._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
 	public static void filter(Relationship op, PipedOutputObjectStream out) {
-		exec.execute(new Filter(op, out));
+		exec.execute(Filter._.walk(op, out));
 	}
 	
     private static class Rule implements Predicate<Path> {
@@ -200,6 +201,19 @@ public class Calculator implements Manipulator {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+	}
+
+	@Override
+	public boolean canGo(Statement statement) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public void go(Statement statement, Relationship op,
+			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		// TODO Auto-generated method stub
 		
 	}
 	

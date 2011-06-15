@@ -30,28 +30,36 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Evaluator extends Walker {
+class Evaluator implements Manipulator {
 
-	public Evaluator(Node node, PipedOutputObjectStream out) {
-		super(node, null, out);
-	}
-
-	public Evaluator(Relationship op, PipedOutputObjectStream out) {
-		super(null, op, out);
-	}
+	public static Evaluator _ = new Evaluator();
+	
+	private Evaluator() {}
 
 	@Override
-	protected boolean canGo(Statement statement) {
+	public boolean canGo(Statement statement) {
 		return statement instanceof Evaluable;
 	}
 
 	@Override
-	protected void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		
 		((Evaluable) statement).eval(op, ot, isLast);
 		
 		ot.close();
 	}
-	
+
+	@Override
+	public void push(Relationship op) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Walker<Evaluator> walk(Node op, PipedOutputObjectStream out) {
+		return new Walker<Evaluator>(this, op, null, out);
+	}
+
+	public Walker<Evaluator> walk(Relationship op, PipedOutputObjectStream out) {
+		return new Walker<Evaluator>(this, null, op, out);
+	}
 }

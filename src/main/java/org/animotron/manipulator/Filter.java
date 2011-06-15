@@ -29,19 +29,19 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Filter extends Walker {
+class Filter implements Manipulator {
 
-	public Filter(Relationship op, PipedOutputObjectStream out) {
-		super(null, op, out);
-	}
+	public static Filter _ = new Filter(); 
+	
+	private Filter() {}
 
 	@Override
-	protected boolean canGo(Statement statement) {
+	public boolean canGo(Statement statement) {
 		return statement instanceof Predicate;
 	}
 
 	@Override
-	protected void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		
 		((Predicate) statement).filter(op, ot, isLast);
 		
@@ -51,5 +51,16 @@ class Filter extends Walker {
 	
 	public boolean isPiped() {
 		return false;
+	}
+
+	@Override
+	public void push(Relationship op) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Runnable walk(Relationship op, PipedOutputObjectStream out) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
