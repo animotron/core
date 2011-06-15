@@ -34,6 +34,7 @@ import org.animotron.manipulator.ResultOnContext;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.Query;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -50,7 +51,7 @@ import org.neo4j.kernel.Traversal;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ANY extends AbstarctOperator implements Cachable, Evaluable {
+public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query {
 	
 	public static final ANY _ = new ANY();
 	

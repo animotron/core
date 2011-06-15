@@ -23,9 +23,13 @@ import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import java.io.IOException;
+
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.io.PipedInputObjectStream;
+import org.animotron.manipulator.Calculator;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Relationship;
@@ -38,7 +42,7 @@ import org.neo4j.graphdb.index.IndexHits;
  */
 public abstract class AbstractResultSerializer {
 	
-	final public void serialize(Relationship r) {
+	final public void serialize(Relationship r) throws IOException {
 		startDocument();
 		build(r);
 		endDocument();
@@ -52,7 +56,7 @@ public abstract class AbstractResultSerializer {
 	
 	public abstract void endDocument();
 
-	protected void build(Relationship r) {
+	protected void build(Relationship r) throws IOException {
 		
 		RelationshipType type = r.getType();
 		String typeName = type.name();
@@ -98,7 +102,7 @@ public abstract class AbstractResultSerializer {
 //		end(statement, r);
 	}
 
-	protected boolean result(Relationship r) {
+	protected boolean result(Relationship r) throws IOException {
 		boolean found = false;
 		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
 		for ( Relationship n : i ) {
@@ -108,6 +112,19 @@ public abstract class AbstractResultSerializer {
 				) 
 			);
 			found = true;
+		}
+		
+		if (!found) {
+			//UNDERSTAND: calculate current r!
+			PipedInputObjectStream in = Calculator.eval(r.getStartNode());
+			
+			for (Object obj : in) {
+				if (obj instanceof Relationship) {
+					build( (Relationship) obj );
+				} else {
+					System.out.println("UNHANDLED "+obj);
+				}
+			}
 		}
 		
 		return found;

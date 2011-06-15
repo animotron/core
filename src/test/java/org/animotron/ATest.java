@@ -188,7 +188,7 @@ public class ATest {
         
         AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
         serializer.serialize(op);
-        assertEquals(in, expecteds);
+        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expecteds);
 	}
 
 	protected void assertString(String the, String expecteds) throws IOException {
