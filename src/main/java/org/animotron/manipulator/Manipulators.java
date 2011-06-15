@@ -28,7 +28,7 @@ import javolution.util.FastList;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Manipulators {
+public class Manipulators implements Creative, Destructive {
 	
 	public static Manipulators _ = new Manipulators(); 
 	
