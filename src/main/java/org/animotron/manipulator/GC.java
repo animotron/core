@@ -19,12 +19,11 @@
 package org.animotron.manipulator;
 
 import java.io.IOException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -39,15 +38,9 @@ public class GC extends GraphListener implements Manipulator {
 		super(RelationshipTypes.GC, Destructive._);
 	}
 	
-	private static int THREADS_NUMBER = 10;
-	
-	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
-	
 	@Override
 	public void push(final Relationship op, PipedOutputObjectStream out) {
-		
 		System.out.println("GC the relationship " + op);
-		
 	}
 
 	@Override
@@ -63,8 +56,14 @@ public class GC extends GraphListener implements Manipulator {
 		
 	}
 
-	// for debug needs
+	@Override
+	public Walker<GC> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new Walker<GC>(this, op, out);
+	}
+	
+	@Override
 	public boolean isPiped() {
 		return true;
 	}
+	
 }

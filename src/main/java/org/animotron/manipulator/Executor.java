@@ -18,44 +18,19 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Predicate;
-import org.neo4j.graphdb.PropertyContainer;
-import org.neo4j.graphdb.Relationship;
+import java.util.concurrent.Executors;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Filter implements Manipulator {
-
-	public static Filter _ = new Filter(); 
+public class Executor {
 	
-	private Filter() {}
-
-	@Override
-	public boolean canGo(Statement statement) {
-		return statement instanceof Predicate;
-	}
-
-	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		((Predicate) statement).filter(op, ot, isLast);
-		if (isPiped())
-			ot.close();
+	private static int THREADS_NUMBER = 100;
+	private static java.util.concurrent.Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
+	
+	public static void execute(Runnable command){
+		exec.execute(command);
 	}
 	
-	@Override
-	public Walker<Filter> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new Walker<Filter>(this, op, out);
-	}
-	
-	@Override
-	public boolean isPiped() {
-		return false;
-	}
-
 }

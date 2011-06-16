@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Prepare;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -42,18 +43,16 @@ class Preparator implements Manipulator {
 
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		
 		((Prepare) statement).prepare(op, ot, isLast);
-		
 		ot.close();
 	}
 	
-	//Walker<Preparator>
-	public Walker<Preparator> walk(Relationship op, PipedOutputObjectStream out) {
-		return new Walker<Preparator>(this, null, op, out);
+	@Override
+	public Walker<Preparator> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new Walker<Preparator>(this, op, out);
 	}
 
-	// for debug needs
+	@Override
 	public boolean isPiped() {
 		return false;
 	}
