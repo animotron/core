@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Evaluator extends AbstractManipulator {
+public class Evaluator extends AbstractStatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
 	
@@ -52,8 +52,8 @@ public class Evaluator extends AbstractManipulator {
 	}
 
 	@Override
-	public Walker<Evaluator> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new Walker<Evaluator>(this, op,out);
+	public ConditionalWalker<Evaluator> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new ConditionalWalker<Evaluator>(this, op,out);
 	}
 	
 	@Override

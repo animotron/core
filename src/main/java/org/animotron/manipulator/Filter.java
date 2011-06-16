@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Filter extends AbstractManipulator {
+public class Filter extends AbstractStatementManipulator {
 
 	public static Filter _ = new Filter(); 
 	
@@ -49,8 +49,8 @@ public class Filter extends AbstractManipulator {
 	}
 	
 	@Override
-	public Walker<Filter> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new Walker<Filter>(this, op, out);
+	public ConditionalWalker<Filter> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new ConditionalWalker<Filter>(this, op, out);
 	}
 	
 	@Override

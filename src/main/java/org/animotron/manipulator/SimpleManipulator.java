@@ -20,25 +20,15 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
-import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.Relationship;
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public abstract class AbstractManipulator implements Manipulator{
+public interface SimpleManipulator extends Manipulator {
 
-	@Override
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
-		return Executor.execute(this, op);
-	}
-
-	@Override
-	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
-		Executor.execute(this, op, out);
-	}
-	
+	public void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;
 
 }

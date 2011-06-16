@@ -20,7 +20,6 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
-import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
@@ -31,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GC extends GraphListener implements Manipulator {
+public class GC extends GraphListener implements SimpleManipulator {
 	
 	protected static GC _ = new GC();
 	
@@ -45,20 +44,14 @@ public class GC extends GraphListener implements Manipulator {
 	}
 
 	@Override
-	public boolean canGo(Statement statement) {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public Walker<GC> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new Walker<GC>(this, op, out);
+	public UnconditionalWalker<GC> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new UnconditionalWalker<GC>(this, op, out);
 	}
 	
 	@Override
