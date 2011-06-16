@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
@@ -46,12 +47,11 @@ public class GC extends GraphListener implements Manipulator {
 	@Override
 	public boolean canGo(Statement statement) {
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -64,6 +64,16 @@ public class GC extends GraphListener implements Manipulator {
 	@Override
 	public boolean isPiped() {
 		return true;
+	}
+
+	@Override
+	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
+		return Executor.execute(this, op);
+	}
+
+	@Override
+	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
+		Executor.execute(this, op, out);
 	}
 	
 }

@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Preparator extends Executor {
+class Preparator extends AbstractManipulator {
 	
 	static Preparator _ = new Preparator();
 	

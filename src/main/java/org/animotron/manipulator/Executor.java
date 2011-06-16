@@ -29,23 +29,23 @@ import org.neo4j.graphdb.PropertyContainer;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Executor implements Manipulator {
+public class Executor {
 	
 	private static int THREADS_NUMBER = 100;
 	private static java.util.concurrent.Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	protected void execute(Runnable command){
+	protected static void execute(Runnable command){
 		exec.execute(command);
 	}
 	
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
+	public static PipedInputObjectStream execute(Manipulator m, PropertyContainer op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(walk(op, new PipedOutputObjectStream(in)));
+		execute(m.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
-	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
-		execute(walk(op, out));
+	public static void execute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
+		execute(m.walk(op, out));
 	}
 	
 

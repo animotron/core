@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Evaluator extends Executor {
+public class Evaluator extends AbstractManipulator {
 
 	public static Evaluator _ = new Evaluator();
 	
@@ -63,7 +63,7 @@ public class Evaluator extends Executor {
 	
 	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(walk(op, new PipedOutputObjectStream(in)));
+		execute(op, new PipedOutputObjectStream(in));
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {

@@ -37,7 +37,7 @@ public class Calculator extends GraphListener {
 	@Override
     public void push(final Relationship op, PipedOutputObjectStream out) {
 		System.out.println("Prepare the relationship " + op);
-		//Preparator._.execute(op, out);
+		Preparator._.execute(op, out);
 	}
 
 }
