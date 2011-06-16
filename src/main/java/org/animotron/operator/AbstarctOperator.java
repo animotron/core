@@ -28,6 +28,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.graph.InMemoryRelationship;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -107,6 +108,14 @@ public abstract class AbstarctOperator implements Operator {
 		return res;
 	}
 	
+	protected Relationship createResultInMemory(Node node, Relationship r) {
+		Relationship res = new InMemoryRelationship(node, r.getEndNode(), RESULT);
+		//store to relationship arrow 
+		RID.set(res, r.getId());
+		
+		return res;
+	}
+
 	@Override
 	public String name(Relationship r) {
 		Node node = r.getEndNode().getSingleRelationship(REF, OUTGOING).getEndNode(); 

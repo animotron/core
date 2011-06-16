@@ -38,7 +38,6 @@ public class GC extends GraphListener implements Manipulator {
 	private GC() {
 		super(RelationshipTypes.GC, Destructive._);
 	}
-
 	
 	private static int THREADS_NUMBER = 10;
 	

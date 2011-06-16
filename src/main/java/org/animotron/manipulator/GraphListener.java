@@ -23,6 +23,8 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -39,17 +41,19 @@ public abstract class GraphListener implements Listener {
 	private Node root;
 	private RelationshipType type;
 	
-	public GraphListener(RelationshipType type, Broadcaster... broadcasters) {
+	public GraphListener(final RelationshipType type, Broadcaster... broadcasters) {
 		this.type = type;
 		for (Broadcaster b : broadcasters) {
 			b.register(this);
 		}
-		Transaction tx = beginTx();
-		try {
-			root = getOrCreateNode(getROOT(), type);
-		} finally {
-			finishTx(tx);
-		}
+		
+		root = AnimoGraph.execute(new GraphOperation<Node>() {
+			@Override
+			public Node execute() {
+				return getOrCreateNode(getROOT(), type);
+			}
+		});
+		
 	}
 
 	public Node getRoot() {

@@ -21,16 +21,13 @@ package org.animotron.operator.query;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.*;
 
 import java.io.IOException;
 
-import org.animotron.graph.InMemoryRelationship;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.manipulator.Calculator;
-import org.animotron.manipulator.ResultOnContext;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
@@ -74,13 +71,14 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 			Node node = ref.getEndNode();
 			
 			if (out.filter(node)) {
-				ot.write(new ResultANY( n, node ));
+				ot.write( createResultInMemory( n, ref ) );
 			} else {
 				
 				for (Relationship tdR : td_eval.traverse(node).relationships()) {
 					System.out.println("ANY get next "+tdR);
 					if (out.filter(tdR.getEndNode() )) {
-						ot.write(new ResultANY( n, tdR.getEndNode() ));
+						
+						ot.write( createResultInMemory( n, tdR ) );
 						break;
 					}
 				}
@@ -93,17 +91,6 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 		ot.close();
 	}
 	
-	class ResultANY extends InMemoryRelationship implements ResultOnContext {
-
-		protected ResultANY(Node sNode, Node eNode) {
-			super(sNode, eNode, RESULT);
-		}
-		
-		public String toString() {
-			return "ANY:RESULT "+getStartNode()+" -> "+getEndNode();
-		}
-	}
-
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().

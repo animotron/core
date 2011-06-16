@@ -28,6 +28,7 @@ import java.util.Iterator;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.instruction.Instruction;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
@@ -102,11 +103,15 @@ class Walker<T extends Manipulator> implements Runnable {
 
 					m.go(s, r, out, isLast(it));
 
-					if (m.isPiped()) {
+					if (in != null) {
 						for (Object n : in) {
 							ot.write(n);
 						}
 					}
+					
+				} else if (s instanceof Instruction) {
+					//bypass instructions
+					ot.write(r);
 					
 				//XXX:find better solution
 				} else if (type.name().equals(RelationshipTypes.REF.name())) {
