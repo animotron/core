@@ -23,7 +23,7 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
-import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -43,21 +43,16 @@ class Evaluator implements Manipulator {
 
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		
 		((Evaluable) statement).eval(op, ot, isLast);
-		
 		ot.close();
 	}
 
-	public Walker<Evaluator> walk(Node op, PipedOutputObjectStream out) {
-		return new Walker<Evaluator>(this, op, null, out);
-	}
-
-	public Walker<Evaluator> walk(Relationship op, PipedOutputObjectStream out) {
-		return new Walker<Evaluator>(this, null, op, out);
+	@Override
+	public Walker<Evaluator> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new Walker<Evaluator>(this, op,out);
 	}
 	
-	// for debug needs
+	@Override
 	public boolean isPiped() {
 		return true;
 	}

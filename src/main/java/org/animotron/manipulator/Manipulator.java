@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -36,4 +37,7 @@ public interface Manipulator {
 
 	// for debug needs
 	public boolean isPiped();
+	
+	public Walker<? extends Manipulator> walk(PropertyContainer op, PipedOutputObjectStream out);
+	
 }

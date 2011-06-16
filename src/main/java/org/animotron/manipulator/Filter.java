@@ -23,6 +23,7 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Predicate;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -42,18 +43,19 @@ class Filter implements Manipulator {
 
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		
 		((Predicate) statement).filter(op, ot, isLast);
-		
 		if (isPiped())
 			ot.close();
 	}
 	
+	@Override
+	public Walker<Filter> walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new Walker<Filter>(this, op, out);
+	}
+	
+	@Override
 	public boolean isPiped() {
 		return false;
 	}
 
-	public Runnable walk(Relationship op, PipedOutputObjectStream out) {
-		return new Walker<Filter>(this, null, op, out);
-	}
 }

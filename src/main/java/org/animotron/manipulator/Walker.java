@@ -31,6 +31,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
@@ -42,13 +43,11 @@ import org.neo4j.graphdb.Transaction;
 class Walker<T extends Manipulator> implements Runnable {
 
 	private T m;
-	private Node node;
-	private Relationship op;
+	private PropertyContainer op;
 	private PipedOutputObjectStream out;
 
-	public Walker(T m, Node node, Relationship op, PipedOutputObjectStream out) {
+	public Walker(T m, PropertyContainer op, PipedOutputObjectStream out) {
 		this.m = m;
-		this.node = node;
 		this.op = op;
 		this.out = out;
 	}
@@ -56,19 +55,17 @@ class Walker<T extends Manipulator> implements Runnable {
 	@Override
 	public void run() {
 		try {
-			if (node != null)
-				go(node, out);
+			if (op instanceof Node)
+				go((Node) op, out);
 			else
-				go(op, out);
+				go((Relationship) op, out);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	protected void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
-
 		//System.out.println("Walk op = " + op);
-
 		go(op.getEndNode(), ot);
 	}
 
