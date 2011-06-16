@@ -21,14 +21,15 @@ package org.animotron.operator.query;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
 import org.animotron.Properties;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Filter;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
@@ -61,7 +62,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 		
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
-		Calculator._.filter(op, out);
+		Filter._.execute(op, out);
 		
 		while (in.read()!= null) ;
 		

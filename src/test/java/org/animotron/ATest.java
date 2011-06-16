@@ -41,7 +41,7 @@ import org.animotron.graph.CommonGraphBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.Reader;
 import org.animotron.io.PipedInputObjectStream;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
 import org.animotron.serializer.AnimoResultSerializer;
 import org.animotron.serializer.StringResultSerializer;
@@ -196,7 +196,7 @@ public class ATest {
         assertNotNull(op);
 
         toConsole(
-    		Calculator._.eval(op)
+    		Evaluator._.execute(op)
 		);
         
         System.out.println("String result serializer...");

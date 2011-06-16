@@ -43,7 +43,7 @@ public class AnimoGraph {
 	
 	private static String STORAGE;
 	
-	private static Node ROOT, CACHE, EMPTY, GC, TOP;
+	private static Node ROOT, CACHE, EMPTY, TOP;
 	private static OrderIndex ORDER;
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();

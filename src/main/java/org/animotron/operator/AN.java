@@ -27,7 +27,7 @@ import java.io.IOException;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Evaluator;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -49,7 +49,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		PipedInputObjectStream in = new PipedInputObjectStream();
 
 		if (!isLast)
-			Calculator.eval(op, new PipedOutputObjectStream(in));
+			Evaluator._.execute(op, new PipedOutputObjectStream(in));
 		
 		Transaction tx = beginTx();
 		try {

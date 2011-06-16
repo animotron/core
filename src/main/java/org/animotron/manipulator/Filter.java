@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Filter implements Manipulator {
+public class Filter extends Executor {
 
 	public static Filter _ = new Filter(); 
 	

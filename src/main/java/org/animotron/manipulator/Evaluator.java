@@ -19,8 +19,12 @@
 package org.animotron.manipulator;
 
 import java.io.IOException;
+import java.util.List;
+
+import javolution.util.FastList;
 
 import org.animotron.Statement;
+import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
 import org.neo4j.graphdb.PropertyContainer;
@@ -30,7 +34,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-class Evaluator implements Manipulator {
+public class Evaluator extends Executor {
 
 	public static Evaluator _ = new Evaluator();
 	
@@ -56,4 +60,19 @@ class Evaluator implements Manipulator {
 	public boolean isPiped() {
 		return true;
 	}
+	
+	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		execute(walk(op, new PipedOutputObjectStream(in)));
+		
+		List<Relationship> result = new FastList<Relationship>();
+		for (Object obj : in) {
+			if (obj instanceof Relationship) {
+				result.add((Relationship) obj);
+			} else
+				System.out.println("evalGetResult");
+		}
+		return result;
+	}
+
 }

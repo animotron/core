@@ -18,17 +18,8 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.manipulator.Executor.execute;
-
-import java.io.IOException;
-import java.util.List;
-
-import javolution.util.FastList;
-
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -43,60 +34,10 @@ public class Calculator extends GraphListener {
 		super(RelationshipTypes.CALC, Creative._);
 	}
 
-	public PipedInputObjectStream eval(PropertyContainer op) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
-		return in;
-	}
-
-	public static void eval(Relationship op, PipedOutputObjectStream out) {
-		execute(Evaluator._.walk(op, out));
-	}
-	
-	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
-		
-		List<Relationship> result = new FastList<Relationship>();
-		for (Object obj : in) {
-			if (obj instanceof Relationship) {
-				result.add((Relationship) obj);
-			} else
-				System.out.println("evalGetResult");
-		}
-		return result;
-	}
-	
-	public PipedInputObjectStream prepare(PropertyContainer op) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(Preparator._.walk(op, new PipedOutputObjectStream(in)));
-		return in;
-	}
-
-	public void prepare(Relationship op, PipedOutputObjectStream out) {
-		execute(Preparator._.walk(op, out));
-	}
-	
-	public PipedInputObjectStream filter(Relationship op) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(Filter._.walk(op, new PipedOutputObjectStream(in)));
-		return in;
-	}
-
-	public void filter(Relationship op, PipedOutputObjectStream out) {
-		execute(Filter._.walk(op, out));
-	}
-	
 	@Override
     public void push(final Relationship op, PipedOutputObjectStream out) {
 		System.out.println("Prepare the relationship " + op);
-		try {
-			prepare(op);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		//Preparator._.execute(op, out);
 	}
 
 }

@@ -31,7 +31,7 @@ import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.animotron.graph.Reader;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -82,7 +82,7 @@ public class SimpleTests extends ATest {
 	        System.out.println(op);
 	
 	        //System.out.println("get:A an:B");
-	        toConsole(Calculator._.eval(op));
+	        toConsole(Evaluator._.execute(op));
 	        
 	    	InputStream stream = Reader.read(op);
 	        assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");

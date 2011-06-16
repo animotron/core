@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.query.GET;
@@ -59,11 +59,11 @@ public class WITH extends AbstarctOperator implements Predicate {
 		
 		//TODO: improve
 		System.out.println("================================== actual");
-		List<Relationship> actual = Calculator._.evalGetResult(have);
+		List<Relationship> actual = Evaluator._.evalGetResult(have);
 		System.out.println("================================== actual result");
 		System.out.println(Arrays.toString(actual.toArray()));
 		System.out.println("================================== expected");
-		List<Relationship> expected = Calculator._.evalGetResult(op.getEndNode());
+		List<Relationship> expected = Evaluator._.evalGetResult(op.getEndNode());
 		System.out.println("================================== expected result");
 		System.out.println(Arrays.toString(expected.toArray()));
 		

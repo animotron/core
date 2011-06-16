@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-class Preparator implements Manipulator {
+class Preparator extends Executor {
 	
 	static Preparator _ = new Preparator();
 	
@@ -56,4 +56,5 @@ class Preparator implements Manipulator {
 	public boolean isPiped() {
 		return false;
 	}
+	
 }

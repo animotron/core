@@ -18,19 +18,35 @@
  */
 package org.animotron.manipulator;
 
+import java.io.IOException;
 import java.util.concurrent.Executors;
+
+import org.animotron.io.PipedInputObjectStream;
+import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.PropertyContainer;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Executor {
+public abstract class Executor implements Manipulator {
 	
 	private static int THREADS_NUMBER = 100;
 	private static java.util.concurrent.Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	public static void execute(Runnable command){
+	protected void execute(Runnable command){
 		exec.execute(command);
 	}
 	
+	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		execute(walk(op, new PipedOutputObjectStream(in)));
+		return in;
+	}
+
+	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
+		execute(walk(op, out));
+	}
+	
+
 }

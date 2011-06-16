@@ -27,7 +27,7 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
@@ -79,7 +79,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				
 				String name = name(op);
 				
-				for (Object n : Calculator._.eval(op)) {
+				for (Object n : Evaluator._.execute(op)) {
 					if (n instanceof IOException) {
 						throw (IOException)n;
 						
