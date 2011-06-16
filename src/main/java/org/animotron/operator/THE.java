@@ -21,7 +21,6 @@ package org.animotron.operator;
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.clear;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
@@ -31,6 +30,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.manipulator.Destructive;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -102,7 +102,7 @@ public class THE extends AbstarctOperator {
 	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Relationship r = get(name);
 		if (r != null) {
-			clear(r);
+			Destructive._.push(r);
 		} else {
 			r = create(name);
 		}
