@@ -23,16 +23,11 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.animotron.Statement;
-import org.animotron.Statements;
-import org.animotron.graph.RelationshipTypes;
-import org.animotron.instruction.Instruction;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -63,11 +58,8 @@ class UnconditionalWalker<T extends SimpleManipulator> extends Walker<Manipulato
 			while (it.hasNext()) {
 
 				r = it.next();
-				RelationshipType type = r.getType();
 
 				//System.out.println(type.name());
-
-				Statement s = Statements.relationshipType(type);
 
 				PipedInputObjectStream in = null;
 				PipedOutputObjectStream out = ot;
