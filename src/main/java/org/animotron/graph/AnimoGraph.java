@@ -18,7 +18,6 @@
  */
 package org.animotron.graph;
 
-import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
@@ -155,16 +154,6 @@ public class AnimoGraph {
 			return result;
 		} finally {
 			finishTx(tx);
-		}
-	}
-	
-	public static void clear (Relationship r){
-		for (Relationship i : r.getEndNode().getRelationships(OUTGOING)){
-			Node end = i.getEndNode();
-			i.delete();
-			if (!end.hasRelationship(INCOMING)) {
-				GC.createRelationshipTo(end, RelationshipTypes.GARBAGE);
-			}
 		}
 	}
 	

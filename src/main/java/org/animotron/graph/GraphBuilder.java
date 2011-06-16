@@ -21,7 +21,6 @@ package org.animotron.graph;
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.clear;
 import static org.animotron.graph.AnimoGraph.createCache;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
@@ -39,6 +38,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.manipulator.Creative;
+import org.animotron.manipulator.Destructive;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -238,7 +238,7 @@ public abstract class GraphBuilder {
 							HASH.set(r, hash);
 							thes.add(r);
 						} else if (!h.equals(hash)) {
-							clear(r);
+							Destructive._.push(r);
 							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
 							thes.add(r);
