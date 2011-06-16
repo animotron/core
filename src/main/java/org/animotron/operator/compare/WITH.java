@@ -59,11 +59,11 @@ public class WITH extends AbstarctOperator implements Predicate {
 		
 		//TODO: improve
 //		System.out.println("================================== actual");
-		List<Relationship> actual = Calculator.evalGetResult(have);
+		List<Relationship> actual = Calculator._.evalGetResult(have);
 		System.out.println("================================== actual result");
 		System.out.println(Arrays.toString(actual.toArray()));
 //		System.out.println("================================== expected");
-		List<Relationship> expected = Calculator.evalGetResult(op.getEndNode());
+		List<Relationship> expected = Calculator._.evalGetResult(op.getEndNode());
 		System.out.println("================================== expected result");
 		System.out.println(Arrays.toString(expected.toArray()));
 		

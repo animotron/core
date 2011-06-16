@@ -18,15 +18,15 @@
  */
 package org.animotron.manipulator;
 
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Creative extends Broadcaster {
+public interface Listener {
 
-	public static final Broadcaster _ = new Creative();
-	private Creative() {} 
+	public void push(Relationship op);
 	
 }

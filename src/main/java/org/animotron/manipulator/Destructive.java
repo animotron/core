@@ -18,14 +18,15 @@
  */
 package org.animotron.manipulator;
 
-import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Destructive {
+public class Destructive extends Broadcaster {
 
-	public void destructivePush(Relationship op);
+	public static final Broadcaster _ = new Destructive();
+	private Destructive() {} 
 	
 }

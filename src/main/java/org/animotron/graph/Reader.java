@@ -97,7 +97,7 @@ public class Reader implements Runnable {
 		
 		if (st instanceof ANY) {
 			
-			PipedInputObjectStream in = Calculator.eval(position.getStartNode());
+			PipedInputObjectStream in = Calculator._.eval(position.getStartNode());
 			for (Object n : in) {
 				if (n instanceof Relationship) {
 					process( (Relationship) n );

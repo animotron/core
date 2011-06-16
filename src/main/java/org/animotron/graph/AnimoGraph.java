@@ -61,7 +61,6 @@ public class AnimoGraph {
 		
 		Transaction tx = beginTx();
 		try {
-			GC = getOrCreateNode(ROOT, RelationshipTypes.GC);
 			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
 			EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);

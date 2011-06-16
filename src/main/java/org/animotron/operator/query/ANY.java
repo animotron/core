@@ -62,7 +62,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 		
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
-		Calculator.filter(op, out);
+		Calculator._.filter(op, out);
 		
 		while (in.read()!= null) ;
 		

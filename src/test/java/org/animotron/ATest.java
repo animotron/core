@@ -196,7 +196,7 @@ public class ATest {
         assertNotNull(op);
 
         toConsole(
-    		Calculator.eval(op)
+    		Calculator._.eval(op)
 		);
         
         System.out.println("String result serializer...");

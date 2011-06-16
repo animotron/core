@@ -20,7 +20,6 @@ package org.animotron.manipulator;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getCACHE;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
@@ -34,7 +33,6 @@ import java.util.concurrent.Executors;
 
 import javolution.util.FastList;
 
-import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
@@ -52,32 +50,25 @@ import org.neo4j.kernel.Uniqueness;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Calculator implements Manipulator, Creative {
+public class Calculator extends GraphListener {
 	
-	protected static Calculator _ = new Calculator();
+	public static Calculator _ = new Calculator();
 	
-	private static int THREADS_NUMBER = 100;
-	private static final Node CALC;
-	
-	static {
-		Transaction tx = beginTx();
-		try {
-			CALC = getOrCreateNode(getROOT() ,RelationshipTypes.CALC);
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
+	private Calculator() {
+		super(RelationshipTypes.CALC, Creative._);
 	}
+
+	private static int THREADS_NUMBER = 100;
 	
 	private static Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	public static PipedInputObjectStream eval(Relationship op) throws IOException {
+	public PipedInputObjectStream eval(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
-	public static PipedInputObjectStream eval(Node op) throws IOException {
+	public PipedInputObjectStream eval(Node op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
@@ -87,7 +78,7 @@ public class Calculator implements Manipulator, Creative {
 		exec.execute(Evaluator._.walk(op, out));
 	}
 	
-	public static List<Relationship> evalGetResult(Relationship op) throws IOException {
+	public List<Relationship> evalGetResult(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		
@@ -101,7 +92,7 @@ public class Calculator implements Manipulator, Creative {
 		return result;
 	}
 	
-	public static List<Relationship> evalGetResult(Node op) throws IOException {
+	public List<Relationship> evalGetResult(Node op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(Evaluator._.walk(op, new PipedOutputObjectStream(in)));
 		
@@ -115,34 +106,34 @@ public class Calculator implements Manipulator, Creative {
 		return result;
 	}
 
-	public static PipedInputObjectStream prepare(Relationship op) throws IOException {
+	public PipedInputObjectStream prepare(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(Preparator._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
-	public static void prepare(Relationship op, PipedOutputObjectStream out) {
+	public void prepare(Relationship op, PipedOutputObjectStream out) {
 		exec.execute(Preparator._.walk(op, out));
 	}
 	
-	public static PipedInputObjectStream filter(Relationship op) throws IOException {
+	public PipedInputObjectStream filter(Relationship op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		exec.execute(Filter._.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
-	public static void filter(Relationship op, PipedOutputObjectStream out) {
+	public void filter(Relationship op, PipedOutputObjectStream out) {
 		exec.execute(Filter._.walk(op, out));
 	}
 	
-    private static class Rule implements Predicate<Path> {
+    private class Rule implements Predicate<Path> {
 
-		private final static HashSet<Node> set = new HashSet<Node>();
-		static {
+		private final HashSet<Node> set = new HashSet<Node>();
+		{
 			set.add(getROOT());
 			set.add(getTOP());
 			set.add(getCACHE());
-			set.add(CALC);
+			set.add(getRoot());
 		}
 		
 		@Override
@@ -161,10 +152,11 @@ public class Calculator implements Manipulator, Creative {
     }
     
     @SuppressWarnings("deprecation")
-    private static final TraversalDescription TD = Traversal.description()
+    private final TraversalDescription TD = Traversal.description()
     	.depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH).filter(new Rule());
 
-	public void creativePush(final Relationship op) {
+	@Override
+    public void push(final Relationship op, PipedOutputObjectStream out) {
 		
 		if (true) return;
 		
@@ -175,8 +167,6 @@ public class Calculator implements Manipulator, Creative {
 		Transaction tx = beginTx();
 		try {
 			
-//			CALC.createRelationshipTo(op.getEndNode(), RelationshipTypes.CALC);
-		
             Iterator<Path> pi = TD.traverse(op.getEndNode()).iterator();
             
 			//System.out.println("Found paths:");
@@ -204,21 +194,4 @@ public class Calculator implements Manipulator, Creative {
 		
 	}
 
-	@Override
-	public boolean canGo(Statement statement) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void go(Statement statement, Relationship op,
-			PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	// for debug needs
-	public boolean isPiped() {
-		return true;
-	}
 }

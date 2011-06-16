@@ -116,7 +116,7 @@ public abstract class AbstractResultSerializer {
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			PipedInputObjectStream in = Calculator.eval(r.getStartNode());
+			PipedInputObjectStream in = Calculator._.eval(r.getStartNode());
 			
 			for (Object obj : in) {
 				if (obj instanceof Relationship) {

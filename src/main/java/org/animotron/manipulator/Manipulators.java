@@ -18,40 +18,13 @@
  */
 package org.animotron.manipulator;
 
-import java.util.List;
-
-import org.neo4j.graphdb.Relationship;
-
-import javolution.util.FastList;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Manipulators implements Creative, Destructive {
+public class Manipulators {
 	
-	public static Manipulators _ = new Manipulators(); 
+	//TODO: Implement manipulators/listeners/broadcasters loader
 	
-	private static List<Creative> creative = new FastList<Creative>();
-	private static List<Destructive> descructive = new FastList<Destructive>();
-	
-	static {
-		creative.add(Calculator._);
-		descructive.add(GC._);
-	}
-	
-	private Manipulators() {}
-
-	public void creativePush(Relationship op) {
-		for (Creative m : creative) {
-			m.creativePush(op);
-		}
-	}
-
-	public void destructivePush(Relationship op) {
-		for (Destructive m : descructive) {
-			m.destructivePush(op);
-		}
-	}
-
 }
