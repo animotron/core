@@ -61,6 +61,15 @@ public abstract class AbstractResultSerializer {
 		RelationshipType type = r.getType();
 		String typeName = type.name();
 		
+		if (RelationshipTypes.RESULT.name().equals(typeName)) {
+			r = getDb().getRelationshipById(
+					(Long)r.getProperty(RID.name())
+				); 
+
+			type = r.getType();
+			typeName = type.name();
+		}
+		
 		Statement s = Statements.relationshipType(typeName);
 		
 		if (typeName.startsWith(THE._.name())) {
@@ -118,13 +127,16 @@ public abstract class AbstractResultSerializer {
 			//UNDERSTAND: calculate current r!
 			PipedInputObjectStream in = Calculator._.eval(r.getStartNode());
 			
+			System.out.println("READER waiting ...");
 			for (Object obj : in) {
+				System.out.println("READER get from calculator "+obj);
 				if (obj instanceof Relationship) {
 					build( (Relationship) obj );
 				} else {
 					System.out.println("UNHANDLED "+obj);
 				}
 			}
+			System.out.println("READER done.");
 		}
 		
 		return found;

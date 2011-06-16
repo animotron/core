@@ -50,7 +50,7 @@ public class WITH extends AbstarctOperator implements Predicate {
 	@Override
 	public boolean filter(Relationship op, Node ref) throws IOException {
 		
-//		System.out.println("WITH op "+op);
+		System.out.println("WITH op "+op);
 		//XXX: fix
 		String name = name(op);
 
@@ -58,11 +58,11 @@ public class WITH extends AbstarctOperator implements Predicate {
 		if (have == null) return false;
 		
 		//TODO: improve
-//		System.out.println("================================== actual");
+		System.out.println("================================== actual");
 		List<Relationship> actual = Calculator._.evalGetResult(have);
 		System.out.println("================================== actual result");
 		System.out.println(Arrays.toString(actual.toArray()));
-//		System.out.println("================================== expected");
+		System.out.println("================================== expected");
 		List<Relationship> expected = Calculator._.evalGetResult(op.getEndNode());
 		System.out.println("================================== expected result");
 		System.out.println(Arrays.toString(expected.toArray()));

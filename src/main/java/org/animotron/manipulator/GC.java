@@ -37,12 +37,10 @@ public class GC extends GraphListener implements Manipulator {
 	private GC() {
 		super(RelationshipTypes.GC, Destructive._);
 	}
-
+	
 	@Override
 	public void push(final Relationship op, PipedOutputObjectStream out) {
-		
 		System.out.println("GC the relationship " + op);
-		
 	}
 
 	@Override
