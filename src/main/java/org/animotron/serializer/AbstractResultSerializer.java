@@ -32,6 +32,7 @@ import org.animotron.io.PipedInputObjectStream;
 import org.animotron.manipulator.Calculator;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
+import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
@@ -79,6 +80,11 @@ public abstract class AbstractResultSerializer {
 		if (s != null) {
 			if (s instanceof Query) {
 				result(r);
+
+			//workaround IS
+			} else if (s instanceof IS) {
+				start(s, r);
+				end(s, r);
 
 			} else {
 				start(s, r);

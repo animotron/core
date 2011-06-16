@@ -25,6 +25,7 @@ import static org.neo4j.graphdb.Direction.*;
 
 import java.io.IOException;
 
+import org.animotron.Properties;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.manipulator.Calculator;
@@ -32,6 +33,7 @@ import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
+import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -71,14 +73,15 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 			Node node = ref.getEndNode();
 			
 			if (out.filter(node)) {
-				ot.write( createResultInMemory( n, ref ) );
+				ot.write( createResultInMemory( n, getThe(node) ) );
 			} else {
 				
 				for (Relationship tdR : td_eval.traverse(node).relationships()) {
 					System.out.println("ANY get next "+tdR);
-					if (out.filter(tdR.getEndNode() )) {
+					Node res = tdR.getEndNode();
+					if (out.filter( res )) {
 						
-						ot.write( createResultInMemory( n, tdR ) );
+						ot.write( createResultInMemory( n, getThe( res ) ) );
 						break;
 					}
 				}
@@ -89,6 +92,10 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 			finishTx(tx);
 		}
 		ot.close();
+	}
+	
+	private Relationship getThe(Node node) {
+		return THE._.get(Properties.NAME.get(node));
 	}
 	
 	private static TraversalDescription td_eval = 
