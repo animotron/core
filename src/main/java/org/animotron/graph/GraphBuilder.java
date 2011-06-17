@@ -126,14 +126,20 @@ public abstract class GraphBuilder {
 			}
 			
 			tx.success();
+			the = (Relationship) first[5];
+			
 		} catch (ExceptionBuilderTerminate e) {
+			
 			tx.failure();
 			
 			catcher.reset();
 			catcher = null;
+			the = null;
+			
 		} finally {
+			
 			finishTx(tx);
-			the = (Relationship) first[5];
+			
 		}
 		
 		if (catcher != null)
