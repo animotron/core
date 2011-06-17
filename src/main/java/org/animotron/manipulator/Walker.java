@@ -34,13 +34,13 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public abstract class Walker<T extends Manipulator> implements Runnable, Startable {
+public abstract class Walker implements Runnable, Startable {
 
-	private T m;
+	private Manipulator m;
 	private PropertyContainer op;
 	private PipedOutputObjectStream out;
 
-	public Walker(T m, PropertyContainer op, PipedOutputObjectStream out) {
+	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
 		this.m = m;
 		this.op = op;
 		this.out = out;

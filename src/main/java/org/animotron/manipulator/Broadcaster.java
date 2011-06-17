@@ -38,7 +38,7 @@ public abstract class Broadcaster implements Listener {
 	}
 	
 	@Override
-	public void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher) throws ExceptionBuilderTerminate {
+	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
 		for (Listener l : pool)
 			l.push(op, catcher);
 	}

@@ -18,8 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 
@@ -29,7 +27,6 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -61,12 +58,12 @@ public abstract class GraphListener implements Listener {
 	}
 	
 	@Override
-	public final void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher) throws ExceptionBuilderTerminate {
+	public final void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
 		//root.createRelationshipTo(op.getEndNode(), type);
 		//TODO add pipe
 		push(op, catcher, null);
 	}
 	
-	public abstract void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher, PipedOutputObjectStream out);
+	public abstract void push(Relationship op, Catcher catcher, PipedOutputObjectStream out);
 	
 }

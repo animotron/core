@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Prepare;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -47,11 +46,6 @@ class Preparator extends AbstractStatementManipulator {
 		ot.close();
 	}
 	
-	@Override
-	public ConditionalWalker<Preparator> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new ConditionalWalker<Preparator>(this, op, out);
-	}
-
 	@Override
 	public boolean isPiped() {
 		return false;

@@ -52,11 +52,6 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public ConditionalWalker<Evaluator> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new ConditionalWalker<Evaluator>(this, op,out);
-	}
-	
-	@Override
 	public boolean isPiped() {
 		return true;
 	}

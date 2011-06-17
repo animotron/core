@@ -33,7 +33,7 @@ public interface Manipulator {
 	// for debug needs
 	public boolean isPiped();
 	
-	public Walker<? extends Manipulator> walk(PropertyContainer op, PipedOutputObjectStream out);
+	public Walker walk(PropertyContainer op, PipedOutputObjectStream out);
 
 	public PipedInputObjectStream execute(PropertyContainer op) throws IOException;
 

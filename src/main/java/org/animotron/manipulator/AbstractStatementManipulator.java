@@ -40,5 +40,9 @@ public abstract class AbstractStatementManipulator implements StatementManipulat
 		Executor.execute(this, op, out);
 	}
 	
+	@Override
+	public ConditionalWalker walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new ConditionalWalker(this, op,out);
+	}
 
 }

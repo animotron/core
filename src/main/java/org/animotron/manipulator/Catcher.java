@@ -27,11 +27,11 @@ import javolution.util.FastList;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Catcher<T extends Startable> {
+public class Catcher {
 	
-	private List<T> objs = new FastList<T>();
+	private List<Startable> objs = new FastList<Startable>();
 	
-	public void add(T obj) {
+	public void add(Startable obj) {
 		objs.add(obj);
 	}
 	
@@ -44,4 +44,5 @@ public class Catcher<T extends Startable> {
 	public void reset() {
 		
 	}
+	
 }

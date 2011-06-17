@@ -27,6 +27,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Listener {
 
-	public void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher) throws ExceptionBuilderTerminate;
+	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate;
 	
 }

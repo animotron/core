@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.animotron.Statement;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Predicate;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -46,11 +45,6 @@ public class Filter extends AbstractStatementManipulator {
 		((Predicate) statement).filter(op, ot, isLast);
 		if (isPiped())
 			ot.close();
-	}
-	
-	@Override
-	public ConditionalWalker<Filter> walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new ConditionalWalker<Filter>(this, op, out);
 	}
 	
 	@Override

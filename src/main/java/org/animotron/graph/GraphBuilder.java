@@ -41,8 +41,6 @@ import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.Creative;
 import org.animotron.manipulator.Destructive;
 import org.animotron.manipulator.ExceptionBuilderTerminate;
-import org.animotron.manipulator.Manipulator;
-import org.animotron.manipulator.Walker;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -96,7 +94,7 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void endGraph(){
-		Catcher<? extends Walker<? extends Manipulator>> catcher = new Catcher(); 
+		Catcher catcher = new Catcher(); 
 		Object[] first = flow.get(0);
 		try {
 			int i = 0;
@@ -234,7 +232,7 @@ public abstract class GraphBuilder {
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, Catcher<? extends Walker<? extends Manipulator>> catcher, int order){
+	private void build(Object[] item, Catcher catcher, int order){
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
 			if ((Boolean) p[8]) {
