@@ -39,8 +39,9 @@ public class GC extends GraphListener implements SimpleManipulator {
 	}
 	
 	@Override
-	public void push(final Relationship op, PipedOutputObjectStream out) {
+	public void push(final Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher, PipedOutputObjectStream out) {
 		System.out.println("GC the relationship " + op);
+		catcher.add(walk(op,out));
 	}
 
 	@Override
