@@ -30,7 +30,6 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.Destructive;
 import org.animotron.manipulator.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -101,14 +100,7 @@ public class THE extends AbstarctOperator {
 	
 	@Override
 	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate {
-		Relationship r = get(name);
-		if (r != null) {
-			//XXX: get catcher!!!
-			Destructive._.push(r, null);
-		} else {
-			r = create(name);
-		}
-		return r;
+		return null;
 	}
 	
 	@Override
