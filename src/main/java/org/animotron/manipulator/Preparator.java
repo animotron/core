@@ -21,6 +21,7 @@ package org.animotron.manipulator;
 import java.io.IOException;
 
 import org.animotron.Statement;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Prepare;
 import org.neo4j.graphdb.Relationship;
@@ -33,7 +34,7 @@ class Preparator extends AbstractStatementManipulator {
 	
 	static Preparator _ = new Preparator();
 	
-	private Preparator() {}
+	private Preparator() {super(RelationshipTypes.PREPARE);}
 
 	@Override
 	public boolean canGo(Statement statement) {
@@ -43,12 +44,6 @@ class Preparator extends AbstractStatementManipulator {
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		((Prepare) statement).prepare(op, ot, isLast);
-		ot.close();
-	}
-	
-	@Override
-	public boolean isPiped() {
-		return false;
 	}
 	
 }

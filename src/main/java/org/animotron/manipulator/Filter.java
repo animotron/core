@@ -21,6 +21,7 @@ package org.animotron.manipulator;
 import java.io.IOException;
 
 import org.animotron.Statement;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Relationship;
@@ -31,9 +32,9 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Filter extends AbstractStatementManipulator {
 
-	public static Filter _ = new Filter(); 
+	public static Filter _ = new Filter(){}; 
 	
-	private Filter() {}
+	private Filter() {super(RelationshipTypes.FILTER);}
 
 	@Override
 	public boolean canGo(Statement statement) {
@@ -43,13 +44,6 @@ public class Filter extends AbstractStatementManipulator {
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		((Predicate) statement).filter(op, ot, isLast);
-		if (isPiped())
-			ot.close();
 	}
 	
-	@Override
-	public boolean isPiped() {
-		return false;
-	}
-
 }

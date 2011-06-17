@@ -19,17 +19,22 @@
 package org.animotron.manipulator;
 
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface GraphListener extends Listener {
+public abstract class AbstractSimpleManipulator extends AbstractManipulator implements SimpleManipulator {
 
-	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate;
-	
-	public void push(Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate;
-	
+	public AbstractSimpleManipulator(RelationshipType type) {
+		super(type);
+	}
+
+	@Override
+	public UnconditionalWalker walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return new UnconditionalWalker(this, op,out);
+	}
+
 }

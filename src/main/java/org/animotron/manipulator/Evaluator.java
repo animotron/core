@@ -24,6 +24,7 @@ import java.util.List;
 import javolution.util.FastList;
 
 import org.animotron.Statement;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
@@ -38,7 +39,7 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
 	
-	private Evaluator() {}
+	private Evaluator() {super(RelationshipTypes.EVAL);}
 
 	@Override
 	public boolean canGo(Statement statement) {
@@ -48,14 +49,8 @@ public class Evaluator extends AbstractStatementManipulator {
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 		((Evaluable) statement).eval(op, ot, isLast);
-		ot.close();
 	}
 
-	@Override
-	public boolean isPiped() {
-		return true;
-	}
-	
 	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		execute(op, new PipedOutputObjectStream(in));

@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
@@ -26,14 +25,10 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Calculator extends GraphListener {
+public class Calculator extends AbstaractGraphListener {
 	
 	public static Calculator _ = new Calculator();
 	
-	private Calculator() {
-		super(RelationshipTypes.CALC, Creative._);
-	}
-
 	@Override
     public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
 		System.out.println("Prepare the relationship " + op);

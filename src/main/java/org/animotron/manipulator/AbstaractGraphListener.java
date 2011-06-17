@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -26,10 +25,19 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface GraphListener extends Listener {
-
-	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate;
+public abstract class AbstaractGraphListener implements GraphListener {
 	
-	public void push(Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate;
+	public AbstaractGraphListener(Broadcaster... broadcasters) {
+		for (Broadcaster b : broadcasters) {
+			b.register(this);
+		}
+	}
+
+	@Override
+	public final void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
+		//root.createRelationshipTo(op.getEndNode(), type);
+		//TODO add pipe
+		push(op, catcher, null);
+	}
 	
 }

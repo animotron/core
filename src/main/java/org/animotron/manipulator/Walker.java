@@ -54,6 +54,7 @@ public abstract class Walker implements Runnable, Startable {
 				go((Node) op, out);
 			else
 				go((Relationship) op, out);
+			out.close();
 			tx.success();
 		} catch (IOException e) {
 			e.printStackTrace();

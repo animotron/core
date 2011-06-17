@@ -18,8 +18,13 @@
  */
 package org.animotron.manipulator;
 
+import static org.animotron.graph.AnimoGraph.getOrCreateNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
+
 import java.io.IOException;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
@@ -27,22 +32,50 @@ import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Manipulator {
+public abstract class AbstractManipulator implements Manipulator {
 
-	//for debug needs
-	public boolean isPiped();
+	private Node root;
+	private RelationshipType type;
 	
-	public Walker walk(PropertyContainer op, PipedOutputObjectStream out);
+	public AbstractManipulator(final RelationshipType type) {
+		this.type = type;
+		
+		root = AnimoGraph.execute(new GraphOperation<Node>() {
+			@Override
+			public Node execute() {
+				return getOrCreateNode(getROOT(), type);
+			}
+		});
+		
+	}
 
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException;
-
-	public void execute(PropertyContainer op, PipedOutputObjectStream out);
+	@Override
+	public Node root() {
+		return root;
+	}
 	
-	public RelationshipType type();
-	
-	public Node root();
+	@Override
+	public RelationshipType type() {
+		return type;
+	}
 
+	
+	@Override
+	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
+		return Executor.execute(this, op);
+	}
+
+	@Override
+	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
+		Executor.execute(this, op, out);
+	}
+	
+	@Override
+	public boolean isPiped() {
+		return true;
+	}
+	
 }

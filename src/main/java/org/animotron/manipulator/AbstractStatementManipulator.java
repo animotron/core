@@ -18,28 +18,20 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractStatementManipulator implements StatementManipulator {
+public abstract class AbstractStatementManipulator extends AbstractManipulator implements StatementManipulator {
 
-	@Override
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
-		return Executor.execute(this, op);
+	public AbstractStatementManipulator(RelationshipType type) {
+		super(type);
 	}
 
-	@Override
-	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
-		Executor.execute(this, op, out);
-	}
-	
 	@Override
 	public ConditionalWalker walk(PropertyContainer op, PipedOutputObjectStream out) {
 		return new ConditionalWalker(this, op,out);
