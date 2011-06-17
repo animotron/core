@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-abstract class Walker<T extends Manipulator> implements Runnable {
+public abstract class Walker<T extends Manipulator> implements Runnable {
 
 	private T m;
 	private PropertyContainer op;

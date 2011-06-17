@@ -61,7 +61,7 @@ public abstract class GraphListener implements Listener {
 	}
 	
 	@Override
-	public final void push(Relationship op) {
+	public final void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher) throws ExceptionBuilderTerminate {
 		Transaction tx = beginTx();
 		try {
 			//root.createRelationshipTo(op.getEndNode(), type);

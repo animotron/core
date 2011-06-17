@@ -30,6 +30,7 @@ import java.io.IOException;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.InMemoryRelationship;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -85,7 +86,7 @@ public abstract class AbstarctOperator implements Operator {
 	}
 
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate {
 		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);
 		order(r, order);

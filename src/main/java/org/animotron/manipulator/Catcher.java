@@ -16,29 +16,29 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
+package org.animotron.manipulator;
 
-import org.animotron.manipulator.ExceptionBuilderTerminate;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+import java.util.List;
+
+import javolution.util.FastList;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Statement extends Quanta {
+public class Catcher<T> {
 	
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate;
+	private List<T> objs = new FastList<T>();
 	
-	public String namespace(Relationship r);
+	public void add(T obj) {
+		objs.add(obj);
+	}
 	
-	public String name(Relationship r);
-	
-	public String value(Relationship r);
+	public void run() {
+		
+	}
 
-	public String prefix(Relationship r);
-
-	public String qname(Relationship r);
-
+	public void reset() {
+		
+	}
 }

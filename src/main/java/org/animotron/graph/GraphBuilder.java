@@ -37,8 +37,12 @@ import org.animotron.MessageDigester;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.Creative;
 import org.animotron.manipulator.Destructive;
+import org.animotron.manipulator.ExceptionBuilderTerminate;
+import org.animotron.manipulator.Manipulator;
+import org.animotron.manipulator.Walker;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -92,6 +96,7 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void endGraph(){
+		Catcher<? extends Walker<? extends Manipulator>> catcher = new Catcher(); 
 		Object[] first = flow.get(0);
 		try {
 			int i = 0;
@@ -109,22 +114,29 @@ public abstract class GraphBuilder {
 						THE.PREFIX			// 9
 					};
 				first[7] = item; 
-				build(item, i++);
+				build(item, catcher, i++);
 				first = item;
 			}
 			for (Object[] item : flow) {
-				build(item, i++);
+				build(item, catcher, i++);
 			}
+
+			for (Relationship r : thes) {
+				Creative._.push(r, catcher);
+			}
+			
 			tx.success();
+		} catch (ExceptionBuilderTerminate e) {
+			tx.failure();
+			
+			catcher.reset();
+			catcher = null;
 		} finally {
 			finishTx(tx);
 			the = (Relationship) first[5];
 		}
 		
-		for (Relationship r : thes) {
-			Creative._.push(r);
-		}
-		
+		catcher.run();
 	}
 
 	final protected void start(String prefix, String ns, String name, String value) {
@@ -215,7 +227,7 @@ public abstract class GraphBuilder {
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, int order){
+	private void build(Object[] item, Catcher<? extends Walker<? extends Manipulator>> catcher, int order){
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
 			if ((Boolean) p[8]) {
@@ -238,7 +250,7 @@ public abstract class GraphBuilder {
 							HASH.set(r, hash);
 							thes.add(r);
 						} else if (!h.equals(hash)) {
-							Destructive._.push(r);
+							Destructive._.push(r, catcher);
 							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
 							thes.add(r);
@@ -306,7 +318,7 @@ public abstract class GraphBuilder {
 		}
 	}
 	
-	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order){
+	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws ExceptionBuilderTerminate{
 		return statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
 	}
 	

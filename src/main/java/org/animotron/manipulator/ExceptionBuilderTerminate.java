@@ -16,29 +16,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
-
-import org.animotron.manipulator.ExceptionBuilderTerminate;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+package org.animotron.manipulator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Statement extends Quanta {
-	
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate;
-	
-	public String namespace(Relationship r);
-	
-	public String name(Relationship r);
-	
-	public String value(Relationship r);
-
-	public String prefix(Relationship r);
-
-	public String qname(Relationship r);
+public class ExceptionBuilderTerminate extends Exception {
 
 }
