@@ -47,27 +47,26 @@ public class GC extends GraphListener implements SimpleManipulator {
 		
 		System.out.println("GC the relationship " + op);
 		
-		for (Relationship r : op.getEndNode().getRelationships(INCOMING)) { 
-			if (!r.equals(op)) {
-				catcher.add(Preparator._.walk(r, out));
-			}
-		}
-		
-		for (Relationship r : op.getEndNode().getRelationships(OUTGOING)) {
-			Node node = r.getEndNode();
-			if (!node.hasRelationship(INCOMING)) {
-				catcher.add(walk(node, out));
-				Destructive._.push(r, catcher);
-			} else {
-				r.delete();
-			}
+		Node node = op.getEndNode();
+		op.delete();
+		if (!node.hasRelationship(INCOMING)) {
+			catcher.add(walk(node, out));
 		}
 		
 	}
 
 	@Override
 	public void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+		Node node = op.getEndNode();
 		op.getStartNode().delete();
+		op.delete();
+		if (!node.hasRelationship(INCOMING)) {
+			if (isLast) {
+				node.delete();
+			} else {
+				execute(node, ot);
+			}
+		}
 	}
 
 	@Override

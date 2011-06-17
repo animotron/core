@@ -26,6 +26,7 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.animotron.graph.AnimoGraph.order;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
@@ -250,7 +251,9 @@ public abstract class GraphBuilder {
 							HASH.set(r, hash);
 							thes.add(r);
 						} else if (!h.equals(hash)) {
-							Destructive._.push(r, catcher);
+							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
+								Destructive._.push(i, catcher);
+							}
 							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
 							thes.add(r);
