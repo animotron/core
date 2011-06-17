@@ -58,6 +58,8 @@ public class GC extends GraphListener implements SimpleManipulator {
 			if (!node.hasRelationship(INCOMING)) {
 				catcher.add(walk(node, out));
 				Destructive._.push(r, catcher);
+			} else {
+				r.delete();
 			}
 		}
 		
