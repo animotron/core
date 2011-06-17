@@ -64,9 +64,9 @@ public abstract class GraphListener implements Listener {
 	public final void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher) throws ExceptionBuilderTerminate {
 		//root.createRelationshipTo(op.getEndNode(), type);
 		//TODO add pipe
-		push(op, null);
+		push(op, catcher, null);
 	}
 	
-	public abstract void push(Relationship op, PipedOutputObjectStream out);
+	public abstract void push(Relationship op, Catcher<? extends Walker<? extends Manipulator>> catcher, PipedOutputObjectStream out);
 	
 }
