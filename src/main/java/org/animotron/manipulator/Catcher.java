@@ -42,7 +42,7 @@ public class Catcher {
 	}
 
 	public void reset() {
-		
+		objs.clear();
 	}
 	
 }

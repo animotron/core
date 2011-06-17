@@ -18,6 +18,8 @@
  */
 package org.animotron.manipulator;
 
+import static org.neo4j.graphdb.Direction.INCOMING;
+
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
@@ -40,8 +42,15 @@ public class GC extends GraphListener implements SimpleManipulator {
 	
 	@Override
 	public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
+		
 		System.out.println("GC the relationship " + op);
+		
+		for (Relationship r : op.getEndNode().getRelationships(INCOMING)) 
+			if (!r.equals(op))
+				catcher.add(Preparator._.walk(r, out));
+		
 		catcher.add(walk(op,out));
+		
 	}
 
 	@Override

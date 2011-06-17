@@ -23,5 +23,7 @@ package org.animotron.manipulator;
  *
  */
 public class ExceptionBuilderTerminate extends Exception {
+	
+	private static final long serialVersionUID = 1419995078851286162L;
 
 }

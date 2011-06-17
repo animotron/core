@@ -127,21 +127,16 @@ public abstract class GraphBuilder {
 			the = (Relationship) first[5];
 			
 		} catch (ExceptionBuilderTerminate e) {
-			
 			tx.failure();
-			
 			catcher.reset();
-			catcher = null;
-			the = null;
 			
 		} finally {
-			
 			finishTx(tx);
 			
 		}
 		
-		if (catcher != null)
-			catcher.run();
+		catcher.run();
+			
 	}
 
 	final protected void start(String prefix, String ns, String name, String value) {
