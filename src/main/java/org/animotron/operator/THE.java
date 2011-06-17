@@ -101,14 +101,7 @@ public class THE extends AbstarctOperator {
 	
 	@Override
 	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate {
-		Relationship r = get(name);
-		if (r != null) {
-			//XXX: get catcher!!!
-			Destructive._.push(r, null);
-		} else {
-			r = create(name);
-		}
-		return r;
+		return null;
 	}
 	
 	@Override
