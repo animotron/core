@@ -38,15 +38,15 @@ public class Executor {
 		exec.execute(command);
 	}
 	
+	@Deprecated
 	public static PipedInputObjectStream execute(Manipulator m, PropertyContainer op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
 		execute(m.walk(op, new PipedOutputObjectStream(in)));
 		return in;
 	}
 
+	@Deprecated
 	public static void execute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
 		execute(m.walk(op, out));
 	}
-	
-
 }

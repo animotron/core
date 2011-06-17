@@ -18,30 +18,12 @@
  */
 package org.animotron.manipulator;
 
-import java.util.List;
-
-
-import javolution.util.FastList;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Catcher<T extends Startable> {
+public interface Startable {
 	
-	private List<T> objs = new FastList<T>();
-	
-	public void add(T obj) {
-		objs.add(obj);
-	}
-	
-	public void run() {
-		for (Startable obj : objs) {
-			obj.start();
-		}
-	}
-
-	public void reset() {
-		
-	}
+	public void start();
+ 
 }
