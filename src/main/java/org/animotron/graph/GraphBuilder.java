@@ -136,7 +136,8 @@ public abstract class GraphBuilder {
 			the = (Relationship) first[5];
 		}
 		
-		catcher.run();
+		if (catcher != null)
+			catcher.run();
 	}
 
 	final protected void start(String prefix, String ns, String name, String value) {
