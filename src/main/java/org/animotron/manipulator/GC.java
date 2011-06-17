@@ -19,7 +19,6 @@
 package org.animotron.manipulator;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
