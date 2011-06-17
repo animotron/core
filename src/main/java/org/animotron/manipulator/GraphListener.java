@@ -64,6 +64,6 @@ public abstract class GraphListener implements Listener {
 		push(op, catcher, null);
 	}
 	
-	public abstract void push(Relationship op, Catcher catcher, PipedOutputObjectStream out);
+	public abstract void push(Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate;
 	
 }

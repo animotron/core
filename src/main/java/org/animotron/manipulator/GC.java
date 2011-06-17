@@ -19,12 +19,14 @@
 package org.animotron.manipulator;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
@@ -41,22 +43,29 @@ public class GC extends GraphListener implements SimpleManipulator {
 	}
 	
 	@Override
-	public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
+	public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate {
 		
 		System.out.println("GC the relationship " + op);
 		
-		for (Relationship r : op.getEndNode().getRelationships(INCOMING)) 
-			if (!r.equals(op))
+		for (Relationship r : op.getEndNode().getRelationships(INCOMING)) { 
+			if (!r.equals(op)) {
 				catcher.add(Preparator._.walk(r, out));
+			}
+		}
 		
-		catcher.add(walk(op,out));
+		for (Relationship r : op.getEndNode().getRelationships(OUTGOING)) {
+			Node node = r.getEndNode();
+			if (!node.hasRelationship(INCOMING)) {
+				catcher.add(walk(node, out));
+				Destructive._.push(r, catcher);
+			}
+		}
 		
 	}
 
 	@Override
 	public void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
-		// TODO Auto-generated method stub
-		
+		op.getStartNode().delete();
 	}
 
 	@Override
