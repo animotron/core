@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.manipulator.Evaluator;
@@ -35,6 +36,7 @@ import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 
 /**
@@ -44,9 +46,16 @@ import org.neo4j.graphdb.index.IndexHits;
 public abstract class AbstractResultSerializer {
 	
 	final public void serialize(Relationship r) throws IOException {
-		startDocument();
-		build(r);
-		endDocument();
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			startDocument();
+			build(r);
+			endDocument();
+			
+			tx.success();
+		} finally {
+			AnimoGraph.finishTx(tx);
+		}
 	}
 
 	public abstract void start(Statement statement, Relationship r);
