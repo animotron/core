@@ -31,6 +31,7 @@ import org.animotron.instruction.string.AfterLast;
 import org.animotron.operator.AN;
 import org.animotron.operator.IC;
 import org.animotron.operator.THE;
+import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
@@ -64,7 +65,7 @@ public class ConnectionTests extends ATest {
 
 			_(IC._, "mime-type", 
 				_(ANY._, "mime-type", 
-					_(HAVE._, "extension"),
+					_(WITH._, "extension"),
 						_(GET._, "extension")))
 		));
 
@@ -82,7 +83,7 @@ public class ConnectionTests extends ATest {
 			_(HAVE._, "extension", text("txt"), text("text"))
 		));
 
-    	new Expression(
+    	Expression A = new Expression(
 		_(THE._, "A", 
 			_(GET._, "type", 
 				_(GET._, "mime-type", 
@@ -90,8 +91,8 @@ public class ConnectionTests extends ATest {
 		))));
 
         //System.out.println("");
-        assertString("A", "text/plain");
-        //assertEquals("A", "<the:A><have:type>text/plain</have:type></the:A>");
+        //assertString(A, "text/plain");
+        assertAnimo(A, "<the:A><have:type>text/plain</have:type></the:A>");
 
         //System.out.println("done.");
 	}
