@@ -44,5 +44,5 @@ public interface Manipulator {
 	public RelationshipType type();
 	
 	public Node root();
-
+	
 }

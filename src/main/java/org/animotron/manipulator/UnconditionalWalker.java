@@ -18,14 +18,10 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
@@ -40,45 +36,28 @@ class UnconditionalWalker extends Walker {
 	}
 
 	@Override
-	protected final SimpleManipulator getManipulator(){
-		return (SimpleManipulator) super.getManipulator();
-	}
-	
-	@Override
-	protected void go(Node node, PipedOutputObjectStream ot) throws IOException {
+	protected void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
 
-		//System.out.println("Walk node = " + node);
-
-		SimpleManipulator m = getManipulator();
+		SimpleManipulator m = (SimpleManipulator) getManipulator();
 		
 		try {
-			Relationship r = null;
+			
+			PipedInputObjectStream in = null;
+			PipedOutputObjectStream out = ot;
 
-			Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
-			while (it.hasNext()) {
-
-				r = it.next();
-
-				//System.out.println(type.name());
-
-				PipedInputObjectStream in = null;
-				PipedOutputObjectStream out = ot;
-
-				if (m.isPiped()) {
-					in = new PipedInputObjectStream();
-					out = new PipedOutputObjectStream(in);
-				}
-
-				m.go(r, out, isLast(it));
-
-				if (in != null) {
-					for (Object n : in) {
-						ot.write(n);
-					}
-				}
-				
+			if (m.isPiped()) {
+				in = new PipedInputObjectStream();
+				out = new PipedOutputObjectStream(in);
 			}
 
+			m.go(op, out, isLast);
+
+			if (in != null) {
+				for (Object n : in) {
+					ot.write(n);
+				}
+			}
+				
 		} catch (IOException e) {
 			e.printStackTrace();
 			ot.write(e);

@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -39,11 +40,21 @@ public abstract class Walker implements Runnable, Startable {
 	private Manipulator m;
 	private PropertyContainer op;
 	private PipedOutputObjectStream out;
+	private Relationship state;
 
 	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
 		this.m = m;
 		this.op = op;
 		this.out = out;
+		stroreState(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
+	}
+	
+	private void stroreState(Node node) {
+		state = m.root().createRelationshipTo(node, m.type());
+	}
+
+	private void dropState() {
+		state.delete();
 	}
 
 	@Override
@@ -54,8 +65,9 @@ public abstract class Walker implements Runnable, Startable {
 				go((Node) op, out);
 			else
 				go((Relationship) op, out);
-			out.close();
+			dropState();
 			tx.success();
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -63,21 +75,30 @@ public abstract class Walker implements Runnable, Startable {
 		}
 	}
 	
-	protected final void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
+	private void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
 		go(op.getEndNode(), ot);
 	}
 
-	protected abstract void go(Node node, PipedOutputObjectStream ot) throws IOException;
+	private final void go(Node node, PipedOutputObjectStream ot) throws IOException {
+		//System.out.println("Walk node = " + node);
+		Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
+		while (it.hasNext()) {
+			Relationship r = it.next();
+			go(r, ot, isLast(it));
+		}
+	}
 
-	protected final boolean isLast(Iterator<?> it) {
+	protected abstract void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;
+
+	private boolean isLast(Iterator<?> it) {
 		return !it.hasNext();
 	}
 	
-	protected Manipulator getManipulator(){
+	protected final Manipulator getManipulator(){
 		return m;
 	}
 	
-	public void start() {
+	public final void start() {
 		Executor.execute(this);
 	}
 }
