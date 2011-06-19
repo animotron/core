@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.interpreter;
+package org.animotron.operator;
 
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
@@ -27,13 +27,9 @@ import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.instruction.string.AfterLast;
-import org.animotron.operator.AN;
-import org.animotron.operator.IC;
 import org.animotron.operator.THE;
 import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.ANY;
-import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
@@ -42,57 +38,32 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ConnectionTests extends ATest {
+public class ANYTests extends ATest {
 	
+
 	@Test
-	public void mimeType_usecase() throws IOException, XMLStreamException {
-        System.out.println("Mime type use case ...");
+	public void testANY() throws IOException, XMLStreamException {
+        System.out.println("Test 'ANY' ...");
         
     	new Expression(
-		_(THE._, "mime-type", 
-			_(HAVE._, "extension")
-		));
+			_(THE._, "A", _(HAVE._, "value"))
+		);
+	
+    	new Expression(
+			_(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+		);
 
     	new Expression(
-		_(THE._, "file", 
-			_(HAVE._, "name", text("file")),
-			_(HAVE._, "path"),
+			_(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+		);
 
-			_(IC._, "extension", 
-				_(AfterLast._, 
-					text("."),
-					_(GET._, "path"))),
+    	Expression D = new Expression(
+			_(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
+		);
 
-			_(IC._, "mime-type", 
-				_(ANY._, "mime-type", 
-					_(WITH._, "extension"),
-						_(GET._, "extension")))
-		));
-
-
-    	new Expression(
-		_(THE._, "fileA", 
-			_(IS._, "file"), 
-			_(HAVE._, "path", text("/home/test.txt"))
-		));
-
-    	new Expression(
-		_(THE._, "text-plain", 
-			_(IS._, "mime-type"), 
-			_(HAVE._, "type", text("text/plain")),
-			_(HAVE._, "extension", text("txt"), text("text"))
-		));
-
-    	Expression A = new Expression(
-		_(THE._, "A", 
-			_(GET._, "type", 
-				_(GET._, "mime-type", 
-					_(AN._, "fileA")
-		))));
-
-        //System.out.println("");
-        //assertString(A, "text/plain");
-        assertAnimo(A, "<the:A><have:type>text/plain</have:type></the:A>");
+        System.out.println("****************************************************");
+        System.out.println("any:A have:value B");
+        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
 
         //System.out.println("done.");
 	}
