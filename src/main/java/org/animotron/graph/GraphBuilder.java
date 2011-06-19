@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import org.animotron.MessageDigester;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.exception.ExceptionBuilderTerminate;
@@ -44,6 +43,7 @@ import org.animotron.manipulator.Creative;
 import org.animotron.manipulator.Destructive;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;

@@ -24,7 +24,6 @@ import static org.animotron.graph.AnimoGraph.getROOT;
 import java.io.IOException;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;

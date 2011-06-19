@@ -30,7 +30,7 @@ import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
-import org.animotron.graph.Reader;
+import org.animotron.Reader;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
 import org.junit.Test;

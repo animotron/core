@@ -29,7 +29,7 @@ import java.io.IOException;
 
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.AnimoRelationshipType;
-import org.animotron.graph.InMemoryRelationship;
+import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

@@ -25,6 +25,13 @@ package org.animotron.manipulator;
  */
 public class Manipulators {
 	
+	public static void load() {
+		Filter._.getClass();
+		GC._.getClass();
+		Calculator._.getClass();
+		Preparator._.getClass();
+	}
+	
 	//TODO: Implement manipulators/listeners/broadcasters loader
 	
 }

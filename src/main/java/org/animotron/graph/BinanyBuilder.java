@@ -31,10 +31,10 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 import org.animotron.Expression;
-import org.animotron.MessageDigester;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
 

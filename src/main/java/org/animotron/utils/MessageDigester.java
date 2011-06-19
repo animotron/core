@@ -1,4 +1,4 @@
-package org.animotron;
+package org.animotron.utils;
 /*
  *  eXist Open Source Native XML Database
  *  Copyright (C) 2010-2011 The eXist Project

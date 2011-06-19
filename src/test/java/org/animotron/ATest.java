@@ -39,7 +39,7 @@ import junit.framework.Assert;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.CommonGraphBuilder;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.Reader;
+import org.animotron.Reader;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
