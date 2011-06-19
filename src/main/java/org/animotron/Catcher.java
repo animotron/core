@@ -20,8 +20,6 @@ package org.animotron;
 
 import java.util.List;
 
-
-
 import javolution.util.FastList;
 
 /**
