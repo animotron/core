@@ -30,6 +30,7 @@ import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -43,12 +44,12 @@ public abstract class AbstractManipulator implements Manipulator {
 	public AbstractManipulator(final RelationshipType type) {
 		this.type = type;
 		
-		root = AnimoGraph.execute(new GraphOperation<Node>() {
-			@Override
-			public Node execute() {
-				return getOrCreateNode(getROOT(), type);
-			}
-		});
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			root = getOrCreateNode(getROOT(), type);
+		} finally {
+			AnimoGraph.finishTx(tx);
+		}
 		
 	}
 

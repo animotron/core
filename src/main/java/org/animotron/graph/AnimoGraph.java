@@ -25,6 +25,10 @@ import java.util.Map.Entry;
 
 import javolution.util.FastMap;
 
+import org.animotron.manipulator.Calculator;
+import org.animotron.manipulator.Filter;
+import org.animotron.manipulator.GC;
+import org.animotron.manipulator.Preparator;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -63,6 +67,13 @@ public class AnimoGraph {
 			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
 			EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
+			
+			//workaround
+			Filter._.getClass();
+			GC._.getClass();
+			Calculator._.getClass();
+			Preparator._.getClass();
+			
 			tx.success();
 		} finally {
 			finishTx(tx);

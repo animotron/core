@@ -33,7 +33,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class GC extends AbstractSimpleManipulator implements GraphListener {
 	
-	protected static GC _ = new GC();
+	public static GC _ = new GC();
 	
 	private GC() {super(RelationshipTypes.GC);}
 	
