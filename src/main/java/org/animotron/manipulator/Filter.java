@@ -46,4 +46,7 @@ public class Filter extends AbstractStatementManipulator {
 		((Predicate) statement).filter(op, ot, isLast);
 	}
 	
+	public boolean isPiped() {
+		return false;
+	}
 }
