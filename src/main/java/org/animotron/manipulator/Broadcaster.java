@@ -22,6 +22,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.exception.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Relationship;
 
 /**

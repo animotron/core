@@ -28,9 +28,9 @@ import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;

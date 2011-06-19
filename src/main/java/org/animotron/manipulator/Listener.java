@@ -18,6 +18,7 @@
  */
 package org.animotron.manipulator;
 
+import org.animotron.exception.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Relationship;
 
 /**

@@ -18,7 +18,7 @@
  */
 package org.animotron;
 
-import org.animotron.manipulator.ExceptionBuilderTerminate;
+import org.animotron.exception.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
