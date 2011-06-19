@@ -115,5 +115,5 @@ public abstract class Walker implements Runnable, Startable {
 		if (marker != null)
 			marker.drop();	
 	}
-	
+
 }

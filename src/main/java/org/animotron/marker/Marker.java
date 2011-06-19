@@ -18,6 +18,7 @@
  */
 package org.animotron.marker;
 
+import org.animotron.manipulator.Manipulator;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -28,11 +29,9 @@ import org.neo4j.graphdb.RelationshipType;
 public interface Marker {
 
 	public RelationshipType type();
-	
 	public Node root();
-	
 	public void mark(Node node);
-	
 	public void drop();
+	public Manipulator manipulator();
 	
 }

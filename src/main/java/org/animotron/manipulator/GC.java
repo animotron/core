@@ -23,8 +23,10 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import java.io.IOException;
 
 import org.animotron.exception.ExceptionBuilderTerminate;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.marker.GCMarker;
+import org.animotron.marker.AbstractMarker;
+import org.animotron.marker.Marker;
 import org.animotron.walker.Walker;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
@@ -37,6 +39,7 @@ import org.neo4j.graphdb.Relationship;
 public class GC extends AbstractSimpleManipulator implements GraphListener {
 	
 	public static GC _ = new GC();
+	private Marker marker = new GCMarker(); 
 	
 	@Override
 	public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate {
@@ -72,7 +75,19 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 	
 	@Override
 	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, GCMarker._);
+		return walk(op, out, marker);
 	}
+	
+	private static class GCMarker extends AbstractMarker {
+		
+		private GCMarker() {
+			super(RelationshipTypes.GC);
+		}
 
+		@Override
+		public Manipulator manipulator() {
+			return GC._;
+		}
+		
+	}
 }

@@ -24,9 +24,11 @@ import java.util.List;
 import javolution.util.FastList;
 
 import org.animotron.Statement;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.marker.CalcMarker;
+import org.animotron.marker.AbstractMarker;
+import org.animotron.marker.Marker;
 import org.animotron.operator.Evaluable;
 import org.animotron.walker.Walker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -39,6 +41,7 @@ import org.neo4j.graphdb.Relationship;
 public class Evaluator extends AbstractStatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
+	private Marker marker = new CalcMarker(); 
 	
 	@Override
 	public boolean canGo(Statement statement) {
@@ -66,7 +69,20 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	@Override
 	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, CalcMarker._);
+		return walk(op, out, marker);
 	}
 
+	private static class CalcMarker extends AbstractMarker {
+		
+		private CalcMarker() {
+			super(RelationshipTypes.CALC);
+		}
+
+		@Override
+		public Manipulator manipulator() {
+			return Evaluator._;
+		}
+		
+	}
+	
 }
