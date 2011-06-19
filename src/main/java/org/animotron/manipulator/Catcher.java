@@ -42,6 +42,9 @@ public class Catcher {
 	}
 
 	public void reset() {
+		for (Startable obj : objs) {
+			obj.reset();
+		}
 		objs.clear();
 	}
 	

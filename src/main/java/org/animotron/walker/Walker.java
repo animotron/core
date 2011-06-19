@@ -50,10 +50,10 @@ public abstract class Walker implements Runnable, Startable {
 		this.op = op;
 		this.out = out;
 		if (m.isStatable())
-			stroreState(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
+			storeState(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
 	}
 	
-	private void stroreState(Node node) {
+	private void storeState(Node node) {
 		state = m.root().createRelationshipTo(node, m.type());
 	}
 
@@ -108,4 +108,11 @@ public abstract class Walker implements Runnable, Startable {
 	public final void start() {
 		Executor.execute(this);
 	}
+	
+	public void reset() {
+		if (m.isStatable()) {
+			dropState();
+		}
+	}
+	
 }

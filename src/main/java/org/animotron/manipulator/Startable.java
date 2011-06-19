@@ -18,6 +18,7 @@
  */
 package org.animotron.manipulator;
 
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
@@ -25,5 +26,7 @@ package org.animotron.manipulator;
 public interface Startable {
 	
 	public void start();
- 
+	 
+	public void reset();
+	 
 }
