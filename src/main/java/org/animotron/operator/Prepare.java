@@ -31,7 +31,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Prepare {
 	
-	public abstract void prepare(Relationship op, PipedOutputObjectStream out,
-			boolean isLast) throws IOException;
+	public abstract void prepare(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
 	
 }

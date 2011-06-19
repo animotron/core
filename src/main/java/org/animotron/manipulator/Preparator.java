@@ -42,7 +42,7 @@ public class Preparator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
 		((Prepare) statement).prepare(op, ot, isLast);
 	}
 	

@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.Executor;
 import org.animotron.manipulator.Manipulator;
 import org.animotron.manipulator.Startable;
@@ -63,12 +64,14 @@ public abstract class Walker implements Runnable, Startable {
 
 	@Override
 	public final void run() {
+		Catcher catcher = new Catcher(); 
+		
 		Transaction tx = beginTx();
 		try {
 			if (op instanceof Node)
-				go((Node) op, out);
+				go((Node) op, out, catcher);
 			else
-				go((Relationship) op, out);
+				go((Relationship) op, out, catcher);
 			
 			if (m.isStatable())
 				dropState();
@@ -77,25 +80,31 @@ public abstract class Walker implements Runnable, Startable {
 			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+			
+			catcher.reset();
+			catcher = null;
 		} finally {
 			finishTx(tx);
 		}
+		
+		if (catcher != null)
+			catcher.run();
 	}
 	
-	private void go(Relationship op, PipedOutputObjectStream ot) throws IOException {
-		go(op.getEndNode(), ot);
+	private void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher) throws IOException {
+		go(op.getEndNode(), ot, catcher);
 	}
 
-	private final void go(Node node, PipedOutputObjectStream ot) throws IOException {
+	private final void go(Node node, PipedOutputObjectStream ot, Catcher catcher) throws IOException {
 		//System.out.println("Walk node = " + node);
 		Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
-			go(r, ot, isLast(it));
+			go(r, ot, catcher, isLast(it));
 		}
 	}
 
-	protected abstract void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;
+	protected abstract void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException;
 
 	private boolean isLast(Iterator<?> it) {
 		return !it.hasNext();

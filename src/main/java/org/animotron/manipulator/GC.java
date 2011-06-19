@@ -52,7 +52,7 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 	}
 
 	@Override
-	public void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
 		Node node = op.getEndNode();
 		op.getStartNode().delete();
 		op.delete();
@@ -60,7 +60,7 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 			if (isLast) {
 				node.delete();
 			} else {
-				execute(node, ot);
+				catcher.add(walk(node, ot));
 			}
 		}
 	}

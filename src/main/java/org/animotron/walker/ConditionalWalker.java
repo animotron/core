@@ -26,6 +26,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.Instruction;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.StatementManipulator;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
@@ -42,7 +43,7 @@ public class ConditionalWalker extends Walker {
 	}
 
 	@Override
-	protected void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	protected void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
 
 		StatementManipulator m = (StatementManipulator) getManipulator();
 		
@@ -63,7 +64,7 @@ public class ConditionalWalker extends Walker {
 					out = new PipedOutputObjectStream(in);
 				}
 
-				m.go(s, op, out, isLast);
+				m.go(s, op, out, catcher, isLast);
 
 				if (in != null) {
 					for (Object n : in) {

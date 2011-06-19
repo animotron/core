@@ -72,8 +72,7 @@ public class IS extends Relation implements Prepare {
 	}
 	
 	@Override
-	public void prepare(Relationship op, PipedOutputObjectStream out,
-			boolean isLast) throws IOException {
+	public void prepare(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
 		
 		Node start = op.getStartNode();
 		

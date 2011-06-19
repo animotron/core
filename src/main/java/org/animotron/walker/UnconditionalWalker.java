@@ -22,6 +22,7 @@ import java.io.IOException;
 
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.SimpleManipulator;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
@@ -37,7 +38,7 @@ public class UnconditionalWalker extends Walker {
 	}
 
 	@Override
-	protected void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	protected void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
 
 		SimpleManipulator m = (SimpleManipulator) getManipulator();
 		
@@ -51,7 +52,7 @@ public class UnconditionalWalker extends Walker {
 				out = new PipedOutputObjectStream(in);
 			}
 
-			m.go(op, out, isLast);
+			m.go(op, out, catcher, isLast);
 
 			if (in != null) {
 				for (Object n : in) {

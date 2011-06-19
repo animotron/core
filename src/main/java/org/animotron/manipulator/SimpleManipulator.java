@@ -29,6 +29,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface SimpleManipulator extends Manipulator {
 
-	public void go(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException;
+	public void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException;
 
 }
