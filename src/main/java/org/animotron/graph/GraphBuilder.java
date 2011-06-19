@@ -129,14 +129,16 @@ public abstract class GraphBuilder {
 			
 		} catch (ExceptionBuilderTerminate e) {
 			tx.failure();
-			catcher.reset();
+			catcher = null; 
 			
 		} finally {
 			finishTx(tx);
 			
 		}
 		
-		catcher.run();
+		if (catcher != null) {
+			catcher.run();
+		}
 			
 	}
 
