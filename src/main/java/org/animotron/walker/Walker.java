@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.walker;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
@@ -26,6 +26,9 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Executor;
+import org.animotron.manipulator.Manipulator;
+import org.animotron.manipulator.Startable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;

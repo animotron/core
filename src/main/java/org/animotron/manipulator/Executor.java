@@ -34,7 +34,7 @@ public class Executor {
 	private static int THREADS_NUMBER = 100;
 	private static java.util.concurrent.Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
-	protected static void execute(Runnable command){
+	public static void execute(Runnable command){
 		exec.execute(command);
 	}
 	

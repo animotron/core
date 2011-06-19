@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.walker.ConditionalWalker;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.RelationshipType;
 

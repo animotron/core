@@ -16,12 +16,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.walker;
 
 import java.io.IOException;
 
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.SimpleManipulator;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
@@ -29,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-class UnconditionalWalker extends Walker {
+public class UnconditionalWalker extends Walker {
 
 	public UnconditionalWalker(SimpleManipulator m, PropertyContainer op, PipedOutputObjectStream out) {
 		super(m, op, out);
