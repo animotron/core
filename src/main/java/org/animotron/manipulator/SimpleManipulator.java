@@ -21,7 +21,6 @@ package org.animotron.manipulator;
 import java.io.IOException;
 
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Relationship;
 
 /**
