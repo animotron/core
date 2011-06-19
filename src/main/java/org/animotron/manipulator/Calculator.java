@@ -34,5 +34,8 @@ public class Calculator extends AbstaractGraphListener {
 		System.out.println("Prepare the relationship " + op);
 		catcher.add(Preparator._.walk(op, out));
 	}
-
+	
+	public void shutdown() {
+		
+	}
 }

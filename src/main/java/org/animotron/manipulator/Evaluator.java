@@ -65,4 +65,9 @@ public class Evaluator extends AbstractStatementManipulator {
 		return result;
 	}
 
+	//XXX: temp, delete later?
+	@Override
+	public boolean isStatable() {
+		return false;
+	}
 }

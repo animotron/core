@@ -36,6 +36,9 @@ public interface Manipulator {
 	//for debug needs
 	public boolean isPiped();
 	
+	//do have state
+	public boolean isStatable();
+	
 	public Walker walk(PropertyContainer op, PipedOutputObjectStream out);
 
 	public PipedInputObjectStream execute(PropertyContainer op) throws IOException;

@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.animotron.io.PipedInputObjectStream;
@@ -32,7 +33,7 @@ import org.neo4j.graphdb.PropertyContainer;
 public class Executor {
 	
 	private static int THREADS_NUMBER = 100;
-	private static java.util.concurrent.Executor exec = Executors.newFixedThreadPool(THREADS_NUMBER);
+	private static ExecutorService exec = Executors.newFixedThreadPool(THREADS_NUMBER);
 	
 	public static void execute(Runnable command){
 		exec.execute(command);
@@ -46,5 +47,9 @@ public class Executor {
 
 	public static void execute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
 		execute(m.walk(op, out));
+	}
+	
+	public static void shutdown() {
+		exec.shutdown();
 	}
 }

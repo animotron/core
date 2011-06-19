@@ -32,6 +32,16 @@ public class Manipulators {
 		Preparator._.getClass();
 	}
 	
+	public static void shutdown() {
+		Filter._.shutdown();
+		GC._.shutdown();
+		Preparator._.shutdown();
+		
+		Calculator._.shutdown();
+
+		Executor.shutdown();
+	}
+
 	//TODO: Implement manipulators/listeners/broadcasters loader
 	
 }

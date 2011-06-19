@@ -46,10 +46,9 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 	
 	@Override
 	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-
-		if (!isLast)
-			Evaluator._.execute(op, new PipedOutputObjectStream(in));
+//		PipedInputObjectStream in = new PipedInputObjectStream();
+//		if (!isLast)
+//			Evaluator._.execute(op, new PipedOutputObjectStream(in));
 		
 		Transaction tx = beginTx();
 		try {

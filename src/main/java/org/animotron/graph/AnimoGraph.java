@@ -102,6 +102,8 @@ public class AnimoGraph {
 	public static void shutdownDB() {
 		System.out.println("shotdown");
 		
+		Manipulators.shutdown();
+
 		while (!activeTx.isEmpty()) {
 		
 			System.out.println("Active transactions "+countTx);

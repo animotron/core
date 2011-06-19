@@ -69,6 +69,4 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
 		push(op, catcher, null);
 	}
-
-	
 }

@@ -61,7 +61,6 @@ public abstract class AbstractManipulator implements Manipulator {
 	public RelationshipType type() {
 		return type;
 	}
-
 	
 	@Override
 	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
@@ -78,4 +77,12 @@ public abstract class AbstractManipulator implements Manipulator {
 		return true;
 	}
 	
+	@Override
+	public boolean isStatable() {
+		return true;
+	}
+
+	public void shutdown() {
+		
+	}
 }

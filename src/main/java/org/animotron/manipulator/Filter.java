@@ -49,4 +49,9 @@ public class Filter extends AbstractStatementManipulator {
 	public boolean isPiped() {
 		return false;
 	}
+
+	@Override
+	public boolean isStatable() {
+		return false;
+	}
 }

@@ -49,7 +49,8 @@ public abstract class Walker implements Runnable, Startable {
 		this.m = m;
 		this.op = op;
 		this.out = out;
-		stroreState(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
+		if (m.isStatable())
+			stroreState(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
 	}
 	
 	private void stroreState(Node node) {
@@ -68,7 +69,10 @@ public abstract class Walker implements Runnable, Startable {
 				go((Node) op, out);
 			else
 				go((Relationship) op, out);
-			dropState();
+			
+			if (m.isStatable())
+				dropState();
+			
 			tx.success();
 			out.close();
 		} catch (IOException e) {
