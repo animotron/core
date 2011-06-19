@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Manipulator;
 import org.neo4j.graphdb.PropertyContainer;
 
 /**

@@ -16,24 +16,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.listener;
 
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.Catcher;
+import org.animotron.exception.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Calculator extends AbstaractGraphListener {
+public abstract class AbstaractGraphListener implements GraphListener {
 	
-	public static Calculator _ = new Calculator();
-	private Calculator() {super(Creative._);}
+	public AbstaractGraphListener(Broadcaster... broadcasters) {
+		for (Broadcaster b : broadcasters) {
+			b.register(this);
+		}
+	}
 
 	@Override
-    public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
-		System.out.println("Prepare the relationship " + op);
-		catcher.add(Preparator._.markWalk(op, out));
+	public final void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
+		//root.createRelationshipTo(op.getEndNode(), type);
+		//TODO add pipe
+		push(op, catcher, null);
 	}
 	
 }

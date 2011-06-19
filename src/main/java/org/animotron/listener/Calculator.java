@@ -16,17 +16,26 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.listener;
 
+import org.animotron.Catcher;
+import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.manipulator.Preparator;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public interface Startable {
+public class Calculator extends AbstaractGraphListener {
 	
-	public void start();
-	 
-	public void reset();
-	 
+	public static Calculator _ = new Calculator();
+	private Calculator() {super(Creative._);}
+
+	@Override
+    public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
+		System.out.println("Prepare the relationship " + op);
+		catcher.add(Preparator._.markWalk(op, out));
+	}
+	
 }

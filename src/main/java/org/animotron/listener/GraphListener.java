@@ -16,13 +16,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.listener;
 
-import java.util.List;
-
-import javolution.util.FastList;
-
+import org.animotron.Catcher;
 import org.animotron.exception.ExceptionBuilderTerminate;
+import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -30,18 +28,10 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Broadcaster implements Listener {
+public interface GraphListener extends Listener {
 
-	private static List<Listener> pool = new FastList<Listener>();
+	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate;
 	
-	public void register (Listener l) {
-		pool.add(l);
-	}
-	
-	@Override
-	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
-		for (Listener l : pool)
-			l.push(op, catcher);
-	}
+	public void push(Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate;
 	
 }

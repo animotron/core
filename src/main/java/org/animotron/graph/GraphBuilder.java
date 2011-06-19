@@ -34,13 +34,13 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.manipulator.Catcher;
-import org.animotron.manipulator.Creative;
-import org.animotron.manipulator.Destructive;
+import org.animotron.listener.Creative;
+import org.animotron.listener.Destructive;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.animotron.utils.MessageDigester;

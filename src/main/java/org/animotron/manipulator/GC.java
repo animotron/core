@@ -22,9 +22,12 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.listener.AbstaractGraphListener;
+import org.animotron.listener.Destructive;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.walker.Walker;

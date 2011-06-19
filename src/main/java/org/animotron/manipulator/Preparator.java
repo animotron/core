@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;

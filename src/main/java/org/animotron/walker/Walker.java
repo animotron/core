@@ -25,11 +25,11 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.animotron.Catcher;
+import org.animotron.Executor;
+import org.animotron.Startable;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.manipulator.Catcher;
-import org.animotron.manipulator.Executor;
 import org.animotron.manipulator.Manipulator;
-import org.animotron.manipulator.Startable;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;

@@ -16,8 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.listener;
 
+import org.animotron.Catcher;
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.neo4j.graphdb.Relationship;
 

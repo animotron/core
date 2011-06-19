@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
+import org.animotron.Executor;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.walker.Walker;

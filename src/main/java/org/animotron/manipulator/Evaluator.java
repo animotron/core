@@ -23,6 +23,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;

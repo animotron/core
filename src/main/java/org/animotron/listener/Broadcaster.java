@@ -16,17 +16,33 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.listener;
 
+import java.util.List;
+
+import javolution.util.FastList;
+
+import org.animotron.Catcher;
+import org.animotron.exception.ExceptionBuilderTerminate;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Creative extends Broadcaster {
+public abstract class Broadcaster implements Listener {
 
-	public static final Broadcaster _ = new Creative();
-	private Creative() {} 
+	private static List<Listener> pool = new FastList<Listener>();
+	
+	public void register (Listener l) {
+		pool.add(l);
+	}
+	
+	@Override
+	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
+		for (Listener l : pool)
+			l.push(op, catcher);
+	}
 	
 }

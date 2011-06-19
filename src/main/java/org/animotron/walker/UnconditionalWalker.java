@@ -20,9 +20,9 @@ package org.animotron.walker;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.SimpleManipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.PropertyContainer;
