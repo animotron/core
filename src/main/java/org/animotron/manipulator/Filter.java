@@ -34,8 +34,6 @@ public class Filter extends AbstractStatementManipulator {
 
 	public static Filter _ = new Filter(){}; 
 	
-	private Filter() {super(RelationshipTypes.FILTER);}
-
 	@Override
 	public boolean canGo(Statement statement) {
 		return statement instanceof Predicate;
@@ -50,8 +48,4 @@ public class Filter extends AbstractStatementManipulator {
 		return false;
 	}
 
-	@Override
-	public boolean isStatable() {
-		return false;
-	}
 }

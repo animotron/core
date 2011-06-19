@@ -29,6 +29,10 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public abstract class AbstractStatementManipulator extends AbstractManipulator implements StatementManipulator {
 
+	public AbstractStatementManipulator() {
+		super();
+	}
+
 	public AbstractStatementManipulator(RelationshipType type) {
 		super(type);
 	}

@@ -39,10 +39,15 @@ public abstract class AbstractManipulator implements Manipulator {
 
 	private Node root;
 	private RelationshipType type;
+	private boolean stateble;
+	
+	public AbstractManipulator() {
+		this.stateble = false;
+	}
 	
 	public AbstractManipulator(final RelationshipType type) {
 		this.type = type;
-		
+		this.stateble = true;
 		Transaction tx = AnimoGraph.beginTx();
 		try {
 			root = getOrCreateNode(getROOT(), type);
@@ -63,6 +68,11 @@ public abstract class AbstractManipulator implements Manipulator {
 	}
 	
 	@Override
+	public final boolean isStatable() {
+		return stateble;
+	}
+	
+	@Override
 	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
 		return Executor.execute(this, op);
 	}
@@ -77,11 +87,6 @@ public abstract class AbstractManipulator implements Manipulator {
 		return true;
 	}
 	
-	@Override
-	public boolean isStatable() {
-		return true;
-	}
-
 	public void shutdown() {
 		
 	}

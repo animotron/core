@@ -29,6 +29,10 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public abstract class AbstractSimpleManipulator extends AbstractManipulator implements SimpleManipulator {
 
+	public AbstractSimpleManipulator() {
+		super();
+	}
+
 	public AbstractSimpleManipulator(RelationshipType type) {
 		super(type);
 	}
