@@ -45,8 +45,18 @@ public class Executor {
 		return in;
 	}
 
+	public static PipedInputObjectStream markExecute(Manipulator m, PropertyContainer op) throws IOException {
+		PipedInputObjectStream in = new PipedInputObjectStream();
+		execute(m.markWalk(op, new PipedOutputObjectStream(in)));
+		return in;
+	}
+
 	public static void execute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
 		execute(m.walk(op, out));
+	}
+	
+	public static void markExecute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
+		execute(m.markWalk(op, out));
 	}
 	
 	public static void shutdown() {

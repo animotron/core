@@ -30,6 +30,7 @@ import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.Executor;
 import org.animotron.manipulator.Manipulator;
 import org.animotron.manipulator.Startable;
+import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
@@ -44,24 +45,17 @@ public abstract class Walker implements Runnable, Startable {
 	private Manipulator m;
 	private PropertyContainer op;
 	private PipedOutputObjectStream out;
-	private Relationship state;
+	private Marker marker;
 
-	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
+	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
 		this.m = m;
 		this.op = op;
 		this.out = out;
-		if (m.isStatable())
-			storeState(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
+		this.marker = marker;
+		if (marker !=null)
+			marker.mark(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
 	}
 	
-	private void storeState(Node node) {
-		state = m.root().createRelationshipTo(node, m.type());
-	}
-
-	private void dropState() {
-		state.delete();
-	}
-
 	@Override
 	public final void run() {
 		Catcher catcher = new Catcher(); 
@@ -73,8 +67,7 @@ public abstract class Walker implements Runnable, Startable {
 			else
 				go((Relationship) op, out, catcher);
 			
-			if (m.isStatable())
-				dropState();
+			reset();
 			
 			tx.success();
 			out.close();
@@ -119,9 +112,8 @@ public abstract class Walker implements Runnable, Startable {
 	}
 	
 	public void reset() {
-		if (m.isStatable()) {
-			dropState();
-		}
+		if (marker != null)
+			marker.drop();	
 	}
 	
 }

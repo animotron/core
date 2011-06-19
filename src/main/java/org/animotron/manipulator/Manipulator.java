@@ -22,10 +22,9 @@ import java.io.IOException;
 
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.marker.Marker;
 import org.animotron.walker.Walker;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,17 +35,15 @@ public interface Manipulator {
 	//for debug needs
 	public boolean isPiped();
 	
-	//do have state
-	public boolean isStatable();
-	
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out);
 	public Walker walk(PropertyContainer op, PipedOutputObjectStream out);
+	
+	public Walker walk(PropertyContainer op, PipedOutputObjectStream out, Marker marker);
 
+	public PipedInputObjectStream markExecute(PropertyContainer op) throws IOException;
 	public PipedInputObjectStream execute(PropertyContainer op) throws IOException;
 
+	public void markExecute(PropertyContainer op, PipedOutputObjectStream out);
 	public void execute(PropertyContainer op, PipedOutputObjectStream out);
-	
-	public RelationshipType type();
-	
-	public Node root();
 	
 }

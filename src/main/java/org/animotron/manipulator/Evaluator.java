@@ -24,10 +24,11 @@ import java.util.List;
 import javolution.util.FastList;
 
 import org.animotron.Statement;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.marker.CalcMarker;
 import org.animotron.operator.Evaluable;
+import org.animotron.walker.Walker;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
@@ -39,8 +40,6 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
 	
-	private Evaluator() {super(RelationshipTypes.EVAL);}
-
 	@Override
 	public boolean canGo(Statement statement) {
 		return statement instanceof Evaluable;
@@ -53,7 +52,7 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(op, new PipedOutputObjectStream(in));
+		markExecute(op, new PipedOutputObjectStream(in));
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {
@@ -63,6 +62,11 @@ public class Evaluator extends AbstractStatementManipulator {
 				System.out.println("evalGetResult");
 		}
 		return result;
+	}
+
+	@Override
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
+		return walk(op, out, CalcMarker._);
 	}
 
 }

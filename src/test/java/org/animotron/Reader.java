@@ -97,7 +97,7 @@ public class Reader implements Runnable {
 		
 		if (st instanceof ANY) {
 			
-			PipedInputObjectStream in = org.animotron.manipulator.Evaluator._.execute(position.getStartNode());
+			PipedInputObjectStream in = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
 			for (Object n : in) {
 				if (n instanceof Relationship) {
 					process( (Relationship) n );

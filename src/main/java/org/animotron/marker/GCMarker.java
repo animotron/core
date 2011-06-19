@@ -16,42 +16,18 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.marker;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Predicate;
-import org.animotron.walker.Walker;
-import org.neo4j.graphdb.PropertyContainer;
-import org.neo4j.graphdb.Relationship;
+import org.animotron.graph.RelationshipTypes;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Filter extends AbstractStatementManipulator {
-
-	public static Filter _ = new Filter(){}; 
+public class GCMarker extends AbstractMarker {
 	
-	@Override
-	public boolean canGo(Statement statement) {
-		return statement instanceof Predicate;
-	}
+	public static final GCMarker _ = new GCMarker(); 
 
-	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
-		((Predicate) statement).filter(op, ot, isLast);
-	}
+	private GCMarker() {super(RelationshipTypes.GC);}
 	
-	public boolean isPiped() {
-		return false;
-	}
-	
-	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out);
-	}
-
 }

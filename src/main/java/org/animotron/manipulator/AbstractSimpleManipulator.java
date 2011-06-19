@@ -19,9 +19,9 @@
 package org.animotron.manipulator;
 
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.marker.Marker;
 import org.animotron.walker.UnconditionalWalker;
 import org.neo4j.graphdb.PropertyContainer;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -29,17 +29,9 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public abstract class AbstractSimpleManipulator extends AbstractManipulator implements SimpleManipulator {
 
-	public AbstractSimpleManipulator() {
-		super();
-	}
-
-	public AbstractSimpleManipulator(RelationshipType type) {
-		super(type);
-	}
-
 	@Override
-	public UnconditionalWalker walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return new UnconditionalWalker(this, op,out);
+	public UnconditionalWalker walk(PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
+		return new UnconditionalWalker(this, op,out, marker);
 	}
 
 }

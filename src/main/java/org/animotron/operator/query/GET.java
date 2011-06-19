@@ -79,7 +79,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				
 				String name = name(op);
 				
-				for (Object n : Evaluator._.execute(op)) {
+				for (Object n : Evaluator._.markExecute(op)) {
 					if (n instanceof IOException) {
 						throw (IOException)n;
 						

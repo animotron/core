@@ -21,9 +21,11 @@ package org.animotron.manipulator;
 import java.io.IOException;
 
 import org.animotron.Statement;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.marker.PrepareMarker;
 import org.animotron.operator.Prepare;
+import org.animotron.walker.Walker;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -34,8 +36,6 @@ public class Preparator extends AbstractStatementManipulator {
 	
 	public static Preparator _ = new Preparator();
 	
-	private Preparator() {super(RelationshipTypes.PREPARE);}
-
 	@Override
 	public boolean canGo(Statement statement) {
 		return statement instanceof Prepare;
@@ -44,6 +44,11 @@ public class Preparator extends AbstractStatementManipulator {
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
 		((Prepare) statement).prepare(op, ot, isLast);
+	}
+
+	@Override
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
+		return walk(op, out, PrepareMarker._);
 	}
 	
 }

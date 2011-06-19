@@ -140,7 +140,7 @@ public abstract class AbstractResultSerializer {
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			PipedInputObjectStream in = Evaluator._.execute(r.getStartNode());
+			PipedInputObjectStream in = Evaluator._.markExecute(r.getStartNode());
 			
 			System.out.println("READER waiting ...");
 			for (Object obj : in) {

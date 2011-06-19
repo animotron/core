@@ -28,6 +28,7 @@ import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.manipulator.Catcher;
 import org.animotron.manipulator.StatementManipulator;
+import org.animotron.marker.Marker;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -38,8 +39,8 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class ConditionalWalker extends Walker {
 
-	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutputObjectStream out) {
-		super(m, op, out);
+	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
+		super(m, op, out, marker);
 	}
 
 	@Override

@@ -16,42 +16,56 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.manipulator;
+package org.animotron.marker;
 
-import java.io.IOException;
+import static org.animotron.graph.AnimoGraph.getOrCreateNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
 
-import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
-import org.animotron.operator.Predicate;
-import org.animotron.walker.Walker;
-import org.neo4j.graphdb.PropertyContainer;
+import org.animotron.graph.AnimoGraph;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Filter extends AbstractStatementManipulator {
+public abstract class AbstractMarker implements Marker {
 
-	public static Filter _ = new Filter(){}; 
+	private Node root;
+	private Relationship state;
+	private RelationshipType type;
 	
-	@Override
-	public boolean canGo(Statement statement) {
-		return statement instanceof Predicate;
+	public AbstractMarker(final RelationshipType type) {
+		this.type = type;
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			root = getOrCreateNode(getROOT(), type);
+		} finally {
+			AnimoGraph.finishTx(tx);
+		}
+		
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
-		((Predicate) statement).filter(op, ot, isLast);
-	}
-	
-	public boolean isPiped() {
-		return false;
+	public Node root() {
+		return root;
 	}
 	
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out);
+	public RelationshipType type() {
+		return type;
+	}
+	
+	@Override
+	public void mark(Node node) {
+		state = root.createRelationshipTo(node, type());
+	}
+
+	@Override
+	public void drop() {
+		state.delete();
 	}
 
 }

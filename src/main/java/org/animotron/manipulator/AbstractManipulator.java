@@ -18,58 +18,27 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.AnimoGraph.getOrCreateNode;
-import static org.animotron.graph.AnimoGraph.getROOT;
-
 import java.io.IOException;
 
-import org.animotron.graph.AnimoGraph;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
-import org.neo4j.graphdb.Node;
+import org.animotron.walker.Walker;
 import org.neo4j.graphdb.PropertyContainer;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public abstract class AbstractManipulator implements Manipulator {
-
-	private Node root;
-	private RelationshipType type;
-	private boolean stateble;
 	
-	public AbstractManipulator() {
-		this.stateble = false;
-	}
-	
-	public AbstractManipulator(final RelationshipType type) {
-		this.type = type;
-		this.stateble = true;
-		Transaction tx = AnimoGraph.beginTx();
-		try {
-			root = getOrCreateNode(getROOT(), type);
-		} finally {
-			AnimoGraph.finishTx(tx);
-		}
-		
+	@Override
+	public PipedInputObjectStream markExecute(PropertyContainer op) throws IOException {
+		return Executor.markExecute(this, op);
 	}
 
 	@Override
-	public Node root() {
-		return root;
-	}
-	
-	@Override
-	public RelationshipType type() {
-		return type;
-	}
-	
-	@Override
-	public final boolean isStatable() {
-		return stateble;
+	public void markExecute(PropertyContainer op, PipedOutputObjectStream out) {
+		Executor.markExecute(this, op, out);
 	}
 	
 	@Override
@@ -81,7 +50,7 @@ public abstract class AbstractManipulator implements Manipulator {
 	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
 		Executor.execute(this, op, out);
 	}
-	
+
 	@Override
 	public boolean isPiped() {
 		return true;
@@ -90,4 +59,10 @@ public abstract class AbstractManipulator implements Manipulator {
 	public void shutdown() {
 		
 	}
+	
+	@Override
+	public Walker walk(PropertyContainer op, PipedOutputObjectStream out) {
+		return walk(op, out, null);
+	}
+	
 }

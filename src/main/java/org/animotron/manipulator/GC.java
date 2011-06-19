@@ -23,9 +23,11 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import java.io.IOException;
 
 import org.animotron.exception.ExceptionBuilderTerminate;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.marker.GCMarker;
+import org.animotron.walker.Walker;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -36,8 +38,6 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 	
 	public static GC _ = new GC();
 	
-	private GC() {super(RelationshipTypes.GC);}
-	
 	@Override
 	public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate {
 		
@@ -46,7 +46,7 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 		Node node = op.getEndNode();
 		op.delete();
 		if (!node.hasRelationship(INCOMING)) {
-			catcher.add(walk(node, out));
+			catcher.add(markWalk(node, out));
 		}
 		
 	}
@@ -60,7 +60,7 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 			if (isLast) {
 				node.delete();
 			} else {
-				catcher.add(walk(node, ot));
+				catcher.add(markWalk(node, ot));
 			}
 		}
 	}
@@ -69,4 +69,10 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
 		push(op, catcher, null);
 	}
+	
+	@Override
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
+		return walk(op, out, GCMarker._);
+	}
+
 }
