@@ -52,7 +52,7 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		markExecute(op, new PipedOutputObjectStream(in));
+		execute(op, new PipedOutputObjectStream(in));
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {
