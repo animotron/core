@@ -133,7 +133,6 @@ public abstract class GraphBuilder {
 			
 		} finally {
 			finishTx(tx);
-			
 		}
 		
 		if (catcher != null) {

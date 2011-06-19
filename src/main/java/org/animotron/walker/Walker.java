@@ -67,17 +67,19 @@ public abstract class Walker implements Runnable, Startable {
 			else
 				go((Relationship) op, out, catcher);
 			
-			reset();
+			if (marker != null)
+				marker.drop();	
 			
 			tx.success();
 			out.close();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 			catcher = null;
-			tx.failure();
 			
 		} finally {
 			finishTx(tx);
+			
 		}
 		
 		if (catcher != null)
@@ -111,9 +113,4 @@ public abstract class Walker implements Runnable, Startable {
 		Executor.execute(this);
 	}
 	
-	public void reset() {
-		if (marker != null)
-			marker.drop();	
-	}
-
 }
