@@ -33,12 +33,10 @@ public class Manipulators {
 	}
 	
 	public static void shutdown() {
-		Filter._.shutdown();
 		GC._.shutdown();
+		Filter._.shutdown();
+		Evaluator._.shutdown();
 		Preparator._.shutdown();
-		
-		Calculator._.shutdown();
-
 		Executor.shutdown();
 	}
 

@@ -41,7 +41,6 @@ import org.neo4j.graphdb.Relationship;
 public class Evaluator extends AbstractStatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
-	private Marker marker = new CalcMarker(); 
 	
 	@Override
 	public boolean canGo(Statement statement) {
@@ -69,14 +68,13 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	@Override
 	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, marker);
+		return walk(op, out, CalcMarker._);
 	}
 
 	private static class CalcMarker extends AbstractMarker {
 		
-		private CalcMarker() {
-			super(RelationshipTypes.CALC);
-		}
+		private static final Marker _ = new CalcMarker(); 
+		private CalcMarker() {super(RelationshipTypes.CALC);}
 
 		@Override
 		public Manipulator manipulator() {

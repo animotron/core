@@ -36,23 +36,10 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GC extends AbstractSimpleManipulator implements GraphListener {
+public class GC extends AbstractSimpleManipulator {
 	
 	public static GC _ = new GC();
-	private Marker marker = new GCMarker(); 
-	
-	@Override
-	public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate {
-		
-		System.out.println("GC the relationship " + op);
-		
-		Node node = op.getEndNode();
-		op.delete();
-		if (!node.hasRelationship(INCOMING)) {
-			catcher.add(markWalk(node, out));
-		}
-		
-	}
+	private GC() {Destructive._.register(new Garbage());}
 
 	@Override
 	public void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
@@ -66,23 +53,36 @@ public class GC extends AbstractSimpleManipulator implements GraphListener {
 				catcher.add(markWalk(node, ot));
 			}
 		}
+
+
 	}
 
 	@Override
-	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
-		push(op, catcher, null);
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
+		return walk(op, out, GCMarker._);
 	}
 	
-	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, marker);
+	public class Garbage extends AbstaractGraphListener {
+		
+		@Override
+		public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate {
+			
+			System.out.println("GC the relationship " + op);
+			
+			Node node = op.getEndNode();
+			op.delete();
+			if (!node.hasRelationship(INCOMING)) {
+				catcher.add(markWalk(node, out));
+			}
+			
+		}
+		
 	}
 	
 	private static class GCMarker extends AbstractMarker {
-		
-		private GCMarker() {
-			super(RelationshipTypes.GC);
-		}
+
+		private static final Marker _ = new GCMarker(); 
+		private GCMarker() {super(RelationshipTypes.GC);}
 
 		@Override
 		public Manipulator manipulator() {

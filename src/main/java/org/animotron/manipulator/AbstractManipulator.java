@@ -56,6 +56,7 @@ public abstract class AbstractManipulator implements Manipulator {
 		return true;
 	}
 	
+	@Override
 	public void shutdown() {
 		
 	}

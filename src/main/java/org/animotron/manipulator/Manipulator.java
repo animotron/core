@@ -45,5 +45,7 @@ public interface Manipulator {
 
 	public void markExecute(PropertyContainer op, PipedOutputObjectStream out);
 	public void execute(PropertyContainer op, PipedOutputObjectStream out);
+
+	public void shutdown();
 	
 }

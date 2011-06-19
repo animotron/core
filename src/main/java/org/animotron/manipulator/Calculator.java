@@ -28,14 +28,12 @@ import org.neo4j.graphdb.Relationship;
 public class Calculator extends AbstaractGraphListener {
 	
 	public static Calculator _ = new Calculator();
-	
+	private Calculator() {super(Creative._);}
+
 	@Override
     public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
 		System.out.println("Prepare the relationship " + op);
 		catcher.add(Preparator._.markWalk(op, out));
 	}
 	
-	public void shutdown() {
-		
-	}
 }

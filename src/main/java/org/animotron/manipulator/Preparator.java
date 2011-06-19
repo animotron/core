@@ -37,7 +37,6 @@ import org.neo4j.graphdb.Relationship;
 public class Preparator extends AbstractStatementManipulator {
 	
 	public static Preparator _ = new Preparator();
-	private Marker marker = new PrepareMarker(); 
 	
 	@Override
 	public boolean canGo(Statement statement) {
@@ -51,14 +50,13 @@ public class Preparator extends AbstractStatementManipulator {
 
 	@Override
 	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, marker);
+		return walk(op, out, PrepareMarker._);
 	}
 	
-	private class PrepareMarker extends AbstractMarker {
+	private static class PrepareMarker extends AbstractMarker {
 		
-		private PrepareMarker() {
-			super(RelationshipTypes.PREPARE);
-		}
+		private static final Marker _ = new PrepareMarker();
+		private PrepareMarker() {super(RelationshipTypes.PREPARE);}
 
 		@Override
 		public Manipulator manipulator() {
