@@ -226,6 +226,4 @@ public class Expression extends GraphBuilder implements Relationship {
 	public boolean isType(RelationshipType type) {
 		return getRelationship().isType(type);
 	}
-
-
 }
