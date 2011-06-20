@@ -50,14 +50,13 @@ public class GC extends AbstractSimpleManipulator {
 		op.getStartNode().delete();
 		op.delete();
 		if (!node.hasRelationship(INCOMING)) {
-			if (isLast) {
+			if 
+			(isLast) {
 				node.delete();
 			} else {
 				catcher.add(markWalk(node, ot));
 			}
 		}
-
-
 	}
 
 	@Override
@@ -72,11 +71,11 @@ public class GC extends AbstractSimpleManipulator {
 			
 			System.out.println("GC the relationship " + op);
 			
-			Node node = op.getEndNode();
-			op.delete();
-			if (!node.hasRelationship(INCOMING)) {
-				catcher.add(markWalk(node, out));
-			}
+//			Node node = op.getEndNode();
+//			op.delete();
+//			if (!node.hasRelationship(INCOMING)) {
+//				catcher.add(markWalk(node, out));
+//			}
 			
 		}
 		
