@@ -117,9 +117,10 @@ public abstract class Walker implements Runnable, Startable {
 				out.close();
 			}
 
-			ot.close();
-			
 		}
+		
+		ot.close();
+		
 	}
 
 	protected abstract void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException;
