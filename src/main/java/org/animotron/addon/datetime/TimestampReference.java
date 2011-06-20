@@ -21,6 +21,7 @@ package org.animotron.addon.datetime;
 import java.io.IOException;
 import java.util.WeakHashMap;
 
+import org.animotron.Catcher;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;
@@ -42,7 +43,7 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 	private TimestampReference() { super("T", "animo/time"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException {
 		Node node = op.getEndNode();
 		String name = (String) node.getProperty("NAME");
 		

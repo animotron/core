@@ -196,7 +196,7 @@ public class ATest {
         assertNotNull(op);
 
         toConsole(
-    		Evaluator._.markExecute(op)
+    		Evaluator._.markExecute(op, new Catcher())
 		);
         
         System.out.println("String result serializer...");

@@ -34,8 +34,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public class UnconditionalWalker extends Walker {
 
-	public UnconditionalWalker(SimpleManipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
-		super(m, op, out, marker);
+	public UnconditionalWalker(SimpleManipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker, Catcher catcher) {
+		super(m, op, out, marker, catcher);
 	}
 
 	@Override

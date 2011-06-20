@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.marker.Marker;
@@ -35,16 +36,16 @@ public interface Manipulator {
 	//for debug needs
 	public boolean isPiped();
 	
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out);
-	public Walker walk(PropertyContainer op, PipedOutputObjectStream out);
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher);
+	public Walker walk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher);
 	
-	public Walker walk(PropertyContainer op, PipedOutputObjectStream out, Marker marker);
+	public Walker walk(PropertyContainer op, PipedOutputObjectStream out, Marker marker, Catcher catcher);
 
-	public PipedInputObjectStream markExecute(PropertyContainer op) throws IOException;
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException;
+	public PipedInputObjectStream markExecute(PropertyContainer op, Catcher catcher) throws IOException;
+	public PipedInputObjectStream execute(PropertyContainer op, Catcher catcher) throws IOException;
 
-	public void markExecute(PropertyContainer op, PipedOutputObjectStream out);
-	public void execute(PropertyContainer op, PipedOutputObjectStream out);
+	public void markExecute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher);
+	public void execute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher);
 
 	public void shutdown();
 	

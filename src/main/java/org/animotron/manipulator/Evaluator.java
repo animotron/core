@@ -50,12 +50,12 @@ public class Evaluator extends AbstractStatementManipulator {
 
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
-		((Evaluable) statement).eval(op, ot, isLast);
+		((Evaluable) statement).eval(op, ot, isLast, catcher);
 	}
 
-	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
+	public List<Relationship> evalGetResult(PropertyContainer op, Catcher catcher) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(op, new PipedOutputObjectStream(in));
+		execute(op, new PipedOutputObjectStream(in),catcher);
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {
@@ -68,8 +68,8 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, CalcMarker._);
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		return walk(op, out, CalcMarker._, catcher);
 	}
 
 	private static class CalcMarker extends AbstractMarker {

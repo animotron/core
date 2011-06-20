@@ -74,20 +74,20 @@ public class Reader implements Runnable {
 		System.out.println("");
 		System.out.println("READER");
 		try {
-			process(position);
+			process(position, new Catcher());
 			out.close();
 		} catch (IOException e) {
 			// TODO: handle exception
 		}
 	}
 	
-	private void subprocess(Node node) throws IOException {
+	private void subprocess(Node node, Catcher catcher) throws IOException {
 		for (Relationship r : node.getRelationships(OUTGOING)) {
-			process(r);
+			process(r, catcher);
 		}
 	}
 
-	private void process(Relationship position) throws IOException {
+	private void process(Relationship position, Catcher catcher) throws IOException {
 		
 		Quanta st = Statements.relationshipType(position.getType());
 		
@@ -97,10 +97,10 @@ public class Reader implements Runnable {
 		
 		if (st instanceof ANY) {
 			
-			PipedInputObjectStream in = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
+			PipedInputObjectStream in = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode(), catcher);
 			for (Object n : in) {
 				if (n instanceof Relationship) {
-					process( (Relationship) n );
+					process((Relationship) n, catcher);
 				} else
 					System.out.println("UNPROCESSED on ANY - "+n);
 			}
@@ -136,14 +136,14 @@ public class Reader implements Runnable {
 
 			out.write(("<"+name+">").getBytes());
 			
-			subprocess(eNode);
+			subprocess(eNode, catcher);
 
 			out.write(("</"+name+">").getBytes());
 			
 		} else if (typeName.startsWith("the:")) {
 			out.write(("<"+typeName+">").getBytes());
 			
-			subprocess(eNode);
+			subprocess(eNode, catcher);
 
 			out.write(("</"+typeName+">").getBytes());
 		
@@ -155,19 +155,19 @@ public class Reader implements Runnable {
 
 			out.write(("<have:"+name+">").getBytes());
 			
-			subprocess(eNode);
+			subprocess(eNode, catcher);
 
 			out.write(("</have:"+name+">").getBytes());
 		
 		} else if (TEXT._.name().toUpperCase().equals(typeName)) {
 			out.write(((String)eNode.getProperty("VALUE")).getBytes());
-			subprocess(eNode);
+			subprocess(eNode, catcher);
 			
 		} else {
 			for (Relationship r : eNode.getRelationships(OUTGOING)) {
 				String type = r.getType().name();
 				if (type.startsWith("RESULT") || type.startsWith("QUERY"))
-					process(r);
+					process(r, catcher);
 			}
 		}
 	}

@@ -24,6 +24,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.io.PipedOutputObjectStream;
@@ -67,7 +68,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			relationships(IC._.relationshipType(), OUTGOING );
 
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException {
 		
 		Transaction tx = beginTx();
 		try {
@@ -79,7 +80,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				
 				String name = name(op);
 				
-				for (Object n : Evaluator._.markExecute(op)) {
+				for (Object n : Evaluator._.markExecute(op, catcher)) {
 					if (n instanceof IOException) {
 						throw (IOException)n;
 						

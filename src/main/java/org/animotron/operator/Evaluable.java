@@ -20,6 +20,7 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
@@ -31,6 +32,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Evaluable {
 	
-	void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException;
+	void eval(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException;
 	
 }

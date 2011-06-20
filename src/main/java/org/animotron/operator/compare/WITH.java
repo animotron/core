@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.animotron.Catcher;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
@@ -43,12 +44,12 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException {
 		out.subscribeFilter(op, this);
 	}
 
 	@Override
-	public boolean filter(Relationship op, Node ref) throws IOException {
+	public boolean filter(Relationship op, Node ref, Catcher catcher) throws IOException {
 		
 		System.out.println("WITH op "+op);
 		//XXX: fix
@@ -59,11 +60,11 @@ public class WITH extends AbstarctOperator implements Predicate {
 		
 		//TODO: improve
 		System.out.println("================================== actual");
-		List<Relationship> actual = Evaluator._.evalGetResult(have);
+		List<Relationship> actual = Evaluator._.evalGetResult(have, catcher);
 		System.out.println("================================== actual result");
 		System.out.println(Arrays.toString(actual.toArray()));
 		System.out.println("================================== expected");
-		List<Relationship> expected = Evaluator._.evalGetResult(op.getEndNode());
+		List<Relationship> expected = Evaluator._.evalGetResult(op.getEndNode(), catcher);
 		System.out.println("================================== expected result");
 		System.out.println(Arrays.toString(expected.toArray()));
 		

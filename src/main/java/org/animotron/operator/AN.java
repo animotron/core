@@ -24,6 +24,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Node;
@@ -43,7 +44,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 	private AN() { super("an", "animo/reference"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException {
 //		PipedInputObjectStream in = new PipedInputObjectStream();
 //		if (!isLast)
 //			Evaluator._.execute(op, new PipedOutputObjectStream(in));

@@ -43,7 +43,7 @@ public class Filter extends AbstractStatementManipulator {
 
 	@Override
 	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
-		((Predicate) statement).filter(op, ot, isLast);
+		((Predicate) statement).filter(op, ot, isLast, catcher);
 	}
 	
 	public boolean isPiped() {
@@ -51,8 +51,8 @@ public class Filter extends AbstractStatementManipulator {
 	}
 	
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out);
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		return walk(op, out, catcher);
 	}
 
 }

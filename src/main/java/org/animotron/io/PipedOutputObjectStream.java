@@ -23,6 +23,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.Catcher;
 import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -72,12 +73,12 @@ public class PipedOutputObjectStream implements Cloneable {
     
     List<Object[]> filters = new FastList<Object[]>();
 
-	public boolean filter(Node ref) throws IOException {
+	public boolean filter(Node ref, Catcher catcher) throws IOException {
 		for (Object[] filterTube : filters) {
 			if (!((Predicate)filterTube[1]).
 					filter(
 						(Relationship)filterTube[0], 
-						ref)
+						ref, catcher)
 					) 
 			{
 				return false;

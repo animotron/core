@@ -25,8 +25,10 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInputObjectStream;
@@ -46,15 +48,23 @@ import org.neo4j.graphdb.index.IndexHits;
 public abstract class AbstractResultSerializer {
 	
 	final public void serialize(Relationship r) throws IOException {
+		Catcher catcher = new Catcher();
 		Transaction tx = AnimoGraph.beginTx();
 		try {
 			startDocument();
-			build(r);
+			build(r, catcher);
 			endDocument();
-			
 			tx.success();
+		} catch (ExceptionBuilderTerminate e) {
+			e.printStackTrace();
+			catcher = null;
+			tx.failure();
 		} finally {
 			AnimoGraph.finishTx(tx);
+		}
+		
+		if (catcher != null) {
+			catcher.run();
 		}
 	}
 
@@ -66,7 +76,7 @@ public abstract class AbstractResultSerializer {
 	
 	public abstract void endDocument();
 
-	protected void build(Relationship r) throws IOException {
+	protected void build(Relationship r, Catcher catcher) throws IOException, ExceptionBuilderTerminate {
 		
 		RelationshipType type = r.getType();
 		String typeName = type.name();
@@ -88,7 +98,7 @@ public abstract class AbstractResultSerializer {
 		
 		if (s != null) {
 			if (s instanceof Query) {
-				result(r);
+				result(r, catcher);
 
 			//workaround IS
 			} else if (s instanceof IS) {
@@ -101,7 +111,7 @@ public abstract class AbstractResultSerializer {
 				IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 				try {
 					for (Relationship i : q) {
-						build(i);
+						build(i, catcher);
 					}
 				} finally {
 					q.close();
@@ -126,27 +136,27 @@ public abstract class AbstractResultSerializer {
 //		end(statement, r);
 	}
 
-	protected boolean result(Relationship r) throws IOException {
+	protected boolean result(Relationship r, Catcher catcher) throws IOException, ExceptionBuilderTerminate {
 		boolean found = false;
 		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
 		for ( Relationship n : i ) {
 			build( 
 				getDb().getRelationshipById(
 					(Long)n.getProperty(RID.name())
-				) 
+				), catcher 
 			);
 			found = true;
 		}
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			PipedInputObjectStream in = Evaluator._.markExecute(r.getStartNode());
+			PipedInputObjectStream in = Evaluator._.markExecute(r.getStartNode(), catcher);
 			
 			System.out.println("READER waiting ...");
 			for (Object obj : in) {
 				System.out.println("READER get from calculator "+obj);
 				if (obj instanceof Relationship) {
-					build( (Relationship) obj );
+					build((Relationship) obj, catcher);
 				} else {
 					System.out.println("UNHANDLED "+obj);
 				}

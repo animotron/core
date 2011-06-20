@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.Executor;
 import org.animotron.io.PipedInputObjectStream;
 import org.animotron.io.PipedOutputObjectStream;
@@ -33,23 +34,23 @@ import org.neo4j.graphdb.PropertyContainer;
 public abstract class AbstractManipulator implements Manipulator {
 	
 	@Override
-	public PipedInputObjectStream markExecute(PropertyContainer op) throws IOException {
-		return Executor.markExecute(this, op);
+	public PipedInputObjectStream markExecute(PropertyContainer op, Catcher catcher) throws IOException {
+		return Executor.markExecute(this, op, catcher);
 	}
 
 	@Override
-	public void markExecute(PropertyContainer op, PipedOutputObjectStream out) {
-		Executor.markExecute(this, op, out);
+	public void markExecute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		Executor.markExecute(this, op, out, catcher);
 	}
 	
 	@Override
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException {
-		return Executor.execute(this, op);
+	public PipedInputObjectStream execute(PropertyContainer op, Catcher catcher) throws IOException {
+		return Executor.execute(this, op, catcher);
 	}
 
 	@Override
-	public void execute(PropertyContainer op, PipedOutputObjectStream out) {
-		Executor.execute(this, op, out);
+	public void execute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		Executor.execute(this, op, out, catcher);
 	}
 
 	@Override
@@ -63,8 +64,8 @@ public abstract class AbstractManipulator implements Manipulator {
 	}
 	
 	@Override
-	public Walker walk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, null);
+	public Walker walk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		return walk(op, out, null, catcher);
 	}
 	
 }

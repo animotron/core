@@ -40,24 +40,24 @@ public class Executor {
 		exec.execute(command);
 	}
 	
-	public static PipedInputObjectStream execute(Manipulator m, PropertyContainer op) throws IOException {
+	public static PipedInputObjectStream execute(Manipulator m, PropertyContainer op, Catcher catcher) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(m.walk(op, new PipedOutputObjectStream(in)));
+		execute(m.walk(op, new PipedOutputObjectStream(in), catcher));
 		return in;
 	}
 
-	public static PipedInputObjectStream markExecute(Manipulator m, PropertyContainer op) throws IOException {
+	public static PipedInputObjectStream markExecute(Manipulator m, PropertyContainer op, Catcher catcher) throws IOException {
 		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(m.markWalk(op, new PipedOutputObjectStream(in)));
+		execute(m.markWalk(op, new PipedOutputObjectStream(in), catcher));
 		return in;
 	}
 
-	public static void execute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
-		execute(m.walk(op, out));
+	public static void execute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		execute(m.walk(op, out, catcher));
 	}
 	
-	public static void markExecute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out) {
-		execute(m.markWalk(op, out));
+	public static void markExecute(Manipulator m, PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		execute(m.markWalk(op, out, catcher));
 	}
 	
 	public static void shutdown() {

@@ -39,8 +39,8 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class ConditionalWalker extends Walker {
 
-	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
-		super(m, op, out, marker);
+	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker, Catcher catcher) {
+		super(m, op, out, marker, catcher);
 	}
 
 	@Override

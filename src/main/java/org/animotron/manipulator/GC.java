@@ -54,14 +54,14 @@ public class GC extends AbstractSimpleManipulator {
 			(isLast) {
 				node.delete();
 			} else {
-				catcher.add(markWalk(node, ot));
+				markWalk(node, ot, catcher);
 			}
 		}
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, GCMarker._);
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		return walk(op, out, GCMarker._, catcher);
 	}
 	
 	public class Garbage extends AbstaractGraphListener {
@@ -71,11 +71,11 @@ public class GC extends AbstractSimpleManipulator {
 			
 			System.out.println("GC the relationship " + op);
 			
-//			Node node = op.getEndNode();
-//			op.delete();
-//			if (!node.hasRelationship(INCOMING)) {
-//				catcher.add(markWalk(node, out));
-//			}
+			Node node = op.getEndNode();
+			op.delete();
+			if (!node.hasRelationship(INCOMING)) {
+				catcher.add(markWalk(node, out, catcher));
+			}
 			
 		}
 		

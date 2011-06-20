@@ -20,6 +20,7 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.io.PipedOutputObjectStream;
 import org.neo4j.graphdb.Relationship;
 
@@ -36,7 +37,7 @@ public class IC extends AbstarctOperator implements Evaluable {
 	
 	private IC() { super("ic", "animo/connection"); }
 	
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException {
 		System.out.println("IC "+op);
 		out.close();
 	}

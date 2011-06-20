@@ -47,19 +47,20 @@ public abstract class Walker implements Runnable, Startable {
 	private PipedOutputObjectStream out;
 	private Marker marker;
 
-	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
+	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker, Catcher catcher) {
 		this.m = m;
 		this.op = op;
 		this.out = out;
 		this.marker = marker;
 		if (marker !=null)
 			marker.mark(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
+		catcher.add(this);
 	}
 	
 	@Override
 	public final void run() {
 		Catcher catcher = new Catcher(); 
-		
+
 		Transaction tx = beginTx();
 		try {
 			if (op instanceof Node)
@@ -71,7 +72,7 @@ public abstract class Walker implements Runnable, Startable {
 				marker.drop();	
 			
 			tx.success();
-			//out.close();
+			out.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();

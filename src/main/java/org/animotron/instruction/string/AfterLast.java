@@ -22,6 +22,7 @@ import static org.animotron.graph.AnimoGraph.getORDER;
 
 import java.io.IOException;
 
+import org.animotron.Catcher;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.Evaluable;
@@ -42,7 +43,7 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 	private AfterLast() { super("after-last", STRING._); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast, Catcher catcher) throws IOException {
 		
 		//UNDERSTAND: if we have more that 2 params, what to do?
 		

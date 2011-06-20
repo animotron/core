@@ -128,6 +128,7 @@ public abstract class GraphBuilder {
 			the = (Relationship) first[5];
 			
 		} catch (ExceptionBuilderTerminate e) {
+			e.printStackTrace();
 			tx.failure();
 			catcher = null; 
 			

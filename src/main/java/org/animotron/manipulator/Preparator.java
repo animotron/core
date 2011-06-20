@@ -50,8 +50,8 @@ public class Preparator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
-		return walk(op, out, PrepareMarker._);
+	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+		return walk(op, out, PrepareMarker._, catcher);
 	}
 	
 	private static class PrepareMarker extends AbstractMarker {

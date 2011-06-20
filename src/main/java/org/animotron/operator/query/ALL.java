@@ -18,9 +18,14 @@
  */
 package org.animotron.operator.query;
 
+import java.io.IOException;
+
+import org.animotron.Catcher;
+import org.animotron.io.PipedOutputObjectStream;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Query operator 'ALL'.
@@ -35,5 +40,11 @@ public class ALL extends AbstarctOperator implements Cachable, Evaluable {
 	public static final ALL _ = new ALL();
 	
 	private ALL() { super("all", "animo/query/all"); }
+
+	@Override
+	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast, Catcher catcher) throws IOException {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }
