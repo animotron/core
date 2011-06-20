@@ -98,7 +98,6 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			finishTx(tx);
 		}
 		
-		out.close();
 	}
 
 	public Relationship get(final Node context, final String name) {

@@ -117,6 +117,5 @@ public abstract class AbstractInstruction implements Instruction {
 	public void eval(Relationship op, PipedOutput ot, boolean isLast) throws IOException {
 		System.out.println("empty eval @"+this.getClass());
 		ot.write(op);
-		ot.close();
 	}
 }

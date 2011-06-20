@@ -63,6 +63,6 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		} finally {
 			finishTx(tx);
 		}
-		out.close();
+		
 	}
 }

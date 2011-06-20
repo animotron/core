@@ -57,7 +57,6 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 
 		//UNDERSTAND: use in-memory relations (virtual)
 		out.write(instance);
-		out.close();
 		return;
 	}
 }

@@ -98,7 +98,6 @@ public abstract class AbstarctOperator implements Operator {
 	public void eval(Relationship op, PipedOutput ot, boolean isLast) throws IOException {
 		System.out.println("empty eval @"+this.getClass());
 		ot.write(op);
-		ot.close();
 	}
 	
 	protected Relationship createResult(Node node, Relationship r) {

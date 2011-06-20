@@ -113,8 +113,12 @@ public abstract class Walker implements Runnable, Startable {
 				}
 			}
 			
-			ot.close();
+			if (m.isPiped()) {
+				out.close();
+			}
 
+			ot.close();
+			
 		}
 	}
 

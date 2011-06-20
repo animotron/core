@@ -92,7 +92,6 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 		} finally {
 			finishTx(tx);
 		}
-		ot.close();
 	}
 	
 	private Relationship getThe(Node node) {

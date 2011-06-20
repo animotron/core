@@ -87,6 +87,5 @@ public class IS extends Relation implements Prepare {
 			}
 		}
 		
-		out.close();
 	}
 }

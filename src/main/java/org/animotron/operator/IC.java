@@ -38,6 +38,5 @@ public class IC extends AbstarctOperator implements Evaluable {
 	
 	public void eval(Relationship op, PipedOutput out, boolean isLast) throws IOException {
 		System.out.println("IC "+op);
-		out.close();
 	}
 }
