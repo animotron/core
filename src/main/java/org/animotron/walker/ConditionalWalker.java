@@ -45,6 +45,8 @@ public class ConditionalWalker extends Walker {
 
 	@Override
 	protected void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
+		
+		System.out.println("op = "+op);
 
 		StatementManipulator m = (StatementManipulator) getManipulator();
 		
