@@ -21,7 +21,6 @@ package org.animotron.walker;
 import java.io.IOException;
 
 import org.animotron.Catcher;
-import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.SimpleManipulator;
 import org.animotron.marker.Marker;
@@ -44,29 +43,13 @@ public class UnconditionalWalker extends Walker {
 		SimpleManipulator m = (SimpleManipulator) getManipulator();
 		
 		try {
-			
-			PipedInput in = null;
-			PipedOutput out = ot;
-
-			if (m.isPiped()) {
-				in = new PipedInput();
-				out = new PipedOutput(in);
-			}
-
-			m.go(op, out, catcher, isLast);
-
-			if (in != null) {
-				for (Object n : in) {
-					ot.write(n);
-				}
-			}
+			m.go(op, ot, catcher, isLast);
 				
 		} catch (IOException e) {
 			e.printStackTrace();
 			ot.write(e);
 		}
 
-		ot.close();
 	}
 
 }

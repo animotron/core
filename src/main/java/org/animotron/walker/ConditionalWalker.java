@@ -25,7 +25,6 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.Instruction;
-import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.StatementManipulator;
 import org.animotron.marker.Marker;
@@ -54,22 +53,7 @@ public class ConditionalWalker extends Walker {
 			Statement s = Statements.relationshipType(type);
 
 			if (m.canGo(s)) {
-
-				PipedInput in = null;
-				PipedOutput out = ot;
-
-				if (m.isPiped()) {
-					in = new PipedInput();
-					out = new PipedOutput(in);
-				}
-
-				m.go(s, op, out, catcher, isLast);
-
-				if (in != null) {
-					for (Object n : in) {
-						ot.write(n);
-					}
-				}
+				m.go(s, op, ot, catcher, isLast);
 				
 			} else if (s instanceof Instruction) {
 				//bypass instructions
@@ -89,7 +73,6 @@ public class ConditionalWalker extends Walker {
 			ot.write(e);
 		}
 
-		ot.close();
 	}
 
 }

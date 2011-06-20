@@ -28,6 +28,7 @@ import java.util.Iterator;
 import org.animotron.Catcher;
 import org.animotron.Executor;
 import org.animotron.Startable;
+import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Manipulator;
 import org.animotron.marker.Marker;
@@ -71,7 +72,6 @@ public abstract class Walker implements Runnable, Startable {
 				marker.drop();	
 			
 			tx.success();
-			out.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -96,7 +96,25 @@ public abstract class Walker implements Runnable, Startable {
 		Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
-			go(r, ot, catcher, isLast(it));
+			
+			PipedInput in = null;
+			PipedOutput out = ot;
+
+			if (m.isPiped()) {
+				in = new PipedInput();
+				out = new PipedOutput(in);
+			}
+			
+			go(r, out, catcher, isLast(it));
+			
+			if (in != null) {
+				for (Object n : in) {
+					ot.write(n);
+				}
+			}
+			
+			ot.close();
+
 		}
 	}
 
