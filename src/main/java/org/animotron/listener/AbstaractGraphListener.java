@@ -37,7 +37,6 @@ public abstract class AbstaractGraphListener implements GraphListener {
 
 	@Override
 	public final void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
-		//root.createRelationshipTo(op.getEndNode(), type);
 		//TODO add pipe
 		push(op, catcher, null);
 	}

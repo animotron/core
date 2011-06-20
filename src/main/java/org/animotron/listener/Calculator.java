@@ -35,7 +35,7 @@ public class Calculator extends AbstaractGraphListener {
 	@Override
     public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
 		System.out.println("Prepare the relationship " + op);
-//		catcher.add(Preparator._.markWalk(op, out));
+		catcher.add(Preparator._.markWalk(op, out));
 	}
 	
 }
