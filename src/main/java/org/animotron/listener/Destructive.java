@@ -26,7 +26,6 @@ package org.animotron.listener;
  */
 public class Destructive extends Broadcaster {
 
-	public static final Broadcaster _ = new Destructive();
-	private Destructive() {} 
+	public static final Destructive _ = new Destructive();
 	
 }

@@ -51,8 +51,6 @@ public class ConditionalWalker extends Walker {
 		try {
 			RelationshipType type = op.getType();
 
-			//System.out.println(type.name());
-
 			Statement s = Statements.relationshipType(type);
 
 			if (m.canGo(s)) {

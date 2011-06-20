@@ -26,7 +26,6 @@ package org.animotron.listener;
  */
 public class Creative extends Broadcaster {
 
-	public static final Broadcaster _ = new Creative();
-	private Creative() {} 
+	public static final Creative _ = new Creative();
 	
 }

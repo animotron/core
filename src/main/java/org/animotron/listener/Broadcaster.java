@@ -33,7 +33,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class Broadcaster implements Listener {
 
-	private static List<Listener> pool = new FastList<Listener>();
+	private List<Listener> pool = new FastList<Listener>();
 	
 	public void register (Listener l) {
 		pool.add(l);
