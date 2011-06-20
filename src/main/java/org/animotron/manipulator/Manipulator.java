@@ -20,8 +20,8 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
-import org.animotron.io.PipedInputObjectStream;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
 import org.animotron.walker.Walker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -35,16 +35,16 @@ public interface Manipulator {
 	//for debug needs
 	public boolean isPiped();
 	
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out);
-	public Walker walk(PropertyContainer op, PipedOutputObjectStream out);
+	public Walker markWalk(PropertyContainer op, PipedOutput out);
+	public Walker walk(PropertyContainer op, PipedOutput out);
 	
-	public Walker walk(PropertyContainer op, PipedOutputObjectStream out, Marker marker);
+	public Walker walk(PropertyContainer op, PipedOutput out, Marker marker);
 
-	public PipedInputObjectStream markExecute(PropertyContainer op) throws IOException;
-	public PipedInputObjectStream execute(PropertyContainer op) throws IOException;
+	public PipedInput markExecute(PropertyContainer op) throws IOException;
+	public PipedInput execute(PropertyContainer op) throws IOException;
 
-	public void markExecute(PropertyContainer op, PipedOutputObjectStream out);
-	public void execute(PropertyContainer op, PipedOutputObjectStream out);
+	public void markExecute(PropertyContainer op, PipedOutput out);
+	public void execute(PropertyContainer op, PipedOutput out);
 
 	public void shutdown();
 	

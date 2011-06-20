@@ -27,8 +27,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 
 import org.animotron.Properties;
-import org.animotron.io.PipedInputObjectStream;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Filter;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
@@ -58,10 +58,10 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 	private ANY() { super("any", "animo/query/any"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutput ot, boolean isLast) throws IOException {
 		
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		PipedOutputObjectStream out = new PipedOutputObjectStream(in);
+		PipedInput in = new PipedInput();
+		PipedOutput out = new PipedOutput(in);
 		Filter._.walk(op, out).run();
 		
 		while (in.read()!= null) ;

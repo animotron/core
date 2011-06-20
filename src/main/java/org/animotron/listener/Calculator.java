@@ -19,7 +19,7 @@
 package org.animotron.listener;
 
 import org.animotron.Catcher;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Preparator;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,7 +33,7 @@ public class Calculator extends AbstaractGraphListener {
 	private Calculator() {super(Creative._);}
 
 	@Override
-    public void push(final Relationship op, Catcher catcher, PipedOutputObjectStream out) {
+    public void push(final Relationship op, Catcher catcher, PipedOutput out) {
 		System.out.println("Prepare the relationship " + op);
 		catcher.add(Preparator._.markWalk(op, out));
 	}

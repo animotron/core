@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.animotron.Catcher;
 import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.animotron.operator.Predicate;
 import org.animotron.walker.Walker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -42,7 +42,7 @@ public class Filter extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
 		((Predicate) statement).filter(op, ot, isLast);
 	}
 	
@@ -51,7 +51,7 @@ public class Filter extends AbstractStatementManipulator {
 	}
 	
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
+	public Walker markWalk(PropertyContainer op, PipedOutput out) {
 		return walk(op, out);
 	}
 

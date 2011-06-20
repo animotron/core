@@ -23,7 +23,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -50,7 +50,7 @@ public class Utils {
 			).getEndNode();
 	}
 	
-	public static boolean results(Node node, PipedOutputObjectStream out) throws IOException {
+	public static boolean results(Node node, PipedOutput out) throws IOException {
 		
 		boolean haveSome = false;
 		for (Relationship res : node.getRelationships(OUTGOING)) {

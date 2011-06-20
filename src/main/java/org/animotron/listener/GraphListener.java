@@ -20,7 +20,7 @@ package org.animotron.listener;
 
 import org.animotron.Catcher;
 import org.animotron.exception.ExceptionBuilderTerminate;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -32,6 +32,6 @@ public interface GraphListener extends Listener {
 
 	public void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate;
 	
-	public void push(Relationship op, Catcher catcher, PipedOutputObjectStream out) throws ExceptionBuilderTerminate;
+	public void push(Relationship op, Catcher catcher, PipedOutput out) throws ExceptionBuilderTerminate;
 	
 }

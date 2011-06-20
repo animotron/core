@@ -24,7 +24,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Node;
@@ -72,7 +72,7 @@ public class IS extends Relation implements Prepare {
 	}
 	
 	@Override
-	public void prepare(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void prepare(Relationship op, PipedOutput out, boolean isLast) throws IOException {
 		
 		Node start = op.getStartNode();
 		

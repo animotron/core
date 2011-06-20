@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
@@ -67,7 +67,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			relationships(IC._.relationshipType(), OUTGOING );
 
 	@Override
-	public void eval(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutput out, boolean isLast) throws IOException {
 		
 		Transaction tx = beginTx();
 		try {

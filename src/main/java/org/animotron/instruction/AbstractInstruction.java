@@ -24,7 +24,7 @@ import static org.animotron.graph.AnimoGraph.order;
 import java.io.IOException;
 
 import org.animotron.graph.AnimoRelationshipType;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -114,7 +114,7 @@ public abstract class AbstractInstruction implements Instruction {
 		return prefix(r) + ":" + name(r);
 	}
 
-	public void eval(Relationship op, PipedOutputObjectStream ot, boolean isLast) throws IOException {
+	public void eval(Relationship op, PipedOutput ot, boolean isLast) throws IOException {
 		System.out.println("empty eval @"+this.getClass());
 		ot.write(op);
 		ot.close();

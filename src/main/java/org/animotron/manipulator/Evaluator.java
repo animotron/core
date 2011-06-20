@@ -26,8 +26,8 @@ import javolution.util.FastList;
 import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedInputObjectStream;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Evaluable;
@@ -49,13 +49,13 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
 		((Evaluable) statement).eval(op, ot, isLast);
 	}
 
 	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
-		PipedInputObjectStream in = new PipedInputObjectStream();
-		execute(op, new PipedOutputObjectStream(in));
+		PipedInput in = new PipedInput();
+		execute(op, new PipedOutput(in));
 		
 		List<Relationship> result = new FastList<Relationship>();
 		for (Object obj : in) {
@@ -68,7 +68,7 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutputObjectStream out) {
+	public Walker markWalk(PropertyContainer op, PipedOutput out) {
 		return walk(op, out, CalcMarker._);
 	}
 

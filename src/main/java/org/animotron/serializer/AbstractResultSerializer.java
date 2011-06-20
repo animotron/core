@@ -29,7 +29,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedInputObjectStream;
+import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
@@ -140,7 +140,7 @@ public abstract class AbstractResultSerializer {
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			PipedInputObjectStream in = Evaluator._.markExecute(r.getStartNode());
+			PipedInput in = Evaluator._.markExecute(r.getStartNode());
 			
 			System.out.println("READER waiting ...");
 			for (Object obj : in) {

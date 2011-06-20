@@ -25,7 +25,7 @@ import java.util.Iterator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class PipedInputObjectStream implements Cloneable, Iterable<Object> {
+public class PipedInput implements Cloneable, Iterable<Object> {
     
 	protected boolean closedByWriter = false;
 	protected volatile boolean closedByReader = false;

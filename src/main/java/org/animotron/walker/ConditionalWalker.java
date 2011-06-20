@@ -25,8 +25,8 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.Instruction;
-import org.animotron.io.PipedInputObjectStream;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.StatementManipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -39,12 +39,12 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class ConditionalWalker extends Walker {
 
-	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
+	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutput out, Marker marker) {
 		super(m, op, out, marker);
 	}
 
 	@Override
-	protected void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException {
+	protected void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
 
 		StatementManipulator m = (StatementManipulator) getManipulator();
 		
@@ -57,12 +57,12 @@ public class ConditionalWalker extends Walker {
 
 			if (m.canGo(s)) {
 
-				PipedInputObjectStream in = null;
-				PipedOutputObjectStream out = ot;
+				PipedInput in = null;
+				PipedOutput out = ot;
 
 				if (m.isPiped()) {
-					in = new PipedInputObjectStream();
-					out = new PipedOutputObjectStream(in);
+					in = new PipedInput();
+					out = new PipedOutput(in);
 				}
 
 				m.go(s, op, out, catcher, isLast);

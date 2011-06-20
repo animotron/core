@@ -31,15 +31,15 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public class PipedOutputObjectStream implements Cloneable {
+public class PipedOutput implements Cloneable {
 
-	private PipedInputObjectStream connection;
+	private PipedInput connection;
 
-	public PipedOutputObjectStream(PipedInputObjectStream inStream) throws IOException {
+	public PipedOutput(PipedInput inStream) throws IOException {
 		connect(inStream);
 	}
 
-	protected synchronized void connect(PipedInputObjectStream inStream) throws IOException {
+	protected synchronized void connect(PipedInput inStream) throws IOException {
 		if (inStream == null) {
 			throw new NullPointerException();
 		

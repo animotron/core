@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.animotron.Catcher;
 import org.animotron.Statement;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -33,6 +33,6 @@ public interface StatementManipulator extends Manipulator {
 
 	public boolean canGo(Statement statement);
 
-	public void go(Statement statement, Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException;
+	public void go(Statement statement, Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException;
 
 }

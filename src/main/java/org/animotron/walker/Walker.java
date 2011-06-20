@@ -28,7 +28,7 @@ import java.util.Iterator;
 import org.animotron.Catcher;
 import org.animotron.Executor;
 import org.animotron.Startable;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Manipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Node;
@@ -44,10 +44,10 @@ public abstract class Walker implements Runnable, Startable {
 
 	private Manipulator m;
 	private PropertyContainer op;
-	private PipedOutputObjectStream out;
+	private PipedOutput out;
 	private Marker marker;
 
-	public Walker(Manipulator m, PropertyContainer op, PipedOutputObjectStream out, Marker marker) {
+	public Walker(Manipulator m, PropertyContainer op, PipedOutput out, Marker marker) {
 		this.m = m;
 		this.op = op;
 		this.out = out;
@@ -87,11 +87,11 @@ public abstract class Walker implements Runnable, Startable {
 			catcher.run();
 	}
 	
-	private void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher) throws IOException {
+	private void go(Relationship op, PipedOutput ot, Catcher catcher) throws IOException {
 		go(op.getEndNode(), ot, catcher);
 	}
 
-	private final void go(Node node, PipedOutputObjectStream ot, Catcher catcher) throws IOException {
+	private final void go(Node node, PipedOutput ot, Catcher catcher) throws IOException {
 		//System.out.println("Walk node = " + node);
 		Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
@@ -100,7 +100,7 @@ public abstract class Walker implements Runnable, Startable {
 		}
 	}
 
-	protected abstract void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException;
+	protected abstract void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException;
 
 	private boolean isLast(Iterator<?> it) {
 		return !it.hasNext();

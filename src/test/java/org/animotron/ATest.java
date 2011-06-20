@@ -40,7 +40,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.CommonGraphBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.Reader;
-import org.animotron.io.PipedInputObjectStream;
+import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
 import org.animotron.serializer.AnimoResultSerializer;
@@ -109,7 +109,7 @@ public class ATest {
 		if (e != null) throw e;
     }
 
-	protected void toConsole(PipedInputObjectStream instream) throws IOException {
+	protected void toConsole(PipedInput instream) throws IOException {
 		if (instream == null) return;
 		
 		Object n; 

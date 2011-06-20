@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
@@ -43,7 +43,7 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public void filter(Relationship op, PipedOutputObjectStream out, boolean isLast) throws IOException {
+	public void filter(Relationship op, PipedOutput out, boolean isLast) throws IOException {
 		out.subscribeFilter(op, this);
 	}
 

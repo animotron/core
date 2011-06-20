@@ -31,7 +31,7 @@ import org.animotron.Quanta;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.ml.TEXT;
-import org.animotron.io.PipedInputObjectStream;
+import org.animotron.io.PipedInput;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
@@ -97,7 +97,7 @@ public class Reader implements Runnable {
 		
 		if (st instanceof ANY) {
 			
-			PipedInputObjectStream in = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
+			PipedInput in = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
 			for (Object n : in) {
 				if (n instanceof Relationship) {
 					process( (Relationship) n );

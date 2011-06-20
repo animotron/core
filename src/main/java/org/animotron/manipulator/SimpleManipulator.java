@@ -21,7 +21,7 @@ package org.animotron.manipulator;
 import java.io.IOException;
 
 import org.animotron.Catcher;
-import org.animotron.io.PipedOutputObjectStream;
+import org.animotron.io.PipedOutput;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -30,6 +30,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface SimpleManipulator extends Manipulator {
 
-	public void go(Relationship op, PipedOutputObjectStream ot, Catcher catcher, boolean isLast) throws IOException;
+	public void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException;
 
 }
