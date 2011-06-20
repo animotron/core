@@ -34,22 +34,22 @@ import org.neo4j.graphdb.PropertyContainer;
 public abstract class AbstractManipulator implements Manipulator {
 	
 	@Override
-	public PipedInputObjectStream markExecute(PropertyContainer op, Catcher catcher) throws IOException {
+	public final PipedInputObjectStream markExecute(PropertyContainer op, Catcher catcher) throws IOException {
 		return Executor.markExecute(this, op, catcher);
 	}
 
 	@Override
-	public void markExecute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+	public final void markExecute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
 		Executor.markExecute(this, op, out, catcher);
 	}
 	
 	@Override
-	public PipedInputObjectStream execute(PropertyContainer op, Catcher catcher) throws IOException {
+	public final PipedInputObjectStream execute(PropertyContainer op, Catcher catcher) throws IOException {
 		return Executor.execute(this, op, catcher);
 	}
 
 	@Override
-	public void execute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
+	public final void execute(PropertyContainer op, PipedOutputObjectStream out, Catcher catcher) {
 		Executor.execute(this, op, out, catcher);
 	}
 

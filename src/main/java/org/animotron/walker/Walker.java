@@ -72,7 +72,7 @@ public abstract class Walker implements Runnable, Startable {
 				marker.drop();	
 			
 			tx.success();
-			out.close();
+			if (out != null) out.close();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
