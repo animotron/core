@@ -44,7 +44,7 @@ public class GraphTraverse {
 		handler.endGraph();
 	}
 	
-	protected void build(Relationship r) {
+	private void build(Relationship r) {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		
