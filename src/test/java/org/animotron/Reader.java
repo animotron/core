@@ -35,6 +35,8 @@ import org.animotron.manipulator.Channels;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
+import org.jetlang.core.Callback;
+import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -48,148 +50,36 @@ import org.neo4j.kernel.Uniqueness;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Reader implements Runnable {
+public class Reader {
 	
 	public static InputStream read(Relationship position) throws IOException {
+		
+		Fiber fiber = Executor.getFiber();
+		
 		PipedInputStream in = new PipedInputStream();
+		final PipedOutputStream out = new PipedOutputStream(in);
+		
+		final Channels ch = new Channels(); 
 
-		PipedOutputStream out = new PipedOutputStream(in);
+		Callback<Relationship> onReceive = new Callback<Relationship>() {
+
+			@Override
+			public void onMessage(Relationship r) {
+				String typeName = r.getType().name();
+
+				if (r.getType().name().startsWith("the:")) {
+					try {
+						out.write(("<"+typeName+">").getBytes());
+						out.write(("</"+typeName+">").getBytes());
+					} catch (IOException e) {
+						
+					}
+				}
+			}
+		};
 		
-		Thread th = new Thread(new Reader(position, out));
-		th.start();
-		
+		ch.up.subscribe(fiber, onReceive);
+
 		return in;
 	}
-	
-	private Relationship position;
-	private OutputStream out;
-	
-	public Reader(Relationship position, OutputStream out) {
-		this.position = position;
-		this.out = out;
-	}
-
-	@Override
-	public void run() {
-		System.out.println("");
-		System.out.println("READER");
-		try {
-			process(position);
-			out.close();
-		} catch (IOException e) {
-			// TODO: handle exception
-		}
-	}
-	
-	private void subprocess(Node node) throws IOException {
-		for (Relationship r : node.getRelationships(OUTGOING)) {
-			process(r);
-		}
-	}
-
-	private void process(Relationship position) throws IOException {
-		
-		Quanta st = Statements.relationshipType(position.getType());
-		
-		String typeName = position.getType().toString();
-		Node eNode = position.getEndNode();
-		System.out.println(position);
-		
-		if (st instanceof ANY) {
-			
-			Channels ch = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
-			//XXX: recode
-//			for (Object n : in) {
-//				if (n instanceof Relationship) {
-//					process( (Relationship) n );
-//				} else
-//					System.out.println("UNPROCESSED on ANY - "+n);
-//			}
-
-		} else if (st instanceof ALL) {
-			for (Relationship r : td_is_down.traverse(eNode).relationships()) {
-				System.out.println("ALL is down = "+r.getEndNode());
-			}
-			
-		} else if (RelationshipTypes.RESULT.name().equals(typeName)) {
-			
-			//how to find type???
-			String name = typeName;
-			for (Relationship r : eNode.getRelationships(INCOMING)) {
-				String tmp = r.getType().toString();
-				if (tmp.equals("IC")) {
-					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
-
-					name = "have:"+ref.getEndNode().getProperty("NAME");
-					break;
-
-				} else if (tmp.equals("HAVE")) {
-					Relationship ref = eNode.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
-
-					name = "have:"+ref.getEndNode().getProperty("NAME");
-					break;
-				} else if (tmp.startsWith("the:")) {
-
-					name = "the:"+r.getEndNode().getProperty("NAME");
-					break;
-				}
-			}
-
-			out.write(("<"+name+">").getBytes());
-			
-			subprocess(eNode);
-
-			out.write(("</"+name+">").getBytes());
-			
-		} else if (typeName.startsWith("the:")) {
-			out.write(("<"+typeName+">").getBytes());
-			
-			subprocess(eNode);
-
-			out.write(("</"+typeName+">").getBytes());
-		
-		} else if ("HAVE".equals(typeName)) {
-			String name = null;
-			for (Relationship r : td_have_name.traverse(eNode).relationships()) {
-				name = (String) r.getEndNode().getProperty("NAME");
-			}
-
-			out.write(("<have:"+name+">").getBytes());
-			
-			subprocess(eNode);
-
-			out.write(("</have:"+name+">").getBytes());
-		
-		} else if (TEXT._.name().toUpperCase().equals(typeName)) {
-			out.write(((String)eNode.getProperty("VALUE")).getBytes());
-			subprocess(eNode);
-			
-		} else {
-			for (Relationship r : eNode.getRelationships(OUTGOING)) {
-				String type = r.getType().name();
-				if (type.startsWith("RESULT") || type.startsWith("QUERY"))
-					process(r);
-			}
-		}
-	}
-	
-	private static TraversalDescription td_have_name = 
-		Traversal.description().
-			breadthFirst().
-			relationships(RelationshipTypes.REF, OUTGOING );
-
-	private static TraversalDescription td_is_down = 
-		Traversal.description().
-			breadthFirst().
-			relationships(IS._.relationshipType(), INCOMING ).
-			evaluator(new Evaluator() {
-
-				@Override
-				public Evaluation evaluate(Path path) {
-					System.out.println("path = "+path);
-					return Evaluation.INCLUDE_AND_CONTINUE;
-				}
-			}).
-			uniqueness(Uniqueness.RELATIONSHIP_GLOBAL);
-
 }
