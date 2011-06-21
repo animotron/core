@@ -46,12 +46,36 @@ public abstract class Manipulator {
 		//TODO: make shutdown
 	}
 	
+	public final Channels execute(Node op) {
+		Channels ch = new Channels();
+		execute (op, ch);
+		return ch;
+	}
+	
+	public final Channels execute(Relationship op) {
+		Channels ch = new Channels();
+		execute (op, ch);
+		return ch;
+	}
+	
 	public final void execute(Node op, Channels ch) {
 		execute (op, ch, null);
 	}
 	
 	public final void execute(Relationship op, Channels ch) {
 		execute (op, ch, null);
+	}
+	
+	public final Channels mark(Node op) {
+		Channels ch = new Channels();
+		mark (op, ch);
+		return ch;
+	}
+	
+	public final Channels mark(Relationship op) {
+		Channels ch = new Channels();
+		mark (op, ch);
+		return ch;
 	}
 	
 	public final void mark(Node op, Channels ch) {
