@@ -25,7 +25,6 @@ import java.io.IOException;
 import org.animotron.Catcher;
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedOutput;
 import org.animotron.listener.AbstaractGraphListener;
 import org.animotron.listener.Destructive;
 import org.animotron.marker.AbstractMarker;
@@ -45,7 +44,7 @@ public class GC extends AbstractSimpleManipulator {
 	private GC() {Destructive._.register(new Garbage());}
 
 	@Override
-	public void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
 		Node node = op.getEndNode();
 		op.getStartNode().delete();
 		op.delete();
@@ -54,27 +53,27 @@ public class GC extends AbstractSimpleManipulator {
 			(isLast) {
 				node.delete();
 			} else {
-				catcher.add(markWalk(node, ot));
+				catcher.add(markWalk(node, ch));
 			}
 		}
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutput out) {
-		return walk(op, out, GCMarker._);
+	public Walker markWalk(PropertyContainer op, Channels ch) {
+		return walk(op, ch, GCMarker._);
 	}
 	
 	public class Garbage extends AbstaractGraphListener {
 		
 		@Override
-		public void push(final Relationship op, Catcher catcher, PipedOutput out) throws ExceptionBuilderTerminate {
+		public void push(final Relationship op, Catcher catcher, Channels ch) throws ExceptionBuilderTerminate {
 			
 			System.out.println("GC the relationship " + op);
 			
 			Node node = op.getEndNode();
 			op.delete();
 			if (!node.hasRelationship(INCOMING)) {
-				catcher.add(markWalk(node, out));
+				catcher.add(markWalk(node, ch));
 			}
 			
 		}

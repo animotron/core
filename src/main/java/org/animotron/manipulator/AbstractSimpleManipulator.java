@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
 import org.animotron.walker.UnconditionalWalker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -30,8 +29,8 @@ import org.neo4j.graphdb.PropertyContainer;
 public abstract class AbstractSimpleManipulator extends AbstractManipulator implements SimpleManipulator {
 
 	@Override
-	public UnconditionalWalker walk(PropertyContainer op, PipedOutput out, Marker marker) {
-		return new UnconditionalWalker(this, op,out, marker);
+	public UnconditionalWalker walk(PropertyContainer op, Channels ch, Marker marker) {
+		return new UnconditionalWalker(this, op, ch, marker);
 	}
 
 }

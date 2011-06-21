@@ -23,7 +23,6 @@ import java.io.IOException;
 import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedOutput;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Prepare;
@@ -45,13 +44,13 @@ public class Preparator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
-		((Prepare) statement).prepare(op, ot, isLast);
+	public void go(Statement statement, Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
+		((Prepare) statement).prepare(op, ch, isLast);
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutput out) {
-		return walk(op, out, PrepareMarker._);
+	public Walker markWalk(PropertyContainer op, Channels ch) {
+		return walk(op, ch, PrepareMarker._);
 	}
 	
 	private static class PrepareMarker extends AbstractMarker {

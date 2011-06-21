@@ -29,7 +29,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
@@ -140,17 +140,18 @@ public abstract class AbstractResultSerializer {
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			PipedInput in = Evaluator._.markExecute(r.getStartNode());
+			Channels ch = Evaluator._.markExecute(r.getStartNode());
 			
 			System.out.println("READER waiting ...");
-			for (Object obj : in) {
-				System.out.println("READER get from calculator "+obj);
-				if (obj instanceof Relationship) {
-					build( (Relationship) obj );
-				} else {
-					System.out.println("UNHANDLED "+obj);
-				}
-			}
+			//XXX: code
+//			for (Object obj : in) {
+//				System.out.println("READER get from calculator "+obj);
+//				if (obj instanceof Relationship) {
+//					build( (Relationship) obj );
+//				} else {
+//					System.out.println("UNHANDLED "+obj);
+//				}
+//			}
 			System.out.println("READER done.");
 		}
 		

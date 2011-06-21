@@ -20,7 +20,7 @@ package org.animotron.operator.query;
 
 import java.io.IOException;
 
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
@@ -42,7 +42,7 @@ public class HAS extends AbstarctOperator implements Query, Predicate {
 	private HAS() { super("has", "animo/query/has"); }
 
 	@Override
-	public void filter(Relationship op, PipedOutput out, boolean isLast) throws IOException {
+	public void filter(Relationship op, Channels ch, boolean isLast) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

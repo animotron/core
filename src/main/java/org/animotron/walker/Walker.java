@@ -28,8 +28,7 @@ import java.util.Iterator;
 import org.animotron.Catcher;
 import org.animotron.Executor;
 import org.animotron.Startable;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Manipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Node;
@@ -45,13 +44,13 @@ public abstract class Walker implements Runnable, Startable {
 
 	private Manipulator m;
 	private PropertyContainer op;
-	private PipedOutput out;
+	private Channels ch;
 	private Marker marker;
 
-	public Walker(Manipulator m, PropertyContainer op, PipedOutput out, Marker marker) {
+	public Walker(Manipulator m, PropertyContainer op, Channels ch, Marker marker) {
 		this.m = m;
 		this.op = op;
-		this.out = out;
+		this.ch = ch;
 		this.marker = marker;
 		if (marker !=null)
 			marker.mark(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
@@ -64,9 +63,9 @@ public abstract class Walker implements Runnable, Startable {
 		Transaction tx = beginTx();
 		try {
 			if (op instanceof Node)
-				go((Node) op, out, catcher);
+				go((Node) op, ch, catcher);
 			else
-				go((Relationship) op, out, catcher);
+				go((Relationship) op, ch, catcher);
 			
 			if (marker != null)
 				marker.drop();	
@@ -87,43 +86,22 @@ public abstract class Walker implements Runnable, Startable {
 			catcher.run();
 	}
 	
-	private void go(Relationship op, PipedOutput ot, Catcher catcher) throws IOException {
-		go(op.getEndNode(), ot, catcher);
+	private void go(Relationship op, Channels ch, Catcher catcher) throws IOException {
+		go(op.getEndNode(), ch, catcher);
 	}
 
-	private final void go(Node node, PipedOutput ot, Catcher catcher) throws IOException {
+	private final void go(Node node, Channels ch, Catcher catcher) throws IOException {
 		//System.out.println("Walk node = " + node);
 		Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
 			
-			PipedInput in = null;
-			PipedOutput out = ot;
-
-			if (m.isPiped()) {
-				in = new PipedInput();
-				out = new PipedOutput(in);
-			}
+			go(r, ch, catcher, isLast(it));
 			
-			go(r, out, catcher, isLast(it));
-			
-			if (in != null) {
-				for (Object n : in) {
-					ot.write(n);
-				}
-			}
-			
-			if (m.isPiped()) {
-				out.close();
-			}
-
 		}
-		
-		ot.close();
-		
 	}
 
-	protected abstract void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException;
+	protected abstract void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException;
 
 	private boolean isLast(Iterator<?> it) {
 		return !it.hasNext();

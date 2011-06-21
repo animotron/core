@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
 import org.animotron.walker.ConditionalWalker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -30,8 +29,8 @@ import org.neo4j.graphdb.PropertyContainer;
 public abstract class AbstractStatementManipulator extends AbstractManipulator implements StatementManipulator {
 
 	@Override
-	public ConditionalWalker walk(PropertyContainer op, PipedOutput out, Marker marker) {
-		return new ConditionalWalker(this, op, out, marker);
+	public ConditionalWalker walk(PropertyContainer op, Channels ch, Marker marker) {
+		return new ConditionalWalker(this, op, ch, marker);
 	}
 
 }

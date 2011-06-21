@@ -25,7 +25,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.Instruction;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.StatementManipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -38,12 +38,12 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class ConditionalWalker extends Walker {
 
-	public ConditionalWalker(StatementManipulator m, PropertyContainer op, PipedOutput out, Marker marker) {
-		super(m, op, out, marker);
+	public ConditionalWalker(StatementManipulator m, PropertyContainer op, Channels ch, Marker marker) {
+		super(m, op, ch, marker);
 	}
 
 	@Override
-	protected void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
+	protected void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
 		
 		System.out.println("op = "+op);
 
@@ -55,11 +55,11 @@ public class ConditionalWalker extends Walker {
 			Statement s = Statements.relationshipType(type);
 
 			if (m.canGo(s)) {
-				m.go(s, op, ot, catcher, isLast);
+				m.go(s, op, ch, catcher, isLast);
 				
 			} else if (s instanceof Instruction) {
 				//bypass instructions
-				ot.write(op);
+				ch.up.publish(op);
 				
 			//XXX:find better solution
 			} else if (type.equals(RelationshipTypes.REF)) {
@@ -72,7 +72,7 @@ public class ConditionalWalker extends Walker {
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			ot.write(e);
+			ch.upError.publish(e);
 		}
 
 	}

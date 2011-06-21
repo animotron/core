@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.WeakHashMap;
 
 import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;
 import org.neo4j.graphdb.Node;
@@ -42,7 +43,7 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 	private TimestampReference() { super("T", "animo/time"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutput out, boolean isLast) throws IOException {
+	public void eval(Relationship op, Channels ch, boolean isLast) throws IOException {
 		Node node = op.getEndNode();
 		String name = (String) node.getProperty("NAME");
 		
@@ -56,7 +57,7 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 		}
 
 		//UNDERSTAND: use in-memory relations (virtual)
-		out.write(instance);
+		//XXX: ch.up.publish(instance);
 		return;
 	}
 }

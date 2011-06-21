@@ -26,7 +26,7 @@ import java.io.IOException;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
@@ -67,31 +67,32 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			relationships(IC._.relationshipType(), OUTGOING );
 
 	@Override
-	public void eval(Relationship op, PipedOutput out, boolean isLast) throws IOException {
+	public void eval(Relationship op, Channels ch, boolean isLast) throws IOException {
 		
 		Transaction tx = beginTx();
 		try {
 			Node node = op.getEndNode();
 			
 			//check, maybe, result was already calculated
-			if (!Utils.results(node, out)) {
+			if (!Utils.results(node, ch)) {
 				//no pre-calculated result, calculate it
 				
 				String name = name(op);
-				
-				for (Object n : Evaluator._.markExecute(op)) {
-					if (n instanceof IOException) {
-						throw (IOException)n;
-						
-					} else if (n instanceof Relationship) {
-						
-						Relationship res = get(((Relationship)n).getEndNode(), name);
-						
-						if (res != null)
-							out.write(createResult(node, res));
-						
-					}
-				}
+
+				//XXX: code
+//				for (Object n : Evaluator._.markExecute(op)) {
+//					if (n instanceof IOException) {
+//						throw (IOException)n;
+//						
+//					} else if (n instanceof Relationship) {
+//						
+//						Relationship res = get(((Relationship)n).getEndNode(), name);
+//						
+//						if (res != null)
+//							ch.up.publish(createResult(node, res));
+//						
+//					}
+//				}
 			}
 			tx.success();
 		} finally {

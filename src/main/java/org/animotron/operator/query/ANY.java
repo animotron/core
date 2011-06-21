@@ -27,8 +27,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 
 import org.animotron.Properties;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Filter;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
@@ -58,13 +57,9 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 	private ANY() { super("any", "animo/query/any"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutput ot, boolean isLast) throws IOException {
+	public void eval(Relationship op, Channels ch, boolean isLast) throws IOException {
 		
-		PipedInput in = new PipedInput();
-		PipedOutput out = new PipedOutput(in);
-		Filter._.walk(op, out).run();
-		
-		while (in.read()!= null) ;
+		Filter._.walk(op, ch).run();
 		
 		Transaction tx = beginTx();
 		try {
@@ -72,21 +67,22 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 			Relationship ref = n.getSingleRelationship( REF, OUTGOING );
 			
 			Node node = ref.getEndNode();
-			
-			if (out.filter(node)) {
-				ot.write( createResultInMemory( n, getThe(node) ) );
-			} else {
-				
-				for (Relationship tdR : td_eval.traverse(node).relationships()) {
-					System.out.println("ANY get next "+tdR);
-					Node res = tdR.getEndNode();
-					if (out.filter( res )) {
-						
-						ot.write( createResultInMemory( n, getThe( res ) ) );
-						break;
-					}
-				}
-			}
+
+			//XXX: code
+//			if (out.filter(node)) {
+//				ch.up.publish( createResultInMemory( n, getThe(node) ) );
+//			} else {
+//				
+//				for (Relationship tdR : td_eval.traverse(node).relationships()) {
+//					System.out.println("ANY get next "+tdR);
+//					Node res = tdR.getEndNode();
+//					if (.filter( res )) {
+//						
+//						ch.up.publish( createResultInMemory( n, getThe( res ) ) );
+//						break;
+//					}
+//				}
+//			}
 
 			tx.success();
 		} finally {

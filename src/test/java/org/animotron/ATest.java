@@ -42,6 +42,7 @@ import org.animotron.graph.CommonGraphBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.Reader;
 import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
 import org.animotron.serializer.AnimoResultSerializer;
@@ -110,13 +111,14 @@ public class ATest {
 		if (e != null) throw e;
     }
 
-	protected void toConsole(PipedInput instream) throws IOException {
-		if (instream == null) return;
-		
-		Object n; 
-		while ((n = instream.read()) != null) {
-			System.out.print(n.toString());
-		} 
+	protected void toConsole(Channels ch) throws IOException {
+		//XXX: code
+//		if (instream == null) return;
+//		
+//		Object n; 
+//		while ((n = instream.read()) != null) {
+//			System.out.print(n.toString());
+//		} 
 	}
 
 	protected void toConsole(InputStream stream) throws IOException {

@@ -20,7 +20,7 @@ package org.animotron.operator.compare;
 
 import java.io.IOException;
 
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Node;
@@ -39,7 +39,7 @@ public class LT extends AbstarctOperator implements Predicate {
 	private LT() { super("lt", "animo/compare/lt"); }
 
 	@Override
-	public void filter(Relationship op, PipedOutput out, boolean isLast) throws IOException {
+	public void filter(Relationship op, Channels ch, boolean isLast) throws IOException {
 		// TODO Auto-generated method stub
 		
 	}

@@ -21,7 +21,7 @@ package org.animotron.walker;
 import java.io.IOException;
 
 import org.animotron.Catcher;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.SimpleManipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.PropertyContainer;
@@ -33,21 +33,21 @@ import org.neo4j.graphdb.Relationship;
  */
 public class UnconditionalWalker extends Walker {
 
-	public UnconditionalWalker(SimpleManipulator m, PropertyContainer op, PipedOutput out, Marker marker) {
-		super(m, op, out, marker);
+	public UnconditionalWalker(SimpleManipulator m, PropertyContainer op, Channels ch, Marker marker) {
+		super(m, op, ch, marker);
 	}
 
 	@Override
-	protected void go(Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
+	protected void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
 
 		SimpleManipulator m = (SimpleManipulator) getManipulator();
 		
 		try {
-			m.go(op, ot, catcher, isLast);
+			m.go(op, ch, catcher, isLast);
 				
 		} catch (IOException e) {
 			e.printStackTrace();
-			ot.write(e);
+			ch.upError.publish(e);
 		}
 
 	}

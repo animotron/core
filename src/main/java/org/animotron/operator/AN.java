@@ -18,17 +18,14 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -43,26 +40,18 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 	private AN() { super("an", "animo/reference"); }
 	
 	@Override
-	public void eval(Relationship op, PipedOutput out, boolean isLast) throws IOException {
+	public void eval(Relationship op, Channels ch, boolean isLast) throws IOException {
 //		PipedInputObjectStream in = new PipedInputObjectStream();
 //		if (!isLast)
 //			Evaluator._.execute(op, new PipedOutputObjectStream(in));
 		
-		Transaction tx = beginTx();
-		try {
-		
-			Node node = op.getEndNode();
+		Node node = op.getEndNode();
 
-			Relationship res = node.getSingleRelationship(
-				RelationshipTypes.REF, OUTGOING
-			);
-			
-			out.write(res);
-
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
+		Relationship res = node.getSingleRelationship(
+			RelationshipTypes.REF, OUTGOING
+		);
 		
+		ch.up.publish(res);
+
 	}
 }

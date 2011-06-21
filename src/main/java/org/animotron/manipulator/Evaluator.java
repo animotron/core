@@ -26,8 +26,6 @@ import javolution.util.FastList;
 import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Evaluable;
@@ -49,27 +47,27 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PipedOutput ot, Catcher catcher, boolean isLast) throws IOException {
-		((Evaluable) statement).eval(op, ot, isLast);
+	public void go(Statement statement, Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
+		((Evaluable) statement).eval(op, ch, isLast);
 	}
 
 	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
-		PipedInput in = new PipedInput();
-		execute(op, new PipedOutput(in));
+		Channels ch = new Channels();
+		execute(op, ch);
 		
 		List<Relationship> result = new FastList<Relationship>();
-		for (Object obj : in) {
-			if (obj instanceof Relationship) {
-				result.add((Relationship) obj);
-			} else
-				System.out.println("evalGetResult");
-		}
+//		for (Object obj : ch) {
+//			if (obj instanceof Relationship) {
+//				result.add((Relationship) obj);
+//			} else
+//				System.out.println("evalGetResult");
+//		}
 		return result;
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, PipedOutput out) {
-		return walk(op, out, CalcMarker._);
+	public Walker markWalk(PropertyContainer op, Channels ch) {
+		return walk(op, ch, CalcMarker._);
 	}
 
 	private static class CalcMarker extends AbstractMarker {

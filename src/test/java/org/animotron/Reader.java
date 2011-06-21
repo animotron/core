@@ -31,7 +31,7 @@ import org.animotron.Quanta;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.instruction.ml.TEXT;
-import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Channels;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
@@ -97,13 +97,14 @@ public class Reader implements Runnable {
 		
 		if (st instanceof ANY) {
 			
-			PipedInput in = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
-			for (Object n : in) {
-				if (n instanceof Relationship) {
-					process( (Relationship) n );
-				} else
-					System.out.println("UNPROCESSED on ANY - "+n);
-			}
+			Channels ch = org.animotron.manipulator.Evaluator._.markExecute(position.getStartNode());
+			//XXX: recode
+//			for (Object n : in) {
+//				if (n instanceof Relationship) {
+//					process( (Relationship) n );
+//				} else
+//					System.out.println("UNPROCESSED on ANY - "+n);
+//			}
 
 		} else if (st instanceof ALL) {
 			for (Relationship r : td_is_down.traverse(eNode).relationships()) {

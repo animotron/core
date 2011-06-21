@@ -18,12 +18,10 @@
  */
 package org.animotron.listener;
 
-import java.io.IOException;
 
 import org.animotron.Catcher;
 import org.animotron.exception.ExceptionBuilderTerminate;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -41,11 +39,6 @@ public abstract class AbstaractGraphListener implements GraphListener {
 
 	@Override
 	public final void push(Relationship op, Catcher catcher) throws ExceptionBuilderTerminate {
-		try {
-			push(op, catcher, new PipedOutput(new PipedInput()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		push(op, catcher, new Channels());
 	}
-	
 }

@@ -22,8 +22,7 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Manipulator;
 import org.neo4j.graphdb.PropertyContainer;
 
@@ -40,24 +39,24 @@ public class Executor {
 		exec.execute(command);
 	}
 	
-	public static PipedInput execute(Manipulator m, PropertyContainer op) throws IOException {
-		PipedInput in = new PipedInput();
-		execute(m.walk(op, new PipedOutput(in)));
-		return in;
+	public static Channels execute(Manipulator m, PropertyContainer op) throws IOException {
+		Channels ch = new Channels();
+		execute(m.walk(op, ch));
+		return ch;
 	}
 
-	public static PipedInput markExecute(Manipulator m, PropertyContainer op) throws IOException {
-		PipedInput in = new PipedInput();
-		execute(m.markWalk(op, new PipedOutput(in)));
-		return in;
+	public static Channels markExecute(Manipulator m, PropertyContainer op) throws IOException {
+		Channels ch = new Channels();
+		execute(m.markWalk(op, ch));
+		return ch;
 	}
 
-	public static void execute(Manipulator m, PropertyContainer op, PipedOutput out) {
-		execute(m.walk(op, out));
+	public static void execute(Manipulator m, PropertyContainer op, Channels ch) {
+		execute(m.walk(op, ch));
 	}
 	
-	public static void markExecute(Manipulator m, PropertyContainer op, PipedOutput out) {
-		execute(m.markWalk(op, out));
+	public static void markExecute(Manipulator m, PropertyContainer op, Channels ch) {
+		execute(m.markWalk(op, ch));
 	}
 	
 	public static void shutdown() {

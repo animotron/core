@@ -20,7 +20,7 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
-import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.Channels;
 import org.neo4j.graphdb.Relationship;
 
 
@@ -31,6 +31,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Prepare {
 	
-	public abstract void prepare(Relationship op, PipedOutput out, boolean isLast) throws IOException;
+	public abstract void prepare(Relationship op, Channels ch, boolean isLast) throws IOException;
 	
 }
