@@ -19,17 +19,12 @@
 package org.animotron.graph;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
-import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -63,7 +58,7 @@ public class GraphTraverse {
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					new GraphTraverse(handler).traverse(i);
+					new GraphTraverse(handler).build(i);
 				}
 			} finally {
 				q.close();
