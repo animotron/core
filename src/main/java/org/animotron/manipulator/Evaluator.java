@@ -23,21 +23,19 @@ import java.util.List;
 
 import javolution.util.FastList;
 
-import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Evaluable;
-import org.animotron.walker.Walker;
-import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Evaluator extends AbstractStatementManipulator {
+public class Evaluator extends StatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
 	
@@ -47,11 +45,25 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, Channels ch, boolean isLast) {
 		((Evaluable) statement).eval(op, ch, isLast);
 	}
 
-	public List<Relationship> evalGetResult(PropertyContainer op) throws IOException {
+	public List<Relationship> evalGetResult(Node op) {
+		Channels ch = new Channels();
+		execute(op, ch);
+		
+		List<Relationship> result = new FastList<Relationship>();
+//		for (Object obj : ch) {
+//			if (obj instanceof Relationship) {
+//				result.add((Relationship) obj);
+//			} else
+//				System.out.println("evalGetResult");
+//		}
+		return result;
+	}
+
+	public List<Relationship> evalGetResult(Relationship op) {
 		Channels ch = new Channels();
 		execute(op, ch);
 		
@@ -66,10 +78,10 @@ public class Evaluator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, Channels ch) {
-		return walk(op, ch, CalcMarker._);
+	public Marker marker() {
+		return CalcMarker._;
 	}
-
+	
 	private static class CalcMarker extends AbstractMarker {
 		
 		private static final Marker _ = new CalcMarker(); 
@@ -81,5 +93,5 @@ public class Evaluator extends AbstractStatementManipulator {
 		}
 		
 	}
-	
+
 }

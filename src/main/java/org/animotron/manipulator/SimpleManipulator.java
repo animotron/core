@@ -18,17 +18,30 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-
-import org.animotron.Catcher;
+import org.animotron.Executor;
+import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Relationship;
+
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface SimpleManipulator extends Manipulator {
+public abstract class SimpleManipulator extends Manipulator {
 
-	public void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException;
+	protected abstract void go(Relationship op, Channels ch, boolean isLast);
+
+	@Override
+	protected final void execute(final Relationship op, final Channels ch, final Marker marker, final boolean isLast) {
+		Executor.getFiber().execute(
+			new Operation(marker) {
+				@Override
+				public void execute() {
+					go(op, ch, isLast);
+				}
+			}
+		);
+	}
 
 }

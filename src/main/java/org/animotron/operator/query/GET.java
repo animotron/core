@@ -22,12 +22,9 @@ import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import java.io.IOException;
-
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.manipulator.Channels;
-import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
@@ -67,7 +64,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			relationships(IC._.relationshipType(), OUTGOING );
 
 	@Override
-	public void eval(Relationship op, Channels ch, boolean isLast) throws IOException {
+	public void eval(Relationship op, Channels ch, boolean isLast) {
 		
 		Transaction tx = beginTx();
 		try {

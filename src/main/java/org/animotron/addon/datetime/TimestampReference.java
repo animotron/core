@@ -43,7 +43,7 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 	private TimestampReference() { super("T", "animo/time"); }
 	
 	@Override
-	public void eval(Relationship op, Channels ch, boolean isLast) throws IOException {
+	public void eval(Relationship op, Channels ch, boolean isLast) {
 		Node node = op.getEndNode();
 		String name = (String) node.getProperty("NAME");
 		

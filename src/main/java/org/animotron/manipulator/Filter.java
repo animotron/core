@@ -18,22 +18,17 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-
-import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.operator.Predicate;
-import org.animotron.walker.Walker;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Filter extends AbstractStatementManipulator {
+public class Filter extends StatementManipulator {
 
-	public static Filter _ = new Filter(){}; 
+	public static Filter _ = new Filter(); 
 	
 	@Override
 	public boolean canGo(Statement statement) {
@@ -41,17 +36,8 @@ public class Filter extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, Channels ch, boolean isLast) {
 		((Predicate) statement).filter(op, ch, isLast);
 	}
 	
-	public boolean isPiped() {
-		return false;
-	}
-	
-	@Override
-	public Walker markWalk(PropertyContainer op, Channels ch) {
-		return walk(op, ch);
-	}
-
 }

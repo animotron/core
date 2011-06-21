@@ -20,31 +20,22 @@ package org.animotron.manipulator;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
 
-import java.io.IOException;
-
-import org.animotron.Catcher;
-import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.listener.AbstaractGraphListener;
-import org.animotron.listener.Destructive;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
-import org.animotron.walker.Walker;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GC extends AbstractSimpleManipulator {
+public class GC extends SimpleManipulator {
 	
 	public static GC _ = new GC();
-	private GC() {Destructive._.register(new Garbage());}
 
 	@Override
-	public void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Relationship op, Channels ch, boolean isLast) {
 		Node node = op.getEndNode();
 		op.getStartNode().delete();
 		op.delete();
@@ -52,32 +43,13 @@ public class GC extends AbstractSimpleManipulator {
 			if 
 			(isLast) {
 				node.delete();
-			} else {
-				catcher.add(markWalk(node, ch));
 			}
 		}
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, Channels ch) {
-		return walk(op, ch, GCMarker._);
-	}
-	
-	public class Garbage extends AbstaractGraphListener {
-		
-		@Override
-		public void push(final Relationship op, Catcher catcher, Channels ch) throws ExceptionBuilderTerminate {
-			
-			System.out.println("GC the relationship " + op);
-			
-			Node node = op.getEndNode();
-			op.delete();
-			if (!node.hasRelationship(INCOMING)) {
-				catcher.add(markWalk(node, ch));
-			}
-			
-		}
-		
+	public Marker marker() {
+		return GCMarker._;
 	}
 	
 	private static class GCMarker extends AbstractMarker {

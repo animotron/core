@@ -18,32 +18,102 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
+import java.util.Iterator;
 
 import org.animotron.marker.Marker;
-import org.animotron.walker.Walker;
-import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Manipulator {
+public abstract class Manipulator {
 
-	//for debug needs
-	public boolean isPiped();
+	protected abstract void execute (Relationship op, Channels ch, Marker marker, boolean isLast);
+
+	public Marker marker(){
+		return null;
+	}
 	
-	public Walker markWalk(PropertyContainer op, Channels ch);
-	public Walker walk(PropertyContainer op, Channels ch);
+	public void shutdown() {
+		//TODO: make shutdown
+	}
 	
-	public Walker walk(PropertyContainer op, Channels ch, Marker marker);
+	public final void execute(Node op, Channels ch) {
+		execute (op, ch, null);
+	}
+	
+	public final void execute(Relationship op, Channels ch) {
+		execute (op, ch, null);
+	}
+	
+	public final void mark(Node op, Channels ch) {
+		execute (op, ch, marker());
+	}
+	
+	public final void mark(Relationship op, Channels ch) {
+		execute (op, ch, marker());
+	}
+	
+	private void execute(Relationship op, Channels ch, Marker marker) {
+		Iterator<Relationship> it = op.getEndNode().getRelationships(OUTGOING).iterator();
+		while (it.hasNext()) {
+			Relationship r = it.next();
+			execute(r, ch, marker, !it.hasNext());
+		}
+	}
+	
+	private void execute(Node op, Channels ch, Marker marker) {
+		for (Relationship r : op.getRelationships(OUTGOING)) {
+			execute(r, ch, marker);
+		}
+	}
+	
+	protected abstract class Operation implements Runnable {
+		
+		private Marker marker;
+		
+		protected Operation (Marker marker) {
+			this.marker = marker;
+		}
+		
+		@Override
+		public void run() {
+			Transaction tx = beginTx();
+			try {
+				execute();
+				tx.success();
+			} finally {
+				finishTx(tx);
+			}
+		} 
 
-	public Channels markExecute(PropertyContainer op) throws IOException;
-	public Channels execute(PropertyContainer op) throws IOException;
+		protected abstract void execute();
+		
+	}
 
-	public void markExecute(PropertyContainer op, Channels ch);
-	public void execute(PropertyContainer op, Channels ch);
-
-	public void shutdown();
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

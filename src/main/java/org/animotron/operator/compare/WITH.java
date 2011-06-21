@@ -18,7 +18,6 @@
  */
 package org.animotron.operator.compare;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -43,12 +42,12 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public void filter(Relationship op, Channels ch, boolean isLast) throws IOException {
+	public void filter(Relationship op, Channels ch, boolean isLast) {
 		//XXX: out.subscribeFilter(op, this);
 	}
 
 	@Override
-	public boolean filter(Relationship op, Node ref) throws IOException {
+	public boolean filter(Relationship op, Node ref) {
 		
 		System.out.println("WITH op "+op);
 		//XXX: fix

@@ -18,9 +18,6 @@
  */
 package org.animotron.operator.compare;
 
-import java.io.IOException;
-
-import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Channels;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
@@ -40,7 +37,7 @@ public class GE extends AbstarctOperator implements Predicate {
 	private GE() { super("ge", "animo/compare/ge"); }
 
 	@Override
-	public void filter(Relationship op, Channels ch, boolean isLast) throws IOException {
+	public void filter(Relationship op, Channels ch, boolean isLast) {
 		// TODO Auto-generated method stub
 		
 	}

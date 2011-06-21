@@ -21,10 +21,7 @@ package org.animotron.operator.relation;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import java.io.IOException;
-
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Channels;
 import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
@@ -73,7 +70,7 @@ public class IS extends Relation implements Prepare {
 	}
 	
 	@Override
-	public void prepare(Relationship op, Channels ch, boolean isLast) throws IOException {
+	public void prepare(Relationship op, Channels ch, boolean isLast) {
 		
 		Node start = op.getStartNode();
 		

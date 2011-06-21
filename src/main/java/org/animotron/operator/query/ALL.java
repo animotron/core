@@ -20,7 +20,6 @@ package org.animotron.operator.query;
 
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
-import org.animotron.operator.Evaluable;
 
 /**
  * Query operator 'ALL'.
@@ -30,7 +29,7 @@ import org.animotron.operator.Evaluable;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ALL extends AbstarctOperator implements Cachable, Evaluable {
+public class ALL extends AbstarctOperator implements Cachable {
 	
 	public static final ALL _ = new ALL();
 	

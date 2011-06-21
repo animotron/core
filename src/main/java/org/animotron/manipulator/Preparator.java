@@ -18,23 +18,18 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-
-import org.animotron.Catcher;
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Prepare;
-import org.animotron.walker.Walker;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Preparator extends AbstractStatementManipulator {
+public class Preparator extends StatementManipulator {
 	
 	public static Preparator _ = new Preparator();
 	
@@ -44,13 +39,13 @@ public class Preparator extends AbstractStatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException {
+	public void go(Statement statement, Relationship op, Channels ch, boolean isLast) {
 		((Prepare) statement).prepare(op, ch, isLast);
 	}
 
 	@Override
-	public Walker markWalk(PropertyContainer op, Channels ch) {
-		return walk(op, ch, PrepareMarker._);
+	public Marker marker() {
+		return PrepareMarker._;
 	}
 	
 	private static class PrepareMarker extends AbstractMarker {
