@@ -18,8 +18,6 @@
  */
 package org.animotron.operator.query;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Statement;
@@ -35,7 +33,6 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
@@ -66,34 +63,28 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	@Override
 	public void eval(Relationship op, Channels ch, boolean isLast) {
 		
-		Transaction tx = beginTx();
-		try {
-			Node node = op.getEndNode();
+		Node node = op.getEndNode();
+		
+		//check, maybe, result was already calculated
+		if (!Utils.results(node, ch)) {
+			//no pre-calculated result, calculate it
 			
-			//check, maybe, result was already calculated
-			if (!Utils.results(node, ch)) {
-				//no pre-calculated result, calculate it
-				
-				String name = name(op);
+			String name = name(op);
 
-				//XXX: code
-//				for (Object n : Evaluator._.markExecute(op)) {
-//					if (n instanceof IOException) {
-//						throw (IOException)n;
-//						
-//					} else if (n instanceof Relationship) {
-//						
-//						Relationship res = get(((Relationship)n).getEndNode(), name);
-//						
-//						if (res != null)
-//							ch.up.publish(createResult(node, res));
-//						
-//					}
+			//XXX: code
+//			for (Object n : Evaluator._.markExecute(op)) {
+//				if (n instanceof IOException) {
+//					throw (IOException)n;
+//					
+//				} else if (n instanceof Relationship) {
+//					
+//					Relationship res = get(((Relationship)n).getEndNode(), name);
+//					
+//					if (res != null)
+//						ch.up.publish(createResult(node, res));
+//					
 //				}
-			}
-			tx.success();
-		} finally {
-			finishTx(tx);
+//			}
 		}
 		
 	}

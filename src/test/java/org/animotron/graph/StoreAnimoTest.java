@@ -18,23 +18,17 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
-import org.animotron.graph.stax.StAXGraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -79,36 +73,23 @@ public class StoreAnimoTest extends ATest {
         store(nameDataMap);
         System.out.println("loaded ...");
         
-        Transaction tx = beginTx();
-        try { 
-	        Relationship r = THE._.get("B");
-	            
-	        assertNotNull(r);
-	        
-	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
-	        
-	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
-	        serializer.serialize(r);
-	            
+        Relationship r = THE._.get("B");
+            
+        assertNotNull(r);
+        
+        GraphSerializer.serialize(r, System.out);
+            
 //	        String[] must = new String[] {"the:B", "have:B", "some", "another"};
 //	        int i = 0;
 //            ProcessingFlowIterator it = new ProcessingFlowIterator(node);
 //            while (it.hasNext()) {
 //            	System.out.println(it.next());
-            	//System.out.println(getNodeProxy(it.next()).getNode().getNodeName());
-            	//assertEquals("on "+i+" step", must[i], getNodeProxy(it.next()).getNode().getNodeName());
+        	//System.out.println(getNodeProxy(it.next()).getNode().getNodeName());
+        	//assertEquals("on "+i+" step", must[i], getNodeProxy(it.next()).getNode().getNodeName());
 //            	i++;
 //            }
+        
 	        
-	        tx.success();
-	        
-        } catch (Exception e) {
-        	e.printStackTrace();
-			fail(e.toString());
-        } finally {
-        	finishTx(tx);
-        }
-            
         System.out.println("done.");
 	}
 }

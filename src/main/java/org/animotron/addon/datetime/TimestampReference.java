@@ -18,10 +18,8 @@
  */
 package org.animotron.addon.datetime;
 
-import java.io.IOException;
 import java.util.WeakHashMap;
 
-import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Channels;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;

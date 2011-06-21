@@ -39,7 +39,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class CommonGraphBuilder {
+public class CommonBuilder {
 	
 	private final static WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
 	

@@ -18,33 +18,15 @@
  */
 package org.animotron;
 
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.animotron.Quanta;
-import org.animotron.Statements;
-import org.animotron.graph.RelationshipTypes;
-import org.animotron.instruction.ml.TEXT;
 import org.animotron.manipulator.Channels;
-import org.animotron.operator.query.ALL;
-import org.animotron.operator.query.ANY;
-import org.animotron.operator.relation.IS;
 import org.jetlang.core.Callback;
 import org.jetlang.fibers.Fiber;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluator;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
-import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

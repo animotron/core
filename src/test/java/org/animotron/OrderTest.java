@@ -18,9 +18,6 @@
  */
 package org.animotron;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
-
 import java.util.List;
 
 import org.apache.lucene.search.Sort;
@@ -31,7 +28,6 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
@@ -58,46 +54,31 @@ public class OrderTest {
 		
 		IndexManager index = graphDb.index();
 		
-		Transaction tx;
-		
 		if (true) {
-			tx = beginTx();
-			try {
-				order = index.forRelationships( ORDER );
-		
-				ROOT = graphDb.getReferenceNode();
-				
-				createChild(ROOT, 10000);
-				
-				tx.success();
-			} finally {
-				finishTx(tx);
-			}
+			order = index.forRelationships( ORDER );
+			ROOT = graphDb.getReferenceNode();
+			createChild(ROOT, 10000);
 		}
 		
-		tx = beginTx();
-		try {
-			ROOT = graphDb.getReferenceNode();
-			order = index.forRelationships( ORDER );
+		ROOT = graphDb.getReferenceNode();
+		order = index.forRelationships( ORDER );
 
-			System.out.println("reading ...");
-			IndexHits<Relationship> q = order.query(ORDER, sort( ORDER ), ROOT, null);
-			try {
-				int i = 1;
-				for (Relationship r : q ) {
-					
+		System.out.println("reading ...");
+		IndexHits<Relationship> q = order.query(ORDER, sort( ORDER ), ROOT, null);
+		try {
+			int i = 1;
+			for (Relationship r : q ) {
+				
 //					System.out.print(q.currentScore() + " ");
 //					System.out.println(r.getEndNode().getProperty(ORDER+"-P"));
-					
-					Assert.assertEquals(i, r.getEndNode().getProperty(ORDER+"-P"));
-					i++;
-				}
-			} finally {
-				q.close();
+				
+				Assert.assertEquals(i, r.getEndNode().getProperty(ORDER+"-P"));
+				i++;
 			}
 		} finally {
-			finishTx(tx);
+			q.close();
 		}
+		
 	}
 
 	private List<Node> createChild(Node parent, int num) {

@@ -20,8 +20,6 @@ package org.animotron.operator;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import java.io.IOException;
-
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.Channels;
 import org.neo4j.graphdb.Node;
@@ -50,7 +48,7 @@ public class Utils {
 			).getEndNode();
 	}
 	
-	public static boolean results(Node node, Channels ch) throws IOException {
+	public static boolean results(Node node, Channels ch) {
 		
 		boolean haveSome = false;
 		for (Relationship res : node.getRelationships(OUTGOING)) {

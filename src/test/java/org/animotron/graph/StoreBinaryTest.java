@@ -18,8 +18,6 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayInputStream;
@@ -30,7 +28,6 @@ import javax.xml.stream.XMLStreamException;
 import org.animotron.ATest;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -62,26 +59,17 @@ public class StoreBinaryTest extends ATest {
 	public void storeAndSerialize() throws XMLStreamException, IOException {
         System.out.println("Test binary stream ...");
         
-    	Relationship r = CommonGraphBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
+    	Relationship r = CommonBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
     	
     	assertNotNull(r);
     	
-        Transaction tx = beginTx();
-        try {
 //	   		PipedInputStream in = new PipedInputStream();
 //			PipedOutputStream out = new PipedOutputStream(in);
-	
-	        GraphSerializer.serialize(r, System.out);
-	            
-//	        assertEquals(in, TXT);
-	        
-//        } catch (IOException e) {
-//        	e.printStackTrace();
-//			fail(e.toString());
-		} finally {
-			finishTx(tx);
-		}
 
+        GraphSerializer.serialize(r, System.out);
+            
+//	        assertEquals(in, TXT);
+        
         System.out.println("done.");
 	}
 }

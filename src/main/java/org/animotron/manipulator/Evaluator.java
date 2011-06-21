@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
 import java.util.List;
 
 import javolution.util.FastList;

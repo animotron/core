@@ -20,9 +20,7 @@ package org.animotron.operator;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
@@ -34,7 +32,6 @@ import org.animotron.graph.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * Operator 'THE'.
@@ -53,13 +50,7 @@ public class THE extends AbstarctOperator {
 
 	private THE() { 
 		super(PREFIX, NAMESPACE); 
-		Transaction tx = beginTx();
-		try {
-			THE_NODE = getOrCreateNode(getROOT(), RelationshipTypes.THE);
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
+		THE_NODE = getOrCreateNode(getROOT(), RelationshipTypes.THE);
 	}
 	
 	public Node NODE() {

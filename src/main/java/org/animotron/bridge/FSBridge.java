@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.animotron.graph.CommonGraphBuilder;
+import org.animotron.graph.CommonBuilder;
 
 /**
  * Repository loader
@@ -44,7 +44,7 @@ public class FSBridge {
 				load(file);
 			}
 		} else {
-			CommonGraphBuilder.build(path);
+			CommonBuilder.build(path);
 		}
 		
 	}

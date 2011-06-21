@@ -48,8 +48,8 @@ public class MimeTest extends ATest {
 	public void storeAndSerializeResult() throws XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
-        CommonGraphBuilder.build(MIME);
-        CommonGraphBuilder.build(STATEMENT);
+        CommonBuilder.build(MIME);
+        CommonBuilder.build(STATEMENT);
 
         
         System.out.println("loaded ...");

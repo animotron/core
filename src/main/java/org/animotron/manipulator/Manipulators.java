@@ -18,8 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.Executor;
-import org.animotron.listener.Calculator;
 
 
 /**
@@ -29,10 +27,9 @@ import org.animotron.listener.Calculator;
 public class Manipulators {
 	
 	public static void load() {
-		Filter._.getClass();
-		GC._.getClass();
-		Calculator._.getClass();
-		Preparator._.getClass();
+//		Filter._.getClass();
+//		GC._.getClass();
+//		Preparator._.getClass();
 	}
 	
 	public static void shutdown() {
@@ -40,7 +37,7 @@ public class Manipulators {
 		Filter._.shutdown();
 		Evaluator._.shutdown();
 		Preparator._.shutdown();
-		Executor.shutdown();
+//		Executor.shutdown();
 	}
 
 	//TODO: Implement manipulators/listeners/broadcasters loader

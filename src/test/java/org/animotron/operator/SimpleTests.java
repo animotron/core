@@ -18,7 +18,8 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Expression.*;
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,7 +30,6 @@ import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.Reader;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.operator.THE;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
@@ -58,7 +58,7 @@ public class SimpleTests extends ATest {
 		);
 
         //System.out.println("get:A an:B");
-        toConsole(Evaluator._.markExecute(C));
+        toConsole(Evaluator._.mark(C));
         
     	InputStream stream = Reader.read(C);
         assertEquals(stream, "<the:C><the:A></the:A></the:C>");
@@ -92,7 +92,7 @@ public class SimpleTests extends ATest {
 		);
 
         //System.out.println("get:A an:B");
-        toConsole(Evaluator._.markExecute(C));
+        toConsole(Evaluator._.mark(C));
         
     	InputStream stream = Reader.read(C);
         assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");

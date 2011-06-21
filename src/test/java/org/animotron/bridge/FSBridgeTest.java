@@ -18,22 +18,17 @@
  */
 package org.animotron.bridge;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
 
 import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.ATest;
-import org.animotron.graph.stax.StAXGraphSerializer;
+import org.animotron.graph.GraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -44,36 +39,19 @@ public class FSBridgeTest extends ATest {
 	
 	private static final String PATH = "src/main/animo/mime/application-animo.animo";
 	
-	private void check(String the){
-        Transaction tx = beginTx();
-        try { 
-	        Relationship r = THE._.get(the);
-	        assertNotNull(r);
-	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
-	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
-	        serializer.serialize(r);
-	        tx.success();
-        } catch (Exception e) {
-        	e.printStackTrace();
-			fail(e.toString());
-        } finally {
-        	finishTx(tx);
-        }
+	private void check(String the) throws XMLStreamException{
+        Relationship r = THE._.get(the);
+        assertNotNull(r);
+        GraphSerializer.serialize(r, System.out);
         System.out.println();
 	}
 	
 	@Test
 	public void loadAndSerialize() throws XMLStreamException, IOException {
-		
         System.out.println("Test repository loader ...");
-        
         FSBridge.load(PATH);
-        
         System.out.println("loaded ...");
-        
         check("application-animo");
-            
         System.out.println("done.");
-        
 	}
 }

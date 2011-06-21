@@ -27,9 +27,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.AN;
-import org.animotron.operator.IC;
-import org.animotron.operator.THE;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;

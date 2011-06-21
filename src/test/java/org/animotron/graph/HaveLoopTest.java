@@ -28,7 +28,6 @@ import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -44,25 +43,18 @@ public class HaveLoopTest extends ATest {
 		Relationship B = new Expression(_(THE._, "B", _(HAVE._, "A")));
 		Relationship C = new Expression(_(THE._, "C", _(HAVE._, "B")));
 
-		
-		Transaction tx = AnimoGraph.beginTx();
-		try {
-			System.out.println("Prepare");
-			System.out.print("The a: ");
-			GraphSerializer.serialize(A, System.out);
-			System.out.println();
-			System.out.print("The b: ");
-			GraphSerializer.serialize(B, System.out);
-			System.out.println();
-			System.out.print("The c: ");
-			GraphSerializer.serialize(C, System.out);
-			System.out.println();
-			System.out.println();
+		System.out.println("Prepare");
+		System.out.print("The a: ");
+		GraphSerializer.serialize(A, System.out);
+		System.out.println();
+		System.out.print("The b: ");
+		GraphSerializer.serialize(B, System.out);
+		System.out.println();
+		System.out.print("The c: ");
+		GraphSerializer.serialize(C, System.out);
+		System.out.println();
+		System.out.println();
 			
-			tx.success();
-		} finally {
-			AnimoGraph.finishTx(tx);
-		}
 		
         System.out.println("done.");
 	}

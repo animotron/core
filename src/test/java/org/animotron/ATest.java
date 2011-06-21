@@ -38,10 +38,8 @@ import javax.xml.stream.XMLStreamWriter;
 import junit.framework.Assert;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.CommonGraphBuilder;
+import org.animotron.graph.CommonBuilder;
 import org.animotron.graph.GraphOperation;
-import org.animotron.Reader;
-import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Channels;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
@@ -100,7 +98,7 @@ public class ATest {
 				public XMLStreamException execute() {
 			        for (Entry<String, String> entry : nameDataMap.entrySet()) {
 			        	try {
-							CommonGraphBuilder.build(entry.getValue());
+							CommonBuilder.build(entry.getValue());
 						} catch (XMLStreamException e) {
 							return e;
 						}
@@ -199,7 +197,7 @@ public class ATest {
         assertNotNull(op);
 
         toConsole(
-    		Evaluator._.markExecute(op)
+    		Evaluator._.mark(op)
 		);
         
         System.out.println("String result serializer...");
