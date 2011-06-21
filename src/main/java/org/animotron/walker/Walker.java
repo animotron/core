@@ -18,101 +18,67 @@
  */
 package org.animotron.walker;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import java.io.IOException;
-import java.util.Iterator;
-
-import org.animotron.Catcher;
 import org.animotron.Executor;
-import org.animotron.Startable;
-import org.animotron.manipulator.Channels;
-import org.animotron.manipulator.Manipulator;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.manipulator.SimpleManipulator;
+import org.animotron.manipulator.StatementManipulator;
 import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public abstract class Walker implements Runnable, Startable {
+public abstract class Walker {
+	
+	private static Runnable run (final Relationship op, SimpleManipulator m) {
+		return new Runnable() {
 
-	private Manipulator m;
-	private PropertyContainer op;
-	private Channels ch;
-	private Marker marker;
+			@Override
+			public void run() {
+				m.go(op);
+			}
+			
+		};
+	}
 
-	public Walker(Manipulator m, PropertyContainer op, Channels ch, Marker marker) {
-		this.m = m;
-		this.op = op;
-		this.ch = ch;
-		this.marker = marker;
-		if (marker !=null)
-			marker.mark(op instanceof Node ? (Node) op : ((Relationship) op).getEndNode());
+	private static Runnable run (final Relationship op, StatementManipulator m) {
+		Statement statement = Statements.relationshipType(op.getType());
+		if (m.canGo(statement))
+			return new Runnable() {
+	
+				@Override
+				public void run() {
+					m.go(statement, op);
+				}
+				
+			};
+		else 
+			return null;
+	}
+
+	public static void start(final Relationship op, SimpleManipulator m) {
+		Executor.getFiber().execute(run(op, m));
 	}
 	
-	@Override
-	public final void run() {
-		Catcher catcher = new Catcher(); 
-		
-		Transaction tx = beginTx();
-		try {
-			if (op instanceof Node)
-				go((Node) op, ch, catcher);
-			else
-				go((Relationship) op, ch, catcher);
-			
-			if (marker != null)
-				marker.drop();	
-			
-			tx.success();
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-			catcher = null;
-			tx.failure();
-			
-		} finally {
-			finishTx(tx);
-			
-		}
-		
-		if (catcher != null)
-			catcher.run();
+	public static void start(final Relationship op, StatementManipulator m) {
+		Executor.getFiber().execute(run(op, m));
 	}
 	
-	private void go(Relationship op, Channels ch, Catcher catcher) throws IOException {
-		go(op.getEndNode(), ch, catcher);
-	}
-
-	private final void go(Node node, Channels ch, Catcher catcher) throws IOException {
-		//System.out.println("Walk node = " + node);
-		Iterator<Relationship> it = node.getRelationships(OUTGOING).iterator();
-		while (it.hasNext()) {
-			Relationship r = it.next();
-			
-			go(r, ch, catcher, isLast(it));
-			
+	public static void start(final Node op, StatementManipulator m) {
+		for (Relationship r : op.getRelationships(OUTGOING)) {
+			start(r, m);
 		}
 	}
-
-	protected abstract void go(Relationship op, Channels ch, Catcher catcher, boolean isLast) throws IOException;
-
-	private boolean isLast(Iterator<?> it) {
-		return !it.hasNext();
-	}
 	
-	protected final Manipulator getManipulator(){
-		return m;
-	}
-	
-	public final void start() {
-		Executor.execute(this);
+	public static void start(final Node op, SimpleManipulator m) {
+		for (Relationship r : op.getRelationships(OUTGOING)) {
+			start(r, m);
+		}
 	}
 	
 }
