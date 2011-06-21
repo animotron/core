@@ -18,24 +18,21 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.junit.Assert.assertNotNull;
+import static org.animotron.Expression.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
+import org.animotron.Expression;
 import org.animotron.Reader;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
+import org.animotron.operator.query.GET;
+import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 
 /**
@@ -44,54 +41,62 @@ import org.neo4j.graphdb.Transaction;
  */
 public class SimpleTests extends ATest {
 	
-	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+"/>";
-	
-	private static final String THE_B = 
-		"<the:B "+ANIMO_NSs+">" +
-		"	<have:A>a@b</have:A>"+
-		"</the:B>";
-
-	private static final String THE_C = 
-		"<the:C "+ANIMO_NSs+">" +
-		"	<get:A>" +
-		"		<an:B/>" +
-		"	</get:A>" +
-		"</the:C>";
-
 	@Test
-	public void testGet() throws IOException, XMLStreamException {
-        System.out.println("Test 'get' ...");
+	public void an() throws IOException, XMLStreamException {
+        System.out.println("Test 'an' ...");
         
-        if (firstRun) {
-	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
-	        nameDataMap.put("A.xml", THE_A);
-	        nameDataMap.put("B.xml", THE_B);
-	        nameDataMap.put("C.xml", THE_C);
-	        
-	        store(nameDataMap);
-        }
+    	new Expression(
+			_(THE._, "A")
+		);
+
+    	new Expression(
+			_(THE._, "B", _(HAVE._, "A", text("a@b")))
+		);
+
+    	Expression C = new Expression(
+			_(THE._, "C", _(AN._, "B"))
+		);
+
+        //System.out.println("get:A an:B");
+        toConsole(Evaluator._.markExecute(C));
         
-        Transaction tx = beginTx();
+    	InputStream stream = Reader.read(C);
+        assertEquals(stream, "<the:C><the:A></the:A></the:C>");
         
-        try {
-	        Relationship op = THE._.get("C");
-	        
-	        assertNotNull(op);
-	        
-	        System.out.println(op);
-	
-	        //System.out.println("get:A an:B");
-	        toConsole(Evaluator._.markExecute(op));
-	        
-	    	InputStream stream = Reader.read(op);
-	        assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
+        sleep(10);
         
-        } finally {
-        	finishTx(tx);
-        }
-            
         //System.out.println("done.");
 	}
-	
+
+	private void sleep(int sec) {
+		try {
+			Thread.sleep(sec * 1000);
+		} catch (InterruptedException e) {
+		}
+	}
+
+	@Test
+	public void get() throws IOException, XMLStreamException {
+        System.out.println("Test 'get' ...");
+        
+    	new Expression(
+			_(THE._, "A")
+		);
+
+    	new Expression(
+			_(THE._, "B", _(HAVE._, "A", text("a@b")))
+		);
+
+    	Expression C = new Expression(
+			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
+		);
+
+        //System.out.println("get:A an:B");
+        toConsole(Evaluator._.markExecute(C));
+        
+    	InputStream stream = Reader.read(C);
+        assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
+        
+        //System.out.println("done.");
+	}
 }

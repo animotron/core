@@ -23,6 +23,7 @@ import static org.animotron.graph.AnimoGraph.shutdownDB;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -216,8 +217,24 @@ public class ATest {
     public void cleanup() {
     }
 
+    public static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i=0; i<children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+    
     @BeforeClass
     public static void startDB() {
+    	
+    	deleteDir(new File("data"));
+    	
     	AnimoGraph.startDB("data");
     }
 
