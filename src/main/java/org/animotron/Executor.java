@@ -18,13 +18,11 @@
  */
 package org.animotron;
 
-import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.animotron.manipulator.Channels;
-import org.animotron.manipulator.Manipulator;
-import org.neo4j.graphdb.PropertyContainer;
+import org.jetlang.fibers.Fiber;
+import org.jetlang.fibers.PoolFiberFactory;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -32,34 +30,15 @@ import org.neo4j.graphdb.PropertyContainer;
  */
 public class Executor {
 	
-	private static int THREADS_NUMBER = 100;
-	private static ExecutorService exec = Executors.newFixedThreadPool(THREADS_NUMBER);
-	
-	public static void execute(Runnable command){
-		exec.execute(command);
+	private static ExecutorService exec = Executors.newCachedThreadPool();
+	private static PoolFiberFactory fact = new PoolFiberFactory(exec);
+    
+	public Fiber getFiber() {
+		Fiber fiber =  fact.create();
+		return fiber;
 	}
 	
-	public static Channels execute(Manipulator m, PropertyContainer op) throws IOException {
-		Channels ch = new Channels();
-		execute(m.walk(op, ch));
-		return ch;
-	}
-
-	public static Channels markExecute(Manipulator m, PropertyContainer op) throws IOException {
-		Channels ch = new Channels();
-		execute(m.markWalk(op, ch));
-		return ch;
-	}
-
-	public static void execute(Manipulator m, PropertyContainer op, Channels ch) {
-		execute(m.walk(op, ch));
-	}
-	
-	public static void markExecute(Manipulator m, PropertyContainer op, Channels ch) {
-		execute(m.markWalk(op, ch));
-	}
-	
-	public static void shutdown() {
+	protected static void shutdown() {
 		exec.shutdown();
 	}
 }
