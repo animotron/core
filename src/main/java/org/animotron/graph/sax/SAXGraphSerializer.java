@@ -115,7 +115,7 @@ public class SAXGraphSerializer extends AbstractGraphSerializer {
 	}
 
 	@Override
-	public void startDocument() {
+	public void startGraph() {
 		try {
 			contentHandler.startDocument();
 		} catch (SAXException e) {
@@ -125,7 +125,7 @@ public class SAXGraphSerializer extends AbstractGraphSerializer {
 	}
 
 	@Override
-	public void endDocument() {
+	public void endGraph() {
 		try {
 			contentHandler.endDocument();
 		} catch (SAXException e) {

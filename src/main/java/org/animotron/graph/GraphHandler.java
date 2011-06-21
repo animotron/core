@@ -34,7 +34,7 @@ public interface GraphHandler {
 
 	public abstract void end(Statement statement, Relationship r);
 
-	void startDocument();
+	void startGraph();
 
-	void endDocument();
+	void endGraph();
 }

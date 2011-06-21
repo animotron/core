@@ -24,6 +24,10 @@ import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
+import org.jetlang.channels.Channel;
+import org.jetlang.channels.MemoryChannel;
+import org.jetlang.core.Callback;
+import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -33,17 +37,55 @@ import org.neo4j.graphdb.index.IndexHits;
  */
 public abstract class AbstractGraphSerializer implements GraphHandler, Runnable {
 	
-	Relationship r = null;
+	private Fiber fiber = Executor.getFiber();
+	
+	private Relationship r = null;
+	
+	private Callback<Relationship> startGraph = new Callback<Relationship>(){
+		@Override
+		public void onMessage(Relationship r) {
+			startGraph();
+		}
+	};
+	
+	private Callback<Relationship> start = new Callback<Relationship>(){
+		@Override
+		public void onMessage(Relationship r) {
+			
+		}
+	};
+	
+	private Callback<Relationship> end = new Callback<Relationship>(){
+		@Override
+		public void onMessage(Relationship r) {
+			
+		}
+	};
+	
+	private Callback<Relationship> endGraph = new Callback<Relationship>(){
+		@Override
+		public void onMessage(Relationship r) {
+			endGraph();
+		}
+	};
+	
+	@Override
+	public void run() {
+		
+	}
+	
 	
 	final public void serialize(Relationship r) {
 		this.r = r;
-		Executor.execute(this);
+		Channel<Relationship> up = new MemoryChannel<Relationship>();
+		up.subscribe(fiber, startGraph);
+		up.subscribe(fiber, start);
+		up.subscribe(fiber, end);
+		up.subscribe(fiber, endGraph);
 	}
 	
-	public void run() {
-		startDocument();
-		build(r);
-		endDocument();
+	public void serialize() {
+		fiber.execute(this);
 	}
 	
 	protected void build(Relationship r) {

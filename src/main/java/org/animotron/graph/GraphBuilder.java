@@ -26,7 +26,6 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.animotron.graph.AnimoGraph.order;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
@@ -92,7 +91,7 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void endGraph(){
-		Catcher catcher = new Catcher(); 
+//		Catcher catcher = new Catcher(); 
 		Object[] first = flow.get(0);
 		try {
 			int i = 0;
@@ -110,31 +109,31 @@ public abstract class GraphBuilder {
 						THE.PREFIX			// 9
 					};
 				first[7] = item; 
-				build(item, catcher, i++);
+				build(item, i++);
 				first = item;
 			}
 			for (Object[] item : flow) {
-				build(item, catcher, i++);
+				build(item, i++);
 			}
 
-			for (Relationship r : thes) {
-				Creative._.push(r, catcher);
-			}
+//			for (Relationship r : thes) {
+//				Creative._.push(r, catcher);
+//			}
 			
 			tx.success();
 			the = (Relationship) first[5];
 			
-		} catch (ExceptionBuilderTerminate e) {
-			tx.failure();
-			catcher = null; 
+//		} catch (ExceptionBuilderTerminate e) {
+//			tx.failure();
+//			catcher = null; 
 			
 		} finally {
 			finishTx(tx);
 		}
 		
-		if (catcher != null) {
-			catcher.run();
-		}
+//		if (catcher != null) {
+//			catcher.run();
+//		}
 			
 	}
 
@@ -226,7 +225,7 @@ public abstract class GraphBuilder {
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, Catcher catcher, int order){
+	private void build(Object[] item, int order){
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
 			if ((Boolean) p[8]) {
@@ -249,9 +248,9 @@ public abstract class GraphBuilder {
 							HASH.set(r, hash);
 							thes.add(r);
 						} else if (!h.equals(hash)) {
-							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
-								Destructive._.push(i, catcher);
-							}
+//							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
+//								Destructive._.push(i, catcher);
+//							}
 							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
 							thes.add(r);

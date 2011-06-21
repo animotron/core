@@ -107,7 +107,7 @@ public class StAXGraphSerializer extends AbstractGraphSerializer {
 	}
 
 	@Override
-	public void startDocument() {
+	public void startGraph() {
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
@@ -117,7 +117,7 @@ public class StAXGraphSerializer extends AbstractGraphSerializer {
 	}
 
 	@Override
-	public void endDocument() {
+	public void endGraph() {
 		try {
 			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
