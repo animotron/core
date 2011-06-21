@@ -23,11 +23,12 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import static org.animotron.graph.AnimoGraph.*;
 import org.animotron.manipulator.SimpleManipulator;
 import org.animotron.manipulator.StatementManipulator;
-import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,26 +37,22 @@ import org.neo4j.graphdb.Relationship;
 public abstract class Walker {
 	
 	private static Runnable run (final Relationship op, SimpleManipulator m) {
-		return new Runnable() {
-
+		return new Operation() {
 			@Override
-			public void run() {
+			public void execute() {
 				m.go(op);
 			}
-			
 		};
 	}
 
 	private static Runnable run (final Relationship op, StatementManipulator m) {
 		Statement statement = Statements.relationshipType(op.getType());
 		if (m.canGo(statement))
-			return new Runnable() {
-	
+			return new Operation() {
 				@Override
-				public void run() {
+				public void execute() {
 					m.go(statement, op);
 				}
-				
 			};
 		else 
 			return null;
@@ -79,6 +76,22 @@ public abstract class Walker {
 		for (Relationship r : op.getRelationships(OUTGOING)) {
 			start(r, m);
 		}
+	}
+	
+	private abstract class Operation implements Runnable {
+		
+		public void run() {
+			Transaction tx = beginTx();
+			try {
+				execute();
+				tx.success();
+			} finally {
+				finishTx(tx);
+			}
+		}
+
+		public abstract void execute();
+		
 	}
 	
 }
