@@ -35,57 +35,18 @@ import org.neo4j.graphdb.index.IndexHits;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public abstract class AbstractGraphSerializer implements GraphHandler, Runnable {
-	
-	private Fiber fiber = Executor.getFiber();
+public abstract class AbstractGraphSerializer implements GraphHandler {
 	
 	private Relationship r = null;
 	
-	private Callback<Relationship> startGraph = new Callback<Relationship>(){
-		@Override
-		public void onMessage(Relationship r) {
-			startGraph();
-		}
-	};
-	
-	private Callback<Relationship> start = new Callback<Relationship>(){
-		@Override
-		public void onMessage(Relationship r) {
-			
-		}
-	};
-	
-	private Callback<Relationship> end = new Callback<Relationship>(){
-		@Override
-		public void onMessage(Relationship r) {
-			
-		}
-	};
-	
-	private Callback<Relationship> endGraph = new Callback<Relationship>(){
-		@Override
-		public void onMessage(Relationship r) {
-			endGraph();
-		}
-	};
-	
-	@Override
-	public void run() {
-		
-	}
-	
-	
 	final public void serialize(Relationship r) {
 		this.r = r;
-		Channel<Relationship> up = new MemoryChannel<Relationship>();
-		up.subscribe(fiber, startGraph);
-		up.subscribe(fiber, start);
-		up.subscribe(fiber, end);
-		up.subscribe(fiber, endGraph);
 	}
 	
 	public void serialize() {
-		fiber.execute(this);
+		startGraph();
+		build(r);
+		endGraph();
 	}
 	
 	protected void build(Relationship r) {
@@ -96,7 +57,6 @@ public abstract class AbstractGraphSerializer implements GraphHandler, Runnable 
 			return;
 		
 		start(statement, r);
-		
 		
 		if (!(statement instanceof Relation)) {
 			
