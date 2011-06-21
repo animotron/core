@@ -33,12 +33,12 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public class InMemoryRelationship implements Relationship {
 	
-	private Map<String, Object> properties = new FastMap<String, Object>();
+	private final Map<String, Object> properties = new FastMap<String, Object>();
 	
-	private Node sNode, eNode;
-	private RelationshipType type;
+	private final Node sNode, eNode;
+	private final RelationshipType type;
 	
-	public InMemoryRelationship(Node sNode, Node eNode, RelationshipType type) {
+	public InMemoryRelationship(final Node sNode, final Node eNode, final RelationshipType type) {
 		if (sNode == null) throw new IllegalArgumentException( " start node can't be NULL");
 		if (eNode == null) throw new IllegalArgumentException( " end node can't be NULL");
 		if (type == null) throw new IllegalArgumentException( " type can't be NULL");
