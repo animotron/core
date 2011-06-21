@@ -71,7 +71,7 @@ public class StoreBinaryTest extends ATest {
 //	   		PipedInputStream in = new PipedInputStream();
 //			PipedOutputStream out = new PipedOutputStream(in);
 	
-	        GraphSerializer.serialize(r, System.out);
+	        CommonGraphSerializer.serialize(r, System.out);
 	            
 //	        assertEquals(in, TXT);
 	        

@@ -19,34 +19,34 @@
 package org.animotron.graph;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.operator.Relation;
-import org.jetlang.channels.Channel;
-import org.jetlang.channels.MemoryChannel;
-import org.jetlang.core.Callback;
-import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public abstract class AbstractGraphSerializer implements GraphHandler {
+public class GraphTraverse {
 	
-	private Relationship r = null;
-	
-	final public void serialize(Relationship r) {
-		this.r = r;
+	private GraphHandler handler;
+
+	public GraphTraverse(GraphHandler handler) {
+		this.handler = handler;
 	}
 	
-	public void serialize() {
-		startGraph();
+	public void traverse(Relationship r) {
+		handler.startGraph();
 		build(r);
-		endGraph();
+		handler.endGraph();
 	}
 	
 	protected void build(Relationship r) {
@@ -56,14 +56,14 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 		if (statement == null)
 			return;
 		
-		start(statement, r);
+		handler.start(statement, r);
 		
 		if (!(statement instanceof Relation)) {
 			
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					build(i);
+					new GraphTraverse(handler).traverse(i);
 				}
 			} finally {
 				q.close();
@@ -71,7 +71,8 @@ public abstract class AbstractGraphSerializer implements GraphHandler {
 			
 		}
 		
-		end(statement, r);
+		handler.end(statement, r);
+		
 	}
 	
 }

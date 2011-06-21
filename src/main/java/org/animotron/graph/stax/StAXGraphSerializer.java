@@ -22,7 +22,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.Statement;
-import org.animotron.graph.AbstractGraphSerializer;
+import org.animotron.graph.GraphHandler;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -35,7 +35,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXGraphSerializer extends AbstractGraphSerializer {
+public class StAXGraphSerializer implements GraphHandler {
 	
 	private XMLStreamWriter writer;
 	

@@ -43,8 +43,9 @@ import org.neo4j.kernel.Uniqueness;
  */
 public class IS extends Relation implements Prepare {
 	
-	private static TraversalDescription TD;
 	public static final IS _ = new IS();
+	
+	private static TraversalDescription TD;
 	
 	private IS() { 
 		super("is", "animo/relation/is"); 

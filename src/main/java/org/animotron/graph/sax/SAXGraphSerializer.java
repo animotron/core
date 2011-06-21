@@ -21,7 +21,7 @@ package org.animotron.graph.sax;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Statement;
-import org.animotron.graph.AbstractGraphSerializer;
+import org.animotron.graph.GraphHandler;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -39,7 +39,7 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class SAXGraphSerializer extends AbstractGraphSerializer {
+public class SAXGraphSerializer implements GraphHandler {
 	
 	private static final ATTRIBUTE ATTR = ATTRIBUTE._;
 	private static final RelationshipType ATTR_RELATIONSHIPTYPE = ATTR.relationshipType();
