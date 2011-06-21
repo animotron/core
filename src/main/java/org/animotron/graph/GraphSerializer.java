@@ -34,7 +34,7 @@ import com.ctc.wstx.stax.WstxOutputFactory;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public abstract class CommonGraphSerializer {
+public abstract class GraphSerializer {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 	static {
@@ -48,7 +48,7 @@ public abstract class CommonGraphSerializer {
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         
         GraphTraverse serializer = new GraphTraverse(new StAXGraphSerializer(writer));
-        serializer.serialize(r);
+        serializer.traverse(r);
 	}
 	
 }

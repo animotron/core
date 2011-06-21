@@ -49,13 +49,13 @@ public class HaveLoopTest extends ATest {
 		try {
 			System.out.println("Prepare");
 			System.out.print("The a: ");
-			CommonGraphSerializer.serialize(A, System.out);
+			GraphSerializer.serialize(A, System.out);
 			System.out.println();
 			System.out.print("The b: ");
-			CommonGraphSerializer.serialize(B, System.out);
+			GraphSerializer.serialize(B, System.out);
 			System.out.println();
 			System.out.print("The c: ");
-			CommonGraphSerializer.serialize(C, System.out);
+			GraphSerializer.serialize(C, System.out);
 			System.out.println();
 			System.out.println();
 			
