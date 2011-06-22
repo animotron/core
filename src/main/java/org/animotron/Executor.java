@@ -34,7 +34,9 @@ public class Executor {
 	private static PoolFiberFactory fact = new PoolFiberFactory(exec);
     
 	public static Fiber getFiber() {
-		return fact.create();
+		Fiber fiber = fact.create();
+		fiber.start();
+		return fiber;
 	}
 	
 	protected static void shutdown() {

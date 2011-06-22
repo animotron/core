@@ -48,7 +48,7 @@ public class Utils {
 			).getEndNode();
 	}
 	
-	public static boolean results(Node node, PFlow ch) {
+	public static boolean results(Node node, PFlow pf) {
 		
 		boolean haveSome = false;
 		for (Relationship res : node.getRelationships(OUTGOING)) {
@@ -56,7 +56,7 @@ public class Utils {
 			if (res.getType().name().startsWith("RESULT")) {
 				System.out.println("GET result = "+res);
 				
-				ch.answer.publish(res);
+				pf.answer.publish(res);
 				
 				haveSome = true;
 			}
