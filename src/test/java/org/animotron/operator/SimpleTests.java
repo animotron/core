@@ -42,7 +42,7 @@ import org.junit.Test;
 public class SimpleTests extends ATest {
 	
 	@Test
-	public void an() throws IOException, XMLStreamException {
+	public void an() throws Exception {
         System.out.println("Test 'an' ...");
         
     	new Expression(
@@ -58,7 +58,7 @@ public class SimpleTests extends ATest {
 		);
 
         //System.out.println("get:A an:B");
-        toConsole(Evaluator._.execute(C));
+        Evaluator._.execute(C);
         
     	InputStream stream = Reader.read(C);
         assertEquals(stream, "<the:C><the:A></the:A></the:C>");

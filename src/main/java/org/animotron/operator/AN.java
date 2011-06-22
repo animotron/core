@@ -63,6 +63,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 			System.out.println("AN sending answer");
 
 			pf.answer.publish(res);
+			pf.stop.publish(null);
 		}
 		
 	};

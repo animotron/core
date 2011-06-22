@@ -23,8 +23,13 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.util.Iterator;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
+import org.animotron.Executor;
 import org.animotron.marker.Marker;
+import org.jetlang.core.Callback;
+import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -52,21 +57,33 @@ public abstract class Manipulator {
 		return ch;
 	}
 	
-	public final PFlow execute(Relationship op) {
+	public final Relationship execute(Relationship op) throws InterruptedException {
 		PFlow pf = new PFlow();
-		execute(op, pf);
+		
+		int numberExecutes = execute(op, pf);
+
+		final CountDownLatch reset = new CountDownLatch(numberExecutes);
+        Callback<Void> onStop = new Callback<Void>() {
+            public void onMessage(Void msg) {
+                reset.countDown();
+            }
+        };
+        Fiber fiber = Executor.getFiber();
+        pf.stop.subscribe(fiber, onStop);
 		
 		pf.question.publish(new PFlow(pf, op));
 		
-		return pf;
+		reset.await(5, TimeUnit.SECONDS);
+		
+		return null;
 	}
 	
 	public final void execute(Node op, PFlow ch) {
 		execute (op, ch, null);
 	}
 	
-	public final void execute(Relationship op, PFlow ch) {
-		execute (op, ch, null);
+	public final int execute(Relationship op, PFlow ch) {
+		return execute (op, ch, null);
 	}
 	
 	public final PFlow mark(Node op) {
@@ -89,16 +106,19 @@ public abstract class Manipulator {
 		execute (op, ch, marker());
 	}
 	
-	private void execute(Relationship op, PFlow ch, Marker marker) {
-		execute(op.getEndNode(), ch, marker);
+	private int execute(Relationship op, PFlow ch, Marker marker) {
+		return execute(op.getEndNode(), ch, marker);
 	}
 	
-	private void execute(Node op, PFlow ch, Marker marker) {
+	private int execute(Node op, PFlow ch, Marker marker) {
+		int count = 0;
 		Iterator<Relationship> it = op.getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
 			execute(r, ch, marker, !it.hasNext());
+			count++;
 		}
+		return count;
 	}
 	
 	protected abstract class Operation implements Runnable {
