@@ -60,7 +60,7 @@ public class Reader {
 			}
 		};
 		
-		ch.up.subscribe(fiber, onReceive);
+		//ch.up.subscribe(fiber, onReceive);
 
 		return in;
 	}

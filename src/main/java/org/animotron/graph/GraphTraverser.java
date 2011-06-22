@@ -30,19 +30,15 @@ import org.neo4j.graphdb.index.IndexHits;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class GraphTraverse {
+public class GraphTraverser {
 	
-	protected static GraphTraverse _ = new GraphTraverse();
-
-	private GraphTraverse() {}
-	
-	public void traverse(GraphHandler handler, Relationship r) {
+	public static void traverse(GraphHandler handler, Relationship r) {
 		handler.startGraph();
 		build(handler, r);
 		handler.endGraph();
 	}
 	
-	private void build(GraphHandler handler, Relationship r) {
+	private static void build(GraphHandler handler, Relationship r) {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		
@@ -56,7 +52,6 @@ public class GraphTraverse {
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					//use pool here? well, it will use stack anyway ...
 					build(handler, i);
 				}
 			} finally {
@@ -66,5 +61,7 @@ public class GraphTraverse {
 
 		handler.end(statement, r);
 	}
+	
+	//private class 
 	
 }

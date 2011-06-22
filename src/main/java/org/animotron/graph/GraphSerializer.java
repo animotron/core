@@ -47,7 +47,7 @@ public abstract class GraphSerializer {
 		
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         
-        GraphTraverse._.traverse(new StAXGraphSerializer(writer), r);
+        GraphTraverser.traverse(new StAXGraphSerializer(writer), r);
 	}
 	
 }
