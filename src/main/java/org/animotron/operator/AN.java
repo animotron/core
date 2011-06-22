@@ -40,31 +40,21 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 	
 	@Override
 	public void eval(Relationship op, PFlow ch, boolean isLast) {
-//		PipedInputObjectStream in = new PipedInputObjectStream();
-//		if (!isLast)
-//			Evaluator._.execute(op, new PipedOutputObjectStream(in));
-		
-		Node node = op.getEndNode();
-
-		Relationship res = node.getSingleRelationship(
-			RelationshipTypes.REF, OUTGOING
-		);
-		
-		ch.up.publish(res);
-
+		//do we need this?
 	}
 	
-	Callback response = new Callback() {
+	Callback<PFlow> question = new Callback<PFlow>() {
 
 		@Override
-		public void onMessage(Object message) {
+		public void onMessage(PFlow pf) {
+			Relationship op = pf.getOP();
 			Node node = op.getEndNode();
 
 			Relationship res = node.getSingleRelationship(
 				RelationshipTypes.REF, OUTGOING
 			);
 			
-			ch.up.publish(res);
+			pf.answer.publish(res);
 		}
 		
 	};

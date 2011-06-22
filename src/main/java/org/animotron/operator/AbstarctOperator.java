@@ -97,7 +97,6 @@ public abstract class AbstarctOperator implements Operator {
 	
 	public void eval(Relationship op, PFlow ch, boolean isLast) throws IOException {
 		System.out.println("empty eval @"+this.getClass());
-		ch.up.publish(op);
 	}
 	
 	protected Relationship createResult(Node node, Relationship r) {

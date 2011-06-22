@@ -56,7 +56,7 @@ public class Utils {
 			if (res.getType().name().startsWith("RESULT")) {
 				System.out.println("GET result = "+res);
 				
-				ch.up.publish(res);
+				ch.answer.publish(res);
 				
 				haveSome = true;
 			}

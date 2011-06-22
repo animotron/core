@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -27,16 +28,21 @@ import org.jetlang.channels.MemoryChannel;
  */
 public class PFlow {
 	
-	public final Channel<PFlow> answer = new MemoryChannel<PFlow>();
+	public final Channel<Relationship> answer = new MemoryChannel<Relationship>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Void> stop = new MemoryChannel<Void>();
 	
 	private PFlow parent = null;
+	private Relationship op = null;
 	
 	public PFlow() {
 	}
 
-	public PFlow(PFlow parent) {
+	public PFlow(PFlow parent, Relationship op) {
 		this.parent = parent;
+		this.op = op;
+	}
+	public Relationship getOP() {
+		return op;
 	}
 }
