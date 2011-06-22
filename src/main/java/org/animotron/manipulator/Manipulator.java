@@ -87,16 +87,14 @@ public abstract class Manipulator {
 	}
 	
 	private void execute(Relationship op, PFlow ch, Marker marker) {
-		Iterator<Relationship> it = op.getEndNode().getRelationships(OUTGOING).iterator();
-		while (it.hasNext()) {
-			Relationship r = it.next();
-			execute(r, ch, marker, !it.hasNext());
-		}
+		execute(op.getEndNode(), ch, marker);
 	}
 	
 	private void execute(Node op, PFlow ch, Marker marker) {
-		for (Relationship r : op.getRelationships(OUTGOING)) {
-			execute(r, ch, marker);
+		Iterator<Relationship> it = op.getRelationships(OUTGOING).iterator();
+		while (it.hasNext()) {
+			Relationship r = it.next();
+			execute(r, ch, marker, !it.hasNext());
 		}
 	}
 	
