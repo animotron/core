@@ -56,8 +56,8 @@ public class GraphTraverse {
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					//use pool here
-					new GraphTraverse().build(handler, i);
+					//use pool here? well, it will use stack anyway ...
+					build(handler, i);
 				}
 			} finally {
 				q.close();
