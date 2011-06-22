@@ -32,19 +32,17 @@ import org.neo4j.graphdb.index.IndexHits;
  */
 public class GraphTraverse {
 	
-	private GraphHandler handler;
+	protected static GraphTraverse _ = new GraphTraverse();
 
-	public GraphTraverse(GraphHandler handler) {
-		this.handler = handler;
-	}
+	private GraphTraverse() {}
 	
-	public void traverse(Relationship r) {
+	public void traverse(GraphHandler handler, Relationship r) {
 		handler.startGraph();
-		build(r);
+		build(handler, r);
 		handler.endGraph();
 	}
 	
-	private void build(Relationship r) {
+	private void build(GraphHandler handler, Relationship r) {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		
@@ -58,16 +56,15 @@ public class GraphTraverse {
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					new GraphTraverse(handler).build(i);
+					//use pool here
+					new GraphTraverse().build(handler, i);
 				}
 			} finally {
 				q.close();
 			}
-			
 		}
-		
+
 		handler.end(statement, r);
-		
 	}
 	
 }
