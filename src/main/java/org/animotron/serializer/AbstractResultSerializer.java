@@ -26,7 +26,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
@@ -129,7 +129,7 @@ public abstract class AbstractResultSerializer {
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			Channels ch = Evaluator._.mark(r.getStartNode());
+			PFlow ch = Evaluator._.mark(r.getStartNode());
 			
 			System.out.println("READER waiting ...");
 			//XXX: code

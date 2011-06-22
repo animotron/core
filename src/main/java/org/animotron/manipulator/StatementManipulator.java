@@ -31,12 +31,12 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class StatementManipulator extends Manipulator {
 
-	protected abstract void go(Statement statement, Relationship op, Channels ch, boolean isLast);
+	protected abstract void go(Statement statement, Relationship op, PFlow ch, boolean isLast);
 
 	protected abstract boolean canGo(Statement statement);
 
 	@Override
-	protected final void execute(final Relationship op, final Channels ch, final Marker marker, final boolean isLast) {
+	protected final void execute(final Relationship op, final PFlow ch, final Marker marker, final boolean isLast) {
 		final Statement statement = Statements.relationshipType(op.getType());
 		if (canGo(statement))
 			Executor.getFiber().execute(

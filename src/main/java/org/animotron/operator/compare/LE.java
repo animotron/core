@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Node;
@@ -37,7 +37,7 @@ public class LE extends AbstarctOperator implements Predicate {
 	private LE() { super("le", "animo/compare/le"); }
 
 	@Override
-	public void filter(Relationship op, Channels ch, boolean isLast) {
+	public void filter(Relationship op, PFlow ch, boolean isLast) {
 		// TODO Auto-generated method stub
 		
 	}

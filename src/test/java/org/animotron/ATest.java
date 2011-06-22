@@ -40,7 +40,7 @@ import junit.framework.Assert;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.CommonBuilder;
 import org.animotron.graph.GraphOperation;
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.THE;
 import org.animotron.serializer.AnimoResultSerializer;
@@ -109,7 +109,7 @@ public class ATest {
 		if (e != null) throw e;
     }
 
-	protected void toConsole(Channels ch) throws IOException {
+	protected void toConsole(PFlow ch) throws IOException {
 		//XXX: code
 //		if (instream == null) return;
 //		

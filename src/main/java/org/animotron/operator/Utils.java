@@ -21,7 +21,7 @@ package org.animotron.operator;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -48,7 +48,7 @@ public class Utils {
 			).getEndNode();
 	}
 	
-	public static boolean results(Node node, Channels ch) {
+	public static boolean results(Node node, PFlow ch) {
 		
 		boolean haveSome = false;
 		for (Relationship res : node.getRelationships(OUTGOING)) {

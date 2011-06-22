@@ -20,7 +20,7 @@ package org.animotron.addon.datetime;
 
 import java.util.WeakHashMap;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;
 import org.neo4j.graphdb.Node;
@@ -41,7 +41,7 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 	private TimestampReference() { super("T", "animo/time"); }
 	
 	@Override
-	public void eval(Relationship op, Channels ch, boolean isLast) {
+	public void eval(Relationship op, PFlow ch, boolean isLast) {
 		Node node = op.getEndNode();
 		String name = (String) node.getProperty("NAME");
 		

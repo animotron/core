@@ -21,7 +21,8 @@ package org.animotron.operator;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
+import org.jetlang.core.Callback;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -38,7 +39,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 	private AN() { super("an", "animo/reference"); }
 	
 	@Override
-	public void eval(Relationship op, Channels ch, boolean isLast) {
+	public void eval(Relationship op, PFlow ch, boolean isLast) {
 //		PipedInputObjectStream in = new PipedInputObjectStream();
 //		if (!isLast)
 //			Evaluator._.execute(op, new PipedOutputObjectStream(in));
@@ -52,4 +53,19 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		ch.up.publish(res);
 
 	}
+	
+	Callback response = new Callback() {
+
+		@Override
+		public void onMessage(Object message) {
+			Node node = op.getEndNode();
+
+			Relationship res = node.getSingleRelationship(
+				RelationshipTypes.REF, OUTGOING
+			);
+			
+			ch.up.publish(res);
+		}
+		
+	};
 }

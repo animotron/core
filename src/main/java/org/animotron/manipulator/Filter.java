@@ -36,7 +36,7 @@ public class Filter extends StatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, Channels ch, boolean isLast) {
+	public void go(Statement statement, Relationship op, PFlow ch, boolean isLast) {
 		((Predicate) statement).filter(op, ch, isLast);
 	}
 	

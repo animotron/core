@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
@@ -40,7 +40,7 @@ public class HAS extends AbstarctOperator implements Query, Predicate {
 	private HAS() { super("has", "animo/query/has"); }
 
 	@Override
-	public void filter(Relationship op, Channels ch, boolean isLast) {
+	public void filter(Relationship op, PFlow ch, boolean isLast) {
 		// TODO Auto-generated method stub
 		
 	}

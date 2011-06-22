@@ -22,7 +22,7 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Node;
@@ -71,7 +71,7 @@ public class IS extends Relation implements Prepare {
 	}
 	
 	@Override
-	public void prepare(Relationship op, Channels ch, boolean isLast) {
+	public void prepare(Relationship op, PFlow ch, boolean isLast) {
 		
 		Node start = op.getStartNode();
 		

@@ -18,7 +18,7 @@
  */
 package org.animotron.operator;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 
@@ -29,6 +29,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Prepare {
 	
-	public abstract void prepare(Relationship op, Channels ch, boolean isLast);
+	public abstract void prepare(Relationship op, PFlow ch, boolean isLast);
 	
 }

@@ -18,7 +18,7 @@
  */
 package org.animotron.operator;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 
@@ -29,6 +29,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Evaluable {
 	
-	void eval(Relationship op, Channels ch, boolean isLast);
+	void eval(Relationship op, PFlow ch, boolean isLast);
 	
 }

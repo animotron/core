@@ -44,12 +44,12 @@ public class Evaluator extends StatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, Channels ch, boolean isLast) {
+	public void go(Statement statement, Relationship op, PFlow ch, boolean isLast) {
 		((Evaluable) statement).eval(op, ch, isLast);
 	}
 
 	public List<Relationship> evalGetResult(Node op) {
-		Channels ch = new Channels();
+		PFlow ch = new PFlow();
 		execute(op, ch);
 		
 		List<Relationship> result = new FastList<Relationship>();
@@ -63,7 +63,7 @@ public class Evaluator extends StatementManipulator {
 	}
 
 	public List<Relationship> evalGetResult(Relationship op) {
-		Channels ch = new Channels();
+		PFlow ch = new PFlow();
 		execute(op, ch);
 		
 		List<Relationship> result = new FastList<Relationship>();

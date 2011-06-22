@@ -23,7 +23,7 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Properties;
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Filter;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
@@ -52,7 +52,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 	private ANY() { super("any", "animo/query/any"); }
 	
 	@Override
-	public void eval(Relationship op, Channels ch, boolean isLast) {
+	public void eval(Relationship op, PFlow ch, boolean isLast) {
 		
 		Filter._.execute(op, ch);
 		

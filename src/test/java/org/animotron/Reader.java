@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.jetlang.core.Callback;
 import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Relationship;
@@ -41,7 +41,7 @@ public class Reader {
 		PipedInputStream in = new PipedInputStream();
 		final PipedOutputStream out = new PipedOutputStream(in);
 		
-		final Channels ch = new Channels(); 
+		final PFlow ch = new PFlow(); 
 
 		Callback<Relationship> onReceive = new Callback<Relationship>() {
 

@@ -35,7 +35,7 @@ public class GC extends SimpleManipulator {
 	public static GC _ = new GC();
 
 	@Override
-	public void go(Relationship op, Channels ch, boolean isLast) {
+	public void go(Relationship op, PFlow ch, boolean isLast) {
 		Node node = op.getEndNode();
 		op.getStartNode().delete();
 		op.delete();

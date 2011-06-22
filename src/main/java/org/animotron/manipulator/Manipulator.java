@@ -36,7 +36,7 @@ import org.neo4j.graphdb.Transaction;
  */
 public abstract class Manipulator {
 
-	protected abstract void execute (Relationship op, Channels ch, Marker marker, boolean isLast);
+	protected abstract void execute (Relationship op, PFlow ch, Marker marker, boolean isLast);
 
 	public Marker marker(){
 		return null;
@@ -46,47 +46,47 @@ public abstract class Manipulator {
 		//TODO: make shutdown
 	}
 	
-	public final Channels execute(Node op) {
-		Channels ch = new Channels();
+	public final PFlow execute(Node op) {
+		PFlow ch = new PFlow();
 		execute (op, ch);
 		return ch;
 	}
 	
-	public final Channels execute(Relationship op) {
-		Channels ch = new Channels();
+	public final PFlow execute(Relationship op) {
+		PFlow ch = new PFlow();
 		execute (op, ch);
 		return ch;
 	}
 	
-	public final void execute(Node op, Channels ch) {
+	public final void execute(Node op, PFlow ch) {
 		execute (op, ch, null);
 	}
 	
-	public final void execute(Relationship op, Channels ch) {
+	public final void execute(Relationship op, PFlow ch) {
 		execute (op, ch, null);
 	}
 	
-	public final Channels mark(Node op) {
-		Channels ch = new Channels();
+	public final PFlow mark(Node op) {
+		PFlow ch = new PFlow();
 		mark (op, ch);
 		return ch;
 	}
 	
-	public final Channels mark(Relationship op) {
-		Channels ch = new Channels();
+	public final PFlow mark(Relationship op) {
+		PFlow ch = new PFlow();
 		mark (op, ch);
 		return ch;
 	}
 	
-	public final void mark(Node op, Channels ch) {
+	public final void mark(Node op, PFlow ch) {
 		execute (op, ch, marker());
 	}
 	
-	public final void mark(Relationship op, Channels ch) {
+	public final void mark(Relationship op, PFlow ch) {
 		execute (op, ch, marker());
 	}
 	
-	private void execute(Relationship op, Channels ch, Marker marker) {
+	private void execute(Relationship op, PFlow ch, Marker marker) {
 		Iterator<Relationship> it = op.getEndNode().getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
@@ -94,7 +94,7 @@ public abstract class Manipulator {
 		}
 	}
 	
-	private void execute(Node op, Channels ch, Marker marker) {
+	private void execute(Node op, PFlow ch, Marker marker) {
 		for (Relationship r : op.getRelationships(OUTGOING)) {
 			execute(r, ch, marker);
 		}

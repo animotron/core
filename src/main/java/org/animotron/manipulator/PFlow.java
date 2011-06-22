@@ -20,20 +20,23 @@ package org.animotron.manipulator;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class Channels {
+public class PFlow {
 	
-	public final Channel<Relationship> up = new MemoryChannel<Relationship>();
-	public final Channel<Exception> upError = new MemoryChannel<Exception>();
-	public final Channel<Void> upStop = new MemoryChannel<Void>();
+	public final Channel<PFlow> answer = new MemoryChannel<PFlow>();
+	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
+	public final Channel<Void> stop = new MemoryChannel<Void>();
 	
-	public final Channel<Relationship> down = new MemoryChannel<Relationship>();
-	public final Channel<Exception> downError = new MemoryChannel<Exception>();
-	public final Channel<Void> downStop = new MemoryChannel<Void>();
-}
+	private PFlow parent = null;
+	
+	public PFlow() {
+	}
 
+	public PFlow(PFlow parent) {
+		this.parent = parent;
+	}
+}

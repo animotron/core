@@ -21,7 +21,7 @@ package org.animotron.operator.compare;
 import java.util.Arrays;
 import java.util.List;
 
-import org.animotron.manipulator.Channels;
+import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
@@ -42,7 +42,7 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public void filter(Relationship op, Channels ch, boolean isLast) {
+	public void filter(Relationship op, PFlow ch, boolean isLast) {
 		//XXX: out.subscribeFilter(op, this);
 	}
 

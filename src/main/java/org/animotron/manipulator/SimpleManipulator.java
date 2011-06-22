@@ -30,10 +30,10 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class SimpleManipulator extends Manipulator {
 
-	protected abstract void go(Relationship op, Channels ch, boolean isLast);
+	protected abstract void go(Relationship op, PFlow ch, boolean isLast);
 
 	@Override
-	protected final void execute(final Relationship op, final Channels ch, final Marker marker, final boolean isLast) {
+	protected final void execute(final Relationship op, final PFlow ch, final Marker marker, final boolean isLast) {
 		Executor.getFiber().execute(
 			new Operation(marker) {
 				@Override
