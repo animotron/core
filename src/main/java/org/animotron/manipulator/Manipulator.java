@@ -53,9 +53,12 @@ public abstract class Manipulator {
 	}
 	
 	public final PFlow execute(Relationship op) {
-		PFlow ch = new PFlow();
-		execute (op, ch);
-		return ch;
+		PFlow pf = new PFlow();
+		execute(op, pf);
+		
+		pf.question.publish(new PFlow(pf, op));
+		
+		return pf;
 	}
 	
 	public final void execute(Node op, PFlow ch) {

@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.marker.Marker;
@@ -36,17 +35,10 @@ public abstract class StatementManipulator extends Manipulator {
 	protected abstract boolean canGo(Statement statement);
 
 	@Override
-	protected final void execute(final Relationship op, final PFlow ch, final Marker marker, final boolean isLast) {
+	protected final void execute(final Relationship op, final PFlow pf, final Marker marker, final boolean isLast) {
 		final Statement statement = Statements.relationshipType(op.getType());
 		if (canGo(statement))
-			Executor.getFiber().execute(
-				new Operation(marker) {
-					@Override
-					public void execute() {
-						go(statement, op, ch, isLast);
-					}
-				}
-			);
+			go(statement, op, pf, isLast);
 	}
 
 }

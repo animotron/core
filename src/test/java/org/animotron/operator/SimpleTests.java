@@ -58,7 +58,7 @@ public class SimpleTests extends ATest {
 		);
 
         //System.out.println("get:A an:B");
-        toConsole(Evaluator._.mark(C));
+        toConsole(Evaluator._.execute(C));
         
     	InputStream stream = Reader.read(C);
         assertEquals(stream, "<the:C><the:A></the:A></the:C>");

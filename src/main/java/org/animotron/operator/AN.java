@@ -20,6 +20,7 @@ package org.animotron.operator;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import org.animotron.Executor;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.core.Callback;
@@ -40,13 +41,18 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 	
 	@Override
 	public void eval(Relationship op, PFlow ch, boolean isLast) {
-		//do we need this?
+		ch.question.subscribe(Executor.getFiber(), question);
+		
+		System.out.println("register AN");
 	}
 	
 	Callback<PFlow> question = new Callback<PFlow>() {
 
 		@Override
 		public void onMessage(PFlow pf) {
+
+			System.out.println("AN get question");
+
 			Relationship op = pf.getOP();
 			Node node = op.getEndNode();
 
@@ -54,6 +60,8 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 				RelationshipTypes.REF, OUTGOING
 			);
 			
+			System.out.println("AN sending answer");
+
 			pf.answer.publish(res);
 		}
 		
