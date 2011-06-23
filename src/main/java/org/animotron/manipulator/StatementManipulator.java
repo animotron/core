@@ -48,12 +48,12 @@ public abstract class StatementManipulator extends Manipulator {
 	 */
 	protected abstract boolean canGo(Statement statement);
 
-	protected final Subscribable<PFlow> onQuestion(final Relationship op) {
+	public final Subscribable<PFlow> onQuestion(final Relationship op) {
 		final Statement statement = Statements.relationshipType(op.getType());
 		if (canGo(statement))
 			return onQuestion(statement, op);
 		
-		return super.onQuestion(op);
+		return null;
 	}
 
 }

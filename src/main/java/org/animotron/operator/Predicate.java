@@ -18,7 +18,6 @@
  */
 package org.animotron.operator;
 
-import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -28,8 +27,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Predicate {
 	
-	public void filter(Relationship op, PFlow ch, boolean isLast);
-
 	public boolean filter(Relationship op, Node ref);
 
 }

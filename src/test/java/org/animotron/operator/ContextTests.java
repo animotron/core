@@ -73,7 +73,7 @@ public class ContextTests extends ATest {
 		"</the:G>";
 
 	@Test
-	public void testGet() throws IOException, XMLStreamException {
+	public void testGet() throws Exception {
         System.out.println("Test 'get' ...");
         
         if (firstRun) {

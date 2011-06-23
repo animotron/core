@@ -25,14 +25,11 @@ import static org.animotron.graph.AnimoGraph.order;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import java.io.IOException;
-
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
-import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -96,10 +93,6 @@ public abstract class AbstarctOperator implements Operator {
 		return r;
 	}
 
-	
-	public void eval(Relationship op, PFlow ch, boolean isLast) throws IOException {
-		System.out.println("empty eval @"+this.getClass());
-	}
 	
 	protected Relationship createResult(final Node node, final Relationship r) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {

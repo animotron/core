@@ -21,6 +21,9 @@ package org.animotron.operator.compare;
 import java.util.Arrays;
 import java.util.List;
 
+import javolution.util.FastList;
+
+import org.animotron.io.PipedInput;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
@@ -42,11 +45,6 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public void filter(Relationship op, PFlow ch, boolean isLast) {
-		//XXX: out.subscribeFilter(op, this);
-	}
-
-	@Override
 	public boolean filter(Relationship op, Node ref) {
 		
 		System.out.println("WITH op "+op);
@@ -58,13 +56,12 @@ public class WITH extends AbstarctOperator implements Predicate {
 		
 		//TODO: improve
 		System.out.println("================================== actual");
-		List<Relationship> actual = Evaluator._.evalGetResult(have);
-		System.out.println("================================== actual result");
-		System.out.println(Arrays.toString(actual.toArray()));
+//		PipedInput in_actual = Evaluator._.execute(have);
 		System.out.println("================================== expected");
-		List<Relationship> expected = Evaluator._.evalGetResult(op.getEndNode());
-		System.out.println("================================== expected result");
-		System.out.println(Arrays.toString(expected.toArray()));
+//		List<Relationship> in_expected = Evaluator._.execute(op.getEndNode());
+
+		List<Relationship> actual = new FastList<Relationship>();
+		List<Relationship> expected = new FastList<Relationship>();
 		
 		if (actual.size() == 1 && expected.size() == 1) {
 			Relationship e = actual.get(0);
@@ -78,5 +75,4 @@ public class WITH extends AbstarctOperator implements Predicate {
 
 		return false;
 	}
-	
 }

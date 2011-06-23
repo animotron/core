@@ -21,10 +21,6 @@ package org.animotron.operator;
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
 
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.compare.WITH;
@@ -41,7 +37,7 @@ public class ANYTests extends ATest {
 	
 
 	@Test
-	public void testANY() throws IOException, XMLStreamException {
+	public void testANY() throws Exception {
         System.out.println("Test 'ANY' ...");
         
     	new Expression(

@@ -42,7 +42,7 @@ import org.junit.Test;
 public class ConnectionTests extends ATest {
 	
 	@Test
-	public void mimeType_usecase() throws IOException, XMLStreamException {
+	public void mimeType_usecase() throws Exception {
         System.out.println("Mime type use case ...");
         
     	new Expression(

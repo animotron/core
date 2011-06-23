@@ -18,7 +18,6 @@
  */
 package org.animotron.operator.compare;
 
-import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Node;
@@ -35,12 +34,6 @@ public class GE extends AbstarctOperator implements Predicate {
 	public static final GE _ = new GE();
 	
 	private GE() { super("ge", "animo/compare/ge"); }
-
-	@Override
-	public void filter(Relationship op, PFlow ch, boolean isLast) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public boolean filter(Relationship op, Node ref) {

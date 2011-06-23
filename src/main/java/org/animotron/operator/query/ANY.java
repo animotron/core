@@ -22,15 +22,24 @@ import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import java.util.Iterator;
+
+import org.animotron.Executor;
 import org.animotron.Properties;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Filter;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
@@ -51,32 +60,48 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 	
 	private ANY() { super("any", "animo/query/any"); }
 	
-	@Override
-	public void eval(Relationship op, PFlow ch, boolean isLast) {
-		
-		Filter._.execute(op, ch);
-		
-		Node n = op.getEndNode();
-		Relationship ref = n.getSingleRelationship( REF, OUTGOING );
-		
-		Node node = ref.getEndNode();
+	public OnQuestion onCalcQuestion() {
+		return new OnQuestion() {
+			@Override
+			public void onMessage(final PFlow pf) {
+				final Node n = pf.getOP().getEndNode();
+				Relationship ref = n.getSingleRelationship( REF, OUTGOING );
+				
+				Node node = ref.getEndNode();
+				
+				if (filtering(pf, node)) {
+					pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+				} else {
+					
+					for (Relationship tdR : td_eval.traverse(node).relationships()) {
+						System.out.println("ANY get next "+tdR);
+						Node res = tdR.getEndNode();
+						if (filtering(pf, res)) {
+							
+							pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
+							break;
+						}
+					}
+				}
+			}
+			
+			public boolean filtering(PFlow pf, Node node) {
 
-		//XXX: code
-//		if (out.filter(node)) {
-//			ch.up.publish( createResultInMemory( n, getThe(node) ) );
-//		} else {
-//			
-//			for (Relationship tdR : td_eval.traverse(node).relationships()) {
-//				System.out.println("ANY get next "+tdR);
-//				Node res = tdR.getEndNode();
-//				if (.filter( res )) {
-//					
-//					ch.up.publish( createResultInMemory( n, getThe( res ) ) );
-//					break;
-//				}
-//			}
-//		}
+				Iterator<Relationship> it = pf.getOP().getEndNode().getRelationships(OUTGOING).iterator();
+				while (it.hasNext()) {
+					Relationship r = it.next();
+					
+					Statement st = Statements.relationshipType(r);
+					
+					if (st instanceof Predicate) {
+						if (!((Predicate) st).filter(r, node))
+							return false;
+					}
+				}
 
+				return true;
+			}
+		};
 	}
 	
 	private Relationship getThe(Node node) {

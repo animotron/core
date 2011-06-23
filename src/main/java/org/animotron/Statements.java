@@ -46,6 +46,7 @@ import org.clapper.util.classutil.ClassInfo;
 import org.clapper.util.classutil.InterfaceOnlyClassFilter;
 import org.clapper.util.classutil.NotClassFilter;
 import org.clapper.util.classutil.SubclassClassFilter;
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -280,6 +281,10 @@ public class Statements {
 		}
 	}
 	
+	public static Statement relationshipType(Relationship r) {
+		return relationshipType(r.getType());
+	}
+
 	public static Statement relationshipType(RelationshipType type) {
 		String name = type.name();
 		return name.startsWith(THE.PREFIX + ":") ? THE._ : relationshipType(name);

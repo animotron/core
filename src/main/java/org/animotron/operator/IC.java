@@ -19,6 +19,7 @@
 package org.animotron.operator;
 
 import org.animotron.manipulator.PFlow;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 
@@ -36,5 +37,11 @@ public class IC extends AbstarctOperator implements Evaluable {
 	
 	public void eval(Relationship op, PFlow ch, boolean isLast) {
 		System.out.println("IC "+op);
+	}
+
+	@Override
+	public Subscribable<PFlow> onCalcQuestion() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
