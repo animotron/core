@@ -21,22 +21,11 @@ package org.animotron.operator;
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.stream.XMLStreamException;
-
-import junit.framework.Assert;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.Reader;
-import org.animotron.io.PipedInput;
-import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
 
 
 /**
@@ -50,35 +39,28 @@ public class SimpleTests extends ATest {
         System.out.println("Test 'an' ...");
         
     	new Expression(
-			_(THE._, "A")
+			_(THE._, "AA")
 		);
 
     	new Expression(
-			_(THE._, "B", _(HAVE._, "A", text("a@b")))
+			_(THE._, "BB", _(HAVE._, "AA", text("a@b")))
 		);
 
     	Expression C = new Expression(
-			_(THE._, "C", _(AN._, "B"))
+			_(THE._, "CC", _(AN._, "BB"))
 		);
 
         //System.out.println("get:A an:B");
-        PipedInput in = Evaluator._.execute(C.getRelationship());
-        System.out.println("outing ....");
-        for (Object r : in) {
-        	Assert.assertEquals(14, ((Relationship)r).getId());
-        }
+//        PipedInput in = Evaluator._.execute(C.getRelationship());
+//        System.out.println("outing ....");
+//        for (Object r : in) {
+//        	Assert.assertEquals(14, ((Relationship)r).getId());
+//        }
         
-        assertAnimo(C, "<the:C><an:B/></the:C>");
+        assertAnimo(C, "<the:CC><an:BB/></the:CC>");
         //assertString(C, "<the:C><the:A></the:A></the:C>");
         
         System.out.println("done.");
-	}
-
-	private void sleep(int sec) {
-		try {
-			Thread.sleep(sec * 1000);
-		} catch (InterruptedException e) {
-		}
 	}
 
 	@Test
