@@ -18,16 +18,12 @@
  */
 package org.animotron.manipulator;
 
-import java.util.List;
-
-import javolution.util.FastList;
-
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Evaluable;
-import org.neo4j.graphdb.Node;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -44,36 +40,8 @@ public class Evaluator extends StatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PFlow ch, boolean isLast) {
-		((Evaluable) statement).eval(op, ch, isLast);
-	}
-
-	public List<Relationship> evalGetResult(Node op) {
-		PFlow ch = new PFlow();
-		execute(op, ch);
-		
-		List<Relationship> result = new FastList<Relationship>();
-//		for (Object obj : ch) {
-//			if (obj instanceof Relationship) {
-//				result.add((Relationship) obj);
-//			} else
-//				System.out.println("evalGetResult");
-//		}
-		return result;
-	}
-
-	public List<Relationship> evalGetResult(Relationship op) {
-		PFlow ch = new PFlow();
-		execute(op, ch);
-		
-		List<Relationship> result = new FastList<Relationship>();
-//		for (Object obj : ch) {
-//			if (obj instanceof Relationship) {
-//				result.add((Relationship) obj);
-//			} else
-//				System.out.println("evalGetResult");
-//		}
-		return result;
+	public Subscribable<PFlow> onQuestion(Statement statement, Relationship op) {
+		return ((Evaluable) statement).onCalcQuestion();
 	}
 
 	@Override

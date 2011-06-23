@@ -20,25 +20,40 @@ package org.animotron.manipulator;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.marker.Marker;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
+ * Manipulations based on statement's behavior.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public abstract class StatementManipulator extends Manipulator {
 
-	protected abstract void go(Statement statement, Relationship op, PFlow ch, boolean isLast);
+	/**
+	 * get statement's callback.
+	 * 
+	 * @param statement
+	 * @param op
+	 */
+	protected abstract Subscribable<PFlow> onQuestion(Statement statement, Relationship op);
 
+	/**
+	 * Should manipulator go this direction?
+	 * 
+	 * @param statement
+	 * @return
+	 */
 	protected abstract boolean canGo(Statement statement);
 
-	@Override
-	protected final void execute(final Relationship op, final PFlow pf, final Marker marker, final boolean isLast) {
+	protected final Subscribable<PFlow> onQuestion(final Relationship op) {
 		final Statement statement = Statements.relationshipType(op.getType());
 		if (canGo(statement))
-			go(statement, op, pf, isLast);
+			return onQuestion(statement, op);
+		
+		return null;
 	}
 
 }

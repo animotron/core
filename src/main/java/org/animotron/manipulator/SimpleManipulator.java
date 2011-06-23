@@ -18,8 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.Executor;
-import org.animotron.marker.Marker;
 import org.neo4j.graphdb.Relationship;
 
 
@@ -30,18 +28,10 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class SimpleManipulator extends Manipulator {
 
-	protected abstract void go(Relationship op, PFlow ch, boolean isLast);
+	protected abstract void go(Relationship op, PFlow ch);
 
-	@Override
-	protected final void execute(final Relationship op, final PFlow ch, final Marker marker, final boolean isLast) {
-		Executor.getFiber().execute(
-			new Operation(marker) {
-				@Override
-				public void execute() {
-					go(op, ch, isLast);
-				}
-			}
-		);
+	protected final void execute(final Relationship op, final PFlow ch) {
+		go(op, ch);
 	}
 
 }

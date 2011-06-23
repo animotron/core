@@ -39,7 +39,7 @@ public class Executor {
 		return fiber;
 	}
 	
-	protected static void shutdown() {
+	public static void shutdown() {
 		exec.shutdown();
 	}
 }

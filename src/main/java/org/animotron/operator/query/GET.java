@@ -80,7 +80,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				
 				final String name = name(op);
 				
-				PFlow nextPF = new PFlow();
+//				PFlow nextPF = new PFlow();
 				
 				Callback<Relationship> onContext = new Callback<Relationship>() {
 					@Override
@@ -93,7 +93,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 					
 				};
 				
-				nextPF.answer.subscribe(Executor.getFiber(), onContext);
+//				nextPF.answer.subscribe(Executor.getFiber(), onContext);
 			}
 		}
 		

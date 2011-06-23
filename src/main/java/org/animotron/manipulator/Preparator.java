@@ -39,7 +39,7 @@ public class Preparator extends StatementManipulator {
 	}
 
 	@Override
-	public void go(Statement statement, Relationship op, PFlow ch, boolean isLast) {
+	public void go(Statement statement, Relationship op, PFlow ch) {
 		((Prepare) statement).prepare(op, ch, isLast);
 	}
 

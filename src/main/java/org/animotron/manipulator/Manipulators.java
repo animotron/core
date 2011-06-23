@@ -18,28 +18,12 @@
  */
 package org.animotron.manipulator;
 
-
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public class Manipulators {
 	
-	public static void load() {
-//		Filter._.getClass();
-//		GC._.getClass();
-//		Preparator._.getClass();
-	}
-	
-	public static void shutdown() {
-		GC._.shutdown();
-		Filter._.shutdown();
-		Evaluator._.shutdown();
-		Preparator._.shutdown();
-//		Executor.shutdown();
-	}
-
 	//TODO: Implement manipulators/listeners/broadcasters loader
 	
 }

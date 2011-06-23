@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 
 import javolution.util.FastMap;
 
-import org.animotron.manipulator.Manipulators;
+import org.animotron.Executor;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -44,7 +44,7 @@ public class AnimoGraph {
 	
 	private static String STORAGE;
 	
-	private static Node ROOT, CACHE, EMPTY, TOP;
+	private static Node ROOT, CACHE, TOP; //EMPTY
 	private static OrderIndex ORDER;
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
@@ -62,11 +62,8 @@ public class AnimoGraph {
 		Transaction tx = beginTx();
 		try {
 			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
-			EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
+			//EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
 			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
-			
-			//workaround write deadlock
-			Manipulators.load();
 			
 			tx.success();
 		} finally {
@@ -102,7 +99,7 @@ public class AnimoGraph {
 	public static void shutdownDB() {
 		System.out.println("shotdown");
 		
-		Manipulators.shutdown();
+		Executor.shutdown();
 
 		while (!activeTx.isEmpty()) {
 		

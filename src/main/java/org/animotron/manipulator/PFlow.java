@@ -28,6 +28,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public class PFlow {
 	
+	private final StatementManipulator m;
+
 	public final Channel<Relationship> answer = new MemoryChannel<Relationship>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Void> stop = new MemoryChannel<Void>();
@@ -35,11 +37,13 @@ public class PFlow {
 	private PFlow parent = null;
 	private Relationship op = null;
 	
-	public PFlow() {
+	public PFlow(StatementManipulator m) {
+		this.m = m;
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
 		this.parent = parent;
+		this.m = parent.m;
 		this.op = op;
 	}
 	public Relationship getOP() {
@@ -54,5 +58,9 @@ public class PFlow {
 	public void done() {
 		if (parent == null) stop.publish(null);
 		else parent.stop.publish(null);
+	}
+
+	public StatementManipulator getManipulator() {
+		return m;
 	}
 }

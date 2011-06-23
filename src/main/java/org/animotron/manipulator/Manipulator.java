@@ -18,23 +18,15 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
 
 import org.animotron.Executor;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
-import org.jetlang.core.Callback;
-import org.jetlang.fibers.Fiber;
-import org.neo4j.graphdb.Node;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -43,55 +35,41 @@ import org.neo4j.graphdb.Transaction;
  */
 public abstract class Manipulator {
 
-	protected abstract void execute (Relationship op, PFlow ch, Marker marker, boolean isLast);
+//	protected abstract void prepare(Relationship op, PFlow ch);
 
 	public Marker marker(){
 		return null;
 	}
 	
-	public void shutdown() {
-		//TODO: make shutdown
-	}
-	
-	public final PFlow execute(Node op) {
-		PFlow ch = new PFlow();
-		execute (op, ch);
-		return ch;
-	}
-	
 	public final PipedInput execute(Relationship op) throws InterruptedException {
-		PFlow pf = new PFlow();
+		PFlow pf = new PFlow((StatementManipulator) this);
 		
-		int numberExecutes = execute(op, pf);
-
-        final Fiber fiber = Executor.getFiber();
-
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
 		
-		//finish watcher
-		final CountDownLatch reset = new CountDownLatch(numberExecutes);
-        Callback<Void> onStop = new Callback<Void>() {
-            public void onMessage(Void msg) {
-            	System.out.println("get stop");
-
-            	reset.countDown();
-                
-                if (reset.getCount() == 0)
-                	try {
-                		System.out.println("closing ...");
-                		//fiber.dispose();
-						out.close();
-					} catch (IOException e) {
-						//XXX: what to do?
-						e.printStackTrace();
-					}
-            }
-        };
-        pf.stop.subscribe(fiber, onStop);
+//		//finish watcher
+//		final CountDownLatch reset = new CountDownLatch();
+//        Callback<Void> onStop = new Callback<Void>() {
+//            public void onMessage(Void msg) {
+//            	System.out.println("get stop");
+//
+//            	reset.countDown();
+//                
+//                if (reset.getCount() == 0)
+//                	try {
+//                		System.out.println("closing ...");
+//                		//fiber.dispose();
+//						out.close();
+//					} catch (IOException e) {
+//						//XXX: what to do?
+//						e.printStackTrace();
+//					}
+//            }
+//        };
+//        pf.stop.subscribe(fiber, onStop);
 
         //answers transfer to output
-        Callback<Relationship> onAnswer = new Callback<Relationship>() {
+        Subscribable<Relationship> onAnswer = new Subscribable<Relationship>() {
             public void onMessage(Relationship msg) {
             	System.out.println("get answer "+msg);
             	try {
@@ -101,9 +79,17 @@ public abstract class Manipulator {
 					e.printStackTrace();
 				}
             }
-        };
-        pf.answer.subscribe(fiber, onAnswer);
 
+			@Override
+			public DisposingExecutor getQueue() {
+				System.out.println("onAnswer getQueue");
+				return Executor.getFiber();
+			}
+        };
+        pf.answer.subscribe(onAnswer);
+
+        pf.question.subscribe(new OnQuestion());
+        
         //send question to evaluation
         pf.question.publish(new PFlow(pf, op));
 		
@@ -112,88 +98,4 @@ public abstract class Manipulator {
 		
 		return in;
 	}
-	
-	public final void execute(Node op, PFlow ch) {
-		execute (op, ch, null);
-	}
-	
-	public final int execute(Relationship op, PFlow ch) {
-		return execute (op, ch, null);
-	}
-	
-	public final PFlow mark(Node op) {
-		PFlow ch = new PFlow();
-		mark (op, ch);
-		return ch;
-	}
-	
-	public final PFlow mark(Relationship op) {
-		PFlow ch = new PFlow();
-		mark (op, ch);
-		return ch;
-	}
-	
-	public final void mark(Node op, PFlow ch) {
-		execute (op, ch, marker());
-	}
-	
-	public final void mark(Relationship op, PFlow ch) {
-		execute (op, ch, marker());
-	}
-	
-	private int execute(Relationship op, PFlow ch, Marker marker) {
-		return execute(op.getEndNode(), ch, marker);
-	}
-	
-	private int execute(Node op, PFlow ch, Marker marker) {
-		int count = 0;
-		Iterator<Relationship> it = op.getRelationships(OUTGOING).iterator();
-		while (it.hasNext()) {
-			Relationship r = it.next();
-			execute(r, ch, marker, !it.hasNext());
-			count++;
-		}
-		return count;
-	}
-	
-	protected abstract class Operation implements Runnable {
-		
-		private Marker marker;
-		
-		protected Operation (Marker marker) {
-			this.marker = marker;
-		}
-		
-		@Override
-		public void run() {
-			Transaction tx = beginTx();
-			try {
-				execute();
-				tx.success();
-			} finally {
-				finishTx(tx);
-			}
-		} 
-
-		protected abstract void execute();
-		
-	}
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

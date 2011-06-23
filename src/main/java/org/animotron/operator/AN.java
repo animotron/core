@@ -22,8 +22,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Executor;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.jetlang.core.Callback;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -46,7 +46,11 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		System.out.println("register AN");
 	}
 	
-	Callback<PFlow> question = new Callback<PFlow>() {
+	public OnQuestion onCalcQuestion() {
+		return question;
+	}
+	
+	private static OnQuestion question = new OnQuestion() {
 
 		@Override
 		public void onMessage(PFlow pf) {
