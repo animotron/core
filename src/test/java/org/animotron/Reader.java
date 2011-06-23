@@ -34,34 +34,4 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Reader {
 	
-	public static InputStream read(Relationship position) throws IOException {
-		
-		Fiber fiber = Executor.getFiber();
-		
-		PipedInputStream in = new PipedInputStream();
-		final PipedOutputStream out = new PipedOutputStream(in);
-		
-		final PFlow ch = new PFlow(); 
-
-		Callback<Relationship> onReceive = new Callback<Relationship>() {
-
-			@Override
-			public void onMessage(Relationship r) {
-				String typeName = r.getType().name();
-
-				if (r.getType().name().startsWith("the:")) {
-					try {
-						out.write(("<"+typeName+">").getBytes());
-						out.write(("</"+typeName+">").getBytes());
-					} catch (IOException e) {
-						
-					}
-				}
-			}
-		};
-		
-		//ch.up.subscribe(fiber, onReceive);
-
-		return in;
-	}
 }

@@ -41,8 +41,6 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.CommonBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.operator.THE;
 import org.animotron.serializer.AnimoResultSerializer;
 import org.animotron.serializer.StringResultSerializer;
 import org.junit.After;
@@ -160,19 +158,7 @@ public class ATest {
 		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 
-	protected void assertEquals(String the, String expecteds) throws IOException {
-        Relationship op = THE._.get(the);
-        assertNotNull(op);
-
-//        toConsole(
-//    		Calculator.eval(op)
-//		);
-        
-    	InputStream stream = Reader.read(op);
-        assertEquals(stream, expecteds);
-	}
-	
-	protected void assertAnimo(Relationship op, String expecteds) throws IOException {
+	protected void assertAnimo(Relationship op, String expecteds) throws IOException, InterruptedException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
@@ -192,15 +178,10 @@ public class ATest {
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expecteds);
 	}
 
-	protected void assertString(String the, String expecteds) throws IOException {
-        Relationship op = THE._.get(the);
+	protected void assertString(Relationship op, String expecteds) throws IOException, InterruptedException {
         assertNotNull(op);
 
-        toConsole(
-    		Evaluator._.mark(op)
-		);
-        
-        System.out.println("String result serializer...");
+       System.out.println("String result serializer...");
         StringResultSerializer serializer = new StringResultSerializer();
         serializer.serialize(op);
         Assert.assertEquals(serializer.getString(), expecteds);

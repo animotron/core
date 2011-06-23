@@ -37,7 +37,12 @@ public class PFlow {
 	private PFlow parent = null;
 	private Relationship op = null;
 	
+	private PFlow(StatementManipulator m) {
+		this.m = m;
+	};
+	
 	public PFlow(StatementManipulator m, Relationship op) {
+		parent = new PFlow(m);
 		this.m = m;
 		this.op = op;
 	}

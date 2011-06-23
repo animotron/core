@@ -47,27 +47,6 @@ public abstract class Manipulator {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
 		
-//		//finish watcher
-//		final CountDownLatch reset = new CountDownLatch();
-//        Callback<Void> onStop = new Callback<Void>() {
-//            public void onMessage(Void msg) {
-//            	System.out.println("get stop");
-//
-//            	reset.countDown();
-//                
-//                if (reset.getCount() == 0)
-//                	try {
-//                		System.out.println("closing ...");
-//                		//fiber.dispose();
-//						out.close();
-//					} catch (IOException e) {
-//						//XXX: what to do?
-//						e.printStackTrace();
-//					}
-//            }
-//        };
-//        pf.stop.subscribe(fiber, onStop);
-
         //answers transfer to output
         Subscribable<Relationship> onAnswer = new Subscribable<Relationship>() {
             public void onMessage(Relationship msg) {
@@ -85,7 +64,7 @@ public abstract class Manipulator {
 
 			@Override
 			public DisposingExecutor getQueue() {
-				System.out.println("onAnswer getQueue");
+				//System.out.println("onAnswer getQueue");
 				return Executor.getFiber();
 			}
         };
@@ -93,7 +72,7 @@ public abstract class Manipulator {
         System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
         pf.answer.subscribe(onAnswer);
 
-        pf.question.subscribe(new OnQuestion());
+        pf.question.subscribe(onQuestion(op));
         
         //send question to evaluation
         pf.question.publish(pf);
@@ -102,5 +81,9 @@ public abstract class Manipulator {
         //reset.await(5, TimeUnit.SECONDS);
 		
 		return in;
+	}
+	
+	protected Subscribable<PFlow> onQuestion(final Relationship op) {
+		return new OnQuestion();
 	}
 }

@@ -23,6 +23,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
@@ -32,7 +33,8 @@ import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
-import org.jetlang.core.Callback;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -62,11 +64,11 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 			relationships(IS._.relationshipType(), OUTGOING ).
 			relationships(IC._.relationshipType(), OUTGOING );
 
-	@Override
-	public void eval(Relationship op, PFlow ch, boolean isLast) {
+	public OnQuestion onCalcQuestion() {
+		return onQuestion;
 	}
-	
-	Callback<PFlow> onQuestion = new Callback<PFlow>() {
+
+	OnQuestion onQuestion = new OnQuestion() {
 
 		@Override
 		public void onMessage(final PFlow pf) {
@@ -80,23 +82,31 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				
 				final String name = name(op);
 				
-//				PFlow nextPF = new PFlow();
 				
-				Callback<Relationship> onContext = new Callback<Relationship>() {
+				Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
 					@Override
 					public void onMessage(Relationship context) {
+						if (context == null) {
+							pf.sendAnswer(null);
+							return;
+						}
+							
 						Relationship res = get(context.getEndNode(), name);
 						
 						if (res != null)
-							pf.answer.publish(createResult(node, res));
+							pf.sendAnswer(createResult(node, res));
 					}
-					
+
+					@Override
+					public DisposingExecutor getQueue() {
+						return Executor.getFiber();
+					}
 				};
+				pf.answer.subscribe(onContext);
 				
-//				nextPF.answer.subscribe(Executor.getFiber(), onContext);
+				super.onMessage(pf);
 			}
 		}
-		
 	};
 
 	public Relationship get(final Node context, final String name) {

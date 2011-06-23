@@ -53,7 +53,7 @@ public abstract class StatementManipulator extends Manipulator {
 		if (canGo(statement))
 			return onQuestion(statement, op);
 		
-		return null;
+		return super.onQuestion(op);
 	}
 
 }

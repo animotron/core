@@ -26,6 +26,8 @@ import java.io.InputStream;
 
 import javax.xml.stream.XMLStreamException;
 
+import junit.framework.Assert;
+
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.Reader;
@@ -34,6 +36,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
+import org.neo4j.graphdb.Relationship;
 
 
 /**
@@ -62,13 +65,11 @@ public class SimpleTests extends ATest {
         PipedInput in = Evaluator._.execute(C.getRelationship());
         System.out.println("outing ....");
         for (Object r : in) {
-        	System.out.println(r);
+        	Assert.assertEquals(14, ((Relationship)r).getId());
         }
         
-//    	InputStream stream = Reader.read(C);
-//        assertEquals(stream, "<the:C><the:A></the:A></the:C>");
-        
-//        sleep(10);
+        assertAnimo(C, "<the:C><an:B/></the:C>");
+        //assertString(C, "<the:C><the:A></the:A></the:C>");
         
         System.out.println("done.");
 	}
@@ -81,7 +82,7 @@ public class SimpleTests extends ATest {
 	}
 
 	@Test
-	public void get() throws IOException, XMLStreamException {
+	public void get() throws Exception {
         System.out.println("Test 'get' ...");
         
     	new Expression(
@@ -97,10 +98,7 @@ public class SimpleTests extends ATest {
 		);
 
         //System.out.println("get:A an:B");
-        toConsole(Evaluator._.mark(C));
-        
-    	InputStream stream = Reader.read(C);
-        assertEquals(stream, "<the:C><have:A>a@b</have:A></the:C>");
+        assertAnimo(C, "<the:C><have:A>a@b</have:A></the:C>");
         
         //System.out.println("done.");
 	}

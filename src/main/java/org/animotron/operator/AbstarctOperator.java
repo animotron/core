@@ -28,7 +28,9 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.io.IOException;
 
 import org.animotron.exception.ExceptionBuilderTerminate;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
@@ -99,12 +101,17 @@ public abstract class AbstarctOperator implements Operator {
 		System.out.println("empty eval @"+this.getClass());
 	}
 	
-	protected Relationship createResult(Node node, Relationship r) {
-		Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
-		//store to relationship arrow 
-		RID.set(res, r.getId());
-		
-		return res;
+	protected Relationship createResult(final Node node, final Relationship r) {
+		return AnimoGraph.execute(new GraphOperation<Relationship>() {
+			@Override
+			public Relationship execute() {
+				Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
+				//store to relationship arrow 
+				RID.set(res, r.getId());
+				
+				return res;
+			}
+		});
 	}
 	
 	protected Relationship createResultInMemory(Node node, Relationship r) {

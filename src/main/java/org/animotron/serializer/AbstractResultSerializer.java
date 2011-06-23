@@ -26,7 +26,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.manipulator.PFlow;
+import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
@@ -41,7 +41,7 @@ import org.neo4j.graphdb.index.IndexHits;
  */
 public abstract class AbstractResultSerializer {
 	
-	final public void serialize(Relationship r) {
+	final public void serialize(Relationship r) throws InterruptedException {
 		startDocument();
 		build(r);
 		endDocument();
@@ -55,7 +55,7 @@ public abstract class AbstractResultSerializer {
 	
 	public abstract void endDocument();
 
-	protected void build(Relationship r) {
+	protected void build(Relationship r) throws InterruptedException {
 		
 		RelationshipType type = r.getType();
 		String typeName = type.name();
@@ -71,7 +71,9 @@ public abstract class AbstractResultSerializer {
 		
 		Statement s = Statements.relationshipType(typeName);
 		
-		if (typeName.startsWith(THE._.name())) {
+		if (RelationshipTypes.REF.name().equals(typeName) 
+			|| typeName.startsWith(THE._.name())) {
+			
 			s = THE._;
 		}
 		
@@ -115,7 +117,7 @@ public abstract class AbstractResultSerializer {
 //		end(statement, r);
 	}
 
-	protected boolean result(Relationship r) {
+	protected boolean result(Relationship r) throws InterruptedException {
 		boolean found = false;
 		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
 		for ( Relationship n : i ) {
@@ -129,18 +131,18 @@ public abstract class AbstractResultSerializer {
 		
 		if (!found) {
 			//UNDERSTAND: calculate current r!
-			PFlow ch = Evaluator._.mark(r.getStartNode());
+			System.out.println("READER Execute r = "+r);
+			PipedInput in = Evaluator._.execute(r);
 			
 			System.out.println("READER waiting ...");
-			//XXX: code
-//			for (Object obj : in) {
-//				System.out.println("READER get from calculator "+obj);
-//				if (obj instanceof Relationship) {
-//					build( (Relationship) obj );
-//				} else {
-//					System.out.println("UNHANDLED "+obj);
-//				}
-//			}
+			for (Object obj : in) {
+				System.out.println("READER get from calculator "+obj);
+				if (obj instanceof Relationship) {
+					build( (Relationship) obj );
+				} else {
+					System.out.println("UNHANDLED "+obj);
+				}
+			}
 			System.out.println("READER done.");
 		}
 		
