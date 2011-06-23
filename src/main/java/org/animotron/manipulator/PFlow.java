@@ -34,7 +34,7 @@ public class PFlow {
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Void> stop = new MemoryChannel<Void>();
 	
-	private PFlow parent = null;
+	protected PFlow parent = null;
 	private Relationship op = null;
 	
 	private PFlow(StatementManipulator m) {

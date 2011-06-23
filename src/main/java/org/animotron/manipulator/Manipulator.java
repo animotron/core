@@ -70,7 +70,7 @@ public abstract class Manipulator {
         };
         System.out.println("pf "+pf);
         System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
-        pf.answer.subscribe(onAnswer);
+        pf.parent.answer.subscribe(onAnswer);
 
         pf.question.subscribe(onQuestion(op));
         
