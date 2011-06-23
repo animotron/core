@@ -98,10 +98,10 @@ public class UoM extends ATest {
         //NOTE: R must be same not only for start&end node, but between A & B
 
 		//System.out.println("op:plus an:m-10m an:m-5m");
-        assertEquals("A", "<the:A><the:{*=R}><is:measure/><have:quantity><Q:N15/></have:quantity><have:UoM><an:meter/></have:UoM></the:{*=R}></the:A>");
+        assertAnimo(A, "<the:A><the:{*=R}><is:measure/><have:quantity><Q:N15/></have:quantity><have:UoM><an:meter/></have:UoM></the:{*=R}></the:A>");
 
         //System.out.println("op:plus an:m-5m an:m-10m");
-        assertEquals("B", "<the:B><the:{*=R}><is:measure/><have:quantity><Q:N15/></have:quantity><have:UoM><an:meter/></have:UoM></the:{*=R}></the:B>");
+        assertAnimo(B, "<the:B><the:{*=R}><is:measure/><have:quantity><Q:N15/></have:quantity><have:UoM><an:meter/></have:UoM></the:{*=R}></the:B>");
 
 	}
 }

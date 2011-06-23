@@ -58,10 +58,11 @@ public class PFlow {
 	
 	public void sendAnswer(Relationship r) {
 		if (parent == null) {
-			System.out.println("send answer to "+answer+" (this = "+this+")");
+			System.out.println("WORNG - no parent");
+			//System.out.println("send answer to "+answer+" (this = "+this+")");
 			answer.publish(r);
 		} else {
-			System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
+			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 			parent.answer.publish(r);
 		}
 	}

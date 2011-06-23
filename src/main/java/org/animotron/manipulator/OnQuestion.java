@@ -36,7 +36,6 @@ public class OnQuestion implements Subscribable<PFlow> {
 	@Override
 	public void onMessage(PFlow pf) {
 		
-		System.out.println("OnQuestion pf = "+pf);
 		int count = 0;
 		Iterator<Relationship> it = pf.getOP().getEndNode().getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {

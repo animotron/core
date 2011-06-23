@@ -72,6 +72,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 
 		@Override
 		public void onMessage(final PFlow pf) {
+			System.out.println("GET THREAD "+Thread.currentThread());
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();

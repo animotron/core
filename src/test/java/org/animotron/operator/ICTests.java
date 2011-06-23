@@ -21,10 +21,6 @@ package org.animotron.operator;
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
 
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.query.GET;
@@ -39,7 +35,7 @@ public class ICTests extends ATest {
 	
 
 	@Test
-	public void testIC() throws IOException, XMLStreamException {
+	public void testIC() throws Exception {
         System.out.println("Test 'IC' ...");
         
     	new Expression(
@@ -54,13 +50,13 @@ public class ICTests extends ATest {
 			_(THE._, "C", _(IS._, "B") )
 		);
 
-    	new Expression(
+    	Expression D = new Expression(
 			_(THE._, "D", _(GET._, "A", _(AN._, "C")))
 		);
 
         //System.out.println("get:A an:C");
-        assertString("D", ".");
-//        assertEquals("D", "<the:D><have:A>.</have:A></the:D>");
+        assertString(D, ".");
+        assertAnimo(D, "<the:D><have:A>.</have:A></the:D>");
 
         //System.out.println("done.");
 	}

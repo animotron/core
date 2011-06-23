@@ -50,7 +50,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<Relationship> onAnswer = new Subscribable<Relationship>() {
             public void onMessage(Relationship msg) {
-            	System.out.println("get answer "+msg);
+//            	System.out.println("get answer "+msg);
             	try {
             		if (msg == null)
             			out.close();
@@ -68,8 +68,8 @@ public abstract class Manipulator {
 				return Executor.getFiber();
 			}
         };
-        System.out.println("pf "+pf);
-        System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
+//        System.out.println("pf "+pf);
+//        System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
         pf.parent.answer.subscribe(onAnswer);
 
         pf.question.subscribe(onQuestion(op));

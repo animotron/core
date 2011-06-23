@@ -28,6 +28,8 @@ import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.instruction.ml.ValueInstruction;
+import org.animotron.operator.IC;
+import org.animotron.operator.relation.HAVE;
 import org.codehaus.stax2.XMLStreamWriter2;
 import org.neo4j.graphdb.Relationship;
 
@@ -46,6 +48,9 @@ public class AnimoResultSerializer extends AbstractResultSerializer {
 	@Override
 	public void start(Statement statement, Relationship r) {
 		try {
+			if (statement instanceof IC)
+				statement = HAVE._;
+
 			if (statement instanceof ATTRIBUTE) {
 				String prefix = statement.prefix(r);
 				String ns = statement.namespace(r);
