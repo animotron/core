@@ -45,4 +45,14 @@ public class PFlow {
 	public Relationship getOP() {
 		return op;
 	}
+	
+	public void sendAnswer(Relationship r) {
+		if (parent == null) answer.publish(r);
+		else parent.answer.publish(r);
+	}
+
+	public void done() {
+		if (parent == null) stop.publish(null);
+		else parent.stop.publish(null);
+	}
 }

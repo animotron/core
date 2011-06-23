@@ -22,11 +22,13 @@ import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.animotron.Executor;
+import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
 import org.jetlang.core.Callback;
 import org.jetlang.fibers.Fiber;
@@ -57,25 +59,58 @@ public abstract class Manipulator {
 		return ch;
 	}
 	
-	public final Relationship execute(Relationship op) throws InterruptedException {
+	public final PipedInput execute(Relationship op) throws InterruptedException {
 		PFlow pf = new PFlow();
 		
 		int numberExecutes = execute(op, pf);
 
+        final Fiber fiber = Executor.getFiber();
+
+        final PipedOutput out = new PipedOutput();
+        PipedInput in = out.getInputStream();
+		
+		//finish watcher
 		final CountDownLatch reset = new CountDownLatch(numberExecutes);
         Callback<Void> onStop = new Callback<Void>() {
             public void onMessage(Void msg) {
-                reset.countDown();
+            	System.out.println("get stop");
+
+            	reset.countDown();
+                
+                if (reset.getCount() == 0)
+                	try {
+                		System.out.println("closing ...");
+                		//fiber.dispose();
+						out.close();
+					} catch (IOException e) {
+						//XXX: what to do?
+						e.printStackTrace();
+					}
             }
         };
-        Fiber fiber = Executor.getFiber();
         pf.stop.subscribe(fiber, onStop);
+
+        //answers transfer to output
+        Callback<Relationship> onAnswer = new Callback<Relationship>() {
+            public void onMessage(Relationship msg) {
+            	System.out.println("get answer "+msg);
+            	try {
+					out.write(msg);
+				} catch (IOException e) {
+					//XXX: what to do?
+					e.printStackTrace();
+				}
+            }
+        };
+        pf.answer.subscribe(fiber, onAnswer);
+
+        //send question to evaluation
+        pf.question.publish(new PFlow(pf, op));
 		
-		pf.question.publish(new PFlow(pf, op));
+		//XXX: what to do with this?
+        //reset.await(5, TimeUnit.SECONDS);
 		
-		reset.await(5, TimeUnit.SECONDS);
-		
-		return null;
+		return in;
 	}
 	
 	public final void execute(Node op, PFlow ch) {

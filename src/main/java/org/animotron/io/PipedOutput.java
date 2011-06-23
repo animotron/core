@@ -35,8 +35,18 @@ public class PipedOutput implements Cloneable {
 
 	private PipedInput connection;
 
+	public PipedOutput() {
+		try {
+			connect(new PipedInput());
+		} catch (IOException e) {}
+	}
+
 	public PipedOutput(PipedInput inStream) throws IOException {
 		connect(inStream);
+	}
+	
+	public PipedInput getInputStream() {
+		return connection;
 	}
 
 	protected synchronized void connect(PipedInput inStream) throws IOException {
@@ -65,6 +75,7 @@ public class PipedOutput implements Cloneable {
     }
     
     public void close()  throws IOException {
+    	System.out.println("out-pipe close");
     	if (connection != null) {
     		connection.receivedLast();
     	}
