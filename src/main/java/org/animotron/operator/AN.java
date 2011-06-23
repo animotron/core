@@ -60,7 +60,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 			Relationship op = pf.getOP();
 			System.out.println("AN op = "+op);
 			Node node = op.getEndNode();
-			System.out.println("AN end-node = "+op);
+			System.out.println("AN end-node = "+node);
 
 			Relationship res = node.getSingleRelationship(
 				RelationshipTypes.REF, OUTGOING

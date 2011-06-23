@@ -37,8 +37,9 @@ public class PFlow {
 	private PFlow parent = null;
 	private Relationship op = null;
 	
-	public PFlow(StatementManipulator m) {
+	public PFlow(StatementManipulator m, Relationship op) {
 		this.m = m;
+		this.op = op;
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
@@ -51,13 +52,18 @@ public class PFlow {
 	}
 	
 	public void sendAnswer(Relationship r) {
-		if (parent == null) answer.publish(r);
-		else parent.answer.publish(r);
+		if (parent == null) {
+			System.out.println("send answer to "+answer+" (this = "+this+")");
+			answer.publish(r);
+		} else {
+			System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
+			parent.answer.publish(r);
+		}
 	}
 
 	public void done() {
-		if (parent == null) stop.publish(null);
-		else parent.stop.publish(null);
+		if (parent == null) answer.publish(null);
+		else parent.answer.publish(null);
 	}
 
 	public StatementManipulator getManipulator() {

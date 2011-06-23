@@ -33,9 +33,12 @@ public class Executor {
 	private static ExecutorService exec = Executors.newCachedThreadPool();
 	private static PoolFiberFactory fact = new PoolFiberFactory(exec);
     
-	public static Fiber getFiber() {
-		Fiber fiber = fact.create();
+	private static Fiber fiber = fact.create();
+	static {
 		fiber.start();
+	}
+
+	public static Fiber getFiber() {
 		return fiber;
 	}
 	

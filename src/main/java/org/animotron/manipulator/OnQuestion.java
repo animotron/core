@@ -35,18 +35,22 @@ public class OnQuestion implements Subscribable<PFlow> {
 	
 	@Override
 	public void onMessage(PFlow pf) {
+		
+		System.out.println("OnQuestion pf = "+pf);
 		int count = 0;
 		Iterator<Relationship> it = pf.getOP().getEndNode().getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
 			Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 			
-			PFlow nextPF = new PFlow(pf, r);
-			nextPF.question.subscribe(onQuestion);
-			
-			nextPF.question.publish(nextPF);
-			
-			count++;
+			if (onQuestion != null) {
+				PFlow nextPF = new PFlow(pf, r);
+				nextPF.question.subscribe(onQuestion);
+				
+				nextPF.question.publish(nextPF);
+				
+				count++;
+			}
 		}
 	}
 

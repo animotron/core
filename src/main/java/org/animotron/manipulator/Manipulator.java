@@ -42,7 +42,7 @@ public abstract class Manipulator {
 	}
 	
 	public final PipedInput execute(Relationship op) throws InterruptedException {
-		PFlow pf = new PFlow((StatementManipulator) this);
+		PFlow pf = new PFlow((StatementManipulator) this, op);
 		
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
@@ -73,7 +73,10 @@ public abstract class Manipulator {
             public void onMessage(Relationship msg) {
             	System.out.println("get answer "+msg);
             	try {
-					out.write(msg);
+            		if (msg == null)
+            			out.close();
+            		else
+            			out.write(msg);
 				} catch (IOException e) {
 					//XXX: what to do?
 					e.printStackTrace();
@@ -86,12 +89,14 @@ public abstract class Manipulator {
 				return Executor.getFiber();
 			}
         };
+        System.out.println("pf "+pf);
+        System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
         pf.answer.subscribe(onAnswer);
 
         pf.question.subscribe(new OnQuestion());
         
         //send question to evaluation
-        pf.question.publish(new PFlow(pf, op));
+        pf.question.publish(pf);
 		
 		//XXX: what to do with this?
         //reset.await(5, TimeUnit.SECONDS);
