@@ -29,7 +29,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class PFlow {
 	
-	private final StatementManipulator m;
+	private final Manipulator m;
 
 	public final Channel<Relationship> answer = new MemoryChannel<Relationship>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
@@ -39,17 +39,17 @@ public class PFlow {
 	private Relationship op = null;
 	private Node opNode = null;
 	
-	private PFlow(StatementManipulator m) {
+	private PFlow(Manipulator m) {
 		this.m = m;
 	};
 	
-	public PFlow(StatementManipulator m, Relationship op) {
+	public PFlow(Manipulator m, Relationship op) {
 		parent = new PFlow(m);
 		this.m = m;
 		this.op = op;
 	}
 
-	public PFlow(StatementManipulator m, Node opNode) {
+	public PFlow(Manipulator m, Node opNode) {
 		parent = new PFlow(m);
 		this.m = m;
 		this.opNode = opNode;
@@ -94,7 +94,7 @@ public class PFlow {
 		else parent.answer.publish(null);
 	}
 
-	public StatementManipulator getManipulator() {
+	public Manipulator getManipulator() {
 		return m;
 	}
 }

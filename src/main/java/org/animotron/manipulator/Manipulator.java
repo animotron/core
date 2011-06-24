@@ -62,9 +62,9 @@ public abstract class Manipulator {
 		
 		PFlow pf;
 		if (op instanceof Node) {
-			pf = new PFlow((StatementManipulator) this, (Node)op);
+			pf = new PFlow(this, (Node)op);
 		} else {
-			pf = new PFlow((StatementManipulator) this, (Relationship)op);
+			pf = new PFlow(this, (Relationship)op);
 		}
 		pf.question.subscribe(sub);
 
