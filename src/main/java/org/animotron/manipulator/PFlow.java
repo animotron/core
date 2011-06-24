@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -36,6 +37,7 @@ public class PFlow {
 	
 	protected PFlow parent = null;
 	private Relationship op = null;
+	private Node opNode = null;
 	
 	private PFlow(StatementManipulator m) {
 		this.m = m;
@@ -47,15 +49,35 @@ public class PFlow {
 		this.op = op;
 	}
 
+	public PFlow(StatementManipulator m, Node opNode) {
+		parent = new PFlow(m);
+		this.m = m;
+		this.opNode = opNode;
+	}
+
 	public PFlow(PFlow parent, Relationship op) {
 		this.parent = parent;
 		this.m = parent.m;
 		this.op = op;
 	}
+
+	public PFlow(PFlow parent, Node opNode) {
+		this.parent = parent;
+		this.m = parent.m;
+		this.opNode = opNode;
+	}
+
 	public Relationship getOP() {
 		return op;
 	}
 	
+	public Node getOPNode() {
+		if (opNode != null)
+			return opNode;
+		
+		return op.getEndNode();
+	}
+
 	public void sendAnswer(Relationship r) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");

@@ -18,13 +18,9 @@
  */
 package org.animotron.operator.compare;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javolution.util.FastList;
+import java.io.IOException;
 
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Predicate;
@@ -45,7 +41,7 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public boolean filter(Relationship op, Node ref) {
+	public boolean filter(Relationship op, Node ref) throws InterruptedException, IOException {
 		
 		System.out.println("WITH op "+op);
 		//XXX: fix
@@ -54,24 +50,21 @@ public class WITH extends AbstarctOperator implements Predicate {
 		Relationship have = GET._.get(ref, name);
 		if (have == null) return false;
 		
-		//TODO: improve
-		System.out.println("================================== actual");
-//		PipedInput in_actual = Evaluator._.execute(have);
-		System.out.println("================================== expected");
-//		List<Relationship> in_expected = Evaluator._.execute(op.getEndNode());
+		PipedInput expected = Evaluator._.execute(op.getEndNode());
 
-		List<Relationship> actual = new FastList<Relationship>();
-		List<Relationship> expected = new FastList<Relationship>();
-		
-		if (actual.size() == 1 && expected.size() == 1) {
-			Relationship e = actual.get(0);
-			Relationship g = expected.get(0);
-			if (
-			       e.getType().name().equals(g.getType().name()) 
-				&& e.getEndNode().equals(g.getEndNode()))
-				
-				return true;
+		for (Object e : expected) {
+			System.out.println("expected "+e);
 		}
+		
+//		if (expected.size() == 1) {
+//			Relationship e = actual.get(0);
+//			Relationship g = expected.get(0);
+//			if (
+//			       e.getType().name().equals(g.getType().name()) 
+//				&& e.getEndNode().equals(g.getEndNode()))
+//				
+//				return true;
+//		}
 
 		return false;
 	}

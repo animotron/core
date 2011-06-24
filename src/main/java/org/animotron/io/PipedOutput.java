@@ -19,13 +19,6 @@
 package org.animotron.io;
 
 import java.io.IOException;
-import java.util.List;
-
-import javolution.util.FastList;
-
-import org.animotron.operator.Predicate;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -80,24 +73,4 @@ public class PipedOutput implements Cloneable {
     		connection.receivedLast();
     	}
     }
-    
-    List<Object[]> filters = new FastList<Object[]>();
-
-	public boolean filter(Node ref) throws IOException {
-		for (Object[] filterTube : filters) {
-			if (!((Predicate)filterTube[1]).
-					filter(
-						(Relationship)filterTube[0], 
-						ref)
-					) 
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public void subscribeFilter(Relationship op, Predicate filter) {
-		filters.add(new Object[] {op, filter});
-	}
 }

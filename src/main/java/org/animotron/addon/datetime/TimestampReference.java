@@ -23,6 +23,7 @@ import java.util.WeakHashMap;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Evaluable;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -40,8 +41,7 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 	
 	private TimestampReference() { super("T", "animo/time"); }
 	
-	@Override
-	public void eval(Relationship op, PFlow ch, boolean isLast) {
+	public void eval(Relationship op, PFlow ch) {
 		Node node = op.getEndNode();
 		String name = (String) node.getProperty("NAME");
 		
@@ -57,5 +57,11 @@ public class TimestampReference extends AbstarctOperator implements Evaluable {
 		//UNDERSTAND: use in-memory relations (virtual)
 		//XXX: ch.up.publish(instance);
 		return;
+	}
+
+	@Override
+	public Subscribable<PFlow> onCalcQuestion() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

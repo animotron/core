@@ -70,8 +70,7 @@ public class IS extends Relation implements Prepare {
         };
 	}
 	
-	@Override
-	public void prepare(Relationship op, PFlow ch, boolean isLast) {
+	public void prepare(Relationship op, PFlow ch) {
 		
 		Node start = op.getStartNode();
 		

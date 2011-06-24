@@ -26,6 +26,8 @@ import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -41,11 +43,31 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public final PipedInput execute(Relationship op) throws InterruptedException {
-		PFlow pf = new PFlow((StatementManipulator) this, op);
-		
+	public final PipedInput execute(PropertyContainer op) throws InterruptedException, IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
+		
+        Subscribable<PFlow> sub;
+		if (op instanceof Node) {
+			sub = onQuestion(null);
+		} else {
+			sub = onQuestion((Relationship)op);
+		}
+		
+		if (sub == null) {
+			out.write(op);
+			out.close();
+			return in;
+		}
+		
+		PFlow pf;
+		if (op instanceof Node) {
+			pf = new PFlow((StatementManipulator) this, (Node)op);
+		} else {
+			pf = new PFlow((StatementManipulator) this, (Relationship)op);
+		}
+		pf.question.subscribe(sub);
+
 		
         //answers transfer to output
         Subscribable<Relationship> onAnswer = new Subscribable<Relationship>() {
@@ -72,8 +94,6 @@ public abstract class Manipulator {
 //        System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
         pf.parent.answer.subscribe(onAnswer);
 
-        pf.question.subscribe(onQuestion(op));
-        
         //send question to evaluation
         pf.question.publish(pf);
 		

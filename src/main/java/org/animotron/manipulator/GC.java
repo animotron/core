@@ -35,15 +35,13 @@ public class GC extends SimpleManipulator {
 	public static GC _ = new GC();
 
 	@Override
-	public void go(Relationship op, PFlow ch, boolean isLast) {
+	public void go(Relationship op, PFlow ch) {
 		Node node = op.getEndNode();
 		op.getStartNode().delete();
 		op.delete();
 		if (!node.hasRelationship(INCOMING)) {
-			if 
-			(isLast) {
+//			if (isLast)
 				node.delete();
-			}
 		}
 	}
 

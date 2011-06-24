@@ -23,6 +23,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Prepare;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -38,9 +39,8 @@ public class Preparator extends StatementManipulator {
 		return statement instanceof Prepare;
 	}
 
-	@Override
 	public void go(Statement statement, Relationship op, PFlow ch) {
-		((Prepare) statement).prepare(op, ch, isLast);
+		((Prepare) statement).prepare(op, ch);
 	}
 
 	@Override
@@ -58,6 +58,13 @@ public class Preparator extends StatementManipulator {
 			return Preparator._;
 		}
 		
+	}
+
+	@Override
+	protected Subscribable<PFlow> onQuestion(Statement statement,
+			Relationship op) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

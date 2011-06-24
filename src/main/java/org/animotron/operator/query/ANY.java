@@ -24,13 +24,11 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.util.Iterator;
 
-import org.animotron.Executor;
 import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.Filter;
 import org.animotron.operator.AbstarctOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
@@ -38,8 +36,6 @@ import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
-import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
@@ -94,8 +90,13 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 					Statement st = Statements.relationshipType(r);
 					
 					if (st instanceof Predicate) {
-						if (!((Predicate) st).filter(r, node))
+						try {
+							if (!((Predicate) st).filter(r, node))
+								return false;
+						} catch (Exception e) {
+							//XXX: report
 							return false;
+						}
 					}
 				}
 

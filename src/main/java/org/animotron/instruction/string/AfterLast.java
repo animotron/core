@@ -20,10 +20,13 @@ package org.animotron.instruction.string;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
 
+import java.io.IOException;
+
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
 import org.animotron.serializer.StringResultSerializer;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -39,8 +42,7 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 	
 	private AfterLast() { super("after-last", STRING._); }
 	
-	@Override
-	public void eval(Relationship op, PFlow ch, boolean isLast) {
+	public void eval(Relationship op, PFlow ch) throws InterruptedException, IOException {
 		
 		//UNDERSTAND: if we have more that 2 params, what to do?
 		
@@ -58,5 +60,11 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 		String result = source.substring(index);
 		
 		System.out.println(result);
+	}
+
+	@Override
+	public Subscribable<PFlow> onCalcQuestion() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

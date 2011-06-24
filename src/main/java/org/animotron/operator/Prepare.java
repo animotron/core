@@ -29,6 +29,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Prepare {
 	
-	public abstract void prepare(Relationship op, PFlow ch, boolean isLast);
+	public abstract void prepare(Relationship op, PFlow ch);
 	
 }

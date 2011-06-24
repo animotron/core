@@ -93,7 +93,7 @@ public class ContextTests extends ATest {
         //assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
 
         //System.out.println("an:D use:B");
-        assertEquals("E", "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
+//        assertAnimo(E, "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
 
         //System.out.println("done.");
 	}

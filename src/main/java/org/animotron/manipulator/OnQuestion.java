@@ -37,7 +37,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 	public void onMessage(PFlow pf) {
 		
 		int count = 0;
-		Iterator<Relationship> it = pf.getOP().getEndNode().getRelationships(OUTGOING).iterator();
+		Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
 			Relationship r = it.next();
 			Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
