@@ -79,6 +79,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 						}
 					}
 				}
+				pf.done();
 			}
 			
 			public boolean filtering(PFlow pf, Node node) {
