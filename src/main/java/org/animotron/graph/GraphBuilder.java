@@ -26,7 +26,9 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.animotron.graph.AnimoGraph.order;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
@@ -37,6 +39,8 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.manipulator.GC;
+import org.animotron.manipulator.Preparator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.animotron.utils.MessageDigester;
@@ -91,8 +95,9 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void endGraph(){
-//		Catcher catcher = new Catcher(); 
+		
 		Object[] first = flow.get(0);
+		
 		try {
 			int i = 0;
 			if (!(first[0] instanceof THE)) {
@@ -116,24 +121,17 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 
-//			for (Relationship r : thes) {
-//				Creative._.push(r, catcher);
-//			}
-			
 			tx.success();
 			the = (Relationship) first[5];
-			
-//		} catch (ExceptionBuilderTerminate e) {
-//			tx.failure();
-//			catcher = null; 
 			
 		} finally {
 			finishTx(tx);
 		}
 		
-//		if (catcher != null) {
-//			catcher.run();
-//		}
+		for (Relationship r : thes) {
+			creative(r);
+		}
+		
 			
 	}
 
@@ -248,9 +246,9 @@ public abstract class GraphBuilder {
 							HASH.set(r, hash);
 							thes.add(r);
 						} else if (!h.equals(hash)) {
-//							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
-//								Destructive._.push(i, catcher);
-//							}
+							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
+								destructive(i);
+							}
 							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
 							thes.add(r);
@@ -326,5 +324,30 @@ public abstract class GraphBuilder {
 		e.printStackTrace(System.out);
 		finishTx(tx);
 	}
+	
+	private void creative(Relationship r) {
+		try {
+			Preparator._.execute(r);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private void destructive(Relationship r) {
+		try {
+			GC._.execute(r);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	
 }
