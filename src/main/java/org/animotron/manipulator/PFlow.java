@@ -78,6 +78,11 @@ public class PFlow {
 		return op.getEndNode();
 	}
 
+	protected void setOPNode(Node opNode) {
+		this.opNode = opNode;
+		this.op = null;
+	}
+
 	public void sendAnswer(Relationship r) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
