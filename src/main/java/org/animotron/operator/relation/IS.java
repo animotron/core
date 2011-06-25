@@ -88,16 +88,17 @@ public class IS extends Relation implements Prepare {
 			if (t.iterator().hasNext()) {
 				final Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
 				if (r != null) {
-					AnimoGraph.execute(
-						new GraphOperation<Void>(){
-							@Override
-							public Void execute() {
-								r.delete();
-								return null;
-							}
-							
-						}
-					);
+					r.delete();
+//					AnimoGraph.execute(
+//						new GraphOperation<Void>(){
+//							@Override
+//							public Void execute() {
+//								r.delete();
+//								return null;
+//							}
+//							
+//						}
+//					);
 				}
 			}
 			

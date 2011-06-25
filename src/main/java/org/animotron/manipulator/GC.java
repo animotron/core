@@ -52,16 +52,17 @@ public class GC extends Manipulator {
 		
 		@Override
 		public void onMessage(final PFlow pf) {
-			AnimoGraph.execute(
-				new GraphOperation<Void>(){
-					@Override
-					public Void execute() {
-						garbage(pf);
-						return null;
-					}
-					
-				}
-			);
+			garbage(pf);
+//			AnimoGraph.execute(
+//				new GraphOperation<Void>(){
+//					@Override
+//					public Void execute() {
+//						garbage(pf);
+//						return null;
+//					}
+//					
+//				}
+//			);
 
 		}
 
