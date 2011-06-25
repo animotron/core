@@ -59,16 +59,18 @@ public class AnimoGraph {
 		IndexManager INDEX = graphDb.index();
 		ORDER = new OrderIndex(INDEX);
 		
-		Transaction tx = beginTx();
-		try {
-			TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
-			//EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
-			CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
-			
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
+		execute(
+			new GraphOperation<Void> () {
+				@Override
+				public Void execute() {
+					TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
+					//EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
+					CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
+					return null;
+				}
+				
+			}
+		);
 		
 	}
 	

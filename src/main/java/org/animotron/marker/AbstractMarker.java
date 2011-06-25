@@ -18,15 +18,14 @@
  */
 package org.animotron.marker;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 
+import org.animotron.graph.GraphOperation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -40,13 +39,15 @@ public abstract class AbstractMarker implements Marker {
 	
 	public AbstractMarker(final RelationshipType type) {
 		this.type = type;
-		Transaction tx = beginTx();
-		try {
-			root = getOrCreateNode(getROOT(), type);
-		} finally {
-			finishTx(tx);
-		}
-		
+		execute(
+			new GraphOperation<Void> () {
+				@Override
+				public Void execute() {
+					root = getOrCreateNode(getROOT(), type);
+					return null;
+				}
+			}
+		);
 	}
 
 	@Override
