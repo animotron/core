@@ -20,6 +20,8 @@ package org.animotron.manipulator;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
@@ -37,15 +39,30 @@ public class GC extends Manipulator {
 
 	private OnQuestion question = new OnQuestion() {
 		
-		@Override
-		public void onMessage(PFlow pf) {
-			super.onMessage(pf);
+		private void garbage(PFlow pf) {
 			Relationship op = pf.getOP();
 			Node node = op.getEndNode();
 			op.delete();
 			if (!node.hasRelationship(INCOMING)) {
+				pf.setOPNode(node);
+				super.onMessage(pf);
 				node.delete();
 			}
+		}
+		
+		@Override
+		public void onMessage(final PFlow pf) {
+			AnimoGraph.execute(
+				new GraphOperation<Void>(){
+					@Override
+					public Void execute() {
+						garbage(pf);
+						return null;
+					}
+					
+				}
+			);
+
 		}
 
 	};

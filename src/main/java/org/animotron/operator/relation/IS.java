@@ -21,6 +21,8 @@ package org.animotron.operator.relation;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -84,10 +86,18 @@ public class IS extends Relation implements Prepare {
 			Traverser t = TD.filter(predicate(start)).traverse(start);
 			
 			if (t.iterator().hasNext()) {
-				Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
+				final Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
 				if (r != null) {
-					//TODO: r is null sometime. why?
-					r.delete();
+					AnimoGraph.execute(
+						new GraphOperation<Void>(){
+							@Override
+							public Void execute() {
+								r.delete();
+								return null;
+							}
+							
+						}
+					);
 				}
 			}
 			

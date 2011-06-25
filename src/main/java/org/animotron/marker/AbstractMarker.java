@@ -18,10 +18,11 @@
  */
 package org.animotron.marker;
 
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getOrCreateNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 
-import org.animotron.graph.AnimoGraph;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -39,11 +40,11 @@ public abstract class AbstractMarker implements Marker {
 	
 	public AbstractMarker(final RelationshipType type) {
 		this.type = type;
-		Transaction tx = AnimoGraph.beginTx();
+		Transaction tx = beginTx();
 		try {
 			root = getOrCreateNode(getROOT(), type);
 		} finally {
-			AnimoGraph.finishTx(tx);
+			finishTx(tx);
 		}
 		
 	}
