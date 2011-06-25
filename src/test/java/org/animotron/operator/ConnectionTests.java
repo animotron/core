@@ -21,10 +21,6 @@ package org.animotron.operator;
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;
 
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.instruction.string.AfterLast;
@@ -62,8 +58,8 @@ public class ConnectionTests extends ATest {
 
 			_(IC._, "mime-type", 
 				_(ANY._, "mime-type", 
-					_(WITH._, "extension"),
-						_(GET._, "extension")))
+					_(WITH._, "extension",
+						_(GET._, "extension"))))
 		));
 
 

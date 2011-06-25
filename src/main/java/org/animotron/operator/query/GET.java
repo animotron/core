@@ -23,6 +23,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
@@ -83,7 +85,6 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				
 				final String name = name(op);
 				
-				
 				Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
 					@Override
 					public void onMessage(Relationship context) {
@@ -91,11 +92,20 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 							pf.sendAnswer(null);
 							return;
 						}
-							
-						Relationship res = get(context.getEndNode(), name);
+						PipedInput in;
+						try {
+							in = Evaluator._.execute(context.getEndNode());
 						
-						if (res != null)
-							pf.sendAnswer(createResult(node, res));
+							for (Object n : in) {
+								Relationship res = get(((Relationship)n).getEndNode(), name);
+								
+								if (res != null)
+									pf.sendAnswer(createResult(node, res));
+							}
+						} catch (Exception e) {
+							//XXX: what to do?
+							e.printStackTrace();
+						}
 					}
 
 					@Override
@@ -105,7 +115,12 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				};
 				pf.answer.subscribe(onContext);
 				
-				super.onMessage(pf);
+				if (haveContext(pf))
+					super.onMessage(pf);
+				else {
+					System.out.println("P-FLOW is context for GET!");
+					pf.done();
+				}
 			}
 		}
 	};

@@ -68,4 +68,25 @@ public class OnQuestion implements Subscribable<PFlow> {
 		return Executor.getFiber();
 	}
 
+	//move to utils?
+	protected boolean haveContext(PFlow pf) {
+		
+		Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
+		while (it.hasNext()) {
+			Relationship r = it.next();
+			Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
+			
+			if (onQuestion != null) {
+				return true;
+				
+			} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+				//ignore REF
+			} else {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 }
