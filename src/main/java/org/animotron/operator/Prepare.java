@@ -19,7 +19,7 @@
 package org.animotron.operator;
 
 import org.animotron.manipulator.PFlow;
-import org.neo4j.graphdb.Relationship;
+import org.jetlang.channels.Subscribable;
 
 
 /**
@@ -29,6 +29,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Prepare {
 	
-	public abstract void prepare(Relationship op, PFlow ch);
+	public Subscribable<PFlow> onPrepareQuestion();
 	
 }

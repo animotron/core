@@ -42,7 +42,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		return question;
 	}
 	
-	private static OnQuestion question = new OnQuestion() {
+	private OnQuestion question = new OnQuestion() {
 
 		@Override
 		public void onMessage(PFlow pf) {
@@ -60,4 +60,5 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 			pf.done();
 		}
 	};
+	
 }

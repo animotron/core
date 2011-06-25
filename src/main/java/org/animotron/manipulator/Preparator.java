@@ -39,8 +39,9 @@ public class Preparator extends StatementManipulator {
 		return statement instanceof Prepare;
 	}
 
-	public void go(Statement statement, Relationship op, PFlow ch) {
-		((Prepare) statement).prepare(op, ch);
+	@Override
+	public Subscribable<PFlow> onQuestion(Statement statement, Relationship op) {
+		return ((Prepare) statement).onPrepareQuestion();
 	}
 
 	@Override
@@ -60,11 +61,4 @@ public class Preparator extends StatementManipulator {
 		
 	}
 
-	@Override
-	protected Subscribable<PFlow> onQuestion(Statement statement,
-			Relationship op) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

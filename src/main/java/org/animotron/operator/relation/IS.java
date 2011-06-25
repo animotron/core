@@ -22,9 +22,11 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Prepare;
 import org.animotron.operator.Relation;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -70,20 +72,32 @@ public class IS extends Relation implements Prepare {
         };
 	}
 	
-	public void prepare(Relationship op, PFlow ch) {
+	private OnQuestion question = new OnQuestion() {
 		
-		Node start = op.getStartNode();
-		
-		@SuppressWarnings("deprecation")
-		Traverser t = TD.filter(predicate(start)).traverse(start);
-		
-		if (t.iterator().hasNext()) {
-			Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
-			if (r != null) {
-				//TODO: r is null sometime. why?
-				r.delete();
+		@Override
+		public void onMessage(PFlow pf) {
+			
+			Relationship op = pf.getOP();
+			Node start = op.getStartNode();
+			
+			@SuppressWarnings("deprecation")
+			Traverser t = TD.filter(predicate(start)).traverse(start);
+			
+			if (t.iterator().hasNext()) {
+				Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
+				if (r != null) {
+					//TODO: r is null sometime. why?
+					r.delete();
+				}
 			}
+			
 		}
-		
+
+	};
+
+	@Override
+	public Subscribable<PFlow> onPrepareQuestion() {
+		return question;
 	}
+
 }

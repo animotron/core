@@ -23,6 +23,7 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -30,19 +31,28 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GC extends SimpleManipulator {
+public class GC extends Manipulator {
 	
 	public static GC _ = new GC();
 
-	@Override
-	public void go(Relationship op, PFlow ch) {
-		Node node = op.getEndNode();
-		op.getStartNode().delete();
-		op.delete();
-		if (!node.hasRelationship(INCOMING)) {
-//			if (isLast)
+	private OnQuestion question = new OnQuestion() {
+		
+		@Override
+		public void onMessage(PFlow pf) {
+			super.onMessage(pf);
+			Relationship op = pf.getOP();
+			Node node = op.getEndNode();
+			op.delete();
+			if (!node.hasRelationship(INCOMING)) {
 				node.delete();
+			}
 		}
+
+	};
+
+	@Override
+	public Subscribable<PFlow> onQuestion(Relationship op) {
+		return question;
 	}
 
 	@Override
