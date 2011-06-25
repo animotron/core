@@ -23,6 +23,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import java.util.Iterator;
 
 import org.animotron.Executor;
+import org.animotron.graph.RelationshipTypes;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -49,8 +50,16 @@ public class OnQuestion implements Subscribable<PFlow> {
 				nextPF.question.publish(nextPF);
 				
 				count++;
+				
+			} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+				//ignore REF
+			} else {
+				pf.sendAnswer(r);
 			}
 		}
+		
+		if (count == 0)
+			pf.done();
 	}
 
 	@Override
