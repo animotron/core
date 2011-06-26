@@ -26,11 +26,11 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.animotron.graph.AnimoGraph.order;
-import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -46,8 +46,14 @@ import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.helpers.Predicate;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -341,19 +347,32 @@ public abstract class GraphBuilder {
 		finishTx(tx);
 	}
 	
+	@SuppressWarnings("deprecation")
+	private static TraversalDescription TD = 
+	     Traversal.description()
+		.depthFirst()
+		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
+		.evaluator(Evaluators.atDepth(2))
+		.filter(new Predicate<Path> (){
+				@Override
+				public boolean accept(Path path) {
+					if (THE._.NODE().equals(path.startNode()))
+						return true;
+					Relationship r = path.lastRelationship();
+					if (r != null && RelationshipTypes.REF.equals(r.getType()))
+						return true;
+					return false;
+				}
+			});
+	
 	private void creative(Relationship r) {
+		
 		try {
 			Preparator._.execute(r);
-//			for (Relationship i : r.getEndNode().getRelationships(INCOMING)) {
-//				if (RelationshipTypes.REF.equals(i.getType())) {
-//					for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
-//						Preparator._.execute(j);
-//					}
-//				} else {
-//					Preparator._.execute(i.getStartNode());
-//				}
-//			}
-			
+			Iterator<Path> it = TD.traverse(r.getEndNode()).iterator();
+			while (it.hasNext()) {
+				Preparator._.execute(it.next().relationships().iterator().next());
+			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

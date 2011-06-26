@@ -53,7 +53,7 @@ public class IS extends Relation implements Prepare {
 	
 	private IS() { 
 		super("is", "animo/relation/is"); 
-		 TD = Traversal.description()
+		TD = Traversal.description()
 			.depthFirst()
 			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
 			.relationships(relationshipType(), OUTGOING)
@@ -80,24 +80,23 @@ public class IS extends Relation implements Prepare {
 		public void onMessage(PFlow pf) {
 			
 			Relationship op = pf.getOP();
-			Node start = op.getStartNode();
+			final Node start = op.getStartNode();
 			
 			@SuppressWarnings("deprecation")
 			Traverser t = TD.filter(predicate(start)).traverse(start);
 			
 			if (t.iterator().hasNext()) {
-				final Relationship r = start.getSingleRelationship(RelationshipTypes.TOP, INCOMING);
-				if (r != null) {
-					AnimoGraph.execute(
-						new GraphOperation<Void>(){
-							@Override
-							public Void execute() {
+				AnimoGraph.execute(
+					new GraphOperation<Void>() {
+						@Override
+						public Void execute() {
+							for (Relationship r : start.getRelationships(RelationshipTypes.TOP, INCOMING)) {
 								r.delete();
-								return null;
 							}
+							return null;
 						}
-					);
-				}
+					}
+				);
 			}
 			
 		}
