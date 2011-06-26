@@ -26,6 +26,7 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.animotron.graph.AnimoGraph.order;
+import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import java.io.IOException;
@@ -73,7 +74,8 @@ public abstract class GraphBuilder {
 	private Relationship the = null;
 	
 	private Stack<Object[]> statements;
-	private List<Relationship> thes;
+	private List<Relationship> destructive;
+	private List<Relationship> creative;
 	private List<Object[]> flow;
 
 	private Transaction tx;
@@ -83,9 +85,10 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void startGraph() {
+		creative = new LinkedList<Relationship>();
+		destructive = new LinkedList<Relationship>();
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
-		thes = new LinkedList<Relationship>();
 		the = null;
 		tx = beginTx();
 	};
@@ -122,16 +125,27 @@ public abstract class GraphBuilder {
 			}
 
 			tx.success();
-			the = (Relationship) first[5];
-			
-		} finally {
 			finishTx(tx);
+			
+			the = (Relationship) first[5];
+			creative.add(the);
+			
+		} catch (Exception e) {
+			
+			fail(e);
+			
 		}
 		
-		for (Relationship r : thes) {
-			creative(r);
-		}
 		
+		if (creative != null)
+			for (Relationship r : creative) {
+				creative(r);
+			}
+		
+		if (destructive != null)
+			for (Relationship r : destructive) {
+				destructive(r);
+			}
 			
 	}
 
@@ -244,24 +258,24 @@ public abstract class GraphBuilder {
 						String h = HASH.get(r);
 						if (h == null) {
 							HASH.set(r, hash);
-							thes.add(r);
+							creative.add(r);
 						} else if (!h.equals(hash)) {
 							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
-								destructive(i);
+								destructive.add(i);
 							}
 							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
 							HASH.set(r, hash);
-							thes.add(r);
+							creative.add(r);
 						} else {
 							item[8] = true;
 						}
 					} else {
 						HASH.set(r, hash);
-						thes.add(r);
+						creative.add(r);
 					}
 				} else {
 					r = the.create(name, hash);
-					thes.add(r);
+					creative.add(r);
 				}
 			} else {
 				Node parent = (Node) p[6];
@@ -322,12 +336,28 @@ public abstract class GraphBuilder {
 	
 	protected void fail(Exception e){
 		e.printStackTrace(System.out);
+		destructive = null;
+		creative = null;
 		finishTx(tx);
 	}
 	
 	private void creative(Relationship r) {
 		try {
+			
 			Preparator._.execute(r);
+			
+			for (Relationship i : r.getEndNode().getRelationships(INCOMING)) {
+				for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
+					if (RelationshipTypes.REF.equals(j.getType())) {
+						for (Relationship k : j.getEndNode().getRelationships(INCOMING)) {
+							Preparator._.execute(k);
+						}
+					} else {
+						Preparator._.execute(j.getStartNode());
+					}
+				}
+			}
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
