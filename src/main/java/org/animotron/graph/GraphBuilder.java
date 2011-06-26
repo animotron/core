@@ -343,20 +343,16 @@ public abstract class GraphBuilder {
 	
 	private void creative(Relationship r) {
 		try {
-			
 			Preparator._.execute(r);
-			
-			for (Relationship i : r.getEndNode().getRelationships(INCOMING)) {
-				for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
-					if (RelationshipTypes.REF.equals(j.getType())) {
-						for (Relationship k : j.getEndNode().getRelationships(INCOMING)) {
-							Preparator._.execute(k);
-						}
-					} else {
-						Preparator._.execute(j.getStartNode());
-					}
-				}
-			}
+//			for (Relationship i : r.getEndNode().getRelationships(INCOMING)) {
+//				if (RelationshipTypes.REF.equals(i.getType())) {
+//					for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
+//						Preparator._.execute(j);
+//					}
+//				} else {
+//					Preparator._.execute(i.getStartNode());
+//				}
+//			}
 			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block

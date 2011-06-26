@@ -31,6 +31,9 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.exception.ExceptionBuilderTerminate;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.manipulator.OnQuestion;
+import org.animotron.manipulator.PFlow;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -42,7 +45,7 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstarctOperator {
+public class THE extends AbstarctOperator implements Prepare {
 	
 	public static String NAMESPACE = "animo/instance";
 	public static String PREFIX = "the";
@@ -107,5 +110,13 @@ public class THE extends AbstarctOperator {
 	public String name(Relationship r) {
 		return NAME.get(r.getEndNode());
 	}
+	
+	private OnQuestion question = new OnQuestion();
+
+	@Override
+	public Subscribable<PFlow> onPrepareQuestion() {
+		return question;
+	}
+
 	
 }
