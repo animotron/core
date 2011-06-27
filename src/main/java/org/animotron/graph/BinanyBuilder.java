@@ -31,6 +31,7 @@ import java.security.MessageDigest;
 import java.util.UUID;
 
 import org.animotron.Expression;
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
@@ -97,12 +98,16 @@ public class BinanyBuilder {
 				throw new IOException("transaction can not be finished");
 				
 			} else {
-				e = new Expression(
-						_(THE._, HASH_PREFIX + hash,
-							_(IS._, "file"),
-							_(HAVE._, "path", text(path))
-						)
-					);
+				try {
+					e = new Expression(
+							_(THE._, HASH_PREFIX + hash,
+								_(IS._, "file"),
+								_(HAVE._, "path", text(path))
+							)
+						);
+				} catch (EBuilderTerminated exp) {
+					throw new IOException(exp);
+				}
 				
 				if (!e.successful()) {
 					tmp.delete();

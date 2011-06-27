@@ -28,7 +28,7 @@ import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import org.animotron.exception.ExceptionBuilderTerminate;
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
@@ -102,7 +102,7 @@ public class THE extends AbstarctOperator implements Prepare {
 	}
 	
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws EBuilderTerminated {
 		return null;
 	}
 	

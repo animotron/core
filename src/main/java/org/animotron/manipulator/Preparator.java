@@ -18,13 +18,24 @@
  */
 package org.animotron.manipulator;
 
+import java.io.IOException;
+import java.util.Iterator;
+
 import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.operator.Prepare;
+import org.animotron.operator.THE;
 import org.jetlang.channels.Subscribable;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.helpers.Predicate;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -33,6 +44,36 @@ import org.neo4j.graphdb.Relationship;
 public class Preparator extends StatementManipulator {
 	
 	public static Preparator _ = new Preparator();
+	
+	@SuppressWarnings("deprecation")
+	private static TraversalDescription TD = 
+	     Traversal.description()
+		.depthFirst()
+		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
+		.evaluator(Evaluators.atDepth(2))
+		.filter(new Predicate<Path> (){
+				@Override
+				public boolean accept(Path path) {
+					if (THE._.NODE().equals(path.startNode()))
+						return true;
+					Relationship r = path.lastRelationship();
+					if (r != null && RelationshipTypes.REF.equals(r.getType()))
+						return true;
+					return false;
+				}
+			});
+	
+	
+	public void execute(Relationship op) throws InterruptedException, IOException {
+		execute(op.getEndNode());
+	}
+
+	public void execute(Node op) throws InterruptedException, IOException {
+		Iterator<Path> it = TD.traverse(op).iterator();
+		while (it.hasNext()) {
+			super.execute(it.next().relationships().iterator().next());
+		}
+	}
 	
 	@Override
 	public boolean canGo(Statement statement) {

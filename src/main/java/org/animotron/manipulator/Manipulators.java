@@ -18,12 +18,92 @@
  */
 package org.animotron.manipulator;
 
+import static org.animotron.graph.AnimoGraph.getTOP;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
+import java.io.IOException;
+import java.util.List;
+
+import javolution.util.FastList;
+
+import org.animotron.exception.EBuilderTerminated;
+import org.animotron.graph.RelationshipTypes;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public class Manipulators {
 	
+	private static Manipulators _ = new Manipulators();
+	
+	private Manipulators() {}
+	
 	//TODO: Implement manipulators/listeners/broadcasters loader
 	
+	public class Catcher {
+		
+		List<Node> creative = new FastList<Node>();
+		List<Node> destructive = new FastList<Node>();
+		
+		public Catcher() {}
+		
+		public void creative(Relationship r) throws EBuilderTerminated {
+			creative.add(r.getEndNode());
+		}
+		
+		public void renew(Relationship r) throws EBuilderTerminated {
+			for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
+				destructive(i);
+			}
+			Node node = r.getEndNode();
+			getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
+			
+			creative(r);
+		}
+
+		private void destructive(Relationship r) throws EBuilderTerminated {
+			creative.add(r.getEndNode());
+
+			r.delete();
+		}
+		
+
+		public void push() throws EBuilderTerminated {
+			creative();
+			destructive();
+		}
+		
+		private void creative() throws EBuilderTerminated {
+			try {
+				for (Node n : creative) {
+					Preparator._.execute(n);
+				}
+			} catch (InterruptedException e) {
+				throw new EBuilderTerminated(e);
+			} catch (IOException e) {
+				throw new EBuilderTerminated(e);
+			}
+		}
+		
+		private void destructive() throws EBuilderTerminated {
+			try {
+				for (Node n : destructive) {
+					GC._.execute(n);
+				}
+			} catch (InterruptedException e) {
+				throw new EBuilderTerminated(e);
+			} catch (IOException e) {
+				throw new EBuilderTerminated(e);
+			}
+		}
+		
+	}
+	
+	public static Catcher getCatcher() {
+		return _.new Catcher();
+	}
+
 }

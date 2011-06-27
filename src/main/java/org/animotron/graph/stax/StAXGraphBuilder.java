@@ -22,6 +22,7 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.GraphBuilder;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
@@ -76,7 +77,11 @@ public class StAXGraphBuilder extends GraphBuilder {
 			reader.next();
 		}
 		
-		endGraph();
+		try {
+			endGraph();
+		} catch (EBuilderTerminated e) {
+			throw new XMLStreamException(e);
+		}
 		
 		return getRelationship();
 		

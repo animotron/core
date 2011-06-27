@@ -20,17 +20,9 @@ package org.animotron.graph;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.createCache;
-import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.AnimoGraph.getCache;
-import static org.animotron.graph.AnimoGraph.getTOP;
-import static org.animotron.graph.AnimoGraph.order;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.animotron.graph.AnimoGraph.*;
 
-import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -38,22 +30,16 @@ import java.util.StringTokenizer;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.exception.ExceptionBuilderTerminate;
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.manipulator.GC;
-import org.animotron.manipulator.Preparator;
+import org.animotron.manipulator.Manipulators;
+import org.animotron.manipulator.Manipulators.Catcher;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.helpers.Predicate;
-import org.neo4j.kernel.Traversal;
-import org.neo4j.kernel.Uniqueness;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -80,8 +66,8 @@ public abstract class GraphBuilder {
 	private Relationship the = null;
 	
 	private Stack<Object[]> statements;
-	private List<Node> destructive;
-	private List<Node> creative;
+	private Catcher catcher;
+
 	private List<Object[]> flow;
 
 	private Transaction tx;
@@ -91,19 +77,19 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void startGraph() {
-		creative = new LinkedList<Node>();
-		destructive = new LinkedList<Node>();
+		catcher = Manipulators.getCatcher();
+
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		the = null;
 		tx = beginTx();
 	};
 	
-	final public boolean successful(){
+	final public boolean successful() {
 		return the != null;
 	}
 	
-	final protected void endGraph(){
+	final protected void endGraph() throws EBuilderTerminated {
 		
 		Object[] first = flow.get(0);
 		
@@ -138,8 +124,7 @@ public abstract class GraphBuilder {
 			
 			the = (Relationship) first[5];
 			
-			destructive();
-			creative();
+			catcher.push();
 			
 		} catch (Exception e) {
 			
@@ -157,7 +142,6 @@ public abstract class GraphBuilder {
 		}
 		
 		start(statement, prefix, ns, name, value);
-		
 	}
 	
 	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
@@ -184,9 +168,8 @@ public abstract class GraphBuilder {
 		}
 		
 		Object[] parent = null;
-		if (!statements.empty()) {
+		if (!statements.empty())
 			parent = statements.peek();
-		}
 		
 		Object[] item = {	
 				statement,	// 0  statement 	
@@ -203,7 +186,6 @@ public abstract class GraphBuilder {
 		
 		statements.push(item);
 		flow.add(item);
-		
 	}
 	
 	final protected void end() {
@@ -231,13 +213,12 @@ public abstract class GraphBuilder {
 			return buf.toString();
 			
 		return null;
-		
 	}
 	
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, int order){
+	private void build(Object[] item, int order) throws EBuilderTerminated {
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
 			if ((Boolean) p[8]) {
@@ -257,34 +238,27 @@ public abstract class GraphBuilder {
 					if (HASH.has(r)) {
 						String h = HASH.get(r);
 						if (h == null) {
+							catcher.creative(r);
 							HASH.set(r, hash);
-							creative.add(r.getEndNode());
 						} else if (!h.equals(hash)) {
-							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
-								destructive.add(i.getEndNode());
-								i.delete();
-							}
-							Node node = r.getEndNode();
-							getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
+							catcher.renew(r);
 							HASH.set(r, hash);
-							creative.add(node);
 						} else {
 							item[8] = true;
 						}
 					} else {
+						catcher.creative(r);
 						HASH.set(r, hash);
-						creative.add(r.getEndNode());
 					}
 				} else {
 					r = the.create(name, hash);
-					creative.add(r.getEndNode());
+					catcher.creative(r);
 				}
 			} else {
 				Node parent = (Node) p[6];
-				if (parent == null) {
-					//TODO Fire exception
-					return;
-				}
+				if (parent == null)
+					throw new EBuilderTerminated("Internal error: parent can not be null.");
+
 				if (statement instanceof Cachable) {
 					String hash = hash(item);
 					Node node = getCache(hash);
@@ -332,7 +306,7 @@ public abstract class GraphBuilder {
 		}
 	}
 	
-	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws ExceptionBuilderTerminate{
+	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws EBuilderTerminated{
 		return statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
 	}
 	
@@ -340,57 +314,4 @@ public abstract class GraphBuilder {
 		e.printStackTrace(System.out);
 		finishTx(tx);
 	}
-	
-	@SuppressWarnings("deprecation")
-	private static TraversalDescription TD = 
-	     Traversal.description()
-		.depthFirst()
-		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-		.evaluator(Evaluators.atDepth(2))
-		.filter(new Predicate<Path> (){
-				@Override
-				public boolean accept(Path path) {
-					if (THE._.NODE().equals(path.startNode()))
-						return true;
-					Relationship r = path.lastRelationship();
-					if (r != null && RelationshipTypes.REF.equals(r.getType()))
-						return true;
-					return false;
-				}
-			});
-	
-	private void creative() {
-		
-		try {
-			for (Node n : creative) {
-				Preparator._.execute(n);
-				Iterator<Path> it = TD.traverse(n).iterator();
-				while (it.hasNext()) {
-					Preparator._.execute(it.next().relationships().iterator().next());
-				}
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private void destructive() {
-		try {
-			for (Node n : destructive) {
-				GC._.execute(n);
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	
 }

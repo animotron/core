@@ -18,11 +18,8 @@
  */
 package org.animotron.operator;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
 import org.junit.Test;

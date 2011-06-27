@@ -18,6 +18,7 @@
  */
 package org.animotron;
 
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.GraphBuilder;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ATTRIBUTE;
@@ -40,12 +41,12 @@ public class Expression extends GraphBuilder implements Relationship {
 	
 	Object[][] e;
 	
-	public Expression(Object[]... e) {
+	public Expression(Object[]... e) throws EBuilderTerminated {
 		this.e = e;
 		build();
 	}
 	
-	private void build() {
+	private void build() throws EBuilderTerminated {
 		startGraph();
 		for(Object[] i : e) {
 			buildExpression(i);

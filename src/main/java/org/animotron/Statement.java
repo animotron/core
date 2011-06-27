@@ -18,7 +18,7 @@
  */
 package org.animotron;
 
-import org.animotron.exception.ExceptionBuilderTerminate;
+import org.animotron.exception.EBuilderTerminated;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -29,7 +29,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Statement extends Quanta {
 	
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws ExceptionBuilderTerminate;
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws EBuilderTerminated;
 	
 	public String namespace(Relationship r);
 	
