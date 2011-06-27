@@ -20,8 +20,6 @@ package org.animotron.graph;
 
 import static org.animotron.Expression._;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.THE;
@@ -36,7 +34,7 @@ import org.junit.Test;
 public class IsLoopTest extends ATest {
 	
 	@Test
-	public void storeAndSerializeResult() throws XMLStreamException {
+	public void storeAndSerializeResult() throws Exception {
 		
 		new Expression(_(THE._, "A", _(IS._, "C")));
 		new Expression(_(THE._, "B", _(IS._, "A")));

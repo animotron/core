@@ -20,8 +20,6 @@ package org.animotron.graph;
 
 import static org.animotron.Expression._;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.THE;
@@ -37,7 +35,7 @@ import org.neo4j.graphdb.Relationship;
 public class HaveLoopTest extends ATest {
 	
 	@Test
-	public void storeAndSerializeResult() throws XMLStreamException {
+	public void storeAndSerializeResult() throws Exception {
 		
 		Relationship A = new Expression(_(THE._, "A", _(HAVE._, "C")));
 		Relationship B = new Expression(_(THE._, "B", _(HAVE._, "A")));
