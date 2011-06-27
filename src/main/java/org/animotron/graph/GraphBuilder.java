@@ -80,8 +80,8 @@ public abstract class GraphBuilder {
 	private Relationship the = null;
 	
 	private Stack<Object[]> statements;
-	private List<Relationship> destructive;
-	private List<Relationship> creative;
+	private List<Node> destructive;
+	private List<Node> creative;
 	private List<Object[]> flow;
 
 	private Transaction tx;
@@ -91,8 +91,8 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void startGraph() {
-		creative = new LinkedList<Relationship>();
-		destructive = new LinkedList<Relationship>();
+		creative = new LinkedList<Node>();
+		destructive = new LinkedList<Node>();
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		the = null;
@@ -108,7 +108,9 @@ public abstract class GraphBuilder {
 		Object[] first = flow.get(0);
 		
 		try {
+			
 			int i = 0;
+			
 			if (!(first[0] instanceof THE)) {
 				Object[] item = {	
 						THE._,				// 0 	
@@ -126,6 +128,7 @@ public abstract class GraphBuilder {
 				build(item, i++);
 				first = item;
 			}
+			
 			for (Object[] item : flow) {
 				build(item, i++);
 			}
@@ -134,24 +137,15 @@ public abstract class GraphBuilder {
 			finishTx(tx);
 			
 			the = (Relationship) first[5];
-			creative.add(the);
+			
+			destructive();
+			creative();
 			
 		} catch (Exception e) {
 			
 			fail(e);
 			
 		}
-		
-		
-		if (creative != null)
-			for (Relationship r : creative) {
-				creative(r);
-			}
-		
-		if (destructive != null)
-			for (Relationship r : destructive) {
-				destructive(r);
-			}
 			
 	}
 
@@ -264,24 +258,26 @@ public abstract class GraphBuilder {
 						String h = HASH.get(r);
 						if (h == null) {
 							HASH.set(r, hash);
-							creative.add(r);
+							creative.add(r.getEndNode());
 						} else if (!h.equals(hash)) {
 							for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
-								destructive.add(i);
+								destructive.add(i.getEndNode());
+								i.delete();
 							}
-							getTOP().createRelationshipTo(r.getEndNode(), RelationshipTypes.TOP);
+							Node node = r.getEndNode();
+							getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
 							HASH.set(r, hash);
-							creative.add(r);
+							creative.add(node);
 						} else {
 							item[8] = true;
 						}
 					} else {
 						HASH.set(r, hash);
-						creative.add(r);
+						creative.add(r.getEndNode());
 					}
 				} else {
 					r = the.create(name, hash);
-					creative.add(r);
+					creative.add(r.getEndNode());
 				}
 			} else {
 				Node parent = (Node) p[6];
@@ -342,8 +338,6 @@ public abstract class GraphBuilder {
 	
 	protected void fail(Exception e){
 		e.printStackTrace(System.out);
-		destructive = null;
-		creative = null;
 		finishTx(tx);
 	}
 	
@@ -365,13 +359,15 @@ public abstract class GraphBuilder {
 				}
 			});
 	
-	private void creative(Relationship r) {
+	private void creative() {
 		
 		try {
-			Preparator._.execute(r);
-			Iterator<Path> it = TD.traverse(r.getEndNode()).iterator();
-			while (it.hasNext()) {
-				Preparator._.execute(it.next().relationships().iterator().next());
+			for (Node n : creative) {
+				Preparator._.execute(n);
+				Iterator<Path> it = TD.traverse(n).iterator();
+				while (it.hasNext()) {
+					Preparator._.execute(it.next().relationships().iterator().next());
+				}
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -382,9 +378,11 @@ public abstract class GraphBuilder {
 		}
 	}
 	
-	private void destructive(Relationship r) {
+	private void destructive() {
 		try {
-			GC._.execute(r);
+			for (Node n : destructive) {
+				GC._.execute(n);
+			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
