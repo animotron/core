@@ -18,6 +18,8 @@
  */
 package org.animotron.manipulator;
 
+import java.util.Iterator;
+
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
@@ -102,4 +104,38 @@ public class PFlow {
 	public Manipulator getManipulator() {
 		return m;
 	}
+	
+	public Iterable<PFlow> stack() {
+		return new Iterable<PFlow>() {
+			@Override
+			public Iterator<PFlow> iterator() {
+				return new PFlowStack();
+			}
+		};
+	}
+	
+	
+	private class PFlowStack implements Iterator<PFlow> {
+		
+		private PFlow pos = parent;
+		
+		@Override
+		public boolean hasNext() {
+			return pos.parent != null;
+		}
+
+		@Override
+		public PFlow next() {
+			pos = pos.parent;
+			return pos;
+		}
+
+		@Override
+		public void remove() {
+			// TODO Auto-generated method stub
+		}
+
+		
+	}
+	
 }
