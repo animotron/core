@@ -74,7 +74,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 
 		@Override
 		public void onMessage(final PFlow pf) {
-			System.out.println("GET THREAD "+Thread.currentThread());
+//			System.out.println("GET THREAD "+Thread.currentThread());
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
@@ -88,16 +88,24 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
 					@Override
 					public void onMessage(Relationship context) {
+						System.out.println("GET message context "+context);
+						
 						if (context == null) {
 							pf.sendAnswer(null);
 							return;
 						}
+						Relationship res = get(context.getEndNode(), name);
+						if (res != null) {
+							pf.sendAnswer(res);
+							return;
+						}
+
 						PipedInput in;
 						try {
 							in = Evaluator._.execute(context.getEndNode());
 						
 							for (Object n : in) {
-								Relationship res = get(((Relationship)n).getEndNode(), name);
+								res = get(((Relationship)n).getEndNode(), name);
 								
 								if (res != null)
 									pf.sendAnswer(createResult(node, res));
@@ -127,6 +135,8 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 
 	public Relationship get(final Node context, final String name) {
 		
+		System.out.println("GET get context = "+context);
+
 		//search local 'HAVE'
 		for (Relationship tdR : td_eval.traverse(context).relationships()) {
 			
