@@ -36,6 +36,8 @@ import org.neo4j.graphdb.Relationship;
 public class GC extends Manipulator {
 	
 	public static GC _ = new GC();
+	
+	private GC () {}
 
 	private OnQuestion question = new OnQuestion() {
 		

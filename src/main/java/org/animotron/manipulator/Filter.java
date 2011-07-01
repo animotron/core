@@ -29,7 +29,9 @@ import org.neo4j.graphdb.Relationship;
  */
 public class Filter extends StatementManipulator {
 
-	public static Filter _ = new Filter(); 
+	public static Filter _ = new Filter();
+	
+	private Filter() {}
 	
 	@Override
 	public boolean canGo(Statement statement) {

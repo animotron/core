@@ -45,6 +45,8 @@ public class Preparator extends StatementManipulator {
 	
 	public static Preparator _ = new Preparator();
 	
+	private Preparator() {};
+	
 	@SuppressWarnings("deprecation")
 	private static TraversalDescription TD = 
 	     Traversal.description()

@@ -34,6 +34,8 @@ public class Evaluator extends StatementManipulator {
 
 	public static Evaluator _ = new Evaluator();
 	
+	private Evaluator() {}
+	
 	@Override
 	public boolean canGo(Statement statement) {
 		return statement instanceof Evaluable;
