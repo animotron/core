@@ -42,7 +42,7 @@ public class IC extends AbstarctOperator implements Evaluable {
 	
 	private OnQuestion question = new OnQuestion(){
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void onMessage(PFlow pf) {
 			//if (GET._.relationshipType().equals(pf.))
 			pf.done();
 		}
