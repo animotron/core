@@ -30,6 +30,7 @@ import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
@@ -80,7 +81,7 @@ public abstract class AbstractResultSerializer {
 		}
 		
 		if (s != null) {
-			if (s instanceof Query) {
+			if (s instanceof Query || s instanceof Evaluable) {
 				result(r);
 
 			//workaround IS

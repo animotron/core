@@ -48,8 +48,8 @@ public class AnimoResultSerializer extends AbstractResultSerializer {
 	@Override
 	public void start(Statement statement, Relationship r) {
 		try {
-			if (statement instanceof IC)
-				statement = HAVE._;
+//			if (statement instanceof IC)
+//				statement = HAVE._;
 
 			if (statement instanceof ATTRIBUTE) {
 				String prefix = statement.prefix(r);

@@ -18,9 +18,9 @@
  */
 package org.animotron.operator;
 
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.jetlang.channels.Subscribable;
-import org.neo4j.graphdb.Relationship;
+import org.animotron.operator.query.GET;
 
 
 /**
@@ -34,14 +34,20 @@ public class IC extends AbstarctOperator implements Evaluable {
 	public static final IC _ = new IC();
 	
 	private IC() { super("ic", "animo/connection"); }
-	
-	public void eval(Relationship op, PFlow ch, boolean isLast) {
-		System.out.println("IC "+op);
-	}
 
 	@Override
-	public Subscribable<PFlow> onCalcQuestion() {
-		// TODO Auto-generated method stub
-		return null;
+	public OnQuestion onCalcQuestion() {
+		return question;
 	}
+	
+	private OnQuestion question = new OnQuestion(){
+		@Override
+		public void onMessage(final PFlow pf) {
+			//if (GET._.relationshipType().equals(pf.))
+			pf.done();
+		}
+	};
+	
+	
+	
 }
