@@ -42,23 +42,29 @@ public class ContextTests extends ATest {
     	new Expression(
 			_(THE._, "A")
 		);
+    	
     	new Expression(
 			_(THE._, "B")
 		);
-    	new Expression(
+    	
+    	Expression C = new Expression(
 			_(THE._, "C", _(HAVE._, "A", text(".")), _(IC._, "B", _(GET._, "A")))
 		);
-    	new Expression(
+    	Expression D = new Expression(
 			_(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
 		);
 
     	Expression E = new Expression(
 			_(THE._, "E", _(GET._, "B", _(AN._, "C")))
 		);
+    	
     	Expression F = new Expression(
 			_(THE._, "F", _(GET._, "B", _(AN._, "D")))
 		);
     	
+        assertAnimo(C, "<the:C><have:A>.<have:A><IC:B>.</IC:B></the:C>");
+        assertAnimo(D, "<the:D><have:B>.</have:B></the:D>");
+        
         //System.out.println("get:B an:C");
         assertAnimo(E, "<the:E><have:B>.<have:B></the:E>");
 

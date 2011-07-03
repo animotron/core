@@ -60,7 +60,6 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	@SuppressWarnings("deprecation")
 	private static TraversalDescription td_self = 
 			Traversal.description().
-			depthFirst().
 			filter(new Predicate<Path> (){
 				@Override
 				public boolean accept(Path item) {
