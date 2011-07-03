@@ -49,7 +49,7 @@ public class ContextTests extends ATest {
 			_(THE._, "C", _(HAVE._, "A", text(".")), _(IC._, "B", _(GET._, "A")))
 		);
     	new Expression(
-			_(THE._, "D", _(HAVE._, "A", text(":")))
+			_(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
 		);
 
     	Expression E = new Expression(
