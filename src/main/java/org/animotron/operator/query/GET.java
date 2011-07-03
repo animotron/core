@@ -32,14 +32,17 @@ import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.IC;
 import org.animotron.operator.Query;
+import org.animotron.operator.THE;
 import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 
 /**
@@ -54,6 +57,20 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	
 	private GET() { super("get", "animo/query/extract"); }
 
+	@SuppressWarnings("deprecation")
+	private static TraversalDescription td_self = 
+			Traversal.description().
+			depthFirst().
+			filter(new Predicate<Path> (){
+				@Override
+				public boolean accept(Path item) {
+					if (THE._.NODE().equals(item.endNode())) {
+						return true;
+					}
+					return false;
+				}
+			});
+	
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
@@ -127,7 +144,12 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				else {
 					System.out.println("P-FLOW is context for GET!");
-					pf.done();
+					for (PFlow p : pf.stack()) {
+						System.out.println(p.getOP());
+					}
+					Relationship context = td_self.traverse(pf.getOP().getStartNode()).iterator().next().lastRelationship();
+					PFlow sub = new PFlow(pf, context);
+					onMessage(sub);
 				}
 			}
 		}
@@ -166,4 +188,5 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 		
 		return null;
 	}
+	
 }

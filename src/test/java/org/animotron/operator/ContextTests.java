@@ -53,7 +53,7 @@ public class ContextTests extends ATest {
 		);
     	
         //System.out.println("get:Z an:B");
-        assertAnimo(D, "<the:C><have:B>.<have:B></the:D>");
+        assertAnimo(D, "<the:D><have:B>.<have:B></the:D>");
 
         //System.out.println("done.");
 	}
