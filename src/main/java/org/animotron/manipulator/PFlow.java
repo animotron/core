@@ -68,6 +68,10 @@ public class PFlow {
 		this.m = parent.m;
 		this.opNode = opNode;
 	}
+	
+	public PFlow getParent() {
+		return parent;
+	}
 
 	public Relationship getOP() {
 		return op;
@@ -109,11 +113,14 @@ public class PFlow {
 		return new Iterable<PFlow>() {
 			@Override
 			public Iterator<PFlow> iterator() {
-				return new PFlowStack();
+				return iterator();
 			}
 		};
 	}
 	
+	public PFlowStack iterator() {
+		return new PFlowStack();
+	}
 	
 	private class PFlowStack implements Iterator<PFlow> {
 		
