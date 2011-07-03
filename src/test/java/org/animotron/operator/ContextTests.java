@@ -18,10 +18,15 @@
  */
 package org.animotron.operator;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import static org.animotron.Expression.*;
 
 import org.animotron.ATest;
+import org.animotron.Expression;
+import org.animotron.operator.query.ANY;
+import org.animotron.operator.query.GET;
+import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.junit.Test;
 
 /**
@@ -30,62 +35,55 @@ import org.junit.Test;
  */
 public class ContextTests extends ATest {
 	
-	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+"/>";
-	
-	private static final String THE_B = 
-		"<the:B "+ANIMO_NSs+">" +
-		"	<is:A/>"+
-		"</the:B>";
-
-	private static final String THE_C = 
-		"<the:C "+ANIMO_NSs+">" +
-		"	<is:B/>" +
-		"</the:C>";
-
-	private static final String THE_D = 
-		"<the:D "+ANIMO_NSs+">" +
-		"	<any:A/>" +
-		"</the:D>";
-
-	private static final String THE_E = 
-		"<the:E "+ANIMO_NSs+">" +
-		"	<an:D>" +
-		"		<use:B/>" +
-		"	</an:D>" +
-		"</the:E>";
-
-	private static final String THE_F = 
-		"<the:F "+ANIMO_NSs+">" +
-		"	<an:D>" +
-		"		<use:C/>" +
-		"	</an:D>" +
-		"</the:F>";
-
-	private static final String THE_G = 
-		"<the:G "+ANIMO_NSs+">" +
-		"	<an:E>" +
-		"		<use:A/>" +
-		"	</an:E>" +
-		"</the:G>";
-
 	@Test
-	public void testGet() throws Exception {
+	public void getFromPFlow() throws Exception {
+        System.out.println("Test empty 'get' ...");
+        
+    	new Expression(
+			_(THE._, "A")
+		);
+    	new Expression(
+			_(THE._, "B")
+		);
+    	new Expression(
+			_(THE._, "C", _(HAVE._, "A", text(".")), _(IC._, "B", _(GET._, "A")))
+		);
+    	Expression D = new Expression(
+			_(THE._, "D", _(GET._, "B", _(AN._, "C")))
+		);
+    	
+        //System.out.println("get:Z an:B");
+        assertAnimo(D, "<the:C><have:B>.<have:B></the:D>");
+
+        //System.out.println("done.");
+	}
+	
+	@Test
+	public void anyWithUse() throws Exception {
         System.out.println("Test 'get' ...");
         
-        if (firstRun) {
-	        Map<String, String> nameDataMap = new LinkedHashMap<String, String>();
-	        nameDataMap.put("A.xml", THE_A);
-	        nameDataMap.put("B.xml", THE_B);
-	        nameDataMap.put("C.xml", THE_C);
-	        nameDataMap.put("D.xml", THE_D);
-	        nameDataMap.put("E.xml", THE_E);
-	        nameDataMap.put("F.xml", THE_F);
-	        nameDataMap.put("G.xml", THE_G);
-	        
-	        store(nameDataMap);
-        }
-        
+    	new Expression(
+			_(THE._, "A")
+		);
+    	new Expression(
+			_(THE._, "B", _(IS._, "A"))
+		);
+    	new Expression(
+			_(THE._, "C", _(IS._, "B"))
+		);
+    	new Expression(
+			_(THE._, "D", _(ANY._, "A"))
+		);
+    	new Expression(
+			_(THE._, "E", _(AN._, "D", _(USE._, "B")))
+		);
+    	new Expression(
+			_(THE._, "F", _(AN._, "D", _(USE._, "C")))
+		);
+    	new Expression(
+			_(THE._, "G", _(AN._, "E", _(USE._, "A")))
+		);
+    	
         //System.out.println("any:A");
         //assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
 
@@ -94,5 +92,4 @@ public class ContextTests extends ATest {
 
         //System.out.println("done.");
 	}
-	
 }
