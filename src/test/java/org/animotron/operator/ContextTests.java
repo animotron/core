@@ -50,23 +50,22 @@ public class ContextTests extends ATest {
     	Expression C = new Expression(
 			_(THE._, "C", _(HAVE._, "A", text(".")), _(IC._, "B", _(GET._, "A")))
 		);
-//    	Expression D = new Expression(
-//			_(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
-//		);
-//
-//    	Expression E = new Expression(
-//			_(THE._, "E", _(GET._, "B", _(AN._, "C")))
-//		);
-//    	
+    	Expression D = new Expression(
+			_(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
+		);
+
+    	Expression E = new Expression(
+			_(THE._, "E", _(GET._, "B", _(AN._, "C")))
+		);
+    	
 //    	Expression F = new Expression(
 //			_(THE._, "F", _(GET._, "B", _(AN._, "D")))
 //		);
     	
         assertAnimo(C, "<the:C><have:A>.</have:A></the:C>");
-//        assertAnimo(D, "<the:D><have:B>.</have:B></the:D>");
-//        
-//        //System.out.println("get:B an:C");
-//        assertAnimo(E, "<the:E><have:B>.<have:B></the:E>");
+        assertAnimo(D, "<the:D><is:C/><have:A>:</have:A></the:D>");
+        //System.out.println("get:B an:C");
+        assertAnimo(E, "<the:E><have:B>.<have:B></the:E>");
 //
 //        //System.out.println("get:B an:D");
 //        assertAnimo(F, "<the:F><have:B>:<have:B></the:F>");
