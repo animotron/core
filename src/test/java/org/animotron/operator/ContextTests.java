@@ -62,7 +62,7 @@ public class ContextTests extends ATest {
 			_(THE._, "F", _(GET._, "B", _(AN._, "D")))
 		);
     	
-        assertAnimo(C, "<the:C><have:A>.<have:A><IC:B>.</IC:B></the:C>");
+        assertAnimo(C, "<the:C><have:A>.<have:A><have:B>.</have:B></the:C>");
         assertAnimo(D, "<the:D><have:B>.</have:B></the:D>");
         
         //System.out.println("get:B an:C");

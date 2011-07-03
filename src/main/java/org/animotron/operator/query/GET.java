@@ -147,10 +147,14 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 						System.out.println(p.getOP());
 					}
 					Relationship context = td_self.traverse(pf.getOP().getStartNode()).iterator().next().lastRelationship();
-					PFlow sub = new PFlow(pf, context);
-					onMessage(sub);
+					
+					Relationship res = get(context.getEndNode(), name);
+
+					if (res != null)
+						pf.sendAnswer(createResult(node, res));
 				}
 			}
+			pf.done();
 		}
 	};
 
