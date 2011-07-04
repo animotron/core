@@ -73,14 +73,14 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
-			relationships(HAVE._.relationshipType(), OUTGOING );
+			relationships(HAVE._.relationshipType(), OUTGOING);
 			//.evaluator(Evaluators.excludeStartPosition());
 
 	private static TraversalDescription td_eval_ic = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS._.relationshipType(), OUTGOING ).
-			relationships(IC._.relationshipType(), OUTGOING );
+			relationships(IS._.relationshipType(), OUTGOING).
+			relationships(IC._.relationshipType(), OUTGOING);
 
 	public OnQuestion onCalcQuestion() {
 		return onQuestion;
@@ -144,7 +144,8 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				else {
 					System.out.println("P-FLOW is context for GET!");
 					
-					Node context = td_self.traverse(pf.getOP().getStartNode()).iterator().next().lastRelationship().getEndNode();
+					Node context = td_self.traverse(pf.getOP().getStartNode()).
+									iterator().next().lastRelationship().getEndNode();
 					
 					Relationship res = get(context, name);
 
