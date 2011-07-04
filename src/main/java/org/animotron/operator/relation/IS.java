@@ -60,12 +60,17 @@ public class IS extends Relation implements Prepare {
 	
 	private Predicate<Path> predicate(final Node node) {
 		return new Predicate<Path>() {
+			private boolean done = false;
             public boolean accept(Path pos) {
+            	if (done) {
+            		return false;
+            	}
             	if (pos.endNode().equals(node)){
             		return false;
             	} else if (pos.endNode().hasRelationship(relationshipType(), OUTGOING)) {
             		return false;
             	} else {
+            		done = true;
             		return true;
             	}
             }
