@@ -57,19 +57,6 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 	
 	private GET() { super("get", "animo/query/extract"); }
 
-	@SuppressWarnings("deprecation")
-	private static TraversalDescription td_self = 
-			Traversal.description().
-			filter(new Predicate<Path> (){
-				@Override
-				public boolean accept(Path item) {
-					if (THE._.NODE().equals(item.endNode())) {
-						return true;
-					}
-					return false;
-				}
-			});
-	
 	private static TraversalDescription td_eval = 
 		Traversal.description().
 			breadthFirst().
@@ -143,14 +130,14 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				else {
 					System.out.println("P-FLOW is context for GET!");
-					
-					Node context = td_self.traverse(pf.getOP().getStartNode()).
-									iterator().next().lastRelationship().getEndNode();
-					
-					Relationship res = get(context, name);
-
-					if (res != null)
-						pf.sendAnswer(createResult(node, res));
+//					
+//					Node context = td_self.traverse(pf.getOP().getStartNode()).
+//									iterator().next().lastRelationship().getEndNode();
+//					
+//					Relationship res = get(context, name);
+//
+//					if (res != null)
+//						pf.sendAnswer(createResult(node, res));
 				}
 			}
 			pf.done();

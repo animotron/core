@@ -20,10 +20,15 @@ package org.animotron.manipulator;
 
 import java.util.Iterator;
 
+import org.animotron.operator.THE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.helpers.Predicate;
+import org.neo4j.kernel.Traversal;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,6 +45,19 @@ public class PFlow {
 	protected PFlow parent = null;
 	private Relationship op = null;
 	private Node opNode = null;
+	
+	@SuppressWarnings("deprecation")
+	private static TraversalDescription td_self = 
+			Traversal.description().
+			filter(new Predicate<Path> (){
+				@Override
+				public boolean accept(Path item) {
+					if (THE._.NODE().equals(item.endNode())) {
+						return true;
+					}
+					return false;
+				}
+			});
 	
 	private PFlow(Manipulator m) {
 		this.m = m;
@@ -75,6 +93,17 @@ public class PFlow {
 
 	public Relationship getOP() {
 		return op;
+	}
+	
+	public Relationship getSelf() {
+		final Relationship self =
+				td_self.traverse(getOPNode()).iterator().next().lastRelationship();
+		
+		return self;
+	}
+	
+	public Node getSelfNode() {
+		return getSelf().getEndNode();
 	}
 	
 	public Node getOPNode() {
