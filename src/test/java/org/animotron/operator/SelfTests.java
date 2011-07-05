@@ -1,5 +1,4 @@
 /*
- *  Copyright (C) 2011 The Animo Project
  *  http://animotron.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -18,26 +17,26 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Expression.*;
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.query.ANY;
 import org.animotron.operator.query.GET;
+import org.animotron.operator.query.SELF;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
 import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ContextTests extends ATest {
+public class SelfTests extends ATest {
 	
 	@Test
 	public void getFromPFlow() throws Exception {
-        System.out.println("Test empty 'get' ...");
+        System.out.println("Test empty 'self' ...");
         
     	new Expression(
 			_(THE._, "A")
@@ -48,11 +47,11 @@ public class ContextTests extends ATest {
 		);
     	
     	Expression C = new Expression(
-			_(THE._, "C", _(HAVE._, "A", text(".")), _(IC._, "B", _(GET._, "A")))
+			_(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "A")))
 		);
 
     	Expression CC = new Expression(
-			_(THE._, "CC", _(HAVE._, "A", text("CC")), _(IC._, "B", _(GET._, "A")))
+			_(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "A")))
 		);
 
     	Expression D = new Expression(
@@ -70,10 +69,10 @@ public class ContextTests extends ATest {
         assertAnimo(C, "<the:C><have:A>.</have:A></the:C>");
         assertAnimo(CC, "<the:CC><have:A>CC</have:A></the:CC>");
         assertAnimo(D, "<the:D><is:C/><have:A>:</have:A><have:B><have:A>:</have:A></have:B></the:D>");
-        //System.out.println("get:B an:C");
+        //System.out.println("self:B an:C");
         assertAnimo(E, "<the:E><have:B>.<have:B></the:E>");
 //
-//        //System.out.println("get:B an:D");
+//        //System.out.println("self:B an:D");
 //        assertAnimo(F, "<the:F><have:B>:<have:B></the:F>");
 
         //System.out.println("done.");
@@ -81,7 +80,7 @@ public class ContextTests extends ATest {
 	
 //	@Test
 //	public void anyWithUse() throws Exception {
-//        System.out.println("Test 'get' ...");
+//        System.out.println("Test 'self' ...");
 //        
 //    	new Expression(
 //			_(THE._, "A")
