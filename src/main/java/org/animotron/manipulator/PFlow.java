@@ -139,17 +139,21 @@ public class PFlow {
 		return m;
 	}
 	
-	public Iterable<PFlow> stack() {
-		return new PFlowStack();
+	public PFlowStack stack() {
+		return new PFlowStack(parent);
 	}
 	
-	public PFlowStack iterator() {
-		return new PFlowStack();
+	public PFlowStack STACK() {
+		return new PFlowStack(this);
 	}
 	
 	private class PFlowStack implements Iterator<PFlow>, Iterable<PFlow> {
 		
-		private PFlow pos = parent;
+		private PFlow pos;
+		
+		public PFlowStack(PFlow pf) {
+			pos = pf;
+		}
 		
 		@Override
 		public boolean hasNext() {
