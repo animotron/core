@@ -30,7 +30,6 @@ import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
