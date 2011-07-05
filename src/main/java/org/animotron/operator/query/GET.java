@@ -32,17 +32,14 @@ import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.IC;
 import org.animotron.operator.Query;
-import org.animotron.operator.THE;
 import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 
 /**
@@ -130,14 +127,15 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				else {
 					System.out.println("P-FLOW is context for GET!");
-//					
-//					Node context = td_self.traverse(pf.getOP().getStartNode()).
-//									iterator().next().lastRelationship().getEndNode();
-//					
-//					Relationship res = get(context, name);
-//
-//					if (res != null)
-//						pf.sendAnswer(createResult(node, res));
+					for (PFlow p : pf.stack()) {
+						System.out.println(p.getOP());
+						Node context = p.getSelfNode();
+						Relationship res = context == null ? null : get(context, name);
+						if (res != null) {
+							pf.sendAnswer(createResult(node, res));
+							break;
+						}
+					}
 				}
 			}
 			pf.done();

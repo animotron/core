@@ -96,14 +96,15 @@ public class PFlow {
 	}
 	
 	public Relationship getSelf() {
-		final Relationship self =
-				td_self.traverse(getOPNode()).iterator().next().lastRelationship();
+		final Relationship self = op == null ? null :
+				td_self.traverse(op.getStartNode()).iterator().next().lastRelationship();
 		
 		return self;
 	}
 	
 	public Node getSelfNode() {
-		return getSelf().getEndNode();
+		final Node self = getSelf() == null ? null : getSelf().getEndNode(); 
+		return self;
 	}
 	
 	public Node getOPNode() {
@@ -139,31 +140,27 @@ public class PFlow {
 	}
 	
 	public Iterable<PFlow> stack() {
-		return new Iterable<PFlow>() {
-			@Override
-			public Iterator<PFlow> iterator() {
-				return iterator();
-			}
-		};
+		return new PFlowStack();
 	}
 	
 	public PFlowStack iterator() {
 		return new PFlowStack();
 	}
 	
-	private class PFlowStack implements Iterator<PFlow> {
+	private class PFlowStack implements Iterator<PFlow>, Iterable<PFlow> {
 		
 		private PFlow pos = parent;
 		
 		@Override
 		public boolean hasNext() {
-			return pos.parent != null;
+			return pos != null;
 		}
 
 		@Override
 		public PFlow next() {
+			PFlow res = pos;
 			pos = pos.parent;
-			return pos;
+			return res;
 		}
 
 		@Override
@@ -171,6 +168,10 @@ public class PFlow {
 			// TODO Auto-generated method stub
 		}
 
+		@Override
+		public Iterator<PFlow> iterator() {
+			return this;
+		}
 		
 	}
 	
