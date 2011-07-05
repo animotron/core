@@ -66,10 +66,6 @@ public class Preparator extends StatementManipulator {
 			});
 	
 	
-	public void execute(Relationship op) throws InterruptedException, IOException {
-		execute(op.getEndNode());
-	}
-
 	public void execute(Node op) throws InterruptedException, IOException {
 		Iterator<Path> it = TD.traverse(op).iterator();
 		while (it.hasNext()) {
