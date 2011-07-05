@@ -36,7 +36,7 @@ public class EQ extends AbstarctOperator implements Predicate {
 	private EQ() { super("eq", "animo/compare/eq"); }
 
 	@Override
-	public boolean filter(Relationship op, Node ref) {
+	public boolean filter(Relationship start_op, Relationship op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

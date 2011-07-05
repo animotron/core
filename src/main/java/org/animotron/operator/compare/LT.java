@@ -36,7 +36,7 @@ public class LT extends AbstarctOperator implements Predicate {
 	private LT() { super("lt", "animo/compare/lt"); }
 
 	@Override
-	public boolean filter(Relationship op, Node ref) {
+	public boolean filter(Relationship start_op, Relationship op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

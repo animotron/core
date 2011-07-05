@@ -30,6 +30,7 @@ import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
@@ -46,7 +47,7 @@ public abstract class AbstractResultSerializer {
 	
 	final public void serialize(Relationship r) throws InterruptedException, IOException {
 		startDocument();
-		build(r);
+		build(r, r);
 		endDocument();
 	}
 
@@ -58,7 +59,7 @@ public abstract class AbstractResultSerializer {
 	
 	public abstract void endDocument();
 
-	protected void build(Relationship r) throws InterruptedException, IOException {
+	protected void build(Relationship start_op, Relationship r) throws InterruptedException, IOException {
 		
 		RelationshipType type = r.getType();
 		String typeName = type.name();
@@ -82,7 +83,7 @@ public abstract class AbstractResultSerializer {
 		
 		if (s != null) {
 			if (s instanceof Query || s instanceof Evaluable) {
-				result(r);
+				result(start_op, r);
 
 			//workaround IS
 			} else if (s instanceof IS) {
@@ -95,7 +96,7 @@ public abstract class AbstractResultSerializer {
 				IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 				try {
 					for (Relationship i : q) {
-						build(i);
+						build(start_op, i);
 					}
 				} finally {
 					q.close();
@@ -120,11 +121,12 @@ public abstract class AbstractResultSerializer {
 //		end(statement, r);
 	}
 
-	protected boolean result(Relationship r) throws InterruptedException, IOException {
+	protected boolean result(Relationship start_op, Relationship r) throws InterruptedException, IOException {
 		boolean found = false;
 		Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
 		for ( Relationship n : i ) {
 			build( 
+				start_op, 
 				getDb().getRelationshipById(
 					(Long)n.getProperty(RID.name())
 				) 
@@ -135,13 +137,13 @@ public abstract class AbstractResultSerializer {
 		if (!found) {
 			//UNDERSTAND: calculate current r!
 			System.out.println("READER Execute r = "+r);
-			PipedInput in = Evaluator._.execute(r);
+			PipedInput in = Evaluator._.execute(start_op, r);
 			
 			System.out.println("READER waiting ...");
 			for (Object obj : in) {
 				System.out.println("READER get from calculator "+obj);
 				if (obj instanceof Relationship) {
-					build( (Relationship) obj );
+					build( start_op, (Relationship) obj );
 				} else {
 					System.out.println("UNHANDLED "+obj);
 				}

@@ -92,7 +92,7 @@ public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query 
 					
 					if (st instanceof Predicate) {
 						try {
-							if (!((Predicate) st).filter(r, node))
+							if (!((Predicate) st).filter(pf.getStartOP(), r, node))
 								return false;
 						} catch (Exception e) {
 							//XXX: report

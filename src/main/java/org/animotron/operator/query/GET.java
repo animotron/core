@@ -102,7 +102,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 
 						PipedInput in;
 						try {
-							in = Evaluator._.execute(context.getEndNode());
+							in = Evaluator._.execute(pf.getStartOP(), context.getEndNode());
 						
 							for (Object n : in) {
 								res = get(((Relationship)n).getEndNode(), name);

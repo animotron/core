@@ -91,7 +91,7 @@ public class Manipulators {
 		private void destructive() throws EBuilderTerminated {
 			try {
 				for (Node n : destructive) {
-					GC._.execute(n);
+					GC._.execute(null, n);
 				}
 			} catch (InterruptedException e) {
 				throw new EBuilderTerminated(e);

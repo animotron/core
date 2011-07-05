@@ -43,7 +43,15 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public final PipedInput execute(PropertyContainer op) throws InterruptedException, IOException {
+	public final PipedInput execute(Relationship op) throws InterruptedException, IOException {
+		return execute(op, op);
+	}
+
+	public final PipedInput execute(Relationship start_op, Node op) throws InterruptedException, IOException {
+		return execute(start_op, op);
+	}
+	
+	public final PipedInput execute(Relationship start_op, PropertyContainer op) throws InterruptedException, IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
 		
@@ -62,9 +70,9 @@ public abstract class Manipulator {
 		
 		PFlow pf;
 		if (op instanceof Node) {
-			pf = new PFlow(this, (Node)op);
+			pf = new PFlow(this, start_op, (Node)op);
 		} else {
-			pf = new PFlow(this, (Relationship)op);
+			pf = new PFlow(this, start_op, (Relationship)op);
 		}
 		pf.question.subscribe(sub);
 

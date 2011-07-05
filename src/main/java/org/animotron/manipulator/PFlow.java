@@ -43,6 +43,7 @@ public class PFlow {
 	public final Channel<Void> stop = new MemoryChannel<Void>();
 	
 	protected PFlow parent = null;
+	private Relationship start_op = null;
 	private Relationship op = null;
 	private Node opNode = null;
 	
@@ -63,16 +64,18 @@ public class PFlow {
 		this.m = m;
 	};
 	
-	public PFlow(Manipulator m, Relationship op) {
+	public PFlow(Manipulator m, Relationship start_op, Relationship op) {
 		parent = new PFlow(m);
 		this.m = m;
 		this.op = op;
+		this.start_op = start_op;
 	}
 
-	public PFlow(Manipulator m, Node opNode) {
+	public PFlow(Manipulator m, Relationship start_op, Node opNode) {
 		parent = new PFlow(m);
 		this.m = m;
 		this.opNode = opNode;
+		this.start_op = start_op;
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
@@ -94,7 +97,15 @@ public class PFlow {
 	public Relationship getOP() {
 		return op;
 	}
+
+	public Relationship getStartOP() {
+		return start_op;
+	}
 	
+	public Node getStartNode() {
+		return start_op.getEndNode();
+	}
+
 	public Relationship getSelf() {
 		final Relationship self = op == null ? null :
 				td_self.traverse(op.getStartNode()).iterator().next().lastRelationship();

@@ -44,7 +44,7 @@ public class WITH extends AbstarctOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public boolean filter(Relationship op, Node ref) throws InterruptedException, IOException {
+	public boolean filter(Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
 		
 		System.out.println("==================================================");
 		System.out.println("WITH op "+op+" ref "+ref);
@@ -58,14 +58,14 @@ public class WITH extends AbstarctOperator implements Predicate {
 		List<Relationship> expected = new FastList<Relationship>();
 
 		System.out.println("Eval actual");
-		PipedInput in = Evaluator._.execute(have.getEndNode());
+		PipedInput in = Evaluator._.execute(start_op, have.getEndNode());
 		for (Object e : in) {
 			actual.add((Relationship) e);
 			System.out.println("actual "+e);
 		}
 
 		System.out.println("Eval expected");
-		in = Evaluator._.execute(op.getEndNode());
+		in = Evaluator._.execute(start_op, op.getEndNode());
 		for (Object e : in) {
 			expected.add((Relationship) e);
 			System.out.println("expected "+e);

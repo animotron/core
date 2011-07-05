@@ -29,6 +29,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Predicate {
 	
-	public boolean filter(Relationship op, Node ref) throws InterruptedException, IOException;
+	public boolean filter(Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException;
 
 }
