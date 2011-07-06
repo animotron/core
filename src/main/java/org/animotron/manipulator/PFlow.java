@@ -23,15 +23,18 @@ import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 import java.util.Iterator;
 
+import org.animotron.operator.AN;
 import org.animotron.operator.THE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
@@ -177,36 +180,43 @@ public class PFlow {
 		return m;
 	}
 	
+	public Traverser traverseFlow() {
+		return td_flow.traverse(getOPNode());
+	}
+	
 	public Path getFlowPath() {
-		return td_flow.traverse(getOPNode()).iterator().next();
+		return traverseFlow().iterator().next();
 	}
 	
 	public PFlowStack stack() {
-		return new PFlowStack(parent);
+		return new PFlowStack();
 	}
 	
-	public PFlowStack STACK() {
-		return new PFlowStack(this);
-	}
-	
-	private class PFlowStack implements Iterator<PFlow>, Iterable<PFlow> {
+	private class PFlowStack implements Iterator<Relationship>, Iterable<Relationship> {
 		
-		private PFlow pos;
+		private Relationship pos;
+		private Iterator<Relationship> it = traverseFlow().relationships().iterator();
 		
-		public PFlowStack(PFlow pf) {
-			pos = pf;
+		private void step() {
+			while (it.hasNext()) {
+				Relationship r = it.next();
+				RelationshipType type = r.getType();
+				if (AN._.relationshipType().equals(type)){
+					pos = r;
+					return;
+				}
+			}
 		}
 		
 		@Override
 		public boolean hasNext() {
+			step();
 			return pos != null;
 		}
 
 		@Override
-		public PFlow next() {
-			PFlow res = pos;
-			pos = pos.parent;
-			return res;
+		public Relationship next() {
+			return pos;
 		}
 
 		@Override
@@ -215,7 +225,7 @@ public class PFlow {
 		}
 
 		@Override
-		public Iterator<PFlow> iterator() {
+		public Iterator<Relationship> iterator() {
 			return this;
 		}
 		
