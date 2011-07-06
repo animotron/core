@@ -50,10 +50,23 @@ public class PFlow {
 	@SuppressWarnings("deprecation")
 	private static TraversalDescription td_self = 
 			Traversal.description().
-			filter(new Predicate<Path> (){
+			filter(new Predicate<Path> () {
 				@Override
 				public boolean accept(Path item) {
 					if (THE._.NODE().equals(item.endNode())) {
+						return true;
+					}
+					return false;
+				}
+			});
+	
+	@SuppressWarnings("deprecation")
+	private TraversalDescription td_flow = 
+			Traversal.description().
+			filter(new Predicate<Path> () {
+				@Override
+				public boolean accept(Path item) {
+					if (getStartNode().equals(item.endNode())) {
 						return true;
 					}
 					return false;
@@ -148,6 +161,10 @@ public class PFlow {
 
 	public Manipulator getManipulator() {
 		return m;
+	}
+	
+	public Path getFlowPath() {
+		return td_flow.traverse(getOPNode()).iterator().next();
 	}
 	
 	public PFlowStack stack() {

@@ -127,14 +127,15 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				else {
 					System.out.println("P-FLOW is context for GET!");
-					for (PFlow p : pf.stack()) {
-						Node context = p.getOPNode();
-						Relationship res = context == null ? null : get(context, name);
-						if (res != null) {
-							pf.sendAnswer(createResult(node, res));
-							break;
-						}
-					}
+					System.out.println(pf.getFlowPath());
+//					for (PFlow p : pf.stack()) {
+//						Node context = p.getOPNode();
+//						Relationship res = context == null ? null : get(context, name);
+//						if (res != null) {
+//							pf.sendAnswer(createResult(node, res));
+//							break;
+//						}
+//					}
 				}
 			}
 			pf.done();
