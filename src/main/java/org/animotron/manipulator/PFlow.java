@@ -18,6 +18,9 @@
  */
 package org.animotron.manipulator;
 
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
+
 import java.util.Iterator;
 
 import org.animotron.operator.THE;
@@ -26,9 +29,12 @@ import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -60,16 +66,24 @@ public class PFlow {
 				}
 			});
 	
-	@SuppressWarnings("deprecation")
 	private TraversalDescription td_flow = 
 			Traversal.description().
-			filter(new Predicate<Path> () {
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new Evaluator(){
 				@Override
-				public boolean accept(Path item) {
-					if (getStartNode().equals(item.endNode())) {
-						return true;
+				public Evaluation evaluate(Path path) {
+					if (path.length() > 0) {
+						Iterator<Node> n = path.nodes().iterator();
+						for (Relationship r : path.relationships()) {
+							if (!r.getEndNode().equals(n.next())) {
+								return EXCLUDE_AND_CONTINUE;
+							}
+						}
+						if (path.lastRelationship().equals(getStartOP())) {
+							return INCLUDE_AND_PRUNE;
+						}
 					}
-					return false;
+					return EXCLUDE_AND_CONTINUE;
 				}
 			});
 	

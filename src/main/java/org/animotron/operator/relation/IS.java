@@ -37,6 +37,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * Operator 'IS'.
@@ -54,6 +55,7 @@ public class IS extends Relation implements Prepare {
 		super("is", "animo/relation/is"); 
 		TD = Traversal.description()
 			.depthFirst()
+			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
 			.relationships(relationshipType(), OUTGOING)
 			.evaluator(Evaluators.fromDepth(1));
 	}
