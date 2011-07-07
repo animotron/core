@@ -32,6 +32,8 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	CACHE, EMPTY, TOP,
 	
-	REF, RESULT, SOURCE,
+	REF, RESULT, SOURCE;
+	
+	
 	
 }

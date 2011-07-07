@@ -30,11 +30,9 @@ import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
@@ -180,43 +178,39 @@ public class PFlow {
 		return m;
 	}
 	
-	public Traverser traverseFlow() {
-		return td_flow.traverse(getOPNode());
-	}
-	
 	public Path getFlowPath() {
-		return traverseFlow().iterator().next();
+		return td_flow.traverse(getOPNode()).iterator().next();
 	}
 	
-	public PFlowStack stack() {
+	public Iterable<Relationship> stack() {
 		return new PFlowStack();
 	}
 	
 	private class PFlowStack implements Iterator<Relationship>, Iterable<Relationship> {
 		
-		private Relationship pos;
-		private Iterator<Relationship> it = traverseFlow().relationships().iterator();
+		private Iterator<Relationship> it = getFlowPath().relationships().iterator();
+		private Relationship pos = step();
 		
-		private void step() {
+		private Relationship step() {
 			while (it.hasNext()) {
 				Relationship r = it.next();
-				RelationshipType type = r.getType();
-				if (AN._.relationshipType().equals(type)){
-					pos = r;
-					return;
+				if (AN._.relationshipType().name().equals(r.getType().name())){
+					return r;
 				}
 			}
+			return null;
 		}
 		
 		@Override
 		public boolean hasNext() {
-			step();
 			return pos != null;
 		}
 
 		@Override
 		public Relationship next() {
-			return pos;
+			Relationship res = pos;
+			pos = step();
+			return res;
 		}
 
 		@Override
