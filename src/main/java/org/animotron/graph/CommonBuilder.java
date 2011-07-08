@@ -75,7 +75,7 @@ public class CommonBuilder {
 	}
 	
 	private static Relationship storeAnimo(InputStream stream) throws XMLStreamException {
-		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
+		return new StAXGraphBuilder(createXMLStreamReader(stream));
 	}
 
 	private static Relationship storeBinary(InputStream stream, String path) throws IOException {
