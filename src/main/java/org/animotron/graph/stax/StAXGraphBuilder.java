@@ -41,7 +41,7 @@ public class StAXGraphBuilder extends GraphBuilder {
 	
 	private XMLStreamReader reader;
 	
-	public StAXGraphBuilder(XMLStreamReader reader) {
+	public StAXGraphBuilder(XMLStreamReader reader) throws XMLStreamException {
 		this.reader = reader;
 	}
 

@@ -19,7 +19,6 @@
 package org.animotron;
 
 import org.animotron.exception.EBuilderTerminated;
-import org.animotron.graph.GraphBuilder;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
@@ -27,17 +26,13 @@ import org.animotron.instruction.ml.COMMENT;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.operator.Operator;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Expression extends GraphBuilder implements Relationship {
+public class Expression extends AbstractExpression {
 	
 	Object[][] e;
 	
@@ -147,84 +142,4 @@ public class Expression extends GraphBuilder implements Relationship {
 		return tmp;
 	}
 
-	@Override
-	public GraphDatabaseService getGraphDatabase() {
-		return getRelationship().getGraphDatabase();
-	}
-
-	@Override
-	public boolean hasProperty(String key) {
-		return getRelationship().hasProperty(key);
-	}
-
-	@Override
-	public Object getProperty(String key) {
-		return getRelationship().getProperty(key);
-	}
-
-	@Override
-	public Object getProperty(String key, Object defaultValue) {
-		return getRelationship().getProperty(key, defaultValue);
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		getRelationship().setProperty(key, value);
-	}
-
-	@Override
-	public Object removeProperty(String key) {
-		return getRelationship().removeProperty(key);
-	}
-
-	@Override
-	public Iterable<String> getPropertyKeys() {
-		return getRelationship().getPropertyKeys();
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public Iterable<Object> getPropertyValues() {
-		return getRelationship().getPropertyValues();
-	}
-
-	@Override
-	public long getId() {
-		return getRelationship().getId();
-	}
-
-	@Override
-	public void delete() {
-		getRelationship().delete();
-	}
-
-	@Override
-	public Node getStartNode() {
-		return getRelationship().getStartNode();
-	}
-
-	@Override
-	public Node getEndNode() {
-		return getRelationship().getEndNode();
-	}
-
-	@Override
-	public Node getOtherNode(Node node) {
-		return getRelationship().getOtherNode(node);
-	}
-
-	@Override
-	public Node[] getNodes() {
-		return getRelationship().getNodes();
-	}
-
-	@Override
-	public RelationshipType getType() {
-		return getRelationship().getType();
-	}
-
-	@Override
-	public boolean isType(RelationshipType type) {
-		return getRelationship().isType(type);
-	}
 }

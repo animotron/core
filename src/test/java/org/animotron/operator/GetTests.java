@@ -40,12 +40,11 @@ public class GetTests extends ATest {
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
     	
-    	Expression B = new Expression(
+    	Expression D = new Expression(
 			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
 		);
-    	
-        assertAnimo(A, "<the:A><have:B/></the:A>");
-        assertAnimo(B, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
+        	
+        assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
         
         //System.out.println("done.");
 	}
