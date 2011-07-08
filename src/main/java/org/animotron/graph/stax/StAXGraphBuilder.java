@@ -46,7 +46,7 @@ public class StAXGraphBuilder extends GraphBuilder {
 		build();
 	}
 
-	private Relationship build() throws XMLStreamException {
+	public Relationship build() throws XMLStreamException {
 		
 		startGraph();
 		
