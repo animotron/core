@@ -19,7 +19,6 @@
 package org.animotron;
 
 import org.animotron.exception.EBuilderTerminated;
-import org.animotron.graph.GraphBuilder;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
@@ -33,7 +32,7 @@ import org.animotron.operator.Operator;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Expression extends GraphBuilder {
+public class Expression extends AbstractExpression {
 	
 	Object[][] e;
 	

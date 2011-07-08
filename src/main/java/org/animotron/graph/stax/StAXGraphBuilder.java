@@ -43,7 +43,6 @@ public class StAXGraphBuilder extends GraphBuilder {
 	
 	public StAXGraphBuilder(XMLStreamReader reader) throws XMLStreamException {
 		this.reader = reader;
-		build();
 	}
 
 	public Relationship build() throws XMLStreamException {
