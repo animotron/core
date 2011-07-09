@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
 import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 import java.util.Iterator;
@@ -68,21 +69,20 @@ public class PFlow {
 			});
 	
 	private TraversalDescription td_flow = 
-			Traversal.description().
+			Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new Evaluator(){
 				@Override
 				public Evaluation evaluate(Path path) {
 					if (path.length() > 0) {
-						Iterator<Node> n = path.nodes().iterator();
-						for (Relationship r : path.relationships()) {
-							if (!r.getEndNode().equals(n.next())) {
-								return EXCLUDE_AND_CONTINUE;
-							}
-						}
-						if (path.lastRelationship().equals(getStartOP())) {
-							return INCLUDE_AND_PRUNE;
-						}
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							if (r.equals(getStartOP())) {
+								return INCLUDE_AND_PRUNE;
+							} 
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
 					}
 					return EXCLUDE_AND_CONTINUE;
 				}
