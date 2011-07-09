@@ -154,11 +154,11 @@ public abstract class GraphBuilder {
 		Object[] parent = null;
 		
 		if (!statements.empty()) {
-			parent = statements.peek();
 			if (statement instanceof THE) {
 				start(AN._, AN._.name(), AN._.namespace(), name, null);
 				end();
-				parent = null;
+			} else {
+				parent = statements.peek();
 			}
 		}
 		
