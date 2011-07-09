@@ -132,7 +132,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 						System.out.println(context);
 						Relationship res = get(context.getEndNode(), name);
 						if (res != null) {
-							pf.sendAnswer(createResult(node, res));
+							pf.sendAnswer(createResultInMemory(node, res));
 							break;
 						}
 					}

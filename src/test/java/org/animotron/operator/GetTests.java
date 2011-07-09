@@ -33,7 +33,7 @@ import org.junit.Test;
 public class GetTests extends ATest {
 	
 	@Test
-	public void getFromPFlow() throws Exception {
+	public void getFromPFlow_an_with_param() throws Exception {
         System.out.println("Test empty 'get' ...");
         
     	Expression A = new Expression(
@@ -45,7 +45,26 @@ public class GetTests extends ATest {
 		);
         	
         assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
+        //System.out.println("done.");
+	}
+
+	@Test
+	public void getFromPFlow_an_with_an() throws Exception {
+        System.out.println("Test empty 'get' on AN with AN...");
         
+    	Expression A = new Expression(
+			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+		);
+    	
+    	Expression D = new Expression(
+			_(THE._, "D", _(HAVE._, "C", text(".")))
+		);
+        	
+    	Expression E = new Expression(
+			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
+		);
+
+    	assertAnimo(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
         //System.out.println("done.");
 	}
 	
