@@ -38,6 +38,7 @@ import org.animotron.exception.EBuilderTerminated;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.manipulator.Manipulators.Catcher;
+import org.animotron.operator.AN;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.THE;
 import org.animotron.utils.MessageDigester;
@@ -150,9 +151,20 @@ public abstract class GraphBuilder {
 	
 	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
 		
+		Object[] parent = null;
+		
+		if (!statements.empty()) {
+			parent = statements.peek();
+			if (statement instanceof THE) {
+				start(AN._, AN._.name(), AN._.namespace(), name, null);
+				end();
+				parent = null;
+			}
+		}
+		
 		MessageDigest md = MessageDigester.md();
 		
-		if (ns != null) 
+		if (ns != null)
 			md.update(ns.getBytes());
 		
 		if (name != null)
@@ -170,10 +182,6 @@ public abstract class GraphBuilder {
 			val = value(value, bytes);
 			md.update(bytes);
 		}
-		
-		Object[] parent = null;
-		if (!statements.empty())
-			parent = statements.peek();
 		
 		Object[] item = {	
 				statement,	// 0  statement 	
@@ -195,8 +203,9 @@ public abstract class GraphBuilder {
 	final protected void end() {
 		Object[] current = statements.pop();
 		byte[] hash = ((MessageDigest) current[4]).digest();
-		if (!statements.empty()) {
-			((MessageDigest) statements.peek()[4]).update(hash);
+		Object[] parent = (Object[]) current[7];
+		if (parent != null) {
+			((MessageDigest) (parent[4])).update(hash);
 		}
 		current[4] = hash;
 	}
