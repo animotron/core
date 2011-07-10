@@ -47,6 +47,26 @@ public class GetTests extends ATest {
 //        assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
 //        //System.out.println("done.");
 //	}
+	
+	@Test
+	public void getFromPFlow_cross_an_with_param() throws Exception {
+        System.out.println("Test cross 'get' ...");
+        
+    	Expression A = new Expression(
+			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+		);
+    	
+    	Expression D = new Expression(
+			_(THE._, "D", _(HAVE._, "E", _(GET._, "B")))
+		);
+    	
+    	Expression X = new Expression(
+			_(THE._, "X", _(AN._, "D", _(AN._, "A", _(HAVE._, "C", text(":")))))
+		);
+        	
+        assertAnimo(X, "<the:X><the:D><have:e><have:B><have:C>:</have:C></have:B></have:e></the:D></the:X>");
+        //System.out.println("done.");
+	}
 
 //	@Test
 //	public void getFromPFlow_an_with_an() throws Exception {
@@ -68,33 +88,33 @@ public class GetTests extends ATest {
 //        //System.out.println("done.");
 //	}
 	
-	@Test
-	public void getFromPFlow_an_with_more_an() throws Exception {
-        System.out.println("Test empty 'get' on AN with AN...");
-        
-    	Expression A = new Expression(
-			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-		);
-    	
-    	Expression D = new Expression(
-			_(THE._, "D", _(HAVE._, "C", text(".")))
-		);
-        	
-    	Expression E = new Expression(
-			_(THE._, "E", _(HAVE._, "C", text(":")))
-		);
-        	
-    	Expression F = new Expression(
-			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
-		);
-    	
-    	Expression X = new Expression(
-			_(THE._, "X", _(AN._, "A", _(HAVE._, "C", text("X"))))
-		);
-        	
-    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C></have:B></the:A></the:F>");
-        //System.out.println("done.");
-	}
+//	@Test
+//	public void getFromPFlow_an_with_more_an() throws Exception {
+//        System.out.println("Test empty 'get' on AN with AN...");
+//        
+//    	Expression A = new Expression(
+//			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+//		);
+//    	
+//    	Expression D = new Expression(
+//			_(THE._, "D", _(HAVE._, "C", text(".")))
+//		);
+//        	
+//    	Expression E = new Expression(
+//			_(THE._, "E", _(HAVE._, "C", text(":")))
+//		);
+//        	
+//    	Expression F = new Expression(
+//			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
+//		);
+//    	
+//    	Expression X = new Expression(
+//			_(THE._, "X", _(AN._, "A", _(HAVE._, "C", text("X"))))
+//		);
+//        	
+//    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C></have:B></the:A></the:F>");
+//        //System.out.println("done.");
+//	}
 	
 //	@Test
 //	public void anyWithUse() throws Exception {
