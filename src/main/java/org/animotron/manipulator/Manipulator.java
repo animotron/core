@@ -44,11 +44,11 @@ public abstract class Manipulator {
 	}
 	
 	public final PipedInput execute(Relationship op) throws InterruptedException, IOException {
-		return execute(op, op);
+		return execute(op, (PropertyContainer)op);
 	}
 
 	public final PipedInput execute(Relationship start_op, Node op) throws InterruptedException, IOException {
-		return execute(start_op, op);
+		return execute(start_op, (PropertyContainer)op);
 	}
 	
 	public final PipedInput execute(Relationship start_op, PropertyContainer op) throws InterruptedException, IOException {
