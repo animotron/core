@@ -29,7 +29,7 @@ import org.animotron.operator.query.GET;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends AbstarctOperator implements Evaluable {
+public class IC extends AbstarctOperator implements Cachable, Evaluable {
 	
 	public static final IC _ = new IC();
 	
