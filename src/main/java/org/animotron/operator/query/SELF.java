@@ -18,7 +18,10 @@
  */
 package org.animotron.operator.query;
 
+import org.animotron.manipulator.OnQuestion;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.Evaluable;
 
 /**
  * Query operator 'self'.
@@ -26,10 +29,20 @@ import org.animotron.operator.AbstarctOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class SELF extends AbstarctOperator {
+public class SELF extends AbstarctOperator implements Evaluable {
 	
 	public static final SELF _ = new SELF();
 	
 	private SELF() { super("self", "animo/query/self"); }
+
+	@Override
+	public OnQuestion onCalcQuestion() {
+		return new OnQuestion() {
+			@Override
+			public void onMessage(final PFlow pf) {
+				System.out.println("SELF op = "+pf.getOP());
+			}
+		};
+	}
 	
 }
