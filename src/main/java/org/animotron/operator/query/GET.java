@@ -91,7 +91,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
 					@Override
 					public void onMessage(Relationship context) {
-						System.out.println("GET message context "+context);
+						System.out.println("GET message ["+name+"] context "+context);
 						
 						if (context == null) {
 							pf.sendAnswer(null);
