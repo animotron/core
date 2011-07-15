@@ -64,7 +64,7 @@ public class GetTests extends ATest {
 			_(THE._, "X", _(AN._, "D", _(AN._, "A", _(HAVE._, "C", text(":")))))
 		);
         	
-        assertAnimo(X, "<the:X><the:D><have:e><have:B><have:C>:</have:C></have:B></have:e></the:D></the:X>");
+        assertAnimo(X, "<the:X><the:D><have:E><have:B><have:C>:</have:C></have:B></have:E></the:D></the:X>");
         //System.out.println("done.");
 	}
 

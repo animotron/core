@@ -28,6 +28,7 @@ import org.animotron.operator.AN;
 import org.animotron.operator.THE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -224,5 +225,8 @@ public class PFlow {
 		}
 		
 	}
-	
+
+	public Iterable<Relationship> getStackContext(Node node) {
+		return node.getRelationships(AN._.relationshipType(), Direction.OUTGOING);
+	}
 }

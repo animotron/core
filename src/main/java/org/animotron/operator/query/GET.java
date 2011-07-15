@@ -23,6 +23,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
@@ -37,6 +39,7 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -127,14 +130,17 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				else {
 					System.out.println("P-FLOW is context for GET!");
-					System.out.println(pf.getFlowPath());
-					for (Relationship context : pf.stack()) {
-						System.out.println(context);
-						Relationship res = get(context.getEndNode(), name);
-						if (res != null) {
-							pf.sendAnswer(createResultInMemory(node, res));
-							break;
+					for (Relationship stack : pf.stack()) {
+						boolean answered = false;
+						for (Relationship context : pf.getStackContext(stack.getEndNode())) {
+							System.out.println(context);
+							Relationship res = get(context.getEndNode(), name);
+							if (res != null) {
+								pf.sendAnswer(createResultInMemory(node, res));
+								answered = true;
+							}
 						}
+						if (answered) break;
 					}
 				}
 			}
@@ -142,17 +148,30 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 		}
 	};
 
-	public Relationship get(final Node context, final String name) {
+	public Relationship get(Node context, final String name) {
 		
 		System.out.println("GET get context = "+context);
 
 		//search local 'HAVE'
 		for (Relationship tdR : td_eval.traverse(context).relationships()) {
 			
-			System.out.println("GET get = "+tdR);
+			System.out.println("GET check = "+tdR);
 			
 			if (name.equals(name(tdR)))
 				return tdR;
+		}
+		
+		Relationship instance = context.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
+		if (instance != null) {
+			context = instance.getEndNode();
+
+			for (Relationship tdR : td_eval.traverse(context).relationships()) {
+				
+				System.out.println("GET check = "+tdR);
+				
+				if (name.equals(name(tdR)))
+					return tdR;
+			}
 		}
 		
 		//search 'IC' by 'IS' topology
