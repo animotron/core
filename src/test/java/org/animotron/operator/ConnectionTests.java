@@ -27,6 +27,7 @@ import org.animotron.instruction.string.AfterLast;
 import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.query.GET;
+import org.animotron.operator.query.SELF;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
@@ -54,12 +55,12 @@ public class ConnectionTests extends ATest {
 			_(IC._, "extension", 
 				_(AfterLast._, 
 					text("."),
-					_(GET._, "path"))),
+					_(SELF._, "path"))),
 
 			_(IC._, "mime-type", 
 				_(ANY._, "mime-type", 
 					_(WITH._, "extension",
-						_(GET._, "extension"))))
+						_(SELF._, "extension"))))
 		));
 
 
