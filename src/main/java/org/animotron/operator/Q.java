@@ -37,7 +37,7 @@ public class Q extends AbstarctOperator implements Reference, Cachable {
 	
 	public static final Q _ = new Q();
 	
-	private Q() { super("an", "animo/quantity"); }
+	private Q() { super("Q", "animo/quantity"); }
 	
 //	public OnQuestion onCalcQuestion() {
 //		return question;
