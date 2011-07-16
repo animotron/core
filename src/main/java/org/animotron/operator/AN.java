@@ -47,7 +47,7 @@ public class AN extends AbstarctOperator implements Reference, Evaluable, Cachab
 		@Override
 		public void onMessage(PFlow pf) {
 
-//			System.out.println("AN THREAD "+Thread.currentThread());
+			System.out.println("AN THREAD "+Thread.currentThread());
 
 			Relationship op = pf.getOP();
 			Node node = op.getEndNode();

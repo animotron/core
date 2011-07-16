@@ -23,6 +23,9 @@ import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
 import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 import java.util.Iterator;
+import java.util.List;
+
+import javolution.util.FastList;
 
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
@@ -52,9 +55,10 @@ public class PFlow {
 	public final Channel<Void> stop = new MemoryChannel<Void>();
 	
 	protected PFlow parent = null;
-	private Relationship start_op = null;
 	private Relationship op = null;
 	private Node opNode = null;
+	
+	private List<Relationship> path = new FastList<Relationship>();
 	
 	@SuppressWarnings("deprecation")
 	private static TraversalDescription td_self = 
@@ -97,25 +101,35 @@ public class PFlow {
 		parent = new PFlow(m);
 		this.m = m;
 		this.op = op;
-		this.start_op = start_op;
+		
+		path.add(start_op);
 	}
 
 	public PFlow(Manipulator m, Relationship start_op, Node opNode) {
 		parent = new PFlow(m);
 		this.m = m;
 		this.opNode = opNode;
-		this.start_op = start_op;
+
+		path.add(start_op);
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
 		this.parent = parent;
 		this.m = parent.m;
+		
+		//XXX: maybe, clone faster?
+		path.addAll(parent.path);
+		
 		this.op = op;
 	}
 
 	public PFlow(PFlow parent, Node opNode) {
 		this.parent = parent;
 		this.m = parent.m;
+		
+		//XXX: maybe, clone faster?
+		path.addAll(parent.path);
+
 		this.opNode = opNode;
 	}
 	
@@ -128,11 +142,11 @@ public class PFlow {
 	}
 
 	public Relationship getStartOP() {
-		return start_op;
+		return path.get(0);
 	}
 	
 	public Node getStartNode() {
-		return start_op.getEndNode();
+		return path.get(0).getEndNode();
 	}
 
 	public Relationship getSelf() {
@@ -228,5 +242,9 @@ public class PFlow {
 
 	public Iterable<Relationship> getStackContext(Node node) {
 		return node.getRelationships(AN._.relationshipType(), Direction.OUTGOING);
+	}
+
+	public void addContextPoint(Relationship r) {
+		path.add(r);
 	}
 }

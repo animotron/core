@@ -23,7 +23,6 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
@@ -39,7 +38,6 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -77,11 +75,12 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 
 		@Override
 		public void onMessage(final PFlow pf) {
-//			System.out.println("GET THREAD "+Thread.currentThread());
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
 			
+			System.out.println("GET '"+name(op)+"' THREAD "+Thread.currentThread());
+
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
 				//no pre-calculated result, calculate it
@@ -126,9 +125,10 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				};
 				pf.answer.subscribe(onContext);
 				
-				if (haveContext(pf))
+				if (haveContext(pf)) {
+					pf.addContextPoint(op);
 					super.onMessage(pf);
-				else {
+				} else {
 					System.out.println("P-FLOW is context for GET!");
 					for (Relationship stack : pf.stack()) {
 						boolean answered = false;
@@ -161,7 +161,7 @@ public class GET extends AbstarctOperator implements Evaluable, Query, Cachable 
 				return tdR;
 		}
 		
-		Relationship instance = context.getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING);
+		Relationship instance = context.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
 		if (instance != null) {
 			context = instance.getEndNode();
 

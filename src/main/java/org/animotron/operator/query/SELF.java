@@ -40,7 +40,11 @@ public class SELF extends AbstarctOperator implements Evaluable {
 		return new OnQuestion() {
 			@Override
 			public void onMessage(final PFlow pf) {
-				System.out.println("SELF op = "+pf.getOP());
+				System.out.println("SELF '"+name(pf.getOP())+"' op = "+pf.getOP());
+				
+				System.out.println("path = "+pf.getFlowPath());
+				
+				pf.done();
 			}
 		};
 	}
