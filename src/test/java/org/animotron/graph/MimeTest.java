@@ -21,6 +21,7 @@ package org.animotron.graph;
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -45,6 +46,7 @@ public class MimeTest extends ATest {
 		"</any:mime-type>";
 	
 	@Test
+	@Ignore
 	public void storeAndSerializeResult() throws XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
@@ -53,22 +55,6 @@ public class MimeTest extends ATest {
 
         
         System.out.println("loaded ...");
-        
-//        Transaction tx = beginTx();
-//        try { 
-//	        Relationship r = THE._.relationship("B");
-//	        assertNotNull(r);
-//	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
-//	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
-//	        serializer.serialize(r);
-//	        tx.success();
-//	        
-//        } catch (Exception e) {
-//        	e.printStackTrace();
-//			fail(e.toString());
-//        } finally {
-//        	tx.finish();
-//        }
             
         System.out.println("done.");
 	}

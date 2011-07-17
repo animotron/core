@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -183,6 +184,7 @@ public class TetrisTest extends ATest {
 		"</the:tetris>";
 
 	@Test
+	@Ignore
 	public void game() throws XMLStreamException {
 		
 		if (true) {
