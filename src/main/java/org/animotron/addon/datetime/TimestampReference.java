@@ -21,7 +21,7 @@ package org.animotron.addon.datetime;
 import java.util.WeakHashMap;
 
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
@@ -33,7 +33,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class TimestampReference extends AbstarctOperator implements Evaluable {
+public class TimestampReference extends AbstractOperator implements Evaluable {
 	
 	public static final TimestampReference _ = new TimestampReference();
 	

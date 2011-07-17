@@ -20,7 +20,7 @@ package org.animotron.operator.query;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Evaluable;
 
 /**
@@ -29,7 +29,7 @@ import org.animotron.operator.Evaluable;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class SELF extends AbstarctOperator implements Evaluable {
+public class SELF extends AbstractOperator implements Evaluable {
 	
 	public static final SELF _ = new SELF();
 	

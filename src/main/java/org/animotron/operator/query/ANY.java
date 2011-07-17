@@ -29,7 +29,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Predicate;
@@ -45,12 +45,12 @@ import org.neo4j.kernel.Traversal;
 /**
  * Query operator 'ANY'.
  * 
- * Retrun 'all' or first 'perfect' USE
+ * Return 'all' or first 'perfect' USE
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ANY extends AbstarctOperator implements Cachable, Evaluable, Query {
+public class ANY extends AbstractOperator implements Cachable, Evaluable, Query {
 	
 	public static final ANY _ = new ANY();
 	

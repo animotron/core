@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 
 /**
  * Query operator 'CNTXT'.
@@ -27,7 +27,7 @@ import org.animotron.operator.AbstarctOperator;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 @Deprecated //???
-public class CNTXT extends AbstarctOperator {
+public class CNTXT extends AbstractOperator {
 	
 	public static final CNTXT _ = new CNTXT();
 	

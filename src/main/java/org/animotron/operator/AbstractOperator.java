@@ -38,7 +38,7 @@ import org.neo4j.graphdb.RelationshipType;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public abstract class AbstarctOperator implements Operator {
+public abstract class AbstractOperator implements Operator {
 	
 	private static final RelationshipType REF = AnimoRelationshipType.get("REF"); 
 	
@@ -47,17 +47,17 @@ public abstract class AbstarctOperator implements Operator {
 	private RelationshipType relationshipType;
 	private RelationshipType resultRelationshipType = null;
 	
-	public AbstarctOperator(String prefix, String uri) {
+	public AbstractOperator(String prefix, String uri) {
 		this(prefix, uri, prefix.toUpperCase());
 	}
 	
-	public AbstarctOperator(String prefix, String uri, String relationshipType) {
+	public AbstractOperator(String prefix, String uri, String relationshipType) {
 		this.prefix = prefix;
 		this.uri = uri;
 		this.relationshipType = AnimoRelationshipType.get(relationshipType);
 	}
 
-	public AbstarctOperator(String prefix, String uri, String relationshipType, String resultRelationshipType) {
+	public AbstractOperator(String prefix, String uri, String relationshipType, String resultRelationshipType) {
 		this.prefix = prefix;
 		this.uri = uri;
 		this.relationshipType = AnimoRelationshipType.get(relationshipType);

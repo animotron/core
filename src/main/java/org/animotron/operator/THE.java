@@ -48,7 +48,7 @@ import org.neo4j.graphdb.event.KernelEventHandler;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstarctOperator implements Prepare, KernelEventHandler {
+public class THE extends AbstractOperator implements Prepare, KernelEventHandler {
 	
 	public static String NAMESPACE = "animo/instance";
 	public static String PREFIX = "the";
@@ -77,12 +77,12 @@ public class THE extends AbstarctOperator implements Prepare, KernelEventHandler
 		return THE_NODE;
 	}
 
-	public RelationshipType relashionshipType(String name){
+	public RelationshipType relationshipType(String name){
 		return AnimoRelationshipType.get(name(), name);
 	}
 	
 	public Relationship get(String name) {
-		RelationshipType type = relashionshipType(name);
+		RelationshipType type = relationshipType(name);
 		return THE_NODE().getSingleRelationship(type, OUTGOING);
 	}
 	
@@ -94,7 +94,7 @@ public class THE extends AbstarctOperator implements Prepare, KernelEventHandler
 	
 	private Relationship create(String name) {
 		Node node = createNode();
-		RelationshipType type = relashionshipType(name);
+		RelationshipType type = relationshipType(name);
 		Relationship r = THE_NODE().createRelationshipTo(node, type);
 		NAME.set(node, name);
 		getTOP().createRelationshipTo(node, RelationshipTypes.TOP);

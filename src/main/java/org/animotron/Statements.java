@@ -149,7 +149,7 @@ public class Statements {
 				//create class finder
 				ClassFinder finder = new ClassFinder();
 				
-				//add class paths as seaching place
+				//add class paths as searching place
 				finder.addClassPath();
 				
 				//create filter for 'Quanta' implementations

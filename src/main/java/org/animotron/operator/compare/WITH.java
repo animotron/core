@@ -25,7 +25,7 @@ import javolution.util.FastList;
 
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.query.GET;
 import org.neo4j.graphdb.Node;
@@ -37,7 +37,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class WITH extends AbstarctOperator implements Predicate {
+public class WITH extends AbstractOperator implements Predicate {
 	
 	public static final WITH _ = new WITH();
 	

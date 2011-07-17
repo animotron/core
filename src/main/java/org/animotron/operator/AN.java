@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends AbstarctOperator implements Reference, Evaluable, Cachable {
+public class AN extends AbstractOperator implements Reference, Evaluable, Cachable {
 	
 	public static final AN _ = new AN();
 	

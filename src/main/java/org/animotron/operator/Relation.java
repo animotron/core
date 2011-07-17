@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Relation extends AbstarctOperator {
+public abstract class Relation extends AbstractOperator {
 	
 	public Relation(String prefix, String uri) {
 		super(prefix, uri);

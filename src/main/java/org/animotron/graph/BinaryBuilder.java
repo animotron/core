@@ -44,7 +44,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinanyBuilder {
+public class BinaryBuilder {
 	
 	private final static String HASH_PREFIX = "file-";
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");

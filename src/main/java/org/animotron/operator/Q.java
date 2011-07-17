@@ -33,7 +33,7 @@ package org.animotron.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class Q extends AbstarctOperator implements Reference, Cachable {
+public class Q extends AbstractOperator implements Reference, Cachable {
 	
 	public static final Q _ = new Q();
 	

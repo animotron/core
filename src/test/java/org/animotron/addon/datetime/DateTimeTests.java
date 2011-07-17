@@ -35,7 +35,7 @@ public class DateTimeTests {
 		//year
 		check("Y1975");
 		
-		//mounth
+		//month
 		check("M02");
 		
 		try {

@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
 import org.neo4j.graphdb.Node;
@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAS extends AbstarctOperator implements Query, Predicate {
+public class HAS extends AbstractOperator implements Query, Predicate {
 	
 	public static final HAS _ = new HAS();
 	

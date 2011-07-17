@@ -79,7 +79,7 @@ public class CommonBuilder {
 	}
 
 	private static Relationship storeBinary(InputStream stream, String path) throws IOException {
-		return BinanyBuilder.build(stream, path);
+		return BinaryBuilder.build(stream, path);
 	}
 
 }

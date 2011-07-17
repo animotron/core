@@ -34,11 +34,11 @@ public class MessageDigester {
 
     private static final Logger LOG = Logger.getLogger(MessageDigester.class);
 
-	private static final String CACHE_ALGOTHIM = "SHA-256";
+	private static final String CACHE_ALGORITHM = "SHA-256";
 	
 	public static MessageDigest md() {
 		try {
-			return MessageDigest.getInstance(CACHE_ALGOTHIM);
+			return MessageDigest.getInstance(CACHE_ALGORITHM);
 		} catch (NoSuchAlgorithmException e) {
 			//can't be, but throw runtime error
 			throw new RuntimeException(e);

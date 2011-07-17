@@ -24,7 +24,7 @@ import java.util.WeakHashMap;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
- * RelartionType implementation for animo graph needs.
+ * RelationType implementation for animo graph needs.
  * 
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

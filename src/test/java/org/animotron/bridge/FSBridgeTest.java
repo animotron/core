@@ -32,7 +32,7 @@ import org.neo4j.graphdb.Relationship;
 
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdobsky</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class FSBridgeTest extends ATest {

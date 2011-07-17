@@ -21,26 +21,26 @@ package org.animotron.addon.datetime;
 import org.neo4j.graphdb.GraphDatabaseService;
 
 /**
- * Mounth object.
+ * Month object.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public class DateNodeMounth extends TimestampNode {
+public class DateNodeMonth extends TimestampNode {
 	
 	public static final char SYMBOL = 'M';
 	
 //	static {
-//		TimestampNode.addType(SYMBOL, DateNodeMounth.class);
+//		TimestampNode.addType(SYMBOL, DateNodeMonth.class);
 //	}
 	
-	private int mounth;
+	private int month;
 	
-	public DateNodeMounth(GraphDatabaseService db, String name) {
+	public DateNodeMonth(GraphDatabaseService db, String name) {
 		super(db, name);
 		
-		mounth = Integer.valueOf(name.substring(1));
-		if (!(mounth >= 1 && mounth <= 12)) {
+		month = Integer.valueOf(name.substring(1));
+		if (!(month >= 1 && month <= 12)) {
 			throw new IllegalArgumentException("Mounth must be inrange between 1 and 12");
 		}
 	}

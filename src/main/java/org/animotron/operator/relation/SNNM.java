@@ -18,7 +18,7 @@
  */
 package org.animotron.operator.relation;
 
-import org.animotron.operator.AbstarctOperator;
+import org.animotron.operator.AbstractOperator;
 
 /**
  * Operator 'SNNM'.
@@ -26,7 +26,7 @@ import org.animotron.operator.AbstarctOperator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class SNNM extends AbstarctOperator {
+public class SNNM extends AbstractOperator {
 	
 	public static final SNNM _ = new SNNM();
 	

@@ -54,7 +54,7 @@ public class TimestampNode implements Node {
 		TimestampNode.addType(DateNode.SYMBOL, DateNode.class);
 		
 		TimestampNode.addType(DateNodeYear.SYMBOL, DateNodeYear.class);
-		TimestampNode.addType(DateNodeMounth.SYMBOL, DateNodeMounth.class);
+		TimestampNode.addType(DateNodeMonth.SYMBOL, DateNodeMonth.class);
 		
 		TimestampNode.addType(TimeNode.SYMBOL, TimeNode.class);
 		
