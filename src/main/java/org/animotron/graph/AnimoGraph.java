@@ -157,9 +157,7 @@ public class AnimoGraph {
 		Transaction tx = beginTx();
 		try {
 			result = operation.execute();
-			
 			tx.success();
-			
 			return result;
 		} finally {
 			finishTx(tx);
