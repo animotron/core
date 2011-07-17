@@ -29,6 +29,7 @@ import static org.animotron.graph.AnimoGraph.getTOP;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.exception.EBuilderTerminated;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
@@ -38,6 +39,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.event.ErrorState;
+import org.neo4j.graphdb.event.KernelEventHandler;
 
 /**
  * Operator 'THE'.
@@ -45,27 +48,32 @@ import org.neo4j.graphdb.Transaction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstarctOperator implements Prepare {
+public class THE extends AbstarctOperator implements Prepare, KernelEventHandler {
 	
 	public static String NAMESPACE = "animo/instance";
 	public static String PREFIX = "the";
 
 	public static final THE _ = new THE();
 	
-	protected final Node THE_NODE;
-
 	private THE() { 
 		super(PREFIX, NAMESPACE);
-		Transaction tx = beginTx();
-		try {
-			THE_NODE = getOrCreateNode(getROOT(), RelationshipTypes.THE);
-			tx.success();
-		} finally {
-			finishTx(tx);
-		}
 	}
 	
-	public Node NODE() {
+	private Node THE_NODE = null;
+
+	public Node THE_NODE() {
+		if (THE_NODE == null) {
+			synchronized (this) {
+				Transaction tx = beginTx();
+				try {
+					THE_NODE = getOrCreateNode(getROOT(), RelationshipTypes.THE);
+					AnimoGraph.getDb().registerKernelEventHandler(this);
+					tx.success();
+				} finally {
+					finishTx(tx);
+				}
+			}
+		}
 		return THE_NODE;
 	}
 
@@ -75,7 +83,7 @@ public class THE extends AbstarctOperator implements Prepare {
 	
 	public Relationship get(String name) {
 		RelationshipType type = relashionshipType(name);
-		return THE_NODE.getSingleRelationship(type, OUTGOING);
+		return THE_NODE().getSingleRelationship(type, OUTGOING);
 	}
 	
 	public Relationship create(String name, String hash) {
@@ -87,7 +95,7 @@ public class THE extends AbstarctOperator implements Prepare {
 	private Relationship create(String name) {
 		Node node = createNode();
 		RelationshipType type = relashionshipType(name);
-		Relationship r = THE_NODE.createRelationshipTo(node, type);
+		Relationship r = THE_NODE().createRelationshipTo(node, type);
 		NAME.set(node, name);
 		getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
 		return r;
@@ -118,5 +126,26 @@ public class THE extends AbstarctOperator implements Prepare {
 		return question;
 	}
 
-	
+	@Override
+	public void beforeShutdown() {
+		THE_NODE = null;
+		
+	}
+
+	@Override
+	public void kernelPanic(ErrorState error) {
+		//ignore
+	}
+
+	@Override
+	public Object getResource() {
+		//ignore
+		return null;
+	}
+
+	@Override
+	public ExecutionOrder orderComparedTo(KernelEventHandler other) {
+		//ignore
+		return null;
+	}
 }

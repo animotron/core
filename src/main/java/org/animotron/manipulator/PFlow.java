@@ -66,7 +66,7 @@ public class PFlow {
 			filter(new Predicate<Path> () {
 				@Override
 				public boolean accept(Path item) {
-					if (THE._.NODE().equals(item.endNode())) {
+					if (THE._.THE_NODE().equals(item.endNode())) {
 						return true;
 					}
 					return false;

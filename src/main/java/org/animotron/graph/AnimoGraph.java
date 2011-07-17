@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import javolution.util.FastMap;
 
 import org.animotron.Executor;
+import org.animotron.operator.THE;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -115,6 +116,8 @@ public class AnimoGraph {
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
 		graphDb.shutdown();
+		
+		THE._.beforeShutdown();
 	}
 	
 	private static FastMap<Transaction, Exception> activeTx = new FastMap<Transaction, Exception>();

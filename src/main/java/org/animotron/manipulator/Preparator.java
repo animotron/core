@@ -56,7 +56,7 @@ public class Preparator extends StatementManipulator {
 		.filter(new Predicate<Path> (){
 				@Override
 				public boolean accept(Path path) {
-					if (THE._.NODE().equals(path.startNode()))
+					if (THE._.THE_NODE().equals(path.startNode()))
 						return true;
 					Relationship r = path.lastRelationship();
 					if (r != null && RelationshipTypes.REF.equals(r.getType()))
