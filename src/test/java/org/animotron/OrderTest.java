@@ -28,6 +28,7 @@ import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
@@ -54,10 +55,17 @@ public class OrderTest {
 		
 		IndexManager index = graphDb.index();
 		
+		
 		if (true) {
-			order = index.forRelationships( ORDER );
-			ROOT = graphDb.getReferenceNode();
-			createChild(ROOT, 10000);
+			Transaction tx = graphDb.beginTx();
+			try {
+				order = index.forRelationships( ORDER );
+				ROOT = graphDb.getReferenceNode();
+				createChild(ROOT, 10000);
+				tx.success();
+			} finally {
+				tx.finish();
+			}
 		}
 		
 		ROOT = graphDb.getReferenceNode();

@@ -134,4 +134,8 @@
 		-->
 	</repositories>
 	
+	<organization>
+		<name>Animotron</name>
+		<url>http://animotron.org</url>
+	</organization>
 </project>
