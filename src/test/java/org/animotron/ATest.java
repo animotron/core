@@ -29,6 +29,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -47,7 +49,10 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
+import org.neo4j.graphdb.index.IndexManager;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
 
@@ -186,16 +191,64 @@ public abstract class ATest {
         serializer.serialize(op);
         Assert.assertEquals(serializer.getString(), expecteds);
 	}
+	
+	//database cleaning (thanks to mh)
+    public Map<String, Object> cleanDb() {
+        return cleanDb(Long.MAX_VALUE);
+    }
+    public Map<String, Object> cleanDb(long maxNodesToDelete) {
+        Map<String, Object> result = new HashMap<String, Object>();
+        Transaction tx = AnimoGraph.getDb().beginTx();
+        try {
+            clearIndex(result);
+            removeNodes(result,maxNodesToDelete);
+            tx.success();
+        } finally {
+            tx.finish();
+        }
+        return result;
+    }
 
-	protected boolean firstRun = false;
+    private void removeNodes(Map<String, Object> result, long maxNodesToDelete) {
+        Node refNode = AnimoGraph.getDb().getReferenceNode();
+        long nodes = 0, relationships = 0;
+        for (Node node : AnimoGraph.getDb().getAllNodes()) {
+            for (Relationship rel : node.getRelationships()) {
+                rel.delete();
+                relationships++;
+            }
+            if (!refNode.equals(node)) {
+                node.delete();
+                nodes++;
+            }
+            if (nodes >= maxNodesToDelete) break;
+        }
+        result.put("maxNodesToDelete", maxNodesToDelete);
+        result.put("nodes", nodes);
+        result.put("relationships", relationships);
+
+    }
+
+    private void clearIndex(Map<String, Object> result) {
+        IndexManager indexManager = AnimoGraph.getDb().index();
+        result.put("node-indexes", Arrays.asList(indexManager.nodeIndexNames()));
+        result.put("relationship-indexes", Arrays.asList(indexManager.relationshipIndexNames()));
+        for (String ix : indexManager.nodeIndexNames()) {
+            indexManager.forNodes(ix).delete();
+        }
+        for (String ix : indexManager.relationshipIndexNames()) {
+            indexManager.forRelationships(ix).delete();
+        }
+    }	
+	//*database cleaning
 
     @Before
     public void setup() {
-    	firstRun = true;
     }
 
     @After
     public void cleanup() {
+    	cleanDb();
     }
 
     public static boolean deleteDir(File dir) {

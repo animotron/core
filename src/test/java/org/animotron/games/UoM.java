@@ -80,7 +80,7 @@ public class UoM extends ATest {
 	@Test
 	public void operations() throws XMLStreamException, IOException {
 		
-		if (firstRun) {
+		if (true) {
 	        Map<String, String> data = new LinkedHashMap<String, String>();
 
 	        data.put("UoM.xml", THE_UoM);

@@ -185,7 +185,7 @@ public class TetrisTest extends ATest {
 	@Test
 	public void game() throws XMLStreamException {
 		
-		if (firstRun) {
+		if (true) {
 	        Map<String, String> data = new LinkedHashMap<String, String>();
 	        
 	        //keyboard

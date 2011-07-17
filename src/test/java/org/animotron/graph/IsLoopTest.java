@@ -19,6 +19,7 @@
 package org.animotron.graph;
 
 import static org.animotron.Expression._;
+import junit.framework.Assert;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
@@ -34,31 +35,13 @@ import org.junit.Test;
 public class IsLoopTest extends ATest {
 	
 	@Test
-	public void storeAndSerializeResult() throws Exception {
-		
-		new Expression(_(THE._, "A", _(IS._, "C")));
-		new Expression(_(THE._, "B", _(IS._, "A")));
-//		new Expression(_(THE._, "C", _(IS._, "B")));
-		new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
-//		new Expression(_(THE._, "A"));
-
-        
-//        Transaction tx = beginTx();
-//        try { 
-//	        Relationship r = THE._.relationship("B");
-//	        assertNotNull(r);
-//	        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(System.out);
-//	        StAXGraphSerializer serializer = new StAXGraphSerializer(writer);
-//	        serializer.serialize(r);
-//	        tx.success();
-//	        
-//        } catch (Exception e) {
-//        	e.printStackTrace();
-//			fail(e.toString());
-//        } finally {
-//        	tx.finish();
-//        }
-            
-        System.out.println("done.");
+	public void storeAndSerializeResult() {
+		try {
+			new Expression(_(THE._, "A", _(IS._, "C")));
+			new Expression(_(THE._, "B", _(IS._, "A")));
+			new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
+		} catch (Exception e) {
+			Assert.fail(e.getMessage());
+		}
 	}
 }
