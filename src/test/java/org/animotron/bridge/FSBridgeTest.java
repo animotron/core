@@ -37,7 +37,7 @@ import org.neo4j.graphdb.Relationship;
  */
 public class FSBridgeTest extends ATest {
 	
-	private static final String PATH = "src/main/animo/mime/application-animo.animo";
+	private static final String PATH = "src/main/animo/mime-type/application-animo.animo";
 	
 	private void check(String the) throws XMLStreamException{
         Relationship r = THE._.get(the);
