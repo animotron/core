@@ -23,6 +23,7 @@ import static org.animotron.Expression.text;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.operator.compare.EQ;
 import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.HAVE;
@@ -63,4 +64,37 @@ public class ANYTests extends ATest {
         //System.out.println("done.");
 	}
 	
+	@Test
+	public void ANYwithEQ() throws Exception {
+
+		new Expression(
+			_(THE._, "text-plain", 
+				_(IS._, "mime-type"),
+				_(IS._, "text"),
+				_(HAVE._, "type", text("text/plain")),
+				_(HAVE._, "name", text("Plain text")),
+				_(HAVE._, "extension", text("txt"))
+				)
+		);
+    	
+		new Expression(
+				_(THE._, "application-atom", 
+					_(IS._, "mime-type"),
+					_(IS._, "application"),
+					_(HAVE._, "type", text("application/atom+xml")),
+					_(HAVE._, "name", text("Atom Feed Document")),
+					_(HAVE._, "extension", text("atom"))
+					)
+			);
+
+		Expression test = new Expression(
+			_(THE._, "test", 
+				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
+			)
+		);
+	
+        assertAnimo(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
+
+        //System.out.println("done.");
+	}
 }
