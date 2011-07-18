@@ -18,69 +18,50 @@
  */
 package org.animotron;
 
-import java.util.List;
-
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.junit.Assert;
 import org.junit.Test;
-import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.index.lucene.QueryContext;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
+
+import java.util.List;
+
+import static org.animotron.graph.AnimoGraph.*;
 
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class OrderTest {
-	
-	private static final String ORDER = "order"; 
-	
-	GraphDatabaseService graphDb;
-	RelationshipIndex order;
-	
-	@Test
+public class OrderTest extends ATest {
+
+    @Test
 	public void orderedRelationships() {
-		Node ROOT;
-		
-		graphDb = new EmbeddedGraphDatabase("data-tests");
-		
-		IndexManager index = graphDb.index();
-		
-		
 		if (true) {
-			Transaction tx = graphDb.beginTx();
+			Transaction tx = beginTx();
 			try {
-				order = index.forRelationships( ORDER );
-				ROOT = graphDb.getReferenceNode();
-				createChild(ROOT, 10000);
+				createChild(getROOT(), 10000);
 				tx.success();
 			} finally {
-				tx.finish();
+				finishTx(tx);
 			}
 		}
 		
-		ROOT = graphDb.getReferenceNode();
-		order = index.forRelationships( ORDER );
-
 		System.out.println("reading ...");
-		IndexHits<Relationship> q = order.query(ORDER, sort( ORDER ), ROOT, null);
+		IndexHits<Relationship> q = getORDER().query(getROOT());
 		try {
 			int i = 1;
 			for (Relationship r : q ) {
-				
+
 //					System.out.print(q.currentScore() + " ");
 //					System.out.println(r.getEndNode().getProperty(ORDER+"-P"));
 				
-				Assert.assertEquals(i, r.getEndNode().getProperty(ORDER+"-P"));
+				Assert.assertEquals(i, r.getEndNode().getProperty("ORDER-P"));
 				i++;
 			}
 		} finally {
@@ -92,12 +73,10 @@ public class OrderTest {
 	private List<Node> createChild(Node parent, int num) {
 		
 		for (int i = 1; i <= num; i++) {
-			Node child = graphDb.createNode();
-			child.setProperty(ORDER+"-P", i);
-			
+			Node child = createNode();
+			child.setProperty("ORDER-P", i);
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
-			
-			order.add(r, ORDER, i);
+			getORDER().add(r, i);
 		}
 
 		return null;

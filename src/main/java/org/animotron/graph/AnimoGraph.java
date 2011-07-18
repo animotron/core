@@ -50,31 +50,29 @@ public class AnimoGraph {
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
-	public static void startDB(String folder) {
-		
-		STORAGE = folder;
-		graphDb = new EmbeddedGraphDatabase(STORAGE);
-		
-		ROOT = graphDb.getReferenceNode();
-		
-		IndexManager INDEX = graphDb.index();
-		ORDER = new OrderIndex(INDEX);
-		
-		execute(
-			new GraphOperation<Void> () {
-				@Override
-				public Void execute() {
-					TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
-					//EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
-					CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
-					return null;
-				}
-				
-			}
-		);
-		
-	}
+    public static void startDB(String folder) {
+        STORAGE = folder;
+        graphDb = new EmbeddedGraphDatabase(STORAGE);
+        initDB();
+    }
 	
+    public static void initDB() {
+        ROOT = graphDb.getReferenceNode();
+        IndexManager INDEX = graphDb.index();
+        ORDER = new OrderIndex(INDEX);
+        execute(
+            new GraphOperation<Void> () {
+                @Override
+                public Void execute() {
+                    TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
+                    //EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
+                    CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
+                    return null;
+                }
+            }
+        );
+    }
+
 	public static GraphDatabaseService getDb() {
 		return graphDb;
 	}
@@ -167,7 +165,7 @@ public class AnimoGraph {
 	public static Node getNode(Node parent, RelationshipType type) {
 		Relationship r = parent.getSingleRelationship(type, OUTGOING);
 		return r == null ? null : r.getEndNode();
-	};
+	}
 	
 	public static Node createNode(){
 		return graphDb.createNode();
