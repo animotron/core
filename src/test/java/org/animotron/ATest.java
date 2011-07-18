@@ -18,26 +18,8 @@
  */
 package org.animotron;
 
-import static org.animotron.graph.AnimoGraph.*;
-import static org.junit.Assert.assertNotNull;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
+import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
-
 import org.animotron.graph.CommonBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;
@@ -49,10 +31,18 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexManager;
 
-import com.ctc.wstx.stax.WstxOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import static org.animotron.graph.AnimoGraph.*;
+import static org.junit.Assert.assertNotNull;
 
 
 /**
@@ -185,7 +175,7 @@ public abstract class ATest {
 	protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
-       System.out.println("String result serializer...");
+        System.out.println("String result serializer...");
         StringResultSerializer serializer = new StringResultSerializer();
         serializer.serialize(op);
         Assert.assertEquals(expected, serializer.getString());
@@ -195,17 +185,17 @@ public abstract class ATest {
     public Map<String, Object> cleanDb() {
         return cleanDb(Long.MAX_VALUE);
     }
-    
-    public Map<String, Object> cleanDb(long maxNodesToDelete) {
-        Map<String, Object> result = new HashMap<String, Object>();
-        Transaction tx = beginTx();
-        try {
-            clearIndex(result);
-            removeNodes(result,maxNodesToDelete);
-            tx.success();
-        } finally {
-            finishTx(tx);
-        }
+
+    public Map<String, Object> cleanDb(final long maxNodesToDelete) {
+        Map<String, Object> result = execute(new GraphOperation<Map<String, Object>>() {
+            @Override
+            public Map<String, Object> execute() {
+                Map<String, Object> result = new HashMap<String, Object>();
+                clearIndex(result);
+                removeNodes(result,maxNodesToDelete);
+                return result;
+            }
+        });
         initDB();
         return result;
     }
