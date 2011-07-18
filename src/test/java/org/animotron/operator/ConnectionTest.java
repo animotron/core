@@ -36,7 +36,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ConnectionTests extends ATest {
+public class ConnectionTest extends ATest {
 	
 	@Test
 	public void mimeType_usecase() throws Exception {

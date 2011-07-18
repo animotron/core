@@ -32,7 +32,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class SimpleTests extends ATest {
+public class SimpleTest extends ATest {
 	
 	@Test
 	public void an() throws Exception {

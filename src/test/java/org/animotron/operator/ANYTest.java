@@ -34,7 +34,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ANYTests extends ATest {
+public class ANYTest extends ATest {
 	
 
 	@Test

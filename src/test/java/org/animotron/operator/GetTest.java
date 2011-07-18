@@ -30,7 +30,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GetTests extends ATest {
+public class GetTest extends ATest {
 	
 //	@Test
 //	public void getFromPFlow_an_with_param() throws Exception {
