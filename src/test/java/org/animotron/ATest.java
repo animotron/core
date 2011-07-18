@@ -195,6 +195,7 @@ public abstract class ATest {
     public Map<String, Object> cleanDb() {
         return cleanDb(Long.MAX_VALUE);
     }
+    
     public Map<String, Object> cleanDb(long maxNodesToDelete) {
         Map<String, Object> result = new HashMap<String, Object>();
         Transaction tx = beginTx();
@@ -213,11 +214,15 @@ public abstract class ATest {
         Node refNode = getROOT();
         long nodes = 0, relationships = 0;
         for (Node node : getDb().getAllNodes()) {
+        	boolean delete = true;
             for (Relationship rel : node.getRelationships()) {
-                rel.delete();
+            	if (rel.getStartNode().equals(refNode))
+            		delete = false;
+            	else
+            		rel.delete();
                 relationships++;
             }
-            if (!refNode.equals(node)) {
+            if (delete && !refNode.equals(node)) {
                 node.delete();
                 nodes++;
             }
