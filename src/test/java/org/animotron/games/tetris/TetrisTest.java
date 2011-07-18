@@ -183,8 +183,7 @@ public class TetrisTest extends ATest {
 		"	</have:action>" +
 		"</the:tetris>";
 
-	@Test
-	@Ignore
+	//@Test
 	public void game() throws XMLStreamException {
 		
 		if (true) {
