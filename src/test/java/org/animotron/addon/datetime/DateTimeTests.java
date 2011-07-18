@@ -84,13 +84,18 @@ public class DateTimeTests {
 		} catch (IllegalArgumentException e) {
 		}
 
-		try {
-			check("T23-60");
-			assertFalse(true);
-		} catch (IllegalArgumentException e) {
-		}
+        try {
+            check("T23-60");
+            assertFalse(true);
+        } catch (IllegalArgumentException e) {
+        }
 
-		check("P3s");
+        try {
+            check("P3s");
+            assertFalse(true);
+        } catch (IllegalArgumentException e) {
+        }
+
 	}
 	
 	private void check(String str) throws IllegalArgumentException {
