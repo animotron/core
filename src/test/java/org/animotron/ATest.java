@@ -18,8 +18,7 @@
  */
 package org.animotron;
 
-import static org.animotron.graph.AnimoGraph.execute;
-import static org.animotron.graph.AnimoGraph.shutdownDB;
+import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.BufferedReader;
@@ -39,7 +38,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import junit.framework.Assert;
 
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.CommonBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;
@@ -199,21 +197,22 @@ public abstract class ATest {
     }
     public Map<String, Object> cleanDb(long maxNodesToDelete) {
         Map<String, Object> result = new HashMap<String, Object>();
-        Transaction tx = AnimoGraph.getDb().beginTx();
+        Transaction tx = beginTx();
         try {
             clearIndex(result);
             removeNodes(result,maxNodesToDelete);
             tx.success();
         } finally {
-            tx.finish();
+            finishTx(tx);
         }
+        initDB();
         return result;
     }
 
     private void removeNodes(Map<String, Object> result, long maxNodesToDelete) {
-        Node refNode = AnimoGraph.getDb().getReferenceNode();
+        Node refNode = getROOT();
         long nodes = 0, relationships = 0;
-        for (Node node : AnimoGraph.getDb().getAllNodes()) {
+        for (Node node : getDb().getAllNodes()) {
             for (Relationship rel : node.getRelationships()) {
                 rel.delete();
                 relationships++;
@@ -231,7 +230,7 @@ public abstract class ATest {
     }
 
     private void clearIndex(Map<String, Object> result) {
-        IndexManager indexManager = AnimoGraph.getDb().index();
+        IndexManager indexManager = getDb().index();
         result.put("node-indexes", Arrays.asList(indexManager.nodeIndexNames()));
         result.put("relationship-indexes", Arrays.asList(indexManager.relationshipIndexNames()));
         for (String ix : indexManager.nodeIndexNames()) {
@@ -244,7 +243,7 @@ public abstract class ATest {
 
     @Before
     public void setup() {
-    	//cleanDb();
+    	cleanDb();
     }
 
     @After
@@ -265,13 +264,13 @@ public abstract class ATest {
     }
     
     @BeforeClass
-    public static void startDB() {
+    public static void start() {
     	deleteDir(new File(DATA_FOLDER));
-    	AnimoGraph.startDB(DATA_FOLDER);
+    	startDB(DATA_FOLDER);
     }
 
     @AfterClass
-    public static void stopDB() {
+    public static void stop() {
     	shutdownDB();
     }
 
