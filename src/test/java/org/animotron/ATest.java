@@ -250,7 +250,7 @@ public abstract class ATest {
 
     @After
     public void cleanup() {
-    	cleanDb();
+    	//cleanDb();
     }
 
     public static boolean deleteDir(File dir) {

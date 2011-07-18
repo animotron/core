@@ -18,8 +18,16 @@
  */
 package org.animotron.operator.compare;
 
+import java.io.IOException;
+import java.util.List;
+
+import javolution.util.FastList;
+
+import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
+import org.animotron.operator.query.GET;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -36,9 +44,42 @@ public class EQ extends AbstractOperator implements Predicate {
 	private EQ() { super("eq", "animo/compare/eq"); }
 
 	@Override
-	public boolean filter(Relationship start_op, Relationship op, Node ref) {
-		// TODO Auto-generated method stub
+	public boolean filter(Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
+		System.out.println("==================================================");
+		System.out.println("EQ op "+op+" ref "+ref);
+		//XXX: fix
+		String name = name(op);
+
+		Relationship have = GET._.get(ref, name);
+		if (have == null) return false;
+		
+		List<Relationship> actual = new FastList<Relationship>();
+		List<Relationship> expected = new FastList<Relationship>();
+
+		System.out.println("Eval actual");
+		PipedInput in = Evaluator._.execute(start_op, have.getEndNode());
+		for (Object e : in) {
+			actual.add((Relationship) e);
+			System.out.println("actual "+e);
+		}
+
+		System.out.println("Eval expected");
+		in = Evaluator._.execute(start_op, op.getEndNode());
+		for (Object e : in) {
+			expected.add((Relationship) e);
+			System.out.println("expected "+e);
+		}
+		
+		if (actual.size() == 1 && expected.size() == 1) {
+			Relationship e = actual.get(0);
+			Relationship g = expected.get(0);
+			
+			if (   e.getType().name().equals(g.getType().name()) 
+				&& e.getEndNode().equals(g.getEndNode()))
+				
+				return true;
+		}
+
 		return false;
 	}
-	
 }

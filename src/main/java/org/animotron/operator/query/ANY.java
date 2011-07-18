@@ -70,8 +70,8 @@ public class ANY extends AbstractOperator implements Cachable, Evaluable, Query 
 				} else {
 					
 					for (Relationship tdR : td_eval.traverse(node).relationships()) {
-						System.out.println("ANY get next "+tdR);
-						Node res = tdR.getEndNode();
+						System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
+						Node res = tdR.getStartNode();
 						if (filtering(pf, res)) {
 							
 							pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
@@ -84,7 +84,7 @@ public class ANY extends AbstractOperator implements Cachable, Evaluable, Query 
 			
 			public boolean filtering(PFlow pf, Node node) {
 
-				Iterator<Relationship> it = pf.getOP().getEndNode().getRelationships(OUTGOING).iterator();
+				Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
 				while (it.hasNext()) {
 					Relationship r = it.next();
 					
