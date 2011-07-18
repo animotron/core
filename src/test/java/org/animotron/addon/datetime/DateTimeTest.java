@@ -28,7 +28,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class DateTimeTests {
+public class DateTimeTest {
 	
 	@Test
 	public void formats() throws IllegalArgumentException {

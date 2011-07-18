@@ -31,7 +31,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class UoM extends ATest {
+public class UoMTest extends ATest {
 
 	private static final String THE_UoM = 
 		"<the:UoM "+ANIMO_NSs+">" +

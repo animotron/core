@@ -32,7 +32,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class SelfTests extends ATest {
+public class SelfTest extends ATest {
 	
 	@Test
 	public void getFromPFlow() throws Exception {
