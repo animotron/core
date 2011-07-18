@@ -27,7 +27,7 @@
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
-			<version>1.4.M06</version>
+			<version>1.4</version>
 		</dependency>
 		
 		<!-- light/fast date-time (animo/time) -->
@@ -76,7 +76,6 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.8.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

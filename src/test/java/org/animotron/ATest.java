@@ -62,13 +62,12 @@ import com.ctc.wstx.stax.WstxOutputFactory;
  *
  */
 public abstract class ATest {
+
+    private static final String DATA_FOLDER = "data-test";
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-	
-	private static boolean cleanAfterTest = false;
 
-
-	public static final String ANIMO_NSs = 
+	public static final String ANIMO_NSs =
 		"xmlns:the='animo/instance' " +
 		"xmlns:an='animo/reference' " +
 		
@@ -134,7 +133,7 @@ public abstract class ATest {
 			int n; 
 			while ((n = reader.read(buffer)) != -1) {
 				for (int i = 0; i < n; i++) {
-					System.out.print((char)buffer[i]);
+					System.out.print(buffer[i]);
 				}
 			} 
 		} finally { 
@@ -154,8 +153,8 @@ public abstract class ATest {
 			int n; 
 			while ((n = reader.read(buffer)) != -1) {
 				for (int i = 0; i < n; i++) {
-					System.out.print((char)buffer[i]);
-					b.append((char)buffer[i]);
+					System.out.print(buffer[i]);
+					b.append(buffer[i]);
 				}
 			} 
 		} finally { 
@@ -165,7 +164,7 @@ public abstract class ATest {
 		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 
-	protected void assertAnimo(Relationship op, String expecteds) throws IOException, InterruptedException {
+	protected void assertAnimo(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
@@ -182,16 +181,16 @@ public abstract class ATest {
         
         AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
         serializer.serialize(op);
-        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expecteds);
+        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
 	}
 
-	protected void assertString(Relationship op, String expecteds) throws IOException, InterruptedException {
+	protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
        System.out.println("String result serializer...");
         StringResultSerializer serializer = new StringResultSerializer();
         serializer.serialize(op);
-        Assert.assertEquals(serializer.getString(), expecteds);
+        Assert.assertEquals(serializer.getString(), expected);
 	}
 	
 	//database cleaning (thanks to mh)
@@ -242,22 +241,21 @@ public abstract class ATest {
             indexManager.forRelationships(ix).delete();
         }
     }	
-	//*database cleaning
 
     @Before
     public void setup() {
+    	cleanDb();
     }
 
     @After
     public void cleanup() {
-    	//cleanDb();
     }
 
     public static boolean deleteDir(File dir) {
         if (dir.isDirectory()) {
             String[] children = dir.list();
-            for (int i=0; i<children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
                 if (!success) {
                     return false;
                 }
@@ -268,18 +266,13 @@ public abstract class ATest {
     
     @BeforeClass
     public static void startDB() {
-    	
-    	deleteDir(new File("data"));
-    	
-    	AnimoGraph.startDB("data");
+    	deleteDir(new File(DATA_FOLDER));
+    	AnimoGraph.startDB(DATA_FOLDER);
     }
 
     @AfterClass
     public static void stopDB() {
     	shutdownDB();
-    	
-    	if (cleanAfterTest) {
-    		;//delete folder?
-    	}
     }
+
 }
