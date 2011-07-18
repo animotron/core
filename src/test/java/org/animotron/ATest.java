@@ -170,6 +170,8 @@ public abstract class ATest {
         AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
         serializer.serialize(op);
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
+
+        System.out.println();
 	}
 
 	protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
@@ -179,6 +181,8 @@ public abstract class ATest {
         StringResultSerializer serializer = new StringResultSerializer();
         serializer.serialize(op);
         Assert.assertEquals(expected, serializer.getString());
+
+        System.out.println();
 	}
 	
 	//database cleaning (thanks to mh)

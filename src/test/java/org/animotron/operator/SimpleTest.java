@@ -50,16 +50,8 @@ public class SimpleTest extends ATest {
 			_(THE._, "CC", _(AN._, "BB"))
 		);
 
-        //System.out.println("get:A an:B");
-//        PipedInput in = Evaluator._.execute(C.getRelationship());
-//        System.out.println("outing ....");
-//        for (Object r : in) {
-//        	Assert.assertEquals(14, ((Relationship)r).getId());
-//        }
-        
-        assertAnimo(C, "<the:CC><an:BB/></the:CC>");
-        //assertString(C, "<the:C><the:A></the:A></the:C>");
-        
+        assertAnimo(C, "<the:CC><the:BB><have:AA>a@b</have:AA></the:BB></the:CC>");
+
         System.out.println("done.");
 	}
 
@@ -79,7 +71,6 @@ public class SimpleTest extends ATest {
 			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
 		);
 
-        //System.out.println("get:A an:B");
         assertAnimo(C, "<the:C><have:A>a@b</have:A></the:C>");
         
         //System.out.println("done.");
