@@ -165,7 +165,7 @@ public class AnimoGraph {
 	public static Node getNode(Node parent, RelationshipType type) {
 		Relationship r = parent.getSingleRelationship(type, OUTGOING);
 		return r == null ? null : r.getEndNode();
-	};
+	}
 	
 	public static Node createNode(){
 		return graphDb.createNode();
