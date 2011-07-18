@@ -40,6 +40,6 @@ public class Executor {
 	}
 	
 	public static void shutdown() {
-		exec.shutdown();
+		//exec.shutdown();
 	}
 }
