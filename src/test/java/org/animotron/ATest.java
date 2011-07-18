@@ -244,7 +244,7 @@ public abstract class ATest {
 
     @Before
     public void setup() {
-    	cleanDb();
+    	//cleanDb();
     }
 
     @After
