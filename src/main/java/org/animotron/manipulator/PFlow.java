@@ -247,4 +247,8 @@ public class PFlow {
 	public void addContextPoint(Relationship r) {
 		path.add(r);
 	}
+
+	public Relationship getLastContext() {
+		return path.get(path.size()-1);
+	}
 }

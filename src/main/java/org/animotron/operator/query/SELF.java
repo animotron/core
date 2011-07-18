@@ -18,10 +18,15 @@
  */
 package org.animotron.operator.query;
 
+import static org.animotron.graph.RelationshipTypes.REF;
+
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Evaluable;
+import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.PropertyContainer;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Query operator 'self'.
@@ -43,6 +48,29 @@ public class SELF extends AbstractOperator implements Evaluable {
 				System.out.println("SELF '"+name(pf.getOP())+"' op = "+pf.getOP());
 				
 				System.out.println("path = "+pf.getFlowPath());
+				
+				Path path = pf.getFlowPath();
+				
+				Relationship lastContext = pf.getLastContext();
+				
+				Relationship ref = null;
+				for (Relationship step : path.relationships()) {
+					if (REF.name().equals(step.getType().name())) {
+						
+						ref = step;
+					}
+					
+					if (step == lastContext)
+						break;
+				}
+				
+				if (ref != null) {
+					Relationship res = GET._.get(ref.getEndNode(), name(pf.getOP()));
+					
+					if (res != null)
+						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+				} else
+					;//XXX: error???
 				
 				pf.done();
 			}
