@@ -99,8 +99,11 @@ public abstract class Manipulator {
 			}
         };
 //        System.out.println("pf "+pf);
-//        System.out.println("pf.answer.subscribe(onAnswer) "+pf.answer);
+//        System.out.println("pf.answer.subscribe(onAnswer) "+pf.parent.answer);
+		
         pf.parent.answer.subscribe(onAnswer);
+		if (op instanceof Node)
+	        pf.answer.subscribe(onAnswer);
 
         //send question to evaluation
         pf.question.publish(pf);
