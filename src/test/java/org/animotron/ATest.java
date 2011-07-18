@@ -90,8 +90,10 @@ public abstract class ATest {
 
 		"xmlns:op='animo/operation' " +
 		"xmlns:string='animo/string' " +
-		"xmlns:ml='animo/ml' " +
-		
+        "xmlns:ml='animo/ml' " +
+
+        "xmlns:math='animo/math' " +
+
 		"xmlns:Q='animo/quantity' ";
 
 	protected void store(final Map<String, String> nameDataMap) throws XMLStreamException {
