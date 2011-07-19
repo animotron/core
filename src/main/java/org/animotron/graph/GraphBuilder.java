@@ -95,32 +95,15 @@ public abstract class GraphBuilder {
 	}
 	
 	final protected void endGraph() throws EBuilderTerminated {
-		
-		Object[] first = flow.get(0);
-		
+
+        if (!statements.empty()) {
+            end();
+        }
+
 		try {
 			
 			int i = 0;
-			
-			if (!(first[0] instanceof THE)) {
-				Object[] item = {	
-						THE._,				// 0 	
-						THE.NAMESPACE,		// 1
-                        //TODO : need more investigations
-						hash(first),		// 2
-						null, 				// 3
-						first[4], 			// 4
-						null,				// 5
-						null,				// 6
-						null,	 			// 7
-						false,				// 8
-						THE.PREFIX			// 9
-					};
-				first[7] = item; 
-				build(item, i++);
-				first = item;
-			}
-			
+
 			for (Object[] item : flow) {
 				build(item, i++);
 			}
@@ -128,14 +111,14 @@ public abstract class GraphBuilder {
 			tx.success();
 			finishTx(tx);
 			
-			the = (Relationship) first[5];
+			the = (Relationship) flow.get(0)[5];
 			
 			catcher.push();
 			
 		} catch (Exception e) {
-			
+
 			fail(e);
-			
+
 		}
 			
 	}
@@ -152,6 +135,10 @@ public abstract class GraphBuilder {
 	
 	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
 		
+        if (flow.isEmpty() && !(statement instanceof THE)) {
+            start(THE._, THE._.name(), THE._.namespace(), null, null);
+        }
+
 		Object[] parent = null;
 		
 		if (!statements.empty()) {
@@ -245,8 +232,8 @@ public abstract class GraphBuilder {
 			Statement statement = (Statement) item[0];
 			if (statement instanceof THE) {
 				THE the = (THE) statement;
-				String name = (String) item[2];
 				String hash = hash(item);
+                String name = item[2] != null ? (String) item[2] : hash;
 				r = the.get(name);
 				if (r != null) {
 					if (HASH.has(r)) {
