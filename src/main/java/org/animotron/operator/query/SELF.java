@@ -24,8 +24,8 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.relation.HAVE;
 import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -53,11 +53,15 @@ public class SELF extends AbstractOperator implements Evaluable {
 				
 				Relationship lastContext = pf.getLastContext();
 				
+				short searchHave = 1;
+				
 				Relationship ref = null;
 				for (Relationship step : path.relationships()) {
 					if (REF.name().equals(step.getType().name())) {
-						
 						ref = step;
+						searchHave = 0;
+					} else if (searchHave == 1 && HAVE._.relationshipType().name().equals(step.getType().name())) {
+						searchHave = 2;
 					}
 					
 					if (step == lastContext)
@@ -65,10 +69,18 @@ public class SELF extends AbstractOperator implements Evaluable {
 				}
 				
 				if (ref != null) {
+					//reference in processing flow
 					Relationship res = GET._.get(ref.getEndNode(), name(pf.getOP()));
 					
 					if (res != null)
 						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+				} else if (searchHave == 2) {
+					//the instance self in have
+					Relationship res = GET._.get(pf.getStartNode(), name(pf.getOP()));
+					
+					if (res != null)
+						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+					
 				} else
 					;//XXX: error???
 				

@@ -66,8 +66,8 @@ public class SelfTest extends ATest {
 //			_(THE._, "F", _(GET._, "B", _(AN._, "D")))
 //		);
     	
-        assertAnimo(C, "<the:C><have:A>.</have:A></the:C>");
-        assertAnimo(CC, "<the:CC><have:A>CC</have:A></the:CC>");
+        assertAnimo(C, "<the:C><have:A>.</have:A><have:B><have:A>.</have:A></have:B></the:C>");
+        assertAnimo(CC, "<the:CC><have:A>CC</have:A><have:B><have:A>CC</have:A></have:B></the:CC>");
         assertAnimo(D, "<the:D><is:C/><have:A>:</have:A><have:B><have:A>:</have:A></have:B></the:D>");
         //System.out.println("self:B an:C");
         assertAnimo(E, "<the:E><have:B>.<have:B></the:E>");
