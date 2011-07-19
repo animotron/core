@@ -79,10 +79,13 @@ public class ConnectionTest extends ATest {
 
     	Expression A = new Expression(
 		_(THE._, "A", 
-			_(GET._, "type", 
-				_(GET._, "mime-type", 
-					_(AN._, "fileA")
-		))));
+//			_(GET._, "type",
+//                _(AfterLast._,
+//					text("."),
+					_(GET._, "path", _(AN._, "fileA"))));
+//				_(GET._, "extension", //"mime-type",
+//					_(AN._, "fileA")
+		//)));
 
         //System.out.println("");
         //assertString(A, "text/plain");
