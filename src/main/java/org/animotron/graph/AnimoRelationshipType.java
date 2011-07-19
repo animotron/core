@@ -40,11 +40,11 @@ public class AnimoRelationshipType implements RelationshipType {
 		this.name = name;
 	}
 
-	private static String name (String name, String prefix) {
+	private static String name (String prefix, String name) {
 		return prefix + ":" + name;
 	}
 
-	public static RelationshipType get(String name, String prefix) {
+	public static RelationshipType get(String prefix, String name) {
         if (name == null) {
             return get(prefix);
         }
