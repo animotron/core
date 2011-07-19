@@ -80,7 +80,7 @@ public class ConnectionTest extends ATest {
     	Expression A = new Expression(
 		_(THE._, "A", 
 			_(GET._, "type",
-    			_(GET._, "extension", //"mime-type",
+    			_(GET._, "mime-type",
 					_(AN._, "fileA")
 		))));
 
