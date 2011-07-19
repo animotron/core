@@ -180,7 +180,7 @@ public abstract class ATest {
         System.out.println("String result serializer...");
         StringResultSerializer serializer = new StringResultSerializer();
         serializer.serialize(op);
-        Assert.assertEquals(expected, serializer.getString());
+        Assert.assertEquals("", expected, serializer.getString());
 
         System.out.println();
 	}

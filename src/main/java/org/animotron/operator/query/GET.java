@@ -24,6 +24,7 @@ import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
@@ -186,7 +187,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				
 				if (name.equals(name(tdR))) {
 					System.out.println(" MATCH");
-					return tdR;
+					return new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
 				}
 				System.out.println();
 			}

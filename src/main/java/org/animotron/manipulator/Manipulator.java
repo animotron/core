@@ -80,7 +80,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<Relationship> onAnswer = new Subscribable<Relationship>() {
             public void onMessage(Relationship msg) {
-//            	System.out.println("get answer "+msg);
+            	System.out.println("get answer "+msg);
             	try {
             		if (msg == null)
             			out.close();
