@@ -123,7 +123,6 @@ public class InMemoryRelationship implements Relationship {
 	 */
 	@Override
 	public long getId() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -189,5 +188,8 @@ public class InMemoryRelationship implements Relationship {
 	public boolean isType(RelationshipType type) {
 		return type.equals(type);
 	}
-
+	 
+	public String toString() {
+		return ""+getStartNode()+" -- ["+getType()+"] -> "+getEndNode();
+	}
 }
