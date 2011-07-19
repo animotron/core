@@ -106,7 +106,7 @@ public abstract class GraphBuilder {
 				Object[] item = {	
 						THE._,				// 0 	
 						THE.NAMESPACE,		// 1
-						first[2],			// 2
+						hash(first),		// 2
 						null, 				// 3
 						first[4], 			// 4
 						null,				// 5
