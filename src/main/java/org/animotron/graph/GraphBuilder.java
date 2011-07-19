@@ -106,6 +106,7 @@ public abstract class GraphBuilder {
 				Object[] item = {	
 						THE._,				// 0 	
 						THE.NAMESPACE,		// 1
+                        //TODO : need more investigations
 						hash(first),		// 2
 						null, 				// 3
 						first[4], 			// 4
