@@ -190,13 +190,13 @@ public class AnimoGraph {
 	}
 
 	public static Node createCache(Node node, String hash) {
-		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
+		RelationshipType type = AnimoRelationshipType.get(CACHE_PREFIX, hash);
 		CACHE.createRelationshipTo(node, type);
 		return node;
 	}
 
 	public static Node getCache(String hash) {
-		RelationshipType type = AnimoRelationshipType.get(hash, CACHE_PREFIX);
+		RelationshipType type = AnimoRelationshipType.get(CACHE_PREFIX, hash);
 		return getNode(CACHE, type);
 	}
 	
