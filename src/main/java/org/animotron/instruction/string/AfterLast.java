@@ -68,14 +68,18 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 
                 szer.serialize(params[1]);
                 String source = szer.getString();
+                
+                int index = source.lastIndexOf(pattern);
+                if (index != -1) {
 
-                Relationship r = new Expression(
-                    text(
-                        source.substring(source.lastIndexOf(pattern) + 1)
-                    )
-                );
-
-                pf.answer.publish(r);
+		            Relationship r = new Expression(
+		                text(
+		                    source.substring(index + 1)
+		                )
+		            );
+		
+		            pf.sendAnswer(r);
+                }
 
                 pf.done();
 
