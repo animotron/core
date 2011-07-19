@@ -98,6 +98,8 @@ public abstract class Manipulator {
             						(Long)msg.getProperty(RID.name())
             					); 
             			}
+            			
+            			System.out.println("Manipulator get evaluable "+msg);
 
         				Statement s = Statements.relationshipType(msg.getType());
             			if (s instanceof Query || s instanceof Evaluable) {

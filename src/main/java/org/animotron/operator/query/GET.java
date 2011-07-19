@@ -24,6 +24,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
@@ -188,10 +190,23 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				
 				if (name.equals(name(tdR))) {
 					System.out.println(" MATCH");
+					
+					final Node sNode = context;
+					final Relationship r = tdR;
+					
+					AnimoGraph.execute(new GraphOperation<Relationship>() {
+						@Override
+						public Relationship execute() {
+							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
+							RID.set(res, r.getId());
+							return res;
+						}
+					});
+					
 //					Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
 //					RID.set(res, tdR.getId());
 //					return res;
-					return tdR;
+//					return tdR;
 				}
 				System.out.println();
 			}
