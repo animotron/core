@@ -52,11 +52,11 @@ public class GetTest extends ATest {
 	public void getFromPFlow_cross_an_with_param() throws Exception {
         System.out.println("Test cross 'get' ...");
         
-    	Expression A = new Expression(
+    	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
     	
-    	Expression D = new Expression(
+    	new Expression(
 			_(THE._, "D", _(HAVE._, "E", _(GET._, "B")))
 		);
     	
