@@ -20,9 +20,9 @@ package org.animotron.instruction.string;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
 
-import java.io.IOException;
-
+import org.animotron.Expression;
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
 import org.animotron.serializer.StringResultSerializer;
@@ -42,29 +42,48 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 	
 	private AfterLast() { super("after-last", STRING._); }
 	
-	public void eval(Relationship op, PFlow ch) throws InterruptedException, IOException {
-		
-		//UNDERSTAND: if we have more that 2 params, what to do?
-		
-		Relationship[] params = getORDER().first(2, op.getEndNode());
-		
-		//pattern
-		StringResultSerializer szer = new StringResultSerializer();
-		szer.serialize(params[0]);
-		String pattern = szer.getString();
-
-		szer.serialize(params[1]);
-		String source = szer.getString();
-		
-		int index = source.lastIndexOf(pattern);
-		String result = source.substring(index);
-		
-		System.out.println(result);
-	}
-
 	@Override
 	public Subscribable<PFlow> onCalcQuestion() {
-		// TODO Auto-generated method stub
-		return null;
+		return question;
 	}
+	
+	private OnQuestion question = new OnQuestion() {
+		@Override
+		public void onMessage(PFlow pf) {
+			//UNDERSTAND: if we have more that 2 params, what to do?
+			
+			Relationship[] params = getORDER().first(2, pf.getOPNode());
+			
+			String pattern;
+			String source;
+			
+			try {
+
+				//pattern
+				StringResultSerializer szer = new StringResultSerializer();
+				szer.serialize(params[0]);
+				pattern = szer.getString();
+	
+				szer.serialize(params[1]);
+				source = szer.getString();
+			
+
+				int index = source.lastIndexOf(pattern);
+				if (index > 0) {
+					String result = source.substring(index+1);
+					System.out.println(result);
+					
+					pf.sendAnswer(new Expression(Expression.text(result))) ;
+				}
+			
+			} catch (Exception e) {
+				//XXX: log?
+				pf.done();
+				return;
+			}
+
+			pf.done();
+		}
+		
+	};
 }
