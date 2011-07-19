@@ -15,11 +15,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.operator;
+package org.animotron.instruction.string;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.instruction.string.AfterLast;
+import org.animotron.operator.AN;
+import org.animotron.operator.THE;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
@@ -38,14 +40,14 @@ public class AfterLastTest extends ATest {
         System.out.println("Test 'AfterLast' ...");
         
     	new Expression(
-			_(THE._, "A", _(HAVE._, "B", text("x.y.z")))
+			Expression._(THE._, "A", _(HAVE._, "B", text("x.y.z")))
 		);
     	
     	Expression C = new Expression(
-			_(THE._, "C", _(AfterLast._, _(GET._, "B", _(AN._, "A"))))
+			_(THE._, "C", _(AfterLast._, text("."), _(GET._, "B", Expression._(AN._, "A"))))
 		);
     	
-        assertAnimo(C, "<the:C><have:B>c</have:B></the:C>");
+        assertAnimo(C, "<the:C><have:B>z</have:B></the:C>");
 
         //System.out.println("done.");
 	}
