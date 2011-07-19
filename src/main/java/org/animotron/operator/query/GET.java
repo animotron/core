@@ -18,6 +18,7 @@
  */
 package org.animotron.operator.query;
 
+import static org.animotron.Properties.RID;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Executor;
@@ -187,7 +188,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				
 				if (name.equals(name(tdR))) {
 					System.out.println(" MATCH");
-					return new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
+					Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
+					RID.set(res, tdR.getId());
+					return res;
 				}
 				System.out.println();
 			}
