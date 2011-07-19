@@ -74,6 +74,7 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
                 int index = source.lastIndexOf(pattern);
                 if (index != -1) {
 
+                	System.out.println("AfterLast = "+source.substring(index + 1));
 		            Relationship r = new Expression(
 		                text(
 		                    source.substring(index + 1)

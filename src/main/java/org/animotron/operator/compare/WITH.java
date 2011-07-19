@@ -18,11 +18,15 @@
  */
 package org.animotron.operator.compare;
 
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
+
 import java.io.IOException;
 import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstractOperator;
@@ -73,8 +77,11 @@ public class WITH extends AbstractOperator implements Predicate {
 		
 		if (actual.size() >= 1 && expected.size() == 1) {
 			Relationship g = expected.get(0);
+
+			System.out.println("***** expected = "+g.getEndNode());
 			
 			for (Relationship e : actual) {
+				System.out.println("***** actual = "+e.getEndNode());
 				if (   e.getType().name().equals(g.getType().name()) 
 					&& e.getEndNode().equals(g.getEndNode()))
 					

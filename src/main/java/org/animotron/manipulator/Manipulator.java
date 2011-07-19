@@ -18,12 +18,20 @@
  */
 package org.animotron.manipulator;
 
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
+
 import java.io.IOException;
 
 import org.animotron.Executor;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
+import org.animotron.operator.Evaluable;
+import org.animotron.operator.Query;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -51,7 +59,7 @@ public abstract class Manipulator {
 		return execute(start_op, (PropertyContainer)op);
 	}
 	
-	public final PipedInput execute(Relationship start_op, PropertyContainer op) throws InterruptedException, IOException {
+	public final PipedInput execute(final Relationship start_op, PropertyContainer op) throws InterruptedException, IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
 		
@@ -84,8 +92,32 @@ public abstract class Manipulator {
             	try {
             		if (msg == null)
             			out.close();
-            		else
-            			out.write(msg);
+            		else {
+            			if (RelationshipTypes.RESULT.name().equals(msg.getType().name())) {
+            				msg = getDb().getRelationshipById(
+            						(Long)msg.getProperty(RID.name())
+            					); 
+            			}
+
+        				Statement s = Statements.relationshipType(msg.getType());
+            			if (s instanceof Query || s instanceof Evaluable) {
+            				try {
+	            				PipedInput in = Evaluator._.execute(start_op, msg);
+	            				
+	            				for (Object obj : in) {
+	            					if (obj instanceof Relationship) {
+	            						out.write(obj);
+	            					} else {
+	            						System.out.println("UNHANDLED "+obj);
+	            					}
+	            				}
+            				} catch (Exception e) {
+            					//XXX: log error
+								out.close();
+							}
+            			} else
+            				out.write(msg);
+            		}
 				} catch (IOException e) {
 					//XXX: what to do?
 					e.printStackTrace();
