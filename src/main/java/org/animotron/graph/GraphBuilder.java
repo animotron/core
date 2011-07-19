@@ -232,8 +232,8 @@ public abstract class GraphBuilder {
 			Statement statement = (Statement) item[0];
 			if (statement instanceof THE) {
 				THE the = (THE) statement;
+                String name = (String) item[2];
 				String hash = hash(item);
-                String name = item[2] != null ? (String) item[2] : hash;
 				r = the.get(name);
 				if (r != null) {
 					if (HASH.has(r)) {

@@ -45,6 +45,9 @@ public class AnimoRelationshipType implements RelationshipType {
 	}
 
 	public static RelationshipType get(String name, String prefix) {
+        if (name == null) {
+            return get(prefix);
+        }
 		return get(name(prefix, name));
 	}
 
