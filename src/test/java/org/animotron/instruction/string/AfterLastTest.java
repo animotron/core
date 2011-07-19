@@ -47,7 +47,7 @@ public class AfterLastTest extends ATest {
 			_(THE._, "C", _(AfterLast._, text("."), _(GET._, "B", Expression._(AN._, "A"))))
 		);
     	
-        assertAnimo(C, "<the:C><have:B>z</have:B></the:C>");
+        assertAnimo(C, "<the:C>z</the:C>");
 
         //System.out.println("done.");
 	}

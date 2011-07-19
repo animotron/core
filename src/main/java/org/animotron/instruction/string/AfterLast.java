@@ -18,9 +18,8 @@
  */
 package org.animotron.instruction.string;
 
-import static org.animotron.graph.AnimoGraph.getORDER;
-
 import org.animotron.Expression;
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -29,61 +28,66 @@ import org.animotron.serializer.StringResultSerializer;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
+import java.io.IOException;
+
+import static org.animotron.Expression.text;
+import static org.animotron.graph.AnimoGraph.getORDER;
+
 /**
  * String instruction 'after-last'.
- * 
+ *
  * Return last chars from input string after last-found defined pattern.
- * 
+ *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
 public class AfterLast extends AbstractInstruction implements Evaluable {
-	
+
 	public static final AfterLast _ = new AfterLast();
-	
+
 	private AfterLast() { super("after-last", STRING._); }
-	
+
+
 	@Override
 	public Subscribable<PFlow> onCalcQuestion() {
 		return question;
 	}
-	
-	private OnQuestion question = new OnQuestion() {
-		@Override
-		public void onMessage(PFlow pf) {
-			//UNDERSTAND: if we have more that 2 params, what to do?
-			
-			Relationship[] params = getORDER().first(2, pf.getOPNode());
-			
-			String pattern;
-			String source;
-			
-			try {
 
-				//pattern
-				StringResultSerializer szer = new StringResultSerializer();
-				szer.serialize(params[0]);
-				pattern = szer.getString();
-	
-				szer.serialize(params[1]);
-				source = szer.getString();
-			
+    private OnQuestion question = new OnQuestion(){
+        @Override
+        public void onMessage(PFlow pf) {
 
-				int index = source.lastIndexOf(pattern);
-				if (index > 0) {
-					String result = source.substring(index+1);
-					System.out.println(result);
-					
-					pf.sendAnswer(new Expression(Expression.text(result))) ;
-				}
-			
-			} catch (Exception e) {
-				//XXX: log?
-				pf.done();
-				return;
-			}
+            try {
+                //UNDERSTAND: if we have more that 2 params, what to do?
 
-			pf.done();
-		}
-		
-	};
+                Relationship[] params = getORDER().first(2, pf.getOPNode());
+
+                //pattern
+                StringResultSerializer szer = new StringResultSerializer();
+                szer.serialize(params[0]);
+                String pattern = szer.getString();
+
+                szer.serialize(params[1]);
+                String source = szer.getString();
+
+                Relationship r = new Expression(
+                    text(
+                        source.substring(source.lastIndexOf(pattern) + 1)
+                    )
+                );
+
+                pf.answer.publish(r);
+
+                pf.done();
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (EBuilderTerminated eBuilderTerminated) {
+                eBuilderTerminated.printStackTrace();
+            }
+
+        }
+
+    };
 }
