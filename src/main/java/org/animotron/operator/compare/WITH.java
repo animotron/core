@@ -71,14 +71,15 @@ public class WITH extends AbstractOperator implements Predicate {
 			System.out.println("expected "+e);
 		}
 		
-		if (actual.size() == 1 && expected.size() == 1) {
-			Relationship e = actual.get(0);
+		if (actual.size() >= 1 && expected.size() == 1) {
 			Relationship g = expected.get(0);
 			
-			if (   e.getType().name().equals(g.getType().name()) 
-				&& e.getEndNode().equals(g.getEndNode()))
-				
-				return true;
+			for (Relationship e : actual) {
+				if (   e.getType().name().equals(g.getType().name()) 
+					&& e.getEndNode().equals(g.getEndNode()))
+					
+					return true;
+			}
 		}
 
 		return false;
