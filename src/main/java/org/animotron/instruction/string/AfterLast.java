@@ -21,6 +21,7 @@ package org.animotron.instruction.string;
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.instruction.ml.TEXT;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
@@ -32,6 +33,7 @@ import java.io.IOException;
 
 import static org.animotron.Expression.text;
 import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * String instruction 'after-last'.
@@ -78,7 +80,7 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 		                )
 		            );
 		
-		            pf.sendAnswer(r);
+		            pf.sendAnswer(r.getEndNode().getSingleRelationship(TEXT._.relationshipType(), OUTGOING));
                 }
 
                 pf.done();
