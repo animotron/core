@@ -18,29 +18,22 @@
  */
 package org.animotron.operator.query;
 
-import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
-import java.util.Iterator;
-
 import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.AbstractOperator;
-import org.animotron.operator.Cachable;
-import org.animotron.operator.Evaluable;
-import org.animotron.operator.Predicate;
-import org.animotron.operator.Query;
-import org.animotron.operator.THE;
+import org.animotron.operator.*;
 import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
+
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'ANY'.
@@ -84,10 +77,8 @@ public class ANY extends AbstractOperator implements Cachable, Evaluable, Query 
 			
 			public boolean filtering(PFlow pf, Node node) {
 
-				Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
-				while (it.hasNext()) {
-					Relationship r = it.next();
-					
+				for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
+
 					Statement st = Statements.relationshipType(r);
 					
 					if (st instanceof Predicate) {
