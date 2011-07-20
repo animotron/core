@@ -205,12 +205,12 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 //					});
 					
 					//in-memory
-					Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
-					RID.set(res, tdR.getId());
-					return res;
+					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
+					//RID.set(res, tdR.getId());
+					//return res;
 					
 					//as it
-//					return tdR;
+					return tdR;
 				}
 				System.out.println();
 			}

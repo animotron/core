@@ -60,20 +60,7 @@ public class PFlow {
 	
 	private List<Relationship> path = new FastList<Relationship>();
 	
-	@SuppressWarnings("deprecation")
-	private static TraversalDescription td_self = 
-			Traversal.description().
-			filter(new Predicate<Path> () {
-				@Override
-				public boolean accept(Path item) {
-					if (THE._.THE_NODE().equals(item.endNode())) {
-						return true;
-					}
-					return false;
-				}
-			});
-	
-	private TraversalDescription td_flow = 
+	private TraversalDescription td_flow =
 			Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new Evaluator(){
@@ -149,18 +136,6 @@ public class PFlow {
 		return path.get(0).getEndNode();
 	}
 
-	public Relationship getSelf() {
-		final Relationship self = op == null ? null :
-				td_self.traverse(op.getStartNode()).iterator().next().lastRelationship();
-		
-		return self;
-	}
-	
-	public Node getSelfNode() {
-		final Node self = getSelf() == null ? null : getSelf().getEndNode(); 
-		return self;
-	}
-	
 	public Node getOPNode() {
 		if (opNode != null)
 			return opNode;
@@ -251,4 +226,5 @@ public class PFlow {
 	public Relationship getLastContext() {
 		return path.get(path.size()-1);
 	}
+
 }
