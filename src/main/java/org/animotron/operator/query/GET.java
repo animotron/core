@@ -192,17 +192,17 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					System.out.println(" MATCH");
 					
 					//store
-//					final Node sNode = context;
-//					final Relationship r = tdR;
-//					
-//					AnimoGraph.execute(new GraphOperation<Relationship>() {
-//						@Override
-//						public Relationship execute() {
-//							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
-//							RID.set(res, r.getId());
-//							return res;
-//						}
-//					});
+					final Node sNode = context;
+					final Relationship r = tdR;
+
+					AnimoGraph.execute(new GraphOperation<Relationship>() {
+						@Override
+						public Relationship execute() {
+							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
+							//RID.set(res, r.getId());
+							return res;
+						}
+					});
 					
 					//in-memory
 					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
@@ -210,7 +210,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					//return res;
 					
 					//as it
-					return tdR;
+					//return tdR;
 				}
 				System.out.println();
 			}
