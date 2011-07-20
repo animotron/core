@@ -195,7 +195,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					final Node sNode = context;
 					final Relationship r = tdR;
 
-					AnimoGraph.execute(new GraphOperation<Relationship>() {
+					return AnimoGraph.execute(new GraphOperation<Relationship>() {
 						@Override
 						public Relationship execute() {
 							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
