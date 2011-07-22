@@ -50,12 +50,12 @@ public class ConnectionTest extends ATest {
     	new Expression(
 		_(THE._, "file", 
 			_(HAVE._, "name", text("file")),
-			_(HAVE._, "path"),
+			_(HAVE._, "path", text("some.path")),
 
 			_(IC._, "extension",
 				_(AfterLast._, 
 					text("."),
-					_(SELF._, "path"))),
+					_(SELF._, "path"))), //GET don't working too
 
 			_(IC._, "mime-type", 
 				_(ANY._, "mime-type", 
