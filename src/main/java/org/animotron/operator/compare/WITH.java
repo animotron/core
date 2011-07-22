@@ -32,7 +32,6 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.query.GET;
-import org.animotron.serializer.AnimoResultSerializer;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -63,14 +62,14 @@ public class WITH extends AbstractOperator implements Predicate {
 		List<Relationship> expected = new FastList<Relationship>();
 
 		System.out.println("Eval actual");
-		PipedInput in = Evaluator._.execute(start_op, have);
+		PipedInput in = Evaluator._.execute(start_op, have.getEndNode());
 		for (Object e : in) {
 			actual.add((Relationship) e);
 			System.out.println("actual "+e);
 		}
 
 		System.out.println("Eval expected");
-		in = Evaluator._.execute(start_op, op);
+		in = Evaluator._.execute(start_op, op.getEndNode());
 		for (Object e : in) {
 			expected.add((Relationship) e);
 			System.out.println("expected "+e);
