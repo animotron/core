@@ -44,9 +44,9 @@ import org.neo4j.graphdb.index.IndexHits;
  */
 public abstract class AbstractResultSerializer {
 	
-	final public void serialize(Relationship r) throws InterruptedException, IOException {
+	final public void serialize(Relationship start_op, Relationship r) throws InterruptedException, IOException {
 		startDocument();
-		build(r, r);
+		build(start_op, r);
 		endDocument();
 	}
 

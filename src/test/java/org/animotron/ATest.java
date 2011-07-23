@@ -168,7 +168,7 @@ public abstract class ATest {
 		}
         
         AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
-        serializer.serialize(op);
+        serializer.serialize(op, op);
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
 
         System.out.println();
@@ -179,7 +179,7 @@ public abstract class ATest {
 
         System.out.println("String result serializer...");
         StringResultSerializer serializer = new StringResultSerializer();
-        serializer.serialize(op);
+        serializer.serialize(op, op);
         Assert.assertEquals("", expected, serializer.getString());
 
         System.out.println();

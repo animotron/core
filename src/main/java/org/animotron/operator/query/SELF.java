@@ -74,6 +74,7 @@ public class SELF extends AbstractOperator implements Evaluable {
 					
 					if (res != null)
 						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+					
 				} else if (searchHave == 2) {
 					//the instance self in have
 					Relationship res = GET._.get(pf.getStartNode(), name(pf.getOP()));

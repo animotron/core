@@ -65,10 +65,10 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 
                 //pattern
                 StringResultSerializer szer = new StringResultSerializer();
-                szer.serialize(params[0]);
+                szer.serialize(pf.getStartOP(), params[0]);
                 String pattern = szer.getString();
 
-                szer.serialize(params[1]);
+                szer.serialize(pf.getStartOP(), params[1]);
                 String source = szer.getString();
                 
                 int index = source.lastIndexOf(pattern);
