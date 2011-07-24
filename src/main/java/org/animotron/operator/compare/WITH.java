@@ -20,20 +20,26 @@ package org.animotron.operator.compare;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
+import static org.animotron.graph.AnimoGraph.getORDER;
 
 import java.io.IOException;
 import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.Statement;
+import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstractOperator;
+import org.animotron.operator.Evaluable;
 import org.animotron.operator.Predicate;
+import org.animotron.operator.Query;
 import org.animotron.operator.query.GET;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 /**
  * Compare operator 'WITH'.
@@ -77,6 +83,9 @@ public class WITH extends AbstractOperator implements Predicate {
 		
 		if (actual.size() >= 1 && expected.size() == 1) {
 			Relationship g = expected.get(0);
+			
+			//XXX: finish
+			g = evaluable(start_op, g.getEndNode()).get(0);
 
 			System.out.println("***** expected = "+g.getEndNode());
 			
@@ -90,5 +99,31 @@ public class WITH extends AbstractOperator implements Predicate {
 		}
 
 		return false;
+	}
+	
+	private List<Relationship> evaluable(Relationship start_op, Node node) throws InterruptedException, IOException {
+		List<Relationship> list = new FastList<Relationship>();
+		
+		IndexHits<Relationship> q = getORDER().query(node);
+		try {
+			for (Relationship i : q) {
+				Statement s = Statements.relationshipType(i.getType());
+    			if (s instanceof Query || s instanceof Evaluable) {
+    				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+    				PipedInput in = Evaluator._.execute(start_op, i);
+    				for (Object e : in) {
+    					list.add((Relationship) e);
+    					System.out.println("get from Evaluator "+e);
+    				}
+    			} else {
+    				list.add(i);
+    			}
+			}
+		} finally {
+			q.close();
+		}
+
+		
+		return list;
 	}
 }
