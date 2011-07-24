@@ -58,7 +58,7 @@ public class ANYTest extends ATest {
 		);
 
         System.out.println("****************************************************");
-        System.out.println("any:A have:value B");
+        System.out.println("any:A with:value B");
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
 
         //System.out.println("done.");

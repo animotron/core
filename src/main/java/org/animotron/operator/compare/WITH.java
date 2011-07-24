@@ -85,7 +85,11 @@ public class WITH extends AbstractOperator implements Predicate {
 			Relationship g = expected.get(0);
 			
 			//XXX: finish
-			g = evaluable(start_op, g.getEndNode()).get(0);
+			List<Relationship> l = evaluable(start_op, g.getEndNode());
+			if (l.size() == 1)
+				g = l.get(0);
+			else if (l.size() > 1) 
+				System.out.println("DON'T KNOW WHAT TO DO, get alot of results @WITH");
 
 			System.out.println("***** expected = "+g.getEndNode());
 			

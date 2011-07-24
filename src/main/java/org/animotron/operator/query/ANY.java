@@ -87,6 +87,7 @@ public class ANY extends AbstractOperator implements Cachable, Evaluable, Query 
 								return false;
 						} catch (Exception e) {
 							//XXX: report
+							e.printStackTrace();
 							return false;
 						}
 					}
