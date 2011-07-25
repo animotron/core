@@ -22,8 +22,11 @@ import static org.animotron.Expression.text;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.instruction.string.AfterLast;
 import org.animotron.operator.query.GET;
+import org.animotron.operator.query.SELF;
 import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
 import org.junit.Test;
 
 /**
@@ -150,4 +153,65 @@ public class GetTest extends ATest {
 //
 //        //System.out.println("done.");
 //	}
+
+    @Test
+    public void checkHAVEonIS() throws Exception {
+        System.out.println("Mime type use case ...");
+
+        new Expression(
+        _(THE._, "A",
+            _(HAVE._, "A1", text("some.path")),
+
+            _(IC._, "A2",
+                _(SELF._, "A1")),
+
+            _(IC._, "B1",
+                _(AfterLast._,
+                    text("."),
+                    _(SELF._, "A1")))
+        ));
+
+        new Expression(
+        _(THE._, "B",
+            _(IS._, "A"),
+            _(HAVE._, "A1", text("test.txt"))
+        ));
+
+        Expression C0 = new Expression(
+        _(THE._, "C0",
+            _(GET._, "A1",
+                _(AN._, "A")
+        )));
+        assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
+
+        Expression C1 = new Expression(
+        _(THE._, "C1",
+            _(GET._, "A1",
+                _(AN._, "B")
+        )));
+        assertAnimo(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
+
+        Expression C2 = new Expression(
+        _(THE._, "C2",
+            _(GET._, "A2",
+                _(AN._, "B")
+        )));
+        assertAnimo(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
+
+        Expression C3 = new Expression(
+        _(THE._, "C3",
+            _(GET._, "E1",
+                _(AN._, "B")
+        )));
+        assertAnimo(C3, "<the:C3/>");
+
+        Expression C4 = new Expression(
+        _(THE._, "C4",
+            _(GET._, "B1",
+                _(AN._, "B")
+        )));
+        assertAnimo(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
+
+        //System.out.println("done.");
+    }
 }
