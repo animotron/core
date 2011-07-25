@@ -127,7 +127,7 @@ public class ConnectionTest extends ATest {
         new Expression(
         _(THE._, "file",
             _(HAVE._, "name", text("file")),
-            _(HAVE._, "path1", text("some.path")),
+            _(HAVE._, "path1", text("some.path.text")),
 
             _(IC._, "path2",
                 _(SELF._, "path1")),
@@ -135,7 +135,12 @@ public class ConnectionTest extends ATest {
             _(IC._, "extension1",
                 _(AfterLast._,
                     text("."),
-                    _(SELF._, "path1")))
+                    _(SELF._, "path1"))),
+
+            _(IC._, "mime-type",
+                _(ANY._, "mime-type",
+                    _(WITH._, "extension",
+                        _(SELF._, "extension1"))))
         ));
 
         new Expression(
@@ -144,26 +149,48 @@ public class ConnectionTest extends ATest {
             _(HAVE._, "path", text("/home/test.txt"))
         ));
 
+        new Expression(
+        _(THE._, "text-plain",
+            _(IS._, "mime-type"),
+            _(HAVE._, "type", text("text/plain")),
+            _(HAVE._, "extension", text("txt"), text("text"))
+        ));
+
         Expression B1 = new Expression(
         _(THE._, "B1",
             _(GET._, "path1",
                 _(AN._, "fileA")
         )));
-//        assertAnimo(B1, "<the:B1><have:path1>some.path</have:path1></the:B1>");
+        assertAnimo(B1, "<the:B1><have:path1>some.path.text</have:path1></the:B1>");
 
         Expression B2 = new Expression(
         _(THE._, "B2",
             _(GET._, "path2",
                 _(AN._, "fileA")
         )));
-        assertAnimo(B2, "<the:B2><have:path2><have:path1>some.path</have:path1></have:path2></the:B2>");
+        assertAnimo(B2, "<the:B2><have:path2><have:path1>some.path.text</have:path1></have:path2></the:B2>");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
             _(GET._, "extension1",
                 _(AN._, "fileA")
         )));
-        assertAnimo(C1, "<the:C1><have:extension1>path</have:extension1></the:C1>");
+        assertAnimo(C1, "<the:C1><have:extension1>text</have:extension1></the:C1>");
+
+        Expression D = new Expression(
+        _(THE._, "D",
+            _(GET._, "mime-type",
+                _(AN._, "fileA")
+        )));
+        assertAnimo(D, "<the:D><have:mime-type><the:text-plain><is:mime-type/><have:type>text/plain</have:type><have:extension>txttext</have:extension></the:text-plain></have:mime-type></the:D>");
+
+        Expression E = new Expression(
+        _(THE._, "E",
+            _(GET._, "type",
+                _(GET._, "mime-type",
+                    _(AN._, "fileA")
+        ))));
+        assertAnimo(E, "<the:E><have:type>text/plain</have:type></the:E>");
 
         //System.out.println("done.");
     }
