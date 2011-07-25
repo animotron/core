@@ -53,6 +53,9 @@ public class ConnectionTest extends ATest {
             _(HAVE._, "path"),
             _(HAVE._, "path1", text("some.path")),
 
+            _(IC._, "path2",
+                _(SELF._, "path1")),
+
             _(IC._, "extension1",
                 _(AfterLast._,
                     text("."),
@@ -96,6 +99,20 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         assertAnimo(B, "<the:B><have:path>/home/test.txt</have:path></the:B>");
+
+        Expression B1 = new Expression(
+        _(THE._, "B1",
+            _(GET._, "path1",
+                _(AN._, "fileA")
+        )));
+        assertAnimo(B1, "<the:B1><have:path1>some.path</have:path1></the:B1>");
+
+        Expression B2 = new Expression(
+        _(THE._, "B2",
+            _(GET._, "path2",
+                _(AN._, "fileA")
+        )));
+        assertAnimo(B2, "<the:B2><have:path2><have:path1>some.path</have:path1></have:path2></the:B2>");
 
         Expression C = new Expression(
         _(THE._, "C",
