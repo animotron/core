@@ -61,7 +61,7 @@ public class ConnectionTest extends ATest {
 			_(IC._, "extension",
 				_(AfterLast._, 
 					text("."),
-					_(SELF._, "path"))), //GET don't working too
+					_(SELF._, "path"))),
 
 			_(IC._, "mime-type", 
 				_(ANY._, "mime-type", 
