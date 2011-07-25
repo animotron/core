@@ -38,53 +38,43 @@ import org.junit.Test;
  */
 public class ConnectionTest extends ATest {
 	
-	@Test
-	public void mimeType_usecase() throws Exception {
+    @Test
+    public void mimeType_usecase() throws Exception {
         System.out.println("Mime type use case ...");
         
-    	new Expression(
-		_(THE._, "mime-type", 
-			_(HAVE._, "extension")
-		));
+        new Expression(
+        _(THE._, "mime-type",
+            _(HAVE._, "extension")
+        ));
 
-    	new Expression(
-		_(THE._, "file", 
-			_(HAVE._, "name", text("file")),
+        new Expression(
+        _(THE._, "file",
+            _(HAVE._, "name", text("file")),
             _(HAVE._, "path"),
-            _(HAVE._, "path1", text("some.path")),
 
-            _(IC._, "path2",
-                _(SELF._, "path1")),
-
-            _(IC._, "extension1",
+            _(IC._, "extension",
                 _(AfterLast._,
                     text("."),
-                    _(SELF._, "path1"))),
+                    _(SELF._, "path"))),
 
-			_(IC._, "extension",
-				_(AfterLast._, 
-					text("."),
-					_(SELF._, "path"))),
+            _(IC._, "mime-type",
+                _(ANY._, "mime-type",
+                    _(WITH._, "extension",
+                        _(SELF._, "extension"))))
+        ));
 
-			_(IC._, "mime-type", 
-				_(ANY._, "mime-type", 
-					_(WITH._, "extension",
-						_(SELF._, "extension"))))
-		));
+        new Expression(
+        _(THE._, "fileA",
+            _(IS._, "file"),
+            _(HAVE._, "path", text("/home/test.txt"))
+        ));
 
-
-    	new Expression(
-		_(THE._, "fileA", 
-			_(IS._, "file"), 
-			_(HAVE._, "path", text("/home/test.txt"))
-		));
-
-    	new Expression(
-		_(THE._, "text-plain", 
-			_(IS._, "mime-type"), 
-			_(HAVE._, "type", text("text/plain")),
-			_(HAVE._, "extension", text("txt"), text("text"))
-		));
+        new Expression(
+        _(THE._, "text-plain",
+            _(IS._, "mime-type"),
+            _(HAVE._, "type", text("text/plain")),
+            _(HAVE._, "extension", text("txt"), text("text"))
+        ));
 
         Expression A = new Expression(
         _(THE._, "A",
@@ -100,33 +90,12 @@ public class ConnectionTest extends ATest {
         )));
         assertAnimo(B, "<the:B><have:path>/home/test.txt</have:path></the:B>");
 
-        Expression B1 = new Expression(
-        _(THE._, "B1",
-            _(GET._, "path1",
-                _(AN._, "fileA")
-        )));
-        assertAnimo(B1, "<the:B1><have:path1>some.path</have:path1></the:B1>");
-
-        Expression B2 = new Expression(
-        _(THE._, "B2",
-            _(GET._, "path2",
-                _(AN._, "fileA")
-        )));
-        assertAnimo(B2, "<the:B2><have:path2><have:path1>some.path</have:path1></have:path2></the:B2>");
-
         Expression C = new Expression(
         _(THE._, "C",
             _(GET._, "extension",
                 _(AN._, "fileA")
         )));
         assertAnimo(C, "<the:C><have:extension>txt</have:extension></the:C>");
-
-        Expression C1 = new Expression(
-        _(THE._, "C1",
-            _(GET._, "extension1",
-                _(AN._, "fileA")
-        )));
-        assertAnimo(C1, "<the:C1><have:extension1>path</have:extension1></the:C1>");
 
         Expression D = new Expression(
         _(THE._, "D",
@@ -144,6 +113,59 @@ public class ConnectionTest extends ATest {
         assertAnimo(E, "<the:E><have:type>text/plain</have:type></the:E>");
 
         //System.out.println("done.");
-	}
+    }
 	
+    @Test
+    public void mimeType_one_more_usecase() throws Exception {
+        System.out.println("Mime type use case ...");
+
+        new Expression(
+        _(THE._, "mime-type",
+            _(HAVE._, "extension")
+        ));
+
+        new Expression(
+        _(THE._, "file",
+            _(HAVE._, "name", text("file")),
+            _(HAVE._, "path1", text("some.path")),
+
+            _(IC._, "path2",
+                _(SELF._, "path1")),
+
+            _(IC._, "extension1",
+                _(AfterLast._,
+                    text("."),
+                    _(SELF._, "path1")))
+        ));
+
+        new Expression(
+        _(THE._, "fileA",
+            _(IS._, "file"),
+            _(HAVE._, "path", text("/home/test.txt"))
+        ));
+
+        Expression B1 = new Expression(
+        _(THE._, "B1",
+            _(GET._, "path1",
+                _(AN._, "fileA")
+        )));
+        assertAnimo(B1, "<the:B1><have:path1>some.path</have:path1></the:B1>");
+
+        Expression B2 = new Expression(
+        _(THE._, "B2",
+            _(GET._, "path2",
+                _(AN._, "fileA")
+        )));
+        assertAnimo(B2, "<the:B2><have:path2><have:path1>some.path</have:path1></have:path2></the:B2>");
+
+        Expression C1 = new Expression(
+        _(THE._, "C1",
+            _(GET._, "extension1",
+                _(AN._, "fileA")
+        )));
+        assertAnimo(C1, "<the:C1><have:extension1>path</have:extension1></the:C1>");
+
+        //System.out.println("done.");
+    }
+
 }
