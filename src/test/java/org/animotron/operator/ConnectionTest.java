@@ -149,7 +149,7 @@ public class ConnectionTest extends ATest {
             _(GET._, "path1",
                 _(AN._, "fileA")
         )));
-        assertAnimo(B1, "<the:B1><have:path1>some.path</have:path1></the:B1>");
+//        assertAnimo(B1, "<the:B1><have:path1>some.path</have:path1></the:B1>");
 
         Expression B2 = new Expression(
         _(THE._, "B2",

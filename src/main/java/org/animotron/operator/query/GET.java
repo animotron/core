@@ -18,7 +18,6 @@
  */
 package org.animotron.operator.query;
 
-import static org.animotron.Properties.RID;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Executor;
@@ -27,7 +26,6 @@ import org.animotron.Statements;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
@@ -156,27 +154,21 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		
 		System.out.println("GET get context = "+context);
 
-		//search local 'HAVE'
-		for (Relationship tdR : td_eval.traverse(context).relationships()) {
-			
-			System.out.println("GET check = "+tdR);
-			
-			if (name.equals(name(tdR)))
-				return tdR;
-		}
+		//search for local 'HAVE'
+		Relationship have = getByHave(context, name);
+		if (have != null) return have;
 		
 		Relationship instance = context.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
 		if (instance != null) {
+			//change context to the-instance by REF
 			context = instance.getEndNode();
-
-			for (Relationship tdR : td_eval.traverse(context).relationships()) {
-				
-				System.out.println("GET check = "+tdR);
-				
-				if (name.equals(name(tdR)))
-					return tdR;
-			}
+			
+			//search for have
+			have = getByHave(context, name);
+			if (have != null) return have;
 		}
+		
+		Relationship prevTHE = null;
 		
 		//search 'IC' by 'IS' topology
 		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
@@ -184,6 +176,12 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			Statement st = Statements.relationshipType( tdR.getType() );
 			if (st instanceof IS) {
 				System.out.println("GET IC -> IS "+tdR);
+				if (prevTHE != null) {
+					//search for have
+					have = getByHave(prevTHE.getEndNode(), name);
+					if (have != null) return have;
+				}
+				prevTHE = tdR;
 				
 			} else if (st instanceof IC) {
 				System.out.print("GET IC -> "+tdR);
@@ -214,6 +212,24 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				}
 				System.out.println();
 			}
+		}
+		
+		if (prevTHE != null) {
+			//search for have
+			have = getByHave(prevTHE.getEndNode(), name);
+			if (have != null) return have;
+		}
+
+		return null;
+	}
+	
+	private Relationship getByHave(Node context, final String name) {
+		for (Relationship tdR : td_eval.traverse(context).relationships()) {
+			
+			System.out.println("GET check = "+tdR);
+			
+			if (name.equals(name(tdR)))
+				return tdR;
 		}
 		
 		return null;
