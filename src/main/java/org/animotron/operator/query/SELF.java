@@ -78,9 +78,10 @@ public class SELF extends AbstractOperator implements Evaluable {
 				} else if (searchHave == 2) {
 					//the instance self in have
 					Relationship res = GET._.get(pf.getStartNode(), name(pf.getOP()));
-					
+
 					if (res != null)
 						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+                        //TODO Why don't create persistent relationship?
 					
 				} else
 					;//XXX: error???
