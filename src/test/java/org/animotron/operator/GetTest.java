@@ -35,21 +35,21 @@ import org.junit.Test;
  */
 public class GetTest extends ATest {
 	
-//	@Test
-//	public void getFromPFlow_an_with_param() throws Exception {
-//        System.out.println("Test empty 'get' ...");
-//        
-//    	Expression A = new Expression(
-//			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-//		);
-//    	
-//    	Expression D = new Expression(
-//			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
-//		);
-//        	
-//        assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
-//        //System.out.println("done.");
-//	}
+	@Test
+	public void getFromPFlow_an_with_param() throws Exception {
+        System.out.println("Test empty 'get' ...");
+
+    	Expression A = new Expression(
+			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+		);
+
+    	Expression D = new Expression(
+			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
+		);
+
+        assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
+        //System.out.println("done.");
+}
 	
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Exception {
@@ -71,89 +71,50 @@ public class GetTest extends ATest {
         //System.out.println("done.");
 	}
 
-//	@Test
-//	public void getFromPFlow_an_with_an() throws Exception {
-//        System.out.println("Test empty 'get' on AN with AN...");
-//        
-//    	Expression A = new Expression(
-//			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-//		);
-//    	
-//    	Expression D = new Expression(
-//			_(THE._, "D", _(HAVE._, "C", text(".")))
-//		);
-//        	
-//    	Expression E = new Expression(
-//			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
-//		);
-//
-//    	assertAnimo(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:E>");
-//        //System.out.println("done.");
-//	}
-	
-//	@Test
-//	public void getFromPFlow_an_with_more_an() throws Exception {
-//        System.out.println("Test empty 'get' on AN with AN...");
-//        
-//    	Expression A = new Expression(
-//			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-//		);
-//    	
-//    	Expression D = new Expression(
-//			_(THE._, "D", _(HAVE._, "C", text(".")))
-//		);
-//        	
-//    	Expression E = new Expression(
-//			_(THE._, "E", _(HAVE._, "C", text(":")))
-//		);
-//        	
-//    	Expression F = new Expression(
-//			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
-//		);
-//    	
-//    	Expression X = new Expression(
-//			_(THE._, "X", _(AN._, "A", _(HAVE._, "C", text("X"))))
-//		);
-//        	
-//    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C></have:B></the:A></the:F>");
-//        //System.out.println("done.");
-//	}
-	
-//	@Test
-//	public void anyWithUse() throws Exception {
-//        System.out.println("Test 'get' ...");
-//        
-//    	new Expression(
-//			_(THE._, "A")
-//		);
-//    	new Expression(
-//			_(THE._, "B", _(IS._, "A"))
-//		);
-//    	new Expression(
-//			_(THE._, "C", _(IS._, "B"))
-//		);
-//    	new Expression(
-//			_(THE._, "D", _(ANY._, "A"))
-//		);
-//    	new Expression(
-//			_(THE._, "E", _(AN._, "D", _(USE._, "B")))
-//		);
-//    	new Expression(
-//			_(THE._, "F", _(AN._, "D", _(USE._, "C")))
-//		);
-//    	new Expression(
-//			_(THE._, "G", _(AN._, "E", _(USE._, "A")))
-//		);
-//    	
-//        //System.out.println("any:A");
-//        //assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
-//
-//        //System.out.println("an:D use:B");
-////        assertAnimo(E, "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
-//
-//        //System.out.println("done.");
-//	}
+	@Test
+	public void getFromPFlow_an_with_an() throws Exception {
+        System.out.println("Test empty 'get' on AN with AN...");
 
+    	Expression A = new Expression(
+			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+		);
+
+    	Expression D = new Expression(
+			_(THE._, "D", _(HAVE._, "C", text(".")))
+		);
+
+    	Expression E = new Expression(
+			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
+		);
+
+    	assertAnimo(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:E>");
+        //System.out.println("done.");
+	}
+	
+	@Test
+	public void getFromPFlow_an_with_more_an() throws Exception {
+        System.out.println("Test empty 'get' on AN with AN...");
+
+    	Expression A = new Expression(
+			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+		);
+
+    	Expression D = new Expression(
+			_(THE._, "D", _(HAVE._, "C", text(".")))
+		);
+
+    	Expression E = new Expression(
+			_(THE._, "E", _(HAVE._, "C", text(":")))
+		);
+
+    	Expression F = new Expression(
+			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
+		);
+
+    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>_</have:C></have:B></the:A></the:F>");
+        //System.out.println("done.");
+	}
+	
     @Test
     public void checkHAVEonIS() throws Exception {
         System.out.println("Mime type use case ...");
