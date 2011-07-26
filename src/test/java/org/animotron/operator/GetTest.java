@@ -39,7 +39,7 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_param() throws Exception {
         System.out.println("Test empty 'get' ...");
 
-    	Expression A = new Expression(
+    	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
 
@@ -75,11 +75,11 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_an() throws Exception {
         System.out.println("Test empty 'get' on AN with AN...");
 
-    	Expression A = new Expression(
+    	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
 
-    	Expression D = new Expression(
+    	new Expression(
 			_(THE._, "D", _(HAVE._, "C", text(".")))
 		);
 
@@ -95,15 +95,15 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_more_an() throws Exception {
         System.out.println("Test empty 'get' on AN with AN...");
 
-    	Expression A = new Expression(
+    	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
 
-    	Expression D = new Expression(
+    	new Expression(
 			_(THE._, "D", _(HAVE._, "C", text(".")))
 		);
 
-    	Expression E = new Expression(
+    	new Expression(
 			_(THE._, "E", _(HAVE._, "C", text(":")))
 		);
 
@@ -175,4 +175,30 @@ public class GetTest extends ATest {
 
         //System.out.println("done.");
     }
+
+    @Test
+    public void getFromPFlow_an_with_stack() throws Exception {
+        System.out.println("Test empty 'get' on AN with AN...");
+
+        new Expression(
+            _(THE._, "A", _(GET._, "X"))
+        );
+
+        new Expression(
+            _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "Z"), _(AN._, "B"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "β", text("γ")), _(HAVE._, "Z", text("Z"))))
+        );
+
+        assertAnimo(E, "<the:E><the:C><have:C>γ</have:C><the:B><have:B>β</have:B><the:A><have:A>α</have:A></the:A></the:B></the:C></the:E>");
+        //System.out.println("done.");
+    }
+
+
 }
