@@ -18,30 +18,28 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
-
-import java.util.Iterator;
-import java.util.List;
-
 import javolution.util.FastList;
-
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.operator.AN;
-import org.animotron.operator.THE;
+import org.animotron.operator.query.ALL;
+import org.animotron.operator.query.ANY;
+import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
+
+import java.util.Iterator;
+import java.util.List;
+
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -209,37 +207,70 @@ public class PFlow {
 		return path.get(path.size()-1);
 	}
 
-	private TraversalDescription td_context =
-			Traversal.description().depthFirst().
-			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			evaluator(new Evaluator(){
-				@Override
-				public Evaluation evaluate(Path path) {
-					System.out.println("path = "+path);
-					if (path.length() > 0) {
-						Relationship r = path.lastRelationship(); 
-						if (r.getStartNode().equals(path.endNode())) {
-							
-							if (r.isType(AN._.relationshipType()))
-								return INCLUDE_AND_PRUNE;
-							else if (r.isType(RelationshipTypes.REF)) {
-							
-								boolean found = false;
-								
-								//TODO: check for REF after AN
-								path.iterator();
-								
-								if (found)
-									return INCLUDE_AND_PRUNE;
-							}
+//    private TraversalDescription td_context =
+//            Traversal.description().depthFirst().
+//            uniqueness(Uniqueness.RELATIONSHIP_PATH).
+//            evaluator(new Evaluator(){
+//                @Override
+//                public Evaluation evaluate(Path path) {
+//                    System.out.println("path = "+path);
+//                    if (path.length() > 0) {
+//                        Relationship r = path.lastRelationship();
+//                        if (r.getStartNode().equals(path.endNode())) {
+//
+//                            if (r.isType(AN._.relationshipType()))
+//                                return INCLUDE_AND_PRUNE;
+//                            else if (r.isType(RelationshipTypes.REF)) {
+//
+//                                boolean found = false;
+//
+//                                //TODO: check for REF after AN
+//                                path.iterator();
+//
+//                                if (found)
+//                                    return INCLUDE_AND_PRUNE;
+//                            }
+//
+//                            return EXCLUDE_AND_CONTINUE;
+//                        }
+//                        return EXCLUDE_AND_PRUNE;
+//                    }
+//                    return EXCLUDE_AND_CONTINUE;
+//                }
+//            });
 
-							return EXCLUDE_AND_CONTINUE;	
-						} 
-						return EXCLUDE_AND_PRUNE;
-					}
-					return EXCLUDE_AND_CONTINUE;
-				}
-			});
+    private TraversalDescription td_context =
+            Traversal.description().depthFirst().
+            uniqueness(Uniqueness.RELATIONSHIP_PATH).
+            evaluator(new Evaluator(){
+                @Override
+                public Evaluation evaluate(Path path) {
+                    System.out.println("path = "+path);
+                    if (path.length() > 0) {
+                        Relationship r = path.lastRelationship();
+                        if (r.isType(RelationshipTypes.REF)) {
+                            return EXCLUDE_AND_PRUNE;
+                        }
+                        if (r.isType(IS._.relationshipType())) {
+                            return EXCLUDE_AND_PRUNE;
+                        }
+                        if (r.isType(USE._.relationshipType())) {
+                            return EXCLUDE_AND_PRUNE;
+                        }
+                        if (r.isType(AN._.relationshipType())) {
+                            return INCLUDE_AND_PRUNE;
+                        }
+                        if (r.isType(ALL._.relationshipType())) {
+                            return INCLUDE_AND_PRUNE;
+                        }
+                        if (r.isType(ANY._.relationshipType())) {
+                            return INCLUDE_AND_PRUNE;
+                        }
+                        return EXCLUDE_AND_CONTINUE;
+                    }
+                    return Evaluation.EXCLUDE_AND_CONTINUE;
+                }
+            });
 
 	private TraversalDescription td_flow =
 			Traversal.description().depthFirst().
