@@ -21,6 +21,7 @@ package org.animotron.games.web;
 import static org.animotron.Expression.*;
 import static org.junit.Assert.*;
 
+import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.AN;
@@ -33,7 +34,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class WebFrameworkTest {
+public class WebFrameworkTest extends ATest {
 
 	@Test
 	public void test() throws EBuilderTerminated {
