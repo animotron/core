@@ -193,7 +193,7 @@ public class GetTest extends ATest {
         );
 
         Expression E = new Expression(
-            _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "β", text("γ")), _(HAVE._, "Z", text("Z"))))
+            _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "Y", text("β")), _(HAVE._, "Z", text("γ"))))
         );
 
         assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z><the:B><have:Y>β</have:Y><the:A><have:X>α</have:X></the:A></the:B></the:C></the:E>");

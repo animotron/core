@@ -132,14 +132,23 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				} else {
 					System.out.println("P-FLOW is context for GET!");
+					Relationship res = null;
+					boolean answered = false;
 					for (Relationship stack : pf.stack()) {
-						boolean answered = false;
-						for (Relationship context : pf.getStackContext(stack.getEndNode())) {
-							System.out.println(context);
-							Relationship res = get(context.getEndNode(), name);
-							if (res != null) {
-								pf.sendAnswer(createResultInMemory(node, res));
-								answered = true;
+						System.out.println("stack "+stack);
+
+						res = get(stack.getEndNode(), name);
+						if (res != null) {
+							pf.sendAnswer(createResultInMemory(node, res));
+							answered = true;
+						} else {
+							for (Relationship context : pf.getStackContext(stack.getEndNode())) {
+								System.out.println(context);
+								res = get(context.getEndNode(), name);
+								if (res != null) {
+									pf.sendAnswer(createResultInMemory(node, res));
+									answered = true;
+								}
 							}
 						}
 						if (answered) break;
