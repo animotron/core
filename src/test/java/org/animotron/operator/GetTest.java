@@ -200,4 +200,52 @@ public class GetTest extends ATest {
         //System.out.println("done.");
     }
 
+    @Test
+    public void getFromPFlow_more_an_with_stack() throws Exception {
+        System.out.println("Test empty 'get' on AN with AN...");
+
+        new Expression(
+            _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
+        );
+
+        new Expression(
+            _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "Z"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(AN._, "C", _(AN._, "B", _(HAVE._, "B", text("β")))))
+        );
+
+        assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
+        //System.out.println("done.");
+    }
+
+    @Test
+    public void getFromPFlow_one_more_an_with_stack() throws Exception {
+        System.out.println("Test empty 'get' on AN with AN...");
+
+        new Expression(
+            _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
+        );
+
+        new Expression(
+            _(THE._, "B", _(GET._, "Y"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "Z"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
+        );
+
+        assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
+        //System.out.println("done.");
+    }
+
 }

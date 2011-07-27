@@ -52,12 +52,12 @@ public class ConnectionTest extends ATest {
             _(HAVE._, "name", text("file")),
             _(HAVE._, "path"),
 
-            _(IC._, "extension",
+            _(IC._, "extension", //TODO HAVE instead IC work as well too! (bug or feature)
                 _(AfterLast._,
                     text("."),
                     _(SELF._, "path"))),
 
-            _(IC._, "mime-type",
+            _(IC._, "mime-type", //TODO HAVE instead IC work as well too! (bug or feature)
                 _(ANY._, "mime-type",
                     _(WITH._, "extension",
                         _(SELF._, "extension"))))
