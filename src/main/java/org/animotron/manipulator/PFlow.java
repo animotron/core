@@ -27,6 +27,7 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
 import org.jetlang.channels.Channel;
@@ -59,26 +60,6 @@ public class PFlow {
 	private Node opNode = null;
 	
 	private List<Relationship> path = new FastList<Relationship>();
-	
-	private TraversalDescription td_flow =
-			Traversal.description().depthFirst().
-			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			evaluator(new Evaluator(){
-				@Override
-				public Evaluation evaluate(Path path) {
-					if (path.length() > 0) {
-						Relationship r = path.lastRelationship(); 
-						if (r.getStartNode().equals(path.endNode())) {
-							if (r.equals(getStartOP())) {
-								return INCLUDE_AND_PRUNE;
-							} 
-							return EXCLUDE_AND_CONTINUE;	
-						} 
-						return EXCLUDE_AND_PRUNE;
-					}
-					return EXCLUDE_AND_CONTINUE;
-				}
-			});
 	
 	private PFlow(Manipulator m) {
 		this.m = m;
@@ -216,7 +197,8 @@ public class PFlow {
 	}
 
 	public Iterable<Relationship> getStackContext(Node node) {
-		return node.getRelationships(AN._.relationshipType(), Direction.OUTGOING);
+		return td_context.traverse(node).relationships();
+				//node.getRelationships(AN._.relationshipType(), Direction.OUTGOING);
 	}
 
 	public void addContextPoint(Relationship r) {
@@ -227,4 +209,55 @@ public class PFlow {
 		return path.get(path.size()-1);
 	}
 
+	private TraversalDescription td_context =
+			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new Evaluator(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					System.out.println("path = "+path);
+					if (path.length() > 0) {
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							
+							if (r.isType(AN._.relationshipType()))
+								return INCLUDE_AND_PRUNE;
+							else if (r.isType(RelationshipTypes.REF)) {
+							
+								boolean found = false;
+								
+								//TODO: check for REF after AN
+								path.iterator();
+								
+								if (found)
+									return INCLUDE_AND_PRUNE;
+							}
+
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
+					}
+					return EXCLUDE_AND_CONTINUE;
+				}
+			});
+
+	private TraversalDescription td_flow =
+			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new Evaluator(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					if (path.length() > 0) {
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							if (r.equals(getStartOP())) {
+								return INCLUDE_AND_PRUNE;
+							} 
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
+					}
+					return EXCLUDE_AND_CONTINUE;
+				}
+			});
 }
