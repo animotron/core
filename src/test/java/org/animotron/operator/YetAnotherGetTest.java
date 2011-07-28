@@ -20,6 +20,7 @@ package org.animotron.operator;
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.query.GET;
+import org.animotron.operator.query.SELF;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
@@ -51,6 +52,26 @@ public class YetAnotherGetTest extends ATest{
         );
 
         assertAnimo(E, "<the:E><have:B>π</have:B></the:E>");
+        //System.out.println("done.");
+    }
+
+    @Test
+    public void self_via_is() throws Exception {
+        System.out.println("Test empty 'get' ...");
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(HAVE._, "B", text("π")))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(IS._, "C"), _(SELF._, "A"))
+        );
+
+        assertAnimo(E, "<the:E><is:C/><have:B>π</have:B></the:E>");
         //System.out.println("done.");
     }
 
