@@ -142,14 +142,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							pf.sendAnswer(createResultInMemory(node, res));
 							answered = true;
 						} else {
-							for (Relationship context : pf.getStackContext(stack.getEndNode())) {
-								System.out.println(context);
-								res = get(context.getEndNode(), name);
-								if (res != null) {
-									pf.sendAnswer(createResultInMemory(node, res));
-									answered = true;
-								}
-							}
+							answered = goDownStack(pf, answered, name, node, stack);
 						}
 						if (answered) break;
 					}
@@ -158,6 +151,48 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			pf.done();
 		}
 	};
+	
+	private boolean goDownStack(PFlow pf, boolean answered, String name, Node node, Relationship pos) {
+		
+		Relationship res = null;
+		
+		//go by REF first
+		System.out.println("go by REF");
+		for (Relationship context : pf.getStackContext(pos, true)) {
+			System.out.println(context);
+			res = get(context.getEndNode(), name);
+			if (res != null) {
+				pf.sendAnswer(createResultInMemory(node, res));
+				answered = true;
+			}
+		}
+		if (!answered) {
+			for (Relationship context : pf.getStackContext(pos, true)) {
+				answered = answered || goDownStack(pf, answered, name, node, context);
+			}
+		}
+		
+		if (!answered) {
+			//go by AN (references)
+			System.out.println("go by AN");
+			for (Relationship context : pf.getStackContext(pos, false)) {
+				System.out.println(context);
+				res = get(context.getEndNode(), name);
+				if (res != null) {
+					pf.sendAnswer(createResultInMemory(node, res));
+					answered = true;
+				}
+			}
+			if (!answered) {
+				for (Relationship context : pf.getStackContext(pos, false)) {
+					answered = answered || goDownStack(pf, answered, name, node, context);
+				}
+			}
+		}
+
+		
+		return answered;
+	}
 
 	public Relationship get(Node context, final String name) {
 		

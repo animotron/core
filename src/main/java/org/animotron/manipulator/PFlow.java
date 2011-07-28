@@ -18,8 +18,10 @@
  */
 package org.animotron.manipulator;
 
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
 import javolution.util.FastList;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.operator.AN;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
@@ -194,10 +196,18 @@ public class PFlow {
 		
 	}
 
-	public Iterable<Relationship> getStackContext(Node node) {
-		return td_context.traverse(node).relationships();
-				//node.getRelationships(AN._.relationshipType(), Direction.OUTGOING);
+	public Iterable<Relationship> getStackContext(Relationship r, boolean goDown) {
+//		return td_context.traverse(node).relationships();
+		
+		Node node = r.getEndNode();
+		
+		if (goDown && r.getType().name().equals(AN._.relationshipType().name())) {
+			node = node.getSingleRelationship(REF, OUTGOING).getEndNode();
+		}
+		
+		return node.getRelationships(AN._.relationshipType(), OUTGOING);
 	}
+
 
 	public void addContextPoint(Relationship r) {
 		path.add(r);
@@ -248,7 +258,7 @@ public class PFlow {
                     System.out.println("path = "+path);
                     if (path.length() > 0) {
                         Relationship r = path.lastRelationship();
-                        if (r.isType(RelationshipTypes.REF)) {
+                        if (r.isType(REF)) {
                             return EXCLUDE_AND_PRUNE;
                         }
                         if (r.isType(IS._.relationshipType())) {
