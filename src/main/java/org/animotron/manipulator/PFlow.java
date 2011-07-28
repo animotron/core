@@ -258,25 +258,28 @@ public class PFlow {
                     System.out.println("path = "+path);
                     if (path.length() > 0) {
                         Relationship r = path.lastRelationship();
-                        if (r.isType(REF)) {
-                            return EXCLUDE_AND_PRUNE;
+                        if (r.getStartNode().equals(path.endNode())) {
+                            if (r.isType(REF)) {
+                                return EXCLUDE_AND_PRUNE;
+                            }
+                            if (r.isType(IS._.relationshipType())) {
+                                return EXCLUDE_AND_PRUNE;
+                            }
+                            if (r.isType(USE._.relationshipType())) {
+                                return EXCLUDE_AND_PRUNE;
+                            }
+                            if (r.isType(AN._.relationshipType())) {
+                                return INCLUDE_AND_PRUNE;
+                            }
+                            if (r.isType(ALL._.relationshipType())) {
+                                return INCLUDE_AND_PRUNE;
+                            }
+                            if (r.isType(ANY._.relationshipType())) {
+                                return INCLUDE_AND_PRUNE;
+                            }
+                            return EXCLUDE_AND_CONTINUE;
                         }
-                        if (r.isType(IS._.relationshipType())) {
-                            return EXCLUDE_AND_PRUNE;
-                        }
-                        if (r.isType(USE._.relationshipType())) {
-                            return EXCLUDE_AND_PRUNE;
-                        }
-                        if (r.isType(AN._.relationshipType())) {
-                            return INCLUDE_AND_PRUNE;
-                        }
-                        if (r.isType(ALL._.relationshipType())) {
-                            return INCLUDE_AND_PRUNE;
-                        }
-                        if (r.isType(ANY._.relationshipType())) {
-                            return INCLUDE_AND_PRUNE;
-                        }
-                        return EXCLUDE_AND_CONTINUE;
+                        return EXCLUDE_AND_PRUNE;
                     }
                     return Evaluation.EXCLUDE_AND_CONTINUE;
                 }
