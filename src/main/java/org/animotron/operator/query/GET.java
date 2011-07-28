@@ -312,20 +312,33 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		System.out.println("context = "+context+" start_op = "+start_op);
 		
 		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
+//		for (Path path : td.traverse(node)) {
+//			System.out.println("path = "+path);
+//		}
+		
+		int deep = Integer.MAX_VALUE;
+		Relationship result = null;
+
+		Relationship thisResult = null;
+		int thisDeep = 0;
+		
 		for (Path path : td.traverse(node)) {
-			System.out.println("path = "+path);
 			
 			boolean foundIS = false;
-			
+			thisDeep = 0;
 			for (Relationship r : path.relationships()) {
+				if (thisDeep > 0) {
+					thisDeep++;
+					continue;
+				}
 				String type = r.getType().name();
 				
 				if (type.equals(IS._.relationshipType().name())) { 
 					foundIS = true;
 					
 				} else if (type.equals(HAVE._.relationshipType().name())) { 
-					System.out.println("return r = "+r);
-					return r;
+					thisResult = r;
+					thisDeep++;
 				
 				} else if (type.equals(IC._.relationshipType().name())) {
 					if (foundIS) {
@@ -333,7 +346,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 						final Node sNode = context.getEndNode();
 						final Node eNode = r.getEndNode();
 
-						return AnimoGraph.execute(new GraphOperation<Relationship>() {
+						thisResult = AnimoGraph.execute(new GraphOperation<Relationship>() {
 							@Override
 							public Relationship execute() {
 								Relationship res = sNode.createRelationshipTo(eNode, HAVE._.relationshipType());
@@ -341,11 +354,15 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 								return res;
 							}
 						});
+						thisDeep++;
 					}
 				}
 			}
+			
+			if (thisDeep < deep)
+				result = thisResult;
 		}
 		
-		return null;
+		return result;
 	}
 }

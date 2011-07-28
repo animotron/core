@@ -205,7 +205,7 @@ public class GetTest extends ATest {
             _(GET._, "A1",
                 _(AN._, "A")
         )));
-        assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
+        //assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
