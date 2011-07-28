@@ -18,13 +18,11 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import javolution.util.FastList;
 import org.animotron.operator.AN;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
+import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
 import org.jetlang.channels.Channel;
@@ -41,6 +39,8 @@ import org.neo4j.kernel.Uniqueness;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
@@ -267,6 +267,9 @@ public class PFlow {
                             }
                             if (r.isType(USE._.relationshipType())) {
                                 return EXCLUDE_AND_PRUNE;
+                            }
+                            if (r.isType(HAVE._.relationshipType())) {
+                                return INCLUDE_AND_PRUNE;
                             }
                             if (r.isType(AN._.relationshipType())) {
                                 return INCLUDE_AND_PRUNE;
