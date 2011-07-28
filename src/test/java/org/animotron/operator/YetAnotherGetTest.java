@@ -56,6 +56,54 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
+    public void get_ic_via_is() throws Exception {
+        System.out.println("Test empty 'get' ...");
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IC._, "B", text("π")))
+        );
+
+        new Expression(
+            _(THE._, "D", _(IS._, "C"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(GET._, "A", _(AN._, "D")))
+        );
+
+        assertAnimo(E, "<the:E><have:B>π</have:B></the:E>");
+        //System.out.println("done.");
+    }
+
+    @Test
+    public void get_have_via_is() throws Exception {
+        System.out.println("Test empty 'get' ...");
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(HAVE._, "B", text("π")))
+        );
+
+        new Expression(
+            _(THE._, "D", _(IS._, "C"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(GET._, "A", _(AN._, "D")))
+        );
+
+        assertAnimo(E, "<the:E><have:B>π</have:B></the:E>");
+        //System.out.println("done.");
+    }
+
+    @Test
     public void self_via_is() throws Exception {
         System.out.println("Test empty 'get' ...");
 
@@ -72,6 +120,54 @@ public class YetAnotherGetTest extends ATest{
         );
 
         assertAnimo(E, "<the:E><is:C/><have:B>π</have:B></the:E>");
+        //System.out.println("done.");
+    }
+
+    @Test
+    public void self_ic_via_is() throws Exception {
+        System.out.println("Test empty 'get' ...");
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IC._, "B", text("π")))
+        );
+
+        new Expression(
+            _(THE._, "D", _(IS._, "C"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
+        );
+
+        assertAnimo(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
+        //System.out.println("done.");
+    }
+
+    @Test
+    public void self_have_via_is() throws Exception {
+        System.out.println("Test empty 'get' ...");
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(HAVE._, "B", text("π")))
+        );
+
+        new Expression(
+            _(THE._, "D", _(IS._, "C"))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
+        );
+
+        assertAnimo(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
         //System.out.println("done.");
     }
 
