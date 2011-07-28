@@ -19,6 +19,9 @@
 package org.animotron.operator.query;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 import org.animotron.Executor;
 import org.animotron.Statement;
@@ -40,10 +43,15 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 /**
  * Query operator 'Get'. Return 'have' relations on provided context.
@@ -98,7 +106,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							pf.sendAnswer(null);
 							return;
 						}
-						Relationship res = get(context.getEndNode(), name);
+						Relationship res = getByTraversal(op, context, name); //get(context.getEndNode(), name);
 						if (res != null) {
 							pf.sendAnswer(res);
 							return;
@@ -279,4 +287,65 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		return null;
 	}
 	
+	private Relationship getByTraversal(final Relationship start_op, final Relationship context, final String name) {
+		
+		TraversalDescription td =
+			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					if (path.length() > 0) {
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							if (r.equals(context)) {
+								return INCLUDE_AND_PRUNE;
+							} 
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
+					}
+					return EXCLUDE_AND_CONTINUE;
+				}
+			});
+		
+		System.out.println("context = "+context+" start_op = "+start_op);
+		
+		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
+		for (Path path : td.traverse(node)) {
+			System.out.println("path = "+path);
+			
+			boolean foundIS = false;
+			
+			for (Relationship r : path.relationships()) {
+				String type = r.getType().name();
+				
+				if (type.equals(IS._.relationshipType().name())) { 
+					foundIS = true;
+					
+				} else if (type.equals(HAVE._.relationshipType().name())) { 
+					System.out.println("return r = "+r);
+					return r;
+				
+				} else if (type.equals(IC._.relationshipType().name())) {
+					if (foundIS) {
+						//store
+						final Node sNode = context.getEndNode();
+						final Node eNode = r.getEndNode();
+
+						return AnimoGraph.execute(new GraphOperation<Relationship>() {
+							@Override
+							public Relationship execute() {
+								Relationship res = sNode.createRelationshipTo(eNode, HAVE._.relationshipType());
+								//RID.set(res, r.getId());
+								return res;
+							}
+						});
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
 }
