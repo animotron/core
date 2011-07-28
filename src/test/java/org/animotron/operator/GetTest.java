@@ -31,6 +31,7 @@ import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class GetTest extends ATest {
