@@ -38,8 +38,6 @@ public class GetTest extends ATest {
 	
 	@Test
 	public void getFromPFlow_an_with_param() throws Exception {
-        System.out.println("Test empty 'get' ...");
-
     	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
@@ -49,12 +47,10 @@ public class GetTest extends ATest {
 		);
 
         assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
-        //System.out.println("done.");
-}
+	}
 	
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Exception {
-        System.out.println("Test cross 'get' ...");
         
     	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
@@ -69,12 +65,10 @@ public class GetTest extends ATest {
 		);
         	
         assertAnimo(X, "<the:X><the:D><have:E><have:B><have:C>:</have:C></have:B></have:E></the:D></the:X>");
-        //System.out.println("done.");
 	}
 
 	@Test
 	public void getFromPFlow_an_with_an() throws Exception {
-        System.out.println("Test empty 'get' on AN with AN...");
 
     	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
@@ -89,12 +83,10 @@ public class GetTest extends ATest {
 		);
 
     	assertAnimo(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:E>");
-        //System.out.println("done.");
 	}
 	
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Exception {
-        System.out.println("Test empty 'get' on AN with AN...");
 
     	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
@@ -113,12 +105,10 @@ public class GetTest extends ATest {
 		);
 
     	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>_</have:C></have:B></the:A></the:F>");
-        //System.out.println("done.");
 	}
 	
     @Test
     public void checkIConIS() throws Exception {
-        System.out.println("Mime type use case ...");
 
         new Expression(
         _(THE._, "A",
@@ -173,14 +163,10 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         assertAnimo(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
-
-        //System.out.println("done.");
     }
 
     @Test
     public void checkHAVEonIS() throws Exception {
-        System.out.println("Mime type use case ...");
-
         new Expression(
         _(THE._, "A",
             _(HAVE._, "A1", text("some.path")),
@@ -205,7 +191,7 @@ public class GetTest extends ATest {
             _(GET._, "A1",
                 _(AN._, "A")
         )));
-        //assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
+        assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
@@ -234,13 +220,10 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         assertAnimo(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
-
-        //System.out.println("done.");
     }
 
     @Test
     public void getFromPFlow_an_with_stack() throws Exception {
-        System.out.println("Test empty 'get' on AN with AN...");
 
         new Expression(
             _(THE._, "A", _(GET._, "X"))
@@ -259,12 +242,10 @@ public class GetTest extends ATest {
         );
 
         assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z><the:B><have:Y>β</have:Y><the:A><have:X>α</have:X></the:A></the:B></the:C></the:E>");
-        //System.out.println("done.");
     }
 
     @Test
     public void getFromPFlow_more_an_with_stack() throws Exception {
-        System.out.println("Test empty 'get' on AN with AN...");
 
         new Expression(
             _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
@@ -283,12 +264,10 @@ public class GetTest extends ATest {
         );
 
         assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
-        //System.out.println("done.");
     }
 
     @Test
     public void getFromPFlow_one_more_an_with_stack() throws Exception {
-        System.out.println("Test empty 'get' on AN with AN...");
 
         new Expression(
             _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
@@ -307,7 +286,5 @@ public class GetTest extends ATest {
         );
 
         assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
-        //System.out.println("done.");
     }
-
 }

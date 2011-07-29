@@ -312,9 +312,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		System.out.println("context = "+context+" start_op = "+start_op);
 		
 		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
-//		for (Path path : td.traverse(node)) {
-//			System.out.println("path = "+path);
-//		}
+		for (Path path : td.traverse(node)) {
+			System.out.println("path = "+path);
+		}
 		
 		int deep = Integer.MAX_VALUE;
 		Relationship result = null;
@@ -336,11 +336,12 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				if (type.equals(IS._.relationshipType().name())) { 
 					foundIS = true;
 					
-				} else if (type.equals(HAVE._.relationshipType().name())) { 
+				} else if (type.equals(HAVE._.relationshipType().name()) && name.equals(name(r))) {
+					;
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (type.equals(IC._.relationshipType().name())) {
+				} else if (type.equals(IC._.relationshipType().name()) && name.equals(name(r))) {
 					if (foundIS) {
 						//store
 						final Node sNode = context.getEndNode();
