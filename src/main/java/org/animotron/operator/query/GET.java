@@ -333,14 +333,14 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				}
 				String type = r.getType().name();
 				
-				if (type.equals(IS._.relationshipType().name()) && name.equals(nameIS(r))) { 
+				if (type.equals(IS._.relationshipType().name()) && name.equals(IS._.name(r))) {
 					foundIS = true;
 					
-				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(name(r)) || foundIS)) {
+				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (type.equals(IC._.relationshipType().name()) && name.equals(name(r))) {
+				} else if (type.equals(IC._.relationshipType().name()) && name.equals(IC._.name(r))) {
 					if (foundIS) {
 						//store
 						final Node sNode = context.getEndNode();
