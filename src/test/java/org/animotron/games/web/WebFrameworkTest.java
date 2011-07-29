@@ -74,28 +74,28 @@ public class WebFrameworkTest extends ATest {
 
     	new Expression(
 			_(THE._, "html", 
-				_(IS._, "html-serialization"), //why???
-				_(AN._, "html-serialization",
-					_(AN._, "html-composition",
-						_(ANY._, "layout",
-							_(ANY._, "theme")
-		)	)	)	)	);
+                _(AN._, "html-composition",
+                    _(ANY._, "layout"
+		)	)	)	);
 
     	new Expression(
 			_(THE._, "html-composition", 
 				_(IS._, "composition"),
-				_(AN._, "html-part-composition",
-					_(HAVE._, "content",
-						element("html",
-							_(AN._, "html-head",
-								_(HAVE._, "css",
-									_(ALL._, "css")),
-								_(HAVE._, "script",
-									_(ALL._, "script"))
-							),
-							element("body",
-								_(GET._, "content"))
-		)	)	)	)	);
+                _(HAVE._, "content",
+                    element("html",
+                        _(AN._, "html-head",
+                            _(HAVE._, "css",
+                                _(ALL._, "css")),
+                            _(HAVE._, "script",
+                                _(ALL._, "script"))
+                        ),
+                        element("body",
+                            _(GET._, "content"))
+			)	)	)	);
+
+        new Expression(
+                _(THE._, "root-layout", _(IS._, "layout"))
+        );
 
     	new Expression(
 			_(THE._, "theme-concrete-root-layout", 
