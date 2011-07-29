@@ -26,9 +26,12 @@ import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
+import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.*;
 import org.animotron.operator.relation.*;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -37,7 +40,7 @@ import org.junit.Test;
 public class WebFrameworkTest extends ATest {
 
 	@Test
-	public void test() throws EBuilderTerminated {
+	public void test() throws EBuilderTerminated, IOException, InterruptedException {
     	new Expression(
 			_(THE._, "request", 
 				_(HAVE._, "uri", text("/")),
@@ -111,7 +114,26 @@ public class WebFrameworkTest extends ATest {
 				_(HAVE._, "content", text("Overview"))
 		)	);
 
-    	fail("Not yet implemented");
+    	new Expression(
+            _(THE._, "service", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri"))))
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s", _(AN._, "service", _(AN._, "request"), _(AN._, "test-site")))
+        );
+        assertAnimo(s,  "<the:s>" +
+                            "<the:service>" +
+                                "<the:root-service>" +
+                                    "<is:service/>" +
+                                    "<have:uri>/</have:uri>" +
+                                    "<the:html>" +
+                                        "<is:html-serialization/>" +
+                                        "<the:html-serialization/>" +
+                                    "</the:html>" +
+                                "</the:root-service>" +
+                            "</the:service>" +
+                        "</the:s>");
+
 	}
 
 }
