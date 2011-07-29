@@ -89,8 +89,8 @@ public class WebFrameworkTest extends ATest {
                             _(HAVE._, "script",
                                 _(ALL._, "script"))
                         ),
-                        element("body",
-                            _(GET._, "content"))
+                        element("body"/*,
+                            _(GET._, "content")*/)
 			)	)	)	);
 
         new Expression(
@@ -127,8 +127,15 @@ public class WebFrameworkTest extends ATest {
                                     "<is:service/>" +
                                     "<have:uri>/</have:uri>" +
                                     "<the:html>" +
-                                        "<is:html-serialization/>" +
-                                        "<the:html-serialization/>" +
+                                        "<the:html-composition>" +
+                                            "<is:composition/>" +
+                                            "<have:content>" +
+                                                "<html>" +
+                                                    "<the:html-head/>" +
+                                                    "<body/>" +
+                                                "</html>" +
+                                            "</have:content>" +
+                                        "</the:html-composition>" +
                                     "</the:html>" +
                                 "</the:root-service>" +
                             "</the:service>" +
