@@ -94,6 +94,13 @@ public class WebFrameworkTest extends ATest {
 			)	)	)	);
 
         new Expression(
+            _(THE._, "html-head",
+                element("head",
+                    element("title",
+                        _(GET._, "title")
+        )   )   )   );
+
+        new Expression(
                 _(THE._, "root-layout", _(IS._, "layout"))
         );
 
@@ -131,7 +138,11 @@ public class WebFrameworkTest extends ATest {
                                             "<is:composition/>" +
                                             "<have:content>" +
                                                 "<html>" +
-                                                    "<the:html-head/>" +
+                                                    "<the:html-head>" +
+                                                    "<head>" +
+                                                        "<title><have:title>Welcome to Animotron</have:title></title>" +
+                                                    "</head>" +
+                                                    "</the:html-head>" +
                                                     "<body/>" +
                                                 "</html>" +
                                             "</have:content>" +
