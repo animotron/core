@@ -121,6 +121,11 @@ public abstract class AbstractOperator implements Operator {
 		return NAME.get(node);
 	}
 	
+	public String nameIS(Relationship r) {
+		Node node = r.getEndNode(); 
+		return NAME.get(node);
+	}
+
 	@Override
 	public String namespace(Relationship r) {
 		return namespace();
