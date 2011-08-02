@@ -81,7 +81,7 @@ public class ANYTest extends ATest {
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
         );
         new Expression(
-            _(THE._, "C1", _(IS._, "B1"), _(HAVE._, "value", text("C")))
+            _(THE._, "C1", _(IS._, "C"), _(HAVE._, "value", text("C")))
         );
 
         Expression D = new Expression(
