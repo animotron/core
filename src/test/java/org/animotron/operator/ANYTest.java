@@ -73,9 +73,15 @@ public class ANYTest extends ATest {
         new Expression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
         );
+        new Expression(
+            _(THE._, "B1", _(IS._, "B"), _(HAVE._, "value", text("B")))
+        );
 
         new Expression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+        );
+        new Expression(
+            _(THE._, "C1", _(IS._, "B1"), _(HAVE._, "value", text("C")))
         );
 
         Expression D = new Expression(
