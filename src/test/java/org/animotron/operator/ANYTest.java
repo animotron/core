@@ -32,38 +32,66 @@ import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class ANYTest extends ATest {
 	
 
-	@Test
-	public void testANY() throws Exception {
+    @Test
+    public void testANY() throws Exception {
         System.out.println("Test 'ANY' ...");
         
-    	new Expression(
-			_(THE._, "A", _(HAVE._, "value"))
-		);
+        new Expression(
+            _(THE._, "A", _(HAVE._, "value"))
+        );
 	
-    	new Expression(
-			_(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
-		);
+        new Expression(
+            _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+        );
 
-    	new Expression(
-			_(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
-		);
+        new Expression(
+            _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+        );
 
-    	Expression D = new Expression(
-			_(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
-		);
+        Expression D = new Expression(
+            _(THE._, "D", _(ANY._, "A"))
+        );
+
+        System.out.println("****************************************************");
+        System.out.println("any:A");
+        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+
+        //System.out.println("done.");
+    }
+	
+    @Test
+    public void testANYwithWITH() throws Exception {
+        System.out.println("Test 'ANY' ...");
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "value"))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+        );
+
+        Expression D = new Expression(
+            _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
+        );
 
         System.out.println("****************************************************");
         System.out.println("any:A with:value B");
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
 
         //System.out.println("done.");
-	}
-	
+    }
+
 	@Test
 	public void ANYwithEQ() throws Exception {
 
