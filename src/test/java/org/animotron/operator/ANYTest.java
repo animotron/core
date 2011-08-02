@@ -57,9 +57,6 @@ public class ANYTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(ANY._, "A"))
         );
-
-        System.out.println("****************************************************");
-        System.out.println("any:A");
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
 
         //System.out.println("done.");
@@ -84,10 +81,12 @@ public class ANYTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
         );
-
-        System.out.println("****************************************************");
-        System.out.println("any:A with:value B");
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+
+        Expression E = new Expression(
+            _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
+        );
+        assertAnimo(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
 
         //System.out.println("done.");
     }
