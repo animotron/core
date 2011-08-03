@@ -18,8 +18,13 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.operator.AbstractOperator;
-import org.animotron.operator.Cachable;
+import org.animotron.manipulator.OnQuestion;
+import org.animotron.manipulator.PFlow;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'ALL'.
@@ -29,10 +34,35 @@ import org.animotron.operator.Cachable;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ALL extends AbstractOperator implements Cachable {
+public class ALL extends AbstractQuery {
 	
 	public static final ALL _ = new ALL();
 	
 	private ALL() { super("all", "animo/query/all"); }
-	
+
+    public OnQuestion onCalcQuestion() {
+        return question;
+    }
+
+    private OnQuestion question = new OnQuestion() {
+        @Override
+        public void onMessage(final PFlow pf) {
+            final Node n = pf.getOP().getEndNode();
+            Relationship ref = n.getSingleRelationship( REF, OUTGOING );
+
+            Node node = ref.getEndNode();
+
+            for (Relationship tdR : td_eval.traverse(node).relationships()) {
+                System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+                Node res = tdR.getStartNode();
+                if (filtering(pf, res)) {
+                    pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
+                }
+            }
+
+            pf.done();
+        }
+
+    };
+
 }
