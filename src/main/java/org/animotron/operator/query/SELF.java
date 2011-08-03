@@ -18,8 +18,6 @@
  */
 package org.animotron.operator.query;
 
-import static org.animotron.graph.RelationshipTypes.REF;
-
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
@@ -27,6 +25,8 @@ import org.animotron.operator.Evaluable;
 import org.animotron.operator.relation.HAVE;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.graph.RelationshipTypes.REF;
 
 /**
  * Query operator 'self'.
@@ -42,53 +42,55 @@ public class SELF extends AbstractOperator implements Evaluable {
 
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return new OnQuestion() {
-			@Override
-			public void onMessage(final PFlow pf) {
-				System.out.println("SELF '"+name(pf.getOP())+"' op = "+pf.getOP());
-				
-				System.out.println("path = "+pf.getFlowPath());
-				
-				Path path = pf.getFlowPath();
-				
-				Relationship lastContext = pf.getLastContext();
-				
-				short searchHave = 1;
-				
-				Relationship ref = null;
-				for (Relationship step : path.relationships()) {
-					if (REF.name().equals(step.getType().name())) {
-						ref = step;
-						searchHave = 0;
-					} else if (searchHave == 1 && HAVE._.relationshipType().name().equals(step.getType().name())) {
-						searchHave = 2;
-					}
-					
-					if (step == lastContext)
-						break;
-				}
-				
-				if (ref != null) {
-					//reference in processing flow
-					Relationship res = GET._.get(ref.getEndNode(), name(pf.getOP()));
-					
-					if (res != null)
-						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
-					
-				} else if (searchHave == 2) {
-					//the instance self in have
-					Relationship res = GET._.get(pf.getStartNode(), name(pf.getOP()));
+        return question;
+    }
 
-					if (res != null)
-						pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
-                        //TODO Why don't create persistent relationship?
-					
-				} else
-					;//XXX: error???
-				
-				pf.done();
-			}
-		};
-	}
-	
+	private OnQuestion question = new OnQuestion() {
+        @Override
+        public void onMessage(final PFlow pf) {
+            System.out.println("SELF '"+name(pf.getOP())+"' op = "+pf.getOP());
+
+            System.out.println("path = "+pf.getFlowPath());
+
+            Path path = pf.getFlowPath();
+
+            Relationship lastContext = pf.getLastContext();
+
+            short searchHave = 1;
+
+            Relationship ref = null;
+            for (Relationship step : path.relationships()) {
+                if (REF.name().equals(step.getType().name())) {
+                    ref = step;
+                    searchHave = 0;
+                } else if (searchHave == 1 && HAVE._.relationshipType().name().equals(step.getType().name())) {
+                    searchHave = 2;
+                }
+
+                if (step == lastContext)
+                    break;
+            }
+
+            if (ref != null) {
+                //reference in processing flow
+                Relationship res = GET._.get(ref.getEndNode(), name(pf.getOP()));
+
+                if (res != null)
+                    pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+
+            } else if (searchHave == 2) {
+                //the instance self in have
+                Relationship res = GET._.get(pf.getStartNode(), name(pf.getOP()));
+
+                if (res != null)
+                    pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+                    //TODO Why don't create persistent relationship?
+
+            } else
+                ;//XXX: error???
+
+            pf.done();
+        }
+    };
+
 }

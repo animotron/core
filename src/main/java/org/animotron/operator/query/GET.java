@@ -78,10 +78,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			relationships(IC._.relationshipType(), OUTGOING);
 
 	public OnQuestion onCalcQuestion() {
-		return onQuestion;
+		return question;
 	}
 
-	OnQuestion onQuestion = new OnQuestion() {
+	private OnQuestion question = new OnQuestion() {
 
 		@Override
 		public void onMessage(final PFlow pf) {

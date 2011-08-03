@@ -36,49 +36,42 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
- * Query operator 'ANY'.
- * 
- * Return 'all' or first 'perfect' USE
+ * Abstract Query
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ANY extends AbstractQuery {
-	
-	public static final ANY _ = new ANY();
-	
-	private ANY() { super("any", "animo/query/any"); }
+public abstract class AbstractQuery extends AbstractOperator implements Cachable, Evaluable, Query {
 
-	public OnQuestion onCalcQuestion() {
-        return question;
+    public AbstractQuery(String prefix, String uri) {
+        super(prefix, uri);
     }
 
-	private OnQuestion question = new OnQuestion() {
-        @Override
-        public void onMessage(final PFlow pf) {
-            final Node n = pf.getOP().getEndNode();
-            Relationship ref = n.getSingleRelationship( REF, OUTGOING );
+    protected TraversalDescription td_eval =
+        Traversal.description().
+            breadthFirst().
+            relationships(IS._.relationshipType(), INCOMING ).
+            evaluator(Evaluators.excludeStartPosition());
 
-            Node node = ref.getEndNode();
-
-//				if (filtering(pf, node)) {
-//					pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
-//				} else {
-
-                for (Relationship tdR : td_eval.traverse(node).relationships()) {
-                    System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
-                    Node res = tdR.getStartNode();
-                    if (filtering(pf, res)) {
-
-                        pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
-                        break;
-                    }
+    protected boolean filtering(PFlow pf, Node node) {
+        for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
+            Statement st = Statements.relationshipType(r);
+            if (st instanceof Predicate) {
+                try {
+                    if (!((Predicate) st).filter(pf.getStartOP(), r, node))
+                        return false;
+                } catch (Exception e) {
+                    //XXX: report
+                    e.printStackTrace();
+                    return false;
                 }
-//				}
-            pf.done();
+            }
         }
+        return true;
+    }
 
-    };
-
+	protected Relationship getThe(Node node) {
+		return THE._.get(Properties.NAME.get(node));
+	}
 
 }
