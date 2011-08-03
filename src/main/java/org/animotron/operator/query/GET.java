@@ -340,7 +340,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (type.equals(IC._.relationshipType().name()) && name.equals(IC._.name(r))) {
+				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
 					if (foundIS) {
 						//store
 						final Node sNode = context.getEndNode();
