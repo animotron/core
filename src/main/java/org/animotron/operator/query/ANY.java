@@ -58,9 +58,9 @@ public class ANY extends AbstractOperator implements Cachable, Evaluable, Query 
 				
 				Node node = ref.getEndNode();
 				
-				if (filtering(pf, node)) {
-					pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
-				} else {
+//				if (filtering(pf, node)) {
+//					pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+//				} else {
 					
 					for (Relationship tdR : td_eval.traverse(node).relationships()) {
 						System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
@@ -71,7 +71,7 @@ public class ANY extends AbstractOperator implements Cachable, Evaluable, Query 
 							break;
 						}
 					}
-				}
+//				}
 				pf.done();
 			}
 			
