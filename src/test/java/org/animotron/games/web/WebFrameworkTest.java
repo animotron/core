@@ -89,8 +89,8 @@ public class WebFrameworkTest extends ATest {
                             _(HAVE._, "script",
                                 _(ALL._, "script"))
                         ),
-                        element("body"/*TODO like, infinity loop here,
-                            _(GET._, "content")*/)
+                        element("body",
+                            _(GET._, "content"))
 			)	)	)	);
 
         new Expression(
