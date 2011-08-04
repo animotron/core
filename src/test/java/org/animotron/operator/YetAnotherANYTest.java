@@ -85,7 +85,7 @@ public class YetAnotherANYTest extends ATest {
         );
 
         new Expression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Χ", text("γ")))
+            _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
         );
 
         Expression a = new Expression(
@@ -94,14 +94,14 @@ public class YetAnotherANYTest extends ATest {
         assertAnimo(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
 
         Expression b = new Expression(
-            _(THE._, "b", _(ANY._, "S", _(WITH._, "Χ", text("β"))))
+            _(THE._, "b", _(ANY._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimo(b, "<the:b><the:B><is:A/><have:Χ>β</have:Χ></the:B></the:b>");
+        assertAnimo(b, "<the:b><the:B><is:A/><have:X>β</have:X></the:B></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimo(c, "<the:c><the:C><is:B/><have:Χ>γ</have:Χ></the:C></the:c>");
+        assertAnimo(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
 
         //System.out.println("done.");
 
