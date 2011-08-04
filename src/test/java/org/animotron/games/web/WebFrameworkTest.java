@@ -111,7 +111,7 @@ public class WebFrameworkTest extends ATest {
 					element("div", attribute("id", "title"),
 						_(GET._, "title")),
 					element("div", attribute("id", "content"),
-							_(GET._, "content"))
+                        _(GET._, "content"))
 		)	)	);
 
     	new Expression(
@@ -143,7 +143,9 @@ public class WebFrameworkTest extends ATest {
                                                         "<title><have:title>Welcome to Animotron</have:title></title>" +
                                                     "</head>" +
                                                     "</the:html-head>" +
-                                                    "<body/>" +
+                                                    "<body>" +
+                                                        "<have:content>Overview</have:content>" +
+                                                    "</body>" +
                                                 "</html>" +
                                             "</have:content>" +
                                         "</the:html-composition>" +
