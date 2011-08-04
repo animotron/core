@@ -18,15 +18,30 @@
  */
 package org.animotron.operator.query;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Evaluable;
+import org.animotron.operator.IC;
 import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 /**
  * Query operator 'self'.
@@ -50,9 +65,18 @@ public class SELF extends AbstractOperator implements Evaluable {
         public void onMessage(final PFlow pf) {
             System.out.println("SELF '"+name(pf.getOP())+"' op = "+pf.getOP());
 
-            System.out.println("path = "+pf.getFlowPath());
+            Relationship op = pf.getOP();
+            
+			Relationship res = selfByTraversal(op, op.getStartNode(), name(op));
+			if (res != null) {
+				pf.sendAnswer(res);
+				pf.done();
+				return;
+			}
 
             Path path = pf.getFlowPath();
+            System.out.println("path = "+path);
+            
 
             Relationship lastContext = pf.getLastContext();
 
@@ -73,14 +97,14 @@ public class SELF extends AbstractOperator implements Evaluable {
 
             if (ref != null) {
                 //reference in processing flow
-                Relationship res = GET._.get(ref.getEndNode(), name(pf.getOP()));
+                res = GET._.get(ref.getEndNode(), name(pf.getOP()));
 
                 if (res != null)
                     pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
 
             } else if (searchHave == 2) {
                 //the instance self in have
-                Relationship res = GET._.get(pf.getStartNode(), name(pf.getOP()));
+                res = GET._.get(pf.getStartNode(), name(pf.getOP()));
 
                 if (res != null)
                     pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
@@ -93,4 +117,83 @@ public class SELF extends AbstractOperator implements Evaluable {
         }
     };
 
+	private Relationship selfByTraversal(final Relationship start_op, final Node eNode, final String name) {
+		
+		TraversalDescription td =
+			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					//System.out.println("path = "+path);
+					if (path.length() > 0) {
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							if (r.getStartNode().equals(eNode)) {
+								return INCLUDE_AND_PRUNE;
+							} 
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
+					}
+					return EXCLUDE_AND_CONTINUE;
+				}
+			});
+		
+		System.out.println("start_op = "+start_op+" eNode = "+eNode);
+		
+		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
+		for (Path path : td.traverse(node)) {
+			System.out.println("path = "+path);
+		}
+		
+		int deep = Integer.MAX_VALUE;
+		Relationship result = null;
+
+		Relationship thisResult = null;
+		int thisDeep = 0;
+		
+		for (Path path : td.traverse(node)) {
+			
+			boolean foundIS = false;
+			thisDeep = 0;
+			for (Relationship r : path.relationships()) {
+				if (thisDeep > 0) {
+					thisDeep++;
+					continue;
+				}
+				String type = r.getType().name();
+				
+				if (type.equals(IS._.relationshipType().name()) && name.equals(IS._.name(r))) {
+					foundIS = true;
+					
+				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
+					thisResult = r;
+					thisDeep++;
+				
+				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
+					if (foundIS) {
+						//store
+						final Node sN = eNode;
+						final Node eN = r.getEndNode();
+
+						thisResult = AnimoGraph.execute(new GraphOperation<Relationship>() {
+							@Override
+							public Relationship execute() {
+								Relationship res = sN.createRelationshipTo(eN, HAVE._.relationshipType());
+								//RID.set(res, r.getId());
+								return res;
+							}
+						});
+						thisDeep++;
+					}
+				}
+			}
+			
+			if (thisDeep < deep)
+				result = thisResult;
+		}
+		
+		return result;
+	}
 }
