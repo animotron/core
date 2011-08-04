@@ -22,7 +22,6 @@ import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.compare.WITH;
 import org.animotron.operator.query.ANY;
-import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
@@ -46,7 +45,7 @@ public class YetAnotherANYTest extends ATest {
         );
 
         new Expression(
-            _(THE._, "B", _(HAVE._, "Y", text("β")))
+            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
         );
 
         new Expression(
