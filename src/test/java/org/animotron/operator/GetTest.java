@@ -104,7 +104,7 @@ public class GetTest extends ATest {
 			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
 		);
 
-    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>_</have:C></have:B></the:A></the:F>");
+    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>:</have:C></have:B></the:A></the:F>");
 	}
 	
     @Test
