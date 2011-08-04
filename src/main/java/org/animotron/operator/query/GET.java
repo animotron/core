@@ -140,11 +140,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				} else {
 					System.out.println("P-FLOW is context for GET!");
 					
-					Node context = Utils.getByREF(op.getEndNode());
-					Relationship res = getByTraversal(op, context, name); //get(context.getEndNode(), name);
+					Relationship res = getByTraversal(op, pf.getStartOP(), name); //get(context.getEndNode(), name);
 					if (res != null) {
 						pf.sendAnswer(res);
-						return;
 					}
 
 //					Relationship res = null;
@@ -167,47 +165,47 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		}
 	};
 	
-	private boolean goDownStack(PFlow pf, boolean answered, String name, Node node, Relationship pos) {
-		
-		Relationship res = null;
-		
-		//go by REF first
-		System.out.println("go by REF");
-		for (Relationship context : pf.getStackContext(pos, true)) {
-			System.out.println(context);
-			res = get(context.getEndNode(), name);
-			if (res != null) {
-				pf.sendAnswer(createResultInMemory(node, res));
-				answered = true;
-			}
-		}
-		if (!answered) {
-			for (Relationship context : pf.getStackContext(pos, true)) {
-				answered = answered || goDownStack(pf, answered, name, node, context);
-			}
-		}
-		
-		if (!answered) {
-			//go by AN (references)
-			System.out.println("go by AN");
-			for (Relationship context : pf.getStackContext(pos, false)) {
-				System.out.println(context);
-				res = get(context.getEndNode(), name);
-				if (res != null) {
-					pf.sendAnswer(createResultInMemory(node, res));
-					answered = true;
-				}
-			}
-			if (!answered) {
-				for (Relationship context : pf.getStackContext(pos, false)) {
-					answered = answered || goDownStack(pf, answered, name, node, context);
-				}
-			}
-		}
-
-		
-		return answered;
-	}
+//	private boolean goDownStack(PFlow pf, boolean answered, String name, Node node, Relationship pos) {
+//		
+//		Relationship res = null;
+//		
+//		//go by REF first
+//		System.out.println("go by REF");
+//		for (Relationship context : pf.getStackContext(pos, true)) {
+//			System.out.println(context);
+//			res = get(context.getEndNode(), name);
+//			if (res != null) {
+//				pf.sendAnswer(createResultInMemory(node, res));
+//				answered = true;
+//			}
+//		}
+//		if (!answered) {
+//			for (Relationship context : pf.getStackContext(pos, true)) {
+//				answered = answered || goDownStack(pf, answered, name, node, context);
+//			}
+//		}
+//		
+//		if (!answered) {
+//			//go by AN (references)
+//			System.out.println("go by AN");
+//			for (Relationship context : pf.getStackContext(pos, false)) {
+//				System.out.println(context);
+//				res = get(context.getEndNode(), name);
+//				if (res != null) {
+//					pf.sendAnswer(createResultInMemory(node, res));
+//					answered = true;
+//				}
+//			}
+//			if (!answered) {
+//				for (Relationship context : pf.getStackContext(pos, false)) {
+//					answered = answered || goDownStack(pf, answered, name, node, context);
+//				}
+//			}
+//		}
+//
+//		
+//		return answered;
+//	}
 
 	public Relationship get(Node context, final String name) {
 		
