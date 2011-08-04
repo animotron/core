@@ -38,13 +38,9 @@ public class YetAnotherALLTest extends ATest {
 
     @Test
     public void deep_all() throws Exception {
-        System.out.println("Test 'deep all' ...");
 
-        new Expression(
+    	new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-        new Expression(
-            _(THE._, "A`", _(IS._, "S"), _(HAVE._, "X", text("αα")))
         );
 
         new Expression(
@@ -52,31 +48,27 @@ public class YetAnotherALLTest extends ATest {
         );
 
         new Expression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")))
+            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
 
         Expression a = new Expression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimo(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
+        assertAnimo(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A><the:B><is:A/><have:Y>β</have:Y></the:B></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimo(b, "<the:b><the:B><is:S/><have:Y>β</have:Y></the:B></the:b>");
+        assertAnimo(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimo(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z></the:C></the:c>");
-
-        //System.out.println("done.");
-
+        assertAnimo(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:c>");
     }
 
     @Test
     public void one_more_deep_all() throws Exception {
-        System.out.println("Test 'deep all' ...");
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
@@ -104,9 +96,5 @@ public class YetAnotherALLTest extends ATest {
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
         assertAnimo(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
-
-        //System.out.println("done.");
-
     }
-
 }
