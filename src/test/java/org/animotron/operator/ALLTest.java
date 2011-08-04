@@ -55,7 +55,7 @@ public class ALLTest extends ATest {
         );
 
         Expression D = new Expression(
-            _(THE._, "D", _(ALL._, "A", _(WITH._, "value", text("B"))))
+            _(THE._, "D", _(ALL._, "A"))
         );
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B><the:C><is:B/><have:value>C</have:value></the:C></the:D>");
 
