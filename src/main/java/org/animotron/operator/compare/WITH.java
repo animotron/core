@@ -61,7 +61,7 @@ public class WITH extends AbstractOperator implements Predicate {
 		//XXX: fix
 		String name = name(op);
 
-		Relationship have = GET._.get(ref, name);
+		Relationship have = GET._.getByTraversal(op, ref, name);
 		if (have == null) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();

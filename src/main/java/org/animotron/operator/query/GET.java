@@ -46,6 +46,7 @@ import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -286,10 +287,12 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		return null;
 	}
 	
-	private Relationship getByTraversal(final Relationship start_op, final Relationship context, final String name) {
+	public Relationship getByTraversal(final Relationship start_op, final PropertyContainer context, final String name) {
 		
-		TraversalDescription td =
-			Traversal.description().depthFirst().
+		TraversalDescription td;
+		
+		if (context instanceof Relationship) {
+			td = Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 				@Override
@@ -307,10 +310,30 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					return EXCLUDE_AND_CONTINUE;
 				}
 			});
+		} else {
+			td = Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					if (path.length() > 0) {
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							if (r.getEndNode().equals(context)) {
+								return INCLUDE_AND_PRUNE;
+							} 
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
+					}
+					return EXCLUDE_AND_CONTINUE;
+				}
+			});
+		}
 		
 		System.out.println("context = "+context+" start_op = "+start_op);
 		
-		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
+		Node node = Utils.getByREF(start_op.getEndNode());
 		for (Path path : td.traverse(node)) {
 			System.out.println("path = "+path);
 		}
@@ -346,7 +369,12 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
 					if (foundIS) {
 						//store
-						final Node sNode = context.getEndNode();
+						final Node sNode;
+						if (context instanceof Relationship) {
+							sNode = ((Relationship)context).getEndNode();
+						} else {
+							sNode = (Node)context;
+						}
 						final Node eNode = r.getEndNode();
 
 						thisResult = AnimoGraph.execute(new GraphOperation<Relationship>() {
