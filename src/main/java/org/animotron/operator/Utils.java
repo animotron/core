@@ -20,6 +20,8 @@ package org.animotron.operator;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
+import org.animotron.Properties;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
@@ -56,7 +58,7 @@ public class Utils {
 			if (res.getType().name().startsWith("RESULT")) {
 				System.out.println("GET result = "+res);
 				
-				pf.answer.publish(res);
+				pf.sendAnswer(res);
 				
 				haveSome = true;
 			}
