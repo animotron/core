@@ -43,7 +43,6 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.PropertyContainer;
@@ -140,20 +139,28 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					super.onMessage(pf);
 				} else {
 					System.out.println("P-FLOW is context for GET!");
-					Relationship res = null;
-					boolean answered = false;
-					for (Relationship stack : pf.stack()) {
-						System.out.println("stack "+stack);
-
-						res = get(stack.getEndNode(), name);
-						if (res != null) {
-							pf.sendAnswer(createResultInMemory(node, res));
-							answered = true;
-						} else {
-							answered = goDownStack(pf, answered, name, node, stack);
-						}
-						if (answered) break;
+					
+					Node context = Utils.getByREF(op.getEndNode());
+					Relationship res = getByTraversal(op, context, name); //get(context.getEndNode(), name);
+					if (res != null) {
+						pf.sendAnswer(res);
+						return;
 					}
+
+//					Relationship res = null;
+//					boolean answered = false;
+//					for (Relationship stack : pf.stack()) {
+//						System.out.println("stack "+stack);
+//
+//						res = get(stack.getEndNode(), name);
+//						if (res != null) {
+//							pf.sendAnswer(createResultInMemory(node, res));
+//							answered = true;
+//						} else {
+//							answered = goDownStack(pf, answered, name, node, stack);
+//						}
+//						if (answered) break;
+//					}
 				}
 			}
 			pf.done();
