@@ -46,7 +46,6 @@ import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -337,6 +336,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					foundIS = true;
 					
 				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
+					//ignore empty have 
+					if (!Utils.haveContext(r.getEndNode()))
+						break;
+					
 					thisResult = r;
 					thisDeep++;
 				

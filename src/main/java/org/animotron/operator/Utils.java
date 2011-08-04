@@ -20,8 +20,6 @@ package org.animotron.operator;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
-import org.animotron.Properties;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
@@ -64,5 +62,19 @@ public class Utils {
 			}
 		}
 		return haveSome;
+	}
+	
+	public static boolean haveContext(Node node) {
+		
+		for (Relationship r : node.getRelationships(OUTGOING)) {
+			
+			if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+				//ignore REF
+			} else {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
