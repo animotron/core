@@ -127,7 +127,7 @@ public class GetTest extends ATest {
         new Expression(
         _(THE._, "B",
             _(IS._, "A"),
-            _(HAVE._, "A1", text("test.txt"))
+            _(HAVE._, "split testsA1", text("test.txt"))
         ));
 
         Expression C0 = new Expression(
