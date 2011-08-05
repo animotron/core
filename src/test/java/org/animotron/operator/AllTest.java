@@ -8,7 +8,7 @@
  *  of the License, or (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ALL WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
@@ -18,27 +18,28 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.operator.compare.EQ;
 import org.animotron.operator.compare.WITH;
-import org.animotron.operator.query.ANY;
+import org.animotron.operator.query.ALL;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
+
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ANYTest extends ATest {
+public class AllTest extends ATest {
 	
+
     @Test
-    public void testANY() throws Exception {
+    public void testALL() throws Exception {
         
         new Expression(
             _(THE._, "A", _(HAVE._, "value"))
@@ -53,13 +54,13 @@ public class ANYTest extends ATest {
         );
 
         Expression D = new Expression(
-            _(THE._, "D", _(ANY._, "A"))
+            _(THE._, "D", _(ALL._, "A"))
         );
-        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B><the:C><is:B/><have:value>C</have:value></the:C></the:D>");
     }
 	
     @Test
-    public void testANYwithWITH() throws Exception {
+    public void testALLwithWITH() throws Exception {
 
         new Expression(
             _(THE._, "A", _(HAVE._, "value"))
@@ -68,6 +69,7 @@ public class ANYTest extends ATest {
         new Expression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
         );
+
         new Expression(
             _(THE._, "B1", _(IS._, "B"), _(HAVE._, "value", text("B")))
         );
@@ -80,18 +82,18 @@ public class ANYTest extends ATest {
         );
 
         Expression D = new Expression(
-            _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
+            _(THE._, "D", _(ALL._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B><the:B1><is:B/><have:value>B</have:value></the:B1></the:D>");
 
         Expression E = new Expression(
-            _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
+            _(THE._, "E", _(ALL._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimo(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
+        assertAnimo(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C><the:C1><is:C/><have:value>C</have:value></the:C1></the:E>");
     }
 
 	@Test
-	public void ANYwithEQ() throws Exception {
+	public void ALLwithEQ() throws Exception {
 
 		new Expression(
 			_(THE._, "text-plain", 
@@ -115,7 +117,7 @@ public class ANYTest extends ATest {
 
 		Expression test = new Expression(
 			_(THE._, "test", 
-				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
+				_(ALL._, "mime-type", _(EQ._, "extension", text("txt")))
 			)
 		);
 	
