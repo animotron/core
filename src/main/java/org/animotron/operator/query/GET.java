@@ -79,7 +79,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			breadthFirst().
 			relationships(IS._.relationshipType(), OUTGOING).
 			relationships(IC._.relationshipType(), OUTGOING);
-
+	
 	public OnQuestion onCalcQuestion() {
 		return question;
 	}
@@ -314,6 +314,15 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							if (r.equals(context)) {
 								return INCLUDE_AND_PRUNE;
 							} 
+
+							String rType = r.getType().name();
+							
+							//second must be REF
+							if (path.length() == 1 && !rType.equals(RelationshipTypes.REF.name())) {
+								return EXCLUDE_AND_PRUNE;
+							} else if (path.length() == 2 && !(rType.equals(HAVE._.rType) || rType.equals(IC._.rType))) {
+								return EXCLUDE_AND_PRUNE;
+							}
 							return EXCLUDE_AND_CONTINUE;	
 						} 
 						return EXCLUDE_AND_PRUNE;
@@ -322,6 +331,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				}
 			});
 		} else {
+			//TODO: merge with prev. one
 			td = Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
@@ -332,7 +342,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 						if (r.getStartNode().equals(path.endNode())) {
 							if (r.getEndNode().equals(context)) {
 								return INCLUDE_AND_PRUNE;
-							} 
+							}
 							return EXCLUDE_AND_CONTINUE;	
 						} 
 						return EXCLUDE_AND_PRUNE;

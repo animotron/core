@@ -77,11 +77,6 @@ public abstract class AbstractInstruction implements Instruction {
 	}
 	
 	@Override
-	public RelationshipType resultRelationshipType() {
-		return null;
-	}
-
-	@Override
 	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
 		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);

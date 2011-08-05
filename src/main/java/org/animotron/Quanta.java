@@ -37,6 +37,4 @@ public interface Quanta {
 	public abstract String namespace();
 
 	public abstract RelationshipType relationshipType();
-
-	public abstract RelationshipType resultRelationshipType();
 }

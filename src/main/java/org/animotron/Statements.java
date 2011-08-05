@@ -68,9 +68,6 @@ public class Statements {
 	private static Map<String, Statement> statementsByRelationType = 
 		new FastMap<String, Statement>();
 
-	private static Map<String, Statement> statementsByResultRelationType = 
-		new FastMap<String, Statement>();
-
 	@SuppressWarnings("unchecked")
 	private static void loadClass(String name, Map<String, List<Instruction>> instructions) {
         Class<? extends Quanta> clazz;
@@ -98,10 +95,6 @@ public class Statements {
 					quantasByNamespace.put(obj.namespace(), op);
 					quantasByPrefix.put(obj.name(), op);
 	            	statementsByRelationType.put(op.relationshipType().name(), op);
-	            	
-	            	RelationshipType resultType = op.resultRelationshipType();
-	            	if (resultType != null)
-	            		statementsByResultRelationType.put(resultType.name(), op);
 	            	
 				} else {
 					//TODO: log?
@@ -294,20 +287,6 @@ public class Statements {
 		ready();
 		
 		Statement s = statementsByRelationType.get(name);
-//		if (s == null && run())
-//			s = statementsByRelationType.get(name);
-		
-		return s;
-	}
-
-	public static Statement resultRelationshipType(RelationshipType type) {
-		return resultRelationshipType(type.name());
-	}
-
-	public static Statement resultRelationshipType(String name) {
-		ready();
-		
-		Statement s = statementsByResultRelationType.get(name);
 //		if (s == null && run())
 //			s = statementsByRelationType.get(name);
 		

@@ -44,8 +44,8 @@ public abstract class AbstractOperator implements Operator {
 	
 	private String prefix;
 	private String uri;
-	private RelationshipType relationshipType;
-	private RelationshipType resultRelationshipType = null;
+	public final RelationshipType relationshipType;
+	public final String rType;
 	
 	public AbstractOperator(String prefix, String uri) {
 		this(prefix, uri, prefix.toUpperCase());
@@ -55,13 +55,14 @@ public abstract class AbstractOperator implements Operator {
 		this.prefix = prefix;
 		this.uri = uri;
 		this.relationshipType = AnimoRelationshipType.get(relationshipType);
+		rType = this.relationshipType.name(); 
 	}
 
 	public AbstractOperator(String prefix, String uri, String relationshipType, String resultRelationshipType) {
 		this.prefix = prefix;
 		this.uri = uri;
 		this.relationshipType = AnimoRelationshipType.get(relationshipType);
-		this.resultRelationshipType = AnimoRelationshipType.get(resultRelationshipType);
+		rType = this.relationshipType.name(); 
 	}
 
 	@Override
@@ -79,11 +80,6 @@ public abstract class AbstractOperator implements Operator {
 		return relationshipType;
 	}
 	
-	@Override
-	public RelationshipType resultRelationshipType() {
-		return resultRelationshipType;
-	}
-
 	@Override
 	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws EBuilderTerminated {
 		Node child = createNode();
