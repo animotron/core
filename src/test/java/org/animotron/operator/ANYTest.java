@@ -37,10 +37,8 @@ import org.junit.Test;
  */
 public class ANYTest extends ATest {
 	
-
     @Test
     public void testANY() throws Exception {
-        System.out.println("Test 'ANY' ...");
         
         new Expression(
             _(THE._, "A", _(HAVE._, "value"))
@@ -58,13 +56,10 @@ public class ANYTest extends ATest {
             _(THE._, "D", _(ANY._, "A"))
         );
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
-
-        //System.out.println("done.");
     }
 	
     @Test
     public void testANYwithWITH() throws Exception {
-        System.out.println("Test 'ANY' ...");
 
         new Expression(
             _(THE._, "A", _(HAVE._, "value"))
@@ -93,8 +88,6 @@ public class ANYTest extends ATest {
             _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
         );
         assertAnimo(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
-
-        //System.out.println("done.");
     }
 
 	@Test
@@ -127,7 +120,5 @@ public class ANYTest extends ATest {
 		);
 	
         assertAnimo(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
-
-        //System.out.println("done.");
 	}
 }

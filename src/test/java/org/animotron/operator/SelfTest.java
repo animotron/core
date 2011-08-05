@@ -1,4 +1,5 @@
 /*
+ *  Copyright (C) 2011 The Animo Project
  *  http://animotron.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -7,7 +8,7 @@
  *  of the License, or (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  but WITHOUT ALL WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU Lesser General Public License for more details.
  *
@@ -36,7 +37,6 @@ public class SelfTest extends ATest {
 	
 	@Test
 	public void getFromPFlow() throws Exception {
-        System.out.println("Test empty 'self' ...");
         
     	new Expression(
 			_(THE._, "A")
@@ -77,8 +77,6 @@ public class SelfTest extends ATest {
         assertAnimo(E, "<the:E><have:B><have:A>.</have:A></have:B></the:E>");
         //System.out.println("self:B an:D");
         assertAnimo(F, "<the:F><have:B><have:A>:</have:A></have:B></the:F>");
-
-        //System.out.println("done.");
 	}
 	
 //	@Test

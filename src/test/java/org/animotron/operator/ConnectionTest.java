@@ -40,7 +40,6 @@ public class ConnectionTest extends ATest {
 	
     @Test
     public void mimeType_usecase() throws Exception {
-        System.out.println("Mime type use case ...");
         
         new Expression(
         _(THE._, "mime-type",
@@ -111,13 +110,10 @@ public class ConnectionTest extends ATest {
                     _(AN._, "fileA")
         ))));
         assertAnimo(E, "<the:E><have:type>text/plain</have:type></the:E>");
-
-        //System.out.println("done.");
     }
 	
     @Test
     public void mimeType_one_more_usecase() throws Exception {
-        System.out.println("Mime type use case ...");
 
         new Expression(
         _(THE._, "mime-type",
@@ -191,8 +187,5 @@ public class ConnectionTest extends ATest {
                     _(AN._, "fileA")
         ))));
         assertAnimo(E, "<the:E><have:type>text/plain</have:type></the:E>");
-
-        //System.out.println("done.");
     }
-
 }

@@ -38,7 +38,6 @@ public class YetAnotherANYTest extends ATest {
 
     @Test
     public void deep_any() throws Exception {
-        System.out.println("Test 'deep any' ...");
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
@@ -66,14 +65,10 @@ public class YetAnotherANYTest extends ATest {
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", text("γ"))))
         );
         assertAnimo(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z></the:C></the:c>");
-
-        //System.out.println("done.");
-
     }
 
     @Test
     public void one_more_deep_any() throws Exception {
-        System.out.println("Test 'deep any' ...");
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
@@ -101,9 +96,5 @@ public class YetAnotherANYTest extends ATest {
             _(THE._, "c", _(ANY._, "S", _(WITH._, "X", text("γ"))))
         );
         assertAnimo(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
-
-        //System.out.println("done.");
-
     }
-
 }

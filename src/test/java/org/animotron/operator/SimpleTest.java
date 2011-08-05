@@ -36,7 +36,6 @@ public class SimpleTest extends ATest {
 	
 	@Test
 	public void an() throws Exception {
-        System.out.println("Test 'an' ...");
         
     	new Expression(
 			_(THE._, "AA")
@@ -51,13 +50,10 @@ public class SimpleTest extends ATest {
 		);
 
         assertAnimo(C, "<the:CC><the:BB><have:AA>a@b</have:AA></the:BB></the:CC>");
-
-        System.out.println("done.");
 	}
 
 	@Test
 	public void get() throws Exception {
-        System.out.println("Test 'get' ...");
         
     	new Expression(
 			_(THE._, "A")
@@ -72,7 +68,5 @@ public class SimpleTest extends ATest {
 		);
 
         assertAnimo(C, "<the:C><have:A>a@b</have:A></the:C>");
-        
-        //System.out.println("done.");
 	}
 }

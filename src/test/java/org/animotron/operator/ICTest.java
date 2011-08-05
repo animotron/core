@@ -33,10 +33,8 @@ import org.junit.Test;
  */
 public class ICTest extends ATest {
 	
-
 	@Test
 	public void testIC() throws Exception {
-        System.out.println("Test 'IC' ...");
         
     	new Expression(
 			_(THE._, "A")
@@ -57,8 +55,5 @@ public class ICTest extends ATest {
         //System.out.println("get:A an:C");
         assertString(D, ".");
         assertAnimo(D, "<the:D><have:A>.</have:A></the:D>");
-
-        //System.out.println("done.");
 	}
-	
 }

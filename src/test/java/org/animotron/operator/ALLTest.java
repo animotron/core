@@ -40,7 +40,6 @@ public class ALLTest extends ATest {
 
     @Test
     public void testALL() throws Exception {
-        System.out.println("Test 'ALL' ...");
         
         new Expression(
             _(THE._, "A", _(HAVE._, "value"))
@@ -58,13 +57,10 @@ public class ALLTest extends ATest {
             _(THE._, "D", _(ALL._, "A"))
         );
         assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B><the:C><is:B/><have:value>C</have:value></the:C></the:D>");
-
-        //System.out.println("done.");
     }
 	
     @Test
     public void testALLwithWITH() throws Exception {
-        System.out.println("Test 'ALL' ...");
 
         new Expression(
             _(THE._, "A", _(HAVE._, "value"))
@@ -94,7 +90,6 @@ public class ALLTest extends ATest {
             _(THE._, "E", _(ALL._, "A", _(WITH._, "value", text("C"))))
         );
         assertAnimo(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C><the:C1><is:C/><have:value>C</have:value></the:C1></the:E>");
-        //System.out.println("done.");
     }
 
 	@Test
@@ -127,7 +122,5 @@ public class ALLTest extends ATest {
 		);
 	
         assertAnimo(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
-
-        //System.out.println("done.");
 	}
 }
