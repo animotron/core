@@ -23,6 +23,10 @@ import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
 import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
 import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
+import java.util.Set;
+
+import javolution.util.FastSet;
+
 import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
@@ -88,7 +92,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			
 			final Node node = op.getEndNode();
 			
-			System.out.println("GET '"+name(op)+"' THREAD "+Thread.currentThread());
+			System.out.println("GET '"+name(op)+"' pflow "+pf.getFlowPath());
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
@@ -105,9 +109,11 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							pf.sendAnswer(null);
 							return;
 						}
-						Relationship res = getByTraversal(op, context, name); //get(context.getEndNode(), name);
-						if (res != null) {
-							pf.sendAnswer(res);
+						Set<Relationship> res = getByTraversal(op, context, name); //get(context.getEndNode(), name);
+						if (!res.isEmpty()) {
+							for (Relationship r : res)
+								pf.sendAnswer(r);
+
 							return;
 						}
 
@@ -116,10 +122,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							in = Evaluator._.execute(pf.getStartOP(), context.getEndNode());
 						
 							for (Object n : in) {
-								res = get(((Relationship)n).getEndNode(), name);
+								Relationship r = get(((Relationship)n).getEndNode(), name);
 								
 								if (res != null)
-									pf.sendAnswer(createResult(node, res));
+									pf.sendAnswer(createResult(node, r));
 							}
 						} catch (Exception e) {
 							//XXX: what to do?
@@ -140,10 +146,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				} else {
 					System.out.println("P-FLOW is context for GET!");
 					
-					Relationship res = getByTraversal(op, pf.getStartOP(), name); //get(context.getEndNode(), name);
-					if (res != null) {
-						pf.sendAnswer(res);
-					}
+					Set<Relationship> res = getByTraversal(op, pf.getStartOP(), name); //get(context.getEndNode(), name);
+					if (!res.isEmpty())
+						for (Relationship r : res)
+							pf.sendAnswer(r);
 
 //					Relationship res = null;
 //					boolean answered = false;
@@ -292,7 +298,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		return null;
 	}
 	
-	public Relationship getByTraversal(final Relationship start_op, final PropertyContainer context, final String name) {
+	public Set<Relationship> getByTraversal(final Relationship start_op, final PropertyContainer context, final String name) {
 		
 		TraversalDescription td;
 		
@@ -339,17 +345,18 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		System.out.println("context = "+context+" start_op = "+start_op);
 		
 		Node node = Utils.getByREF(start_op.getEndNode());
-		for (Path path : td.traverse(node)) {
-			System.out.println("path = "+path);
-		}
+//		for (Path path : td.traverse(node)) {
+//			System.out.println("path = "+path);
+//		}
 		
 		int deep = Integer.MAX_VALUE;
-		Relationship result = null;
+		Set<Relationship> result = new FastSet<Relationship>();
 
 		Relationship thisResult = null;
 		int thisDeep = 0;
 		
 		for (Path path : td.traverse(node)) {
+			System.out.println("path = "+path);
 			
 			boolean foundIS = false;
 			thisDeep = 0;
@@ -395,8 +402,16 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				}
 			}
 			
-			if (thisDeep < deep)
-				result = thisResult;
+			if (thisDeep == 0)
+				;
+			else if (thisDeep == deep) {
+				result.add(thisResult);
+
+			} else if (thisDeep < deep) {
+				result.clear();
+				result.add(thisResult);
+				deep = thisDeep;
+			}
 		}
 		
 		return result;

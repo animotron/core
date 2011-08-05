@@ -18,18 +18,16 @@
  */
 package org.animotron.operator.compare;
 
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javolution.util.FastList;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.AbstractOperator;
@@ -61,17 +59,21 @@ public class WITH extends AbstractOperator implements Predicate {
 		//XXX: fix
 		String name = name(op);
 
-		Relationship have = GET._.getByTraversal(op, ref, name);
-		if (have == null) return false;
+		Set<Relationship> haveSet = GET._.getByTraversal(op, ref, name);
+		if (haveSet.isEmpty()) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();
 		List<Relationship> expected = new FastList<Relationship>();
 
+		PipedInput in = null;
+		
 		System.out.println("Eval actual");
-		PipedInput in = Evaluator._.execute(start_op, have.getEndNode());
-		for (Object e : in) {
-			actual.add((Relationship) e);
-			System.out.println("actual "+e);
+		for (Relationship have : haveSet) {
+			in = Evaluator._.execute(start_op, have.getEndNode());
+			for (Object e : in) {
+				actual.add((Relationship) e);
+				System.out.println("actual "+e);
+			}
 		}
 
 		System.out.println("Eval expected");
