@@ -21,7 +21,6 @@ package org.animotron.operator.query;
 import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.*;
 import org.animotron.operator.relation.IS;
@@ -31,7 +30,6 @@ import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
-import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -47,7 +45,7 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
         super(prefix, uri);
     }
 
-    protected TraversalDescription td_eval =
+    protected TraversalDescription td_IS =
         Traversal.description().
             breadthFirst().
             relationships(IS._.relationshipType(), INCOMING ).

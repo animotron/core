@@ -18,21 +18,12 @@
  */
 package org.animotron.operator.query;
 
-import org.animotron.Properties;
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.*;
-import org.animotron.operator.relation.IS;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.Evaluators;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
 
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -65,7 +56,7 @@ public class ANY extends AbstractQuery {
 //					pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
 //				} else {
 
-                for (Relationship tdR : td_eval.traverse(node).relationships()) {
+                for (Relationship tdR : td_IS.traverse(node).relationships()) {
                     System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
                     Node res = tdR.getStartNode();
                     if (filtering(pf, res)) {

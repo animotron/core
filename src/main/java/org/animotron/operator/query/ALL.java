@@ -52,7 +52,7 @@ public class ALL extends AbstractQuery {
 
             Node node = ref.getEndNode();
 
-            for (Relationship tdR : td_eval.traverse(node).relationships()) {
+            for (Relationship tdR : td_IS.traverse(node).relationships()) {
                 System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
                 Node res = tdR.getStartNode();
                 if (filtering(pf, res)) {
