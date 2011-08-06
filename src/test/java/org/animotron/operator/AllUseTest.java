@@ -134,7 +134,7 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B><the:B1><is:B/><have:Y>ββ</have:Y></the:B1></the:s></the:b>");
+        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B><the:B1><is:B/><have:Y>ββ</have:Y></the:B1><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C><the:C1><is:C/><have:Z>γγ</have:Z><have:X>ααα</have:X></the:C1></the:s></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
@@ -178,7 +178,7 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B><the:B1><is:B/><have:Y>ββ</have:Y></the:B1></the:s></the:b>");
+        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B><the:B1><is:B/><have:Y>ββ</have:Y></the:B1><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C><the:C1><is:C/><have:Z>γγ</have:Z><have:X>ααα</have:X></the:C1></the:s></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
