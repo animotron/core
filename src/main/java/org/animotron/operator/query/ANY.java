@@ -63,32 +63,7 @@ public class ANY extends AbstractQuery {
 
             Node node = ref.getEndNode();
 
-            final Relationship end = pf.getStartOP(); 
-
-			TraversalDescription td = Traversal.description().depthFirst().
-			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
-				@Override
-				public Evaluation evaluate(Path path) {
-					if (path.length() > 0) {
-						Relationship r = path.lastRelationship(); 
-						if (r.getStartNode().equals(path.endNode())) {
-							if (r.equals(end)) {
-								return INCLUDE_AND_PRUNE;
-							} 
-
-							String rType = r.getType().name();
-							
-							if (path.length() == 1 && !(rType.equals(USE._.rType) || rType.equals(IS._.rType)) ) {
-								return EXCLUDE_AND_PRUNE;
-							}
-							return EXCLUDE_AND_CONTINUE;	
-						} 
-						return EXCLUDE_AND_PRUNE;
-					}
-					return EXCLUDE_AND_CONTINUE;
-				}
-			});
+			TraversalDescription td = getUSEtravers(pf.getStartOP());
 			
 			System.out.println("ANY **************************");
 			for (Path path : td.traverse(Utils.getByREF(pf.getOP().getEndNode()))) {

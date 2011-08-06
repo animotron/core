@@ -24,14 +24,21 @@ import org.animotron.Statements;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.*;
 import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 /**
  * Abstract Query
@@ -71,5 +78,32 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 	protected Relationship getThe(Node node) {
 		return THE._.get(Properties.NAME.get(node));
 	}
+	
+	protected TraversalDescription getUSEtravers(final Relationship end) {
 
+		return Traversal.description().depthFirst().
+		uniqueness(Uniqueness.RELATIONSHIP_PATH).
+		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+			@Override
+			public Evaluation evaluate(Path path) {
+				if (path.length() > 0) {
+					Relationship r = path.lastRelationship(); 
+					if (r.getStartNode().equals(path.endNode())) {
+						if (r.equals(end)) {
+							return INCLUDE_AND_PRUNE;
+						} 
+
+						String rType = r.getType().name();
+						
+						if (path.length() == 1 && !(rType.equals(USE._.rType) || rType.equals(IS._.rType)) ) {
+							return EXCLUDE_AND_PRUNE;
+						}
+						return EXCLUDE_AND_CONTINUE;	
+					} 
+					return EXCLUDE_AND_PRUNE;
+				}
+				return EXCLUDE_AND_CONTINUE;
+			}
+		});
+	};
 }

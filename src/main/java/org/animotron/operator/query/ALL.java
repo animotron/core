@@ -20,8 +20,12 @@ package org.animotron.operator.query;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.operator.Utils;
+import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -52,13 +56,28 @@ public class ALL extends AbstractQuery {
 
             Node node = ref.getEndNode();
 
-            for (Relationship tdR : td_IS.traverse(node).relationships()) {
-                System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
-                Node res = tdR.getStartNode();
-                if (filtering(pf, res)) {
-                    pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
-                }
-            }
+			TraversalDescription td = getUSEtravers(pf.getStartOP());
+			
+			System.out.println("ALL **************************");
+			for (Path path : td.traverse(Utils.getByREF(pf.getOP().getEndNode()))) {
+				System.out.println(" path = "+path);
+				for (Relationship p : path.relationships()) {
+					if (p.getType().name().equals(USE._.rType)) {
+						node = p.getEndNode();
+					}
+				}
+			}
+
+			if (filtering(pf, node))
+				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+
+	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
+	            System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+	            Node res = tdR.getStartNode();
+	            if (filtering(pf, res)) {
+	                pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
+	            }
+	        }
 
             pf.done();
         }
