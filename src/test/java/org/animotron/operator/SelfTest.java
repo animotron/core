@@ -35,82 +35,82 @@ import org.junit.Test;
  */
 public class SelfTest extends ATest {
 	
-	@Test
-	public void getFromPFlow() throws Exception {
+    @Test
+    public void getFromPFlow() throws Exception {
         
-    	new Expression(
-			_(THE._, "A")
-		);
+        new Expression(
+            _(THE._, "A")
+        );
     	
-    	new Expression(
-			_(THE._, "B")
-		);
+        new Expression(
+            _(THE._, "B")
+        );
     	
-    	Expression C = new Expression(
-			_(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "A")))
-		);
+        Expression C = new Expression(
+            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "A")))
+        );
 
-    	Expression CC = new Expression(
-			_(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "A")))
-		);
+        Expression CC = new Expression(
+            _(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "A")))
+        );
 
-    	Expression D = new Expression(
-			_(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
-		);
+        Expression D = new Expression(
+            _(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
+        );
 
-    	Expression E = new Expression(
-			_(THE._, "E", _(GET._, "B", _(AN._, "C")))
-		);
+        Expression E = new Expression(
+            _(THE._, "E", _(GET._, "B", _(AN._, "C")))
+        );
     	
-    	Expression F = new Expression(
-			_(THE._, "F", _(GET._, "B", _(AN._, "D")))
-		);
+        Expression F = new Expression(
+            _(THE._, "F", _(GET._, "B", _(AN._, "D")))
+        );
     	
         assertAnimo(C, "<the:C><have:A>.</have:A><have:B><have:A>.</have:A></have:B></the:C>");
         assertAnimo(CC, "<the:CC><have:A>CC</have:A><have:B><have:A>CC</have:A></have:B></the:CC>");
         assertAnimo(D, "<the:D><is:C/><have:A>:</have:A></the:D>");
-
-        //this will be after is evaluation
-        //assertAnimo(D, "<the:D><have:A>:</have:A><have:B><have:A>:</have:A></have:B></the:D>");
-
-        //System.out.println("self:B an:C");
         assertAnimo(E, "<the:E><have:B><have:A>.</have:A></have:B></the:E>");
-        //System.out.println("self:B an:D");
         assertAnimo(F, "<the:F><have:B><have:A>:</have:A></have:B></the:F>");
-	}
+
+    }
 	
-//	@Test
-//	public void anyWithUse() throws Exception {
-//        System.out.println("Test 'self' ...");
-//
-//    	new Expression(
-//			_(THE._, "A")
-//		);
-//    	new Expression(
-//			_(THE._, "B", _(IS._, "A"))
-//		);
-//    	new Expression(
-//			_(THE._, "C", _(IS._, "B"))
-//		);
-//    	new Expression(
-//			_(THE._, "D", _(ANY._, "A"))
-//		);
-//    	new Expression(
-//			_(THE._, "E", _(AN._, "D", _(USE._, "B")))
-//		);
-//    	new Expression(
-//			_(THE._, "F", _(AN._, "D", _(USE._, "C")))
-//		);
-//    	new Expression(
-//			_(THE._, "G", _(AN._, "E", _(USE._, "A")))
-//		);
-//
-//        //System.out.println("any:A");
-//        //assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
-//
-//        //System.out.println("an:D use:B");
-////        assertAnimo(E, "<the:E><the:D><the:B></the:B><the:C></the:C></the:D></the:E>");
-//
-//        //System.out.println("done.");
-//	}
+    @Test
+    public void getFromPFlow_by_IS() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(IS._, "X"))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IS._, "X"))
+        );
+
+        Expression C = new Expression(
+            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "X")))
+        );
+
+        Expression CC = new Expression(
+            _(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "X")))
+        );
+
+        Expression D = new Expression(
+            _(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
+        );
+
+        Expression E = new Expression(
+            _(THE._, "E", _(GET._, "B", _(AN._, "C")))
+        );
+
+        Expression F = new Expression(
+            _(THE._, "F", _(GET._, "B", _(AN._, "D")))
+        );
+
+        assertAnimo(C, "<the:C><have:A>.</have:A><have:B><have:A>.</have:A></have:B></the:C>");
+        assertAnimo(CC, "<the:CC><have:A>CC</have:A><have:B><have:A>CC</have:A></have:B></the:CC>");
+        assertAnimo(D, "<the:D><is:C/><have:A>:</have:A></the:D>");
+        assertAnimo(E, "<the:E><have:B><have:A>.</have:A></have:B></the:E>");
+        assertAnimo(F, "<the:F><have:B><have:A>:</have:A></have:B></the:F>");
+
+    }
+
 }
