@@ -82,7 +82,7 @@ public class SelfTest extends ATest {
 //	@Test
 //	public void anyWithUse() throws Exception {
 //        System.out.println("Test 'self' ...");
-//        
+//
 //    	new Expression(
 //			_(THE._, "A")
 //		);
@@ -104,7 +104,7 @@ public class SelfTest extends ATest {
 //    	new Expression(
 //			_(THE._, "G", _(AN._, "E", _(USE._, "A")))
 //		);
-//    	
+//
 //        //System.out.println("any:A");
 //        //assertEquals("D", "<the:D><the:A></the:A><the:B></the:B><the:C></the:C></the:D>");
 //

@@ -53,32 +53,6 @@ public class AllUseTest extends ATest {
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
 
-        Expression b = new Expression(
-            _(THE._, "b", _(ALL._, "S", _(USE._, "B")))
-        );
-        assertAnimo(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B></the:b>");
-
-        Expression c = new Expression(
-            _(THE._, "c", _(ALL._, "S", _(USE._, "C")))
-        );
-        assertAnimo(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:c>");
-
-    }
-
-    @Test
-    public void simple_all_Use_via_an() throws EBuilderTerminated, IOException, InterruptedException {
-        new Expression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-
-        new Expression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-
-        new Expression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
-        );
-
         new Expression (
             _(THE._, "s", _(ALL._, "S"))
         );
@@ -97,38 +71,6 @@ public class AllUseTest extends ATest {
 
     @Test
     public void complex_all_Use() throws EBuilderTerminated, IOException, InterruptedException {
-        new Expression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-
-        new Expression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-        new Expression(
-            _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
-        );
-
-        new Expression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
-        );
-        new Expression(
-            _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")),  _(HAVE._, "X", text("ααα")))
-        );
-
-        Expression b = new Expression(
-            _(THE._, "b", _(ALL._, "S", _(USE._, "B")))
-        );
-        assertAnimo(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B><the:B1><is:B/><have:Y>ββ</have:Y></the:B1></the:b>");
-
-        Expression c = new Expression(
-            _(THE._, "c", _(ALL._, "S", _(USE._, "C")))
-        );
-        assertAnimo(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C><the:C1><is:C/><have:Z>γγ</have:Z><have:X>ααα</have:X></the:C1></the:c>");
-
-    }
-
-    @Test
-    public void complex_all_Use_via_an() throws EBuilderTerminated, IOException, InterruptedException {
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );

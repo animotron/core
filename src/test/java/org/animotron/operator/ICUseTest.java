@@ -58,10 +58,5 @@ public class ICUseTest extends ATest {
         );
         assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
 
-        Expression E = new Expression(
-            _(THE._, "E", _(GET._, "A", _(AN._, "C"), _(USE._, "Y")))
-        );
-        assertAnimo(E, "<the:E><have:Y>υ</have:Y></the:E>");
-
 	}
 }
