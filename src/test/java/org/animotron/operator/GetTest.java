@@ -288,4 +288,27 @@ public class GetTest extends ATest {
 
         assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
     }
+
+    @Test
+    public void getFromPFlow_an_an_an() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "Y", _(GET._, "X")))
+        );
+
+        new Expression(
+            _(THE._, "B", _(HAVE._, "Z", _(GET._, "Y")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "Z"))
+        );
+
+        Expression D = new Expression(
+            _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(HAVE._, "X", text("."))))))
+        );
+
+        assertAnimo(D, "<the:D><the:C><have:Z><have:Y><have:X>.</have:X></have:Y></have:Z></the:C></the:D>");
+    }
+
 }
