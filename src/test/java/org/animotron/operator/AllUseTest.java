@@ -98,7 +98,7 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
+        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
