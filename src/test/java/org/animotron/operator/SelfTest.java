@@ -82,7 +82,7 @@ public class SelfTest extends ATest {
         );
 
         new Expression(
-            _(THE._, "B", _(IS._, "X"))
+            _(THE._, "B")
         );
 
         Expression C = new Expression(
