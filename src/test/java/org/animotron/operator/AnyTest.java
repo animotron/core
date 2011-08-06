@@ -52,10 +52,15 @@ public class AnyTest extends ATest {
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
         );
 
-        Expression D = new Expression(
-            _(THE._, "D", _(ANY._, "A"))
+        Expression a = new Expression(
+            _(THE._, "a", _(ANY._, "A"))
         );
-        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+        assertAnimo(a, "<the:a><the:A><have:value/></the:A></the:a>");
+
+        Expression b = new Expression(
+            _(THE._, "b", _(ANY._, "B"))
+        );
+        assertAnimo(b, "<the:b><the:B><is:A/><have:value>B</have:value></the:B></the:b>");
     }
 	
     @Test
