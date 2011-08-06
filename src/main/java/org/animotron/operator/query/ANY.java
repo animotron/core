@@ -20,11 +20,22 @@ package org.animotron.operator.query;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.operator.Utils;
+import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
 
 /**
  * Query operator 'ANY'.
@@ -52,11 +63,47 @@ public class ANY extends AbstractQuery {
 
             Node node = ref.getEndNode();
 
-//				if (filtering(pf, node)) {
-//					pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
-//				} else {
+            final Relationship end = pf.getStartOP(); 
 
-                for (Relationship tdR : td_IS.traverse(node).relationships()) {
+			TraversalDescription td = Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					if (path.length() > 0) {
+						Relationship r = path.lastRelationship(); 
+						if (r.getStartNode().equals(path.endNode())) {
+							if (r.equals(end)) {
+								return INCLUDE_AND_PRUNE;
+							} 
+
+							String rType = r.getType().name();
+							
+							if (path.length() == 1 && !(rType.equals(USE._.rType) || rType.equals(IS._.rType)) ) {
+								return EXCLUDE_AND_PRUNE;
+							}
+							return EXCLUDE_AND_CONTINUE;	
+						} 
+						return EXCLUDE_AND_PRUNE;
+					}
+					return EXCLUDE_AND_CONTINUE;
+				}
+			});
+			
+			System.out.println("ANY **************************");
+			for (Path path : td.traverse(Utils.getByREF(pf.getOP().getEndNode()))) {
+				System.out.println(" path = "+path);
+				for (Relationship p : path.relationships()) {
+					if (p.getType().name().equals(USE._.rType)) {
+						node = p.getEndNode();
+					}
+				}
+			}
+
+			if (filtering(pf, node)) {
+				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+			} else {
+	            for (Relationship tdR : td_IS.traverse(node).relationships()) {
                     System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
                     Node res = tdR.getStartNode();
                     if (filtering(pf, res)) {
@@ -65,7 +112,7 @@ public class ANY extends AbstractQuery {
                         break;
                     }
                 }
-//				}
+			}
             pf.done();
         }
 
