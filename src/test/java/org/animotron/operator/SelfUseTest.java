@@ -37,43 +37,74 @@ import static org.animotron.Expression.text;
  */
 public class SelfUseTest extends ATest {
 	
-	@Test
-	public void getFromPFlow() throws Exception {
+    @Test
+    public void selfTest() throws Exception {
         
-    	new Expression(
-			_(THE._, "A", _(IS._, "X"))
-		);
+        new Expression(
+            _(THE._, "A", _(IS._, "X"))
+        );
     	
-    	new Expression(
-			_(THE._, "B", _(IS._, "X"))
-		);
+        new Expression(
+            _(THE._, "B", _(IS._, "X"))
+        );
     	
-    	Expression C = new Expression(
-			_(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "X")))
-		);
+        new Expression(
+            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
+        );
 
-    	Expression CC = new Expression(
-			_(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "X")))
-		);
+        new Expression(
+            _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
+        );
 
-    	Expression D = new Expression(
-			_(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
-		);
+        Expression a = new Expression(
+            _(THE._, "a", _(AN._, "D", _(USE._, "A")))
+        );
+        assertAnimo(a, "<the:a><the:D><have:A>.</have:A></the:D></the:a>");
 
-    	Expression E = new Expression(
-			_(THE._, "E", _(GET._, "B", _(AN._, "C")))
-		);
-    	
-    	Expression F = new Expression(
-			_(THE._, "F", _(GET._, "B", _(AN._, "D")))
-		);
-    	
-        assertAnimo(C, "<the:C><have:A>.</have:A><have:B><have:A>.</have:A></have:B></the:C>");
-        assertAnimo(CC, "<the:CC><have:A>CC</have:A><have:B><have:A>CC</have:A></have:B></the:CC>");
-        assertAnimo(D, "<the:D><is:C/><have:A>:</have:A></the:D>");
-        assertAnimo(E, "<the:E><have:B><have:A>.</have:A></have:B></the:E>");
-        assertAnimo(F, "<the:F><have:B><have:A>:</have:A></have:B></the:F>");
+        Expression b = new Expression(
+            _(THE._, "b", _(AN._, "D", _(USE._, "B")))
+        );
+        assertAnimo(a, "<the:a><the:D><have:B>..</have:B></the:D></the:a>");
 
-	}
+    }
 	
+    @Test
+    public void selfTest1() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(IS._, "X"))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IS._, "X"))
+        );
+
+        new Expression(
+            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
+        );
+
+        new Expression(
+            _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
+        );
+
+        new Expression(
+          _(THE._, "ua", _(USE._, "A"))
+        );
+
+        new Expression(
+          _(THE._, "ub", _(USE._, "B"))
+        );
+
+        Expression a = new Expression(
+            _(THE._, "a", _(AN._, "D", _(AN._, "ua")))
+        );
+        assertAnimo(a, "<the:a><the:D><have:A>.</have:A></the:D></the:a>");
+
+        Expression b = new Expression(
+            _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
+        );
+        assertAnimo(a, "<the:a><the:D><have:B>..</have:B></the:D></the:a>");
+
+    }
+
 }
