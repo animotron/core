@@ -70,6 +70,44 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
+    public void simple_any_Use_1() throws EBuilderTerminated, IOException, InterruptedException {
+        new Expression(
+            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
+        );
+
+        new Expression (
+            _(THE._, "s", _(ANY._, "S"))
+        );
+
+        new Expression (
+            _(THE._, "ub", _(USE._, "B"))
+        );
+
+        new Expression (
+            _(THE._, "uc", _(USE._, "C"))
+        );
+
+        Expression b = new Expression(
+            _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
+        );
+        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
+
+        Expression c = new Expression(
+            _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
+        );
+        assertAnimo(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
+
+    }
+
+    @Test
     public void complex_any_Use() throws EBuilderTerminated, IOException, InterruptedException {
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
@@ -100,6 +138,50 @@ public class AnyUseTest extends ATest {
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
+        );
+        assertAnimo(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
+
+    }
+
+    @Test
+    public void complex_any_Use_1() throws EBuilderTerminated, IOException, InterruptedException {
+        new Expression(
+            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+        );
+        new Expression(
+            _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
+        );
+        new Expression(
+            _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")),  _(HAVE._, "X", text("ααα")))
+        );
+
+        new Expression (
+            _(THE._, "s", _(ANY._, "S"))
+        );
+
+        new Expression (
+            _(THE._, "ub", _(USE._, "B"))
+        );
+
+        new Expression (
+            _(THE._, "uc", _(USE._, "C"))
+        );
+
+        Expression b = new Expression(
+            _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
+        );
+        assertAnimo(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
+
+        Expression c = new Expression(
+            _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
         assertAnimo(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
 
