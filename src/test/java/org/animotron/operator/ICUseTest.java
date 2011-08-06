@@ -59,4 +59,61 @@ public class ICUseTest extends ATest {
         assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
 
 	}
+
+    @Test
+    public void testIC_1() throws Exception {
+
+        new Expression(
+            _(THE._, "X", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "Y", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IS._, "B"), _(USE._, "X") )
+        );
+
+        Expression D = new Expression(
+            _(THE._, "D", _(GET._, "A", _(AN._, "C")))
+        );
+        assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
+
+    }
+
+    @Test
+    public void testIC_2() throws Exception {
+
+        new Expression(
+            _(THE._, "X", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "Y", _(IS._, "A"))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IS._, "B") )
+        );
+
+        new Expression(
+            _(THE._, "U", _(USE._, "X") )
+        );
+
+        Expression D = new Expression(
+            _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
+        );
+        assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
+
+    }
+
 }
