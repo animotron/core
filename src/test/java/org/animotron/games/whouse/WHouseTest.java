@@ -20,12 +20,16 @@ package org.animotron.games.whouse;
 
 import static org.animotron.Expression.*;
 
+import java.io.IOException;
+
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.AN;
 import org.animotron.operator.Q;
 import org.animotron.operator.THE;
+import org.animotron.operator.compare.WITH;
+import org.animotron.operator.query.ALL;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
@@ -37,7 +41,7 @@ import org.junit.Test;
 public class WHouseTest extends ATest {
 
 	@Test
-	public void test() throws EBuilderTerminated {
+	public void test() throws EBuilderTerminated, IOException, InterruptedException {
 		
 		//party: person & organization
 		// + receipt or issue
@@ -96,7 +100,7 @@ public class WHouseTest extends ATest {
 				_(IS._, "UoM")
 		)	);
 
-		Expression KG = new Expression(
+		new Expression(
     		_(THE._, "kilogram", 
 				_(IS._, "kilo"),
 				_(IS._, "gram")
@@ -171,7 +175,13 @@ public class WHouseTest extends ATest {
 				)	)
 		)	);
         
-        
+        Expression a = new Expression(
+    		_(THE._, "a", 
+				_(ALL._, "whouse-receive",
+					_(WITH._, "party", _(AN._, "I"))))
+		);
+        assertAnimo(a, "<the:a></the:a>");
+
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?
 	}

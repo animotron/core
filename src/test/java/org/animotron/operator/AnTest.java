@@ -20,15 +20,10 @@ package org.animotron.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.compare.EQ;
-import org.animotron.operator.compare.WITH;
-import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.HAVE;
-import org.animotron.operator.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
+import static org.animotron.Expression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,6 +39,11 @@ public class AnTest extends ATest {
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
         );
         assertAnimo(A, "<the:A><the:B/></the:A>");
+
+        new Expression(
+            _(THE._, "B", _(HAVE._, "C", text("y")))
+        );
+        assertAnimo(A, "<the:A><the:B><have:C>y</have:C></the:B></the:A>");
     }
 
 }
