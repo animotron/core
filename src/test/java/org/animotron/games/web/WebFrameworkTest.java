@@ -67,7 +67,7 @@ public class WebFrameworkTest extends ATest {
 				_(IS._, "service"),
 				_(HAVE._, "uri", text("/")),
 				_(AN._, "html",
-					_(ANY._, "root-service"),
+					_(ANY._, "root-content"),
 					_(USE._, "root-layout")
 		)	)	);
 
@@ -116,7 +116,7 @@ public class WebFrameworkTest extends ATest {
 
     	new Expression(
 			_(THE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc", 
-				_(IS._, "root-service"),
+				_(IS._, "root-content"),
 				_(HAVE._, "title", text("Welcome to Animotron")),
 				_(HAVE._, "content", text("Overview"))
 		)	);
@@ -131,8 +131,7 @@ public class WebFrameworkTest extends ATest {
         assertAnimo(s,  "<the:s>" +
                             "<the:service>" +
                                 "<the:root-service>" +
-                                    "<is:service/>" +
-                                    "<have:uri>/</have:uri>" +
+                                    "<is:root-service/>" +
                                     "<the:html>" +
                                         "<the:html-composition>" +
                                             "<is:composition/>" +
