@@ -23,24 +23,19 @@ import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.AbstractOperator;
-import org.animotron.operator.Evaluable;
 import org.animotron.operator.IC;
+import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
-import org.neo4j.kernel.Uniqueness;
 
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'self'.
@@ -48,7 +43,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class SELF extends AbstractOperator implements Evaluable {
+public class SELF extends AbstractQuery {
 	
 	public static final SELF _ = new SELF();
 	
@@ -66,7 +61,7 @@ public class SELF extends AbstractOperator implements Evaluable {
 
             Relationship op = pf.getOP();
             
-			Relationship res = selfByTraversal(op, op.getStartNode(), name(op));
+			Relationship res = selfByTraversal(pf, op, op.getStartNode(), name(op));
 			if (res != null) {
 				pf.sendAnswer(res);
 				pf.done();
@@ -116,32 +111,28 @@ public class SELF extends AbstractOperator implements Evaluable {
         }
     };
 
-	private Relationship selfByTraversal(final Relationship start_op, final Node eNode, final String name) {
+	private Relationship selfByTraversal(PFlow pf, final Relationship start_op, final Node eNode, final String name) {
 		
-		TraversalDescription td =
-			Traversal.description().depthFirst().
-			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
-				@Override
-				public Evaluation evaluate(Path path) {
-					//System.out.println("path = "+path);
-					if (path.length() > 0) {
-						Relationship r = path.lastRelationship(); 
-						if (r.getStartNode().equals(path.endNode())) {
-							if (r.getStartNode().equals(eNode)) {
-								return INCLUDE_AND_PRUNE;
-							} 
-							return EXCLUDE_AND_CONTINUE;	
-						} 
-						return EXCLUDE_AND_PRUNE;
-					}
-					return EXCLUDE_AND_CONTINUE;
+		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
+
+		System.out.println("start_op = "+start_op+" eNode = "+eNode);
+
+		boolean underUSE = false;
+		for (Path path : getUSEtravers(pf.getStartOP()).traverse(node)) {
+			System.out.println(" path = "+path);
+			for (Relationship p : path.relationships()) {
+				if (p.getType().name().equals(USE._.rType)) {
+					node = p.getEndNode();
+					underUSE = true;
+					break;
 				}
-			});
+			}
+		}
+
+		TraversalDescription td = getDirectedTravers(eNode);
 		
 		System.out.println("start_op = "+start_op+" eNode = "+eNode);
 		
-		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
 		for (Path path : td.traverse(node)) {
 			System.out.println("path = "+path);
 		}
@@ -154,7 +145,7 @@ public class SELF extends AbstractOperator implements Evaluable {
 		
 		for (Path path : td.traverse(node)) {
 			
-			boolean foundIS = false;
+			boolean foundIS = underUSE;
 			thisDeep = 0;
 			for (Relationship r : path.relationships()) {
 				if (thisDeep > 0) {

@@ -106,4 +106,26 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 			}
 		});
 	};
+
+	protected TraversalDescription getDirectedTravers(final Node end) {
+
+		return Traversal.description().depthFirst().
+		uniqueness(Uniqueness.RELATIONSHIP_PATH).
+		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+			@Override
+			public Evaluation evaluate(Path path) {
+				if (path.length() > 0) {
+					Relationship r = path.lastRelationship(); 
+					if (r.getStartNode().equals(path.endNode())) {
+						if (r.getStartNode().equals(end)) {
+							return INCLUDE_AND_PRUNE;
+						} 
+						return EXCLUDE_AND_CONTINUE;	
+					} 
+					return EXCLUDE_AND_PRUNE;
+				}
+				return EXCLUDE_AND_CONTINUE;
+			}
+		});
+	};
 }

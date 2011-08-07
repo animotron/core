@@ -20,8 +20,6 @@ package org.animotron.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.query.ANY;
-import org.animotron.operator.query.GET;
 import org.animotron.operator.query.SELF;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
@@ -59,12 +57,12 @@ public class SelfUseTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(AN._, "D", _(USE._, "A")))
         );
-        assertAnimo(a, "<the:a><the:D><have:A>.</have:A></the:D></the:a>");
+        assertAnimo(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "D", _(USE._, "B")))
         );
-        assertAnimo(a, "<the:a><the:D><have:B>..</have:B></the:D></the:a>");
+        assertAnimo(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
 
     }
 	
@@ -98,12 +96,12 @@ public class SelfUseTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(AN._, "D", _(AN._, "ua")))
         );
-        assertAnimo(a, "<the:a><the:D><have:A>.</have:A></the:D></the:a>");
+        assertAnimo(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
         );
-        assertAnimo(a, "<the:a><the:D><have:B>..</have:B></the:D></the:a>");
+        assertAnimo(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
 
     }
 
