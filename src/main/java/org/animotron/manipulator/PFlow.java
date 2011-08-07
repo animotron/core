@@ -229,12 +229,6 @@ public class PFlow {
 				public Evaluation evaluate(Path path) {
 					if (path.length() > 0) {
 						Relationship r = path.lastRelationship();
-                        if (r.getType().equals(IS._.relationshipType())) {
-                            return EXCLUDE_AND_PRUNE;
-                        }
-                        if (r.getType().equals(USE._.relationshipType())) {
-                            return EXCLUDE_AND_PRUNE;
-                        }
 						if (r.getStartNode().equals(path.endNode())) {
 							if (r.equals(getStartOP())) {
 								return INCLUDE_AND_PRUNE;
