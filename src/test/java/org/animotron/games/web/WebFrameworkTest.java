@@ -73,10 +73,8 @@ public class WebFrameworkTest extends ATest {
 
     	new Expression(
 			_(THE._, "html", 
-                _(AN._, "html-composition",
-//                  _(ANY._, "layout"     TODO Don't working
-                    _(AN._, "theme-concrete-root-layout" //TODO fix it (don't working too)
-		)	)	)	);
+                _(AN._, "html-composition"
+		)	)	);
 
     	new Expression(
 			_(THE._, "html-composition", 
@@ -90,8 +88,8 @@ public class WebFrameworkTest extends ATest {
                                 _(ALL._, "script"))
                         ),
                         element("body",
-                            _(GET._, "content"))
-			)	)	)	);
+                            _(AN._, "theme-concrete-root-layout", _(GET._, "content"))
+			)   )	)	)	);
 
         new Expression(
             _(THE._, "html-head",
@@ -144,19 +142,17 @@ public class WebFrameworkTest extends ATest {
                                                     "</head>" +
                                                     "</the:html-head>" +
                                                     "<body>" +
-                                                        "<have:content>" +
-                                                            "<the:theme-concrete-root-layout>" +
-                                                                "<is:root-layout/>" +
-                                                                "<have:content>" +
-                                                                    "<div id=\"title\">" +
-                                                                        "<have:title>Welcome to Animotron</have:title>" +
-                                                                    "</div>" +
-                                                                    "<div id=\"content\">" +
-                                                                        "<have:content>Overview</have:content>" +
-                                                                    "</div>" +
-                                                                "</have:content>" +
-                                                            "</the:theme-concrete-root-layout>" +
-                                                        "</have:content>" +
+                                                        "<the:theme-concrete-root-layout>" +
+                                                            "<is:root-layout/>" +
+                                                            "<have:content>" +
+                                                                "<div id=\"title\">" +
+                                                                    "<have:title>Welcome to Animotron</have:title>" +
+                                                                "</div>" +
+                                                                "<div id=\"content\">" +
+                                                                    "<have:content>Overview</have:content>" +
+                                                                "</div>" +
+                                                            "</have:content>" +
+                                                        "</the:theme-concrete-root-layout>" +
                                                     "</body>" +
                                                 "</html>" +
                                             "</have:content>" +
