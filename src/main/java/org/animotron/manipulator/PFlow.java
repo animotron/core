@@ -145,8 +145,14 @@ public class PFlow {
 	}
 	
 	public Path getFlowPath() {
+//		int i = 0;
+//		for (Path path : td_flow.traverse(getOPNode())) {
+//			//System.out.println(" path = "+path);
+//			i++;
+//		}
+//		System.out.println("PFLOW ********************* "+i);
+
 		Iterator<Path> it = td_flow.traverse(getOPNode()).iterator();
-		
 		if (it.hasNext())
 			return it.next();
 		else {

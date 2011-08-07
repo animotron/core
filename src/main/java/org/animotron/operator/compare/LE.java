@@ -18,6 +18,7 @@
  */
 package org.animotron.operator.compare;
 
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
 import org.neo4j.graphdb.Node;
@@ -36,7 +37,7 @@ public class LE extends AbstractOperator implements Predicate {
 	private LE() { super("le", "animo/compare/le"); }
 
 	@Override
-	public boolean filter(Relationship start_op, Relationship op, Node ref) {
+	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

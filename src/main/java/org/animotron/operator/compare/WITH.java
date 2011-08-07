@@ -30,6 +30,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Predicate;
@@ -52,14 +53,14 @@ public class WITH extends AbstractOperator implements Predicate {
 	private WITH() { super("with", "animo/compare/with"); }
 
 	@Override
-	public boolean filter(Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
+	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
 		
 		System.out.println("==================================================");
 		System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 		String name = name(op);
 
-		Set<Relationship> haveSet = GET._.getByTraversal(op, ref, name);
+		Set<Relationship> haveSet = GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
 		if (haveSet.isEmpty()) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();

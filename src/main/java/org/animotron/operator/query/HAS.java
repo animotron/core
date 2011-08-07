@@ -18,6 +18,7 @@
  */
 package org.animotron.operator.query;
 
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.Query;
@@ -39,7 +40,7 @@ public class HAS extends AbstractOperator implements Query, Predicate {
 	private HAS() { super("has", "animo/query/has"); }
 
 	@Override
-	public boolean filter(Relationship start_op, Relationship op, Node ref) {
+	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -20,6 +20,7 @@ package org.animotron.operator;
 
 import java.io.IOException;
 
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -29,6 +30,6 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface Predicate {
 	
-	public boolean filter(Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException;
+	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException;
 
 }

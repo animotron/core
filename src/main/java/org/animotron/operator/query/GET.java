@@ -83,6 +83,16 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 	public OnQuestion onCalcQuestion() {
 		return question;
 	}
+	
+	public static Relationship getHaveAtPFlow(PFlow pf, String name) {
+		final Path pflow = pf.getFlowPath();
+		for (Relationship p : pflow.relationships()) {
+			if (p.getType().name().equals(HAVE._.rType) && _.name(p).equals(name)) {
+				return p;
+			}
+		}
+		return null;
+	}
 
 	private OnQuestion question = new OnQuestion() {
 
@@ -92,13 +102,15 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			
 			final Node node = op.getEndNode();
 			
-			System.out.println("GET '"+name(op)+"' pflow "+pf.getFlowPath());
+			final String name = name(op);
+			
+			final Relationship underHAVE = getHaveAtPFlow(pf, name);
+			
+			System.out.println("GET '"+name(op));
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
 				//no pre-calculated result, calculate it
-				
-				final String name = name(op);
 				
 				Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
 					@Override
@@ -109,7 +121,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							pf.sendAnswer(null);
 							return;
 						}
-						Set<Relationship> res = getByTraversal(op, context, name); //get(context.getEndNode(), name);
+						Set<Relationship> res = getByTraversal(underHAVE, op, context, name); //get(context.getEndNode(), name);
 						if (!res.isEmpty()) {
 							for (Relationship r : res)
 								pf.sendAnswer(r);
@@ -146,7 +158,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				} else {
 					System.out.println("P-FLOW is context for GET!");
 					
-					Set<Relationship> res = getByTraversal(op, pf.getStartOP(), name); //get(context.getEndNode(), name);
+					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
 					if (!res.isEmpty())
 						for (Relationship r : res)
 							pf.sendAnswer(r);
@@ -298,7 +310,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		return null;
 	}
 	
-	public Set<Relationship> getByTraversal(final Relationship start_op, final PropertyContainer context, final String name) {
+	public Set<Relationship> getByTraversal(final Relationship underHAVE, final Relationship start_op, final PropertyContainer context, final String name) {
 		
 		TraversalDescription td;
 		
@@ -384,6 +396,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
 					//ignore empty have 
 					if (!Utils.haveContext(r.getEndNode()))
+						break;
+					
+					//cycle detection
+					if (underHAVE != null && r.equals(underHAVE))
 						break;
 					
 					thisResult = r;

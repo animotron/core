@@ -63,7 +63,7 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
             Statement st = Statements.relationshipType(r);
             if (st instanceof Predicate) {
                 try {
-                    if (!((Predicate) st).filter(pf.getStartOP(), r, node))
+                    if (!((Predicate) st).filter(pf, pf.getStartOP(), r, node))
                         return false;
                 } catch (Exception e) {
                     //XXX: report

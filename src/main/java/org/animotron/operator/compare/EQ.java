@@ -25,6 +25,7 @@ import javolution.util.FastList;
 
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.PFlow;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Predicate;
 import org.animotron.operator.query.GET;
@@ -44,7 +45,7 @@ public class EQ extends AbstractOperator implements Predicate {
 	private EQ() { super("eq", "animo/compare/eq"); }
 
 	@Override
-	public boolean filter(Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
+	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
 		System.out.println("==================================================");
 		System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
