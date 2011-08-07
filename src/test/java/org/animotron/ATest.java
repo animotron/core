@@ -24,6 +24,7 @@ import org.animotron.graph.CommonBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;
 import org.animotron.serializer.AnimoResultSerializer;
+import org.animotron.serializer.ResultSerializer;
 import org.animotron.serializer.StringResultSerializer;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -152,27 +153,49 @@ public abstract class ATest {
 		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 
-	protected void assertAnimo(Relationship op, String expected) throws IOException, InterruptedException {
+    protected void assertAnimo(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
         
-		PipedInputStream in = new PipedInputStream();
-		PipedOutputStream out = new PipedOutputStream(in);
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out = new PipedOutputStream(in);
 
         XMLStreamWriter writer;
-		try {
-			writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
-		} catch (XMLStreamException e) {
-			throw new IOException(e);
-		}
+        try {
+            writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
         
         AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
         serializer.serialize(op, op);
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
 
         System.out.println();
-	}
+    }
+
+    protected void assertResult(Relationship op, String expected) throws IOException, InterruptedException {
+        assertNotNull(op);
+
+        System.out.println("Result serializer...");
+
+        PipedInputStream in = new PipedInputStream();
+        PipedOutputStream out = new PipedOutputStream(in);
+
+        XMLStreamWriter writer;
+        try {
+            writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+
+        ResultSerializer serializer = new ResultSerializer(writer);
+        serializer.serialize(op, op);
+        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
+
+        System.out.println();
+    }
 
 	protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);

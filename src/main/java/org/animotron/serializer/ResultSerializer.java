@@ -47,7 +47,7 @@ public class ResultSerializer extends AnimoResultSerializer {
     @Override
     public void end(Statement statement, Relationship r) {
         if (statement instanceof Result) {
-            super.start(statement, r);
+            super.end(statement, r);
         }
     }
 

@@ -161,6 +161,15 @@ public class WebFrameworkTest extends ATest {
                                 "</the:root-service>" +
                             "</the:service>" +
                         "</the:s>");
+        assertResult(s, "<html>" +
+                            "<head>" +
+                                "<title>Welcome to Animotron</title>" +
+                            "</head>" +
+                            "<body>" +
+                                "<div id=\"title\">Welcome to Animotron</div>" +
+                                "<div id=\"content\">Overview</div>" +
+                            "</body>" +
+                        "</html>");
 
 	}
 
