@@ -20,6 +20,8 @@ package org.animotron.manipulator;
 
 import javolution.util.FastList;
 import org.animotron.operator.AN;
+import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
@@ -226,7 +228,13 @@ public class PFlow {
 				@Override
 				public Evaluation evaluate(Path path) {
 					if (path.length() > 0) {
-						Relationship r = path.lastRelationship(); 
+						Relationship r = path.lastRelationship();
+                        if (r.getType().equals(IS._.relationshipType())) {
+                            return EXCLUDE_AND_PRUNE;
+                        }
+                        if (r.getType().equals(USE._.relationshipType())) {
+                            return EXCLUDE_AND_PRUNE;
+                        }
 						if (r.getStartNode().equals(path.endNode())) {
 							if (r.equals(getStartOP())) {
 								return INCLUDE_AND_PRUNE;

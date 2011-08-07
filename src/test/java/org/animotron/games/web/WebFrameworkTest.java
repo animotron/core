@@ -137,9 +137,9 @@ public class WebFrameworkTest extends ATest {
                                             "<have:content>" +
                                                 "<html>" +
                                                     "<the:html-head>" +
-                                                    "<head>" +
-                                                        "<title><have:title>Welcome to Animotron</have:title></title>" +
-                                                    "</head>" +
+                                                        "<head>" +
+                                                            "<title><have:title>Welcome to Animotron</have:title></title>" +
+                                                        "</head>" +
                                                     "</the:html-head>" +
                                                     "<body>" +
                                                         "<the:theme-concrete-root-layout>" +
