@@ -32,7 +32,7 @@ import static org.animotron.Expression._;
 public class TheTest extends ATest {
 	
     @Test
-    public void testAN() throws Exception {
+    public void testTHE() throws Exception {
 
         Expression A = new Expression(
             _(THE._, "A", _(THE._, "B", _(THE._, "C")))
