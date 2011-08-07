@@ -57,7 +57,7 @@ public class WebFrameworkTest extends ATest {
 					text("animotron.org"), 
 					text("localhost")),
 				_(USE._, "local-cdn"),
-				_(USE._, "theme-concrete"),
+				_(USE._, "theme-concrete-root-layout"),
 				_(USE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc")
 			)
 		);
