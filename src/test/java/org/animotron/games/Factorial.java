@@ -1,0 +1,61 @@
+/*
+ *  Copyright (C) 2011 The Animo Project
+ *  http://animotron.org
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public License
+ *  as published by the Free Software Foundation; either version 3
+ *  of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+package org.animotron.games;
+
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
+
+import org.animotron.ATest;
+import org.animotron.Expression;
+import org.animotron.instruction.math.Mult;
+import org.animotron.instruction.math.Sum;
+import org.animotron.operator.AN;
+import org.animotron.operator.PTRN;
+import org.animotron.operator.Q;
+import org.animotron.operator.THE;
+import org.animotron.operator.query.GET;
+import org.animotron.operator.relation.HAVE;
+import org.junit.Test;
+
+/**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ *
+ */
+public class Factorial extends ATest {
+
+	//TODO @Test
+	public void factorial() throws Exception {
+		
+    	new Expression(
+			_(THE._, "factorial", 
+				_(HAVE._, "number", 
+					_(PTRN._, "number", 
+						_(Q._, "N0", text("Q:N1")),
+						_(Q._, "N0>", 
+							_(Mult._, 
+								_(GET._, "number"),
+								_(AN._, "factorial", _(Sum._, _(GET._, "number"), _(Q._, "N-1")))
+							)
+						) 
+					)
+				)
+			)
+		);
+	}
+}
