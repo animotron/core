@@ -24,7 +24,6 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.IC;
-import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
@@ -35,7 +34,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'self'.
@@ -131,7 +129,7 @@ public class SELF extends AbstractQuery {
 
 		TraversalDescription td = getDirectedTravers(eNode);
 		
-		System.out.println("start_op = "+start_op+" eNode = "+eNode);
+		System.out.println("start_op = "+start_op+" eNode = "+eNode+" sNode = "+node);
 		
 		for (Path path : td.traverse(node)) {
 			System.out.println("path = "+path);

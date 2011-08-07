@@ -19,7 +19,6 @@
 package org.animotron.games.web;
 
 import static org.animotron.Expression.*;
-import static org.junit.Assert.*;
 
 import org.animotron.ATest;
 import org.animotron.Expression;

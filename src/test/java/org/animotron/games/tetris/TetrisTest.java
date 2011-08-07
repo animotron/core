@@ -24,7 +24,6 @@ import java.util.Map;
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
-import org.junit.Ignore;
 import org.junit.Test;
 
 

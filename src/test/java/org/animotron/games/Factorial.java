@@ -31,7 +31,6 @@ import org.animotron.operator.Q;
 import org.animotron.operator.THE;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

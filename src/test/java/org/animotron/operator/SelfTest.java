@@ -88,23 +88,29 @@ public class SelfTest extends ATest {
         Expression C = new Expression(
             _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "X")))
         );
+        assertAnimo(C, "<the:C><have:A>.</have:A><have:B><have:A>.</have:A></have:B></the:C>");
 
         Expression CC = new Expression(
             _(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "X")))
         );
+        assertAnimo(CC, "<the:CC><have:A>CC</have:A><have:B><have:A>CC</have:A></have:B></the:CC>");
 
         Expression D = new Expression(
             _(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
         );
+        assertAnimo(D, "<the:D><is:C/><have:A>:</have:A></the:D>");
 
         Expression E = new Expression(
             _(THE._, "E", _(GET._, "B", _(AN._, "C")))
         );
+        assertAnimo(E, "<the:E><have:B><have:A>.</have:A></have:B></the:E>");
 
         Expression F = new Expression(
             _(THE._, "F", _(GET._, "B", _(AN._, "D")))
         );
+        assertAnimo(F, "<the:F><have:B><have:A>:</have:A></have:B></the:F>");
 
+        //second try to be sure
         assertAnimo(C, "<the:C><have:A>.</have:A><have:B><have:A>.</have:A></have:B></the:C>");
         assertAnimo(CC, "<the:CC><have:A>CC</have:A><have:B><have:A>CC</have:A></have:B></the:CC>");
         assertAnimo(D, "<the:D><is:C/><have:A>:</have:A></the:D>");

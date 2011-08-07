@@ -19,11 +19,9 @@
 package org.animotron.games.whouse;
 
 import static org.animotron.Expression.*;
-import static org.junit.Assert.*;
 
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
-import org.animotron.instruction.math.Mult;
 import org.animotron.operator.AN;
 import org.animotron.operator.Q;
 import org.animotron.operator.THE;
@@ -68,17 +66,17 @@ public class WHouseTest {
 				_(IS._, "party")
 		)	);
 
-		Expression ORG01 = new Expression(
+		new Expression(
     		_(THE._, "ORG-01", 
 				_(IS._, "organization")
 		)	);
 
-		Expression ORG02 = new Expression(
+		new Expression(
     		_(THE._, "ORG-02", 
 				_(IS._, "organization")
 		)	);
 
-		Expression I = new Expression(
+		new Expression(
     		_(THE._, "I", 
 				_(IS._, "person")
 		)	);
@@ -92,18 +90,17 @@ public class WHouseTest {
 		)	);
 
 		//kg -> kilo + gramm
-		Expression G = new Expression(
+		new Expression(
     		_(THE._, "gram", 
 				_(IS._, "UoM")
 		)	);
 
-		Expression KG = new Expression(
+		new Expression(
     		_(THE._, "kilogram", 
 				_(IS._, "kilo"),
 				_(IS._, "gram")
 		)	);
 
-		
 		//currency
 		new Expression(
     		_(THE._, "USD", 
