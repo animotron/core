@@ -145,7 +145,14 @@ public class PFlow {
 	}
 	
 	public Path getFlowPath() {
-		return td_flow.traverse(getOPNode()).iterator().next();
+		Iterator<Path> it = td_flow.traverse(getOPNode()).iterator();
+		
+		if (it.hasNext())
+			return it.next();
+		else {
+			//what looks wrong!
+			return null;
+		}
 	}
 	
 	public Iterable<Relationship> stack() {

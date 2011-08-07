@@ -131,7 +131,8 @@ public class WebFrameworkTest extends ATest {
         assertAnimo(s,  "<the:s>" +
                             "<the:service>" +
                                 "<the:root-service>" +
-                                    "<is:root-service/>" +
+                                    "<is:service/>" +
+                                    "<have:uri>/</have:uri>" +
                                     "<the:html>" +
                                         "<the:html-composition>" +
                                             "<is:composition/>" +
