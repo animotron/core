@@ -88,7 +88,7 @@ public class WebFrameworkTest extends ATest {
                                 _(ALL._, "script"))
                         ),
                         element("body",
-                            _(AN._, "theme-concrete-root-layout", _(GET._, "content"))
+                            _(ANY._, "layout")
 			)   )	)	)	);
 
         new Expression(
