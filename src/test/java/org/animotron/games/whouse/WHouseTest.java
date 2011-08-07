@@ -1,0 +1,179 @@
+/*
+ *  Copyright (C) 2011 The Animo Project
+ *  http://animotron.org
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public License
+ *  as published by the Free Software Foundation; either version 3
+ *  of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ */
+package org.animotron.games.whouse;
+
+import static org.animotron.Expression.*;
+import static org.junit.Assert.*;
+
+import org.animotron.Expression;
+import org.animotron.exception.EBuilderTerminated;
+import org.animotron.instruction.math.Mult;
+import org.animotron.operator.AN;
+import org.animotron.operator.Q;
+import org.animotron.operator.THE;
+import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.relation.IS;
+import org.junit.Test;
+
+/**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ *
+ */
+public class WHouseTest {
+
+	@Test
+	public void test() throws EBuilderTerminated {
+		
+		//party: person & organization
+		// + receipt or issue
+		new Expression(
+    		_(THE._, "party")
+        );
+
+		new Expression(
+    		_(THE._, "receipt-party", 
+				_(IS._, "party"),
+				_(IS._, "receipt")
+		)	);
+
+		new Expression(
+    		_(THE._, "issue-party", 
+				_(IS._, "party"),
+				_(IS._, "issue")
+		)	);
+
+		new Expression(
+    		_(THE._, "person", 
+				_(IS._, "party")
+		)	);
+
+		new Expression(
+    		_(THE._, "organization", 
+				_(IS._, "party")
+		)	);
+
+		Expression ORG01 = new Expression(
+    		_(THE._, "ORG-01", 
+				_(IS._, "organization")
+		)	);
+
+		Expression ORG02 = new Expression(
+    		_(THE._, "ORG-02", 
+				_(IS._, "organization")
+		)	);
+
+		Expression I = new Expression(
+    		_(THE._, "I", 
+				_(IS._, "person")
+		)	);
+		
+		//unit of measure
+		new Expression(_(THE._, "UoM"));
+		
+		new Expression(
+    		_(THE._, "kilo", 
+				_(HAVE._, "number", _(Q._, "N1000"))
+		)	);
+
+		//kg -> kilo + gramm
+		Expression G = new Expression(
+    		_(THE._, "gram", 
+				_(IS._, "UoM")
+		)	);
+
+		Expression KG = new Expression(
+    		_(THE._, "kilogram", 
+				_(IS._, "kilo"),
+				_(IS._, "gram")
+		)	);
+
+		
+		//currency
+		new Expression(
+    		_(THE._, "USD", 
+				_(IS._, "currency")
+		)	);
+		
+		//Stock Keeping Unit
+		new Expression(
+    		_(THE._, "SKU",
+				_(HAVE._, "name"),
+				_(HAVE._, "qty"),
+				_(HAVE._, "price"),
+				_(HAVE._, "cost")
+		)	);
+
+		//documents structure
+		new Expression(
+    		_(THE._, "document", _(HAVE._, "date"))
+        );
+
+        new Expression(
+    		_(THE._, "whouse-document", 
+				_(IS._, "document"),
+				_(HAVE._, "issue-party"),
+				_(HAVE._, "receipt-party"),
+				_(HAVE._, "SKU") 
+		)	);
+
+        new Expression(
+    		_(THE._, "whouse-receipt", 
+				_(IS._, "whouse-document"),
+				_(IS._, "receipt")
+		)	);
+
+        new Expression(
+    		_(THE._, "whouse-issue", 
+				_(IS._, "whouse-document"),
+				_(IS._, "issue")
+		)	);
+
+        new Expression(
+    		_(THE._, "whouse-transfer", 
+				_(IS._, "whouse-document"),
+				_(IS._, "receipt"),
+				_(IS._, "issue")
+		)	);
+        
+        //documents
+        new Expression(
+    		_(THE._, "R01", 
+				_(IS._, "whouse-receipt"),
+				_(HAVE._, "date", text("T2011-08-07")), //TODO: date instruction
+				_(HAVE._, "issue-party", _(AN._, "ORG01")),
+				_(HAVE._, "receipt-party", _(AN._, "I")),
+				_(HAVE._, "SKU", 
+					_(THE._, "item01", 
+						_(HAVE._, "name", text("item01")),
+						_(HAVE._, "qty", 
+							_(HAVE._, "number", _(Q._, "N2")),
+							_(HAVE._, "UoM", _(AN._, "KG")) //TODO: _(HAVE._, "UoM", KG)) 
+						),
+						_(HAVE._, "price", //
+							_(HAVE._, "number", _(Q._, "N5")),
+							_(HAVE._, "UoM", _(AN._, "G")),
+							_(HAVE._, "currency", _(AN._, "USD")) 
+						)
+				)	)
+		)	);
+        
+        
+        //TODO: how to answer "what do I have?" (answer "item01")
+	}
+}
