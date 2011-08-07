@@ -26,6 +26,7 @@ import static org.animotron.graph.AnimoGraph.order;
 
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.operator.Cachable;
+import org.animotron.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -34,7 +35,7 @@ import org.neo4j.graphdb.Relationship;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class ELEMENT extends AbstractInstruction implements Cachable {
+public class ELEMENT extends AbstractInstruction implements Cachable, Result {
 	
 	public static final ELEMENT _ = new ELEMENT();
 	

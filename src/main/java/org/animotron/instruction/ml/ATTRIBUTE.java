@@ -25,15 +25,17 @@ import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.order;
 
 import org.animotron.instruction.AbstractInstruction;
+import org.animotron.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
 
 /**
  * Instruction 'ml:attribute'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class ATTRIBUTE extends AbstractInstruction {
+public class ATTRIBUTE extends AbstractInstruction implements Result {
 	
 	public static final ATTRIBUTE _ = new ATTRIBUTE();
 	

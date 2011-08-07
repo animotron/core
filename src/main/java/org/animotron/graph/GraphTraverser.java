@@ -38,7 +38,7 @@ public class GraphTraverser {
 		handler.endGraph();
 	}
 	
-	private static void build(GraphHandler handler, Relationship r) {
+	protected static void build(GraphHandler handler, Relationship r) {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		

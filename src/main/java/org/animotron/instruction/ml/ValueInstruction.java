@@ -23,6 +23,7 @@ import static org.animotron.graph.AnimoGraph.order;
 
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.instruction.InstructionContainer;
+import org.animotron.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -30,7 +31,7 @@ import org.neo4j.graphdb.Relationship;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public abstract class ValueInstruction extends AbstractInstruction {
+public abstract class ValueInstruction extends AbstractInstruction implements Result {
 	
 	public ValueInstruction(String name, String prefix, String uri) {
 		super(name, prefix, uri);
