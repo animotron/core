@@ -20,6 +20,7 @@ package org.animotron.games.whouse;
 
 import static org.animotron.Expression.*;
 
+import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.AN;
@@ -33,7 +34,7 @@ import org.junit.Test;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class WHouseTest {
+public class WHouseTest extends ATest {
 
 	@Test
 	public void test() throws EBuilderTerminated {
@@ -95,7 +96,7 @@ public class WHouseTest {
 				_(IS._, "UoM")
 		)	);
 
-		new Expression(
+		Expression KG = new Expression(
     		_(THE._, "kilogram", 
 				_(IS._, "kilo"),
 				_(IS._, "gram")
@@ -153,7 +154,7 @@ public class WHouseTest {
     		_(THE._, "R01", 
 				_(IS._, "whouse-receipt"),
 				_(HAVE._, "date", text("T2011-08-07")), //TODO: date instruction
-				_(HAVE._, "issue-party", _(AN._, "ORG01")),
+				_(HAVE._, "issue-party", _(AN._, "ORG-01")),
 				_(HAVE._, "receipt-party", _(AN._, "I")),
 				_(HAVE._, "SKU", 
 					_(THE._, "item01", 
@@ -171,6 +172,7 @@ public class WHouseTest {
 		)	);
         
         
-        //TODO: how to answer "what do I have?" (answer "item01")
+        //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
+        //How may of "item01" I have?
 	}
 }
