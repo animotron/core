@@ -124,7 +124,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							for (Object n : in) {
 								Relationship r = get(((Relationship)n).getEndNode(), name);
 								
-								if (res != null)
+								if (r != null)
 									pf.sendAnswer(createResult(node, r));
 							}
 						} catch (Exception e) {
