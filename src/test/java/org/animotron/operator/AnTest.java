@@ -43,7 +43,7 @@ public class AnTest extends ATest {
         Expression A = new Expression(
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
         );
-        assertAnimo(A, "<the:A><the:B><the:C/></the:B></the:A>");
+        assertAnimo(A, "<the:A><the:B/></the:A>");
     }
 
 }
