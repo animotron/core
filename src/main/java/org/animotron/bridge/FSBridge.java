@@ -23,7 +23,7 @@ import java.io.IOException;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.animotron.graph.CommonBuilder;
+import org.animotron.graph.builder.CommonBuilder;
 
 /**
  * Repository loader

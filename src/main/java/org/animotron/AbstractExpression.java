@@ -18,7 +18,7 @@
  */
 package org.animotron;
 
-import org.animotron.graph.GraphBuilder;
+import org.animotron.graph.builder.GraphBuilder;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

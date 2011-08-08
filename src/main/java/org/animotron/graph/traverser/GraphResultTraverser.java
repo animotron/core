@@ -20,7 +20,7 @@ package org.animotron.graph.traverser;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.GraphHandler;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;

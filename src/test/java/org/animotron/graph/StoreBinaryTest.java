@@ -26,6 +26,7 @@ import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
 
 import org.animotron.ATest;
+import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.serializer.GraphSerializer;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;

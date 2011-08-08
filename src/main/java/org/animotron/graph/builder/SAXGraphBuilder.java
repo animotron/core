@@ -16,10 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.sax;
+package org.animotron.graph.builder;
 
 import org.animotron.exception.EBuilderTerminated;
-import org.animotron.graph.GraphBuilder;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;

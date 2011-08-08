@@ -16,12 +16,11 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.sax;
+package org.animotron.graph.handler;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 import org.animotron.Statement;
-import org.animotron.graph.GraphHandler;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -39,14 +38,14 @@ import org.xml.sax.helpers.AttributesImpl;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class SAXGraphSerializer implements GraphHandler {
+public class SAXGraphHandler implements GraphHandler {
 	
 	private static final ATTRIBUTE ATTR = ATTRIBUTE._;
 	private static final RelationshipType ATTR_RELATIONSHIPTYPE = ATTR.relationshipType();
 	private ContentHandler contentHandler;
 	private LexicalHandler lexicalHandler;
 	
-	public SAXGraphSerializer(ContentHandler c, LexicalHandler l){
+	public SAXGraphHandler(ContentHandler c, LexicalHandler l){
 		contentHandler = c;
 		lexicalHandler = l;
 	}

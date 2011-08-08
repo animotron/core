@@ -20,7 +20,7 @@ package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
-import org.animotron.graph.CommonBuilder;
+import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;
 import org.animotron.graph.serializer.AnimoResultSerializer;

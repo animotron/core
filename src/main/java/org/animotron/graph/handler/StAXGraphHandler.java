@@ -16,13 +16,12 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.stax;
+package org.animotron.graph.handler;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.Statement;
-import org.animotron.graph.GraphHandler;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -35,11 +34,11 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXGraphSerializer implements GraphHandler {
+public class StAXGraphHandler implements GraphHandler {
 	
 	private XMLStreamWriter writer;
 	
-	public StAXGraphSerializer(XMLStreamWriter writer) {
+	public StAXGraphHandler(XMLStreamWriter writer) {
 		this.writer = writer;
 	}
 	

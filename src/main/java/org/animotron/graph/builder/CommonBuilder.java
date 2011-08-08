@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph;
+package org.animotron.graph.builder;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -27,7 +27,6 @@ import java.io.InputStream;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import org.animotron.graph.stax.StAXGraphBuilder;
 import org.neo4j.graphdb.Relationship;
 
 import com.ctc.wstx.stax.WstxInputFactory;

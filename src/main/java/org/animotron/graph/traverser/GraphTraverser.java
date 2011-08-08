@@ -22,14 +22,12 @@ import static org.animotron.graph.AnimoGraph.getORDER;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.GraphHandler;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.test.GraphDescription;
 
 import java.io.IOException;
-import java.security.PrivateKey;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
