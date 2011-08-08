@@ -41,6 +41,7 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.event.ErrorState;
 import org.neo4j.graphdb.event.KernelEventHandler;
+import sun.misc.Cache;
 
 /**
  * Operator 'THE'.
@@ -87,6 +88,8 @@ public class THE extends AbstractOperator implements Prepare, KernelEventHandler
 	}
 	
 	public Relationship create(String name, String hash) {
+        //TODO do we really need the a name?
+        if (name == null) name = hash;
 		Relationship r = create(name);
 		HASH.set(r, hash);
 		return r;
