@@ -16,15 +16,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph;
+package org.animotron.graph.traverser;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.GraphHandler;
 import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.test.GraphDescription;
+
+import java.io.IOException;
+import java.security.PrivateKey;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -32,14 +37,18 @@ import org.neo4j.graphdb.index.IndexHits;
  * 
  */
 public class GraphTraverser {
+
+    public GraphTraverser _ = new GraphTraverser();
+
+    protected GraphTraverser() {}
 	
-	public static void traverse(GraphHandler handler, Relationship r) {
+	public void traverse(GraphHandler handler, Relationship r) throws InterruptedException, IOException  {
 		handler.startGraph();
-		build(handler, r);
+		build(handler, r, r);
 		handler.endGraph();
 	}
 	
-	private static void build(GraphHandler handler, Relationship r) {
+	protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		
@@ -53,7 +62,7 @@ public class GraphTraverser {
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					build(handler, i);
+					build(handler, start_op, i);
 				}
 			} finally {
 				q.close();
@@ -62,7 +71,5 @@ public class GraphTraverser {
 
 		handler.end(statement, r);
 	}
-	
-	//private class 
 	
 }

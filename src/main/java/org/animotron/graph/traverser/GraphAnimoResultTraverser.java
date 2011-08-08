@@ -16,14 +16,20 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph;
+package org.animotron.graph.traverser;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
+import org.animotron.graph.GraphHandler;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.operator.*;
+import org.animotron.operator.Evaluable;
+import org.animotron.operator.Query;
+import org.animotron.operator.Result;
+import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
@@ -40,15 +46,14 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class GraphResultTraverser {
+public class GraphAnimoResultTraverser extends GraphResultTraverser{
 	
-	public static void traverse(GraphHandler handler, Relationship r) throws IOException, InterruptedException {
-		handler.startGraph();
-		build(handler, r, r);
-		handler.endGraph();
-	}
+    public GraphAnimoResultTraverser _ = new GraphAnimoResultTraverser();
 
-    private static void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
+    protected GraphAnimoResultTraverser() {}
+
+    @Override
+    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -73,9 +78,12 @@ public class GraphResultTraverser {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, start_op, r);
+			//workaround IS and USE
+			} else if (s instanceof IS || s instanceof USE) {
+				handler.start(s, r);
+				handler.end(s, r);
             } else {
-                if (s instanceof Result)
-                    handler.start(s, r);
+                handler.start(s, r);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
                     for (Relationship i : q) {
@@ -84,42 +92,10 @@ public class GraphResultTraverser {
                 } finally {
                     q.close();
                 }
-                if (s instanceof Result)
-                    handler.end(s, r);
+                handler.end(s, r);
             }
         }
 
     }
 
-    private static boolean result(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
-
-        boolean found = false;
-        Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
-        for ( Relationship n : i ) {
-            build(
-                handler,
-                start_op,
-                getDb().getRelationshipById(
-                    (Long)n.getProperty(RID.name())
-                )
-            );
-            found = true;
-        }
-
-        if (!found) {
-            //UNDERSTAND: calculate current r!
-            System.out.println("READER Execute r = "+r);
-            PipedInput in = Evaluator._.execute(start_op, r);
-
-            for (Object obj : in) {
-                if (obj instanceof Relationship) {
-                    build(handler, start_op, (Relationship) obj);
-                }
-            }
-        }
-
-        return found;
-
-    }
-	
 }

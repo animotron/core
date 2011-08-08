@@ -24,6 +24,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.graph.stax.StAXGraphSerializer;
+import org.animotron.graph.traverser.GraphTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import com.ctc.wstx.api.WriterConfig;
