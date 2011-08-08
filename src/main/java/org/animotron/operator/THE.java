@@ -18,16 +18,6 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Properties.HASH;
-import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.AnimoGraph.getOrCreateNode;
-import static org.animotron.graph.AnimoGraph.getROOT;
-import static org.animotron.graph.AnimoGraph.getTOP;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
@@ -41,7 +31,11 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.event.ErrorState;
 import org.neo4j.graphdb.event.KernelEventHandler;
-import sun.misc.Cache;
+
+import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.NAME;
+import static org.animotron.graph.AnimoGraph.*;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Operator 'THE'.
