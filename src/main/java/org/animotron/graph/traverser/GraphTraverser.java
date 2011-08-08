@@ -18,8 +18,6 @@
  */
 package org.animotron.graph.traverser;
 
-import static org.animotron.graph.AnimoGraph.getORDER;
-
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.handler.GraphHandler;
@@ -27,7 +25,7 @@ import org.animotron.operator.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.io.IOException;
+import static org.animotron.graph.AnimoGraph.getORDER;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,13 +38,13 @@ public class GraphTraverser {
 
     protected GraphTraverser() {}
 	
-	public void traverse(GraphHandler handler, Relationship r) throws InterruptedException, IOException  {
+	public void traverse(GraphHandler handler, Relationship r) {
 		handler.startGraph();
-		build(handler, r, r);
+		build(handler, r);
 		handler.endGraph();
 	}
 	
-	protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
+	protected void build(GraphHandler handler, Relationship r) {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		
@@ -60,7 +58,7 @@ public class GraphTraverser {
 			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
 			try {
 				for (Relationship i : q) {
-					build(handler, start_op, i);
+					build(handler, i);
 				}
 			} finally {
 				q.close();

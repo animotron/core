@@ -20,8 +20,8 @@ package org.animotron.graph.traverser;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.Evaluable;
@@ -50,8 +50,18 @@ public class GraphResultTraverser extends GraphTraverser {
 
     protected GraphResultTraverser() {}
 
+    public void traverse(GraphHandler handler, Relationship start_op, Relationship r) {
+        handler.startGraph();
+        build(handler, start_op, r);
+        handler.endGraph();
+    }
+
     @Override
-    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
+    protected void build(GraphHandler handler, Relationship r) {
+        build(handler, r, r);
+    }
+
+    protected void build(GraphHandler handler, Relationship start_op, Relationship r) {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -94,7 +104,7 @@ public class GraphResultTraverser extends GraphTraverser {
 
     }
 
-    protected boolean result(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
+    protected boolean result(GraphHandler handler, Relationship start_op, Relationship r) {
 
         boolean found = false;
         Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
@@ -112,7 +122,14 @@ public class GraphResultTraverser extends GraphTraverser {
         if (!found) {
             //UNDERSTAND: calculate current r!
             System.out.println("READER Execute r = "+r);
-            PipedInput in = Evaluator._.execute(start_op, r);
+            PipedInput in = null;
+            try {
+                in = Evaluator._.execute(start_op, r);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             for (Object obj : in) {
                 if (obj instanceof Relationship) {

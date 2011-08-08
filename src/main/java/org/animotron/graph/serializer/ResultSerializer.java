@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.animotron.Statement;
+import org.animotron.graph.handler.StAXGraphHandler;
+import org.animotron.graph.traverser.GraphResultTraverser;
+import org.animotron.graph.traverser.GraphTraverser;
 import org.animotron.operator.Result;
 import org.neo4j.graphdb.Relationship;
 
@@ -31,41 +34,19 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 /**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ResultSerializer extends AnimoResultSerializer {
+public class ResultSerializer extends GraphSerializer {
 	
-	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
-	public static void serialize(Relationship r, OutputStream out) throws IOException, InterruptedException {
-        XMLStreamWriter writer;
-        try {
-            writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
-        } catch (XMLStreamException e) {
-            throw new IOException(e);
-        }
-
-		ResultSerializer serializer = new ResultSerializer(writer);
-        serializer.serialize(r, r);
-	}
-
-    public ResultSerializer(XMLStreamWriter writer) {
-        super(writer);
+    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+        serialize(r, r, out);
     }
 
-    @Override
-    public void start(Statement statement, Relationship r) {
-        if (statement instanceof Result) {
-            super.start(statement, r);
-        }
-    }
-
-    @Override
-    public void end(Statement statement, Relationship r) {
-        if (statement instanceof Result) {
-            super.end(statement, r);
-        }
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException {
+        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+        GraphResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
     }
 
 }

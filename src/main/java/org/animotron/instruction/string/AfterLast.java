@@ -20,16 +20,14 @@ package org.animotron.instruction.string;
 
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
+import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.instruction.ml.TEXT;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
-import org.animotron.graph.serializer.StringResultSerializer;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
-
-import java.io.IOException;
 
 import static org.animotron.Expression.text;
 import static org.animotron.graph.AnimoGraph.getORDER;
@@ -64,12 +62,8 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
                 Relationship[] params = getORDER().first(2, pf.getOPNode());
 
                 //pattern
-                StringResultSerializer szer = new StringResultSerializer();
-                szer.serialize(pf.getStartOP(), params[0]);
-                String pattern = szer.getString();
-
-                szer.serialize(pf.getStartOP(), params[1]);
-                String source = szer.getString();
+                String pattern = StringResultSerializer.serialize(pf.getStartOP(), params[0]);
+                String source = StringResultSerializer.serialize(pf.getStartOP(), params[1]);
                 
                 int index = source.lastIndexOf(pattern);
                 if (index != -1) {
@@ -86,10 +80,6 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 
                 pf.done();
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (EBuilderTerminated eBuilderTerminated) {
                 eBuilderTerminated.printStackTrace();
             }

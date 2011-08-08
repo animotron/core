@@ -20,8 +20,8 @@ package org.animotron.graph.traverser;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.animotron.operator.THE;
@@ -30,8 +30,6 @@ import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
-
-import java.io.IOException;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
@@ -49,7 +47,7 @@ public class GraphAnimoResultTraverser extends GraphResultTraverser{
     protected GraphAnimoResultTraverser() {}
 
     @Override
-    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException, IOException {
+    protected void build(GraphHandler handler, Relationship start_op, Relationship r) {
 
         RelationshipType type = r.getType();
         String typeName = type.name();

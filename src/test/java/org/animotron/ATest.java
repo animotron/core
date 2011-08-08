@@ -20,12 +20,13 @@ package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
-import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.GraphOperation;
-import org.animotron.manipulator.PFlow;
-import org.animotron.graph.serializer.AnimoResultSerializer;
-import org.animotron.graph.serializer.ResultSerializer;
+import org.animotron.graph.builder.CommonBuilder;
+import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.serializer.StringResultSerializer;
+import org.animotron.graph.traverser.GraphAnimoResultTraverser;
+import org.animotron.graph.traverser.GraphResultTraverser;
+import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -167,11 +168,9 @@ public abstract class ATest {
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
-        
-        AnimoResultSerializer serializer = new AnimoResultSerializer(writer);
-        serializer.serialize(op, op);
+        GraphAnimoResultTraverser._.traverse(new StAXGraphHandler(writer), op);
+        out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
-
         System.out.println();
     }
 
@@ -189,11 +188,9 @@ public abstract class ATest {
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
-
-        ResultSerializer serializer = new ResultSerializer(writer);
-        serializer.serialize(op, op);
+        GraphResultTraverser._.traverse(new StAXGraphHandler(writer), op);
+        out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
-
         System.out.println();
     }
 
@@ -201,13 +198,11 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("String result serializer...");
-        StringResultSerializer serializer = new StringResultSerializer();
-        serializer.serialize(op, op);
-        Assert.assertEquals("", expected, serializer.getString());
+        Assert.assertEquals("", expected, StringResultSerializer.serialize(op));
 
         System.out.println();
 	}
-	
+
 	//database cleaning (thanks to mh)
     public Map<String, Object> cleanDb() {
         return cleanDb(Long.MAX_VALUE);

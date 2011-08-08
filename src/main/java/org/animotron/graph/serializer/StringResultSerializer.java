@@ -19,58 +19,41 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.Statement;
+import org.animotron.graph.handler.StAXGraphHandler;
+import org.animotron.graph.handler.TextGraphHandler;
+import org.animotron.graph.traverser.GraphAnimoResultTraverser;
+import org.animotron.graph.traverser.GraphResultTraverser;
 import org.animotron.instruction.ml.TEXT;
 import org.neo4j.graphdb.Relationship;
 
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class StringResultSerializer extends AbstractResultSerializer {
+public class StringResultSerializer {
 	
-	private StringBuilder builder;
-	private String result;
-	
-	public String getString() {
-		return result;
-	}
+    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+        serialize(r, r, out);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#start(org.animotron.Statement, org.neo4j.graphdb.Relationship)
-	 */
-//	@Override
-	public void start(Statement statement, Relationship r) {
-		//System.out.println(r);
-		if (statement instanceof TEXT) {
-			System.out.println("TEXT found");
-			builder.append(statement.value(r));
-		} else {
-			//build(r);
-		}
-	}
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException {
+        GraphAnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#end(org.animotron.Statement, org.neo4j.graphdb.Relationship)
-	 */
-//	@Override
-	public void end(Statement statement, Relationship r) {
-	}
+    public static String serialize(Relationship r) {
+        return serialize(r, r);
+    }
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#startDocument()
-	 */
-//	@Override
-	public void startDocument() {
-		builder = new StringBuilder(1024);
-		result = null;
-	}
+    public static String serialize(Relationship start_op, Relationship r) {
+        StringBuilder out = new StringBuilder(1024);
+        GraphAnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
+        return out.toString();
+    }
 
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.GraphHandler#endDocument()
-	 */
-//	@Override
-	public void endDocument() {
-		result = builder.toString();
-		builder = null;
-	}
 }

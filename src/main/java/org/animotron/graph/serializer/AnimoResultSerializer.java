@@ -22,6 +22,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import org.animotron.Statement;
+import org.animotron.graph.handler.StAXGraphHandler;
+import org.animotron.graph.traverser.GraphResultTraverser;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -31,110 +33,22 @@ import org.animotron.instruction.ml.ValueInstruction;
 import org.codehaus.stax2.XMLStreamWriter2;
 import org.neo4j.graphdb.Relationship;
 
+import java.io.OutputStream;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoResultSerializer extends AbstractResultSerializer {
+public class AnimoResultSerializer extends ResultSerializer {
 	
-	private XMLStreamWriter writer;
-	
-	public AnimoResultSerializer(XMLStreamWriter writer) {
-		this.writer = writer;
-	}
+    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+        serialize(r, r, out);
+    }
 
-	@Override
-	public void start(Statement statement, Relationship r) {
-		try {
-//			if (statement instanceof IC)
-//				statement = HAVE._;
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException {
+        XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+        GraphResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
+    }
 
-			if (statement instanceof ATTRIBUTE) {
-				String prefix = statement.prefix(r);
-				String ns = statement.namespace(r);
-				String name = statement.name(r);
-				String value = statement.value(r);
-				if (prefix == null && ns == null) {
-					writer.writeAttribute(name, value);
-				} else if (prefix == null) {
-					writer.writeAttribute(ns, name, value);
-				} else {
-					writer.writeAttribute(prefix, ns, name, value);
-				}
-				
-			} else if (statement instanceof TEXT) {
-				writer.writeCharacters(statement.value(r));
-				
-			} else if (statement instanceof COMMENT){
-				writer.writeComment(statement.value(r));
-				
-			} else if (statement instanceof CDATA){
-				writer.writeCData(statement.value(r));
-				
-			} else if (statement instanceof ELEMENT) {
-				String prefix = statement.prefix(r);
-				String ns = statement.namespace(r);
-				String name = statement.name(r);
-				if (prefix == null && ns == null) {
-					writer.writeStartElement(name);
-				} else if (prefix == null) {
-					writer.writeStartElement(ns, name);
-				} else {
-					writer.writeStartElement(prefix, name, ns);
-				}
-				
-			} else {
-				writer.writeStartElement(statement.prefix(r), statement.name(r), statement.namespace(r));
-				
-			}
-			
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void end(Statement statement, Relationship r) {
-		try {
-			if (statement instanceof ValueInstruction ||
-					statement instanceof ATTRIBUTE) {
-				return;
-			} else {
-				writer.writeEndElement();
-			}
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void startDocument() {
-		try {
-			writer.writeStartDocument();
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/* (non-Javadoc)
-	 * @see org.animotron.graph.handler.GraphHandler#endDocument()
-	 */
-//	@Override
-	public void endDocument() {
-		try {
-			writer.writeEndDocument();
-			writer.flush();
-			if (writer instanceof XMLStreamWriter2) {
-				((XMLStreamWriter2) writer).closeCompletely();
-			} else {
-				writer.close();
-			}
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

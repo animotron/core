@@ -32,13 +32,14 @@ import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 
 /**
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public abstract class GraphSerializer {
-	
+
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+
 	static {
 		WriterConfig conf = OUTPUT_FACTORY.getConfig();
 		conf.doSupportNamespaces(true);
@@ -46,16 +47,8 @@ public abstract class GraphSerializer {
 	}
 
 	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
-		
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
-
-        try {
-            GraphTraverser._.traverse(new StAXGraphHandler(writer), r);
-        } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        } catch (IOException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+        GraphTraverser._.traverse(new StAXGraphHandler(writer), r);
     }
-	
+
 }
