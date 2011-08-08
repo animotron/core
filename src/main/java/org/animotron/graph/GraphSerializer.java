@@ -18,6 +18,7 @@
  */
 package org.animotron.graph;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.xml.stream.XMLStreamException;
@@ -47,8 +48,14 @@ public abstract class GraphSerializer {
 	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
 		
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
-        
-        GraphTraverser.traverse(new StAXGraphSerializer(writer), r);
-	}
+
+        try {
+            GraphTraverser._.traverse(new StAXGraphSerializer(writer), r);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
 	
 }

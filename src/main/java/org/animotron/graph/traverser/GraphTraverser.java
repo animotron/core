@@ -38,7 +38,7 @@ import java.security.PrivateKey;
  */
 public class GraphTraverser {
 
-    public GraphTraverser _ = new GraphTraverser();
+    public static GraphTraverser _ = new GraphTraverser();
 
     protected GraphTraverser() {}
 	

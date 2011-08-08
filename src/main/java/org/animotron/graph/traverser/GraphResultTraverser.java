@@ -24,8 +24,10 @@ import org.animotron.graph.GraphHandler;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.operator.*;
-import org.animotron.operator.relation.IS;
+import org.animotron.operator.Evaluable;
+import org.animotron.operator.Query;
+import org.animotron.operator.Result;
+import org.animotron.operator.THE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
@@ -44,7 +46,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class GraphResultTraverser extends GraphTraverser {
 
-    public GraphResultTraverser _ = new GraphResultTraverser();
+    public static GraphResultTraverser _ = new GraphResultTraverser();
 
     protected GraphResultTraverser() {}
 

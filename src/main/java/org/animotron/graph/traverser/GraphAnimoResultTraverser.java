@@ -22,11 +22,8 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.GraphHandler;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.io.PipedInput;
-import org.animotron.manipulator.Evaluator;
 import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
-import org.animotron.operator.Result;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
@@ -39,7 +36,6 @@ import java.io.IOException;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -48,7 +44,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class GraphAnimoResultTraverser extends GraphResultTraverser{
 	
-    public GraphAnimoResultTraverser _ = new GraphAnimoResultTraverser();
+    public static GraphAnimoResultTraverser _ = new GraphAnimoResultTraverser();
 
     protected GraphAnimoResultTraverser() {}
 
