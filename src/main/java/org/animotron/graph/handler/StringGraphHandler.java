@@ -18,16 +18,8 @@
  */
 package org.animotron.graph.handler;
 
-import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.Statement;
-import org.animotron.graph.serializer.AnimoResultSerializer;
-import org.animotron.operator.Result;
 import org.neo4j.graphdb.Relationship;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
