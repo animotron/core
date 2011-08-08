@@ -38,11 +38,11 @@ import java.io.OutputStream;
  */
 public class StringResultSerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+    public static void serialize(Relationship r, OutputStream out) {
         serialize(r, r, out);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException {
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) {
         GraphAnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
     }
 
