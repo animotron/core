@@ -86,6 +86,11 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 	
 	public static Relationship getHaveAtPFlow(PFlow pf, String name) {
 		final Path pflow = pf.getFlowPath();
+		
+		//XXX: remove when getFlowPath fixed
+		if (pflow == null)
+			return null;
+		
 		for (Relationship p : pflow.relationships()) {
 			if (p.getType().name().equals(HAVE._.rType) && _.name(p).equals(name)) {
 				return p;

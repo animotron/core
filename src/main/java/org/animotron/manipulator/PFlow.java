@@ -20,8 +20,6 @@ package org.animotron.manipulator;
 
 import javolution.util.FastList;
 import org.animotron.operator.AN;
-import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;

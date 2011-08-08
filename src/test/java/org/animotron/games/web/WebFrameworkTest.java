@@ -120,46 +120,48 @@ public class WebFrameworkTest extends ATest {
 		)	);
 
     	new Expression(
-            _(THE._, "service", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri"))))
+            _(THE._, "service")
         );
 
         Expression s = new Expression(
-            _(THE._, "s", _(AN._, "service", _(AN._, "request"), _(AN._, "test-site")))
+            _(THE._, "s", 
+        		_(ANY._, "service",
+    				_(WITH._, "uri", _(GET._, "uri")),
+    				_(AN._, "request"), _(AN._, "test-site"))
+				)
         );
         assertAnimo(s,  "<the:s>" +
-                            "<the:service>" +
-                                "<the:root-service>" +
-                                    "<is:service/>" +
-                                    "<have:uri>/</have:uri>" +
-                                    "<the:html>" +
-                                        "<the:html-composition>" +
-                                            "<is:composition/>" +
-                                            "<have:content>" +
-                                                "<html>" +
-                                                    "<the:html-head>" +
-                                                        "<head>" +
-                                                            "<title><have:title>Welcome to Animotron</have:title></title>" +
-                                                        "</head>" +
-                                                    "</the:html-head>" +
-                                                    "<body>" +
-                                                        "<the:theme-concrete-root-layout>" +
-                                                            "<is:root-layout/>" +
-                                                            "<have:content>" +
-                                                                "<div id=\"title\">" +
-                                                                    "<have:title>Welcome to Animotron</have:title>" +
-                                                                "</div>" +
-                                                                "<div id=\"content\">" +
-                                                                    "<have:content>Overview</have:content>" +
-                                                                "</div>" +
-                                                            "</have:content>" +
-                                                        "</the:theme-concrete-root-layout>" +
-                                                    "</body>" +
-                                                "</html>" +
-                                            "</have:content>" +
-                                        "</the:html-composition>" +
-                                    "</the:html>" +
-                                "</the:root-service>" +
-                            "</the:service>" +
+                            "<the:root-service>" +
+                                "<is:service/>" +
+                                "<have:uri>/</have:uri>" +
+                                "<the:html>" +
+                                    "<the:html-composition>" +
+                                        "<is:composition/>" +
+                                        "<have:content>" +
+                                            "<html>" +
+                                                "<the:html-head>" +
+                                                    "<head>" +
+                                                        "<title><have:title>Welcome to Animotron</have:title></title>" +
+                                                    "</head>" +
+                                                "</the:html-head>" +
+                                                "<body>" +
+                                                    "<the:theme-concrete-root-layout>" +
+                                                        "<is:root-layout/>" +
+                                                        "<have:content>" +
+                                                            "<div id=\"title\">" +
+                                                                "<have:title>Welcome to Animotron</have:title>" +
+                                                            "</div>" +
+                                                            "<div id=\"content\">" +
+                                                                "<have:content>Overview</have:content>" +
+                                                            "</div>" +
+                                                        "</have:content>" +
+                                                    "</the:theme-concrete-root-layout>" +
+                                                "</body>" +
+                                            "</html>" +
+                                        "</have:content>" +
+                                    "</the:html-composition>" +
+                                "</the:html>" +
+                            "</the:root-service>" +
                         "</the:s>");
         assertResult(s, "<html>" +
                             "<head>" +
