@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 /**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
