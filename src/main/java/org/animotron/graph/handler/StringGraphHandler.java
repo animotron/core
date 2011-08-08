@@ -35,7 +35,6 @@ import java.io.OutputStream;
  */
 public class StringGraphHandler implements GraphHandler {
 
-
     @Override
     public void start(Statement statement, Relationship r) {
         //To change body of implemented methods use File | Settings | File Templates.
