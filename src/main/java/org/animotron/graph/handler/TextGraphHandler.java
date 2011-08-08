@@ -19,31 +19,73 @@
 package org.animotron.graph.handler;
 
 import org.animotron.Statement;
+import org.animotron.instruction.ml.TEXT;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class StringGraphHandler implements GraphHandler {
+public class TextGraphHandler implements GraphHandler {
+
+    Handler out;
+
+    public TextGraphHandler (OutputStream stream) {
+        out = new StreamHandler(stream);
+    }
+
+    public TextGraphHandler (StringBuilder builder) {
+        out = new StringHandler(builder);
+    }
 
     @Override
     public void start(Statement statement, Relationship r) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        if (statement instanceof TEXT) {
+            out.write(statement.value(r));
+        }
     }
 
     @Override
     public void end(Statement statement, Relationship r) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void startGraph() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     public void endGraph() {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    private interface Handler {
+        public void write(String string);
+    }
+
+    private class StreamHandler implements Handler {
+        OutputStream out;
+        public StreamHandler(OutputStream stream) {
+            out = stream;
+        }
+        public void write(String s) {
+            try {
+                out.write(s.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private class StringHandler implements Handler {
+        StringBuilder out;
+        public StringHandler(StringBuilder builder) {
+            out = builder;
+        }
+        public void write(String s) {
+            out.append(s);
+        }
+    }
+
 }
