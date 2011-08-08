@@ -18,11 +18,14 @@
  */
 package org.animotron.serializer;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import org.animotron.Statement;
-import org.animotron.instruction.ml.*;
 import org.animotron.operator.Result;
-import org.codehaus.stax2.XMLStreamWriter2;
 import org.neo4j.graphdb.Relationship;
+
+import com.ctc.wstx.stax.WstxOutputFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -32,6 +35,20 @@ import javax.xml.stream.XMLStreamWriter;
  *
  */
 public class ResultSerializer extends AnimoResultSerializer {
+	
+	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+
+	public static void serialize(Relationship r, OutputStream out) throws IOException, InterruptedException {
+        XMLStreamWriter writer;
+        try {
+            writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+
+		ResultSerializer serializer = new ResultSerializer(writer);
+        serializer.serialize(r, r);
+	}
 
     public ResultSerializer(XMLStreamWriter writer) {
         super(writer);
