@@ -25,7 +25,7 @@ import org.animotron.instruction.ml.TEXT;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Evaluable;
-import org.animotron.serializer.StringResultSerializer;
+import org.animotron.graph.serializer.StringResultSerializer;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 

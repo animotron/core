@@ -22,6 +22,7 @@ import static org.animotron.Expression._;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.HAVE;
 import org.junit.Test;
