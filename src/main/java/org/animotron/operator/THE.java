@@ -88,7 +88,7 @@ public class THE extends AbstractOperator implements Prepare, KernelEventHandler
 	}
 	
 	public Relationship create(String name, String hash) {
-        //TODO do we really need the a name?
+        //TODO do we really need a name?
         if (name == null) name = hash;
 		Relationship r = create(name);
 		HASH.set(r, hash);
