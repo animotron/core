@@ -28,6 +28,8 @@ import org.animotron.operator.Evaluable;
 import org.animotron.operator.Query;
 import org.animotron.operator.Result;
 import org.animotron.operator.THE;
+import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
@@ -86,7 +88,7 @@ public class GraphResultTraverser extends GraphTraverser {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, start_op, r);
-            } else {
+			} else if (!(s instanceof IS || s instanceof USE)) {
                 if (s instanceof Result)
                     handler.start(s, r);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
