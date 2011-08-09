@@ -126,8 +126,8 @@ public class WebFrameworkTest extends ATest {
         Expression s = new Expression(
             _(THE._, "s", 
         		_(ANY._, "service",
-    				_(WITH._, "uri", _(GET._, "uri"))
-    				//TODO will be implemented _(AN._, "request"), _(AN._, "test-site") ?
+    				_(WITH._, "uri", _(GET._, "uri")),
+    				_(AN._, "request"), _(AN._, "test-site")
                 )
             )
         );
