@@ -19,9 +19,8 @@
 package org.animotron.operator.query;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
+import static org.animotron.graph.RelationshipTypes.REF;
 
 import java.util.Set;
 
@@ -32,7 +31,6 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
@@ -238,7 +236,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		Relationship have = getByHave(context, name);
 		if (have != null) return have;
 		
-		Relationship instance = context.getSingleRelationship(RelationshipTypes.REF, OUTGOING);
+		Relationship instance = context.getSingleRelationship(REF, OUTGOING);
 		if (instance != null) {
 			//change context to the-instance by REF
 			context = instance.getEndNode();
@@ -390,16 +388,49 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			System.out.println("path = "+path);
 			
 			boolean foundIS = false;
+			boolean foundBackIS = false;
+			Relationship foundIC = null;
+			Node lastNode = null;
 			thisDeep = 0;
+			
+			int step = 0;
+			
+			boolean REFcase = false;
 			for (Relationship r : path.relationships()) {
+				step++;
+				
+				String type = r.getType().name();
+
 				if (thisDeep > 0) {
+					if (type.equals(IS._.relationshipType().name()) && r.getStartNode().equals(lastNode)) {
+						lastNode = r.getEndNode();
+						foundBackIS = true;
+					} else {
+						lastNode = r.getStartNode();
+					}
 					thisDeep++;
 					continue;
 				}
-				String type = r.getType().name();
 				
-				if (type.equals(IS._.relationshipType().name()) && name.equals(IS._.name(r))) {
-					foundIS = true;
+				if (step == 1 && type.equals(REF.name())) {
+					REFcase = true;
+				} else if (REFcase && step == 2 && !(type.equals(HAVE._.rType) || type.equals(IC._.rType))) {
+					break;
+				}
+				
+				lastNode = r.getStartNode();
+				
+				if (type.equals(IS._.relationshipType().name())) {
+					if (name.equals(IS._.name(r))) {
+						foundIS = true;
+						continue;
+					}
+					
+					if (foundIC != null) {
+						thisResult = ICresult(context, foundIC);
+						thisDeep++;
+						continue;
+					}
 					
 				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
 					//ignore empty have 
@@ -415,31 +446,17 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				
 				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
 					if (foundIS) {
-						//store
-						final Node sNode;
-						if (context instanceof Relationship) {
-							sNode = ((Relationship)context).getEndNode();
-						} else {
-							sNode = (Node)context;
-						}
-						final Node eNode = r.getEndNode();
-
-						thisResult = AnimoGraph.execute(new GraphOperation<Relationship>() {
-							@Override
-							public Relationship execute() {
-								Relationship res = sNode.createRelationshipTo(eNode, HAVE._.relationshipType());
-								//RID.set(res, r.getId());
-								return res;
-							}
-						});
+						thisResult = ICresult(context, r);
 						thisDeep++;
+					} else {
+						foundIC = r;
 					}
 				}
 			}
 			
 			if (thisDeep == 0)
 				;
-			else if (thisDeep == deep) {
+			else if (thisDeep == deep && !foundBackIS) {
 				result.add(thisResult);
 
 			} else if (thisDeep < deep) {
@@ -450,5 +467,25 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		}
 		
 		return result;
+	}
+	
+	private Relationship ICresult(PropertyContainer context, Relationship r) {
+		//store
+		final Node sNode;
+		if (context instanceof Relationship) {
+			sNode = ((Relationship)context).getEndNode();
+		} else {
+			sNode = (Node)context;
+		}
+		final Node eNode = r.getEndNode();
+
+		return AnimoGraph.execute(new GraphOperation<Relationship>() {
+			@Override
+			public Relationship execute() {
+				Relationship res = sNode.createRelationshipTo(eNode, HAVE._.relationshipType());
+				//RID.set(res, r.getId());
+				return res;
+			}
+		});
 	}
 }
