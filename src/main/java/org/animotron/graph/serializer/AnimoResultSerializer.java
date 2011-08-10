@@ -21,16 +21,8 @@ package org.animotron.graph.serializer;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.animotron.Statement;
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.GraphResultTraverser;
-import org.animotron.instruction.ml.ATTRIBUTE;
-import org.animotron.instruction.ml.CDATA;
-import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
-import org.animotron.instruction.ml.ValueInstruction;
-import org.codehaus.stax2.XMLStreamWriter2;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.OutputStream;

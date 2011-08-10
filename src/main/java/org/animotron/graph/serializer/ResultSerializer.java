@@ -18,17 +18,11 @@
  */
 package org.animotron.graph.serializer;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
-import org.animotron.Statement;
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.GraphResultTraverser;
-import org.animotron.graph.traverser.GraphTraverser;
-import org.animotron.operator.Result;
 import org.neo4j.graphdb.Relationship;
-
-import com.ctc.wstx.stax.WstxOutputFactory;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
