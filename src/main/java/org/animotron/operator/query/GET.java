@@ -478,6 +478,12 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			sNode = (Node)context;
 		}
 		final Node eNode = r.getEndNode();
+		
+		//avoid duplicate
+		for (Relationship h : sNode.getRelationships(HAVE._.relationshipType(), OUTGOING)) {
+			if (h.getEndNode().equals(eNode))
+				return h;
+		}
 
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
