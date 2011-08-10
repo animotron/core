@@ -36,9 +36,7 @@ import org.neo4j.kernel.Uniqueness;
 
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * Abstract Query
@@ -98,8 +96,12 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 						if (path.length() == 1 && !(rType.equals(USE._.rType) || rType.equals(IS._.rType)) ) {
 							return EXCLUDE_AND_PRUNE;
 						}
-						return EXCLUDE_AND_CONTINUE;	
-					} 
+						return EXCLUDE_AND_CONTINUE;
+					
+					//Allow IS->USE<-IS->...
+					} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+						return EXCLUDE_AND_CONTINUE;
+					}
 					return EXCLUDE_AND_PRUNE;
 				}
 				return EXCLUDE_AND_CONTINUE;

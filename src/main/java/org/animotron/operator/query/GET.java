@@ -342,7 +342,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 //								return EXCLUDE_AND_PRUNE;
 //							}
 							return EXCLUDE_AND_CONTINUE;	
-						} 
+						//Allow ...<-IS->...
+						} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+							return EXCLUDE_AND_CONTINUE;
+						}
 						return EXCLUDE_AND_PRUNE;
 					}
 					return EXCLUDE_AND_CONTINUE;

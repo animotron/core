@@ -64,9 +64,11 @@ public class ANY extends AbstractQuery {
 				for (Relationship p : path.relationships()) {
 					if (p.getType().name().equals(USE._.rType)) {
 						node = p.getEndNode();
+						break;
 					}
 				}
 			}
+			System.out.println(" node = "+node);
 
 			if (filtering(pf, node)) {
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
