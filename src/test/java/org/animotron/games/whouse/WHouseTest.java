@@ -137,18 +137,21 @@ public class WHouseTest extends ATest {
         new Expression(
     		_(THE._, "whouse-receipt", 
 				_(IS._, "whouse-document"),
+				//I do receipt
 				_(IS._, "receipt")
 		)	);
 
         new Expression(
     		_(THE._, "whouse-issue", 
 				_(IS._, "whouse-document"),
+				//I do issue
 				_(IS._, "issue")
 		)	);
 
         new Expression(
     		_(THE._, "whouse-transfer", 
 				_(IS._, "whouse-document"),
+				//I do receipt & issue
 				_(IS._, "receipt"),
 				_(IS._, "issue")
 		)	);
@@ -156,7 +159,7 @@ public class WHouseTest extends ATest {
         //documents
         new Expression(
     		_(THE._, "R01", 
-				_(IS._, "whouse-receipt"),
+				_(IS._, "whouse-document"),
 				_(HAVE._, "date", text("T2011-08-07")), //TODO: date instruction
 				_(HAVE._, "issue-party", _(AN._, "ORG-01")),
 				_(HAVE._, "receipt-party", _(AN._, "I")),
@@ -184,5 +187,28 @@ public class WHouseTest extends ATest {
 
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?
+
+        Expression f = new Expression(
+    		_(THE._, "f", 
+				_(AN._, "form", _(AN._, "R01")))
+		);
+
+        assertAnimo(f, "<form id='R01'>"+
+        	"<input id='date' value='T2011-08-07'>07 August 2011</input>"+
+        	"<input id='issue-party' value='an:ORG-01'>Organization 01</input>"+
+        	"<input id='receipt-party' value='an:I'>I</input>"+
+        	"<table>"+
+        		"<head>"+
+        			"<col id='name'>name</col>"+
+        			"<col id='qty'>qty</col>"+
+        			"<col id='price'>price</col>"+
+        		"<head>"+
+        		"<row>"+
+        			"<col><input id='item01*name' value='item01'>item01</input></col>"+
+        			"<col><input id='item01*qty' value='have:number Q:N2; have:UoM an:KG'>2 kg</input></col>"+
+        			"<col><input id='item01*price' value='have:number Q:N2; have:UoM an:KG'>5 USD per gram</input></col>"+
+        		"<row>"+
+        	"</table>"+
+        "</form>");
 	}
 }
