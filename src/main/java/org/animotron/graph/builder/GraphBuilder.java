@@ -18,13 +18,22 @@
  */
 package org.animotron.graph.builder;
 
-import static org.animotron.Properties.HASH;
-import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.createCache;
-import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.AnimoGraph.getCache;
-import static org.animotron.graph.AnimoGraph.order;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.exception.EBuilderTerminated;
+import org.animotron.instruction.Instruction;
+import org.animotron.instruction.ml.ELEMENT;
+import org.animotron.instruction.ml.TEXT;
+import org.animotron.manipulator.Manipulators;
+import org.animotron.manipulator.Manipulators.Catcher;
+import org.animotron.operator.AN;
+import org.animotron.operator.Cachable;
+import org.animotron.operator.Operator;
+import org.animotron.operator.THE;
+import org.animotron.utils.MessageDigester;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
@@ -32,19 +41,9 @@ import java.util.List;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
-import org.animotron.Statement;
-import org.animotron.Statements;
-import org.animotron.exception.EBuilderTerminated;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.manipulator.Manipulators;
-import org.animotron.manipulator.Manipulators.Catcher;
-import org.animotron.operator.AN;
-import org.animotron.operator.Cachable;
-import org.animotron.operator.THE;
-import org.animotron.utils.MessageDigester;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
+import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.*;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -133,6 +132,22 @@ public abstract class GraphBuilder {
 		start(statement, prefix, ns, name, value);
 	}
 	
+    final protected void start(String value) {
+        start(TEXT._, value);
+    }
+
+    final protected void start(Instruction instruction) {
+        start(instruction, null);
+    }
+
+    final protected void start(Instruction instruction, String value) {
+        start(instruction, null, null, null, value);
+    }
+
+    final protected void start(Operator operator, String name) {
+        start(operator, null, null, name, null);
+    }
+
 	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
 		
         if (flow.isEmpty() && !(statement instanceof THE)) {

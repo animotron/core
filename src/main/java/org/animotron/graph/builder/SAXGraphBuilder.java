@@ -92,18 +92,18 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 		if (valueStatement instanceof TEXT) {
 			value = removeWS(value);
 			if (value != null) {
-				start(valueStatement, null, null, null, value);
+				start(value);
 				end();
 			}
 		} else {
-			start(valueStatement, null, null, null, value);
+			start(valueStatement, value);
 			end();
 		}
     }
 
 	@Override
 	public void comment(char ch[], int start, int length) throws SAXException {
-		start(COMMENT._, null, null, null, new String(ch, start, length));
+		start(COMMENT._, new String(ch, start, length));
 		end();
 	}
 
