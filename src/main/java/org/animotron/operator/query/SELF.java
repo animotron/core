@@ -20,14 +20,13 @@ package org.animotron.operator.query;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.IC;
+import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -111,9 +110,9 @@ public class SELF extends AbstractQuery {
 
 	private Relationship selfByTraversal(PFlow pf, final Relationship start_op, final Node eNode, final String name) {
 		
-		Node node = start_op.getEndNode().getSingleRelationship(RelationshipTypes.REF, Direction.OUTGOING).getEndNode();
+		Node node = Utils.getByREF(start_op.getEndNode());
 
-		System.out.println("start_op = "+start_op+" eNode = "+eNode);
+		System.out.println("start_op = "+start_op+" eNode = "+eNode+" sNode = "+node);
 
 		boolean underUSE = false;
 		for (Path path : getUSEtravers(pf.getStartOP()).traverse(node)) {
@@ -128,8 +127,6 @@ public class SELF extends AbstractQuery {
 		}
 
 		TraversalDescription td = getDirectedTravers(eNode);
-		
-		System.out.println("start_op = "+start_op+" eNode = "+eNode+" sNode = "+node);
 		
 		for (Path path : td.traverse(node)) {
 			System.out.println("path = "+path);
