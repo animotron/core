@@ -18,16 +18,15 @@
  */
 package org.animotron.graph.builder;
 
-import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
-
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.TEXT;
 import org.neo4j.graphdb.Relationship;
+
+import javax.xml.stream.XMLStreamConstants;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamReader;
 
 
 
@@ -89,18 +88,18 @@ public class StAXGraphBuilder extends GraphBuilder {
 	private void text(XMLStreamReader reader) {
 		String value = removeWS(reader.getText());
 		if (value != null) {
-			start(TEXT._, null, null, null, value);
+			start(value);
 			end();
 		}
 	}
 
 	private void comment(XMLStreamReader reader) {
-		start(COMMENT._, null, null, null, reader.getText());
+		start(COMMENT._, reader.getText());
 		end();
 	}
 
 	private void cdata(XMLStreamReader reader) {
-		start(CDATA._, null, null, null, reader.getText());
+		start(CDATA._, reader.getText());
 		end();
 	}
 
