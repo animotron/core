@@ -55,22 +55,22 @@ public class CrossUseTest extends ATest {
         Expression s = new Expression (
             _(THE._, "s", _(ANY._, "S"))
         );
-        assertAnimo(s, "<the:s><the:A><is:S/></is:X></the:A></the:s>");
+        assertAnimo(s, "<the:s><the:A><is:S/><is:X/></the:A></the:s>");
 
         Expression a = new Expression (
             _(THE._, "a", _(ANY._, "S", _(USE._, "X")))
         );
-        assertAnimo(a, "<the:a><the:A><is:S/></is:X></the:A></the:a>");
+        assertAnimo(a, "<the:a><the:A><is:S/><is:X/></the:A></the:a>");
 
         Expression b = new Expression (
             _(THE._, "b", _(ANY._, "S", _(USE._, "Y")))
         );
-        assertAnimo(b, "<the:b><the:B><is:S/></is:Y></the:B></the:b>");
+        assertAnimo(b, "<the:b><the:B><is:S/><is:Y/></the:B></the:b>");
 
         Expression c = new Expression (
             _(THE._, "c", _(ANY._, "S", _(USE._, "X"), _(USE._, "Y")))
         );
-        assertAnimo(c, "<the:c><the:C><is:S/></is:X></is:Y></the:C></the:c>");
+        assertAnimo(c, "<the:c><the:C><is:S/><is:X/></is:Y></the:C></the:c>");
 
     }
 

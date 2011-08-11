@@ -70,9 +70,9 @@ public class ANY extends AbstractQuery {
 			}
 			System.out.println(" node = "+node);
 
-			if (filtering(pf, node)) {
-				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
-			} else {
+//			if (filtering(pf, node)) {
+//				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+//			} else {
 	            for (Relationship tdR : td_IS.traverse(node).relationships()) {
                     System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
                     Node res = tdR.getStartNode();
@@ -82,7 +82,7 @@ public class ANY extends AbstractQuery {
                         break;
                     }
                 }
-			}
+//			}
             pf.done();
         }
 
