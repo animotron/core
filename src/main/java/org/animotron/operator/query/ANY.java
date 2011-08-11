@@ -58,21 +58,24 @@ public class ANY extends AbstractQuery {
 
 			TraversalDescription td = getUSEtravers(pf.getStartOP());
 			
+			boolean underUSE = false;
+			
 			System.out.println("ANY **************************");
 			for (Path path : td.traverse(Utils.getByREF(pf.getOP().getEndNode()))) {
 				System.out.println(" path = "+path);
 				for (Relationship p : path.relationships()) {
 					if (p.getType().name().equals(USE._.rType)) {
 						node = p.getEndNode();
+						underUSE = true;
 						break;
 					}
 				}
 			}
 			System.out.println(" node = "+node);
 
-//			if (filtering(pf, node)) {
-//				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
-//			} else {
+			if (underUSE && filtering(pf, node)) {
+				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+			} else {
 	            for (Relationship tdR : td_IS.traverse(node).relationships()) {
                     System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
                     Node res = tdR.getStartNode();
@@ -82,7 +85,7 @@ public class ANY extends AbstractQuery {
                         break;
                     }
                 }
-//			}
+			}
             pf.done();
         }
 
