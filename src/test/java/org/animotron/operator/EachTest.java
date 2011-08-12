@@ -65,7 +65,7 @@ public class EachTest extends ATest {
     }
 
     @Test
-    public void eachTest() throws EBuilderTerminated, IOException, InterruptedException {
+    public void eachTest1() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))
