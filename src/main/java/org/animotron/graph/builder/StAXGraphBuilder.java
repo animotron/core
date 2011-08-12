@@ -77,7 +77,7 @@ public class StAXGraphBuilder extends GraphBuilder {
 		
 		try {
 			endGraph();
-		} catch (EBuilderTerminated e) {
+        } catch (EBuilderTerminated e) {
 			throw new XMLStreamException(e);
 		}
 		

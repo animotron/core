@@ -22,7 +22,7 @@ package org.animotron.exception;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ENotFound extends Exception {
+public class ENotFound extends EBuilderTerminated {
 
     public ENotFound(String message) {
 		super(message);

@@ -18,18 +18,13 @@
  */
 package org.animotron.graph.builder;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import com.ctc.wstx.stax.WstxInputFactory;
+import org.animotron.exception.EBuilderTerminated;
+import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-
-import org.neo4j.graphdb.Relationship;
-
-import com.ctc.wstx.stax.WstxInputFactory;
+import java.io.*;
 
 
 
@@ -50,7 +45,7 @@ public class CommonBuilder {
 		return build(new ByteArrayInputStream(data.getBytes()));
 	}
 	
-	public static Relationship build(File path) throws IOException {
+	public static Relationship build(File path) throws IOException, EBuilderTerminated {
 		return build(new FileInputStream(path), path.getPath());
 	}
 	
@@ -58,7 +53,7 @@ public class CommonBuilder {
 		return storeAnimo(stream);
 	}
 	
-	public static Relationship build(InputStream stream, String path) throws IOException {
+	public static Relationship build(InputStream stream, String path) throws IOException, EBuilderTerminated {
 		try {
 			return 
 				isAnimo(path) ? storeAnimo(stream) : storeBinary(stream, path);
@@ -77,7 +72,7 @@ public class CommonBuilder {
 		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
 	}
 
-	private static Relationship storeBinary(InputStream stream, String path) throws IOException {
+	private static Relationship storeBinary(InputStream stream, String path) throws IOException, EBuilderTerminated {
 		return BinaryBuilder.build(stream, path);
 	}
 

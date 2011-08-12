@@ -61,8 +61,8 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 	public void endDocument() throws SAXException {
 		try {
 			endGraph();
-		} catch (EBuilderTerminated e) {
-			throw new SAXException(e);
+        } catch (EBuilderTerminated e) {
+            throw new SAXException(e);
 		}
 	}
 	

@@ -18,18 +18,6 @@
  */
 package org.animotron.graph.builder;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
-import static org.animotron.graph.AnimoGraph.getStorage;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-import java.util.UUID;
-
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.THE;
@@ -37,6 +25,14 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.*;
+import java.security.MessageDigest;
+import java.util.UUID;
+
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
+import static org.animotron.graph.AnimoGraph.getStorage;
 
 
 /**
@@ -55,7 +51,7 @@ public class BinaryBuilder {
 		TMP_STORAGE.mkdirs();
 	}
 	
-	public static Relationship build(InputStream stream, String path) throws IOException {
+	public static Relationship build(InputStream stream, String path) throws IOException, EBuilderTerminated {
 		
 		String txID = UUID.randomUUID().toString();
 		
@@ -98,17 +94,12 @@ public class BinaryBuilder {
 				throw new IOException("transaction can not be finished");
 				
 			} else {
-				try {
-					e = new Expression(
-							_(THE._, HASH_PREFIX + hash,
-								_(IS._, "file"),
-								_(HAVE._, "path", text(path))
-							)
-						);
-				} catch (EBuilderTerminated exp) {
-					throw new IOException(exp);
-				}
-				
+                e = new Expression(
+                        _(THE._, HASH_PREFIX + hash,
+                            _(IS._, "file"),
+                            _(HAVE._, "path", text(path))
+                        )
+                    );
 				if (!e.successful()) {
 					tmp.delete();
 				}

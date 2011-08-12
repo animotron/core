@@ -18,12 +18,12 @@
  */
 package org.animotron.bridge;
 
-import java.io.File;
-import java.io.IOException;
+import org.animotron.exception.EBuilderTerminated;
+import org.animotron.graph.builder.CommonBuilder;
 
 import javax.xml.stream.XMLStreamException;
-
-import org.animotron.graph.builder.CommonBuilder;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Repository loader
@@ -33,11 +33,11 @@ import org.animotron.graph.builder.CommonBuilder;
  */
 public class FSBridge {
 	
-	public static void load (String path) throws XMLStreamException, IOException {
+	public static void load (String path) throws XMLStreamException, IOException, EBuilderTerminated {
 		load(new File(path));
 	}
 	
-	public static void load (File path) throws XMLStreamException, IOException {
+	public static void load (File path) throws XMLStreamException, IOException, EBuilderTerminated {
 		
 		if (path.isDirectory()) {
 			for (File file : path.listFiles()) {

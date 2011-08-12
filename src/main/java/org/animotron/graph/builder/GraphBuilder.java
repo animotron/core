@@ -104,7 +104,7 @@ public abstract class GraphBuilder {
 		return the != null;
 	}
 	
-	final protected void endGraph() throws EBuilderTerminated, ENotFound {
+	final protected void endGraph() throws EBuilderTerminated {
 
         if (!statements.empty()) {
             end();
@@ -126,9 +126,6 @@ public abstract class GraphBuilder {
 			catcher.push();
 
         } catch (EBuilderTerminated e) {
-            finishTx(tx);
-            throw e;
-        } catch (ENotFound e) {
             finishTx(tx);
             throw e;
 		} catch (Exception e) {
@@ -249,7 +246,7 @@ public abstract class GraphBuilder {
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, int order) throws EBuilderTerminated, ENotFound {
+	private void build(Object[] item, int order) throws EBuilderTerminated {
 
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {

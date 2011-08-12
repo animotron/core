@@ -20,11 +20,7 @@ package org.animotron;
 
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.instruction.Instruction;
-import org.animotron.instruction.ml.ATTRIBUTE;
-import org.animotron.instruction.ml.CDATA;
-import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
+import org.animotron.instruction.ml.*;
 import org.animotron.operator.Operator;
 
 /**
