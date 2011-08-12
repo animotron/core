@@ -21,6 +21,7 @@ package org.animotron.graph.builder;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.ENotFound;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
@@ -76,6 +77,16 @@ public abstract class GraphBuilder {
 
 	private Transaction tx;
 
+    private boolean ignoreNotFound;
+
+    public GraphBuilder() {
+        this.ignoreNotFound = true;
+    }
+
+    public GraphBuilder(boolean ignoreNotFound) {
+        this.ignoreNotFound = ignoreNotFound;
+    }
+
 	public final Relationship getRelationship() {
 		return the;
 	}
@@ -87,13 +98,13 @@ public abstract class GraphBuilder {
 		flow = new LinkedList<Object[]>();
 		the = null;
 		tx = beginTx();
-	};
+	}
 	
 	final public boolean successful() {
 		return the != null;
 	}
 	
-	final protected void endGraph() throws EBuilderTerminated {
+	final protected void endGraph() throws EBuilderTerminated, ENotFound {
 
         if (!statements.empty()) {
             end();
@@ -113,11 +124,15 @@ public abstract class GraphBuilder {
 			the = (Relationship) flow.get(0)[5];
 			
 			catcher.push();
-			
+
+        } catch (EBuilderTerminated e) {
+            finishTx(tx);
+            throw e;
+        } catch (ENotFound e) {
+            finishTx(tx);
+            throw e;
 		} catch (Exception e) {
-
 			fail(e);
-
 		}
 			
 	}
@@ -234,7 +249,8 @@ public abstract class GraphBuilder {
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, int order) throws EBuilderTerminated {
+	private void build(Object[] item, int order) throws EBuilderTerminated, ENotFound {
+
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
 			if ((Boolean) p[8]) {
@@ -242,59 +258,57 @@ public abstract class GraphBuilder {
 				return;
 			}
 		}
-		try {
-			Relationship r;
-			Statement statement = (Statement) item[0];
-			if (statement instanceof THE) {
-				THE the = (THE) statement;
-				String hash = hash(item);
-                String name = item[2] != null ? (String) item[2] : hash;
-				r = the.get(name);
-				if (r != null) {
-					if (HASH.has(r)) {
-						String h = HASH.get(r);
-						if (h == null) {
-							catcher.creative(r);
-							HASH.set(r, hash);
-						} else if (!h.equals(hash)) {
-							catcher.renew(r);
-							HASH.set(r, hash);
-						} else {
-							item[8] = true;
-						}
-					} else {
-						catcher.creative(r);
-						HASH.set(r, hash);
-					}
-				} else {
-					r = the.create(name, hash);
-					catcher.creative(r);
-				}
-			} else {
-				Node parent = (Node) p[6];
-				if (parent == null)
-					throw new EBuilderTerminated("Internal error: parent can not be null.");
 
-				if (statement instanceof Cachable) {
-					String hash = hash(item);
-					Node node = getCache(hash);
-					if (node == null) {
-						r = build(statement, parent, item, p, order);
-						createCache(r.getEndNode(), hash);
-					} else {
-						r = parent.createRelationshipTo(node, statement.relationshipType());
-						order(r, order);
-						item[8] = true;
-					}
-				} else {
-					r = build(statement, parent, item, p, order); 
-				}
-			}
-			item[5] = r;
-			item[6] = r.getEndNode();
-		} catch (Exception e){
-			fail(e);
-		}
+        Relationship r;
+        Statement statement = (Statement) item[0];
+        if (statement instanceof THE) {
+            THE the = (THE) statement;
+            String hash = hash(item);
+            String name = item[2] != null ? (String) item[2] : hash;
+            r = the.get(name);
+            if (r != null) {
+                if (HASH.has(r)) {
+                    String h = HASH.get(r);
+                    if (h == null) {
+                        catcher.creative(r);
+                        HASH.set(r, hash);
+                    } else if (!h.equals(hash)) {
+                        catcher.renew(r);
+                        HASH.set(r, hash);
+                    } else {
+                        item[8] = true;
+                    }
+                } else {
+                    catcher.creative(r);
+                    HASH.set(r, hash);
+                }
+            } else {
+                r = the.create(name, hash);
+                catcher.creative(r);
+            }
+        } else {
+            Node parent = (Node) p[6];
+            if (parent == null)
+                throw new EBuilderTerminated("Internal error: parent can not be null.");
+
+            if (statement instanceof Cachable) {
+                String hash = hash(item);
+                Node node = getCache(hash);
+                if (node == null) {
+                    r = build(statement, parent, item, p, order);
+                    createCache(r.getEndNode(), hash);
+                } else {
+                    r = parent.createRelationshipTo(node, statement.relationshipType());
+                    order(r, order);
+                    item[8] = true;
+                }
+            } else {
+                r = build(statement, parent, item, p, order);
+            }
+        }
+        item[5] = r;
+        item[6] = r.getEndNode();
+
 	}
 	
 	private String hash (byte[] md) {
@@ -322,8 +336,8 @@ public abstract class GraphBuilder {
 		}
 	}
 	
-	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws EBuilderTerminated{
-		return statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order);
+	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws ENotFound {
+		return statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order, ignoreNotFound);
 	}
 	
 	protected void fail(Exception e){

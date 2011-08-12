@@ -18,16 +18,13 @@
  */
 package org.animotron.instruction.ml;
 
-import static org.animotron.Properties.NAME;
-import static org.animotron.Properties.NAMESPACE;
-import static org.animotron.Properties.PREFIX;
-import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.order;
-
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.Properties.*;
+import static org.animotron.graph.AnimoGraph.order;
 
 
 /**
@@ -42,7 +39,7 @@ public class ATTRIBUTE extends AbstractInstruction implements Result {
 	private ATTRIBUTE() { super("attribute", ML._); }
 	
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order, boolean ignoreNotFound) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
 		order(r, order);
 		PREFIX.set(r, prefix);

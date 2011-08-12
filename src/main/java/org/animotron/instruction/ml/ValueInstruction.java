@@ -42,7 +42,7 @@ public abstract class ValueInstruction extends AbstractInstruction implements Re
 	}
 
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order, boolean ignoreNotFound) {
 		Relationship r = parent.createRelationshipTo(value, relationshipType());
 		order(r, order);
 		return r;

@@ -42,7 +42,7 @@ public class ELEMENT extends AbstractInstruction implements Cachable, Result {
 	private ELEMENT() { super("element", ML._); }
 	
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order, boolean ignoreNotFound) {
 		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType());
 		order(r, order);

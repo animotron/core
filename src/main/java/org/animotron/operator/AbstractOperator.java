@@ -18,14 +18,7 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Properties.NAME;
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
-import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.ENotFound;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.GraphOperation;
@@ -33,6 +26,13 @@ import org.animotron.inmemory.InMemoryRelationship;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+
+import static org.animotron.Properties.NAME;
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.order;
+import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -81,11 +81,11 @@ public abstract class AbstractOperator implements Operator {
 	}
 	
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws EBuilderTerminated {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
 		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType);
 		order(r, order);
-		child.createRelationshipTo(THE._.getOrCreate(name).getEndNode(), REF);
+		child.createRelationshipTo(THE._.getOrCreate(name, ignoreNotFound).getEndNode(), REF);
 		return r;
 	}
 

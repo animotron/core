@@ -18,11 +18,12 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.order;
-
+import org.animotron.exception.ENotFound;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.Properties.NAME;
+import static org.animotron.graph.AnimoGraph.order;
 
 
 /**
@@ -37,8 +38,8 @@ public abstract class Relation extends AbstractOperator {
 	}
 
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) {
-		Node target = THE._.getOrCreate(name).getEndNode();
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
+		Node target = THE._.getOrCreate(name, ignoreNotFound).getEndNode();
 		if (!parent.equals(target)) {
 			Relationship r = parent.createRelationshipTo(target, relationshipType());
 			order(r, order);

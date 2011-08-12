@@ -18,7 +18,7 @@
  */
 package org.animotron.operator;
 
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.ENotFound;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
@@ -98,16 +98,20 @@ public class THE extends AbstractOperator implements Prepare, KernelEventHandler
 		return r;
 	}
 	
-	public Relationship getOrCreate(String name) {
+	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws ENotFound {
 		Relationship r = get(name);
 		if (r == null) {
-			r = create(name);
+            if (ignoreNotFound) {
+			    r = create(name);
+            } else {
+                throw new ENotFound("Internal error: \"the:" + name + "\" not found");
+            }
 		}
 		return r;
 	}
 	
 	@Override
-	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order) throws EBuilderTerminated {
+	public Relationship build(Node parent, String prefix, String ns, String name, Node value, int order, boolean ignoreNotFound) {
 		return null;
 	}
 	
