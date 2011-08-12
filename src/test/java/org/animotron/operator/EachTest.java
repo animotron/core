@@ -64,4 +64,26 @@ public class EachTest extends ATest {
 
     }
 
+    @Test
+    public void eachTest() throws EBuilderTerminated, IOException, InterruptedException {
+
+        new Expression(
+            _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))
+        );
+
+        new Expression(
+            _(THE._, "B", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("β")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
+        );
+
+        Expression s = new Expression (
+            _(THE._, "s", element("p", _(EACH._, "P", _(ALL._, "S"))))
+        );
+        assertAnimo(s, "<the:s><p><the:A><is:S/><is:P/><have:content>α</have:content></the:A></p><p><the:B><is:S/><is:P/><have:content>β</have:content></the:B></p></the:s>");
+
+    }
+
 }
