@@ -148,7 +148,7 @@ public abstract class Manipulator {
 		return in;
 	}
 	
-	protected Subscribable<PFlow> onQuestion(final Relationship op) {
+	public Subscribable<PFlow> onQuestion(final Relationship op) {
 		return new OnQuestion();
 	}
 }

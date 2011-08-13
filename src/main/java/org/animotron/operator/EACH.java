@@ -18,16 +18,81 @@
  */
 package org.animotron.operator;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
+import java.util.Iterator;
+
+import org.animotron.Executor;
+import org.animotron.Statement;
+import org.animotron.Statements;
+import org.animotron.manipulator.OnQuestion;
+import org.animotron.manipulator.PFlow;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
+import org.neo4j.graphdb.Relationship;
+
 /**
- * Operation 'AN'. Direct reference to 'the' instance.
+ * Operation 'EACH'. Run sub-sequence per element.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EACH extends AbstractOperator implements Cachable {
+public class EACH extends AbstractOperator implements Evaluable, Cachable {
 
 	public static final EACH _ = new EACH();
 
 	private EACH() { super("each", "animo/each"); }
 
+	@Override
+	public Subscribable<PFlow> onCalcQuestion() {
+		return question;
+	}
+
+	private OnQuestion question = new OnQuestion() {
+
+		@Override
+		public void onMessage(final PFlow pf) {
+			System.out.println("EACH");
+			
+			Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
+				@Override
+				public void onMessage(Relationship context) {
+					System.out.println("EACH message context "+context);
+					if (context == null) {
+						pf.sendAnswer(null);
+						return;
+					}
+				}
+
+				@Override
+				public DisposingExecutor getQueue() {
+					return Executor.getFiber();
+				}
+			};
+			
+			pf.answer.subscribe(onContext);
+			
+			int count = 0;
+
+			Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
+			while (it.hasNext()) {
+				Relationship r = it.next();
+				Statement s = Statements.relationshipType(r);
+				
+				if (s instanceof Reference || s instanceof Query) {
+					Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
+
+					PFlow nextPF = new PFlow(pf, r);
+					nextPF.question.subscribe(onQuestion);
+					
+					nextPF.question.publish(nextPF);
+					
+					count++;
+				}
+			}
+			
+			if (count == 0)
+				pf.done();
+		}
+	};
 }
