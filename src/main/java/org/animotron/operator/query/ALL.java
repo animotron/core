@@ -22,12 +22,8 @@ import java.util.List;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.Utils;
-import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -62,13 +58,13 @@ public class ALL extends AbstractQuery {
 
 			List<Node> uses = getUSEs(node, pf.getStartOP());
 
-			if (filtering(pf, node))
+			if (filtering(pf, node, uses))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
 
 	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
 	            System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
 	            Node res = tdR.getStartNode();
-	            if (filtering(pf, res)) {
+	            if (filtering(pf, res, uses)) {
 	                pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
 	            }
 	        }

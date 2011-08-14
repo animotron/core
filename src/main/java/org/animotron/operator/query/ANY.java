@@ -57,13 +57,13 @@ public class ANY extends AbstractQuery {
 
 			System.out.println(" node = "+node);
 
-			if (underUSE && filtering(pf, node)) {
+			if (underUSE && filtering(pf, node, uses)) {
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
 			} else {
 	            for (Relationship tdR : td_IS.traverse(node).relationships()) {
                     System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
                     Node res = tdR.getStartNode();
-                    if (filtering(pf, res)) {
+                    if (filtering(pf, res, uses)) {
 
                         pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
                         break;

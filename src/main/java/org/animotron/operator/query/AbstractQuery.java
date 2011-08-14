@@ -60,7 +60,14 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
             relationships(IS._.relationshipType(), INCOMING ).
             evaluator(Evaluators.excludeStartPosition());
 
-    protected boolean filtering(PFlow pf, Node node) {
+    protected boolean filtering(PFlow pf, Node node, List<Node> uses) {
+    	if (uses != null) {
+    		//check intersection
+    		TraversalDescription td = getIntersectionChecktravers(new FastList<Node>(uses));
+    		if (!td.traverse(node).iterator().hasNext())
+    			return false;
+    	}
+    	
         for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
             Statement st = Statements.relationshipType(r);
             if (st instanceof Predicate) {
@@ -107,6 +114,35 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 		return THE._.get(Properties.NAME.get(node));
 	}
 	
+	protected TraversalDescription getIntersectionChecktravers(final List<Node> mustHave) {
+
+		return Traversal.description().depthFirst().
+		uniqueness(Uniqueness.RELATIONSHIP_PATH).
+		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+			@Override
+			public Evaluation evaluate(Path path) {
+				if (path.length() > 0) {
+					
+					System.out.println(path);
+					
+					Relationship r = path.lastRelationship();
+					if (!r.getType().name().equals(IS._.rType))
+						return EXCLUDE_AND_PRUNE;
+						
+					Node sNode = r.getEndNode();
+					if (!sNode.equals(path.endNode()))
+						return EXCLUDE_AND_PRUNE;
+					
+					mustHave.remove(sNode);
+					if (mustHave.size() == 0)
+						return INCLUDE_AND_PRUNE;
+
+				}
+				return EXCLUDE_AND_CONTINUE;
+			}
+		});
+	};
+
 	protected TraversalDescription getUSEtravers(final Relationship end) {
 
 		return Traversal.description().depthFirst().
