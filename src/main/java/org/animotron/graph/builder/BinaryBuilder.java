@@ -18,9 +18,10 @@
  */
 package org.animotron.graph.builder;
 
-import org.animotron.Expression;
+import org.animotron.AbstractExpression;
+import org.animotron.Properties;
 import org.animotron.exception.EBuilderTerminated;
-import org.animotron.operator.THE;
+import org.animotron.graph.GraphOperation;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.animotron.utils.MessageDigester;
@@ -30,8 +31,6 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.util.UUID;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
 
@@ -40,9 +39,8 @@ import static org.animotron.graph.AnimoGraph.getStorage;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinaryBuilder {
+public class BinaryBuilder extends AbstractExpression {
 	
-	private final static String HASH_PREFIX = "file-";
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
 	
@@ -50,68 +48,79 @@ public class BinaryBuilder {
 		BIN_STORAGE.mkdirs();
 		TMP_STORAGE.mkdirs();
 	}
-	
-	public static Relationship build(InputStream stream, String path) throws IOException, EBuilderTerminated {
-		
-		String txID = UUID.randomUUID().toString();
-		
-		File tmp = new File(TMP_STORAGE, txID);
-		tmp.createNewFile();
-		OutputStream out = new FileOutputStream(tmp);
-		
-		byte buf[] = new byte[1024 * 4];
-		int len;
-		MessageDigest md = MessageDigester.md();
-		
-		while((len=stream.read(buf))>0) {
-			out.write(buf,0,len);
-			md.update(buf,0,len);
-		}
-		
-		out.close();
-		stream.close();
-		
-		String hash = MessageDigester.byteArrayToHex(md.digest());
-		
-		File l1  = new File(BIN_STORAGE, hash.substring(0, 2));  
-		File l2  = new File(l1, hash.substring(0, 4));  
-		File bin = new File(l2,  hash);
-		
-		if (bin.exists()) {
-			
-			tmp.delete();
-			System.out.println("File \"" + bin.getPath() + "\" already stored");
-			
-			return THE._.get(hash);
-			
-		} else {
-			
-			Expression e = null;
-			l2.mkdirs();
-			
-			if (!tmp.renameTo(bin)) {
-				tmp.delete();
-				throw new IOException("transaction can not be finished");
-				
-			} else {
-                e = new Expression(
-                        _(THE._, HASH_PREFIX + hash,
-                            _(IS._, "file"),
-                            _(HAVE._, "path", text(path))
-                        )
-                    );
-				if (!e.successful()) {
-					tmp.delete();
-				}
-				
-			}
-			
-			System.out.println("Store the file \"" + bin.getPath() + "\"");
-			
-			return e;
-			
-		}
-			
-	}
 
+    public BinaryBuilder (InputStream stream, String path) throws IOException, EBuilderTerminated {
+
+        String txID = UUID.randomUUID().toString();
+
+        File tmp = new File(TMP_STORAGE, txID);
+        tmp.createNewFile();
+        OutputStream out = new FileOutputStream(tmp);
+
+        byte buf[] = new byte[1024 * 4];
+        int len;
+        MessageDigest md = MessageDigester.md();
+
+        while((len=stream.read(buf))>0) {
+            out.write(buf,0,len);
+            md.update(buf,0,len);
+        }
+
+        out.close();
+        stream.close();
+
+        final String hash = MessageDigester.byteArrayToHex(md.digest());
+
+        File l1  = new File(BIN_STORAGE, hash.substring(0, 2));
+        File l2  = new File(l1, hash.substring(0, 4));
+        File bin = new File(l2,  hash);
+
+        if (bin.exists()) {
+
+            tmp.delete();
+            System.out.println("File \"" + bin.getPath() + "\" already stored");
+
+        } else {
+
+            l2.mkdirs();
+
+            if (!tmp.renameTo(bin)) {
+                tmp.delete();
+                throw new IOException("transaction can not be finished");
+
+            } else {
+                startGraph();
+                    start(IS._, "file");
+                    end();
+                    start(HAVE._, "path");
+                        start(path);
+                        end();
+                    end();
+                endGraph(new SetBinHash(this, hash));
+                if (!successful()) {
+                    tmp.delete();
+                }
+
+            }
+
+            System.out.println("Store the file \"" + bin.getPath() + "\"");
+
+        }
+
+    }
+
+    private class SetBinHash implements GraphOperation<Void> {
+        private Relationship r;
+        private String hash;
+        public SetBinHash(Relationship r, String hash){
+            this.hash = hash;
+            this.r = r;
+        }
+        @Override
+        public Void execute() {
+            Properties.BIN.set(r, hash);
+            return null;
+        }
+    }
+	
 }

@@ -22,12 +22,12 @@ import org.neo4j.graphdb.PropertyContainer;
 
 
 /**
- * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
+ * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public enum Properties  {
 	
-	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT, RID;
+	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT, RID, BIN;
 	
 	public String get(PropertyContainer container) {
 		return container.getProperty(name()).toString();

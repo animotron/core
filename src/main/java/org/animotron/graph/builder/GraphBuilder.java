@@ -22,6 +22,7 @@ import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.exception.ENotFound;
+import org.animotron.graph.GraphOperation;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ELEMENT;
 import org.animotron.instruction.ml.TEXT;
@@ -104,7 +105,11 @@ public abstract class GraphBuilder {
 		return the != null;
 	}
 	
-	final protected void endGraph() throws EBuilderTerminated {
+    final protected void endGraph() throws EBuilderTerminated {
+        endGraph(null);
+    }
+
+	final protected void endGraph(GraphOperation o) throws EBuilderTerminated {
 
         if (!statements.empty()) {
             end();
@@ -118,15 +123,17 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 
+            the = (Relationship) flow.get(0)[5];
+
+            if (o != null) o.execute();
+
 			tx.success();
 			finishTx(tx);
-			
-			the = (Relationship) flow.get(0)[5];
 			
 			catcher.push();
 
         } catch (EBuilderTerminated e) {
-            finishTx(tx);
+            fail(e);
             throw e;
 		} catch (Exception e) {
 			fail(e);
@@ -340,6 +347,7 @@ public abstract class GraphBuilder {
 	protected void fail(Exception e){
 		e.printStackTrace(System.out);
 		finishTx(tx);
+        the = null;
 	}
 	
 }
