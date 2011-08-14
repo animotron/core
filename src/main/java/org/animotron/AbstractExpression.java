@@ -34,8 +34,12 @@ public abstract class AbstractExpression extends GraphBuilder implements Relatio
     public AbstractExpression (boolean ignoreNotFound) {
         super(ignoreNotFound);
     }
-	
-	@Override
+
+    public AbstractExpression() {
+        super();
+    }
+
+    @Override
 	public GraphDatabaseService getGraphDatabase() {
 		return getRelationship().getGraphDatabase();
 	}
