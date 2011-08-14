@@ -18,6 +18,10 @@
  */
 package org.animotron.operator.query;
 
+import java.util.List;
+
+import javolution.util.FastList;
+
 import org.animotron.Properties;
 import org.animotron.Statement;
 import org.animotron.Statements;
@@ -71,6 +75,32 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
             }
         }
         return true;
+    }
+    
+    protected List<Node> getUSEs(Node start, Relationship end) {
+
+    	List<Node> uses = null;
+    	
+    	TraversalDescription td = getUSEtravers(end);
+
+		for (Path path : td.traverse(start)) {
+			System.out.println(" path = "+path);
+			
+			for (Relationship p : path.relationships()) {
+				if (p.getType().name().equals(USE._.rType)) {
+					
+					if (uses == null) uses = new FastList<Node>();
+					
+					uses.add( p.getEndNode() );
+					break;
+				
+				} else if (!(p.getType().name().equals(IS._.rType))) {
+					break;
+				}
+			}
+		}
+		
+		return uses;
     }
 
 	protected Relationship getThe(Node node) {

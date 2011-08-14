@@ -18,6 +18,8 @@
  */
 package org.animotron.operator.query;
 
+import java.util.List;
+
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Utils;
@@ -56,17 +58,9 @@ public class ALL extends AbstractQuery {
 
             Node node = ref.getEndNode();
 
-			TraversalDescription td = getUSEtravers(pf.getStartOP());
-			
 			System.out.println("ALL **************************");
-			for (Path path : td.traverse(Utils.getByREF(pf.getOP().getEndNode()))) {
-				System.out.println(" path = "+path);
-				for (Relationship p : path.relationships()) {
-					if (p.getType().name().equals(USE._.rType)) {
-						node = p.getEndNode();
-					}
-				}
-			}
+
+			List<Node> uses = getUSEs(node, pf.getStartOP());
 
 			if (filtering(pf, node))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );

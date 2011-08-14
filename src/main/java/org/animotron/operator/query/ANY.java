@@ -18,23 +18,18 @@
  */
 package org.animotron.operator.query;
 
+import java.util.List;
+
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Utils;
-import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-
-import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'ANY'.
  * 
- * Return 'all' or first 'perfect' USE
+ * Return amy first 'perfect' USE
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -52,37 +47,14 @@ public class ANY extends AbstractQuery {
 	private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-            final Node n = pf.getOP().getEndNode();
-            Relationship ref = n.getSingleRelationship( REF, OUTGOING );
-
-            Node node = ref.getEndNode();
-
-			TraversalDescription td = getUSEtravers(pf.getStartOP());
-			
-			boolean underUSE = false;
-			
 			System.out.println("ANY **************************");
-			Node sNode = Utils.getByREF(pf.getOP().getEndNode());
-			Node lastNode = null;
-			for (Path path : td.traverse(sNode)) {
-				System.out.println(" path = "+path);
-				
-				lastNode = sNode;
-				for (Relationship p : path.relationships()) {
-					if (p.getType().name().equals(USE._.rType)) {
-						node = p.getEndNode();
-						underUSE = true;
-						break;
-					} else if (!(p.getType().name().equals(IS._.rType))) {
-						break;
-					}
-					
-					if (p.getStartNode() != lastNode)
-						break;
-					
-					lastNode = p.getEndNode();
-				}
-			}
+            
+			final Node n = pf.getOP().getEndNode();
+			Node node = Utils.getByREF(n);
+
+			List<Node> uses = getUSEs(node, pf.getStartOP());
+			boolean underUSE = (uses != null);
+
 			System.out.println(" node = "+node);
 
 			if (underUSE && filtering(pf, node)) {
