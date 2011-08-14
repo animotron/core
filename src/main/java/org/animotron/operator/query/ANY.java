@@ -21,6 +21,7 @@ package org.animotron.operator.query;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Utils;
+import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -61,14 +62,25 @@ public class ANY extends AbstractQuery {
 			boolean underUSE = false;
 			
 			System.out.println("ANY **************************");
-			for (Path path : td.traverse(Utils.getByREF(pf.getOP().getEndNode()))) {
+			Node sNode = Utils.getByREF(pf.getOP().getEndNode());
+			Node lastNode = null;
+			for (Path path : td.traverse(sNode)) {
 				System.out.println(" path = "+path);
+				
+				lastNode = sNode;
 				for (Relationship p : path.relationships()) {
 					if (p.getType().name().equals(USE._.rType)) {
 						node = p.getEndNode();
 						underUSE = true;
 						break;
+					} else if (!(p.getType().name().equals(IS._.rType))) {
+						break;
 					}
+					
+					if (p.getStartNode() != lastNode)
+						break;
+					
+					lastNode = p.getEndNode();
 				}
 			}
 			System.out.println(" node = "+node);
