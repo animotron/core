@@ -30,6 +30,10 @@ import org.neo4j.graphdb.RelationshipType;
  *
  */
 public abstract class AbstractExpression extends GraphBuilder implements Relationship {
+
+    public AbstractExpression (boolean ignoreNotFound) {
+        super(ignoreNotFound);
+    }
 	
 	@Override
 	public GraphDatabaseService getGraphDatabase() {
