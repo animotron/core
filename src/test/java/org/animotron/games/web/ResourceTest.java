@@ -41,14 +41,14 @@ import static org.animotron.Expression.text;
  */
 public class ResourceTest extends ATest {
 
-	@Test
-	public void test() throws EBuilderTerminated, IOException, InterruptedException {
+    @Test
+    public void test() throws EBuilderTerminated, IOException, InterruptedException {
 
-    	new Expression(
-			_(THE._, "service",
-				_(IS._, "resource")
-			)
-		);
+        new Expression(
+            _(THE._, "service",
+                _(IS._, "resource")
+            )
+        );
 
         new Expression(
             _(THE._, "root-service",
@@ -82,6 +82,43 @@ public class ResourceTest extends ATest {
 
         assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service></the:rest></the:s>");
 
-	}
+    }
+
+    @Test
+    public void test1() throws EBuilderTerminated, IOException, InterruptedException {
+
+        new Expression(
+            _(THE._, "root-service",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "not-found-service",
+                _(IS._, "service"),
+                _(IS._, "not-found"),
+                _(HAVE._, "title", text("root"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "rest",
+                _(ANY._, "service")
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(AN._, "rest",
+                    _(USE._, "root")
+                )
+            )
+        );
+
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service></the:rest></the:s>");
+
+    }
 
 }
