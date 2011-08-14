@@ -18,12 +18,12 @@
  */
 package org.animotron.operator.query;
 
-import java.util.List;
-
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import java.util.List;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -57,10 +57,6 @@ public class ALL extends AbstractQuery {
 			System.out.println("ALL **************************");
 
 			List<Node> uses = getUSEs(node, pf.getStartOP());
-			
-			//workaround
-			if (uses != null & uses.size() == 1)
-				node = uses.get(0);
 
 			if (filtering(pf, node, uses))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );

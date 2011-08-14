@@ -18,13 +18,13 @@
  */
 package org.animotron.operator.query;
 
-import java.util.List;
-
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import java.util.List;
 
 /**
  * Query operator 'ANY'.
@@ -54,10 +54,6 @@ public class ANY extends AbstractQuery {
 
 			List<Node> uses = getUSEs(node, pf.getStartOP());
 			boolean underUSE = (uses != null);
-
-			//workaround
-			if (uses != null & uses.size() == 1)
-				node = uses.get(0);
 
 			System.out.println(" node = "+node);
 
