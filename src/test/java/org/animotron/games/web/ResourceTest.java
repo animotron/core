@@ -23,6 +23,7 @@ import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
+import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
@@ -62,7 +63,7 @@ public class ResourceTest extends ATest {
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
-                _(HAVE._, "title", text("root"))
+                _(HAVE._, "title", text("404"))
             )
         );
 
@@ -85,6 +86,107 @@ public class ResourceTest extends ATest {
     }
 
     @Test
+    public void test_() throws EBuilderTerminated, IOException, InterruptedException {
+
+        new Expression(
+            _(THE._, "service",
+                _(IS._, "resource")
+            )
+        );
+
+        new Expression(
+            _(THE._, "root-service",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "root-service1",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root1"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "not-found-service",
+                _(IS._, "service"),
+                _(IS._, "not-found"),
+                _(HAVE._, "title", text("404"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "rest",
+                _(ALL._, "resource")
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(AN._, "rest",
+                    _(USE._, "root")
+                )
+            )
+        );
+
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:service/><is:root/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
+
+    }
+
+    @Test
+    public void test__() throws EBuilderTerminated, IOException, InterruptedException {
+
+        new Expression(
+            _(THE._, "service",
+                _(IS._, "resource")
+            )
+        );
+
+        new Expression(
+            _(THE._, "root-service",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "root-service1",
+                _(IS._, "root-service"),
+                _(HAVE._, "title", text("root1"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "not-found-service",
+                _(IS._, "service"),
+                _(IS._, "not-found"),
+                _(HAVE._, "title", text("404"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "rest",
+                _(ALL._, "resource")
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(AN._, "rest",
+                    _(USE._, "root")
+                )
+            )
+        );
+
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:root-service/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
+
+    }
+
+    @Test
     public void test1() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
@@ -99,7 +201,7 @@ public class ResourceTest extends ATest {
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
-                _(HAVE._, "title", text("root"))
+                _(HAVE._, "title", text("404"))
             )
         );
 
@@ -121,4 +223,95 @@ public class ResourceTest extends ATest {
 
     }
 
+    @Test
+    public void test_1() throws EBuilderTerminated, IOException, InterruptedException {
+
+        new Expression(
+            _(THE._, "root-service",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "root-service1",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root1"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "not-found-service",
+                _(IS._, "service"),
+                _(IS._, "not-found"),
+                _(HAVE._, "title", text("404"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "rest",
+                _(ANY._, "service")
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(ALL._, "rest",
+                    _(USE._, "root")
+                )
+            )
+        );
+
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:service/><is:root/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
+
+    }
+
+    @Test
+    public void test__1() throws EBuilderTerminated, IOException, InterruptedException {
+
+        new Expression(
+            _(THE._, "root-service",
+                _(IS._, "service"),
+                _(IS._, "root"),
+                _(HAVE._, "title", text("root"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "root-service1",
+                _(IS._, "root-service"),
+                _(HAVE._, "title", text("root1"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "not-found-service",
+                _(IS._, "service"),
+                _(IS._, "not-found"),
+                _(HAVE._, "title", text("404"))
+            )
+        );
+
+        new Expression(
+            _(THE._, "rest",
+                _(ANY._, "service")
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(ALL._, "rest",
+                    _(USE._, "root")
+                )
+            )
+        );
+
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:root-service/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
+
+    }
+
 }
+
+
