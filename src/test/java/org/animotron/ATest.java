@@ -19,10 +19,12 @@
 package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import junit.framework.Assert;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.handler.StAXGraphHandler;
+import org.animotron.graph.serializer.BinarySerializer;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.graph.traverser.GraphAnimoResultTraverser;
 import org.animotron.graph.traverser.GraphResultTraverser;
@@ -45,6 +47,7 @@ import java.util.Map.Entry;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -194,14 +197,26 @@ public abstract class ATest {
         System.out.println();
     }
 
-	protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
+    protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
         System.out.println("String result serializer...");
         Assert.assertEquals("", expected, StringResultSerializer.serialize(op));
 
         System.out.println();
-	}
+    }
+
+    protected void assertBinary(Relationship op, String expected) throws IOException, InterruptedException {
+        assertNotNull(op);
+        assertTrue(Properties.BIN.has(op));
+        System.out.println("Binary serializer...");
+        ByteOutputStream out = new ByteOutputStream();
+        BinarySerializer.serialize(op, out);
+        String bin = out.toString();
+        Assert.assertEquals("", expected, bin);
+        System.out.println(bin);
+        System.out.println();
+    }
 
 	//database cleaning (thanks to mh)
     public Map<String, Object> cleanDb() {

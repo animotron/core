@@ -29,8 +29,6 @@ import javax.xml.stream.XMLStreamException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-import static org.junit.Assert.assertNotNull;
-
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -58,20 +56,13 @@ public class StoreBinaryTest extends ATest {
 	private static final String PATH = "test.txt";
 	
 	@Test
-	public void storeAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated {
+	public void storeAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated, InterruptedException {
         System.out.println("Test binary stream ...");
         
     	Relationship r = CommonBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
     	
-    	assertNotNull(r);
-    	
-//	   		PipedInputStream in = new PipedInputStream();
-//			PipedOutputStream out = new PipedOutputStream(in);
-
         GraphSerializer.serialize(r, System.out);
-
-
-//	        assertEquals(in, TXT);
+        assertBinary(r, TXT);
         
         System.out.println("done.");
 	}

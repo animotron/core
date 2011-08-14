@@ -49,6 +49,18 @@ public class BinaryBuilder extends AbstractExpression {
 		TMP_STORAGE.mkdirs();
 	}
 
+    private static File getFolder(String hash) {
+        return new File(new File(BIN_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));
+    }
+
+    private static File getFile(File folder, String hash){
+        return new File(folder,  hash);
+    }
+
+    public static File getFile(String hash){
+        return new File(getFolder(hash),  hash);
+    }
+
     public BinaryBuilder (InputStream stream, String path) throws IOException, EBuilderTerminated {
 
         String txID = UUID.randomUUID().toString();
@@ -69,11 +81,9 @@ public class BinaryBuilder extends AbstractExpression {
         out.close();
         stream.close();
 
-        final String hash = MessageDigester.byteArrayToHex(md.digest());
-
-        File l1  = new File(BIN_STORAGE, hash.substring(0, 2));
-        File l2  = new File(l1, hash.substring(0, 4));
-        File bin = new File(l2,  hash);
+        String hash = MessageDigester.byteArrayToHex(md.digest());
+        File dir = getFolder(hash);
+        File bin = getFile(dir, hash);
 
         if (bin.exists()) {
 
@@ -82,7 +92,7 @@ public class BinaryBuilder extends AbstractExpression {
 
         } else {
 
-            l2.mkdirs();
+            dir.mkdirs();
 
             if (!tmp.renameTo(bin)) {
                 tmp.delete();
