@@ -19,7 +19,6 @@
 package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import junit.framework.Assert;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.CommonBuilder;
@@ -210,7 +209,7 @@ public abstract class ATest {
         assertNotNull(op);
         assertTrue(Properties.BIN.has(op));
         System.out.println("Binary serializer...");
-        ByteOutputStream out = new ByteOutputStream();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
         BinarySerializer.serialize(op, out);
         String bin = out.toString();
         Assert.assertEquals("", expected, bin);
