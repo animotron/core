@@ -55,6 +55,10 @@ public class ANY extends AbstractQuery {
 			List<Node> uses = getUSEs(node, pf.getStartOP());
 			boolean underUSE = (uses != null);
 
+			//workaround
+			if (uses != null & uses.size() == 1)
+				node = uses.get(0);
+
 			System.out.println(" node = "+node);
 
 			if (underUSE && filtering(pf, node, uses)) {
