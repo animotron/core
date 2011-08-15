@@ -207,7 +207,6 @@ public abstract class ATest {
 
     protected void assertBinary(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
-        assertTrue(Properties.BIN.has(op));
         System.out.println("Binary serializer...");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         BinarySerializer.serialize(op, out);

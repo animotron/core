@@ -18,11 +18,11 @@
  */
 package org.animotron.graph.serializer;
 
-import org.animotron.Properties;
-import org.animotron.graph.builder.BinaryBuilder;
+import org.animotron.graph.handler.BinaryGraphHandler;
+import org.animotron.graph.traverser.GraphAnimoResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
-import java.io.*;
+import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -31,18 +31,13 @@ import java.io.*;
  */
 public class BinarySerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws IOException {
+    public static void serialize(Relationship r, OutputStream out) {
+        serialize(r, r, out);
+    }
 
-        File bin = BinaryBuilder.getFile(Properties.BIN.get(r));
-        InputStream in = new FileInputStream(bin);
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) {
+        GraphAnimoResultTraverser._.traverse(new BinaryGraphHandler(out), start_op, r);
+    }
 
-        byte buf[] = new byte[1024 * 4];
-        int len;
-
-        while((len=in.read(buf))>0) {
-            out.write(buf, 0, len);
-        }
-
-   }
 
 }

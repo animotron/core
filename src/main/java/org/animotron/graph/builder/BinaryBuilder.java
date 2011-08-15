@@ -128,7 +128,7 @@ public class BinaryBuilder extends AbstractExpression {
         }
         @Override
         public Void execute() {
-            Properties.BIN.set(r, hash);
+            Properties.BIN.set(r.getEndNode(), hash);
             return null;
         }
     }
