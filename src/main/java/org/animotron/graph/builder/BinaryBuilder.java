@@ -109,17 +109,16 @@ public class BinaryBuilder extends AbstractExpression {
 
                     String[] parts = path.split(File.separator);
                     Expression prev = null;
-
                     for (String part : parts) {
                         if (!part.isEmpty()) {
                             if (prev == null) {
                                 prev = new Expression(
-                                    _(IS._, "folder")
+                                    _(IS._, part)
                                 );
                             } else {
                                 prev = new Expression(
-                                    _(IS._, "folder"),
-                                    _(IS._, THE._.name(prev))
+                                    _(IS._, THE._.name(prev)),
+                                    _(IS._, part)
                                 );
                             }
                         }
