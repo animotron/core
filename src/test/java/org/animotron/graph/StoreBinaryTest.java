@@ -31,6 +31,7 @@ import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 
 import static org.animotron.Expression._;
@@ -59,8 +60,9 @@ public class StoreBinaryTest extends ATest {
 		" eu nisl luctus feugiat a eget enim. Nulla ut dui purus," +
 		" sit amet cursus est. Suspendisse potenti.";
 
-	private static final String PATH = "test.txt";
-	
+    private static final String s = File.separator;
+    private static final String PATH = "/content/article/test.txt";
+
 	@Test
 	public void storeAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated, InterruptedException {
         System.out.println("Test binary stream ...");
@@ -77,6 +79,21 @@ public class StoreBinaryTest extends ATest {
           _(ANY._, "file")
         );
         assertBinary(f, TXT);
+
+        Expression t = new Expression(
+          _(ANY._, "test.txt")
+        );
+        assertBinary(t, TXT);
+
+        Expression a = new Expression(
+          _(ANY._, "article")
+        );
+        assertBinary(a, TXT);
+
+        Expression c = new Expression(
+          _(ANY._, "content")
+        );
+        assertBinary(c, TXT);
 
         System.out.println("done.");
 	}

@@ -19,10 +19,11 @@
 package org.animotron.graph.builder;
 
 import org.animotron.AbstractExpression;
+import org.animotron.Expression;
 import org.animotron.Properties;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.GraphOperation;
-import org.animotron.operator.relation.HAVE;
+import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
@@ -31,6 +32,7 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.util.UUID;
 
+import static org.animotron.Expression._;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
 
@@ -99,14 +101,37 @@ public class BinaryBuilder extends AbstractExpression {
                 throw new IOException("transaction can not be finished");
 
             } else {
+
                 startGraph();
+
                     start(IS._, "file");
                     end();
-                    start(HAVE._, "path");
-                        start(path);
+
+                    String[] parts = path.split(File.separator);
+                    Expression prev = null;
+
+                    for (String part : parts) {
+                        if (!part.isEmpty()) {
+                            if (prev == null) {
+                                prev = new Expression(
+                                    _(IS._, "folder")
+                                );
+                            } else {
+                                prev = new Expression(
+                                    _(IS._, "folder"),
+                                    _(IS._, THE._.name(prev))
+                                );
+                            }
+                        }
+                    }
+
+                    if (prev != null) {
+                        start(IS._, THE._.name(prev));
                         end();
-                    end();
+                    }
+
                 endGraph(new SetBinHash(this, hash));
+
                 if (!successful()) {
                     tmp.delete();
                 }
