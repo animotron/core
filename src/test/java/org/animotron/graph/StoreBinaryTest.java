@@ -25,6 +25,7 @@ import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
+import org.animotron.operator.query.ANY;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -70,9 +71,13 @@ public class StoreBinaryTest extends ATest {
         Expression s = new Expression(
           _(AN._, THE._.name(r))
         );
-
         assertBinary(s, TXT);
         
+        Expression f = new Expression(
+          _(ANY._, "file")
+        );
+        assertBinary(f, TXT);
+
         System.out.println("done.");
 	}
 }
