@@ -264,9 +264,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service></the:rest></the:s>");
-        //assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:service/><is:root/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
-
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:service/><is:root/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
     }
 
     @Test
@@ -309,8 +307,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service></the:rest></the:s>");
-        //assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:root-service/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
+        assertAnimo(s,  "<the:s><the:rest><the:root-service><is:service/><is:root/><have:title>root</have:title></the:root-service><the:root-service1><is:root-service/><have:title>root1</have:title></the:root-service1></the:rest></the:s>");
 
     }
 
