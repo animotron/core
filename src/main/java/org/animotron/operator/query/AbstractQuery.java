@@ -84,30 +84,42 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
         return true;
     }
     
-    protected List<Node> getUSEs(Node start, Relationship end) {
+    protected List<Node>[] getUSEs(Node start, Relationship end) {
 
     	List<Node> uses = null;
+    	List<Node> directed = null;
     	
     	TraversalDescription td = getUSEtravers(end);
 
 		for (Path path : td.traverse(start)) {
 			System.out.println(" path = "+path);
 			
+			Node lastNode = path.startNode();
+			boolean isDirected = true;
 			for (Relationship p : path.relationships()) {
 				if (p.getType().name().equals(USE._.rType)) {
 					
-					if (uses == null) uses = new FastList<Node>();
-					
-					uses.add( p.getEndNode() );
+					if (isDirected) {
+						if (directed == null) directed = new FastList<Node>();
+						directed.add( p.getEndNode() );
+					} else {
+						if (uses == null) uses = new FastList<Node>();
+						uses.add( p.getEndNode() );
+					}
 					break;
 				
 				} else if (!(p.getType().name().equals(IS._.rType))) {
 					break;
 				}
+				
+				if (isDirected && !lastNode.equals(p.getEndNode()))
+					isDirected = false;
+				
+				lastNode = p.getStartNode();
 			}
 		}
 		
-		return uses;
+		return new List[] {directed, uses};
     }
 
 	protected Relationship getThe(Node node) {

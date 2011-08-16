@@ -52,8 +52,15 @@ public class ANY extends AbstractQuery {
 			final Node n = pf.getOP().getEndNode();
 			Node node = Utils.getByREF(n);
 
-			List<Node> uses = getUSEs(node, pf.getStartOP());
-			boolean underUSE = (uses != null);
+			List<Node>[] lists = getUSEs(node, pf.getStartOP());
+			List<Node> uses = lists[1];
+			List<Node> directed = lists[0];
+			
+			boolean underUSE = false;
+			if (directed.size() == 1) { 
+				underUSE = true;
+				node = directed.get(0);
+			}
 
 			System.out.println(" node = "+node);
 

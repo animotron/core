@@ -56,7 +56,7 @@ public class ALL extends AbstractQuery {
 
 			System.out.println("ALL **************************");
 
-			List<Node> uses = getUSEs(node, pf.getStartOP());
+			List<Node> uses = getUSEs(node, pf.getStartOP())[1];
 
 			if (filtering(pf, node, uses))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
