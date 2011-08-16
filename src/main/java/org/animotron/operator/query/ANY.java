@@ -57,7 +57,7 @@ public class ANY extends AbstractQuery {
 			List<Node> directed = lists[0];
 			
 			boolean underUSE = false;
-			if (directed.size() == 1) { 
+			if (directed != null && directed.size() == 1) { 
 				underUSE = true;
 				node = directed.get(0);
 			}
