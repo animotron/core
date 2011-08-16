@@ -18,7 +18,11 @@
  */
 package org.animotron.operator;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.animotron.Executor;
+import org.animotron.Expression;
+import org.animotron.exception.EBuilderTerminated;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
@@ -46,16 +50,32 @@ public class COUNT extends AbstractOperator implements Evaluable, Cachable {
 
 		@Override
 		public void onMessage(final PFlow pf) {
-			System.out.println("EACH");
+			//System.out.println("COUNT");
 			
 			Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
+				
+				AtomicInteger value = new AtomicInteger(0);
+				
 				@Override
 				public void onMessage(Relationship context) {
-					System.out.println("COUNT message context "+context);
 					if (context == null) {
-						pf.sendAnswer(null);
+						//XXX: optimize
+						Expression r;
+						try {
+							r = new Expression(Expression._(Q._, "N"+value.get()));
+						} catch (EBuilderTerminated e) {
+							//what to do?
+							e.printStackTrace();
+							
+							pf.done();
+							return;
+						}
+						pf.sendAnswer(r);
+						pf.done();
 						return;
 					}
+					
+			        value.getAndIncrement();
 				}
 
 				@Override
