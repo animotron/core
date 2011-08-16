@@ -24,7 +24,9 @@ package org.animotron.exception;
  */
 public class ENotFound extends EBuilderTerminated {
 
-    public ENotFound(String message) {
+	private static final long serialVersionUID = 4673983170231016824L;
+
+	public ENotFound(String message) {
 		super(message);
 	}
 

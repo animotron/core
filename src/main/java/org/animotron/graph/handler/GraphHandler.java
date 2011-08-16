@@ -18,6 +18,8 @@
  */
 package org.animotron.graph.handler;
 
+import java.io.IOException;
+
 import org.animotron.Statement;
 import org.neo4j.graphdb.Relationship;
 
@@ -30,11 +32,11 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface GraphHandler {
 	
-	public abstract void start(Statement statement, Relationship r) throws InterruptedException;
+	public abstract void start(Statement statement, Relationship r) throws IOException;
 
-	public abstract void end(Statement statement, Relationship r) throws InterruptedException;
+	public abstract void end(Statement statement, Relationship r) throws IOException;
 
-	void startGraph() throws InterruptedException;
+	void startGraph() throws IOException;
 
-	void endGraph() throws InterruptedException;
+	void endGraph() throws IOException;
 }

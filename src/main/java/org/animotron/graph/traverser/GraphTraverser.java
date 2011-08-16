@@ -18,6 +18,8 @@
  */
 package org.animotron.graph.traverser;
 
+import java.io.IOException;
+
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.handler.GraphHandler;
@@ -38,13 +40,13 @@ public class GraphTraverser {
 
     protected GraphTraverser() {}
 	
-	public void traverse(GraphHandler handler, Relationship r) throws InterruptedException {
+	public void traverse(GraphHandler handler, Relationship r) throws IOException {
 		handler.startGraph();
 		build(handler, r);
 		handler.endGraph();
 	}
 	
-	protected void build(GraphHandler handler, Relationship r) throws InterruptedException {
+	protected void build(GraphHandler handler, Relationship r) throws IOException {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		

@@ -41,20 +41,16 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r) throws InterruptedException {
+    public void start(Statement statement, Relationship r) throws IOException {
         Node n = r.getEndNode();
         if (BIN.has(n)) {
-            try {
-                File bin = BinaryBuilder.getFile(Properties.BIN.get(n));
-                InputStream in = null;
-                    in = new FileInputStream(bin);
-                byte buf[] = new byte[1024 * 4];
-                int len;
-                while((len=in.read(buf))>0) {
-                    out.write(buf, 0, len);
-                }
-            } catch (IOException e) {
-                throw new InterruptedException(e.getMessage());
+            File bin = BinaryBuilder.getFile(Properties.BIN.get(n));
+            InputStream in = null;
+                in = new FileInputStream(bin);
+            byte buf[] = new byte[1024 * 4];
+            int len;
+            while((len=in.read(buf))>0) {
+                out.write(buf, 0, len);
             }
         }
     }
@@ -70,5 +66,4 @@ public class BinaryGraphHandler implements GraphHandler {
     @Override
     public void endGraph() {
     }
-
 }

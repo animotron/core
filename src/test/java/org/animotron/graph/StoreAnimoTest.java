@@ -25,6 +25,8 @@ import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
+
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -63,7 +65,7 @@ public class StoreAnimoTest extends ATest {
 		"</the:B>";
 
 	@Test
-	public void storeAndSerialize() throws XMLStreamException, InterruptedException {
+	public void storeAndSerialize() throws IOException, XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
         Map<String, String> nameDataMap = new LinkedHashMap<String, String>();

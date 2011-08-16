@@ -52,18 +52,18 @@ public class GraphResultTraverser extends GraphTraverser {
 
     protected GraphResultTraverser() {}
 
-    public void traverse(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException {
+    public void traverse(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
         handler.startGraph();
         build(handler, start_op, r);
         handler.endGraph();
     }
 
     @Override
-    protected void build(GraphHandler handler, Relationship r) throws InterruptedException {
+    protected void build(GraphHandler handler, Relationship r) throws IOException {
         build(handler, r, r);
     }
 
-    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException {
+    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -106,7 +106,7 @@ public class GraphResultTraverser extends GraphTraverser {
 
     }
 
-    protected boolean result(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException {
+    protected boolean result(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
 
         boolean found = false;
         Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);

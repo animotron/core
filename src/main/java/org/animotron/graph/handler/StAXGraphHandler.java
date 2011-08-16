@@ -18,6 +18,8 @@
  */
 package org.animotron.graph.handler;
 
+import java.io.IOException;
+
 import org.animotron.Statement;
 import org.animotron.instruction.ml.*;
 import org.neo4j.graphdb.Relationship;
@@ -38,7 +40,7 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 	
 	@Override
-	public void start(Statement statement, Relationship r) throws InterruptedException {
+	public void start(Statement statement, Relationship r) throws IOException {
 		try {
 			if (statement instanceof ATTRIBUTE) {
 				String prefix = statement.prefix(r);
@@ -80,12 +82,12 @@ public class StAXGraphHandler implements GraphHandler {
 			}
 			
 		} catch (XMLStreamException e) {
-			throw new InterruptedException(e.getMessage());
+			throw new IOException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void end(Statement statement, Relationship r) throws InterruptedException {
+	public void end(Statement statement, Relationship r) throws IOException {
 		try {
 			if (statement instanceof ValueInstruction ||
 					statement instanceof ATTRIBUTE) {
@@ -94,26 +96,25 @@ public class StAXGraphHandler implements GraphHandler {
 				writer.writeEndElement();
 			}
 		} catch (XMLStreamException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void startGraph() throws InterruptedException {
+	public void startGraph() throws IOException {
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void endGraph() throws InterruptedException {
+	public void endGraph() throws IOException {
 		try {
 			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e.getMessage());
 		}
 	}
-	
 }

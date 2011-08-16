@@ -18,6 +18,8 @@
  */
 package org.animotron.graph.handler;
 
+import java.io.IOException;
+
 import org.animotron.Statement;
 import org.animotron.instruction.ml.*;
 import org.neo4j.graphdb.Relationship;
@@ -46,7 +48,7 @@ public class SAXGraphHandler implements GraphHandler {
 	}
 
 	@Override
-	public void start(Statement statement, Relationship r) throws InterruptedException {
+	public void start(Statement statement, Relationship r) throws IOException {
 		try {
 			
 			if (statement instanceof TEXT) {
@@ -81,12 +83,12 @@ public class SAXGraphHandler implements GraphHandler {
 				
 			}
 		} catch (SAXException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e);
 		}
 	}
 
 	@Override
-	public void end(Statement statement, Relationship r) throws InterruptedException {
+	public void end(Statement statement, Relationship r) throws IOException {
 		try {
 			
 			if (statement instanceof CDATA){
@@ -102,26 +104,25 @@ public class SAXGraphHandler implements GraphHandler {
 				
 			}
 		} catch (SAXException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e);
 		}
 	}
 
 	@Override
-	public void startGraph() throws InterruptedException {
+	public void startGraph() throws IOException {
 		try {
 			contentHandler.startDocument();
 		} catch (SAXException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e);
 		}
 	}
 
 	@Override
-	public void endGraph() throws InterruptedException {
+	public void endGraph() throws IOException {
 		try {
 			contentHandler.endDocument();
 		} catch (SAXException e) {
-            throw new InterruptedException(e.getMessage());
+            throw new IOException(e);
 		}
 	}
-	
 }

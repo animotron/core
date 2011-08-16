@@ -30,7 +30,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
 
-
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
@@ -39,7 +38,7 @@ public class FSBridgeTest extends ATest {
 	
 	private static final String PATH = "src/main/animo/mime-type/application-animo.animo";
 	
-	private void check(String the) throws XMLStreamException, InterruptedException {
+	private void check(String the) throws IOException {
         Relationship r = THE._.get(the);
         assertNotNull(r);
         GraphSerializer.serialize(r, System.out);

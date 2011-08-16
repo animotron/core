@@ -19,6 +19,8 @@
 package org.animotron.manipulator;
 
 import javolution.util.FastList;
+
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.AN;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
@@ -48,7 +50,7 @@ public class PFlow {
 
 	public final Channel<Relationship> answer = new MemoryChannel<Relationship>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
-	public final Channel<Void> stop = new MemoryChannel<Void>();
+	public final Channel<Throwable> stop = new MemoryChannel<Throwable>();
 	
 	protected PFlow parent = null;
 	private Relationship op = null;
@@ -133,6 +135,18 @@ public class PFlow {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 			parent.answer.publish(r);
 		}
+	}
+
+	public void sendException(Throwable t) {
+		AnimoException ae;
+		if (t instanceof AnimoException) {
+			ae = (AnimoException) t;
+			ae.addToStack(op);
+		} else {
+			ae = new AnimoException(op, t);
+		}
+		parent.stop.publish(ae);
+		done();
 	}
 
 	public void done() {

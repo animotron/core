@@ -18,6 +18,8 @@
  */
 package org.animotron.instruction.string;
 
+import java.io.IOException;
+
 import org.animotron.Expression;
 import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.serializer.StringResultSerializer;
@@ -56,35 +58,46 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
         @Override
         public void onMessage(PFlow pf) {
 
-            try {
-                //UNDERSTAND: if we have more that 2 params, what to do?
+            //UNDERSTAND: if we have more that 2 params, what to do?
 
-                Relationship[] params = getORDER().first(2, pf.getOPNode());
+            Relationship[] params = getORDER().first(2, pf.getOPNode());
 
-                //pattern
-                String pattern = StringResultSerializer.serialize(pf.getStartOP(), params[0]);
-                String source = StringResultSerializer.serialize(pf.getStartOP(), params[1]);
-                
-                int index = source.lastIndexOf(pattern);
-                if (index != -1) {
+            //pattern
+            String pattern;
+			try {
+				pattern = StringResultSerializer.serialize(pf.getStartOP(), params[0]);
+			} catch (IOException e) {
+				pf.sendException(e);
+				return;
+			}
+            String source;
+			try {
+				source = StringResultSerializer.serialize(pf.getStartOP(), params[1]);
+			} catch (IOException e) {
+				pf.sendException(e);
+				return;
+			}
+            
+            int index = source.lastIndexOf(pattern);
+            if (index != -1) {
 
-		            Relationship r = new Expression(
-		                text(
-		                    source.substring(index + 1)
-		                )
-		            );
-		
-		            pf.sendAnswer(r.getEndNode().getSingleRelationship(TEXT._.relationshipType(), OUTGOING));
-                }
-
-                pf.done();
-
-            } catch (EBuilderTerminated e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+	            Relationship r;
+				try {
+					r = new Expression(
+					    text(
+					        source.substring(index + 1)
+					    )
+					);
+				} catch (EBuilderTerminated e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return;
+				}
+	
+	            pf.sendAnswer(r.getEndNode().getSingleRelationship(TEXT._.relationshipType(), OUTGOING));
             }
 
+            pf.done();
         }
 
     };

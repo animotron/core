@@ -22,6 +22,7 @@ import org.animotron.graph.handler.BinaryGraphHandler;
 import org.animotron.graph.traverser.GraphAnimoResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -31,13 +32,11 @@ import java.io.OutputStream;
  */
 public class BinarySerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws InterruptedException {
+    public static void serialize(Relationship r, OutputStream out) throws IOException {
         serialize(r, r, out);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws InterruptedException {
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
         GraphAnimoResultTraverser._.traverse(new BinaryGraphHandler(out), start_op, r);
     }
-
-
 }
