@@ -385,7 +385,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		int thisDeep = 0;
 		
 		for (Path path : td.traverse(node)) {
-			System.out.println("path = "+path);
+			//System.out.println("path = "+path);
 			
 			boolean foundIS = false;
 			boolean foundBackIS = false;

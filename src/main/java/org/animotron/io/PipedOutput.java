@@ -62,13 +62,10 @@ public class PipedOutput implements Cloneable {
         
     	if (connection == null) throw new IOException("Pipe not connected");
 
-    	//System.out.println("pipe write "+obj);
-    	
         connection.receive(obj);
     }
     
     public void close()  throws IOException {
-    	System.out.println("out-pipe close");
     	if (connection != null) {
     		connection.receivedLast();
     	}

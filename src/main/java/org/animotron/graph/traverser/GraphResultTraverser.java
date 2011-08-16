@@ -123,7 +123,7 @@ public class GraphResultTraverser extends GraphTraverser {
 
         if (!found) {
             //UNDERSTAND: calculate current r!
-            System.out.println("READER Execute r = "+r);
+            //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
             try {
                 in = Evaluator._.execute(start_op, r);

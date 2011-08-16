@@ -54,7 +54,7 @@ public class Utils {
 		for (Relationship res : node.getRelationships(OUTGOING)) {
 			
 			if (res.getType().name().startsWith("RESULT")) {
-				System.out.println("GET result = "+res);
+				//System.out.println("GET result = "+res);
 				
 				pf.sendAnswer(res);
 				
