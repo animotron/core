@@ -38,6 +38,10 @@ public class Executor {
 		fiber.start();
 		return fiber;
 	}
+
+    public static void execute (Runnable r) {
+        exec.execute(r);
+    }
 	
 	public static void shutdown() {
 		//exec.shutdown();
