@@ -54,20 +54,23 @@ public class ALL extends AbstractQuery {
 
             Node node = ref.getEndNode();
 
-			System.out.println("ALL **************************");
+			//System.out.println("ALL **************************");
 
 			Set<Node>[] lists = getUSEs(node, pf.getStartOP());
 			Set<Node> uses = lists[1];
 			Set<Node> directed = lists[2];
 			
-			if (directed != null && directed.size() == 1) 
+			boolean underUSE = false;
+			if (directed != null && directed.size() == 1) { 
+				underUSE = true;
 				node = directed.iterator().next();
+			}
 
-			if (filtering(pf, node, uses))
+			if (underUSE && filtering(pf, node, uses))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
 
 	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
-	            System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+	            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
 	            Node res = tdR.getStartNode();
 	            if (filtering(pf, res, uses)) {
 	                pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
