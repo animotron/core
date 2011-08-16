@@ -58,7 +58,12 @@ public class PipedGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void endGraph() {
+    public void endGraph() throws InterruptedException {
+        try {
+            pipe.close();
+        } catch (IOException e) {
+            throw new InterruptedException(e.getMessage());
+        }
     }
 
 }
