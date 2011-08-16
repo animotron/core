@@ -113,7 +113,7 @@ public class BinaryBuilder extends AbstractExpression {
                         if (!part.isEmpty()) {
                             if (prev == null) {
                                 prev = new Expression(
-                                    _(IS._, part)
+                                        _(IS._, part)
                                 );
                             } else {
                                 prev = new Expression(
