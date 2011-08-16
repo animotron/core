@@ -43,7 +43,7 @@ import static org.animotron.Expression.text;
 public class ResourceTest extends ATest {
 
     @Test
-    public void test() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test1() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "service",
@@ -86,7 +86,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test_() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test2() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "service",
@@ -137,7 +137,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test__() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test3() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "service",
@@ -187,7 +187,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test4() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "root-service",
@@ -224,7 +224,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test_1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test5() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "root-service",
@@ -269,7 +269,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test__1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test6() throws EBuilderTerminated, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "root-service",

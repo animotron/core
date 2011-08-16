@@ -23,7 +23,7 @@ import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -56,12 +56,12 @@ public class ALL extends AbstractQuery {
 
 			System.out.println("ALL **************************");
 
-			List<Node>[] lists = getUSEs(node, pf.getStartOP());
-			List<Node> uses = lists[1];
-			List<Node> directed = lists[0];
+			Set<Node>[] lists = getUSEs(node, pf.getStartOP());
+			Set<Node> uses = lists[1];
+			Set<Node> directed = lists[0];
 			
 			if (directed != null && directed.size() == 1) 
-				node = directed.get(0);
+				node = directed.iterator().next();
 
 			if (filtering(pf, node, uses))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );

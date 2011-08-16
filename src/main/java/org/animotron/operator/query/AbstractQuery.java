@@ -18,9 +18,9 @@
  */
 package org.animotron.operator.query;
 
-import java.util.List;
+import java.util.Set;
 
-import javolution.util.FastList;
+import javolution.util.FastSet;
 
 import org.animotron.Properties;
 import org.animotron.Statement;
@@ -60,10 +60,10 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
             relationships(IS._.relationshipType(), INCOMING ).
             evaluator(Evaluators.excludeStartPosition());
 
-    protected boolean filtering(PFlow pf, Node node, List<Node> uses) {
+    protected boolean filtering(PFlow pf, Node node, Set<Node> uses) {
     	if (uses != null) {
     		//check intersection
-    		TraversalDescription td = getIntersectionChecktravers(new FastList<Node>(uses));
+    		TraversalDescription td = getIntersectionChecktravers(new FastSet<Node>(uses));
     		if (!td.traverse(node).iterator().hasNext())
     			return false;
     	}
@@ -84,10 +84,10 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
         return true;
     }
     
-    protected List<Node>[] getUSEs(Node start, Relationship end) {
+	protected Set<Node>[] getUSEs(Node start, Relationship end) {
 
-    	List<Node> uses = null;
-    	List<Node> directed = null;
+    	Set<Node> uses = null;
+    	Set<Node> directed = null;
     	
     	TraversalDescription td = getUSEtravers(end);
 
@@ -100,10 +100,10 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 				if (p.getType().name().equals(USE._.rType)) {
 					
 					if (isDirected) {
-						if (directed == null) directed = new FastList<Node>();
+						if (directed == null) directed = new FastSet<Node>();
 						directed.add( p.getEndNode() );
 					} else {
-						if (uses == null) uses = new FastList<Node>();
+						if (uses == null) uses = new FastSet<Node>();
 						uses.add( p.getEndNode() );
 					}
 					break;
@@ -119,14 +119,14 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 			}
 		}
 		
-		return new List[] {directed, uses};
+		return new Set[] {directed, uses};
     }
 
 	protected Relationship getThe(Node node) {
 		return THE._.get(Properties.NAME.get(node));
 	}
 	
-	protected TraversalDescription getIntersectionChecktravers(final List<Node> mustHave) {
+	protected TraversalDescription getIntersectionChecktravers(final Set<Node> mustHave) {
 
 		return Traversal.description().depthFirst().
 		uniqueness(Uniqueness.RELATIONSHIP_PATH).
