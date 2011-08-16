@@ -252,13 +252,13 @@ public class ResourceTest extends ATest {
 
         new Expression(
             _(THE._, "rest",
-                _(ANY._, "service")
+                _(ALL._, "service")
             )
         );
 
         Expression s = new Expression(
             _(THE._, "s",
-                _(ALL._, "rest",
+                _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
@@ -297,13 +297,13 @@ public class ResourceTest extends ATest {
 
         new Expression(
             _(THE._, "rest",
-                _(ANY._, "service")
+                _(ALL._, "service")
             )
         );
 
         Expression s = new Expression(
             _(THE._, "s",
-                _(ALL._, "rest",
+                _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
