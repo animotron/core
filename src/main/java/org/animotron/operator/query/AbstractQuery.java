@@ -96,7 +96,7 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
     	Node deepestNode = null;
 
 		for (Path path : td.traverse(start)) {
-			System.out.println(" path = "+path);
+			//System.out.println(" path = "+path);
 			
 			Node lastNode = path.startNode();
 			boolean isDirected = true;
@@ -153,7 +153,7 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 			public Evaluation evaluate(Path path) {
 				if (path.length() > 0) {
 					
-					System.out.println(path);
+					//System.out.println(" "+path);
 					
 					Relationship r = path.lastRelationship();
 					if (!r.getType().name().equals(IS._.rType))
@@ -180,6 +180,7 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
+				//System.out.println(" "+path);
 				if (path.length() > 0) {
 					Relationship r = path.lastRelationship(); 
 					if (r.getStartNode().equals(path.endNode())) {
@@ -194,8 +195,8 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 						}
 						return EXCLUDE_AND_CONTINUE;
 					
-					//Allow IS->USE<-IS->...
-					} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+					//Allow IS<-USE<-IS->... and IS<-IS->...<-USE 
+					} if (path.length() > 1 && r.getType().name().equals(IS._.rType)) {
 						return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;
