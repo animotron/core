@@ -18,21 +18,16 @@
  */
 package org.animotron.graph.handler;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import org.animotron.Statement;
-import org.animotron.instruction.ml.ATTRIBUTE;
-import org.animotron.instruction.ml.CDATA;
-import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
-import org.animotron.instruction.ml.ValueInstruction;
+import org.animotron.instruction.ml.*;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.AttributesImpl;
+
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -51,7 +46,7 @@ public class SAXGraphHandler implements GraphHandler {
 	}
 
 	@Override
-	public void start(Statement statement, Relationship r) {
+	public void start(Statement statement, Relationship r) throws InterruptedException {
 		try {
 			
 			if (statement instanceof TEXT) {
@@ -86,13 +81,12 @@ public class SAXGraphHandler implements GraphHandler {
 				
 			}
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void end(Statement statement, Relationship r) {
+	public void end(Statement statement, Relationship r) throws InterruptedException {
 		try {
 			
 			if (statement instanceof CDATA){
@@ -108,28 +102,25 @@ public class SAXGraphHandler implements GraphHandler {
 				
 			}
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void startGraph() {
+	public void startGraph() throws InterruptedException {
 		try {
 			contentHandler.startDocument();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void endGraph() {
+	public void endGraph() throws InterruptedException {
 		try {
 			contentHandler.endDocument();
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 	

@@ -18,17 +18,12 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.Statement;
+import org.animotron.instruction.ml.*;
+import org.neo4j.graphdb.Relationship;
+
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
-import org.animotron.Statement;
-import org.animotron.instruction.ml.ATTRIBUTE;
-import org.animotron.instruction.ml.CDATA;
-import org.animotron.instruction.ml.COMMENT;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
-import org.animotron.instruction.ml.ValueInstruction;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -43,7 +38,7 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 	
 	@Override
-	public void start(Statement statement, Relationship r) {
+	public void start(Statement statement, Relationship r) throws InterruptedException {
 		try {
 			if (statement instanceof ATTRIBUTE) {
 				String prefix = statement.prefix(r);
@@ -85,13 +80,12 @@ public class StAXGraphHandler implements GraphHandler {
 			}
 			
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new InterruptedException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void end(Statement statement, Relationship r) {
+	public void end(Statement statement, Relationship r) throws InterruptedException {
 		try {
 			if (statement instanceof ValueInstruction ||
 					statement instanceof ATTRIBUTE) {
@@ -100,28 +94,25 @@ public class StAXGraphHandler implements GraphHandler {
 				writer.writeEndElement();
 			}
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void startGraph() {
+	public void startGraph() throws InterruptedException {
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 
 	@Override
-	public void endGraph() {
+	public void endGraph() throws InterruptedException {
 		try {
 			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+            throw new InterruptedException(e.getMessage());
 		}
 	}
 	

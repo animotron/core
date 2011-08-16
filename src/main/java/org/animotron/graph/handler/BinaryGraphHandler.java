@@ -41,7 +41,7 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r) {
+    public void start(Statement statement, Relationship r) throws InterruptedException {
         Node n = r.getEndNode();
         if (BIN.has(n)) {
             try {
@@ -54,7 +54,7 @@ public class BinaryGraphHandler implements GraphHandler {
                     out.write(buf, 0, len);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new InterruptedException(e.getMessage());
             }
         }
     }

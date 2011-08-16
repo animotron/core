@@ -34,11 +34,11 @@ import java.io.OutputStream;
  */
 public class AnimoResultSerializer extends ResultSerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException, InterruptedException {
         serialize(r, r, out);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException {
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException, InterruptedException {
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         GraphResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
     }

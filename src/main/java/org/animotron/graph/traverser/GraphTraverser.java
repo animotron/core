@@ -38,13 +38,13 @@ public class GraphTraverser {
 
     protected GraphTraverser() {}
 	
-	public void traverse(GraphHandler handler, Relationship r) {
+	public void traverse(GraphHandler handler, Relationship r) throws InterruptedException {
 		handler.startGraph();
 		build(handler, r);
 		handler.endGraph();
 	}
 	
-	protected void build(GraphHandler handler, Relationship r) {
+	protected void build(GraphHandler handler, Relationship r) throws InterruptedException {
 		
 		Statement statement = Statements.relationshipType(r.getType());
 		

@@ -31,19 +31,19 @@ import java.io.OutputStream;
  */
 public class StringResultSerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) {
+    public static void serialize(Relationship r, OutputStream out) throws InterruptedException {
         serialize(r, r, out);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) {
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws InterruptedException {
         GraphAnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
     }
 
-    public static String serialize(Relationship r) {
+    public static String serialize(Relationship r) throws InterruptedException {
         return serialize(r, r);
     }
 
-    public static String serialize(Relationship start_op, Relationship r) {
+    public static String serialize(Relationship start_op, Relationship r) throws InterruptedException {
         StringBuilder out = new StringBuilder(1024);
         GraphAnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
         return out.toString();

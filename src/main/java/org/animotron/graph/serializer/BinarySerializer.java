@@ -31,11 +31,11 @@ import java.io.OutputStream;
  */
 public class BinarySerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) {
+    public static void serialize(Relationship r, OutputStream out) throws InterruptedException {
         serialize(r, r, out);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) {
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws InterruptedException {
         GraphAnimoResultTraverser._.traverse(new BinaryGraphHandler(out), start_op, r);
     }
 

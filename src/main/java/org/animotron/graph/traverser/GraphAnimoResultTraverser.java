@@ -47,7 +47,7 @@ public class GraphAnimoResultTraverser extends GraphResultTraverser{
     protected GraphAnimoResultTraverser() {}
 
     @Override
-    protected void build(GraphHandler handler, Relationship start_op, Relationship r) {
+    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws InterruptedException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();

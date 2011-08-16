@@ -18,18 +18,17 @@
  */
 package org.animotron.graph;
 
-import static org.junit.Assert.assertNotNull;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
+
+import javax.xml.stream.XMLStreamException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertNotNull;
 
 
 /**
@@ -64,7 +63,7 @@ public class StoreAnimoTest extends ATest {
 		"</the:B>";
 
 	@Test
-	public void storeAndSerialize() throws XMLStreamException {
+	public void storeAndSerialize() throws XMLStreamException, InterruptedException {
         System.out.println("Test processing flow interator ...");
         
         Map<String, String> nameDataMap = new LinkedHashMap<String, String>();

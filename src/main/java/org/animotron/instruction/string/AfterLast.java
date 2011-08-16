@@ -79,8 +79,10 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 
                 pf.done();
 
-            } catch (EBuilderTerminated eBuilderTerminated) {
-                eBuilderTerminated.printStackTrace();
+            } catch (EBuilderTerminated e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
         }

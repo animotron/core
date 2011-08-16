@@ -18,14 +18,13 @@
  */
 package org.animotron.graph.serializer;
 
-import java.io.OutputStream;
-
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.GraphResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -34,11 +33,11 @@ import javax.xml.stream.XMLStreamWriter;
  */
 public class ResultSerializer extends GraphSerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+    public static void serialize(Relationship r, OutputStream out) throws XMLStreamException, InterruptedException {
         serialize(r, r, out);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException {
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws XMLStreamException, InterruptedException {
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         GraphResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
     }

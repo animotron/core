@@ -18,17 +18,15 @@
  */
 package org.animotron.graph.serializer;
 
-import java.io.OutputStream;
-
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-
+import com.ctc.wstx.api.WriterConfig;
+import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.GraphTraverser;
 import org.neo4j.graphdb.Relationship;
 
-import com.ctc.wstx.api.WriterConfig;
-import com.ctc.wstx.stax.WstxOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,7 +43,7 @@ public abstract class GraphSerializer {
 		conf.enableAutomaticNamespaces(true);
 	}
 
-	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException {
+	public static void serialize(Relationship r, OutputStream out) throws XMLStreamException, InterruptedException {
         XMLStreamWriter writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
         GraphTraverser._.traverse(new StAXGraphHandler(writer), r);
     }

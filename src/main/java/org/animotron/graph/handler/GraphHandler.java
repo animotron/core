@@ -30,11 +30,11 @@ import org.neo4j.graphdb.Relationship;
  */
 public interface GraphHandler {
 	
-	public abstract void start(Statement statement, Relationship r);
+	public abstract void start(Statement statement, Relationship r) throws InterruptedException;
 
-	public abstract void end(Statement statement, Relationship r);
+	public abstract void end(Statement statement, Relationship r) throws InterruptedException;
 
-	void startGraph();
+	void startGraph() throws InterruptedException;
 
-	void endGraph();
+	void endGraph() throws InterruptedException;
 }

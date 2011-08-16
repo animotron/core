@@ -39,7 +39,7 @@ public class FSBridgeTest extends ATest {
 	
 	private static final String PATH = "src/main/animo/mime-type/application-animo.animo";
 	
-	private void check(String the) throws XMLStreamException{
+	private void check(String the) throws XMLStreamException, InterruptedException {
         Relationship r = THE._.get(the);
         assertNotNull(r);
         GraphSerializer.serialize(r, System.out);
@@ -47,7 +47,7 @@ public class FSBridgeTest extends ATest {
 	}
 	
 	@Test
-	public void loadAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated {
+	public void loadAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated, InterruptedException {
         System.out.println("Test repository loader ...");
         FSBridge.load(PATH);
         System.out.println("loaded ...");

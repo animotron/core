@@ -42,7 +42,7 @@ public class TextGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r) {
+    public void start(Statement statement, Relationship r) throws InterruptedException {
         if (statement instanceof TEXT) {
             out.write(statement.value(r));
         }
@@ -61,7 +61,7 @@ public class TextGraphHandler implements GraphHandler {
     }
 
     private interface Handler {
-        public void write(String string);
+        public void write(String string) throws InterruptedException;
     }
 
     private class StreamHandler implements Handler {
@@ -69,11 +69,11 @@ public class TextGraphHandler implements GraphHandler {
         public StreamHandler(OutputStream stream) {
             out = stream;
         }
-        public void write(String s) {
+        public void write(String s) throws InterruptedException {
             try {
                 out.write(s.getBytes());
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new InterruptedException(e.getMessage());
             }
         }
     }
