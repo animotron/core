@@ -56,7 +56,12 @@ public class ALL extends AbstractQuery {
 
 			System.out.println("ALL **************************");
 
-			List<Node> uses = getUSEs(node, pf.getStartOP())[1];
+			List<Node>[] lists = getUSEs(node, pf.getStartOP());
+			List<Node> uses = lists[1];
+			List<Node> directed = lists[0];
+			
+			if (directed != null && directed.size() == 1) 
+				node = directed.get(0);
 
 			if (filtering(pf, node, uses))
 				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
