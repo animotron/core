@@ -38,14 +38,10 @@ public class PipedGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r) throws InterruptedException {
+    public void start(Statement statement, Relationship r) throws IOException {
         if (statement instanceof TEXT) {
-            try {
-                pipe.write(statement);
-                pipe.write(r);
-            } catch (IOException e) {
-                throw new InterruptedException(e.getMessage());
-            }
+            pipe.write(statement);
+            pipe.write(r);
         }
     }
 
@@ -58,12 +54,7 @@ public class PipedGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void endGraph() throws InterruptedException {
-        try {
-            pipe.close();
-        } catch (IOException e) {
-            throw new InterruptedException(e.getMessage());
-        }
+    public void endGraph() throws IOException {
+        pipe.close();
     }
-
 }
