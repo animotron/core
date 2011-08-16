@@ -90,18 +90,29 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
     	Set<Node> directed = null;
     	
     	TraversalDescription td = getUSEtravers(end);
+    	
+    	int deep = 0;
+    	int deepest = 0;
+    	Node deepestNode = null;
 
 		for (Path path : td.traverse(start)) {
 			System.out.println(" path = "+path);
 			
 			Node lastNode = path.startNode();
 			boolean isDirected = true;
+			deep = 0;
 			for (Relationship p : path.relationships()) {
 				if (p.getType().name().equals(USE._.rType)) {
 					
 					if (isDirected) {
 						if (directed == null) directed = new FastSet<Node>();
 						directed.add( p.getEndNode() );
+						
+						if (deepest < deep) {
+							deepestNode = p.getEndNode();
+							deepest = deep;
+						}
+						
 					} else {
 						if (uses == null) uses = new FastSet<Node>();
 						uses.add( p.getEndNode() );
@@ -114,12 +125,19 @@ public abstract class AbstractQuery extends AbstractOperator implements Cachable
 				
 				if (isDirected && !lastNode.equals(p.getEndNode()))
 					isDirected = false;
-				
-				lastNode = p.getStartNode();
+				else {
+					deep++;
+					lastNode = p.getStartNode();
+				}
 			}
 		}
-		
-		return new Set[] {directed, uses};
+
+		Set<Node> deepestSet = null;
+		if (deepestNode != null) {
+			deepestSet = new FastSet<Node>();
+			deepestSet.add(deepestNode);			
+		}
+		return new Set[] {directed, uses, deepestSet};
     }
 
 	protected Relationship getThe(Node node) {

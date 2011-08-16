@@ -58,7 +58,7 @@ public class ALL extends AbstractQuery {
 
 			Set<Node>[] lists = getUSEs(node, pf.getStartOP());
 			Set<Node> uses = lists[1];
-			Set<Node> directed = lists[0];
+			Set<Node> directed = lists[2];
 			
 			if (directed != null && directed.size() == 1) 
 				node = directed.iterator().next();

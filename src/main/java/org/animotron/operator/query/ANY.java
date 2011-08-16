@@ -54,7 +54,7 @@ public class ANY extends AbstractQuery {
 
 			Set<Node>[] lists = getUSEs(node, pf.getStartOP());
 			Set<Node> uses = lists[1];
-			Set<Node> directed = lists[0];
+			Set<Node> directed = lists[2];
 			
 			boolean underUSE = false;
 			if (directed != null && directed.size() == 1) { 
