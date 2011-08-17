@@ -40,18 +40,23 @@ public class BinaryGraphHandler implements GraphHandler {
         this.out = out;
     }
 
+    public static void write(Node n, OutputStream out) throws IOException {
+        File bin = BinaryBuilder.getFile(Properties.BIN.get(n));
+        InputStream in = null;
+            in = new FileInputStream(bin);
+        byte buf[] = new byte[1024 * 4];
+        int len;
+        while((len=in.read(buf))>0) {
+            out.write(buf, 0, len);
+        }
+
+    }
+
     @Override
     public void start(Statement statement, Relationship r) throws IOException {
         Node n = r.getEndNode();
         if (BIN.has(n)) {
-            File bin = BinaryBuilder.getFile(Properties.BIN.get(n));
-            InputStream in = null;
-                in = new FileInputStream(bin);
-            byte buf[] = new byte[1024 * 4];
-            int len;
-            while((len=in.read(buf))>0) {
-                out.write(buf, 0, len);
-            }
+            write(n, out);
         }
     }
 
