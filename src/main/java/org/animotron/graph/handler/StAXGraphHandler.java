@@ -82,7 +82,7 @@ public class StAXGraphHandler implements GraphHandler {
 			}
 			
 		} catch (XMLStreamException e) {
-			throw new IOException(e.getMessage());
+			//ignore not well formed structure with a hope to see good one in the middle  
 		}
 	}
 
@@ -96,7 +96,7 @@ public class StAXGraphHandler implements GraphHandler {
 				writer.writeEndElement();
 			}
 		} catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 
@@ -105,7 +105,7 @@ public class StAXGraphHandler implements GraphHandler {
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 
@@ -114,7 +114,7 @@ public class StAXGraphHandler implements GraphHandler {
 		try {
 			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
-            throw new IOException(e.getMessage());
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 }

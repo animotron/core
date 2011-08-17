@@ -83,7 +83,7 @@ public class SAXGraphHandler implements GraphHandler {
 				
 			}
 		} catch (SAXException e) {
-            throw new IOException(e);
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 
@@ -104,7 +104,7 @@ public class SAXGraphHandler implements GraphHandler {
 				
 			}
 		} catch (SAXException e) {
-            throw new IOException(e);
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 
@@ -113,7 +113,7 @@ public class SAXGraphHandler implements GraphHandler {
 		try {
 			contentHandler.startDocument();
 		} catch (SAXException e) {
-            throw new IOException(e);
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 
@@ -122,7 +122,7 @@ public class SAXGraphHandler implements GraphHandler {
 		try {
 			contentHandler.endDocument();
 		} catch (SAXException e) {
-            throw new IOException(e);
+			//ignore not well formed structure with a hope to see good one in the middle
 		}
 	}
 }
