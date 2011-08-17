@@ -19,13 +19,12 @@
 package org.animotron.bridge;
 
 import org.animotron.ATest;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 
 import static org.junit.Assert.assertNotNull;
@@ -46,7 +45,7 @@ public class FSBridgeTest extends ATest {
 	}
 	
 	@Test
-	public void loadAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated, InterruptedException {
+	public void loadAndSerialize() throws IOException, AnimoException {
         System.out.println("Test repository loader ...");
         FSBridge.load(PATH);
         System.out.println("loaded ...");

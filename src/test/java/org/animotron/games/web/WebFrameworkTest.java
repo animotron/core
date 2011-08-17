@@ -22,7 +22,7 @@ import static org.animotron.Expression.*;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
 import org.animotron.operator.compare.WITH;
@@ -40,7 +40,7 @@ import java.io.IOException;
 public class WebFrameworkTest extends ATest {
 
 	@Test
-	public void test() throws EBuilderTerminated, IOException, InterruptedException {
+	public void test() throws IOException, AnimoException {
     	new Expression(
 			_(THE._, "request", 
 				_(HAVE._, "uri", text("/")),

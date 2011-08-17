@@ -18,7 +18,7 @@
  */
 package org.animotron.graph.builder;
 
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
@@ -61,7 +61,7 @@ public class SAXGraphBuilder extends GraphBuilder implements ContentHandler, Lex
 	public void endDocument() throws SAXException {
 		try {
 			endGraph();
-        } catch (EBuilderTerminated e) {
+        } catch (AnimoException e) {
             throw new SAXException(e);
 		}
 	}

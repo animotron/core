@@ -18,7 +18,7 @@
  */
 package org.animotron.graph.builder;
 
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -27,8 +27,6 @@ import org.neo4j.graphdb.Relationship;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-
-
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -77,7 +75,7 @@ public class StAXGraphBuilder extends GraphBuilder {
 		
 		try {
 			endGraph();
-        } catch (EBuilderTerminated e) {
+        } catch (AnimoException e) {
 			throw new XMLStreamException(e);
 		}
 		

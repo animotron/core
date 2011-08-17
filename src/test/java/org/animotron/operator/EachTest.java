@@ -20,7 +20,7 @@ package org.animotron.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
@@ -39,7 +39,7 @@ import static org.animotron.Expression.*;
 public class EachTest extends ATest {
 
     @Test
-    public void eachTest() throws EBuilderTerminated, IOException, InterruptedException {
+    public void eachTest() throws IOException, AnimoException {
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "content", text("α")))
@@ -65,7 +65,7 @@ public class EachTest extends ATest {
     }
 
     @Test
-    public void eachTest1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void eachTest1() throws IOException, AnimoException {
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))

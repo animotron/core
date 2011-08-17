@@ -20,7 +20,7 @@ package org.animotron.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
@@ -40,7 +40,7 @@ import static org.animotron.Expression.text;
 public class AnyUseTest extends ATest {
 
     @Test
-    public void simple_any_Use() throws EBuilderTerminated, IOException, InterruptedException {
+    public void simple_any_Use() throws AnimoException, IOException {
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
@@ -70,7 +70,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void simple_any_Use_1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void simple_any_Use_1() throws AnimoException, IOException {
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
@@ -108,7 +108,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void complex_any_Use() throws EBuilderTerminated, IOException, InterruptedException {
+    public void complex_any_Use() throws AnimoException, IOException {
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
@@ -144,7 +144,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void complex_any_Use_1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void complex_any_Use_1() throws AnimoException, IOException {
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );

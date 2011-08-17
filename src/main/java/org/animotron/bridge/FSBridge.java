@@ -18,10 +18,9 @@
  */
 package org.animotron.bridge;
 
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.CommonBuilder;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 
@@ -33,11 +32,11 @@ import java.io.IOException;
  */
 public class FSBridge {
 	
-	public static void load (String path) throws XMLStreamException, IOException, EBuilderTerminated {
+	public static void load (String path) throws IOException, AnimoException {
 		load(new File(path));
 	}
 	
-	public static void load (File path) throws XMLStreamException, IOException, EBuilderTerminated {
+	public static void load (File path) throws IOException, AnimoException {
 		
 		if (path.isDirectory()) {
 			for (File file : path.listFiles()) {

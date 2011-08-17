@@ -104,7 +104,7 @@ public class THE extends AbstractOperator implements Prepare, KernelEventHandler
             if (ignoreNotFound) {
 			    r = create(name);
             } else {
-                throw new ENotFound("Internal error: \"the:" + name + "\" not found");
+                throw new ENotFound(null, "Internal error: \"the:" + name + "\" not found");
             }
 		}
 		return r;

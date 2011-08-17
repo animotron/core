@@ -51,15 +51,15 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public final PipedInput execute(Relationship op) throws InterruptedException, IOException {
+	public final PipedInput execute(Relationship op) throws IOException {
 		return execute(op, (PropertyContainer)op);
 	}
 
-	public final PipedInput execute(Relationship start_op, Node op) throws InterruptedException, IOException {
+	public final PipedInput execute(Relationship start_op, Node op) throws IOException {
 		return execute(start_op, (PropertyContainer)op);
 	}
 	
-	public final PipedInput execute(final Relationship start_op, PropertyContainer op) throws InterruptedException, IOException {
+	public final PipedInput execute(final Relationship start_op, PropertyContainer op) throws IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
 		

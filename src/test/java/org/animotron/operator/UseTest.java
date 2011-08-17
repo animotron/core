@@ -20,7 +20,7 @@ package org.animotron.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.query.ALL;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
@@ -39,7 +39,7 @@ import static org.animotron.Expression._;
 public class UseTest extends ATest {
 
     @Test
-    public void any_use() throws EBuilderTerminated, IOException, InterruptedException {
+    public void any_use() throws IOException, AnimoException {
         new Expression(
             _(THE._, "A", _(IS._, "X"))
         );
@@ -52,7 +52,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void an_any_use() throws EBuilderTerminated, IOException, InterruptedException {
+    public void an_any_use() throws IOException, AnimoException {
         new Expression(
             _(THE._, "A", _(IS._, "X"))
         );
@@ -69,7 +69,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void all_use() throws EBuilderTerminated, IOException, InterruptedException {
+    public void all_use() throws IOException, AnimoException {
         new Expression(
             _(THE._, "A", _(IS._, "X"))
         );
@@ -86,7 +86,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void an_all_use() throws EBuilderTerminated, IOException, InterruptedException {
+    public void an_all_use() throws IOException, AnimoException {
         new Expression(
             _(THE._, "A", _(IS._, "X"))
         );

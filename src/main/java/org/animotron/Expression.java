@@ -18,7 +18,7 @@
  */
 package org.animotron;
 
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.instruction.Instruction;
 import org.animotron.instruction.ml.*;
 import org.animotron.operator.Operator;
@@ -32,12 +32,12 @@ public class Expression extends AbstractExpression {
 	
 	Object[][] e;
 	
-	public Expression(Object[]... e) throws EBuilderTerminated {
+	public Expression(Object[]... e) throws AnimoException {
 		this.e = e;
 		build();
 	}
 	
-	private void build() throws EBuilderTerminated {
+	private void build() throws AnimoException {
 		startGraph();
 		for(Object[] i : e) {
 			buildExpression(i);

@@ -20,7 +20,7 @@ package org.animotron.graph.builder;
 
 import org.animotron.Statement;
 import org.animotron.Statements;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.GraphOperation;
 import org.animotron.instruction.Instruction;
@@ -105,11 +105,11 @@ public abstract class GraphBuilder {
 		return the != null;
 	}
 	
-    final protected void endGraph() throws EBuilderTerminated {
+    final protected void endGraph() throws AnimoException {
         endGraph(null);
     }
 
-	final protected void endGraph(GraphOperation o) throws EBuilderTerminated {
+	final protected void endGraph(GraphOperation<?> o) throws AnimoException {
 
         if (!statements.empty()) {
             end();
@@ -132,7 +132,7 @@ public abstract class GraphBuilder {
 			
 			catcher.push();
 
-        } catch (EBuilderTerminated e) {
+        } catch (AnimoException e) {
             fail(e);
             throw e;
 		} catch (Exception e) {
@@ -253,7 +253,7 @@ public abstract class GraphBuilder {
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, int order) throws EBuilderTerminated {
+	private void build(Object[] item, int order) throws AnimoException {
 
 		Object[] p =  (Object[]) item[7];
 		if (p != null) {
@@ -293,7 +293,8 @@ public abstract class GraphBuilder {
         } else {
             Node parent = (Node) p[6];
             if (parent == null)
-                throw new EBuilderTerminated("Internal error: parent can not be null.");
+            	//"Internal error: parent can not be null."
+                throw new AnimoException((Relationship)item[5]);
 
             if (statement instanceof Cachable) {
                 String hash = hash(item);

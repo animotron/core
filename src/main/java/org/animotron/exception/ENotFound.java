@@ -18,19 +18,17 @@
  */
 package org.animotron.exception;
 
+import org.neo4j.graphdb.Relationship;
+
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ENotFound extends EBuilderTerminated {
+public class ENotFound extends AnimoException {
 
 	private static final long serialVersionUID = 4673983170231016824L;
 
-	public ENotFound(String message) {
-		super(message);
-	}
-
-	public ENotFound(Throwable cause) {
-		super(cause);
+	public ENotFound(Relationship op, String message) {
+		super(op, message);
 	}
 }

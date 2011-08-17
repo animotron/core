@@ -21,7 +21,7 @@ package org.animotron.instruction.string;
 import java.io.IOException;
 
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.instruction.AbstractInstruction;
 import org.animotron.instruction.ml.TEXT;
@@ -88,9 +88,8 @@ public class AfterLast extends AbstractInstruction implements Evaluable {
 					        source.substring(index + 1)
 					    )
 					);
-				} catch (EBuilderTerminated e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				} catch (AnimoException e) {
+					pf.sendException(e);
 					return;
 				}
 	

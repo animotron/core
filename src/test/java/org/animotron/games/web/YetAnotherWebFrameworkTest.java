@@ -20,7 +20,7 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.AN;
 import org.animotron.operator.THE;
 import org.animotron.operator.compare.WITH;
@@ -42,7 +42,7 @@ import static org.animotron.Expression.*;
  */
 public class YetAnotherWebFrameworkTest extends ATest {
 
-    private void test(Object[]... o) throws EBuilderTerminated, IOException, InterruptedException {
+    private void test(Object[]... o) throws AnimoException, IOException {
 
         new Expression (
             _(THE._, "html",
@@ -161,7 +161,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test1() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test1() throws AnimoException, IOException {
         test(
             _(AN._, "root-service",
                 _(AN._, "localhost-site")
@@ -170,7 +170,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test2() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test2() throws AnimoException, IOException {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
@@ -181,7 +181,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test3() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test3() throws AnimoException, IOException {
         test(
             _(ANY._, "service",
                 _(WITH._, "uri", _(GET._, "uri")),
@@ -191,7 +191,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test4() throws EBuilderTerminated, IOException, InterruptedException {
+    public void test4() throws AnimoException, IOException {
         test(
             _(ANY._, "service",
                 _(WITH._, "uri", _(GET._, "uri")),

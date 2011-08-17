@@ -35,8 +35,20 @@ public class AnimoException extends Exception {
 	private Relationship op;
 	private List<Relationship> stack = new FastList<Relationship>();
 
+	public AnimoException(Relationship op) {
+		super();
+		
+		this.op = op;
+	}
+
 	public AnimoException(Relationship op, Throwable cause) {
 		super(cause);
+		
+		this.op = op;
+	}
+
+	public AnimoException(Relationship op, String message) {
+		super(message);
 		
 		this.op = op;
 	}

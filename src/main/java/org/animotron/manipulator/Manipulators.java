@@ -26,7 +26,6 @@ import java.util.List;
 
 import javolution.util.FastList;
 
-import org.animotron.exception.EBuilderTerminated;
 import org.animotron.graph.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -50,11 +49,11 @@ public class Manipulators {
 		
 		public Catcher() {}
 		
-		public void creative(Relationship r) throws EBuilderTerminated {
+		public void creative(Relationship r) {
 			creative.add(r.getEndNode());
 		}
 		
-		public void renew(Relationship r) throws EBuilderTerminated {
+		public void renew(Relationship r) {
 			for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
 				destructive(i);
 			}
@@ -64,39 +63,27 @@ public class Manipulators {
 			creative(r);
 		}
 
-		private void destructive(Relationship r) throws EBuilderTerminated {
+		private void destructive(Relationship r) {
 			creative.add(r.getEndNode());
 
 			r.delete();
 		}
 		
 
-		public void push() throws EBuilderTerminated {
+		public void push() throws IOException {
 			creative();
 			destructive();
 		}
 		
-		private void creative() throws EBuilderTerminated {
-			try {
-				for (Node n : creative) {
-					Preparator._.execute(n);
-				}
-			} catch (InterruptedException e) {
-				throw new EBuilderTerminated(e);
-			} catch (IOException e) {
-				throw new EBuilderTerminated(e);
+		private void creative() throws IOException {
+			for (Node n : creative) {
+				Preparator._.execute(n);
 			}
 		}
 		
-		private void destructive() throws EBuilderTerminated {
-			try {
-				for (Node n : destructive) {
-					GC._.execute(null, n);
-				}
-			} catch (InterruptedException e) {
-				throw new EBuilderTerminated(e);
-			} catch (IOException e) {
-				throw new EBuilderTerminated(e);
+		private void destructive() throws IOException {
+			for (Node n : destructive) {
+				GC._.execute(null, n);
 			}
 		}
 		

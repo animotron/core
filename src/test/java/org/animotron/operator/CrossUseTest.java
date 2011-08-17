@@ -20,7 +20,7 @@ package org.animotron.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.query.ANY;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
@@ -38,7 +38,7 @@ import static org.animotron.Expression._;
 public class CrossUseTest extends ATest {
 
     @Test
-    public void cross_use_case() throws EBuilderTerminated, IOException, InterruptedException {
+    public void cross_use_case() throws IOException, AnimoException {
 
         new Expression(
             _(THE._, "A", _(IS._, "S"), _(IS._, "X"))

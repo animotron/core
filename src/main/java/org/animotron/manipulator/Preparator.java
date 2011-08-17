@@ -66,7 +66,7 @@ public class Preparator extends StatementManipulator {
 			});
 	
 	
-	public void execute(Node op) throws InterruptedException, IOException {
+	public void execute(Node op) throws IOException {
 		Iterator<Path> it = TD.traverse(op).iterator();
 		while (it.hasNext()) {
 			super.execute(it.next().relationships().iterator().next());

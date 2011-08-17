@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.animotron.Executor;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
@@ -63,11 +63,8 @@ public class COUNT extends AbstractOperator implements Evaluable, Cachable {
 						Expression r;
 						try {
 							r = new Expression(Expression._(Q._, "N"+value.get()));
-						} catch (EBuilderTerminated e) {
-							//what to do?
-							e.printStackTrace();
-							
-							pf.done();
+						} catch (AnimoException e) {
+							pf.sendException(e);
 							return;
 						}
 						pf.sendAnswer(r);

@@ -20,7 +20,7 @@ package org.animotron.graph;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.operator.AN;
@@ -29,7 +29,6 @@ import org.animotron.operator.query.ANY;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
-import javax.xml.stream.XMLStreamException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -64,7 +63,7 @@ public class StoreBinaryTest extends ATest {
     private static final String PATH = "/content/article/test.txt";
 
 	@Test
-	public void storeAndSerialize() throws XMLStreamException, IOException, EBuilderTerminated, InterruptedException {
+	public void storeAndSerialize() throws IOException, AnimoException {
         System.out.println("Test binary stream ...");
         
     	Relationship r = CommonBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);

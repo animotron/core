@@ -21,7 +21,7 @@ package org.animotron.graph.builder;
 import org.animotron.AbstractExpression;
 import org.animotron.Expression;
 import org.animotron.Properties;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
 import org.animotron.operator.THE;
 import org.animotron.operator.relation.IS;
@@ -63,7 +63,7 @@ public class BinaryBuilder extends AbstractExpression {
         return new File(getFolder(hash),  hash);
     }
 
-    public BinaryBuilder (InputStream stream, String path) throws IOException, EBuilderTerminated {
+    public BinaryBuilder (InputStream stream, String path) throws IOException, AnimoException {
 
         String txID = UUID.randomUUID().toString();
 

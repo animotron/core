@@ -24,7 +24,7 @@ import java.io.IOException;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.exception.EBuilderTerminated;
+import org.animotron.exception.AnimoException;
 import org.animotron.operator.AN;
 import org.animotron.operator.Q;
 import org.animotron.operator.THE;
@@ -41,7 +41,7 @@ import org.junit.Test;
 public class WHouseTest extends ATest {
 
 	@Test
-	public void test() throws EBuilderTerminated, IOException, InterruptedException {
+	public void test() throws IOException, AnimoException {
 		
 		//party: person & organization
 		// + receipt or issue

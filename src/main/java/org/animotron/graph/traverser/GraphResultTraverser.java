@@ -125,13 +125,8 @@ public class GraphResultTraverser extends GraphTraverser {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
-            try {
-                in = Evaluator._.execute(start_op, r);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            in = Evaluator._.execute(start_op, r);
 
             for (Object obj : in) {
                 if (obj instanceof Relationship) {

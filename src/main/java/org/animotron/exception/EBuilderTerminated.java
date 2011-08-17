@@ -22,15 +22,15 @@ package org.animotron.exception;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class EBuilderTerminated extends Exception {
+public class EBuilderTerminated extends AnimoException {
 	
 	private static final long serialVersionUID = 1419995078851286162L;
 
 	public EBuilderTerminated(String message) {
-		super(message);
+		super(null, message);
 	}
 	
 	public EBuilderTerminated(Throwable cause) {
-		super(cause);
+		super(null, cause);
 	}
 }

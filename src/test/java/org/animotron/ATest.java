@@ -20,6 +20,7 @@ package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
+
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.handler.StAXGraphHandler;
@@ -46,7 +47,6 @@ import java.util.Map.Entry;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -156,7 +156,7 @@ public abstract class ATest {
 		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 
-    protected void assertAnimo(Relationship op, String expected) throws IOException, InterruptedException {
+    protected void assertAnimo(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
@@ -176,7 +176,7 @@ public abstract class ATest {
         System.out.println();
     }
 
-    protected void assertResult(Relationship op, String expected) throws IOException, InterruptedException {
+    protected void assertResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
         System.out.println("Result serializer...");
@@ -205,7 +205,7 @@ public abstract class ATest {
         System.out.println();
     }
 
-    protected void assertBinary(Relationship op, String expected) throws IOException, InterruptedException {
+    protected void assertBinary(Relationship op, String expected) throws IOException {
         assertNotNull(op);
         System.out.println("Binary serializer...");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
