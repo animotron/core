@@ -159,6 +159,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                                         "</the:theme-concrete-root-layout>" +
                                     "</body>" +
                                 "</html>" +
+                            "</have:content>" +
                         "</the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>");
 
         assertResult(s, "<html>" +
