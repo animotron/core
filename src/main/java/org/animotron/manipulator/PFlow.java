@@ -23,6 +23,7 @@ import javolution.util.FastList;
 import org.animotron.exception.AnimoException;
 import org.animotron.operator.AN;
 import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
@@ -160,20 +161,41 @@ public class PFlow {
 	}
 	
 	public Path getFlowPath() {
-		int i = 0;
+		for (Relationship r : path) {
+			System.out.println(r);
+		}
+//		int i = 0;
 		for (Path path : td_flow.traverse(getOPNode())) {
 			System.out.println(" path = "+path);
-			i++;
+//			i++;
 		}
-		System.out.println("PFLOW ********************* "+i);
+//		System.out.println("PFLOW ********************* "+i);
 
-		Iterator<Path> it = td_flow.traverse(getOPNode()).iterator();
-		if (it.hasNext())
-			return it.next();
-		else {
-			//what looks wrong!
-			return null;
+		Path first = null;
+		for (Path path : td_flow.traverse(getOPNode())) {
+			if (first == null) {
+				first = path;
+			}
+			boolean haveUse = false;
+			for (Relationship r : path.relationships()) {
+				if (r.getType().name().equals(USE._.rType)) {
+					haveUse = true;
+					break;
+				}
+			}
+			if (!haveUse)
+				return path;
 		}
+		
+		return first;
+
+//		Iterator<Path> it = td_flow.traverse(getOPNode()).iterator();
+//		if (it.hasNext())
+//			return it.next();
+//		else {
+//			//what looks wrong!
+//			return null;
+//		}
 	}
 	
 	public Iterable<Relationship> stack() {
