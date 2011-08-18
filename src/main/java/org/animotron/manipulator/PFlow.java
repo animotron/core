@@ -22,6 +22,7 @@ import javolution.util.FastList;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.operator.AN;
+import org.animotron.operator.relation.IS;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
@@ -161,7 +162,7 @@ public class PFlow {
 	public Path getFlowPath() {
 //		int i = 0;
 //		for (Path path : td_flow.traverse(getOPNode())) {
-//			//System.out.println(" path = "+path);
+//			System.out.println(" path = "+path);
 //			i++;
 //		}
 //		System.out.println("PFLOW ********************* "+i);
@@ -252,7 +253,11 @@ public class PFlow {
 								return INCLUDE_AND_PRUNE;
 							} 
 							return EXCLUDE_AND_CONTINUE;	
-						} 
+
+						//Allow ...<-IS->...
+						} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+							return EXCLUDE_AND_CONTINUE;
+						}
 						return EXCLUDE_AND_PRUNE;
 					}
 					return EXCLUDE_AND_CONTINUE;
