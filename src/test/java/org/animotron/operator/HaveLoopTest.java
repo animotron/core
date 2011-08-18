@@ -59,6 +59,28 @@ public class HaveLoopTest extends ATest {
     }
 
     @Test
+    public void loop_test_() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "B"))
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(AN._, "A",
+                    _(HAVE._, "B", text("test"))
+                )
+            )
+        );
+        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+
+    }
+
+    @Test
     public void loop_test1() throws Exception {
 
         new Expression(
@@ -97,6 +119,38 @@ public class HaveLoopTest extends ATest {
 
         new Expression(
             _(THE._, "D",
+                _(AN._, "E")
+            )
+        );
+
+        new Expression(
+            _(THE._, "E",
+                _(HAVE._, "B", text("test"))
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(AN._, "A", _(AN._, "D"))
+            )
+        );
+        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+
+    }
+
+    @Test
+    public void loop_test3() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "B"))
+        );
+
+        new Expression(
+            _(THE._, "D",
                 _(IS._, "d"),
                 _(HAVE._, "B", text("test"))
             )
@@ -108,6 +162,122 @@ public class HaveLoopTest extends ATest {
             )
         );
         assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+
+    }
+
+
+    @Test
+    public void loop_get_test() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "B"))
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(GET._, "B",
+                    _(AN._, "A",
+                        _(HAVE._, "B", text("test"))
+                    )
+                )
+            )
+        );
+        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+
+    }
+
+    @Test
+    public void loop_get_test1() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "B"))
+        );
+
+        new Expression(
+            _(THE._, "D",
+                _(HAVE._, "B", text("test"))
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(GET._, "B",
+                    _(AN._, "A", _(AN._, "D"))
+                )
+            )
+        );
+        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+
+    }
+
+    @Test
+    public void loop_get_test2() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "B"))
+        );
+
+        new Expression(
+            _(THE._, "D",
+                _(AN._, "E")
+            )
+        );
+
+        new Expression(
+            _(THE._, "E",
+                _(HAVE._, "B", text("test"))
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(GET._, "B",
+                    _(AN._, "A", _(AN._, "D"))
+                )
+            )
+        );
+        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+
+    }
+
+    @Test
+    public void loop_get_test3() throws Exception {
+
+        new Expression(
+            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+        );
+
+        new Expression(
+            _(THE._, "C", _(GET._, "B"))
+        );
+
+        new Expression(
+            _(THE._, "D",
+                _(IS._, "d"),
+                _(HAVE._, "B", text("test"))
+            )
+        );
+
+        Expression s = new Expression(
+            _(THE._, "s",
+                _(GET._, "B",
+                    _(AN._, "A", _(ANY._, "d"))
+                )
+            )
+        );
+        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
 
     }
 
