@@ -141,7 +141,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>" +
+        assertAnimo(s,  "<the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>" +
                             "<have:content>" +
                                 "<the:rest>" +
                                     "<the:root-service>" +
@@ -168,7 +168,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                                     "</the:root-service>" +
                                 "</the:rest>" +
                             "</have:content>" +
-                        "</the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>");
+                        "</the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>");
 
         assertResult(s, "<html>" +
                             "<head>" +
