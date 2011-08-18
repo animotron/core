@@ -165,10 +165,10 @@ public class PFlow {
 			System.out.println(r);
 		}
 //		int i = 0;
-		for (Path path : td_flow.traverse(getOPNode())) {
-			System.out.println(" path = "+path);
+//		for (Path path : td_flow.traverse(getOPNode())) {
+//			System.out.println(" path = "+path);
 //			i++;
-		}
+//		}
 //		System.out.println("PFLOW ********************* "+i);
 
 		Path first = null;

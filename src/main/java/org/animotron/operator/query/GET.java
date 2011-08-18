@@ -124,7 +124,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 							pf.sendAnswer(null);
 							return;
 						}
-						Set<Relationship> res = getByTraversal(underHAVE, op, context, name); //get(context.getEndNode(), name);
+						Set<Relationship> res = getByTraversal(underHAVE, op, context, name);
 						if (!res.isEmpty()) {
 							for (Relationship r : res)
 								pf.sendAnswer(r);
@@ -159,74 +159,17 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
-					System.out.println("P-FLOW is context for GET!");
+					System.out.println("P-FLOW is context for GET!"+" pflow "+pf.getFlowPath());
 					
 					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
 					if (!res.isEmpty())
 						for (Relationship r : res)
 							pf.sendAnswer(r);
-
-//					Relationship res = null;
-//					boolean answered = false;
-//					for (Relationship stack : pf.stack()) {
-//						System.out.println("stack "+stack);
-//
-//						res = get(stack.getEndNode(), name);
-//						if (res != null) {
-//							pf.sendAnswer(createResultInMemory(node, res));
-//							answered = true;
-//						} else {
-//							answered = goDownStack(pf, answered, name, node, stack);
-//						}
-//						if (answered) break;
-//					}
 				}
 			}
 			pf.done();
 		}
 	};
-	
-//	private boolean goDownStack(PFlow pf, boolean answered, String name, Node node, Relationship pos) {
-//		
-//		Relationship res = null;
-//		
-//		//go by REF first
-//		System.out.println("go by REF");
-//		for (Relationship context : pf.getStackContext(pos, true)) {
-//			System.out.println(context);
-//			res = get(context.getEndNode(), name);
-//			if (res != null) {
-//				pf.sendAnswer(createResultInMemory(node, res));
-//				answered = true;
-//			}
-//		}
-//		if (!answered) {
-//			for (Relationship context : pf.getStackContext(pos, true)) {
-//				answered = answered || goDownStack(pf, answered, name, node, context);
-//			}
-//		}
-//		
-//		if (!answered) {
-//			//go by AN (references)
-//			System.out.println("go by AN");
-//			for (Relationship context : pf.getStackContext(pos, false)) {
-//				System.out.println(context);
-//				res = get(context.getEndNode(), name);
-//				if (res != null) {
-//					pf.sendAnswer(createResultInMemory(node, res));
-//					answered = true;
-//				}
-//			}
-//			if (!answered) {
-//				for (Relationship context : pf.getStackContext(pos, false)) {
-//					answered = answered || goDownStack(pf, answered, name, node, context);
-//				}
-//			}
-//		}
-//
-//		
-//		return answered;
-//	}
 
 	public Relationship get(Node context, final String name) {
 		
@@ -374,9 +317,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		System.out.println("context = "+context+" start_op = "+start_op);
 		
 		Node node = Utils.getByREF(start_op.getEndNode());
-//		for (Path path : td.traverse(node)) {
-//			System.out.println("path = "+path);
-//		}
+		for (Path path : td.traverse(node)) {
+			System.out.println("path = "+path);
+		}
 		
 		int deep = Integer.MAX_VALUE;
 		Set<Relationship> result = new FastSet<Relationship>();
@@ -402,6 +345,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				String type = r.getType().name();
 
 				if (thisDeep > 0) {
+					if (type.equals(REF.name()) || type.equals(IS._.rType))
+						continue;
+
 					if (type.equals(IS._.relationshipType().name()) && r.getStartNode().equals(lastNode)) {
 						lastNode = r.getEndNode();
 						foundBackIS = true;
