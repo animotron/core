@@ -160,12 +160,12 @@ public class PFlow {
 	}
 	
 	public Path getFlowPath() {
-//		int i = 0;
-//		for (Path path : td_flow.traverse(getOPNode())) {
-//			System.out.println(" path = "+path);
-//			i++;
-//		}
-//		System.out.println("PFLOW ********************* "+i);
+		int i = 0;
+		for (Path path : td_flow.traverse(getOPNode())) {
+			System.out.println(" path = "+path);
+			i++;
+		}
+		System.out.println("PFLOW ********************* "+i);
 
 		Iterator<Path> it = td_flow.traverse(getOPNode()).iterator();
 		if (it.hasNext())
@@ -246,6 +246,7 @@ public class PFlow {
 			evaluator(new Evaluator(){
 				@Override
 				public Evaluation evaluate(Path path) {
+					//System.out.println(" "+path);
 					if (path.length() > 0) {
 						Relationship r = path.lastRelationship();
 						if (r.getStartNode().equals(path.endNode())) {
@@ -255,7 +256,8 @@ public class PFlow {
 							return EXCLUDE_AND_CONTINUE;	
 
 						//Allow ...<-IS->...
-						} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+						} if (path.length() > 1 && 
+								r.getType().name().equals(IS._.rType)) {
 							return EXCLUDE_AND_CONTINUE;
 						}
 						return EXCLUDE_AND_PRUNE;
