@@ -200,7 +200,9 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("String result serializer...");
-        Assert.assertEquals("", expected, StringResultSerializer.serialize(op));
+        String result = StringResultSerializer.serialize(op);
+        System.out.println(result);
+        Assert.assertEquals("", expected, result);
 
         System.out.println();
     }
