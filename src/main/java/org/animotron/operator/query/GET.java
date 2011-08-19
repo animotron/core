@@ -22,6 +22,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 import static org.animotron.graph.RelationshipTypes.REF;
 
+import java.util.Arrays;
 import java.util.Set;
 
 import javolution.util.FastSet;
@@ -293,19 +294,25 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				}
 			});
 		} else {
+			System.out.println("build traversal with context = "+context);
+			
 			//TODO: merge with prev. one
 			td = Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 				@Override
 				public Evaluation evaluate(Path path) {
+					//System.out.println(path);
 					if (path.length() > 0) {
 						Relationship r = path.lastRelationship(); 
 						if (r.getStartNode().equals(path.endNode())) {
-							if (r.getEndNode().equals(context)) {
+							if (r.getStartNode().equals(context)) {
 								return INCLUDE_AND_PRUNE;
 							}
 							return EXCLUDE_AND_CONTINUE;	
+						//Allow ...<-IS->...
+						} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+							return EXCLUDE_AND_CONTINUE;
 						} 
 						return EXCLUDE_AND_PRUNE;
 					}
@@ -317,9 +324,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		System.out.println("context = "+context+" start_op = "+start_op);
 		
 		Node node = Utils.getByREF(start_op.getEndNode());
-		for (Path path : td.traverse(node)) {
-			System.out.println("path = "+path);
-		}
+//		for (Path path : td.traverse(node)) {
+//			System.out.println("path = "+path);
+//		}
 		
 		int deep = Integer.MAX_VALUE;
 		Set<Relationship> result = new FastSet<Relationship>();
@@ -328,7 +335,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		int thisDeep = 0;
 		
 		for (Path path : td.traverse(node)) {
-			//System.out.println("path = "+path);
+			System.out.println("path = "+path);
 			
 			boolean foundIS = false;
 			boolean foundBackIS = false;
@@ -345,8 +352,6 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				String type = r.getType().name();
 
 				if (thisDeep > 0) {
-					if (type.equals(REF.name()) || type.equals(IS._.rType))
-						continue;
 
 					if (type.equals(IS._.relationshipType().name()) && r.getStartNode().equals(lastNode)) {
 						lastNode = r.getEndNode();
@@ -354,6 +359,18 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					} else {
 						lastNode = r.getStartNode();
 					}
+
+					if (type.equals(IS._.rType)) { //type.equals(REF.name()) ||
+						if (!REFcase) {
+							REFcase = true;
+							thisDeep++;
+						}
+
+						continue;
+					}
+
+					REFcase = false;
+					
 					thisDeep++;
 					continue;
 				}
@@ -375,6 +392,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					if (foundIC != null) {
 						thisResult = ICresult(context, foundIC);
 						thisDeep++;
+						REFcase = false;
 						continue;
 					}
 					
@@ -389,11 +407,13 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					
 					thisResult = r;
 					thisDeep++;
+					REFcase = false;
 				
 				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
 					if (foundIS) {
 						thisResult = ICresult(context, r);
 						thisDeep++;
+						REFcase = false;
 					} else {
 						foundIC = r;
 					}
@@ -403,14 +423,18 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			if (thisDeep == 0)
 				;
 			else if (thisDeep == deep && !foundBackIS) {
+				//System.out.println("Adding thisDeep = "+thisDeep+"; deep = "+deep);
 				result.add(thisResult);
 
 			} else if (thisDeep < deep) {
+				//System.out.println("Creating thisDeep = "+thisDeep+"; deep = "+deep);
 				result.clear();
 				result.add(thisResult);
 				deep = thisDeep;
 			}
 		}
+		
+		//System.out.println(Arrays.toString(result.toArray()));
 		
 		return result;
 	}
