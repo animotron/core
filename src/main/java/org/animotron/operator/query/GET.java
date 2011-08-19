@@ -44,6 +44,7 @@ import org.animotron.operator.Query;
 import org.animotron.operator.Utils;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -360,12 +361,13 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 						lastNode = r.getStartNode();
 					}
 
-					if (type.equals(IS._.rType)) { //type.equals(REF.name()) ||
+					if (type.equals(USE._.rType)) {
+						thisDeep += 2;
+					} else  if (type.equals(IS._.rType)) { //type.equals(REF.name()) ||
 						if (!REFcase) {
 							REFcase = true;
 							thisDeep++;
 						}
-
 						continue;
 					}
 
@@ -423,18 +425,18 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 			if (thisDeep == 0)
 				;
 			else if (thisDeep == deep && !foundBackIS) {
-				//System.out.println("Adding thisDeep = "+thisDeep+"; deep = "+deep);
+				System.out.println("Adding thisDeep = "+thisDeep+"; deep = "+deep);
 				result.add(thisResult);
 
 			} else if (thisDeep < deep) {
-				//System.out.println("Creating thisDeep = "+thisDeep+"; deep = "+deep);
+				System.out.println("Creating thisDeep = "+thisDeep+"; deep = "+deep);
 				result.clear();
 				result.add(thisResult);
 				deep = thisDeep;
 			}
 		}
 		
-		//System.out.println(Arrays.toString(result.toArray()));
+		System.out.println(Arrays.toString(result.toArray()));
 		
 		return result;
 	}
