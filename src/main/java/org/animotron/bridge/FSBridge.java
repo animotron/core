@@ -32,18 +32,35 @@ import java.io.IOException;
  */
 public class FSBridge {
 	
-	public static void load (String path) throws IOException, AnimoException {
-		load(new File(path));
-	}
-	
-	public static void load (File path) throws IOException, AnimoException {
+    public static void load (String path) throws IOException, AnimoException {
+        load(new File(path));
+    }
+
+    public static void load (File path) throws IOException, AnimoException {
+        if (path.isDirectory()) {
+            loadDir(path.getPath(), path);
+        } else {
+            loadFile(path.getParent(), path);
+        }
+    }
+
+    private static void loadDir (String root, File path) throws IOException, AnimoException {
+        for (File file : path.listFiles()) {
+            load(root, file);
+        }
+    }
+
+    private static void loadFile (String root, File file) throws IOException, AnimoException {
+        String path = file.getPath().substring(root.length());
+        CommonBuilder.build(file, path);
+    }
+
+	private static void load (String root, File path) throws IOException, AnimoException {
 		
 		if (path.isDirectory()) {
-			for (File file : path.listFiles()) {
-				load(file);
-			}
+            loadDir(root, path);
 		} else {
-			CommonBuilder.build(path);
+            loadFile(root, path);
 		}
 		
 	}

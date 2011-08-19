@@ -49,10 +49,14 @@ public class CommonBuilder {
 		return build(new ByteArrayInputStream(data.getBytes()));
 	}
 	
-	public static Relationship build(File path) throws IOException, AnimoException {
-		return build(new FileInputStream(path), path.getPath());
-	}
+    public static Relationship build(File file) throws IOException, AnimoException {
+        return build(file, file.getName());
+    }
 	
+    public static Relationship build(File file, String path) throws IOException, AnimoException {
+        return build(new FileInputStream(path), path);
+    }
+
 	public static Relationship build(InputStream stream) throws XMLStreamException {
 		return storeAnimo(stream);
 	}
