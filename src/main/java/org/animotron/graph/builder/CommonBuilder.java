@@ -50,7 +50,7 @@ public class CommonBuilder {
 	}
 	
     public static Relationship build(File file) throws IOException, AnimoException {
-        return build(file, file.getPath());
+        return build(file, file.getName());
     }
 	
     public static Relationship build(File file, String path) throws IOException, AnimoException {
