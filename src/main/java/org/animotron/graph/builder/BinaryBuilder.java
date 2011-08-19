@@ -31,6 +31,7 @@ import org.neo4j.graphdb.Relationship;
 import java.io.*;
 import java.security.MessageDigest;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import static org.animotron.Expression._;
 import static org.animotron.graph.AnimoGraph.getStorage;
@@ -107,7 +108,8 @@ public class BinaryBuilder extends AbstractExpression {
                     start(IS._, "file");
                     end();
 
-                    String[] parts = path.split(File.separator);
+                    String[] parts = path.split(Pattern.quote(File.separator));
+                    
                     Expression prev = null;
                     for (String part : parts) {
                         if (!part.isEmpty()) {
