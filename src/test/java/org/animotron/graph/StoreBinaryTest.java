@@ -60,7 +60,7 @@ public class StoreBinaryTest extends ATest {
 		" sit amet cursus est. Suspendisse potenti.";
 
     private static final String s = File.separator;
-    private static final String PATH = "/content/article/test.txt";
+    private static final String PATH = s+"content"+s+"article"+s+"test.txt";
 
 	@Test
 	public void storeAndSerialize() throws IOException, AnimoException {
