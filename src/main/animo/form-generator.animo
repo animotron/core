@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<the:form-generator xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance" xmlns:animo="animo">
-	<animo:THE>
+<the:form-generator xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance" xmlns:af="animo/function" xmlns:ml="animo/ml">
+	<af:THE>
 		<form>
-			<attribute>
+			<ml:attribute>
 				<name>id</name>
 				<value><animo:getID/></value>
-			</attribute>
+			</ml:attribute>
 			<animo:HAVEs>
-				<animo:answer/>
+				<af:AGraph/>
 				<input>
-					<attribute>
+					<ml:attribute>
 						<name>id</name>
-						<value><animo:getID/></value>
-					</attribute>
-					<attribute>
+						<value><af:getID/></value>
+					</ml:attribute>
+					<ml:attribute>
 						<name>value</name>
-						<value><animo:question/></value>
-					</attribute>
+						<value><af:QGraph/></value>
+					</ml:attribute>
 				</input>
 				<br/>
-			</animo:HAVEs>
+			</af:HAVEs>
 			<input type="submit" value="save"/>
 		</form>
-	</animo:THE>
+	</af:THE>
 </the:form-generator>

@@ -32,6 +32,7 @@ import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.HAVE_NOT;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.IS_NOT;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,7 +40,7 @@ import org.animotron.operator.relation.IS_NOT;
  */
 public class DescriptionLogicTest extends ATest {
 
-	//TODO @Test
+	@Test
 	public void famaly() throws Exception {
 		//TODO: Person ≡ Female ⊔ Male?
 		
