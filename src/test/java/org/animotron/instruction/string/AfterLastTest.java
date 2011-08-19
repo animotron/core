@@ -1,4 +1,5 @@
 /*
+ *  Copyright (C) 2011 The Animo Project
  *  http://animotron.org
  *
  *  This program is free software; you can redistribute it and/or

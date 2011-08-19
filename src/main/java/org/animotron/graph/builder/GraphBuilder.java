@@ -76,7 +76,7 @@ public abstract class GraphBuilder {
 
 	private List<Object[]> flow;
 
-	private Transaction tx;
+	protected Transaction tx;
 
     private boolean ignoreNotFound;
 

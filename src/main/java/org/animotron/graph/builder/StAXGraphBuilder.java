@@ -19,6 +19,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.instruction.ml.ATTRIBUTE;
 import org.animotron.instruction.ml.CDATA;
 import org.animotron.instruction.ml.COMMENT;
@@ -45,41 +46,50 @@ public class StAXGraphBuilder extends GraphBuilder {
 		
 		startGraph();
 		
-		while (reader.hasNext()) {
-			
-			switch (reader.getEventType()) {
-			
-			case XMLStreamConstants.START_ELEMENT : 
-				startElement(reader);
-				break;
-			
-			case XMLStreamConstants.END_ELEMENT : 
-				end();
-				break;
-			
-			case XMLStreamConstants.CDATA : 
-				cdata(reader);
-				break;
-			
-			case XMLStreamConstants.COMMENT : 
-				comment(reader);
-				break;
-			
-			case XMLStreamConstants.CHARACTERS : 
-				text(reader);
-			
+		try {
+			while (reader.hasNext()) {
+				
+				switch (reader.getEventType()) {
+				
+				case XMLStreamConstants.START_ELEMENT : 
+					startElement(reader);
+					break;
+				
+				case XMLStreamConstants.END_ELEMENT : 
+					end();
+					break;
+				
+				case XMLStreamConstants.CDATA : 
+					cdata(reader);
+					break;
+				
+				case XMLStreamConstants.COMMENT : 
+					comment(reader);
+					break;
+				
+				case XMLStreamConstants.CHARACTERS : 
+					text(reader);
+				
+				}
+				
+				reader.next();
 			}
 			
-			reader.next();
-		}
+			try {
+				endGraph();
+	        } catch (AnimoException e) {
+				throw new XMLStreamException(e);
+			}
 		
-		try {
-			endGraph();
-        } catch (AnimoException e) {
-			throw new XMLStreamException(e);
+			return getRelationship();
+			
+		} finally {
+			//we must be sure that transaction is closed
+			if (AnimoGraph.isTransactionActive(tx)) {
+				System.out.println("Transaction wasn't close propery.");
+				AnimoGraph.finishTx(tx);
+			}
 		}
-		
-		return getRelationship();
 		
 	}
 

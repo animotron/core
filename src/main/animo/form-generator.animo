@@ -4,9 +4,9 @@
 		<form>
 			<ml:attribute>
 				<name>id</name>
-				<value><animo:getID/></value>
+				<value><af:getID/></value>
 			</ml:attribute>
-			<animo:HAVEs>
+			<af:HAVEs>
 				<af:AGraph/>
 				<input>
 					<ml:attribute>

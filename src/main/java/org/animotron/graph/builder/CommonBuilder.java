@@ -63,6 +63,8 @@ public class CommonBuilder {
 				isAnimo(path) ? storeAnimo(stream) : storeBinary(stream, path);
 			
 		} catch (XMLStreamException e) {
+			//XXX: log this
+			e.printStackTrace();
 			return 
 				storeBinary(stream, path);
 		}

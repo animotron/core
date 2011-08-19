@@ -142,6 +142,10 @@ public class AnimoGraph {
 		activeTx.remove(tx);
 		dec();
 	}
+	
+	public static boolean isTransactionActive(Transaction tx) {
+		return activeTx.containsKey(tx);
+	}
 
 	/**
 	 * Execute operation with transaction.
