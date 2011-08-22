@@ -41,7 +41,7 @@ import static org.animotron.Expression.text;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class CurrentSiteTest1 extends ATest {
+public class CurrentSite_Test extends ATest {
 
     @Test
     public void test() throws AnimoException, IOException, InterruptedException {

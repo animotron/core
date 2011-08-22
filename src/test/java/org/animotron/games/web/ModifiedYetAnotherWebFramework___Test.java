@@ -40,10 +40,9 @@ import static org.animotron.Expression.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class CurrentWebFrameworkTest1 extends ATest {
+public class ModifiedYetAnotherWebFramework___Test extends ATest {
 
-    @Test
-    public void test() throws AnimoException, IOException, InterruptedException {
+    private void test(Object[]... o) throws AnimoException, IOException, InterruptedException {
 
         new Expression(
             _(THE._, "service",
@@ -58,7 +57,7 @@ public class CurrentWebFrameworkTest1 extends ATest {
                 _(HAVE._, "content",
                     element("html",
                         element("head",
-                            element("title", _(GET._, "title", _(ANY._, "service")))
+                            element("title", _(GET._, "title", _(AN._, "current-service")))
                         ),
                         element("body",
                             _(ANY._, "layout")
@@ -69,26 +68,10 @@ public class CurrentWebFrameworkTest1 extends ATest {
         );
 
         new Expression (
-            _(THE._, "resource-not-found",
-                _(IS._, "not-found-content"),
-                _(HAVE._, "title", text("Not found")),
-                _(HAVE._, "content", text("Can't find resource \""), _(GET._, "uri", _(ANY._, "request")), text("\""))
-            )
-        );
-
-        new Expression (
             _(THE._, "it-working",
                 _(IS._, "root-content"),
                 _(HAVE._, "title", text("Welcome to Animo")),
                 _(HAVE._, "content", text("It is working!"))
-            )
-        );
-
-        new Expression (
-            _(THE._, "current-site",
-                _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
-                )
             )
         );
 
@@ -102,20 +85,9 @@ public class CurrentWebFrameworkTest1 extends ATest {
         );
 
         new Expression (
-            _(THE._, "not-found-service",
-                _(IS._, "service"),
-                _(IS._, "not-found"),
-                _(AN._, "html",
-                    _(ANY._, "not-found-content"),
-                    _(USE._, "not-found-layout")
-                )
-            )
-        );
-
-        new Expression (
             _(THE._, "root-service",
                 _(IS._, "service"),
-                _(IS._, "root"),
+                _(HAVE._, "uri", text("/")),
                 _(AN._, "html",
                     _(ANY._, "root-content"),
                     _(USE._, "root-layout")
@@ -124,46 +96,56 @@ public class CurrentWebFrameworkTest1 extends ATest {
         );
 
         new Expression (
-            _(THE._, "not-found-layout",
-                _(IS._, "layout"),
-                element("p",  _(GET._, "content", _(ANY._, "service")))
-            )
-        );
-
-        new Expression (
             _(THE._, "root-layout",
                 _(IS._, "layout"),
-                element("p", text("The default root layout!"))
+                element("p", text("Default layout"))
             )
         );
 
         new Expression (
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
-                element("h1", _(GET._, "title", _(ANY._, "service"))),
-                element("p", _(GET._, "content", _(ANY._, "service"))),
+                element("h1", _(GET._, "title", _(AN._, "current-service"))),
+                element("p", _(GET._, "content", _(AN._, "current-service"))),
                 element("ul",
-                    element("li", text("host: \""), element("strong" ,_(GET._, "host", _(ANY._, "request"))), text("\"")),
-                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
+                    element("li", text("host: \""), element("strong", _(GET._, "host", _(ANY._, "request"))), text("\"")),
+                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(AN._, "current-service"))), text("\""))
                 )
             )
         );
 
         new Expression(
-            _(THE._, "rest",
-                _(ANY._, "resource",
-                    _(AN._, "current-site")
+            _(THE._, "current-service",
+                _(ANY._, "service",
+                        _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))
                 )
             )
         );
 
         new Expression(
             _(THE._, "current-request",
-                _(USE._, "root"),
+                _(IS._, "request"),
                 _(HAVE._, "uri", text("/")),
                 _(HAVE._, "host", text("localhost"))
             )
         );
+
+        new Expression(
+            _(THE._, "rest",
+                o
+            )
+        );
+
+        Expression m = new Expression(
+            _(GET._, "mime-type",
+                _(AN._, "rest",
+                    _(USE._, "current-request")
+                )
+            )
+        );
+
+        assertString(m, "text/html");
+
 
         Expression s = new Expression(
             _(GET._, "content",
@@ -208,6 +190,58 @@ public class CurrentWebFrameworkTest1 extends ATest {
                             "</body>" +
                         "</html>");
 
+    }
+
+    @Test
+    public void test1() throws AnimoException, IOException, InterruptedException {
+        test(
+            _(AN._, "root-service",
+                _(AN._, "localhost-site")
+            )
+        );
+    }
+
+    @Test
+    public void test2() throws AnimoException, IOException, InterruptedException {
+        test(
+            _(AN._, "root-service",
+                _(ANY._, "site",
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
+                )
+            )
+        );
+    }
+
+    @Test
+    public void test3() throws AnimoException, IOException, InterruptedException {
+        test(
+            _(AN._, "current-service",
+                _(AN._, "localhost-site")
+            )
+        );
+    }
+
+    @Test
+    public void test4() throws AnimoException, IOException, InterruptedException {
+        test(
+            _(AN._, "current-service",
+                _(ANY._, "site",
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
+                )
+            )
+        );
+    }
+
+    @Test
+    public void test5() throws AnimoException, IOException, InterruptedException {
+        test(
+            _(ANY._, "resource",
+                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
+                _(ANY._, "site",
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
+                )
+            )
+        );
     }
 
 }
