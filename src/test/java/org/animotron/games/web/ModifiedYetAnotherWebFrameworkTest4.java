@@ -40,7 +40,7 @@ import static org.animotron.Expression.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ModifiedYetAnotherWebFrameworkTest extends ATest {
+public class ModifiedYetAnotherWebFrameworkTest4 extends ATest {
 
     private void test(Object[]... o) throws AnimoException, IOException, InterruptedException {
 
@@ -57,7 +57,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                 _(HAVE._, "content",
                     element("html",
                         element("head",
-                            element("title", _(GET._, "title"))
+                            element("title", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))))))
                         ),
                         element("body",
                             _(ANY._, "layout")
@@ -89,8 +89,8 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                 _(IS._, "service"),
                 _(HAVE._, "uri", text("/")),
                 _(AN._, "html",
-                        _(ANY._, "root-content"),
-                        _(USE._, "root-layout")
+                    _(ANY._, "root-content"),
+                    _(USE._, "root-layout")
                 )
             )
         );
@@ -105,12 +105,20 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
-                element("h1", _(GET._, "title")),
-                element("p", _(GET._, "content")),
+                element("h1", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
+                element("p", _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
                 element("ul",
-                    element("li", text("host: \""), element("strong" ,_(GET._, "host")), text("\"")),
-                    element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
+                    element("li", text("host: \""), element("strong", _(GET._, "host", _(ANY._, "request"))), text("\"")),
+                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
                 )
+            )
+        );
+
+        new Expression(
+            _(THE._, "current-request",
+                _(IS._, "request"),
+                _(HAVE._, "uri", text("/")),
+                _(HAVE._, "host", text("localhost"))
             )
         );
 
@@ -123,8 +131,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
         Expression m = new Expression(
             _(GET._, "mime-type",
                 _(AN._, "rest",
-                    _(HAVE._, "uri", text("/")),
-                    _(HAVE._, "host", text("localhost"))
+                    _(USE._, "current-request")
                 )
             )
         );
@@ -135,13 +142,12 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
         Expression s = new Expression(
             _(GET._, "content",
                 _(AN._, "rest",
-                    _(HAVE._, "uri", text("/")),
-                    _(HAVE._, "host", text("localhost"))
+                    _(USE._, "current-request")
                 )
             )
         );
 
-        assertAnimo(s,  "<the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>" +
+        assertAnimo(s,  "<the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>" +
                             "<have:content>" +
                                 "<html>" +
                                     "<head>" +
@@ -160,7 +166,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                                     "</body>" +
                                 "</html>" +
                             "</have:content>" +
-                        "</the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>");
+                        "</the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>");
 
         assertResult(s, "<html>" +
                             "<head>" +
@@ -192,7 +198,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
@@ -202,7 +208,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
     public void test3() throws AnimoException, IOException, InterruptedException {
         test(
             _(ANY._, "service",
-                _(WITH._, "uri", _(GET._, "uri")),
+                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
                 _(AN._, "localhost-site")
             )
         );
@@ -212,9 +218,9 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
     public void test4() throws AnimoException, IOException, InterruptedException {
         test(
             _(ANY._, "service",
-                _(WITH._, "uri", _(GET._, "uri")),
+                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
@@ -224,9 +230,9 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
     public void test5() throws AnimoException, IOException, InterruptedException {
         test(
             _(ANY._, "resource",
-                _(WITH._, "uri", _(GET._, "uri")),
+                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );

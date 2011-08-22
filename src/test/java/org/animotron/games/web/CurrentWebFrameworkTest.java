@@ -58,7 +58,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 _(HAVE._, "content",
                     element("html",
                         element("head",
-                            element("title", _(GET._, "title", _(ANY._, "service")))
+                            element("title", _(GET._, "title"))
                         ),
                         element("body",
                             _(ANY._, "layout")
@@ -72,7 +72,7 @@ public class CurrentWebFrameworkTest extends ATest {
             _(THE._, "resource-not-found",
                 _(IS._, "not-found-content"),
                 _(HAVE._, "title", text("Not found")),
-                _(HAVE._, "content", text("Can't find resource \""), _(GET._, "uri", _(ANY._, "request")), text("\""))
+                _(HAVE._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
             )
         );
 
@@ -87,7 +87,7 @@ public class CurrentWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "current-site",
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
+                    _(WITH._, "server-name", _(GET._, "host"))
                 )
             )
         );
@@ -126,7 +126,7 @@ public class CurrentWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "not-found-layout",
                 _(IS._, "layout"),
-                element("p",  _(GET._, "content", _(ANY._, "service")))
+                element("p",  _(GET._, "content"))
             )
         );
 
@@ -140,11 +140,11 @@ public class CurrentWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
-                element("h1", _(GET._, "title", _(ANY._, "service"))),
-                element("p", _(GET._, "content", _(ANY._, "service"))),
+                element("h1", _(GET._, "title")),
+                element("p", _(GET._, "content")),
                 element("ul",
-                    element("li", text("host: \""), element("strong" ,_(GET._, "host", _(ANY._, "request"))), text("\"")),
-                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
+                    element("li", text("host: \""), element("strong" ,_(GET._, "host")), text("\"")),
+                    element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
                 )
             )
         );
@@ -157,23 +157,17 @@ public class CurrentWebFrameworkTest extends ATest {
             )
         );
 
-        new Expression(
-            _(THE._, "current-request",
-                _(USE._, "root"),
-                _(HAVE._, "uri", text("/")),
-                _(HAVE._, "host", text("localhost"))
-            )
-        );
-
         Expression s = new Expression(
             _(GET._, "content",
                 _(AN._, "rest",
-                    _(USE._, "current-request")
+                    _(USE._, "root"),
+                    _(HAVE._, "uri", text("/")),
+                    _(HAVE._, "host", text("localhost"))
                 )
             )
         );
 
-        assertAnimo(s,  "<the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>" +
+        assertAnimo(s,  "<the:5ba40e69742be366f1cdcf7a2cfb107bce112789e9b056737ce87231e7386fd0>" +
                             "<have:content>" +
                                 "<html>" +
                                     "<head>" +
@@ -192,7 +186,7 @@ public class CurrentWebFrameworkTest extends ATest {
                                     "</body>" +
                                 "</html>" +
                             "</have:content>" +
-                        "</the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>");
+                        "</the:5ba40e69742be366f1cdcf7a2cfb107bce112789e9b056737ce87231e7386fd0>");
 
         assertResult(s, "<html>" +
                             "<head>" +
