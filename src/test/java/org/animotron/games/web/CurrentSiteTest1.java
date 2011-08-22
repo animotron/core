@@ -28,6 +28,7 @@ import org.animotron.operator.query.ANY;
 import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
+import org.animotron.operator.relation.USE;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -40,7 +41,7 @@ import static org.animotron.Expression.text;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class CurrentSiteTest extends ATest {
+public class CurrentSiteTest1 extends ATest {
 
     @Test
     public void test() throws AnimoException, IOException, InterruptedException {
@@ -48,16 +49,14 @@ public class CurrentSiteTest extends ATest {
         new Expression (
             _(THE._, "current-site",
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
 
         new Expression (
             _(THE._, "test-service",
-                _(IS._, "service"),
-                _(GET._, "server-name"),
-                _(GET._, "host")
+                _(IS._, "service")
             )
         );
 
@@ -76,21 +75,26 @@ public class CurrentSiteTest extends ATest {
             )
         );
 
-        Expression s = new Expression(
-            _(AN._, "rest",
+        new Expression (
+            _(THE._, "current-request",
+                _(IS._, "request"),
                 _(HAVE._, "host", text("localhost"))
             )
         );
 
-        assertAnimo(s,  "<the:d182256aea683765c5c276803ce3e983ac08d14308a3f7df9e739581ace99de3>" +
+        Expression s = new Expression(
+            _(AN._, "rest",
+                _(USE._, "current-request")
+            )
+        );
+
+        assertAnimo(s,  "<the:3af496a2e8ef6b8f85cf85b360f8ab3775232185e2d2cfe65b1a249ccf8f3cff>" +
                             "<the:rest>" +
-                                "<the:teset-service>" +
+                                "<the:test-service>" +
                                     "<is:service/>" +
-                                    "<have:server-name>localhost</have:server-name>" +
-                                    "<have:host>localhost</have:host>" +
-                                "</the:teset-service>" +
+                                "</the:test-service>" +
                             "</the:rest>" +
-                        "</the:d182256aea683765c5c276803ce3e983ac08d14308a3f7df9e739581ace99de3>");
+                        "</the:3af496a2e8ef6b8f85cf85b360f8ab3775232185e2d2cfe65b1a249ccf8f3cff>");
 
     }
 
