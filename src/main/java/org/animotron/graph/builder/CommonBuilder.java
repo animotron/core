@@ -54,7 +54,7 @@ public class CommonBuilder {
     }
 	
     public static Relationship build(File file, String path) throws IOException, AnimoException {
-        return build(new FileInputStream(path), path);
+        return build(new FileInputStream(file), path);
     }
 
 	public static Relationship build(InputStream stream) throws XMLStreamException {

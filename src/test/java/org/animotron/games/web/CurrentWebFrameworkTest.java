@@ -152,7 +152,7 @@ public class CurrentWebFrameworkTest extends ATest {
         new Expression(
             _(THE._, "rest",
                 _(ANY._, "resource",
-                    _(AN._, "courrent-site")
+                    _(AN._, "current-site")
                 )
             )
         );
