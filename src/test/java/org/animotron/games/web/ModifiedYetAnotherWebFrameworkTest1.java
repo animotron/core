@@ -40,7 +40,7 @@ import static org.animotron.Expression.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ModifiedYetAnotherWebFrameworkTest extends ATest {
+public class ModifiedYetAnotherWebFrameworkTest1 extends ATest {
 
     private void test(Object[]... o) throws AnimoException, IOException, InterruptedException {
 
@@ -108,8 +108,8 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                 element("h1", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
                 element("p", _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
                 element("ul",
-                    element("li", text("host: \""), element("strong" ,_(GET._, "host", _(ANY._, "request"))), text("\"")),
-                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
+                    element("li", text("host: \""), element("strong", _(GET._, "host", _(ANY._, "request"))), text("\"")),
+                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))), text("\""))
                 )
             )
         );

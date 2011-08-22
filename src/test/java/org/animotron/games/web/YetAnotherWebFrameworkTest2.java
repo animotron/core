@@ -40,28 +40,18 @@ import static org.animotron.Expression.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ModifiedYetAnotherWebFrameworkTest extends ATest {
+public class YetAnotherWebFrameworkTest2 extends ATest {
 
-    private void test(Object[]... o) throws AnimoException, IOException, InterruptedException {
-
-        new Expression(
-            _(THE._, "service",
-                _(IS._, "resource")
-            )
-
-        );
+    private void test(Object[]... o) throws AnimoException, IOException {
 
         new Expression (
             _(THE._, "html",
-                _(HAVE._, "mime-type", text("text/html")),
-                _(HAVE._, "content",
-                    element("html",
-                        element("head",
-                            element("title", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))))))
-                        ),
-                        element("body",
-                            _(ANY._, "layout")
-                        )
+                element("html",
+                    element("head",
+                        element("title", _(GET._, "title", _(AN._, "current-service")))
+                    ),
+                    element("body",
+                        _(ANY._, "layout")
                     )
                 )
             )
@@ -105,11 +95,19 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
-                element("h1", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
-                element("p", _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
+                element("h1", _(GET._, "title", _(AN._, "current-service"))),
+                element("p", _(GET._, "content", _(AN._, "current-service"))),
                 element("ul",
-                    element("li", text("host: \""), element("strong" ,_(GET._, "host", _(ANY._, "request"))), text("\"")),
+                    element("li", text("host: \""), element("strong", _(GET._, "host", _(ANY._, "request"))), text("\"")),
                     element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
+                )
+            )
+        );
+
+        new Expression(
+            _(THE._, "current-service",
+                _(ANY._, "service",
+                    _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))
                 )
             )
         );
@@ -128,44 +126,37 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        Expression m = new Expression(
-            _(GET._, "mime-type",
-                _(AN._, "rest",
-                    _(USE._, "current-request")
-                )
-            )
-        );
-
-        assertString(m, "text/html");
-
-
         Expression s = new Expression(
-            _(GET._, "content",
-                _(AN._, "rest",
-                    _(USE._, "current-request")
-                )
+            _(AN._, "rest",
+                _(USE._, "current-request")
             )
         );
 
         assertAnimo(s,  "<the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>" +
-                            "<have:content>" +
-                                "<html>" +
-                                    "<head>" +
-                                        "<title><have:title>Welcome to Animo</have:title></title>" +
-                                    "</head>" +
-                                    "<body>" +
-                                        "<the:theme-concrete-root-layout>" +
-                                            "<is:root-layout/>" +
-                                            "<h1><have:title>Welcome to Animo</have:title></h1>" +
-                                            "<p><have:content>It is working!</have:content></p>" +
-                                            "<ul>" +
-                                                "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
-                                                "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
-                                            "</ul>" +
-                                        "</the:theme-concrete-root-layout>" +
-                                    "</body>" +
-                                "</html>" +
-                            "</have:content>" +
+                            "<the:rest>" +
+                                "<the:root-service>" +
+                                    "<is:service/>" +
+                                    "<have:uri>/</have:uri>" +
+                                    "<the:html>" +
+                                        "<html>" +
+                                            "<head>" +
+                                                "<title><have:title>Welcome to Animo</have:title></title>" +
+                                            "</head>" +
+                                            "<body>" +
+                                                "<the:theme-concrete-root-layout>" +
+                                                    "<is:root-layout/>" +
+                                                    "<h1><have:title>Welcome to Animo</have:title></h1>" +
+                                                    "<p><have:content>It is working!</have:content></p>" +
+                                                    "<ul>" +
+                                                        "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
+                                                        "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
+                                                    "</ul>" +
+                                                "</the:theme-concrete-root-layout>" +
+                                            "</body>" +
+                                        "</html>" +
+                                    "</the:html>" +
+                                "</the:root-service>" +
+                            "</the:rest>" +
                         "</the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>");
 
         assertResult(s, "<html>" +
@@ -185,7 +176,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test1() throws AnimoException, IOException, InterruptedException {
+    public void test1() throws AnimoException, IOException {
         test(
             _(AN._, "root-service",
                 _(AN._, "localhost-site")
@@ -194,7 +185,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test2() throws AnimoException, IOException, InterruptedException {
+    public void test2() throws AnimoException, IOException {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
@@ -205,32 +196,18 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    public void test3() throws AnimoException, IOException, InterruptedException {
+    public void test3() throws AnimoException, IOException {
         test(
-            _(ANY._, "service",
-                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
+            _(AN._, "current-service",
                 _(AN._, "localhost-site")
             )
         );
     }
 
     @Test
-    public void test4() throws AnimoException, IOException, InterruptedException {
+    public void test4() throws AnimoException, IOException {
         test(
-            _(ANY._, "service",
-                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
-                _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
-                )
-            )
-        );
-    }
-
-    @Test
-    public void test5() throws AnimoException, IOException, InterruptedException {
-        test(
-            _(ANY._, "resource",
-                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
+            _(AN._, "current-service",
                 _(ANY._, "site",
                     _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )

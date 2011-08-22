@@ -48,7 +48,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
             _(THE._, "html",
                 element("html",
                     element("head",
-                        element("title", _(GET._, "title"))
+                        element("title", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))))))
                     ),
                     element("body",
                         _(ANY._, "layout")
@@ -95,12 +95,20 @@ public class YetAnotherWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
-                element("h1", _(GET._, "title")),
-                element("p", _(GET._, "content")),
+                element("h1", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
+                element("p", _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
                 element("ul",
-                    element("li", text("host: \""), element("strong" ,_(GET._, "host")), text("\"")),
-                    element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
+                    element("li", text("host: \""), element("strong" ,_(GET._, "host", _(ANY._, "request"))), text("\"")),
+                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
                 )
+            )
+        );
+
+        new Expression(
+            _(THE._, "current-request",
+                _(IS._, "request"),
+                _(HAVE._, "uri", text("/")),
+                _(HAVE._, "host", text("localhost"))
             )
         );
 
@@ -112,12 +120,11 @@ public class YetAnotherWebFrameworkTest extends ATest {
 
         Expression s = new Expression(
             _(AN._, "rest",
-                _(HAVE._, "uri", text("/")),
-                _(HAVE._, "host", text("localhost"))
+                _(USE._, "current-request")
             )
         );
 
-        assertAnimo(s,  "<the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>" +
+        assertAnimo(s,  "<the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>" +
                             "<the:rest>" +
                                 "<the:root-service>" +
                                     "<is:service/>" +
@@ -142,7 +149,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
                                     "</the:html>" +
                                 "</the:root-service>" +
                             "</the:rest>" +
-                        "</the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>");
+                        "</the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>");
 
         assertResult(s, "<html>" +
                             "<head>" +
@@ -174,7 +181,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
@@ -184,7 +191,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     public void test3() throws AnimoException, IOException {
         test(
             _(ANY._, "service",
-                _(WITH._, "uri", _(GET._, "uri")),
+                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
                 _(AN._, "localhost-site")
             )
         );
@@ -194,9 +201,9 @@ public class YetAnotherWebFrameworkTest extends ATest {
     public void test4() throws AnimoException, IOException {
         test(
             _(ANY._, "service",
-                _(WITH._, "uri", _(GET._, "uri")),
+                _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
