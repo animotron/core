@@ -41,7 +41,7 @@ import static org.animotron.Expression.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class WebFrameworkTest extends ATest {
+public class WebFramework_Test extends ATest {
 
 	@Test
 	public void test() throws IOException, AnimoException {
@@ -100,7 +100,7 @@ public class WebFrameworkTest extends ATest {
             _(THE._, "html-head",
                 element("head",
                     element("title",
-                        _(GET._, "title")
+                        _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(AN._, "request")))))
         )   )   )   );
 
         new Expression(
@@ -112,9 +112,9 @@ public class WebFrameworkTest extends ATest {
 				_(IS._, "root-layout"),
 				_(HAVE._, "content",
 					element("div", attribute("id", "title"),
-						_(GET._, "title")),
+						_(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(AN._, "request")))))),
 					element("div", attribute("id", "content"),
-                        _(GET._, "content"))
+                        _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(AN._, "request"))))))
 		)	)	);
 
     	new Expression(
