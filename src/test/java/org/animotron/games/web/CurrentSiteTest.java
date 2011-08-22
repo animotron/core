@@ -54,7 +54,7 @@ public class CurrentSiteTest extends ATest {
         );
 
         new Expression (
-            _(THE._, "teset-service",
+            _(THE._, "test-service",
                 _(IS._, "service"),
                 _(GET._, "server-name"),
                 _(GET._, "host")
