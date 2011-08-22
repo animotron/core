@@ -58,10 +58,10 @@ public class CurrentWebFrameworkTest extends ATest {
                 _(HAVE._, "content",
                     element("html",
                         element("head",
-                                element("title", _(GET._, "title", _(ANY._, "service")))
+                            element("title", _(GET._, "title", _(ANY._, "service")))
                         ),
                         element("body",
-                                _(ANY._, "layout")
+                            _(ANY._, "layout")
                         )
                     )
                 )
@@ -72,7 +72,7 @@ public class CurrentWebFrameworkTest extends ATest {
             _(THE._, "resource-not-found",
                 _(IS._, "not-found-content"),
                 _(HAVE._, "title", text("Not found")),
-                _(HAVE._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
+                _(HAVE._, "content", text("Can't find resource \""), _(GET._, "uri", _(ANY._, "request")), text("\""))
             )
         );
 
