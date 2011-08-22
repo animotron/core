@@ -31,6 +31,7 @@ import org.animotron.Executor;
 import org.animotron.Statement;
 import org.animotron.Statements;
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.AnimoPath;
 import org.animotron.graph.GraphOperation;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
@@ -263,6 +264,9 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		TraversalDescription td;
 		
 		if (context instanceof Relationship) {
+//			EmptyGetContextFinder contextFinder = new EmptyGetContextFinder();
+//			contextFinder.findHaves(Utils.getByREF(start_op.getEndNode()), (Relationship)context);
+			
 			td = Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
@@ -337,6 +341,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 		
 		for (Path path : td.traverse(node)) {
 			System.out.println("path = "+path);
+			System.out.println("path = "+new AnimoPath(path));
 			
 			boolean foundIS = false;
 			boolean foundBackIS = false;
