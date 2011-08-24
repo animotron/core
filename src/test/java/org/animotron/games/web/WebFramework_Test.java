@@ -30,6 +30,7 @@ import org.animotron.operator.query.GET;
 import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.animotron.operator.relation.USE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -43,6 +44,7 @@ import static org.animotron.Expression.*;
  */
 public class WebFramework_Test extends ATest {
 
+	@Ignore
 	@Test
 	public void test() throws IOException, AnimoException {
     	new Expression(
