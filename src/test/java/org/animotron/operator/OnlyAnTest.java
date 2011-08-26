@@ -18,16 +18,17 @@
  */
 package org.animotron.operator;
 
-import static org.animotron.Expression._;
-
-import java.io.IOException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.operator.query.GET;
+import org.animotron.operator.relation.HAVE;
 import org.animotron.operator.relation.IS;
 import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.animotron.Expression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,8 +36,8 @@ import org.junit.Test;
  */
 public class OnlyAnTest extends ATest {
 
-	@Test
-	public void test() throws AnimoException, IOException {
+    @Test
+    public void test() throws AnimoException, IOException {
         new Expression(
             _(THE._, "red",
                 _(IS._, "color")
@@ -56,5 +57,29 @@ public class OnlyAnTest extends ATest {
         );
 	
         assertAnimo(a,  "<the:a><the:red><is:color/></the:red></the:a>");
-	}
+    }
+
+    @Test
+    public void test1() throws AnimoException, IOException {
+        new Expression(
+            _(THE._, "red",
+                _(IS._, "color")
+            )
+        );
+
+        new Expression(
+            _(THE._, "dress",
+                _(HAVE._, "red")
+            )
+        );
+
+        Expression a = new Expression(
+            _(THE._, "a",
+                _(GET._, "color", _(AN._, "dress"))
+            )
+        );
+
+        assertAnimo(a,  "<the:a><the:red><is:color/></the:red></the:a>");
+    }
+
 }
