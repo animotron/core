@@ -37,6 +37,7 @@ import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.operator.AN;
 import org.animotron.operator.AbstractOperator;
 import org.animotron.operator.Cachable;
 import org.animotron.operator.Evaluable;
@@ -390,7 +391,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 				
 				lastNode = r.getStartNode();
 				
-				if (type.equals(IS._.relationshipType().name())) {
+				if (type.equals(IS._.rType)) {
 					if (name.equals(IS._.name(r))) {
 						foundIS = true;
 						continue;
@@ -403,7 +404,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 						continue;
 					}
 					
-				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
+				} else if (type.equals(HAVE._.rType) && (name.equals(HAVE._.name(r)) || foundIS)) {
 					//ignore empty have 
 					if (!Utils.haveContext(r.getEndNode()))
 						break;
@@ -416,7 +417,7 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					thisDeep++;
 					REFcase = false;
 				
-				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
+				} else if (type.equals(IC._.rType) && (name.equals(IC._.name(r)) || foundIS)) {
 					if (foundIS) {
 						thisResult = ICresult(context, r);
 						thisDeep++;
@@ -424,6 +425,10 @@ public class GET extends AbstractOperator implements Evaluable, Query, Cachable 
 					} else {
 						foundIC = r;
 					}
+				} else if (type.equals(AN._.rType) && (name.equals(HAVE._.name(r)) || foundIS)) {
+					thisResult = r;
+					thisDeep++;
+					REFcase = false;
 				}
 			}
 			

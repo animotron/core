@@ -55,6 +55,6 @@ public class OnlyAnTest extends ATest {
             )
         );
 	
-        assertAnimo(a,  "<the:red><is:color/></the:red>");
+        assertAnimo(a,  "<the:a><the:red><is:color/></the:red></the:a>");
 	}
 }
