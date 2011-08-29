@@ -22,6 +22,7 @@ import org.animotron.ATest;
 import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.statement.operator.THE;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -36,6 +37,7 @@ import static org.junit.Assert.assertNotNull;
 public class AttributeTest extends ATest {
 
 	@Test
+    @Ignore
 	public void check() throws Exception {
 
 		CommonBuilder.build(new File("src/main/animo/form-generator.animo"));
