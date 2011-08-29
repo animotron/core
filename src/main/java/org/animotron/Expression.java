@@ -72,17 +72,17 @@ public class Expression extends AbstractExpression {
     }
 
 	public static Object[] element(String name) {
-		Object[] e = {ELEMENT._, null, name, null};
+		Object[] e = {ELEMENT._, name, null, null};
 		return e;
 	}
 
 	public static Object[] element(String name, Object[]... p) {
-		Object[] e = {ELEMENT._, null, name, p};
+		Object[] e = {ELEMENT._, name, null, p};
 		return e;
 	}
 	
 	public static Object[] attribute(String name, String value) {
-		Object[] e = {ATTRIBUTE._, null, name, text(value)};
+		Object[] e = {ATTRIBUTE._, name, value, null};
 		return e;
 	}
 
@@ -92,7 +92,7 @@ public class Expression extends AbstractExpression {
 	}
 
 	public static Object[] comment(String value) {
-		Object[] e = {COMMENT._, value, null};
+		Object[] e = {COMMENT._, null, value, null};
 		return e;
 	}
 

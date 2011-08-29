@@ -33,35 +33,35 @@ import java.util.Map;
 public class UoMTest extends ATest {
 
 	private static final String THE_UoM = 
-		"<the:UoM "+ANIMO_NSs+">" +
+		"<the:UoM "+/*ANIMO_NSs+*/">" +
 		"</the:UoM>";
 
 	private static final String THE_METER = 
-		"<the:meter "+ANIMO_NSs+">" +
+		"<the:meter "+/*ANIMO_NSs+*/">" +
 		"	<is:UoM/>" +
 		"</the:meter>";
 
 	private static final String THE_MEASURE = 
-		"<the:measure "+ANIMO_NSs+">" +
+		"<the:measure "+/*ANIMO_NSs+*/">" +
 		"	<have:quantity/>" +
 		"	<have:UoM/>" +
 		"</the:measure>";
 
 	private static final String THE_M_10m = 
-		"<the:m-10m "+ANIMO_NSs+">" +
+		"<the:m-10m "+/*ANIMO_NSs+*/">" +
 		"	<is:measure/>" +
 		"	<have:quantity><Q:N10/></have:quantity>" +
 		"	<have:UoM><an:meter/></have:UoM>" +
 		"</the:m-10m>";
 
 	private static final String THE_M_5m = 
-		"<the:m-5m "+ANIMO_NSs+">" +
+		"<the:m-5m "+/*ANIMO_NSs+*/">" +
 		"	<have:quantity><Q:N5/></have:quantity>" +
 		"	<have:UoM><an:meter/></have:UoM>" +
 		"</the:m-5m>";
 
 	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+">" +
+		"<the:A "+/*ANIMO_NSs+*/">" +
 		"	<math:sum>" +
 		"		<an:m-10m/>" +
 		"		<an:m-5m/>" +
@@ -69,7 +69,7 @@ public class UoMTest extends ATest {
 		"</the:A>";
 
 	private static final String THE_B = 
-		"<the:B "+ANIMO_NSs+">" +
+		"<the:B "+/*ANIMO_NSs+*/">" +
 		"	<math:sum>" +
 		"		<an:m-5m/>" +
 		"		<an:m-10m/>" +
@@ -91,7 +91,7 @@ public class UoMTest extends ATest {
 	        data.put("A.xml", THE_A);
 	        data.put("B.xml", THE_B);
 
-	        store(data);
+//	        store(data);
 		}
 
         //NOTE: R must be same not only for start&end node, but between A & B

@@ -18,8 +18,6 @@
  */
 package org.animotron.games.tetris;
 
-import org.animotron.ATest;
-
 import java.util.Map;
 
 /**
@@ -30,12 +28,12 @@ public class Utils {
 	
 	public static void the(Map<String, String> map, String id) {
 		map.put(id+".xml", 
-			"<the:"+id+" "+ATest.ANIMO_NSs+"/>");
+			"<the:"+id+" "+/*ATest.ANIMO_NSs+*/"/>");
 	}
 
 	public static void the(Map<String, String> map, String id, String is) {
-		map.put(id+".xml", 
-			"<the:"+id+" "+ATest.ANIMO_NSs+">" +
+		map.put(id+".xml",
+			"<the:"+id+" "+/*ATest.ANIMO_NSs+*/">" +
 			"	<is:"+is+"/>" +
 			"</the:"+id+">");
 	}

@@ -236,7 +236,7 @@ public abstract class GraphBuilder {
         if (statement instanceof THE) {
             THE the = (THE) statement;
             String hash = hash(item);
-            String name = (String) item[1] != null ? (String) item[1] : hash;
+            String name = item[1] != null ? (String) item[1] : hash;
             r = the.get(name);
             if (r != null) {
                 if (HASH.has(r)) {
@@ -268,7 +268,7 @@ public abstract class GraphBuilder {
                 String hash = hash(item);
                 Node node = getCache(hash);
                 if (node == null) {
-                    r = build(statement, parent, item, p, order);
+                    r = build(statement, parent, item, order);
                     createCache(r.getEndNode(), hash);
                 } else {
                     r = parent.createRelationshipTo(node, statement.relationshipType());
@@ -276,7 +276,7 @@ public abstract class GraphBuilder {
                     item[7] = true;
                 }
             } else {
-                r = build(statement, parent, item, p, order);
+                r = build(statement, parent, item, order);
             }
         }
         item[4] = r;
@@ -309,7 +309,7 @@ public abstract class GraphBuilder {
 		}
 	}
 	
-	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws ENotFound {
+	private Relationship build(Statement statement, Node parent, Object[] item, int order) throws ENotFound {
 		return statement.build(parent, (String) item[1], (Node) item[2], order, ignoreNotFound);
 	}
 	

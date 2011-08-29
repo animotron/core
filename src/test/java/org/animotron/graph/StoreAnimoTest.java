@@ -39,12 +39,12 @@ import static org.junit.Assert.assertNotNull;
 public class StoreAnimoTest extends ATest {
 	
 	private static final String THE_A = 
-		"<the:A "+ANIMO_NSs+">" +
+		"<the:A "+/*ANIMO_NSs+*/">" +
 		"	<x:some x:a=\"b\" xmlns:x=\"y\" z=\"w\"/>" +
 		"</the:A>";
 	
 	private static final String THE_B = 
-		"<the:B "+ANIMO_NSs+">" +
+		"<the:B "+/*ANIMO_NSs+*/">" +
 		"	<is:A/>" +
 		"	<have:C>" +
 		"		<x:some x:a=\"b\" xmlns:x=\"y\" z=\"w\"/>" +
@@ -71,7 +71,7 @@ public class StoreAnimoTest extends ATest {
         nameDataMap.put("A.xml", THE_A);
         nameDataMap.put("B.xml", THE_B);
         
-        store(nameDataMap);
+//        store(nameDataMap);
         System.out.println("loaded ...");
         
         Relationship r = THE._.get("B");

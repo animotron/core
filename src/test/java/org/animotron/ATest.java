@@ -21,7 +21,6 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.serializer.BinarySerializer;
 import org.animotron.graph.serializer.StringResultSerializer;
@@ -42,7 +41,6 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
@@ -57,52 +55,6 @@ public abstract class ATest {
     private static final String DATA_FOLDER = "data-test";
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
-	public static final String ANIMO_NSs =
-		"xmlns:the='animo/instance' " +
-		"xmlns:an='animo/reference' " +
-		
-		"xmlns:ptrn='animo/pattern' " +
-		
-		"xmlns:have='animo/relation/have' " +
-		"xmlns:use='animo/relation/use' " +
-		"xmlns:is='animo/relation/is' " +
-
-		"xmlns:ic='animo/connection' " +
-		
-		"xmlns:do='animo/perform' " +
-		
-		"xmlns:get='animo/query/extract' " +
-		"xmlns:any='animo/query/any' " +
-		"xmlns:all='animo/query/all' " +
-		
-		"xmlns:eq='animo/compare/eq' " +
-
-		"xmlns:op='animo/operation' " +
-		"xmlns:string='animo/string' " +
-        "xmlns:ml='animo/ml' " +
-
-        "xmlns:math='animo/math' " +
-
-		"xmlns:Q='animo/quantity' ";
-
-	protected void store(final Map<String, String> nameDataMap) throws XMLStreamException {
-		XMLStreamException e = 
-			execute(new GraphOperation<XMLStreamException>() {
-				@Override
-				public XMLStreamException execute() {
-			        for (Entry<String, String> entry : nameDataMap.entrySet()) {
-			        	try {
-							CommonBuilder.build(entry.getValue());
-						} catch (XMLStreamException e) {
-							return e;
-						}
-			        }
-			        return null;
-				}
-			});
-		if (e != null) throw e;
-    }
 
 	protected void toConsole(PFlow ch) throws IOException {
 		//XXX: code
