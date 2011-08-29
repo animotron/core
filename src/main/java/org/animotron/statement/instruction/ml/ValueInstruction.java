@@ -23,6 +23,7 @@ import org.animotron.statement.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.order;
 
 /**
@@ -46,5 +47,11 @@ public abstract class ValueInstruction extends AbstractStatement implements Resu
 	public String name(Relationship r){
 		return null;
 	}
+
+    @Override
+    public String value(Relationship r){
+        return VALUE.get(r.getEndNode());
+    }
+
 	
 }
