@@ -18,9 +18,9 @@
  */
 package org.animotron.games.tetris;
 
-import java.util.Map;
-
 import org.animotron.ATest;
+
+import java.util.Map;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

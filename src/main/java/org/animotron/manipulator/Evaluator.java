@@ -18,11 +18,11 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
-import org.animotron.operator.Evaluable;
+import org.animotron.statement.Statement;
+import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 

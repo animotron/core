@@ -18,11 +18,11 @@
  */
 package org.animotron;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.jetlang.fibers.Fiber;
 import org.jetlang.fibers.PoolFiberFactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

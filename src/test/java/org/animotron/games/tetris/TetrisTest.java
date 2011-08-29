@@ -18,13 +18,12 @@
  */
 package org.animotron.games.tetris;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.animotron.ATest;
 import org.junit.Test;
+
+import javax.xml.stream.XMLStreamException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 
 /**

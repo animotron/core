@@ -18,22 +18,17 @@
  */
 package org.animotron.graph;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import javolution.util.FastMap;
+import org.animotron.Executor;
+import org.animotron.statement.operator.THE;
+import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.io.IOException;
 import java.util.Map.Entry;
 
-import javolution.util.FastMap;
-
-import org.animotron.Executor;
-import org.animotron.operator.THE;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.kernel.EmbeddedGraphDatabase;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

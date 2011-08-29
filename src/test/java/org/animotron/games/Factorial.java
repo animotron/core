@@ -18,19 +18,19 @@
  */
 package org.animotron.games;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.instruction.math.Mult;
-import org.animotron.instruction.math.Sum;
-import org.animotron.operator.AN;
-import org.animotron.operator.PTRN;
-import org.animotron.operator.Q;
-import org.animotron.operator.THE;
-import org.animotron.operator.query.GET;
-import org.animotron.operator.relation.HAVE;
+import org.animotron.statement.instruction.math.Mult;
+import org.animotron.statement.instruction.math.Sum;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.PTRN;
+import org.animotron.statement.operator.Q;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.query.GET;
+import org.animotron.statement.operator.relation.HAVE;
+
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -22,10 +22,10 @@ package org.animotron.utils;
  */
 
 
+import org.apache.log4j.Logger;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import org.apache.log4j.Logger;
 
 public class MessageDigester {
 

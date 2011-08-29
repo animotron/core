@@ -18,8 +18,8 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.Statement;
-import org.animotron.Statements;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 

@@ -23,7 +23,6 @@ import org.animotron.graph.traverser.GraphResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamWriter;
-
 import java.io.IOException;
 import java.io.OutputStream;
 

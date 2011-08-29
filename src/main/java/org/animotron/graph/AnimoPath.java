@@ -18,22 +18,21 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.graph.RelationshipTypes.REF;
-
-import java.util.List;
-
 import javolution.util.FastList;
-
-import org.animotron.Statement;
-import org.animotron.operator.AN;
-import org.animotron.operator.query.ALL;
-import org.animotron.operator.query.ANY;
-import org.animotron.operator.relation.HAVE;
-import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
+import org.animotron.statement.Statement;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.query.ALL;
+import org.animotron.statement.operator.query.ANY;
+import org.animotron.statement.operator.relation.HAVE;
+import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.operator.relation.USE;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+
+import java.util.List;
+
+import static org.animotron.graph.RelationshipTypes.REF;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

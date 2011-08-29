@@ -18,10 +18,10 @@
  */
 package org.animotron.graph;
 
+import org.neo4j.graphdb.RelationshipType;
+
 import java.util.Map;
 import java.util.WeakHashMap;
-
-import org.neo4j.graphdb.RelationshipType;
 
 /**
  * RelationType implementation for animo graph needs.

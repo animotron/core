@@ -18,18 +18,18 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.operator.Evaluable;
-import org.animotron.operator.Query;
-import org.animotron.operator.Result;
-import org.animotron.operator.THE;
-import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Result;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.operator.relation.USE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;

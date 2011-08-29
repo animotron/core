@@ -18,14 +18,13 @@
  */
 package org.animotron.graph.handler;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.instruction.ml.*;
+import org.animotron.statement.Statement;
+import org.animotron.statement.instruction.ml.*;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -43,8 +42,8 @@ public class StAXGraphHandler implements GraphHandler {
 	public void start(Statement statement, Relationship r) throws IOException {
 		try {
 			if (statement instanceof ATTRIBUTE) {
-				String prefix = statement.prefix(r);
-				String ns = statement.namespace(r);
+				String prefix = null;//statement.prefix(r);
+				String ns = null;//statement.namespace(r);
 				String name = statement.name(r);
 				String value = statement.value(r);
 				if (prefix == null && ns == null) {
@@ -65,8 +64,8 @@ public class StAXGraphHandler implements GraphHandler {
 				writer.writeCData(statement.value(r));
 				
 			} else if (statement instanceof ELEMENT) {
-				String prefix = statement.prefix(r);
-				String ns = statement.namespace(r);
+				String prefix = null;//statement.prefix(r);
+				String ns = null;//statement.namespace(r);
 				String name = statement.name(r);
 				if (prefix == null && ns == null) {
 					writer.writeStartElement(name);
@@ -77,8 +76,9 @@ public class StAXGraphHandler implements GraphHandler {
 				}
 				
 			} else {
-				writer.writeStartElement(statement.prefix(r), statement.name(r), statement.namespace(r));
-				
+                //writer.writeStartElement(statement.prefix(r), statement.name(r), statement.namespace(r));
+                writer.writeStartElement(statement.name(), statement.name(r), statement.name());
+
 			}
 			
 		} catch (XMLStreamException e) {

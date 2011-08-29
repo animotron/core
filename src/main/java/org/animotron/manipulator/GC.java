@@ -18,8 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.Direction.INCOMING;
-
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
@@ -28,6 +26,8 @@ import org.animotron.marker.Marker;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

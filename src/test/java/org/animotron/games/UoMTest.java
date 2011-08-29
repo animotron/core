@@ -18,14 +18,13 @@
  */
 package org.animotron.games;
 
+import org.animotron.ATest;
+import org.junit.Test;
+
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import javax.xml.stream.XMLStreamException;
-
-import org.animotron.ATest;
-import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

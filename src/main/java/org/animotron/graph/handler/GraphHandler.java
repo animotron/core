@@ -18,10 +18,10 @@
  */
 package org.animotron.graph.handler;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
+import org.animotron.statement.Statement;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
 
 /**
  * Parse animo structure and generate events for output formater.

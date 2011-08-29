@@ -19,8 +19,8 @@
 package org.animotron.graph.handler;
 
 import org.animotron.Properties;
-import org.animotron.Statement;
 import org.animotron.graph.builder.BinaryBuilder;
+import org.animotron.statement.Statement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 

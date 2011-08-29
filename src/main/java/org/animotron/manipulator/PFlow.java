@@ -19,11 +19,10 @@
 package org.animotron.manipulator;
 
 import javolution.util.FastList;
-
 import org.animotron.exception.AnimoException;
-import org.animotron.operator.AN;
-import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.operator.relation.USE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;

@@ -20,14 +20,12 @@ package org.animotron.graph.serializer;
 
 import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
-
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.GraphTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-
 import java.io.IOException;
 import java.io.OutputStream;
 

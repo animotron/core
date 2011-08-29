@@ -18,18 +18,18 @@
  */
 package org.animotron;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
+import org.animotron.exception.AnimoException;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.query.ALL;
+import org.animotron.statement.operator.query.GET;
+import org.animotron.statement.operator.relation.HAVE;
+import org.animotron.statement.operator.relation.IS;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import org.animotron.exception.AnimoException;
-import org.animotron.operator.THE;
-import org.animotron.operator.query.ALL;
-import org.animotron.operator.query.GET;
-import org.animotron.operator.relation.HAVE;
-import org.animotron.operator.relation.IS;
-import org.junit.Test;
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

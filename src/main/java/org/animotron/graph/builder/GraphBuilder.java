@@ -18,20 +18,16 @@
  */
 package org.animotron.graph.builder;
 
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.GraphOperation;
-import org.animotron.instruction.Instruction;
-import org.animotron.instruction.ml.ELEMENT;
-import org.animotron.instruction.ml.TEXT;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.manipulator.Manipulators.Catcher;
-import org.animotron.operator.AN;
-import org.animotron.operator.Cachable;
-import org.animotron.operator.Operator;
-import org.animotron.operator.THE;
+import org.animotron.statement.Statement;
+import org.animotron.statement.instruction.ml.TEXT;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Cachable;
+import org.animotron.statement.operator.THE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -123,7 +119,7 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 
-            the = (Relationship) flow.get(0)[5];
+            the = (Relationship) flow.get(0)[4];
 
             if (o != null) o.execute();
 
@@ -141,43 +137,25 @@ public abstract class GraphBuilder {
 			
 	}
 
-	final protected void start(String prefix, String ns, String name, String value) {
-		
-		Statement statement = Statements.namespace(ns, name);
-		if (statement == null) {
-			statement = ELEMENT._;
-		}
-		
-		start(statement, prefix, ns, name, value);
-	}
-	
     final protected void start(String value) {
-        start(TEXT._, value);
+        start(TEXT._, null, value);
     }
 
-    final protected void start(Instruction instruction) {
-        start(instruction, null);
+    final protected void start(Statement statement, String name) {
+        start(statement, name, null);
     }
 
-    final protected void start(Instruction instruction, String value) {
-        start(instruction, null, null, null, value);
-    }
-
-    final protected void start(Operator operator, String name) {
-        start(operator, null, null, name, null);
-    }
-
-	final protected void start(Statement statement, String prefix, String ns, String name, String value) {
+	final protected void start(Statement statement, String name, String value) {
 		
         if (flow.isEmpty() && !(statement instanceof THE)) {
-            start(THE._, THE._.name(), THE._.namespace(), null, null);
+            start(THE._, null);
         }
 
 		Object[] parent = null;
 		
 		if (!statements.empty()) {
 			if (statement instanceof THE) {
-				start(AN._, AN._.name(), AN._.namespace(), name, null);
+				start(AN._, name);
 				end();
 			} else {
 				parent = statements.peek();
@@ -186,17 +164,9 @@ public abstract class GraphBuilder {
 		
 		MessageDigest md = MessageDigester.md();
 		
-		if (ns != null)
-			md.update(ns.getBytes());
-		
-		if (name != null)
-			md.update(name.getBytes());
-		
-		if (!statement.namespace().equals(ns)) 
-			md.update(statement.namespace().getBytes());
-
-		if (!statement.name().equals(name)) 
-			md.update(statement.name().getBytes());
+        if (name != null)
+            md.update(name.getBytes());
+        md.update(statement.name().getBytes());
 		
 		Node val = null;
 		if (value != null) {
@@ -206,16 +176,14 @@ public abstract class GraphBuilder {
 		}
 		
 		Object[] item = {	
-				statement,	// 0  statement 	
-				ns, 		// 1  namespace
-				name, 		// 2  name
-				val, 		// 3  value
-				md, 		// 4  message digest
-				null,	 	// 5  current relationship
-				null,		// 6  current node
-				parent, 	// 7  parent item
-				false,		// 8  builded
-				prefix		// 9  prefix
+				statement,	// 0  statement
+                name,       // 1 name
+				val, 		// 2  value
+				md, 		// 3  message digest
+				null,	 	// 4  current relationship
+				null,		// 5  current node
+				parent, 	// 6  parent item
+				false,		// 7  builded
 			};
 		
 		statements.push(item);
@@ -224,12 +192,12 @@ public abstract class GraphBuilder {
 	
 	final protected void end() {
 		Object[] current = statements.pop();
-		byte[] hash = ((MessageDigest) current[4]).digest();
-		Object[] parent = (Object[]) current[7];
+		byte[] hash = ((MessageDigest) current[3]).digest();
+		Object[] parent = (Object[]) current[6];
 		if (parent != null) {
-			((MessageDigest) (parent[4])).update(hash);
+			((MessageDigest) (parent[3])).update(hash);
 		}
-		current[4] = hash;
+		current[3] = hash;
 	}
 	
 	final protected String removeWS(String value) {
@@ -255,10 +223,10 @@ public abstract class GraphBuilder {
 	
 	private void build(Object[] item, int order) throws AnimoException {
 
-		Object[] p =  (Object[]) item[7];
+		Object[] p =  (Object[]) item[6];
 		if (p != null) {
-			if ((Boolean) p[8]) {
-				item[8] = true; 
+			if ((Boolean) p[7]) {
+				item[7] = true; 
 				return;
 			}
 		}
@@ -268,7 +236,7 @@ public abstract class GraphBuilder {
         if (statement instanceof THE) {
             THE the = (THE) statement;
             String hash = hash(item);
-            String name = item[2] != null ? (String) item[2] : hash;
+            String name = (String) item[1] != null ? (String) item[1] : hash;
             r = the.get(name);
             if (r != null) {
                 if (HASH.has(r)) {
@@ -280,7 +248,7 @@ public abstract class GraphBuilder {
                         catcher.renew(r);
                         HASH.set(r, hash);
                     } else {
-                        item[8] = true;
+                        item[7] = true;
                     }
                 } else {
                     catcher.creative(r);
@@ -291,10 +259,10 @@ public abstract class GraphBuilder {
                 catcher.creative(r);
             }
         } else {
-            Node parent = (Node) p[6];
+            Node parent = (Node) p[5];
             if (parent == null)
             	//"Internal error: parent can not be null."
-                throw new AnimoException((Relationship)item[5]);
+                throw new AnimoException((Relationship)item[4]);
 
             if (statement instanceof Cachable) {
                 String hash = hash(item);
@@ -305,14 +273,14 @@ public abstract class GraphBuilder {
                 } else {
                     r = parent.createRelationshipTo(node, statement.relationshipType());
                     order(r, order);
-                    item[8] = true;
+                    item[7] = true;
                 }
             } else {
                 r = build(statement, parent, item, p, order);
             }
         }
-        item[5] = r;
-        item[6] = r.getEndNode();
+        item[4] = r;
+        item[5] = r.getEndNode();
 
 	}
 	
@@ -321,7 +289,7 @@ public abstract class GraphBuilder {
 	}
 	
 	private String hash(Object[] item) {
-		return hash((byte[]) item[4]);
+		return hash((byte[]) item[3]);
 	}
 	
 	private Node value(String value, byte[] bytes) {
@@ -342,7 +310,7 @@ public abstract class GraphBuilder {
 	}
 	
 	private Relationship build(Statement statement, Node parent, Object[] item, Object[] p, int order) throws ENotFound {
-		return statement.build(parent, (String) item[9], (String) item[1], (String) item[2], (Node) item[3], order, ignoreNotFound);
+		return statement.build(parent, (String) item[1], (Node) item[2], order, ignoreNotFound);
 	}
 	
 	protected void fail(Exception e){

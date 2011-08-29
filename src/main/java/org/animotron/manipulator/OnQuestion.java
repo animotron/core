@@ -18,15 +18,15 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
-import java.util.Iterator;
-
 import org.animotron.Executor;
 import org.animotron.graph.RelationshipTypes;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
+
+import java.util.Iterator;
+
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -18,20 +18,20 @@
  */
 package org.animotron.graph.traverser;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.operator.Evaluable;
-import org.animotron.operator.Query;
-import org.animotron.operator.THE;
-import org.animotron.operator.relation.IS;
-import org.animotron.operator.relation.USE;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.operator.relation.USE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;

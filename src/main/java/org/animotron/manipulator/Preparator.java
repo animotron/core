@@ -18,15 +18,12 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-import java.util.Iterator;
-
-import org.animotron.Statement;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
-import org.animotron.operator.Prepare;
-import org.animotron.operator.THE;
+import org.animotron.statement.Statement;
+import org.animotron.statement.operator.Prepare;
+import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -36,6 +33,9 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
+
+import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

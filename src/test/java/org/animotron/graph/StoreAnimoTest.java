@@ -20,12 +20,11 @@ package org.animotron.graph;
 
 import org.animotron.ATest;
 import org.animotron.graph.serializer.GraphSerializer;
-import org.animotron.operator.THE;
+import org.animotron.statement.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
-
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;

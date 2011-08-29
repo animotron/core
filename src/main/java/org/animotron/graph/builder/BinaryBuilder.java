@@ -23,8 +23,8 @@ import org.animotron.Expression;
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
-import org.animotron.operator.THE;
-import org.animotron.operator.relation.IS;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.relation.IS;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 

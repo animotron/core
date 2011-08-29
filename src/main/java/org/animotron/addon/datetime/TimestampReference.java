@@ -18,14 +18,14 @@
  */
 package org.animotron.addon.datetime;
 
-import java.util.WeakHashMap;
-
 import org.animotron.manipulator.PFlow;
-import org.animotron.operator.AbstractOperator;
-import org.animotron.operator.Evaluable;
+import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import java.util.WeakHashMap;
 
 /**
  * Reference on virtual 'time' object.
@@ -33,13 +33,13 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class TimestampReference extends AbstractOperator implements Evaluable {
+public class TimestampReference extends AbstractStatement implements Evaluable {
 	
 	public static final TimestampReference _ = new TimestampReference();
 	
 	private WeakHashMap<String, TimestampNode> pool = new WeakHashMap<String, TimestampNode>(); 
 	
-	private TimestampReference() { super("T", "animo/time"); }
+	private TimestampReference() { super("T"); }
 	
 	public void eval(Relationship op, PFlow ch) {
 		Node node = op.getEndNode();

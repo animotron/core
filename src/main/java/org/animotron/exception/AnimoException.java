@@ -18,11 +18,10 @@
  */
 package org.animotron.exception;
 
-import java.util.List;
-
 import javolution.util.FastList;
-
 import org.neo4j.graphdb.Relationship;
+
+import java.util.List;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -18,25 +18,25 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
-
-import java.io.IOException;
-
 import org.animotron.Executor;
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
-import org.animotron.operator.Evaluable;
-import org.animotron.operator.Query;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Query;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

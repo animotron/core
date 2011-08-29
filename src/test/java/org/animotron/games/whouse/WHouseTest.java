@@ -18,21 +18,22 @@
  */
 package org.animotron.games.whouse;
 
-import static org.animotron.Expression.*;
-
-import java.io.IOException;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.AnimoException;
-import org.animotron.operator.AN;
-import org.animotron.operator.Q;
-import org.animotron.operator.THE;
-import org.animotron.operator.compare.WITH;
-import org.animotron.operator.query.ALL;
-import org.animotron.operator.relation.HAVE;
-import org.animotron.operator.relation.IS;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Q;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.compare.WITH;
+import org.animotron.statement.operator.query.ALL;
+import org.animotron.statement.operator.relation.HAVE;
+import org.animotron.statement.operator.relation.IS;
 import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -17,15 +17,15 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.AN;
-import org.animotron.operator.THE;
-import org.animotron.operator.relation.HAVE;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.relation.HAVE;
 import org.junit.Test;
+
+import static org.animotron.Expression._;
+import static org.animotron.Expression.text;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

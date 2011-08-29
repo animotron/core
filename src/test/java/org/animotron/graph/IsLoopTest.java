@@ -18,14 +18,14 @@
  */
 package org.animotron.graph;
 
-import static org.animotron.Expression._;
 import junit.framework.Assert;
-
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.operator.THE;
-import org.animotron.operator.relation.IS;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.relation.IS;
 import org.junit.Test;
+
+import static org.animotron.Expression._;
 
 
 /**

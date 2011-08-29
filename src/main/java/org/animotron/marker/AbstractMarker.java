@@ -18,14 +18,12 @@
  */
 package org.animotron.marker;
 
-import static org.animotron.graph.AnimoGraph.execute;
-import static org.animotron.graph.AnimoGraph.getOrCreateNode;
-import static org.animotron.graph.AnimoGraph.getROOT;
-
 import org.animotron.graph.GraphOperation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+
+import static org.animotron.graph.AnimoGraph.*;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

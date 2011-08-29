@@ -18,19 +18,13 @@
  */
 package org.animotron.graph.builder;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import com.ctc.wstx.stax.WstxInputFactory;
-
 import org.animotron.exception.AnimoException;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import java.io.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -79,7 +73,7 @@ public class CommonBuilder {
 	}
 	
 	private static Relationship storeAnimo(InputStream stream) throws XMLStreamException {
-		return new StAXGraphBuilder(createXMLStreamReader(stream)).build();
+		return null; //new AnimoGraphBuilder(stream).build();
 	}
 
 	private static Relationship storeBinary(InputStream stream, String path) throws IOException, AnimoException {

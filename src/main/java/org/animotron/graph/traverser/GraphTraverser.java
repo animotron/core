@@ -18,14 +18,14 @@
  */
 package org.animotron.graph.traverser;
 
-import java.io.IOException;
-
-import org.animotron.Statement;
-import org.animotron.Statements;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.operator.Relation;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
 

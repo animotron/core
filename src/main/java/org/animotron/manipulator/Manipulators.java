@@ -18,17 +18,16 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.AnimoGraph.getTOP;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import javolution.util.FastList;
+import org.animotron.graph.RelationshipTypes;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.util.List;
 
-import javolution.util.FastList;
-
-import org.animotron.graph.RelationshipTypes;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+import static org.animotron.graph.AnimoGraph.getTOP;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
