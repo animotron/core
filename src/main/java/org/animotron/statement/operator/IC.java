@@ -20,7 +20,6 @@ package org.animotron.statement.operator;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.operator.query.GET;
 
 
@@ -30,7 +29,7 @@ import org.animotron.statement.operator.query.GET;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends AbstractStatement implements Cachable, Evaluable {
+public class IC extends Operator implements Cachable, Evaluable {
 	
 	public static final IC _ = new IC();
 	

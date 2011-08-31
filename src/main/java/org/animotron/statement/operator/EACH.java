@@ -21,7 +21,6 @@ package org.animotron.statement.operator;
 import org.animotron.Executor;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.jetlang.channels.Subscribable;
@@ -38,7 +37,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EACH extends AbstractStatement implements Evaluable, Cachable {
+public class EACH extends Operator implements Evaluable, Cachable {
 
 	public static final EACH _ = new EACH();
 

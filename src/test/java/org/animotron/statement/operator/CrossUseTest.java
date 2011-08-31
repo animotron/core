@@ -22,8 +22,8 @@ import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.query.ANY;
-import org.animotron.statement.operator.relation.IS;
-import org.animotron.statement.operator.relation.USE;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import java.io.IOException;

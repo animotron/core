@@ -19,7 +19,7 @@
 package org.animotron.statement.operator.compare;
 
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class LT extends AbstractStatement implements Predicate {
+public class LT extends Operator implements Predicate {
 	
 	public static final LT _ = new LT();
 	

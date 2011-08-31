@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.instruction.af;
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * Return HAVE relations of THE instance.
@@ -26,7 +26,7 @@ import org.animotron.statement.AbstractStatement;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class HAVEs extends AbstractStatement {
+public class HAVEs extends Instruction {
 	
 	public static final HAVEs _ = new HAVEs();
 	

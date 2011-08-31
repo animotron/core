@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.instruction.compare;
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * 'Greater or equal' instruction.
@@ -26,7 +26,7 @@ import org.animotron.statement.AbstractStatement;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GE extends AbstractStatement {
+public class GE extends Instruction {
 	
 	public static final GE _ = new GE();
 	

@@ -25,9 +25,9 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.query.ALL;
 import org.animotron.statement.operator.query.ANY;
-import org.animotron.statement.operator.relation.HAVE;
-import org.animotron.statement.operator.relation.IS;
-import org.animotron.statement.operator.relation.USE;
+import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import java.io.IOException;

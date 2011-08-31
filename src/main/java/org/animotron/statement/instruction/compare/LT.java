@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.instruction.compare;
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * 'Less' instruction.
@@ -26,7 +26,7 @@ import org.animotron.statement.AbstractStatement;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class LT extends AbstractStatement {
+public class LT extends Instruction {
 	
 	public static final LT _ = new LT();
 	

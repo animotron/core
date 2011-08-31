@@ -19,15 +19,13 @@
 package org.animotron.statement.operator;
 
 
-import org.animotron.statement.AbstractStatement;
-
 /**
  * Operator 'ptrn'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class PTRN extends AbstractStatement implements Cachable, Property {
+public class PTRN extends Operator implements Cachable, Property {
 	
 	public static final PTRN _ = new PTRN();
 	

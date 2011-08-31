@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator.relation;
+package org.animotron.statement.relation;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
@@ -24,7 +24,6 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Prepare;
-import org.animotron.statement.operator.Relation;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;

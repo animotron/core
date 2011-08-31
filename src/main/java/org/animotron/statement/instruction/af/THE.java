@@ -19,7 +19,7 @@
 package org.animotron.statement.instruction.af;
 
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * Return closest THE instance.
@@ -27,7 +27,7 @@ import org.animotron.statement.AbstractStatement;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class THE extends AbstractStatement {
+public class THE extends Instruction {
 	
 	public static final THE _ = new THE();
 	

@@ -27,13 +27,12 @@ import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.operator.relation.HAVE;
-import org.animotron.statement.operator.relation.IS;
-import org.animotron.statement.operator.relation.USE;
+import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -58,7 +57,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends AbstractStatement implements Evaluable, Query, Cachable {
+public class GET extends Operator implements Evaluable, Query, Cachable {
 
 	public static final GET _ = new GET();
 	

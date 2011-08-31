@@ -27,7 +27,7 @@ import org.animotron.statement.operator.PTRN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.query.GET;
-import org.animotron.statement.operator.relation.HAVE;
+import org.animotron.statement.relation.HAVE;
 
 import static org.animotron.Expression._;
 import static org.animotron.Expression.text;

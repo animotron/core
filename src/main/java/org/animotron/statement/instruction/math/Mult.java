@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.instruction.math;
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class Mult extends AbstractStatement {
+public class Mult extends Instruction {
 	
 	public static final Mult _ = new Mult();
 	

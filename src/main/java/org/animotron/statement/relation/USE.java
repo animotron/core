@@ -16,44 +16,19 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
+package org.animotron.statement.relation;
 
-import org.animotron.ATest;
-import org.animotron.Expression;
-import org.animotron.statement.operator.query.GET;
-import org.animotron.statement.relation.IS;
-import org.junit.Test;
-
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
 
 /**
+ * Operator 'USE'.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- *
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ICTest extends ATest {
+public class USE extends Relation {
 	
-	@Test
-	public void testIC() throws Exception {
-        
-    	new Expression(
-			_(THE._, "A")
-		);
+	public static final USE _ = new USE();
 	
-    	new Expression(
-			_(THE._, "B", _(IC._, "A", text(".")))
-		);
-
-    	new Expression(
-			_(THE._, "C", _(IS._, "B") )
-		);
-
-    	Expression D = new Expression(
-			_(THE._, "D", _(GET._, "A", _(AN._, "C")))
-		);
-
-        //System.out.println("get:A an:C");
-        assertString(D, ".");
-        assertAnimo(D, "<the:D><have:A>.</have:A></the:D>");
-	}
+	private USE() { super("use"); }
+	
 }

@@ -16,14 +16,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
+package org.animotron.statement.instruction;
 
 import org.animotron.Executor;
 import org.animotron.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.Cachable;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Q;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -36,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class COUNT extends AbstractStatement implements Evaluable, Cachable {
+public class COUNT extends Instruction implements Evaluable, Cachable {
 
 	public static final COUNT _ = new COUNT();
 

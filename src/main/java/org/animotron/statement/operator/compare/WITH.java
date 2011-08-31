@@ -22,10 +22,10 @@ import javolution.util.FastList;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.query.GET;
@@ -45,7 +45,7 @@ import static org.animotron.graph.AnimoGraph.getORDER;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class WITH extends AbstractStatement implements Predicate {
+public class WITH extends Operator implements Predicate {
 	
 	public static final WITH _ = new WITH();
 	

@@ -20,16 +20,16 @@ package org.animotron.games;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.statement.instruction.COUNT;
 import org.animotron.statement.instruction.compare.GE;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.COUNT;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.query.ANY;
-import org.animotron.statement.operator.relation.HAVE;
-import org.animotron.statement.operator.relation.HAVE_NOT;
-import org.animotron.statement.operator.relation.IS;
-import org.animotron.statement.operator.relation.IS_NOT;
+import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.HAVE_NOT;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.IS_NOT;
 import org.junit.Test;
 
 import static org.animotron.Expression._;

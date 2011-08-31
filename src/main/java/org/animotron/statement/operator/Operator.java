@@ -16,44 +16,46 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.instruction.ml;
+package org.animotron.statement.operator;
 
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Result;
+import org.animotron.exception.ENotFound;
+import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 import static org.animotron.Properties.NAME;
-import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.order;
-
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
- * Instruction 'ml:attribute'.
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class ATTRIBUTE extends Instruction implements Result {
-	
-	public static final ATTRIBUTE _ = new ATTRIBUTE();
-	
-	private ATTRIBUTE() { super("attribute"); }
-	
-	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) {
-		Relationship r = parent.createRelationshipTo(value, relationshipType());
+public abstract class Operator extends AbstractStatement {
+
+	private static final RelationshipType REF = AnimoRelationshipType.get("REF");
+
+    public Operator(String name) {
+        super(name);
+    }
+
+    @Override
+	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
+		Node child = createNode();
+		Relationship r = parent.createRelationshipTo(child, relationshipType());
 		order(r, order);
-		NAME.set(r, name);
+		child.createRelationshipTo(THE._.getOrCreate(name, ignoreNotFound).getEndNode(), REF);
 		return r;
 	}
-	
+
 	@Override
-	public String name(Relationship r){
-		return NAME.get(r);
+	public String name(Relationship r) {
+		Node node = r.getEndNode().getSingleRelationship(REF, OUTGOING).getEndNode(); 
+		return NAME.get(node);
 	}
 	
-	@Override
-	public String value(Relationship r){
-		return VALUE.get(r.getEndNode());
-	}
 }

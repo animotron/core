@@ -21,7 +21,7 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.operator.Relation;
+import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 

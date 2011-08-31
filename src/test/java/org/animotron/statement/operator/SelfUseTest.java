@@ -21,9 +21,9 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.statement.operator.query.SELF;
-import org.animotron.statement.operator.relation.HAVE;
-import org.animotron.statement.operator.relation.IS;
-import org.animotron.statement.operator.relation.USE;
+import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.Expression._;

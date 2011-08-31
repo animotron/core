@@ -23,7 +23,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.instruction.ml.TEXT;
 import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
@@ -42,7 +42,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class AfterLast extends AbstractStatement implements Evaluable {
+public class AfterLast extends Instruction implements Evaluable {
 
 	public static final AfterLast _ = new AfterLast();
 

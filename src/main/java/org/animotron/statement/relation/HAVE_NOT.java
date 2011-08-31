@@ -16,42 +16,21 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
+package org.animotron.statement.relation;
 
-import org.animotron.exception.ENotFound;
-import org.animotron.statement.AbstractStatement;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.order;
-
+import org.animotron.statement.operator.Cachable;
+import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.Property;
 
 /**
+ * Operator 'HAVE-NOT'.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- *
  */
-public abstract class Relation extends AbstractStatement {
+public class HAVE_NOT extends Operator implements Cachable, Property {
 	
-	public Relation(String name) {
-		super(name);
-	}
+	public static final HAVE_NOT _ = new HAVE_NOT();
 
-	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
-		Node target = THE._.getOrCreate(name, ignoreNotFound).getEndNode();
-		if (!parent.equals(target)) {
-			Relationship r = parent.createRelationshipTo(target, relationshipType());
-			order(r, order);
-			return r;
-		}
-		return null;
-	}
-	
-	@Override
-	public String name(Relationship r){
-		return NAME.get(r.getEndNode());
-	}
-	
+	private HAVE_NOT() { super("have-not"); }
 }

@@ -21,12 +21,11 @@ package org.animotron.statement.operator.query;
 import javolution.util.FastSet;
 import org.animotron.Properties;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.operator.relation.IS;
-import org.animotron.statement.operator.relation.USE;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -48,7 +47,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class AbstractQuery extends AbstractStatement implements Cachable, Evaluable, Query {
+public abstract class AbstractQuery extends Operator implements Cachable, Evaluable, Query {
 
     public AbstractQuery(String name) {
         super(name);

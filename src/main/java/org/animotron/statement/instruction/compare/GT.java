@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.instruction.compare;
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * 'Greater' instruction.
@@ -26,7 +26,7 @@ import org.animotron.statement.AbstractStatement;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class GT extends AbstractStatement {
+public class GT extends Instruction {
 	
 	public static final GT _ = new GT();
 	

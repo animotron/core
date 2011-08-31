@@ -22,8 +22,8 @@ import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.statement.operator.compare.WITH;
 import org.animotron.statement.operator.query.ALL;
-import org.animotron.statement.operator.relation.HAVE;
-import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.Expression._;

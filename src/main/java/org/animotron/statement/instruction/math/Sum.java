@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.instruction.math;
 
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.instruction.Instruction;
 
 /**
  * Math instruction 'SUM'. (aka summation)
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class Sum extends AbstractStatement {
+public class Sum extends Instruction {
 	
 	public static final Sum _ = new Sum();
 	

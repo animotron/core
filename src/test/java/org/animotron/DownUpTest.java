@@ -22,8 +22,8 @@ import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.query.ALL;
 import org.animotron.statement.operator.query.GET;
-import org.animotron.statement.operator.relation.HAVE;
-import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import java.io.IOException;

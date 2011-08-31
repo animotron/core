@@ -24,7 +24,7 @@ import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.relation.IS;
+import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
