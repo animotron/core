@@ -54,7 +54,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
 
     }
 
@@ -76,7 +76,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
 
     }
 
@@ -102,7 +102,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
 
     }
 
@@ -134,7 +134,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
 
     }
 
@@ -161,7 +161,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(ANY._, "d"))
             )
         );
-        assertAnimo(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
 
     }
 
@@ -186,7 +186,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
 
     }
 
@@ -214,7 +214,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
 
     }
 
@@ -248,7 +248,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
 
     }
 
@@ -277,7 +277,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimo(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
 
     }
 

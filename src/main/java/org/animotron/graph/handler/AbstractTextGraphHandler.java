@@ -18,10 +18,6 @@
  */
 package org.animotron.graph.handler;
 
-import org.animotron.statement.Statement;
-import org.animotron.statement.instruction.ml.TEXT;
-import org.neo4j.graphdb.Relationship;
-
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -29,33 +25,43 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TextGraphHandler extends AbstractTextGraphHandler {
+public abstract class AbstractTextGraphHandler implements GraphHandler {
 
-    public TextGraphHandler (OutputStream stream) {
-        super(stream);
+    private Handler out;
+
+    public AbstractTextGraphHandler(OutputStream stream) {
+        out = new StreamHandler(stream);
     }
 
-    public TextGraphHandler (StringBuilder builder) {
-        super(builder);
+    public AbstractTextGraphHandler(StringBuilder builder) {
+        out = new StringHandler(builder);
     }
 
-    @Override
-    public void start(Statement statement, Relationship r) throws IOException {
-        if (statement instanceof TEXT) {
-            write(statement.value(r));
+    protected void write(String text) throws IOException {
+        out.write(text);
+    }
+
+    private interface Handler {
+        public void write(String string) throws IOException;
+    }
+
+    private class StreamHandler implements Handler {
+        OutputStream out;
+        public StreamHandler(OutputStream stream) {
+            out = stream;
+        }
+        public void write(String s) throws IOException {
+            out.write(s.getBytes());
         }
     }
 
-    @Override
-    public void end(Statement statement, Relationship r) {
+    private class StringHandler implements Handler {
+        StringBuilder out;
+        public StringHandler(StringBuilder builder) {
+            out = builder;
+        }
+        public void write(String s) {
+            out.append(s);
+        }
     }
-
-    @Override
-    public void startGraph() {
-    }
-
-    @Override
-    public void endGraph() throws IOException {
-    }
-
 }

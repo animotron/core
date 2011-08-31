@@ -29,33 +29,55 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TextGraphHandler extends AbstractTextGraphHandler {
+public class LispGraphHandler extends AbstractTextGraphHandler {
 
-    public TextGraphHandler (OutputStream stream) {
+    private int level;
+    private int x;
+
+    public LispGraphHandler(OutputStream stream) {
         super(stream);
     }
 
-    public TextGraphHandler (StringBuilder builder) {
+    public LispGraphHandler(StringBuilder builder) {
         super(builder);
     }
 
     @Override
     public void start(Statement statement, Relationship r) throws IOException {
-        if (statement instanceof TEXT) {
-            write(statement.value(r));
+        if (level == 0) {
+            write("(");
+        } else {
+            write(" (");
         }
+        if (statement instanceof TEXT) {
+            write("\"");
+            write(statement.value(r));
+            write("\"");
+        } else {
+            write(statement.name());
+            String name = statement.name(r);
+            if (name != null) {
+                write(" ");
+                write(statement.name(r));
+            }
+        }
+        level++;
     }
 
     @Override
-    public void end(Statement statement, Relationship r) {
+    public void end(Statement statement, Relationship r) throws IOException {
+        level--;
+        write(")");
     }
 
     @Override
     public void startGraph() {
+        level = x = 0;
     }
 
     @Override
     public void endGraph() throws IOException {
+        write("\n");
     }
 
 }

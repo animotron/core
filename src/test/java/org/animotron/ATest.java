@@ -22,10 +22,11 @@ import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.StAXGraphHandler;
+import org.animotron.graph.serializer.AnimoResultSerializer;
+import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.graph.serializer.BinarySerializer;
 import org.animotron.graph.serializer.StringResultSerializer;
-import org.animotron.graph.traverser.GraphAnimoResultTraverser;
-import org.animotron.graph.traverser.GraphResultTraverser;
+import org.animotron.graph.traverser.ResultTraverser;
 import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -110,24 +111,26 @@ public abstract class ATest {
     protected void assertAnimo(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
-        System.out.println("Animo result serializer...");
-        
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream(in);
+        System.out.println("Animo serializer...");
+        String result = AnimoSerializer.serialize(op);
+        System.out.println(result);
+        Assert.assertEquals("", expected, result);
 
-        XMLStreamWriter writer;
-        try {
-            writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
-        } catch (XMLStreamException e) {
-            throw new IOException(e);
-        }
-        GraphAnimoResultTraverser._.traverse(new StAXGraphHandler(writer), op);
-        out.close();
-        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();
     }
 
-    protected void assertResult(Relationship op, String expected) throws IOException {
+    protected void assertAnimoResult(Relationship op, String expected) throws IOException {
+        assertNotNull(op);
+
+        System.out.println("Animo result serializer...");
+        String result = AnimoResultSerializer.serialize(op);
+        System.out.println(result);
+        Assert.assertEquals("", expected, result);
+
+        System.out.println();
+    }
+
+    protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
         System.out.println("Result serializer...");
@@ -141,13 +144,13 @@ public abstract class ATest {
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
-        GraphResultTraverser._.traverse(new StAXGraphHandler(writer), op);
+        ResultTraverser._.traverse(new StAXGraphHandler(writer), op);
         out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();
     }
 
-    protected void assertString(Relationship op, String expected) throws IOException, InterruptedException {
+    protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
         System.out.println("String result serializer...");

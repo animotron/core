@@ -18,11 +18,11 @@
  */
 package org.animotron.graph.serializer;
 
-import org.animotron.graph.handler.StAXGraphHandler;
-import org.animotron.graph.traverser.GraphResultTraverser;
+import org.animotron.graph.handler.LispGraphHandler;
+import org.animotron.graph.traverser.AnimoResultTraverser;
+import org.animotron.graph.traverser.ResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
-import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -31,14 +31,25 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoResultSerializer extends ResultSerializer {
+public class AnimoResultSerializer {
 	
     public static void serialize(Relationship r, OutputStream out) throws IOException {
         serialize(r, r, out);
     }
 
     public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
-        XMLStreamWriter writer = getXMLStreamWriter(out);
-        GraphResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
+        ResultTraverser._.traverse(new LispGraphHandler(out), start_op, r);
     }
+
+    public static String serialize(Relationship r) throws IOException {
+        return serialize(r, r);
+    }
+
+    public static String serialize(Relationship start_op, Relationship r) throws IOException {
+        StringBuilder out = new StringBuilder(1024);
+        AnimoResultTraverser._.traverse(new LispGraphHandler(out), start_op, r);
+        return out.toString();
+    }
+
+
 }

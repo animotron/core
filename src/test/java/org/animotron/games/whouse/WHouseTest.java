@@ -184,7 +184,7 @@ public class WHouseTest extends ATest {
 				_(ALL._, "whouse-receive",
 					_(WITH._, "party", _(AN._, "I"))))
 		);
-        assertAnimo(a, "<the:a/>");
+        assertAnimoResult(a, "<the:a/>");
 
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?
@@ -194,22 +194,22 @@ public class WHouseTest extends ATest {
 				_(AN._, "form", _(AN._, "R01")))
 		);
 
-        assertAnimo(f, "<form id='R01'>"+
-        	"<input id='date' value='T2011-08-07'>07 August 2011</input>"+
-        	"<input id='issue-party' value='an:ORG-01'>Organization 01</input>"+
-        	"<input id='receipt-party' value='an:I'>I</input>"+
-        	"<table>"+
-        		"<head>"+
-        			"<col id='name'>name</col>"+
-        			"<col id='qty'>qty</col>"+
-        			"<col id='price'>price</col>"+
-        		"<head>"+
-        		"<row>"+
-        			"<col><input id='item01*name' value='item01'>item01</input></col>"+
-        			"<col><input id='item01*qty' value='have:number Q:N2; have:UoM an:KG'>2 kg</input></col>"+
-        			"<col><input id='item01*price' value='have:number Q:N2; have:UoM an:KG'>5 USD per gram</input></col>"+
-        		"<row>"+
-        	"</table>"+
-        "</form>");
+        assertAnimoResult(f, "<form id='R01'>" +
+                "<input id='date' value='T2011-08-07'>07 August 2011</input>" +
+                "<input id='issue-party' value='an:ORG-01'>Organization 01</input>" +
+                "<input id='receipt-party' value='an:I'>I</input>" +
+                "<table>" +
+                "<head>" +
+                "<col id='name'>name</col>" +
+                "<col id='qty'>qty</col>" +
+                "<col id='price'>price</col>" +
+                "<head>" +
+                "<row>" +
+                "<col><input id='item01*name' value='item01'>item01</input></col>" +
+                "<col><input id='item01*qty' value='have:number Q:N2; have:UoM an:KG'>2 kg</input></col>" +
+                "<col><input id='item01*price' value='have:number Q:N2; have:UoM an:KG'>5 USD per gram</input></col>" +
+                "<row>" +
+                "</table>" +
+                "</form>");
 	}
 }

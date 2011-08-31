@@ -57,12 +57,12 @@ public class SelfUseTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(AN._, "D", _(USE._, "A")))
         );
-        assertAnimo(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
+        assertAnimoResult(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "D", _(USE._, "B")))
         );
-        assertAnimo(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
+        assertAnimoResult(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
 
     }
 	
@@ -96,12 +96,12 @@ public class SelfUseTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(AN._, "D", _(AN._, "ua")))
         );
-        assertAnimo(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
+        assertAnimoResult(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
         );
-        assertAnimo(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
+        assertAnimoResult(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
 
     }
 

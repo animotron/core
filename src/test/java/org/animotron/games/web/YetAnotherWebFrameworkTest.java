@@ -117,46 +117,46 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>" +
-                            "<the:rest>" +
-                                "<the:root-service>" +
-                                    "<is:service/>" +
-                                    "<have:uri>/</have:uri>" +
-                                    "<the:html>" +
-                                        "<html>" +
-                                            "<head>" +
-                                                "<title><have:title>Welcome to Animo</have:title></title>" +
-                                            "</head>" +
-                                            "<body>" +
-                                                "<the:theme-concrete-root-layout>" +
-                                                    "<is:root-layout/>" +
-                                                    "<h1><have:title>Welcome to Animo</have:title></h1>" +
-                                                    "<p><have:content>It is working!</have:content></p>" +
-                                                    "<ul>" +
-                                                        "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
-                                                        "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
-                                                    "</ul>" +
-                                                "</the:theme-concrete-root-layout>" +
-                                            "</body>" +
-                                        "</html>" +
-                                    "</the:html>" +
-                                "</the:root-service>" +
-                            "</the:rest>" +
-                        "</the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>");
+        assertAnimoResult(s, "<the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>" +
+                "<the:rest>" +
+                "<the:root-service>" +
+                "<is:service/>" +
+                "<have:uri>/</have:uri>" +
+                "<the:html>" +
+                "<html>" +
+                "<head>" +
+                "<title><have:title>Welcome to Animo</have:title></title>" +
+                "</head>" +
+                "<body>" +
+                "<the:theme-concrete-root-layout>" +
+                "<is:root-layout/>" +
+                "<h1><have:title>Welcome to Animo</have:title></h1>" +
+                "<p><have:content>It is working!</have:content></p>" +
+                "<ul>" +
+                "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
+                "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
+                "</ul>" +
+                "</the:theme-concrete-root-layout>" +
+                "</body>" +
+                "</html>" +
+                "</the:html>" +
+                "</the:root-service>" +
+                "</the:rest>" +
+                "</the:c93fb6da14911b195f4511c0a060275ef26db4c1803db4d56fee849192330279>");
 
-        assertResult(s, "<html>" +
-                            "<head>" +
-                                "<title>Welcome to Animo</title>" +
-                            "</head>" +
-                            "<body>" +
-                                "<h1>Welcome to Animo</h1>" +
-                                "<p>It is working!</p>" +
-                                "<ul>" +
-                                    "<li>host: \"<strong>localhost</strong>\"</li>" +
-                                    "<li>uri: \"<strong>/</strong>\"</li>" +
-                                "</ul>" +
-                            "</body>" +
-                        "</html>");
+        assertXMLResult(s, "<html>" +
+                "<head>" +
+                "<title>Welcome to Animo</title>" +
+                "</head>" +
+                "<body>" +
+                "<h1>Welcome to Animo</h1>" +
+                "<p>It is working!</p>" +
+                "<ul>" +
+                "<li>host: \"<strong>localhost</strong>\"</li>" +
+                "<li>uri: \"<strong>/</strong>\"</li>" +
+                "</ul>" +
+                "</body>" +
+                "</html>");
 
     }
 

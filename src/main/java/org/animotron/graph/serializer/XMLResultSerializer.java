@@ -21,7 +21,7 @@ package org.animotron.graph.serializer;
 import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.graph.handler.StAXGraphHandler;
-import org.animotron.graph.traverser.GraphTraverser;
+import org.animotron.graph.traverser.ResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
@@ -34,27 +34,29 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class GraphSerializer {
-
-	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
-	static {
-		WriterConfig conf = OUTPUT_FACTORY.getConfig();
-		conf.doSupportNamespaces(true);
-		conf.enableAutomaticNamespaces(true);
-	}
-
-	public static void serialize(Relationship r, OutputStream out) throws IOException {
-        XMLStreamWriter writer = getXMLStreamWriter(out);
-        
-		GraphTraverser._.traverse(new StAXGraphHandler(writer), r);
-    }
+public class XMLResultSerializer {
 	
-	protected static XMLStreamWriter getXMLStreamWriter(OutputStream out) throws IOException {
-		try {
-			return OUTPUT_FACTORY.createXMLStreamWriter(out);
-		} catch (XMLStreamException e) {
-			throw new IOException(e);
-		}
-	}
+    public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+
+    static {
+        WriterConfig conf = OUTPUT_FACTORY.getConfig();
+        conf.doSupportNamespaces(true);
+        conf.enableAutomaticNamespaces(true);
+    }
+
+    private static XMLStreamWriter getXMLStreamWriter(OutputStream out) throws IOException {
+        try {
+            return OUTPUT_FACTORY.createXMLStreamWriter(out);
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
+    }
+    public static void serialize(Relationship r, OutputStream out) throws IOException {
+        serialize(r, r, out);
+    }
+
+    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
+        XMLStreamWriter writer = getXMLStreamWriter(out);
+		ResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
+    }
 }

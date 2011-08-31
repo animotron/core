@@ -167,40 +167,40 @@ public class CurrentWebFrameworkTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:5ba40e69742be366f1cdcf7a2cfb107bce112789e9b056737ce87231e7386fd0>" +
-                            "<have:content>" +
-                                "<html>" +
-                                    "<head>" +
-                                        "<title><have:title>Welcome to Animo</have:title></title>" +
-                                    "</head>" +
-                                    "<body>" +
-                                        "<the:theme-concrete-root-layout>" +
-                                            "<is:root-layout/>" +
-                                            "<h1><have:title>Welcome to Animo</have:title></h1>" +
-                                            "<p><have:content>It is working!</have:content></p>" +
-                                            "<ul>" +
-                                                "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
-                                                "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
-                                            "</ul>" +
-                                        "</the:theme-concrete-root-layout>" +
-                                    "</body>" +
-                                "</html>" +
-                            "</have:content>" +
-                        "</the:5ba40e69742be366f1cdcf7a2cfb107bce112789e9b056737ce87231e7386fd0>");
+        assertAnimoResult(s, "<the:5ba40e69742be366f1cdcf7a2cfb107bce112789e9b056737ce87231e7386fd0>" +
+                "<have:content>" +
+                "<html>" +
+                "<head>" +
+                "<title><have:title>Welcome to Animo</have:title></title>" +
+                "</head>" +
+                "<body>" +
+                "<the:theme-concrete-root-layout>" +
+                "<is:root-layout/>" +
+                "<h1><have:title>Welcome to Animo</have:title></h1>" +
+                "<p><have:content>It is working!</have:content></p>" +
+                "<ul>" +
+                "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
+                "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
+                "</ul>" +
+                "</the:theme-concrete-root-layout>" +
+                "</body>" +
+                "</html>" +
+                "</have:content>" +
+                "</the:5ba40e69742be366f1cdcf7a2cfb107bce112789e9b056737ce87231e7386fd0>");
 
-        assertResult(s, "<html>" +
-                            "<head>" +
-                                "<title>Welcome to Animo</title>" +
-                            "</head>" +
-                            "<body>" +
-                                "<h1>Welcome to Animo</h1>" +
-                                "<p>It is working!</p>" +
-                                "<ul>" +
-                                    "<li>host: \"<strong>localhost</strong>\"</li>" +
-                                    "<li>uri: \"<strong>/</strong>\"</li>" +
-                                "</ul>" +
-                            "</body>" +
-                        "</html>");
+        assertXMLResult(s, "<html>" +
+                "<head>" +
+                "<title>Welcome to Animo</title>" +
+                "</head>" +
+                "<body>" +
+                "<h1>Welcome to Animo</h1>" +
+                "<p>It is working!</p>" +
+                "<ul>" +
+                "<li>host: \"<strong>localhost</strong>\"</li>" +
+                "<li>uri: \"<strong>/</strong>\"</li>" +
+                "</ul>" +
+                "</body>" +
+                "</html>");
 
     }
 

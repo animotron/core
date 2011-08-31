@@ -22,7 +22,7 @@ import org.animotron.ATest;
 import org.animotron.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.CommonBuilder;
-import org.animotron.graph.serializer.GraphSerializer;
+import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.query.ANY;
@@ -67,7 +67,7 @@ public class StoreBinaryTest extends ATest {
         System.out.println("Test binary stream ...");
         
     	Relationship r = CommonBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
-        GraphSerializer.serialize(r, System.out);
+        AnimoSerializer.serialize(r, System.out);
 
         Expression s = new Expression(
           _(AN._, THE._.name(r))

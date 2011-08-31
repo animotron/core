@@ -20,7 +20,6 @@ package org.animotron.statement.instruction.ml;
 
 import org.animotron.ATest;
 import org.animotron.graph.builder.CommonBuilder;
-import org.animotron.graph.serializer.GraphSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -47,8 +46,7 @@ public class AttributeTest extends ATest {
         assertNotNull(r);
         
         System.out.println("outputing ....");
-        GraphSerializer.serialize(r, System.out);
-        
-        //assertAnimo(r, "<the:C>z</the:C>");
+
+        //assertAnimoResult(r, "<the:C>z</the:C>");
 	}
 }

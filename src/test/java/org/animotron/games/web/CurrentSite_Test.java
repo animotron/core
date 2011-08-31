@@ -88,13 +88,13 @@ public class CurrentSite_Test extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:3af496a2e8ef6b8f85cf85b360f8ab3775232185e2d2cfe65b1a249ccf8f3cff>" +
-                            "<the:rest>" +
-                                "<the:test-service>" +
-                                    "<is:service/>" +
-                                "</the:test-service>" +
-                            "</the:rest>" +
-                        "</the:3af496a2e8ef6b8f85cf85b360f8ab3775232185e2d2cfe65b1a249ccf8f3cff>");
+        assertAnimoResult(s, "<the:3af496a2e8ef6b8f85cf85b360f8ab3775232185e2d2cfe65b1a249ccf8f3cff>" +
+                "<the:rest>" +
+                "<the:test-service>" +
+                "<is:service/>" +
+                "</the:test-service>" +
+                "</the:rest>" +
+                "</the:3af496a2e8ef6b8f85cf85b360f8ab3775232185e2d2cfe65b1a249ccf8f3cff>");
 
     }
 

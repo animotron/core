@@ -54,17 +54,17 @@ public class YetAnotherAllTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimo(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A><the:B><is:A/><have:Y>β</have:Y></the:B></the:a>");
+        assertAnimoResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A><the:B><is:A/><have:Y>β</have:Y></the:B></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimo(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:b>");
+        assertAnimoResult(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimo(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:c>");
+        assertAnimoResult(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:c>");
     }
 
     @Test
@@ -85,16 +85,16 @@ public class YetAnotherAllTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimo(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
+        assertAnimoResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimo(b, "<the:b><the:B><is:A/><have:X>β</have:X></the:B></the:b>");
+        assertAnimoResult(b, "<the:b><the:B><is:A/><have:X>β</have:X></the:B></the:b>");
 
         Expression c = new Expression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimo(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
+        assertAnimoResult(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
     }
 }

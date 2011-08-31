@@ -79,7 +79,7 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:s><have:content><the:root-layout><is:layout/><have:content>It is working!</have:content></the:root-layout></have:content></the:s>");
+        assertAnimoResult(s, "<the:s><have:content><the:root-layout><is:layout/><have:content>It is working!</have:content></the:root-layout></have:content></the:s>");
 
    }
 
@@ -126,7 +126,7 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        assertAnimo(s,  "<the:s><have:content><the:root-layout><is:layout/><have:content>It is working!</have:content></the:root-layout></have:content></the:s>");
+        assertAnimoResult(s, "<the:s><have:content><the:root-layout><is:layout/><have:content>It is working!</have:content></the:root-layout></have:content></the:s>");
 
    }
 

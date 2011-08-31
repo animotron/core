@@ -128,7 +128,7 @@ public class DescriptionLogicTest extends ATest {
 				//eq an:personB; an:mother?
 		);
 		
-		assertAnimo(a, "<the:a><the:yes/></the:a>");
+		assertAnimoResult(a, "<the:a><the:yes/></the:a>");
 		
 	}
 }

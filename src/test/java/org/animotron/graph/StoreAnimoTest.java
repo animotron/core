@@ -19,7 +19,7 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.graph.serializer.GraphSerializer;
+import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -77,8 +77,8 @@ public class StoreAnimoTest extends ATest {
         Relationship r = THE._.get("B");
             
         assertNotNull(r);
-        
-        GraphSerializer.serialize(r, System.out);
+
+        AnimoSerializer.serialize(r, System.out);
             
 //	        String[] must = new String[] {"the:B", "have:B", "some", "another"};
 //	        int i = 0;

@@ -20,7 +20,7 @@ package org.animotron.bridge;
 
 import org.animotron.ATest;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.serializer.GraphSerializer;
+import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -41,7 +41,7 @@ public class FSBridgeTest extends ATest {
 	private void check(String the) throws IOException {
         Relationship r = THE._.get(the);
         assertNotNull(r);
-        GraphSerializer.serialize(r, System.out);
+        AnimoSerializer.serialize(r, System.out);
         System.out.println();
 	}
 	

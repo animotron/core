@@ -47,7 +47,7 @@ public class UseTest extends ATest {
         Expression x = new Expression(
             _(THE._, "x", _(ANY._, "X", _(USE._, "Y")))
         );
-        assertAnimo(x, "<the:x><the:A><is:X/></the:A></the:x>");
+        assertAnimoResult(x, "<the:x><the:A><is:X/></the:A></the:x>");
 
     }
 
@@ -64,7 +64,7 @@ public class UseTest extends ATest {
         Expression x = new Expression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimo(x, "<the:x><the:q><the:A><is:X/></the:A></the:q></the:x>");
+        assertAnimoResult(x, "<the:x><the:q><the:A><is:X/></the:A></the:q></the:x>");
 
     }
 
@@ -81,7 +81,7 @@ public class UseTest extends ATest {
         Expression x = new Expression(
             _(THE._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
-        assertAnimo(x, "<the:x><the:A><is:X/></the:A><the:B><is:X/></the:B></the:x>");
+        assertAnimoResult(x, "<the:x><the:A><is:X/></the:A><the:B><is:X/></the:B></the:x>");
 
     }
 
@@ -102,7 +102,7 @@ public class UseTest extends ATest {
         Expression x = new Expression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimo(x, "<the:x><the:q><the:A><is:X/></the:A><the:B><is:X/></the:B></the:q></the:x>");
+        assertAnimoResult(x, "<the:x><the:q><the:A><is:X/></the:A><the:B><is:X/></the:B></the:q></the:x>");
 
     }
 

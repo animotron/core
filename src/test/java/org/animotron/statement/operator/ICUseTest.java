@@ -56,7 +56,7 @@ public class ICUseTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(USE._, "X"))))
         );
-        assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
+        assertAnimoResult(D, "<the:D><have:X>χ</have:X></the:D>");
 
 	}
 
@@ -82,7 +82,7 @@ public class ICUseTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C")))
         );
-        assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
+        assertAnimoResult(D, "<the:D><have:X>χ</have:X></the:D>");
 
     }
 
@@ -112,7 +112,7 @@ public class ICUseTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
         );
-        assertAnimo(D, "<the:D><have:X>χ</have:X></the:D>");
+        assertAnimoResult(D, "<the:D><have:X>χ</have:X></the:D>");
 
     }
 

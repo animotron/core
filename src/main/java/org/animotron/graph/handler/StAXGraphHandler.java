@@ -75,28 +75,21 @@ public class StAXGraphHandler implements GraphHandler {
 					writer.writeStartElement(prefix, name, ns);
 				}
 				
-			} else {
-                //writer.writeStartElement(statement.prefix(r), statement.name(r), statement.namespace(r));
-                writer.writeStartElement(statement.name(), statement.name(r), statement.name());
-
 			}
 			
 		} catch (XMLStreamException e) {
-			//ignore not well formed structure with a hope to see good one in the middle  
+            throw new IOException(e);
 		}
 	}
 
 	@Override
 	public void end(Statement statement, Relationship r) throws IOException {
 		try {
-			if (statement instanceof ValueInstruction ||
-					statement instanceof ATTRIBUTE) {
-				return;
-			} else {
+			if (statement instanceof ELEMENT) {
 				writer.writeEndElement();
 			}
 		} catch (XMLStreamException e) {
-			//ignore not well formed structure with a hope to see good one in the middle
+            throw new IOException(e);
 		}
 	}
 
@@ -105,7 +98,7 @@ public class StAXGraphHandler implements GraphHandler {
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
-			//ignore not well formed structure with a hope to see good one in the middle
+            throw new IOException(e);
 		}
 	}
 
@@ -114,7 +107,8 @@ public class StAXGraphHandler implements GraphHandler {
 		try {
 			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
-			//ignore not well formed structure with a hope to see good one in the middle
+            throw new IOException(e);
 		}
 	}
+
 }

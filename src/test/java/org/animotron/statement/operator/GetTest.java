@@ -47,7 +47,7 @@ public class GetTest extends ATest {
 			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
 		);
 
-        assertAnimo(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
+        assertAnimoResult(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
 	}
 	
 	@Test
@@ -65,7 +65,7 @@ public class GetTest extends ATest {
 			_(THE._, "X", _(AN._, "D", _(AN._, "A", _(HAVE._, "C", text(":")))))
 		);
         	
-        assertAnimo(X, "<the:X><the:D><have:E><have:B><have:C>:</have:C></have:B></have:E></the:D></the:X>");
+        assertAnimoResult(X, "<the:X><the:D><have:E><have:B><have:C>:</have:C></have:B></have:E></the:D></the:X>");
 	}
 
 	@Test
@@ -83,7 +83,7 @@ public class GetTest extends ATest {
 			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
 		);
 
-    	assertAnimo(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:E>");
+    	assertAnimoResult(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:E>");
 	}
 	
 	@Test
@@ -105,7 +105,7 @@ public class GetTest extends ATest {
 			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
 		);
 
-    	assertAnimo(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>:</have:C></have:B></the:A></the:F>");
+    	assertAnimoResult(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>:</have:C></have:B></the:A></the:F>");
 	}
 	
     @Test
@@ -135,35 +135,35 @@ public class GetTest extends ATest {
             _(GET._, "A1",
                 _(AN._, "A")
         )));
-        assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
+        assertAnimoResult(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
             _(GET._, "A1",
                 _(AN._, "B")
         )));
-        assertAnimo(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
+        assertAnimoResult(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
 
         Expression C2 = new Expression(
         _(THE._, "C2",
             _(GET._, "A2",
                 _(AN._, "B")
         )));
-        assertAnimo(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
+        assertAnimoResult(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
 
         Expression C3 = new Expression(
         _(THE._, "C3",
             _(GET._, "E1",
                 _(AN._, "B")
         )));
-        assertAnimo(C3, "<the:C3/>");
+        assertAnimoResult(C3, "<the:C3/>");
 
         Expression C4 = new Expression(
         _(THE._, "C4",
             _(GET._, "B1",
                 _(AN._, "B")
         )));
-        assertAnimo(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
+        assertAnimoResult(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
     }
 
     @Test
@@ -192,35 +192,35 @@ public class GetTest extends ATest {
             _(GET._, "A1",
                 _(AN._, "A")
         )));
-        assertAnimo(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
+        assertAnimoResult(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
             _(GET._, "A1",
                 _(AN._, "B")
         )));
-        assertAnimo(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
+        assertAnimoResult(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
 
         Expression C2 = new Expression(
         _(THE._, "C2",
             _(GET._, "A2",
                 _(AN._, "B")
         )));
-        assertAnimo(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
+        assertAnimoResult(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
 
         Expression C3 = new Expression(
         _(THE._, "C3",
             _(GET._, "E1",
                 _(AN._, "B")
         )));
-        assertAnimo(C3, "<the:C3/>");
+        assertAnimoResult(C3, "<the:C3/>");
 
         Expression C4 = new Expression(
         _(THE._, "C4",
             _(GET._, "B1",
                 _(AN._, "B")
         )));
-        assertAnimo(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
+        assertAnimoResult(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
     }
 
     @Test
@@ -242,7 +242,7 @@ public class GetTest extends ATest {
             _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "Y", text("β")), _(HAVE._, "Z", text("γ"))))
         );
 
-        assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z><the:B><have:Y>β</have:Y><the:A><have:X>α</have:X></the:A></the:B></the:C></the:E>");
+        assertAnimoResult(E, "<the:E><the:C><have:Z>γ</have:Z><the:B><have:Y>β</have:Y><the:A><have:X>α</have:X></the:A></the:B></the:C></the:E>");
     }
 
     @Test
@@ -264,7 +264,7 @@ public class GetTest extends ATest {
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(HAVE._, "B", text("β")))))
         );
 
-        assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
+        assertAnimoResult(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
     }
 
     @Test
@@ -286,7 +286,7 @@ public class GetTest extends ATest {
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
         );
 
-        assertAnimo(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
+        assertAnimoResult(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
     }
 
     @Test
@@ -308,7 +308,7 @@ public class GetTest extends ATest {
             _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(HAVE._, "X", text("."))))))
         );
 
-        assertAnimo(D, "<the:D><the:C><have:Z><have:Y><have:X>.</have:X></have:Y></have:Z></the:C></the:D>");
+        assertAnimoResult(D, "<the:D><the:C><have:Z><have:Y><have:X>.</have:X></have:Y></have:Z></the:C></the:D>");
     }
 
 }

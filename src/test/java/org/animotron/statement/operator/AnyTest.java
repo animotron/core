@@ -55,12 +55,12 @@ public class AnyTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ANY._, "A"))
         );
-        assertAnimo(a, "<the:a><the:B><is:A/><have:value>B</have:value></the:B></the:a>");
+        assertAnimoResult(a, "<the:a><the:B><is:A/><have:value>B</have:value></the:B></the:a>");
 
         Expression b = new Expression(
             _(THE._, "b", _(ANY._, "B"))
         );
-        assertAnimo(b, "<the:b><the:C><is:B/><have:value>C</have:value></the:C></the:b>");
+        assertAnimoResult(b, "<the:b><the:C><is:B/><have:value>C</have:value></the:C></the:b>");
     }
 	
     @Test
@@ -87,12 +87,12 @@ public class AnyTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimo(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+        assertAnimoResult(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
 
         Expression E = new Expression(
             _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimo(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
+        assertAnimoResult(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
     }
 
 	@Test
@@ -124,6 +124,6 @@ public class AnyTest extends ATest {
 			)
 		);
 	
-        assertAnimo(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
+        assertAnimoResult(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
 	}
 }

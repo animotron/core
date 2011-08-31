@@ -136,48 +136,48 @@ public class WebFrameworkTest extends ATest {
                 )
             )
         );
-        assertAnimo(s,  "<the:s>" +
-                            "<the:root-service>" +
-                                "<is:service/>" +
-                                "<have:uri>/</have:uri>" +
-                                "<the:html>" +
-                                    "<the:html-composition>" +
-                                        "<is:composition/>" +
-                                        "<have:content>" +
-                                            "<html>" +
-                                                "<the:html-head>" +
-                                                    "<head>" +
-                                                        "<title><have:title>Welcome to Animotron</have:title></title>" +
-                                                    "</head>" +
-                                                "</the:html-head>" +
-                                                "<body>" +
-                                                    "<the:theme-concrete-root-layout>" +
-                                                        "<is:root-layout/>" +
-                                                        "<have:content>" +
-                                                            "<div id=\"title\">" +
-                                                                "<have:title>Welcome to Animotron</have:title>" +
-                                                            "</div>" +
-                                                            "<div id=\"content\">" +
-                                                                "<have:content>Overview</have:content>" +
-                                                            "</div>" +
-                                                        "</have:content>" +
-                                                    "</the:theme-concrete-root-layout>" +
-                                                "</body>" +
-                                            "</html>" +
-                                        "</have:content>" +
-                                    "</the:html-composition>" +
-                                "</the:html>" +
-                            "</the:root-service>" +
-                        "</the:s>");
-        assertResult(s, "<html>" +
-                            "<head>" +
-                                "<title>Welcome to Animotron</title>" +
-                            "</head>" +
-                            "<body>" +
-                                "<div id=\"title\">Welcome to Animotron</div>" +
-                                "<div id=\"content\">Overview</div>" +
-                            "</body>" +
-                        "</html>");
+        assertAnimoResult(s, "<the:s>" +
+                "<the:root-service>" +
+                "<is:service/>" +
+                "<have:uri>/</have:uri>" +
+                "<the:html>" +
+                "<the:html-composition>" +
+                "<is:composition/>" +
+                "<have:content>" +
+                "<html>" +
+                "<the:html-head>" +
+                "<head>" +
+                "<title><have:title>Welcome to Animotron</have:title></title>" +
+                "</head>" +
+                "</the:html-head>" +
+                "<body>" +
+                "<the:theme-concrete-root-layout>" +
+                "<is:root-layout/>" +
+                "<have:content>" +
+                "<div id=\"title\">" +
+                "<have:title>Welcome to Animotron</have:title>" +
+                "</div>" +
+                "<div id=\"content\">" +
+                "<have:content>Overview</have:content>" +
+                "</div>" +
+                "</have:content>" +
+                "</the:theme-concrete-root-layout>" +
+                "</body>" +
+                "</html>" +
+                "</have:content>" +
+                "</the:html-composition>" +
+                "</the:html>" +
+                "</the:root-service>" +
+                "</the:s>");
+        assertXMLResult(s, "<html>" +
+                "<head>" +
+                "<title>Welcome to Animotron</title>" +
+                "</head>" +
+                "<body>" +
+                "<div id=\"title\">Welcome to Animotron</div>" +
+                "<div id=\"content\">Overview</div>" +
+                "</body>" +
+                "</html>");
 
 	}
 

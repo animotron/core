@@ -49,8 +49,8 @@ public class TheTest extends ATest {
 			_(THE._, "E", _(AN._, "C"))
 		);
         	
-        assertAnimo(A, "<the:A><have:B><the:C><have:D>.</have:D></the:C></have:B></the:A>");
-        assertAnimo(E, "<the:E><the:C><have:D>.</have:D></the:C></the:E>");
+        assertAnimoResult(A, "<the:A><have:B><the:C><have:D>.</have:D></the:C></have:B></the:A>");
+        assertAnimoResult(E, "<the:E><the:C><have:D>.</have:D></the:C></the:E>");
         
 	}
 	

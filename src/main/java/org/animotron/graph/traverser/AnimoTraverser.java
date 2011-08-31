@@ -34,11 +34,11 @@ import static org.animotron.graph.AnimoGraph.getORDER;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class GraphTraverser {
+public class AnimoTraverser {
 
-    public static GraphTraverser _ = new GraphTraverser();
+    public static AnimoTraverser _ = new AnimoTraverser();
 
-    protected GraphTraverser() {}
+    protected AnimoTraverser() {}
 	
 	public void traverse(GraphHandler handler, Relationship r) throws IOException {
 		handler.startGraph();

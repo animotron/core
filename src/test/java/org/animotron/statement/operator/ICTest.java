@@ -53,7 +53,7 @@ public class ICTest extends ATest {
 		);
 
         //System.out.println("get:A an:C");
-        assertString(D, ".");
-        assertAnimo(D, "<the:D><have:A>.</have:A></the:D>");
+        assertStringResult(D, ".");
+        assertAnimoResult(D, "<the:D><have:A>.</have:A></the:D>");
 	}
 }

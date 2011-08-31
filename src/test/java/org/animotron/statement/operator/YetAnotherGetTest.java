@@ -51,7 +51,7 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(GET._, "A", _(AN._, "C")))
         );
 
-        assertAnimo(E, "<the:E><have:B>π</have:B></the:E>");
+        assertAnimoResult(E, "<the:E><have:B>π</have:B></the:E>");
     }
 
     @Test
@@ -73,7 +73,7 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
 
-        assertAnimo(E, "<the:E><have:B>π</have:B></the:E>");
+        assertAnimoResult(E, "<the:E><have:B>π</have:B></the:E>");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
 
-        assertAnimo(E, "<the:E><have:B>π</have:B></the:E>");
+        assertAnimoResult(E, "<the:E><have:B>π</have:B></the:E>");
     }
 
     @Test
@@ -113,7 +113,7 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(IS._, "C"), _(SELF._, "A"))
         );
 
-        assertAnimo(E, "<the:E><is:C/><have:B>π</have:B></the:E>");
+        assertAnimoResult(E, "<the:E><is:C/><have:B>π</have:B></the:E>");
     }
 
     @Test
@@ -135,7 +135,7 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
         );
 
-        assertAnimo(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
+        assertAnimoResult(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
     }
 
     @Test
@@ -157,6 +157,6 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
         );
 
-        assertAnimo(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
+        assertAnimoResult(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
     }
 }

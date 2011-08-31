@@ -63,7 +63,7 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimo(a, "<the:a><the:B><is:A/><have:X>B</have:X></the:B><the:C><is:A/><have:X>C</have:X></the:C></the:a>");
+    	assertAnimoResult(a, "<the:a><the:B><is:A/><have:X>B</have:X></the:B><the:C><is:A/><have:X>C</have:X></the:C></the:a>");
 	}
 	
 	public void down() throws AnimoException, IOException {
@@ -80,6 +80,6 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimo(a, "<the:a>bla<have:X>B</have:X>bla<have:X>C</have:X></the:a>");
+    	assertAnimoResult(a, "<the:a>bla<have:X>B</have:X>bla<have:X>C</have:X></the:a>");
 	}
 }
