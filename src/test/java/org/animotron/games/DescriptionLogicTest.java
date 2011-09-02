@@ -25,7 +25,7 @@ import org.animotron.statement.instruction.compare.GE;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.query.ANY;
+import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.HAVE_NOT;
 import org.animotron.statement.relation.IS;

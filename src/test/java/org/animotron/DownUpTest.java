@@ -20,8 +20,8 @@ package org.animotron;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.query.ALL;
-import org.animotron.statement.operator.query.GET;
+import org.animotron.statement.query.ALL;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;

@@ -20,7 +20,7 @@ package org.animotron;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
-import org.animotron.statement.instruction.ml.*;
+import org.animotron.statement.ml.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

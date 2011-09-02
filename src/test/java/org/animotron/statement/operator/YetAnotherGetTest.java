@@ -20,8 +20,8 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.statement.operator.query.GET;
-import org.animotron.statement.operator.query.SELF;
+import org.animotron.statement.query.GET;
+import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;

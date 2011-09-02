@@ -20,7 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.operator.query.GET;
+import org.animotron.statement.query.GET;
 
 
 /**

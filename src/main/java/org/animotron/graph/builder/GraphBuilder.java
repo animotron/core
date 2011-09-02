@@ -24,7 +24,7 @@ import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.manipulator.Manipulators.Catcher;
 import org.animotron.statement.Statement;
-import org.animotron.statement.instruction.ml.TEXT;
+import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Cachable;
 import org.animotron.statement.operator.THE;

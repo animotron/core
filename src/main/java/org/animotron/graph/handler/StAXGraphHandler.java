@@ -19,7 +19,7 @@
 package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
-import org.animotron.statement.instruction.ml.*;
+import org.animotron.statement.ml.*;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;

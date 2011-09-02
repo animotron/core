@@ -20,13 +20,13 @@ package org.animotron.games;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
-import org.animotron.statement.instruction.math.Mult;
-import org.animotron.statement.instruction.math.Sum;
+import org.animotron.statement.math.Mult;
+import org.animotron.statement.math.Sum;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.PTRN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.query.GET;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 
 import static org.animotron.Expression._;

@@ -20,7 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.io.PipedOutput;
 import org.animotron.statement.Statement;
-import org.animotron.statement.instruction.ml.TEXT;
+import org.animotron.statement.ml.TEXT;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
