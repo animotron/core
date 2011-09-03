@@ -48,8 +48,8 @@ public class SimpleTest extends ATest {
     	Expression C = new Expression(
 			_(THE._, "CC", _(AN._, "BB"))
 		);
-
-        assertAnimoResult(C, "<the:CC><the:BB><have:AA>a@b</have:AA></the:BB></the:CC>");
+    	//assertXMLResult(C, "<the:CC><the:BB><have:AA>a@b</have:AA></the:BB></the:CC>");
+        assertAnimoResult(C, "the CC the BB have AA \"a@b\"\n");
 	}
 
 	@Test
@@ -66,7 +66,7 @@ public class SimpleTest extends ATest {
     	Expression C = new Expression(
 			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
 		);
-
-        assertAnimoResult(C, "<the:C><have:A>a@b</have:A></the:C>");
+        //assertXMLResult(C, "<the:C><have:A>a@b</have:A></the:C>");
+        assertAnimoResult(C, "the C have A \"a@b\"\n");
 	}
 }
