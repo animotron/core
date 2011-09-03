@@ -20,6 +20,7 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
@@ -49,7 +50,7 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -73,7 +74,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, start_op, r);
+                result(handler, pf, r);
 			//workaround IS and USE
 			} else if (s instanceof IS || s instanceof USE) {
 				handler.start(s, r);
@@ -83,7 +84,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
                     for (Relationship i : q) {
-                        build(handler, start_op, i);
+                        build(handler, pf, i);
                     }
                 } finally {
                     q.close();

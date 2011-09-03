@@ -69,7 +69,7 @@ public class WITH extends Operator implements Predicate {
 		
 		System.out.println("Eval actual");
 		for (Relationship have : haveSet) {
-			in = Evaluator._.execute(start_op, have.getEndNode());
+			in = Evaluator._.execute(pf, have.getEndNode());
 			for (Object e : in) {
 				actual.add((Relationship) e);
 				System.out.println("actual "+e);
@@ -77,7 +77,7 @@ public class WITH extends Operator implements Predicate {
 		}
 
 		System.out.println("Eval expected");
-		in = Evaluator._.execute(start_op, op.getEndNode());
+		in = Evaluator._.execute(pf, op.getEndNode());
 		for (Object e : in) {
 			expected.add((Relationship) e);
 			System.out.println("expected "+e);
@@ -87,7 +87,7 @@ public class WITH extends Operator implements Predicate {
 			Relationship g = expected.get(0);
 			
 			//XXX: finish
-			List<Relationship> l = evaluable(start_op, g.getEndNode());
+			List<Relationship> l = evaluable(pf, g.getEndNode());
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) 
@@ -107,7 +107,7 @@ public class WITH extends Operator implements Predicate {
 		return false;
 	}
 	
-	private List<Relationship> evaluable(Relationship start_op, Node node) throws InterruptedException, IOException {
+	private List<Relationship> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
 		List<Relationship> list = new FastList<Relationship>();
 		
 		IndexHits<Relationship> q = getORDER().query(node);
@@ -116,7 +116,7 @@ public class WITH extends Operator implements Predicate {
 				Statement s = Statements.relationshipType(i.getType());
     			if (s instanceof Query || s instanceof Evaluable) {
     				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput in = Evaluator._.execute(start_op, i);
+    				PipedInput in = Evaluator._.execute(pf, i);
     				for (Object e : in) {
     					list.add((Relationship) e);
     					System.out.println("get from Evaluator "+e);

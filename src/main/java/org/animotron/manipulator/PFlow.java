@@ -63,6 +63,22 @@ public class PFlow {
 		this.m = m;
 	};
 	
+	public PFlow(Manipulator m, PFlow pf, Relationship op) {
+		parent = new PFlow(m);
+		this.m = m;
+		this.op = op;
+		
+		path.addAll(pf.path);
+	}
+
+	public PFlow(Manipulator m, PFlow pf, Node opNode) {
+		parent = new PFlow(m);
+		this.m = m;
+		this.opNode = opNode;
+		
+		path.addAll(pf.path);
+	}
+
 	public PFlow(Manipulator m, Relationship start_op, Relationship op) {
 		parent = new PFlow(m);
 		this.m = m;

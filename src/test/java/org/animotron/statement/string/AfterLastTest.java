@@ -48,7 +48,7 @@ public class AfterLastTest extends ATest {
 			_(THE._, "C", _(AfterLast._, text("."), _(GET._, "B", Expression._(AN._, "A"))))
 		);
     	
-        assertAnimoResult(C, "<the:C>z</the:C>");
+        assertAnimoResult(C, "the C \"z\"\n");
 
         //System.out.println("done.");
 	}

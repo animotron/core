@@ -131,7 +131,7 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 
 						PipedInput in;
 						try {
-							in = Evaluator._.execute(pf.getStartOP(), context.getEndNode());
+							in = Evaluator._.execute(pf, context.getEndNode());
 						
 							for (Object n : in) {
 								Relationship r = get(((Relationship)n).getEndNode(), name);

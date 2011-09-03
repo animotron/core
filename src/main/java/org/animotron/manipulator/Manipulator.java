@@ -52,14 +52,14 @@ public abstract class Manipulator {
 	}
 	
 	public final PipedInput execute(Relationship op) throws IOException {
-		return execute(op, (PropertyContainer)op);
+		return execute(new PFlow(this, op, op), (PropertyContainer)op);
 	}
 
-	public final PipedInput execute(Relationship start_op, Node op) throws IOException {
-		return execute(start_op, (PropertyContainer)op);
+	public final PipedInput execute(final PFlow pflow, Node op) throws IOException {
+		return execute(pflow, (PropertyContainer)op);
 	}
 	
-	public final PipedInput execute(final Relationship start_op, PropertyContainer op) throws IOException {
+	public final PipedInput execute(final PFlow pflow, PropertyContainer op) throws IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
 		
@@ -76,11 +76,11 @@ public abstract class Manipulator {
 			return in;
 		}
 		
-		PFlow pf;
+		final PFlow pf;
 		if (op instanceof Node) {
-			pf = new PFlow(this, start_op, (Node)op);
+			pf = new PFlow(this, pflow, (Node)op);
 		} else {
-			pf = new PFlow(this, start_op, (Relationship)op);
+			pf = new PFlow(this, pflow, (Relationship)op);
 		}
 		pf.question.subscribe(sub);
 
@@ -104,7 +104,7 @@ public abstract class Manipulator {
         				Statement s = Statements.relationshipType(msg.getType());
             			if (s instanceof Query || s instanceof Evaluable) {
             				try {
-	            				PipedInput in = Evaluator._.execute(start_op, msg);
+	            				PipedInput in = Evaluator._.execute(pf, msg);
 	            				
 	            				for (Object obj : in) {
 	            					if (obj instanceof Relationship) {

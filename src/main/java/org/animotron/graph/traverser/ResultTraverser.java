@@ -22,6 +22,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
@@ -54,16 +55,16 @@ public class ResultTraverser extends AnimoTraverser {
 
     public void traverse(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, start_op, r);
+        build(handler, new PFlow(Evaluator._, start_op, r), r);
         handler.endGraph();
     }
 
     @Override
     protected void build(GraphHandler handler, Relationship r) throws IOException {
-        build(handler, r, r);
+        build(handler, new PFlow(Evaluator._, r, r), r);
     }
 
-    protected void build(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -87,14 +88,14 @@ public class ResultTraverser extends AnimoTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, start_op, r);
+                result(handler, pf, r);
 			} else if (!(s instanceof IS || s instanceof USE)) {
                 if (s instanceof Result)
                     handler.start(s, r);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
                     for (Relationship i : q) {
-                        build(handler, start_op, i);
+                        build(handler, pf, i);
                     }
                 } finally {
                     q.close();
@@ -106,14 +107,14 @@ public class ResultTraverser extends AnimoTraverser {
 
     }
 
-    protected boolean result(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
+    protected boolean result(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 
         boolean found = false;
         Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
         for ( Relationship n : i ) {
             build(
                 handler,
-                start_op,
+                pf,
                 getDb().getRelationshipById(
                     (Long)n.getProperty(RID.name())
                 )
@@ -126,11 +127,11 @@ public class ResultTraverser extends AnimoTraverser {
             //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
 
-            in = Evaluator._.execute(start_op, r);
+            in = Evaluator._.execute(pf, r);
 
             for (Object obj : in) {
                 if (obj instanceof Relationship) {
-                    build(handler, start_op, (Relationship) obj);
+                    build(handler, pf, (Relationship) obj);
                 }
             }
         }
