@@ -54,8 +54,8 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
-
+        //assertXMLResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\"\n");
     }
 
     @Test
@@ -76,8 +76,8 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
-
+        //assertXMLResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\"\n");
     }
 
     @Test
@@ -102,8 +102,8 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
-
+        //assertXMLResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\"\n");
     }
 
     @Test
@@ -134,8 +134,8 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
-
+        //assertXMLResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\"\n");
     }
 
     @Test
@@ -161,10 +161,9 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(ANY._, "d"))
             )
         );
-        assertAnimoResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
-
+        //assertXMLResult(s, "<the:s><the:A><have:B><the:C><have:B>test</have:B></the:C></have:B></the:A></the:s>");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\"\n");
     }
-
 
     @Test
     public void loop_get_test() throws Exception {
@@ -186,8 +185,8 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
-
+        //assertXMLResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "the s have B the C have B \"test\"\n");
     }
 
     @Test
@@ -214,8 +213,8 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
-
+        //assertXMLResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "the s have B the C have B \"test\"\n");
     }
 
     @Test
@@ -248,8 +247,8 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
-
+        //assertXMLResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "the s have B the C have B \"test\"\n");
     }
 
     @Test
@@ -277,8 +276,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
-
+        //assertXMLResult(s, "<the:s><have:B><the:C><have:B>test</have:B></the:C></have:B></the:s>");
+        assertAnimoResult(s, "the s have B the C have B \"test\"\n");
     }
-
 }

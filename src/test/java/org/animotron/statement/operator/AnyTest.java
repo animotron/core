@@ -55,12 +55,14 @@ public class AnyTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ANY._, "A"))
         );
-        assertAnimoResult(a, "<the:a><the:B><is:A/><have:value>B</have:value></the:B></the:a>");
+        //assertXMLResult(a, "<the:a><the:B><is:A/><have:value>B</have:value></the:B></the:a>");
+        assertAnimoResult(a, "the a (the B is A have value \"B\")\n");
 
         Expression b = new Expression(
             _(THE._, "b", _(ANY._, "B"))
         );
-        assertAnimoResult(b, "<the:b><the:C><is:B/><have:value>C</have:value></the:C></the:b>");
+        //assertXMLResult(b, "<the:b><the:C><is:B/><have:value>C</have:value></the:C></the:b>");
+        assertAnimoResult(b, "the b (the C is B have value \"C\")\n");
     }
 	
     @Test
@@ -87,12 +89,14 @@ public class AnyTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimoResult(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+        //assertXMLResult(D, "<the:D><the:B><is:A/><have:value>B</have:value></the:B></the:D>");
+        assertAnimoResult(D, "the D (the B is A have value \"B\")\n");
 
         Expression E = new Expression(
             _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimoResult(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
+        //assertXMLResult(E, "<the:E><the:C><is:B/><have:value>C</have:value></the:C></the:E>");
+        assertAnimoResult(E, "the E (the C is B have value \"C\")\n");
     }
 
 	@Test
@@ -123,7 +127,7 @@ public class AnyTest extends ATest {
 				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 			)
 		);
-	
-        assertAnimoResult(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
+		//assertXMLResult(test, "<the:test><the:text-plain><is:mime-type/><is:text/><have:type>text/plain</have:type><have:name>Plain text</have:name><have:extension>txt</have:extension></the:text-plain></the:test>");
+        assertAnimoResult(test, "the test (the text-plain is mime-type is text have type \"text/plain\" have name \"Plain text\" have extension \"txt\")\n");
 	}
 }

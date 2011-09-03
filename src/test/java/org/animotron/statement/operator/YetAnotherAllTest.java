@@ -54,17 +54,20 @@ public class YetAnotherAllTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A><the:B><is:A/><have:Y>β</have:Y></the:B></the:a>");
+        //assertXMLResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A><the:B><is:A/><have:Y>β</have:Y></the:B></the:a>");
+        assertAnimoResult(a, "the a (the A is S have X \"α\") (the B is A have Y \"β\")\n");
 
         Expression b = new Expression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimoResult(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:b>");
+        //assertXMLResult(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:b>");
+        assertAnimoResult(b, "the b (the B is A have Y \"β\") (the C is B have Z \"γ\" have X \"αα\")\n");
 
         Expression c = new Expression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimoResult(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:c>");
+        //assertXMLResult(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:c>");
+        assertAnimoResult(c, "the c (the C is B have Z \"γ\" have X \"αα\")\n");
     }
 
     @Test
@@ -85,16 +88,19 @@ public class YetAnotherAllTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
+        //assertXMLResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
+        assertAnimoResult(a, "the a (the A is S have X \"α\")\n");
 
         Expression b = new Expression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimoResult(b, "<the:b><the:B><is:A/><have:X>β</have:X></the:B></the:b>");
+        //assertXMLResult(b, "<the:b><the:B><is:A/><have:X>β</have:X></the:B></the:b>");
+        assertAnimoResult(b, "the b (the B is A have X \"β\")\n");
 
         Expression c = new Expression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimoResult(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
+        //assertXMLResult(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
+        assertAnimoResult(c, "the c (the C is B have X \"γ\")\n");
     }
 }
