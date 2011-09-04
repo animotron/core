@@ -27,9 +27,15 @@
 		<dependency>
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
-			<version>1.4</version>
+			<version>1.5.M01</version>
 		</dependency>
 		
+        <!--dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-graph-collections</artifactId>
+            <version>1.5-SNAPSHOT</version>
+        </dependency-->
+
 		<!-- light/fast date-time (animo/time) -->
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -157,4 +163,5 @@
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 	</build>
+
 </project>
