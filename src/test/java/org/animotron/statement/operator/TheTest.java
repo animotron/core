@@ -38,6 +38,6 @@ public class TheTest extends ATest {
             _(THE._, "A", _(THE._, "B", _(THE._, "C")))
         );
         //assertXMLResult(A, "<the:A><the:B><the:C/></the:B></the:A>");
-        assertAnimoResult(A, "the A the B the C\n");
+        assertAnimoResult(A, "the A the B the C");
     }
 }

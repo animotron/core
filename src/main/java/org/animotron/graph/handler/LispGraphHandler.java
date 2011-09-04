@@ -97,7 +97,7 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void endGraph() throws IOException {
-        write("\n");
+        //write("\n");
     }
 
 }
