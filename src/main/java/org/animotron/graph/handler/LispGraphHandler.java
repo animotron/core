@@ -31,8 +31,6 @@ import java.io.OutputStream;
  */
 public class LispGraphHandler extends AbstractTextGraphHandler {
 
-    private int level;
-
     public LispGraphHandler(OutputStream stream) {
         super(stream);
     }
@@ -61,12 +59,10 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
                 write(statement.name(r));
             }
         }
-        level++;
     }
 
     @Override
     public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        level--;
         if (level != 0 && !isOne) {
             write(")");
         }
@@ -74,7 +70,6 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void startGraph() {
-        level = 0;
     }
 
     @Override
