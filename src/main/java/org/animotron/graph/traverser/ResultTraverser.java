@@ -133,6 +133,8 @@ public class ResultTraverser extends AnimoTraverser {
                 } else {
                     build(handler, pf, i, level, true);
                 }
+            } else {
+                build(handler, pf, i, level, false);
             }
             isFirst = false;
             found = true;
@@ -152,6 +154,8 @@ public class ResultTraverser extends AnimoTraverser {
                 } else {
                     build(handler, pf, i, level, true);
                 }
+            } else {
+                build(handler, pf, i, level, false);
             }
             isFirst = false;
         }

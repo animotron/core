@@ -75,6 +75,8 @@ public class AnimoTraverser {
                 } else {
                     build(handler, i, level, true);
                 }
+            } else {
+                build(handler, i, level, false);
             }
             isFirst = false;
         }

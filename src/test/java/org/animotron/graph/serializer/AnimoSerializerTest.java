@@ -172,8 +172,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (an C (have D \"1\") (have E \"2\")) (an F (have G \"3\") (have H \"4\")))" +
-                                    "(have I (an J (have K \"5\") (have L \"6\")) (an M (have N \"7\") (have O \"8\")))");
+        assertAnimo(A, "the A (is X) (have B (an C (have D \"1\") (have E \"2\")) (an F (have G \"3\") (have H \"4\"))) (have I (an J (have K \"5\") (have L \"6\")) (an M (have N \"7\") (have O \"8\")))");
 	}
 	
 }
