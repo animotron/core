@@ -32,7 +32,7 @@ import static org.animotron.Properties.BIN;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class BinaryGraphHandler extends AbstractGraphHandler {
+public class BinaryGraphHandler implements GraphHandler {
 
     OutputStream out;
 

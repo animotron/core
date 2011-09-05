@@ -36,16 +36,7 @@ public interface GraphHandler {
 
 	public abstract void end(Statement statement, Relationship r) throws IOException;
 
-	public void startGraph() throws IOException;
+	void startGraph() throws IOException;
 
-	public void endGraph() throws IOException;
-
-    public void setLevel(int level);
-
-    public int getLevel();
-
-    public void setOne(boolean isOne);
-
-    public boolean isOne();
-
+	void endGraph() throws IOException;
 }

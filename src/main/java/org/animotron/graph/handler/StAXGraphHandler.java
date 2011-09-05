@@ -30,7 +30,7 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXGraphHandler extends AbstractGraphHandler {
+public class StAXGraphHandler implements GraphHandler {
 	
 	private XMLStreamWriter writer;
 	

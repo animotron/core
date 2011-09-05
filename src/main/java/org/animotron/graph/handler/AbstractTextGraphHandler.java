@@ -25,7 +25,7 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractTextGraphHandler extends AbstractGraphHandler {
+public abstract class AbstractTextGraphHandler implements GraphHandler {
 
     private Handler out;
 
