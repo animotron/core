@@ -18,43 +18,33 @@
  */
 package org.animotron.graph.handler;
 
-import org.animotron.io.PipedOutput;
-import org.animotron.statement.Statement;
-import org.animotron.statement.ml.TEXT;
-import org.neo4j.graphdb.Relationship;
-
-import java.io.IOException;
-
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class PipedGraphHandler implements GraphHandler {
+public abstract class AbstractGraphHandler implements GraphHandler {
 
-    PipedOutput pipe;
+    private int level;
+    private boolean isOne;
 
-    public PipedGraphHandler(PipedOutput pipe) {
-        this.pipe = pipe;
+    @Override
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     @Override
-    public void start(Statement statement, Relationship r) throws IOException {
-        if (statement instanceof TEXT) {
-            pipe.write(statement);
-            pipe.write(r);
-        }
+    public int getLevel() {
+        return level;
     }
 
     @Override
-    public void end(Statement statement, Relationship r) {
+    public void setOne(boolean isOne) {
+        this.isOne = isOne;
     }
 
     @Override
-    public void startGraph() {
+    public  boolean isOne() {
+        return isOne;
     }
 
-    @Override
-    public void endGraph() throws IOException {
-        pipe.close();
-    }
 }
