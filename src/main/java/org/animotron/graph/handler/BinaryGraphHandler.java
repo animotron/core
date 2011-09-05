@@ -53,7 +53,7 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r) throws IOException {
+    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         Node n = r.getEndNode();
         if (BIN.has(n)) {
             write(n, out);
@@ -61,7 +61,7 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Relationship r) {
+    public void end(Statement statement, Relationship r, int level, boolean isOne) {
     }
 
     @Override

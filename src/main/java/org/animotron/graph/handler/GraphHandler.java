@@ -32,11 +32,11 @@ import java.io.IOException;
  */
 public interface GraphHandler {
 	
-	public abstract void start(Statement statement, Relationship r) throws IOException;
+	public abstract void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException;
 
-	public abstract void end(Statement statement, Relationship r) throws IOException;
+	public abstract void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException;
 
-	void startGraph() throws IOException;
+	public void startGraph() throws IOException;
 
-	void endGraph() throws IOException;
+	public void endGraph() throws IOException;
 }

@@ -20,10 +20,6 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.TEXT;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.IS;
-import org.animotron.statement.relation.USE;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -45,25 +41,11 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
         super(builder);
     }
 
-    private boolean haveChild(Statement statement, Relationship r) {
-        if (statement instanceof IS || statement instanceof USE || statement instanceof TEXT) {
-            return false;
-        }
-        int n = 0;
-        int x = statement instanceof THE ? 1 : 2;
-        for (Relationship i : r.getEndNode().getRelationships(Direction.OUTGOING)) {
-            n ++;
-            if (n > x)
-                return true;
-        }
-        return false;
-    }
-
     @Override
-    public void start(Statement statement, Relationship r) throws IOException {
+    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         if (level != 0) {
             write(" ");
-            if (haveChild(statement, r)) {
+            if (!isOne) {
                 write("(");
             }
         }
@@ -83,9 +65,9 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Relationship r) throws IOException {
+    public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         level--;
-        if (level != 0 && haveChild(statement, r)) {
+        if (level != 0 && !isOne) {
             write(")");
         }
     }
