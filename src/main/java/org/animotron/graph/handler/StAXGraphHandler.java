@@ -39,7 +39,7 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 	
 	@Override
-	public void start(Statement statement, Relationship r) throws IOException {
+	public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
 		try {
 			if (statement instanceof ATTRIBUTE) {
 				String prefix = null;//statement.prefix(r);
@@ -83,7 +83,7 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 
 	@Override
-	public void end(Statement statement, Relationship r) throws IOException {
+	public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
 		try {
 			if (statement instanceof ELEMENT) {
 				writer.writeEndElement();

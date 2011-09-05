@@ -50,7 +50,7 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void build(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -74,22 +74,20 @@ public class AnimoResultTraverser extends ResultTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r);
+                result(handler, pf, r, level);
 			//workaround IS and USE
 			} else if (s instanceof IS || s instanceof USE) {
-				handler.start(s, r);
-				handler.end(s, r);
+				handler.start(s, r, level++, isOne);
+				handler.end(s, r, level--, isOne);
             } else {
-                handler.start(s, r);
+                handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    for (Relationship i : q) {
-                        build(handler, pf, i);
-                    }
+                    iterate(handler, q.iterator(), level);
                 } finally {
                     q.close();
                 }
-                handler.end(s, r);
+                handler.end(s, r, level--, isOne);
             }
         }
 

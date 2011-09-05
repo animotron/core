@@ -36,6 +36,7 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
@@ -55,16 +56,16 @@ public class ResultTraverser extends AnimoTraverser {
 
     public void traverse(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, new PFlow(Evaluator._, start_op, r), r);
+        build(handler, new PFlow(Evaluator._, start_op, r), r, 0, true);
         handler.endGraph();
     }
 
     @Override
-    protected void build(GraphHandler handler, Relationship r) throws IOException {
-        build(handler, new PFlow(Evaluator._, r, r), r);
+    protected void build(GraphHandler handler, Relationship r, int level, boolean isOne) throws IOException {
+        build(handler, new PFlow(Evaluator._, r, r), r, level, isOne);
     }
 
-    protected void build(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
         RelationshipType type = r.getType();
         String typeName = type.name();
@@ -88,56 +89,76 @@ public class ResultTraverser extends AnimoTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r);
+                result(handler, pf, r, level);
 			} else if (!(s instanceof IS || s instanceof USE)) {
                 if (s instanceof Result)
-                    handler.start(s, r);
+                    handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    for (Relationship i : q) {
-                        build(handler, pf, i);
-                    }
+                    iterate(handler, q.iterator(), level);
                 } finally {
                     q.close();
                 }
                 if (s instanceof Result)
-                    handler.end(s, r);
+                    handler.end(s, r, level--, isOne);
             }
         }
 
     }
 
-    protected boolean result(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
-
-        boolean found = false;
-        Iterable<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING);
-        for ( Relationship n : i ) {
-            build(
-                handler,
-                pf,
-                getDb().getRelationshipById(
-                    (Long)n.getProperty(RID.name())
-                )
-            );
-            found = true;
-        }
-
+    protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level) throws IOException {
+        Iterator<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING).iterator();
+        boolean found = iterate(handler, pf, i, level);
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
-
             in = Evaluator._.execute(pf, r);
-
-            for (Object obj : in) {
-                if (obj instanceof Relationship) {
-                    build(handler, pf, (Relationship) obj);
-                }
-            }
+            iterate(handler, pf, in, level);
         }
 
         return found;
 
     }
-	
+
+    private boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
+        boolean found = false;
+        boolean isFirst = true;
+        while (it.hasNext()) {
+            Relationship i = it.next();
+            if (isFirst) {
+                if (it.hasNext()) {
+                    build(handler, pf, i, level, false);
+                    build(handler, pf, it.next(), level, false);
+                } else {
+                    build(handler, pf, i, level, true);
+                }
+            } else {
+                build(handler, pf, i, level, false);
+            }
+            isFirst = false;
+            found = true;
+        }
+        return found;
+    }
+
+    private void iterate(GraphHandler handler, PFlow pf, PipedInput in, int level) throws IOException {
+        Iterator<Object> it = in.iterator();
+        boolean isFirst = true;
+        while (it.hasNext()) {
+            Relationship i = (Relationship) it.next();
+            if (isFirst) {
+                if (it.hasNext()) {
+                    build(handler, pf, i, level, false);
+                    build(handler, pf, (Relationship) it.next(), level, false);
+                } else {
+                    build(handler, pf, i, level, true);
+                }
+            } else {
+                build(handler, pf, i, level, false);
+            }
+            isFirst = false;
+        }
+    }
+
 }

@@ -26,6 +26,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
 
@@ -42,32 +43,43 @@ public class AnimoTraverser {
 	
 	public void traverse(GraphHandler handler, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, r);
+		build(handler, r, 0, true);
 		handler.endGraph();
 	}
 	
-	protected void build(GraphHandler handler, Relationship r) throws IOException {
-		
+	protected void build(GraphHandler handler, Relationship r, int level, boolean isOne) throws IOException {
 		Statement statement = Statements.relationshipType(r.getType());
-		
 		if (statement == null)
 			return;
-		
-		handler.start(statement, r);
-		
+		handler.start(statement, r, level++, isOne);
 		if (!(statement instanceof Relation)) {
-			
-			IndexHits<Relationship> q = getORDER().query(r.getEndNode());
+            IndexHits<Relationship> q = getORDER().query(r.getEndNode());
+            Iterator<Relationship> it = q.iterator();
 			try {
-				for (Relationship i : q) {
-					build(handler, i);
-				}
+                iterate(handler, it, level);
 			} finally {
 				q.close();
 			}
 		}
-
-		handler.end(statement, r);
+		handler.end(statement, r, level--, isOne);
 	}
+
+    protected void iterate(GraphHandler handler, Iterator<Relationship> it, int level) throws IOException {
+        boolean isFirst = true;
+        while (it.hasNext()) {
+            Relationship i = it.next();
+            if (isFirst) {
+                if (it.hasNext()) {
+                    build(handler, i, level, false);
+                    build(handler, it.next(), level, false);
+                } else {
+                    build(handler, i, level, true);
+                }
+            } else {
+                build(handler, i, level, false);
+            }
+            isFirst = false;
+        }
+    }
 	
 }
