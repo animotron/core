@@ -38,6 +38,22 @@ import static org.animotron.Expression.text;
 public class GetTest extends ATest {
 	
 	@Test
+	public void getOnManyAN() throws Exception {
+    	new Expression(
+			_(THE._, "A", _(HAVE._, "Z", text("A")))
+		);
+
+    	new Expression(
+			_(THE._, "B", _(HAVE._, "Z", text("B")))
+		);
+
+    	Expression d = new Expression(
+			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "A")))
+		);
+        assertAnimoResult(d, "the d have Z \"A\" have Z \"B\"\n");
+	}
+
+	@Test
 	public void getFromPFlow_an_with_param() throws Exception {
     	new Expression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
