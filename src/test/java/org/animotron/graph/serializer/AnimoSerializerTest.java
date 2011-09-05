@@ -165,9 +165,9 @@ public class AnimoSerializerTest extends ATest {
                         _(HAVE._, "K", text("5")),
                         _(HAVE._, "L", text("6"))
                     ),
-                    _(AN._, "F",
-                        _(HAVE._, "M", text("7")),
-                        _(HAVE._, "N", text("8"))
+                    _(AN._, "M",
+                        _(HAVE._, "N", text("7")),
+                        _(HAVE._, "O", text("8"))
                     )
                 )
             )
