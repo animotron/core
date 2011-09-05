@@ -30,11 +30,11 @@
 			<version>1.5.M01</version>
 		</dependency>
 		
-        <!--dependency>
+        <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-graph-collections</artifactId>
             <version>1.5-SNAPSHOT</version>
-        </dependency-->
+        </dependency>
 
 		<!-- light/fast date-time (animo/time) -->
 		<dependency>
