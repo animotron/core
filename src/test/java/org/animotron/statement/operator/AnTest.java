@@ -40,12 +40,12 @@ public class AnTest extends ATest {
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
         );
         //assertXMLResult(A, "<the:A><the:B/></the:A>");
-        assertAnimoResult(A, "the A the B\n");
+        assertAnimoResult(A, "the A the B");
 
         new Expression(
             _(THE._, "B", _(HAVE._, "C", text("y")))
         );
         //assertXMLResult(A, "<the:A><the:B><have:C>y</have:C></the:B></the:A>");
-        assertAnimoResult(A, "the A the B have C \"y\"\n");
+        assertAnimoResult(A, "the A the B have C \"y\"");
     }
 }
