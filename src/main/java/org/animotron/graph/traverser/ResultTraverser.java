@@ -128,10 +128,10 @@ public class ResultTraverser extends AnimoTraverser {
             Relationship i = it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, pf, i, level, true);
-                    build(handler, pf, it.next(), level, true);
-                } else {
                     build(handler, pf, i, level, false);
+                    build(handler, pf, it.next(), level, false);
+                } else {
+                    build(handler, pf, i, level, true);
                 }
             }
             isFirst = false;
@@ -147,10 +147,10 @@ public class ResultTraverser extends AnimoTraverser {
             Relationship i = (Relationship) it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, pf, i, level, true);
-                    build(handler, pf, (Relationship) it.next(), level, true);
-                } else {
                     build(handler, pf, i, level, false);
+                    build(handler, pf, (Relationship) it.next(), level, false);
+                } else {
+                    build(handler, pf, i, level, true);
                 }
             }
             isFirst = false;

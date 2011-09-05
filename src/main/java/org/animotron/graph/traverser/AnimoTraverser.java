@@ -70,10 +70,10 @@ public class AnimoTraverser {
             Relationship i = it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, i, level, true);
-                    build(handler, it.next(), level, true);
-                } else {
                     build(handler, i, level, false);
+                    build(handler, it.next(), level, false);
+                } else {
+                    build(handler, i, level, true);
                 }
             }
             isFirst = false;
