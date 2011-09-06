@@ -56,7 +56,7 @@ public class AllTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(ALL._, "A"))
         );
-        assertAnimoResult(D, "the D (the B is A have value \"B\") (the C is B have value \"C\")\n");
+        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\"))");
     }
 	
     @Test
@@ -84,12 +84,12 @@ public class AllTest extends ATest {
         Expression D = new Expression(
             _(THE._, "D", _(ALL._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimoResult(D, "the D (the B is A have value \"B\") (the B1 is B have value \"B\")\n");
+        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the B1 (is B) (have value \"B\"))");
 
         Expression E = new Expression(
             _(THE._, "E", _(ALL._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimoResult(E, "the E (the C is B have value \"C\") (the C1 is C have value \"C\")\n");
+        assertAnimoResult(E, "the E (the C (is B) (have value \"C\")) (the C1 (is C) (have value \"C\"))");
     }
 
 	@Test
@@ -121,6 +121,6 @@ public class AllTest extends ATest {
 			)
 		);
 	
-        assertAnimoResult(test, "the test (the text-plain is mime-type is text have type \"text/plain\" have name \"Plain text\" have extension \"txt\")\n");
+        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have name \"Plain text\") (have extension \"txt\")");
 	}
 }
