@@ -24,6 +24,7 @@ import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -63,10 +64,12 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimoResult(a, "the a (the B is A have X \"B\") (the C is A have X \"C\")\n");
+    	assertAnimoResult(a, "the a (the B (is A) (have X \"B\")) (the C (is A) (have X \"C\"))");
 	}
 	
-	public void down() throws AnimoException, IOException {
+	@Test
+    @Ignore
+    public void down() throws AnimoException, IOException {
     	
 		common();
 
@@ -80,6 +83,6 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimoResult(a, "<the:a>bla<have:X>B</have:X>bla<have:X>C</have:X></the:a>");
+    	assertAnimoResult(a, "the a (\"bla\") (have X \"B\") (\"bla\") (have X \"C\")");
 	}
 }

@@ -173,26 +173,17 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        assertAnimoResult(s, "<the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>" +
-                "<have:content>" +
-                "<html>" +
-                "<head>" +
-                "<title><have:title>Welcome to Animo</have:title></title>" +
-                "</head>" +
-                "<body>" +
-                "<the:theme-concrete-root-layout>" +
-                "<is:root-layout/>" +
-                "<h1><have:title>Welcome to Animo</have:title></h1>" +
-                "<p><have:content>It is working!</have:content></p>" +
-                "<ul>" +
-                "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
-                "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
-                "</ul>" +
-                "</the:theme-concrete-root-layout>" +
-                "</body>" +
-                "</html>" +
-                "</have:content>" +
-                "</the:f258fe04e2b90190dc88f5cdf40e4c0f89cfd4fcc54dcd3fdfa62d5740279489>");
+        assertAnimoResult(s, "the 718357e13084578d5c7f571bae55ea8bb583a8da53f3f391ae7d4a9fd1869475" +
+                "have content " +
+                    "element html " +
+                        "(element head element title have title \"Welcome to Animo\") " +
+                        "(element body the theme-concrete-root-layout is root-layout " +
+                            "(element h1 have title \"Welcome to Animo\") " +
+                            "(element p have content \"It is working\") " +
+                            "(element ul " +
+                                "(element li (\"host:\") (element strong have host \"localhost\")) " +
+                                "(element li (\"uri:\") (element strong have uri \"/\"))))");
+
 
         assertXMLResult(s, "<html>" +
                 "<head>" +
