@@ -108,7 +108,7 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                              //TODO Evaluate instruction here
+                            ((Evaluable) s).onCalcQuestion().onMessage(pf);
                         } else if (s == null){
                             s = Statements.relationshipType(msg.getType());
                             if (s instanceof Query || s instanceof Evaluable) {
