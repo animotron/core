@@ -108,7 +108,7 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                            ((Evaluable) s).onCalcQuestion().onMessage(pf);
+                            ((Evaluable) s).onCalcQuestion().onMessage(new PFlow(pf, msg));
                         } else if (s == null){
                             s = Statements.relationshipType(msg.getType());
                             if (s instanceof Query || s instanceof Evaluable) {
