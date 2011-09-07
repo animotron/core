@@ -18,7 +18,6 @@
  */
 package org.animotron.manipulator;
 
-import javolution.util.FastList;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.operator.AN;
@@ -38,6 +37,7 @@ import org.neo4j.kernel.Uniqueness;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -60,7 +60,7 @@ public class PFlow {
 	private Relationship op = null;
 	private Node opNode = null;
 	
-	private List<Relationship> path = new FastList<Relationship>();
+	private Vector<Relationship> path = new Vector<Relationship>();
 	
 	private PFlow(Manipulator m) {
 		this.m = m;
@@ -108,7 +108,7 @@ public class PFlow {
 		RelationshipType type = op.getType();
 		//Statement s = Statements.relationshipType(type);
 		if (RelationshipTypes.REF.name().equals(type.name())) { //s instanceof Reference || 
-			path.add(op);
+			path.insertElementAt(op, 0);
 		}
 		
 		this.op = op;
@@ -133,11 +133,11 @@ public class PFlow {
 	}
 
 	public Relationship getStartOP() {
-		return path.get(0);
+		return path.lastElement();
 	}
 	
 	public Node getStartNode() {
-		return path.get(0).getEndNode();
+		return path.lastElement().getEndNode();
 	}
 
 	public Node getOPNode() {
@@ -309,11 +309,11 @@ public class PFlow {
 
 
 	public void addContextPoint(Relationship r) {
-		path.add(r);
+		path.insertElementAt(r, 1);
 	}
 
 	public Relationship getLastContext() {
-		return path.get(path.size()-1);
+		return path.get(1);
 	}
 
 	private TraversalDescription td_flow =

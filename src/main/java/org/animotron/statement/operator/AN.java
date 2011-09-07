@@ -63,4 +63,10 @@ public class AN extends Operator implements Reference, Evaluable, Cachable {
 		}
 	};
 	
+	public Relationship getREF(Relationship op) {
+		return op.getEndNode().getSingleRelationship(
+			RelationshipTypes.REF, OUTGOING
+		);
+	}
+	
 }

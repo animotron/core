@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.query;
 
+import javolution.util.FastList;
 import javolution.util.FastSet;
 import org.animotron.Executor;
 import org.animotron.graph.AnimoGraph;
@@ -45,6 +46,7 @@ import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -159,9 +161,11 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 					System.out.println("P-FLOW is context for GET!\n pflow = "+pf.getFlowPath());
 					
 					for (Relationship st : pf.getPFlowPath()) {
-						Relationship r = get(st, name);
-						if (r != null)
-							pf.sendAnswer(createResult(node, r));
+						Set<Relationship> rSet = get(st, name);
+						if (rSet != null) {
+							for (Relationship r : rSet)
+								pf.sendAnswer(createResult(node, r));
+						}
 					}
 					
 //					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
@@ -175,24 +179,61 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 		}
 	};
 
-	public Relationship get(Relationship ref, final String name) {
+	public Set<Relationship> get(Relationship ref, final String name) {
 		System.out.println("GET get context = "+ref);
+		
+		Set<Relationship> set = new FastSet<Relationship>(); 
 
+		Relationship have = null;
+		
+		List<Relationship> nextREFs = new FastList<Relationship>();
+		nextREFs.add(ref);
+		
+		while (true) {
+
+			for (Relationship n : nextREFs) {
+				have = searchForHAVE(n, name);
+				if (have != null) 
+					set.add(have);
+			}
+			
+			if (set.size() > 0) return set;
+
+			List<Relationship> newREFs = new FastList<Relationship>();
+
+			for (Relationship n : nextREFs)
+				for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
+					if (r.equals(n)) continue;
+					
+					Statement st = Statements.relationshipType(r);
+					if (st instanceof AN) {
+						Relationship t = AN._.getREF(r);
+						if (t.equals(n)) continue;
+						
+						newREFs.add(t);
+					}
+				}
+
+			if (newREFs.size() == 0) return null;
+			
+			nextREFs = newREFs;
+		}
+	}
+	
+	private Relationship searchForHAVE(final Relationship ref, final String name) {
+		Relationship prevTHE = null;
+		
 		//search for local 'HAVE'
 		Relationship have = getByHave(ref.getStartNode(), name);
 		if (have != null) return have;
 
-		Node context = ref.getEndNode();
-
-		//search for have
-		have = getByHave(context, name);
+		//search for inside 'HAVE'
+		have = getByHave(ref.getEndNode(), name);
 		if (have != null) return have;
-		
-		Relationship prevTHE = null;
-		
+
 		//search 'IC' by 'IS' topology
-		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
-			
+		for (Relationship tdR : td_eval_ic.traverse(ref.getEndNode()).relationships()) {
+			System.out.println(" "+tdR);
 			Statement st = Statements.relationshipType(tdR.getType());
 			if (st instanceof IS) {
 				System.out.println("GET IC -> IS "+tdR);
@@ -209,26 +250,7 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 				if (name.equals(name(tdR))) {
 					System.out.println(" MATCH");
 					
-					//store
-					final Node sNode = context;
-					final Relationship r = tdR;
-
-					return AnimoGraph.execute(new GraphOperation<Relationship>() {
-						@Override
-						public Relationship execute() {
-							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
-							//RID.set(res, r.getId());
-							return res;
-						}
-					});
-					
-					//in-memory
-					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
-					//RID.set(res, tdR.getId());
-					//return res;
-					
-					//as it
-					//return tdR;
+					return tdR;
 				}
 				System.out.println();
 			}
