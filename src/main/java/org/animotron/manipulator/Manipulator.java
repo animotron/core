@@ -100,7 +100,9 @@ public abstract class Manipulator {
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
             					);
-                            s = Statements.name(THE._.name(msg));
+                            try {
+                                s = Statements.name(THE._.name(msg));
+                            } catch (Exception e){}
             			} else if (REF.equals(msg)){
                             s = Statements.name(THE._.name(msg));
                         }
