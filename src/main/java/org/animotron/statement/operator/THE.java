@@ -25,8 +25,6 @@ import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -41,20 +39,20 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Operator 'THE'.
- * 
+ *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends Operator implements Prepare, KernelEventHandler, Evaluable {
-	
+public class THE extends Operator implements Prepare, KernelEventHandler {
+
 	public static String NAME = "the";
 
 	public static final THE _ = new THE();
-	
-	private THE() { 
+
+	private THE() {
 		super(NAME);
 	}
-	
+
 	private Node THE_NODE = null;
 
 	public Node THE_NODE() {
@@ -76,12 +74,12 @@ public class THE extends Operator implements Prepare, KernelEventHandler, Evalua
 	public RelationshipType relationshipType(String name){
 		return AnimoRelationshipType.get(name(), name);
 	}
-	
+
 	public Relationship get(String name) {
 		RelationshipType type = relationshipType(name);
 		return THE_NODE().getSingleRelationship(type, OUTGOING);
 	}
-	
+
 	public Relationship create(String name, String hash) {
         //TODO do we really need a name?
         if (name == null) name = hash;
@@ -89,7 +87,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler, Evalua
 		HASH.set(r, hash);
 		return r;
 	}
-	
+
 	private Relationship create(String name) {
 		Node node = createNode();
 		RelationshipType type = relationshipType(name);
@@ -98,7 +96,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler, Evalua
 		getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
 		return r;
 	}
-	
+
 	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws ENotFound {
 		Relationship r = get(name);
 		if (r == null) {
@@ -110,26 +108,29 @@ public class THE extends Operator implements Prepare, KernelEventHandler, Evalua
 		}
 		return r;
 	}
-	
+
 	@Override
 	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) {
 		return null;
 	}
-	
+
 	@Override
 	public String name(Relationship r) {
 		return Properties.NAME.get(r.getEndNode());
 	}
-	
+
+
+    private Subscribable<PFlow> question = new OnQuestion();
+
 	@Override
 	public Subscribable<PFlow> onPrepareQuestion() {
-		return question;
+        return question;
 	}
 
 	@Override
 	public void beforeShutdown() {
 		THE_NODE = null;
-		
+
 	}
 
 	@Override
@@ -148,29 +149,5 @@ public class THE extends Operator implements Prepare, KernelEventHandler, Evalua
 		//ignore
 		return null;
 	}
-
-    @Override
-    public OnQuestion onCalcQuestion() {
-        return question;
-    }
-
-    private OnQuestion question = new OnQuestion() {
-
-        @Override
-        public void onMessage(PFlow pf) {
-
-            Relationship op = pf.getOP();
-
-            Statement s = Statements.name(THE._.name(op));
-
-            if (s instanceof Evaluable) {
-                ((Evaluable) s).onCalcQuestion().onMessage(pf);
-            } else {
-                pf.sendAnswer(op);
-                pf.done();
-            }
-
-        }
-    };
 
 }
