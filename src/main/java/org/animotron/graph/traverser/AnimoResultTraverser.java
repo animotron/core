@@ -63,6 +63,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             type = r.getType();
             typeName = type.name();
         }
+        PFlow pflow = pf;
 
         Statement s = Statements.relationshipType(typeName);
 
@@ -70,6 +71,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             || typeName.startsWith(THE._.name())) {
 
             s = THE._;
+            pflow = new PFlow(pf, r);
         }
 
         if (s != null) {
@@ -83,7 +85,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pf, q.iterator(), level);
+                    iterate(handler, pflow, q.iterator(), level);
                 } finally {
                     q.close();
                 }

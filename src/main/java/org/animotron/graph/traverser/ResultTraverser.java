@@ -78,6 +78,8 @@ public class ResultTraverser extends AnimoTraverser {
             type = r.getType();
             typeName = type.name();
         }
+        
+        PFlow pflow = pf;
 
         Statement s = Statements.relationshipType(typeName);
 
@@ -85,6 +87,8 @@ public class ResultTraverser extends AnimoTraverser {
             || typeName.startsWith(THE._.name())) {
 
             s = THE._;
+            
+            pflow = new PFlow(pf, r);
         }
 
         if (s != null) {
@@ -95,7 +99,7 @@ public class ResultTraverser extends AnimoTraverser {
                     handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pf, q.iterator(), level);
+                    iterate(handler, pflow, q.iterator(), level);
                 } finally {
                     q.close();
                 }
@@ -143,6 +147,7 @@ public class ResultTraverser extends AnimoTraverser {
     }
 
     private void iterate(GraphHandler handler, PFlow pf, PipedInput in, int level) throws IOException {
+    	
         Iterator<Object> it = in.iterator();
         boolean isFirst = true;
         while (it.hasNext()) {

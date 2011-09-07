@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import javolution.util.FastList;
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
@@ -31,6 +32,7 @@ import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -105,8 +107,10 @@ public class PFlow {
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
-		Statement s = Statements.relationshipType(op);
-		if (s instanceof Reference) {
+		
+		RelationshipType type = op.getType();
+		//Statement s = Statements.relationshipType(type);
+		if (RelationshipTypes.REF.name().equals(type.name())) { //s instanceof Reference || 
 			path.add(op);
 		}
 		
