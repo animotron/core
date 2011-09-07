@@ -18,7 +18,6 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
@@ -41,6 +40,8 @@ import java.util.Iterator;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -70,7 +71,7 @@ public class ResultTraverser extends AnimoTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
-        if (RelationshipTypes.RESULT.name().equals(typeName)) {
+        if (RESULT.name().equals(typeName)) {
             r = getDb().getRelationshipById(
                     (Long)r.getProperty(RID.name())
                 );
@@ -79,16 +80,13 @@ public class ResultTraverser extends AnimoTraverser {
             typeName = type.name();
         }
         
+        Statement s;
         PFlow pflow = pf;
-
-        Statement s = Statements.relationshipType(typeName);
-
-        if (RelationshipTypes.REF.name().equals(typeName)
-            || typeName.startsWith(THE._.name())) {
-
+        if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
             s = THE._;
-            
             pflow = new PFlow(pf, r);
+        } else {
+            s = Statements.relationshipType(typeName);
         }
 
         if (s != null) {
@@ -111,7 +109,7 @@ public class ResultTraverser extends AnimoTraverser {
     }
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level) throws IOException {
-        Iterator<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING).iterator();
+        Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
         boolean found = _iterate(handler, pf, i, level);
         if (!found) {
             //UNDERSTAND: calculate current r!

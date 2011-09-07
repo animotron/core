@@ -18,7 +18,6 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -37,6 +36,8 @@ import java.io.IOException;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -55,7 +56,7 @@ public class AnimoResultTraverser extends ResultTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
-        if (RelationshipTypes.RESULT.name().equals(typeName)) {
+        if (RESULT.name().equals(typeName)) {
             r = getDb().getRelationshipById(
                     (Long)r.getProperty(RID.name())
                 );
@@ -63,15 +64,14 @@ public class AnimoResultTraverser extends ResultTraverser {
             type = r.getType();
             typeName = type.name();
         }
+
+        Statement s;
         PFlow pflow = pf;
-
-        Statement s = Statements.relationshipType(typeName);
-
-        if (RelationshipTypes.REF.name().equals(typeName)
-            || typeName.startsWith(THE._.name())) {
-
+        if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
             s = THE._;
             pflow = new PFlow(pf, r);
+        } else {
+            s = Statements.relationshipType(typeName);
         }
 
         if (s != null) {

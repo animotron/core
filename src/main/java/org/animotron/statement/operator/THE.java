@@ -120,11 +120,11 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 
-    private Subscribable<PFlow> question = new OnQuestion();
+    private Subscribable<PFlow> prepare = new OnQuestion();
 
 	@Override
 	public Subscribable<PFlow> onPrepareQuestion() {
-        return question;
+        return prepare;
 	}
 
 	@Override

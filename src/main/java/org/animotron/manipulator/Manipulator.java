@@ -27,6 +27,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -58,7 +59,7 @@ public abstract class Manipulator {
 	public final PipedInput execute(final PFlow pflow, Node op) throws IOException {
 		return execute(pflow, (PropertyContainer)op);
 	}
-	
+
 	public final PipedInput execute(final PFlow pflow, PropertyContainer op) throws IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
@@ -93,32 +94,38 @@ public abstract class Manipulator {
             		if (msg == null)
             			out.close();
             		else {
+                        Statement s = null;
             			if (RelationshipTypes.RESULT.equals(msg)) {
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
-            					); 
-            			}
-            			
-            			System.out.println("Manipulator get evaluable "+msg);
+            					);
+                            s = Statements.name(THE._.name(msg));
+            			} else {
+                            s = Statements.name(THE._.name(msg));
+                        }
 
-        				Statement s = Statements.relationshipType(msg.getType());
-            			if (s instanceof Query || s instanceof Evaluable) {
-            				try {
-	            				PipedInput in = Evaluator._.execute(pf, msg);
-	            				
-	            				for (Object obj : in) {
-	            					if (obj instanceof Relationship) {
-	            						out.write(obj);
-	            					} else {
-	            						System.out.println("UNHANDLED "+obj);
-	            					}
-	            				}
-            				} catch (Exception e) {
-            					//XXX: log error
-								out.close();
-							}
-            			} else
-            				out.write(msg);
+                        if (s instanceof Evaluable) {
+
+                        } else {
+                            s = Statements.relationshipType(msg.getType());
+                            if (s instanceof Query || s instanceof Evaluable) {
+                                try {
+                                    PipedInput in = Evaluator._.execute(pf, msg);
+                                    for (Object obj : in) {
+                                        if (obj instanceof Relationship) {
+                                            out.write(obj);
+                                        } else {
+                                            System.out.println("UNHANDLED "+obj);
+                                        }
+                                    }
+                                } catch (Exception e) {
+                                    //XXX: log error
+                                    out.close();
+                                }
+                            } else {
+                                out.write(msg);
+                            }
+                        }
             		}
 				} catch (IOException e) {
 					//XXX: what to do?
