@@ -18,6 +18,7 @@
  */
 package org.animotron.graph;
 
+import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 /**
@@ -34,6 +35,12 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	REF, RESULT, SOURCE;
 	
+    public boolean equals(RelationshipType type) {
+        return name().equals(type.name());
+    }
 	
-	
+    public boolean equals(Relationship r) {
+        return equals(r.getType());
+    }
+
 }

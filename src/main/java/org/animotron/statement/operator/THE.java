@@ -25,6 +25,8 @@ import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -43,7 +45,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends Operator implements Prepare, KernelEventHandler {
+public class THE extends Operator implements Prepare, KernelEventHandler, Evaluable {
 	
 	public static String NAME = "the";
 
@@ -119,8 +121,6 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		return Properties.NAME.get(r.getEndNode());
 	}
 	
-	private OnQuestion question = new OnQuestion();
-
 	@Override
 	public Subscribable<PFlow> onPrepareQuestion() {
 		return question;
@@ -148,4 +148,29 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		//ignore
 		return null;
 	}
+
+    @Override
+    public OnQuestion onCalcQuestion() {
+        return question;
+    }
+
+    private OnQuestion question = new OnQuestion() {
+
+        @Override
+        public void onMessage(PFlow pf) {
+
+            Relationship op = pf.getOP();
+
+            Statement s = Statements.name(THE._.name(op));
+
+            if (s instanceof Evaluable) {
+                ((Evaluable) s).onCalcQuestion().onMessage(pf);
+            } else {
+                pf.sendAnswer(op);
+                pf.done();
+            }
+
+        }
+    };
+
 }

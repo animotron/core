@@ -93,7 +93,7 @@ public abstract class Manipulator {
             		if (msg == null)
             			out.close();
             		else {
-            			if (RelationshipTypes.RESULT.name().equals(msg.getType().name())) {
+            			if (RelationshipTypes.RESULT.equals(msg)) {
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
             					); 
