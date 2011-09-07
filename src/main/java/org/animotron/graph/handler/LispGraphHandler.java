@@ -20,6 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.operator.AN;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -52,12 +53,14 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
             write(statement.value(r));
             write("\"");
         } else {
-            write(statement.name());
-            String name = statement.name(r);
-            if (name != null) {
-                write(" ");
-                write(statement.name(r));
+            if (!(statement instanceof AN)) {
+                write(statement.name());
+                String name = statement.name(r);
+                if (name != null) {
+                    write(" ");
+                }
             }
+            write(statement.name(r));
         }
     }
 

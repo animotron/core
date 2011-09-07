@@ -1,7 +1,7 @@
 /*
  *  http://animotron.org
  *
- *  This program is free software; you can redistribute it and/or
+ *  This program is free software; you credistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
  *  as published by the Free Software Foundation; either version 3
  *  of the License, or (at your option) any later version.
@@ -71,7 +71,7 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "Y")
             )
         );
-        assertAnimo(A, "the A (an X) (an Y)");
+        assertAnimo(A, "the A (X) (Y)");
 
         A = new Expression(
             _(THE._, "A",
@@ -80,7 +80,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A an X an Y");
+        assertAnimo(A, "the A X Y");
 
         A = new Expression(
             _(THE._, "A",
@@ -91,7 +91,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A have B an C have D \".\"");
+        assertAnimo(A, "the A have B C have D \".\"");
 
         A = new Expression(
             _(THE._, "A",
@@ -103,7 +103,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A have B an C (have D) (\".\")");
+        assertAnimo(A, "the A have B C (have D) (\".\")");
 
         A = new Expression(
             _(THE._, "A",
@@ -115,7 +115,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A have B an C (have D \".\") (have E \"_\")");
+        assertAnimo(A, "the A have B C (have D \".\") (have E \"_\")");
 
         A = new Expression(
             _(THE._, "A",
@@ -128,7 +128,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B an C (have D \".\") (have E \"_\"))");
+        assertAnimo(A, "the A (is X) (have B C (have D \".\") (have E \"_\"))");
 
         A = new Expression(
             _(THE._, "A",
@@ -145,7 +145,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (an C (have D \".\") (have E \"_\")) (an F (have G \":\") (have H \";\")))");
+        assertAnimo(A, "the A (is X) (have B (C (have D \".\") (have E \"_\")) (F (have G \":\") (have H \";\")))");
 
         A = new Expression(
             _(THE._, "A",
@@ -172,7 +172,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (an C (have D \"1\") (have E \"2\")) (an F (have G \"3\") (have H \"4\"))) (have I (an J (have K \"5\") (have L \"6\")) (an M (have N \"7\") (have O \"8\")))");
+        assertAnimo(A, "the A (is X) (have B (C (have D \"1\") (have E \"2\")) (F (have G \"3\") (have H \"4\"))) (have I (J (have K \"5\") (have L \"6\")) (M (have N \"7\") (have O \"8\")))");
 	}
 	
 }
