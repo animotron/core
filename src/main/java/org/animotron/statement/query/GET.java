@@ -106,7 +106,7 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 			
 			final Relationship underHAVE = getHaveAtPFlow(pf, name);
 			
-			System.out.println("GET '"+name(op));
+			System.out.println("GET '"+name(op)+"'");
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
@@ -118,7 +118,7 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 						System.out.println("GET message ["+name+"] context "+context);
 						
 						if (context == null) {
-							pf.sendAnswer(null);
+							pf.countDown();
 							return;
 						}
 						Set<Relationship> res = getByTraversal(underHAVE, op, context, name);
@@ -156,14 +156,15 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 					pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
-					System.out.println("P-FLOW is context for GET!"+" pflow "+pf.getFlowPath());
+					System.out.println("P-FLOW is context for GET!\n pflow = "+pf.getFlowPath());
 					
-					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
-					if (!res.isEmpty())
-						for (Relationship r : res)
-							pf.sendAnswer(r);
+//					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
+//					if (!res.isEmpty())
+//						for (Relationship r : res)
+//							pf.sendAnswer(r);
 				}
 			}
+			pf.await();
 			pf.done();
 		}
 	};

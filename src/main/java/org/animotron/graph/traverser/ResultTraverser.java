@@ -60,11 +60,11 @@ public class ResultTraverser extends AnimoTraverser {
         handler.endGraph();
     }
 
-    @Override
     protected void build(GraphHandler handler, Relationship r, int level, boolean isOne) throws IOException {
         build(handler, new PFlow(Evaluator._, r, r), r, level, isOne);
     }
 
+    @Override
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
         RelationshipType type = r.getType();
@@ -95,7 +95,7 @@ public class ResultTraverser extends AnimoTraverser {
                     handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, q.iterator(), level);
+                    iterate(handler, pf, q.iterator(), level);
                 } finally {
                     q.close();
                 }
@@ -108,7 +108,7 @@ public class ResultTraverser extends AnimoTraverser {
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level) throws IOException {
         Iterator<Relationship> i = r.getEndNode().getRelationships(RelationshipTypes.RESULT, OUTGOING).iterator();
-        boolean found = iterate(handler, pf, i, level);
+        boolean found = _iterate(handler, pf, i, level);
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
@@ -121,7 +121,7 @@ public class ResultTraverser extends AnimoTraverser {
 
     }
 
-    private boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
+    protected boolean _iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
         boolean found = false;
         boolean isFirst = true;
         while (it.hasNext()) {

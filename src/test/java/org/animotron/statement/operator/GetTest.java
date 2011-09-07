@@ -48,9 +48,9 @@ public class GetTest extends ATest {
 		);
 
     	Expression d = new Expression(
-			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "A")))
+			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d have Z \"A\" have Z \"B\"\n");
+        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\")");
 	}
 
 	@Test
@@ -63,7 +63,7 @@ public class GetTest extends ATest {
 			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
 		);
     	//assertXMLResult(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
-        assertAnimoResult(D, "the D the A have B have C \".\"\n");
+        assertAnimoResult(D, "the D the A have B have C \".\"");
 	}
 	
 	@Test
@@ -81,7 +81,7 @@ public class GetTest extends ATest {
 			_(THE._, "X", _(AN._, "D", _(AN._, "A", _(HAVE._, "C", text(":")))))
 		);
     	//assertXMLResult(X, "<the:X><the:D><have:E><have:B><have:C>:</have:C></have:B></have:E></the:D></the:X>");
-        assertAnimoResult(X, "the X the D have E have B have C \":\"\n");
+        assertAnimoResult(X, "the X the D have E have B have C \":\"");
 	}
 
 	@Test
@@ -99,7 +99,7 @@ public class GetTest extends ATest {
 			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
 		);
     	//assertXMLResult(E, "<the:E><the:A><have:B><have:C>.</have:C></have:B></the:A></the:E>");
-    	assertAnimoResult(E, "the E the A have B have C \".\"\n");
+    	assertAnimoResult(E, "the E the A have B have C \".\"");
 	}
 	
 	@Test
@@ -121,7 +121,7 @@ public class GetTest extends ATest {
 			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
 		);
     	//assertXMLResult(F, "<the:F><the:A><have:B><have:C>.</have:C><have:C>:</have:C></have:B></the:A></the:F>");
-    	assertAnimoResult(F, "the F the A have B have C \".\" have C \":\"\n");
+    	assertAnimoResult(F, "the F the A have B have C \".\" have C \":\"");
 	}
 	
     @Test
@@ -152,7 +152,7 @@ public class GetTest extends ATest {
                 _(AN._, "A")
         )));
         //assertXMLResult(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
-        assertAnimoResult(C0, "the C0 have A1 \"some.path\"\n");
+        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
@@ -160,7 +160,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
-        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"\n");
+        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
 
         Expression C2 = new Expression(
         _(THE._, "C2",
@@ -168,7 +168,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
-        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"\n");
+        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
 
         Expression C3 = new Expression(
         _(THE._, "C3",
@@ -184,7 +184,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
-        assertAnimoResult(C4, "the C4 have B1 \"txt\"\n");
+        assertAnimoResult(C4, "the C4 have B1 \"txt\"");
     }
 
     @Test
@@ -214,7 +214,7 @@ public class GetTest extends ATest {
                 _(AN._, "A")
         )));
         //assertXMLResult(C0, "<the:C0><have:A1>some.path</have:A1></the:C0>");
-        assertAnimoResult(C0, "the C0 have A1 \"some.path\"\n");
+        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
 
         Expression C1 = new Expression(
         _(THE._, "C1",
@@ -222,7 +222,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C1, "<the:C1><have:A1>test.txt</have:A1></the:C1>");
-        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"\n");
+        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
 
         Expression C2 = new Expression(
         _(THE._, "C2",
@@ -230,7 +230,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C2, "<the:C2><have:A2><have:A1>test.txt</have:A1></have:A2></the:C2>");
-        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"\n");
+        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
 
         Expression C3 = new Expression(
         _(THE._, "C3",
@@ -246,7 +246,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C4, "<the:C4><have:B1>txt</have:B1></the:C4>");
-        assertAnimoResult(C4, "the C4 have B1 \"txt\"\n");
+        assertAnimoResult(C4, "the C4 have B1 \"txt\"");
     }
 
     @Test
@@ -268,7 +268,7 @@ public class GetTest extends ATest {
             _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "Y", text("β")), _(HAVE._, "Z", text("γ"))))
         );
         //assertXMLResult(E, "<the:E><the:C><have:Z>γ</have:Z><the:B><have:Y>β</have:Y><the:A><have:X>α</have:X></the:A></the:B></the:C></the:E>");
-        assertAnimoResult(E, "the E (the C have Z \"γ\" (the B have Y \"β\" the A have X \"α\"))\n");
+        assertAnimoResult(E, "the E (the C have Z \"γ\" (the B have Y \"β\" the A have X \"α\"))");
     }
 
     @Test
@@ -290,7 +290,7 @@ public class GetTest extends ATest {
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(HAVE._, "B", text("β")))))
         );
         //assertXMLResult(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
-        assertAnimoResult(E, "the E the C have Z \"γ\"\n");
+        assertAnimoResult(E, "the E the C have Z \"γ\"");
     }
 
     @Test
@@ -312,7 +312,7 @@ public class GetTest extends ATest {
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
         );
         //assertXMLResult(E, "<the:E><the:C><have:Z>γ</have:Z></the:C></the:E>");
-        assertAnimoResult(E, "the E the C have Z \"γ\"\n");
+        assertAnimoResult(E, "the E the C have Z \"γ\"");
     }
 
     @Test
@@ -334,6 +334,6 @@ public class GetTest extends ATest {
             _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(HAVE._, "X", text("."))))))
         );
         //assertXMLResult(D, "<the:D><the:C><have:Z><have:Y><have:X>.</have:X></have:Y></have:Z></the:C></the:D>");
-        assertAnimoResult(D, "the D the C have Z have Y have X \".\"\n");
+        assertAnimoResult(D, "the D the C have Z have Y have X \".\"");
     }
 }

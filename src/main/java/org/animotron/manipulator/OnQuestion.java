@@ -25,6 +25,9 @@ import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.Iterator;
+import java.util.List;
+
+import javolution.util.FastList;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -37,6 +40,8 @@ public class OnQuestion implements Subscribable<PFlow> {
 	@Override
 	public void onMessage(PFlow pf) {
 		
+		List<PFlow> list = new FastList<PFlow>();
+		
 		int count = 0;
 		Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
 		while (it.hasNext()) {
@@ -47,7 +52,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 				PFlow nextPF = new PFlow(pf, r);
 				nextPF.question.subscribe(onQuestion);
 				
-				nextPF.question.publish(nextPF);
+				list.add(nextPF);
 				
 				count++;
 				
@@ -60,6 +65,12 @@ public class OnQuestion implements Subscribable<PFlow> {
 		
 		if (count == 0)
 			pf.done();
+		else
+			pf.waitBeforeClosePipe(count);
+		
+		for (PFlow nextPF : list) {
+			nextPF.question.publish(nextPF);
+		}
 	}
 
 	@Override

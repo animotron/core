@@ -83,7 +83,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, q.iterator(), level);
+                    iterate(handler, pf, q.iterator(), level);
                 } finally {
                     q.close();
                 }

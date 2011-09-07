@@ -27,6 +27,7 @@ import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.graph.serializer.BinarySerializer;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.graph.traverser.ResultTraverser;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -144,7 +145,7 @@ public abstract class ATest {
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
-        ResultTraverser._.traverse(new StAXGraphHandler(writer), op);
+        ResultTraverser._.traverse(new StAXGraphHandler(writer), new PFlow(Evaluator._, op, op), op);
         out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();

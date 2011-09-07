@@ -36,6 +36,7 @@ import org.neo4j.kernel.Uniqueness;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -171,11 +172,35 @@ public class PFlow {
 		else parent.answer.publish(null);
 	}
 
+	protected CountDownLatch waitBeforeClosePipe = null;
+	
+	public void waitBeforeClosePipe(int count) {
+		waitBeforeClosePipe = new CountDownLatch(count);
+//		if (parent == null) answer.publish(null);
+//		else parent.answer.publish(null);
+	}
+
+	public void countDown() {
+		waitBeforeClosePipe.countDown();
+	}
+	
+	public void await() {
+		if (waitBeforeClosePipe == null) return;
+		
+		try {
+			waitBeforeClosePipe.await();
+		} catch (InterruptedException e) {
+			sendException(e);
+			e.printStackTrace();
+		}
+	}
+
 	public Manipulator getManipulator() {
 		return m;
 	}
 	
 	public Path getFlowPath() {
+		System.out.println("Path:");
 		for (Relationship r : path) {
 			System.out.println(r);
 		}
@@ -185,6 +210,8 @@ public class PFlow {
 //			i++;
 //		}
 //		System.out.println("PFLOW ********************* "+i);
+		
+		System.out.println("OPNode = "+getOPNode());
 
 		Path first = null;
 		for (Path path : td_flow.traverse(getOPNode())) {

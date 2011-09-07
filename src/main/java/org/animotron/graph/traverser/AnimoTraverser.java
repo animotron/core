@@ -19,6 +19,7 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.relation.Relation;
@@ -41,13 +42,13 @@ public class AnimoTraverser {
 
     protected AnimoTraverser() {}
 	
-	public void traverse(GraphHandler handler, Relationship r) throws IOException {
+	public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, r, 0, true);
+		build(handler, pf, r, 0, true);
 		handler.endGraph();
 	}
 	
-	protected void build(GraphHandler handler, Relationship r, int level, boolean isOne) throws IOException {
+	protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 		Statement statement = Statements.relationshipType(r.getType());
 		if (statement == null)
 			return;
@@ -56,7 +57,7 @@ public class AnimoTraverser {
             IndexHits<Relationship> q = getORDER().query(r.getEndNode());
             Iterator<Relationship> it = q.iterator();
 			try {
-                iterate(handler, it, level);
+                iterate(handler, pf, it, level);
 			} finally {
 				q.close();
 			}
@@ -64,19 +65,19 @@ public class AnimoTraverser {
 		handler.end(statement, r, level--, isOne);
 	}
 
-    protected void iterate(GraphHandler handler, Iterator<Relationship> it, int level) throws IOException {
+    protected void iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
         boolean isFirst = true;
         while (it.hasNext()) {
             Relationship i = it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, i, level, false);
-                    build(handler, it.next(), level, false);
+                    build(handler, pf, i, level, false);
+                    build(handler, pf, it.next(), level, false);
                 } else {
-                    build(handler, i, level, true);
+                    build(handler, pf, i, level, true);
                 }
             } else {
-                build(handler, i, level, false);
+                build(handler, pf, i, level, false);
             }
             isFirst = false;
         }

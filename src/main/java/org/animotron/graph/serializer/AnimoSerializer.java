@@ -20,6 +20,8 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.LispGraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
+import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -33,12 +35,12 @@ import java.io.OutputStream;
 public class AnimoSerializer {
 
     public static void serialize(Relationship r, OutputStream out) throws IOException {
-        AnimoTraverser._.traverse(new LispGraphHandler(out), r);
+        AnimoTraverser._.traverse(new LispGraphHandler(out), new PFlow(Evaluator._, r, r), r);
     }
 
     public static String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoTraverser._.traverse(new LispGraphHandler(out), r);
+        AnimoTraverser._.traverse(new LispGraphHandler(out), new PFlow(Evaluator._, r, r), r);
         return out.toString();
     }
 
