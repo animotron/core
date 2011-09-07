@@ -30,6 +30,7 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.HAVE_NOT;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.IS_NOT;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.Expression._;
@@ -41,6 +42,7 @@ import static org.animotron.Expression._;
 public class DescriptionLogicTest extends ATest {
 
 	@Test
+    @Ignore
 	public void famaly() throws Exception {
 		//TODO: Person ≡ Female ⊔ Male?
 		
@@ -128,7 +130,7 @@ public class DescriptionLogicTest extends ATest {
 				//eq an:personB; an:mother?
 		);
 		
-		assertAnimoResult(a, "<the:a><the:yes/></the:a>");
+		assertAnimoResult(a, "the a the yes");
 		
 	}
 }

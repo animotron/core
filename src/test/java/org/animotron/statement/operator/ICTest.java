@@ -55,6 +55,6 @@ public class ICTest extends ATest {
         //System.out.println("get:A an:C");
         assertStringResult(D, ".");
         //assertXMLResult(D, "<the:D><have:A>.</have:A></the:D>");
-        assertAnimoResult(D, "the D have A \".\"\n");
+        assertAnimoResult(D, "the D have A \".\"");
 	}
 }

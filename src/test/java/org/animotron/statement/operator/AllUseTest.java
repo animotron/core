@@ -60,12 +60,12 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the C is B have Z \"γ\" have X \"αα\")\n");
+        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the C is B have Z \"γ\" have X \"αα\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\")\n");
+        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\")");
 
     }
 
@@ -98,12 +98,12 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the C is B have Z \"γ\" have X \"αα\")\n");
+        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the C is B have Z \"γ\" have X \"αα\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\")\n");
+        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\")");
 
     }
 
@@ -134,12 +134,12 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the B1 is B have Y \"ββ\") (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")\n");
+        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the B1 is B have Y \"ββ\") (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")\n");
+        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")");
 
     }
 
@@ -178,12 +178,12 @@ public class AllUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the B1 is B have Y \"ββ\") (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")\n");
+        assertAnimoResult(b, "the b the s (the B is A have Y \"β\") (the B1 is B have Y \"ββ\") (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")\n");
+        assertAnimoResult(c, "the c the s (the C is B have Z \"γ\" have X \"αα\") (the C1 is C have Z \"γγ\" have X \"ααα\")");
 
     }
 

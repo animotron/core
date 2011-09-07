@@ -141,40 +141,31 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "<the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>" +
-                "<have:content>" +
-                "<html>" +
-                "<head>" +
-                "<title><have:title>Welcome to Animo</have:title></title>" +
-                "</head>" +
-                "<body>" +
-                "<the:theme-concrete-root-layout>" +
-                "<is:root-layout/>" +
-                "<h1><have:title>Welcome to Animo</have:title></h1>" +
-                "<p><have:content>It is working!</have:content></p>" +
-                "<ul>" +
-                "<li>host: \"<strong><have:host>localhost</have:host></strong>\"</li>" +
-                "<li>uri: \"<strong><have:uri>/</have:uri></strong>\"</li>" +
-                "</ul>" +
-                "</the:theme-concrete-root-layout>" +
-                "</body>" +
-                "</html>" +
-                "</have:content>" +
-                "</the:081ede81178788230418466a8f32ec0fa11b6a971fc7b914e204848a6262509c>");
+        assertAnimoResult(s,  "the 718357e13084578d5c7f571bae55ea8bb583a8da53f3f391ae7d4a9fd1869475" +
+                                "have content " +
+                                    "element html " +
+                                        "(element head element title have title \"Welcome to Animo\") " +
+                                        "(element body the theme-concrete-root-layout (is root-layout) " +
+                                            "(element h1 have title \"Welcome to Animo\") " +
+                                            "(element p have content \"It is working\") " +
+                                            "(element ul " +
+                                                "(element li (\"host:\") (element strong have host \"localhost\")) " +
+                                                "(element li (\"uri:\") (element strong have uri \"/\"))))");
 
-        assertXMLResult(s, "<html>" +
-                "<head>" +
-                "<title>Welcome to Animo</title>" +
-                "</head>" +
-                "<body>" +
-                "<h1>Welcome to Animo</h1>" +
-                "<p>It is working!</p>" +
-                "<ul>" +
-                "<li>host: \"<strong>localhost</strong>\"</li>" +
-                "<li>uri: \"<strong>/</strong>\"</li>" +
-                "</ul>" +
-                "</body>" +
-                "</html>");
+
+        assertXMLResult(s,  "<html>" +
+                                "<head>" +
+                                    "<title>Welcome to Animo</title>" +
+                                "</head>" +
+                                    "<body>" +
+                                        "<h1>Welcome to Animo</h1>" +
+                                        "<p>It is working!</p>" +
+                                        "<ul>" +
+                                            "<li>host: \"<strong>localhost</strong>\"</li>" +
+                                            "<li>uri: \"<strong>/</strong>\"</li>" +
+                                        "</ul>" +
+                                    "</body>" +
+                                "</html>");
 
     }
 

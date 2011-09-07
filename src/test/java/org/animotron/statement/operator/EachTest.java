@@ -60,7 +60,7 @@ public class EachTest extends ATest {
         Expression s = new Expression (
             _(THE._, "s", _(EACH._, "P", _(ALL._, "S")))
         );
-        assertAnimoResult(s, "<the:s><p><have:content>α</have:content></p><p><have:content>β</have:content></p><p><have:content>γ</have:content></p></the:s>");
+        assertAnimoResult(s, "the s (element p have content \"α\") (element p have content \"β\") (element p have content \"γ\")");
 
     }
 
@@ -82,7 +82,7 @@ public class EachTest extends ATest {
         Expression s = new Expression (
             _(THE._, "s", element("p", _(EACH._, "P", _(ALL._, "S"))))
         );
-        assertAnimoResult(s, "<the:s><p><the:A><is:S/><is:P/><have:content>α</have:content></the:A></p><p><the:B><is:S/><is:P/><have:content>β</have:content></the:B></p></the:s>");
+        assertAnimoResult(s, "the s (element p the A (is A) (is S) (is P) (have content \"α\")) (element p the B (is S) (is P) (have content \"β\"))");
 
     }
 

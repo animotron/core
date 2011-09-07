@@ -52,7 +52,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         //assertXMLResult(E, "<the:E><have:B>π</have:B></the:E>");
-        assertAnimoResult(E, "the E have B \"π\"\n");
+        assertAnimoResult(E, "the E have B \"π\"");
     }
 
     @Test
@@ -75,7 +75,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         //assertXMLResult(E, "<the:E><have:B>π</have:B></the:E>");
-        assertAnimoResult(E, "the E have B \"π\"\n");
+        assertAnimoResult(E, "the E have B \"π\"");
     }
 
     @Test
@@ -98,7 +98,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         //assertXMLResult(E, "<the:E><have:B>π</have:B></the:E>");
-        assertAnimoResult(E, "the E have B \"π\"\n");
+        assertAnimoResult(E, "the E have B \"π\"");
     }
 
     @Test
@@ -117,7 +117,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         //assertXMLResult(E, "<the:E><is:C/><have:B>π</have:B></the:E>");
-        assertAnimoResult(E, "the E is C have B \"π\"\n");
+        assertAnimoResult(E, "the E is C have B \"π\"");
     }
 
     @Test
@@ -140,7 +140,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         //assertXMLResult(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
-        assertAnimoResult(E, "the E is D have B \"π\"\n");
+        assertAnimoResult(E, "the E is D have B \"π\"");
     }
 
     @Test
@@ -163,6 +163,6 @@ public class YetAnotherGetTest extends ATest{
         );
 
         //assertXMLResult(E, "<the:E><is:D/><have:B>π</have:B></the:E>");
-        assertAnimoResult(E, "the E is D have B \"π\"\n");
+        assertAnimoResult(E, "the E is D have B \"π\"");
     }
 }
