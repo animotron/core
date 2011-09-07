@@ -23,7 +23,7 @@ package org.animotron.statement.ml;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class COMMENT extends ValueInstruction {
+public class COMMENT extends Value {
 	
 	public static final COMMENT _ = new COMMENT();
 	

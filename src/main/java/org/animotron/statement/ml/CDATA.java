@@ -23,7 +23,7 @@ package org.animotron.statement.ml;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class CDATA extends ValueInstruction {
+public class CDATA extends Value {
 	
 	public static final CDATA _ = new CDATA();
 	

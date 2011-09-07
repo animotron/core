@@ -20,11 +20,9 @@ package org.animotron.statement.instruction;
 
 import org.animotron.exception.ENotFound;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.AN;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,10 +37,7 @@ public abstract class Instruction extends AbstractStatement {
 
     @Override
 	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
-		Node child = createNode();
-		Relationship r = parent.createRelationshipTo(child, relationshipType());
-		order(r, order);
-		return r;
+        return AN._.build(parent, name(), value, order, ignoreNotFound);
 	}
 
 }
