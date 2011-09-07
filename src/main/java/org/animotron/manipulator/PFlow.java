@@ -102,6 +102,7 @@ public class PFlow {
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
+		path.add(op);
 		
 		this.op = op;
 	}

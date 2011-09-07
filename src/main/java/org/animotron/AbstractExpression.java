@@ -120,4 +120,7 @@ public abstract class AbstractExpression extends GraphBuilder implements Relatio
 		return getRelationship().isType(type);
 	}
 
+	public String toString() {
+		return getRelationship().toString();
+	}
 }

@@ -100,5 +100,4 @@ public class Expression extends AbstractExpression {
 		Object[] e = {CDATA._, null, value, null};
 		return e;
 	}
-
 }

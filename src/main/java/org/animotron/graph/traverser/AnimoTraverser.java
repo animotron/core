@@ -71,13 +71,14 @@ public class AnimoTraverser {
             Relationship i = it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, pf, i, level, false);
-                    build(handler, pf, it.next(), level, false);
+                    build(handler, new PFlow(pf, i), i, level, false);
+                    i = it.next();
+                    build(handler, new PFlow(pf, i), i, level, false);
                 } else {
-                    build(handler, pf, i, level, true);
+                    build(handler, new PFlow(pf, i), i, level, true);
                 }
             } else {
-                build(handler, pf, i, level, false);
+                build(handler, new PFlow(pf, i), i, level, false);
             }
             isFirst = false;
         }
