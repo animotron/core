@@ -20,7 +20,10 @@ package org.animotron.manipulator;
 
 import javolution.util.FastList;
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Reference;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Channel;
@@ -102,7 +105,10 @@ public class PFlow {
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
-		path.add(op);
+		Statement s = Statements.relationshipType(op);
+		if (s instanceof Reference) {
+			path.add(op);
+		}
 		
 		this.op = op;
 	}
