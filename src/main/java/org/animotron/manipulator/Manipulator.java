@@ -106,7 +106,7 @@ public abstract class Manipulator {
 
                         if (s instanceof Evaluable) {
                               //TODO Evaluate instruction here
-                        } else {
+                        } else if (s == null){
                             s = Statements.relationshipType(msg.getType());
                             if (s instanceof Query || s instanceof Evaluable) {
                                 try {
@@ -125,6 +125,8 @@ public abstract class Manipulator {
                             } else {
                                 out.write(msg);
                             }
+                        } else {
+                            out.write(msg);
                         }
             		}
 				} catch (IOException e) {
