@@ -19,7 +19,6 @@
 package org.animotron.manipulator;
 
 import org.animotron.Executor;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
@@ -38,6 +37,8 @@ import java.io.IOException;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -95,12 +96,12 @@ public abstract class Manipulator {
             			out.close();
             		else {
                         Statement s = null;
-            			if (RelationshipTypes.RESULT.equals(msg)) {
+            			if (RESULT.equals(msg)) {
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
             					);
                             s = Statements.name(THE._.name(msg));
-            			} else {
+            			} else if (REF.equals(msg)){
                             s = Statements.name(THE._.name(msg));
                         }
 
