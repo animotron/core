@@ -158,6 +158,12 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 				} else {
 					System.out.println("P-FLOW is context for GET!\n pflow = "+pf.getFlowPath());
 					
+					for (Relationship st : pf.getPFlowPath()) {
+						Relationship r = get(st, name);
+						if (r != null)
+							pf.sendAnswer(createResult(node, r));
+					}
+					
 //					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
 //					if (!res.isEmpty())
 //						for (Relationship r : res)
@@ -169,6 +175,74 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 		}
 	};
 
+	public Relationship get(Relationship ref, final String name) {
+		System.out.println("GET get context = "+ref);
+
+		//search for local 'HAVE'
+		Relationship have = getByHave(ref.getStartNode(), name);
+		if (have != null) return have;
+
+		Node context = ref.getEndNode();
+
+		//search for have
+		have = getByHave(context, name);
+		if (have != null) return have;
+		
+		Relationship prevTHE = null;
+		
+		//search 'IC' by 'IS' topology
+		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
+			
+			Statement st = Statements.relationshipType(tdR.getType());
+			if (st instanceof IS) {
+				System.out.println("GET IC -> IS "+tdR);
+				if (prevTHE != null) {
+					//search for have
+					have = getByHave(prevTHE.getEndNode(), name);
+					if (have != null) return have;
+				}
+				prevTHE = tdR;
+				
+			} else if (st instanceof IC) {
+				System.out.print("GET IC -> "+tdR);
+				
+				if (name.equals(name(tdR))) {
+					System.out.println(" MATCH");
+					
+					//store
+					final Node sNode = context;
+					final Relationship r = tdR;
+
+					return AnimoGraph.execute(new GraphOperation<Relationship>() {
+						@Override
+						public Relationship execute() {
+							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
+							//RID.set(res, r.getId());
+							return res;
+						}
+					});
+					
+					//in-memory
+					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
+					//RID.set(res, tdR.getId());
+					//return res;
+					
+					//as it
+					//return tdR;
+				}
+				System.out.println();
+			}
+		}
+		
+		if (prevTHE != null) {
+			//search for have
+			have = getByHave(prevTHE.getEndNode(), name);
+			if (have != null) return have;
+		}
+
+		return null;
+	}
+
 	public Relationship get(Node context, final String name) {
 		
 		System.out.println("GET get context = "+context);
@@ -176,7 +250,7 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 		//search for local 'HAVE'
 		Relationship have = getByHave(context, name);
 		if (have != null) return have;
-		
+
 		Relationship instance = context.getSingleRelationship(REF, OUTGOING);
 		if (instance != null) {
 			//change context to the-instance by REF

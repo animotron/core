@@ -21,10 +21,7 @@ package org.animotron.manipulator;
 import javolution.util.FastList;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Reference;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Channel;
@@ -210,6 +207,10 @@ public class PFlow {
 		return m;
 	}
 	
+	public List<Relationship> getPFlowPath() {
+		return path;
+	}
+
 	public Path getFlowPath() {
 		System.out.println("Path:");
 		for (Relationship r : path) {
