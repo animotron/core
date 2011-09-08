@@ -64,6 +64,15 @@ public class GetTest extends ATest {
 		);
     	//assertXMLResult(D, "<the:D><the:A><have:B><have:C>.</have:C></have:B></the:A></the:D>");
         assertAnimoResult(D, "the D the A have B have C \".\"");
+
+    	new Expression(
+			_(THE._, "A1", _(GET._, "B1"))
+		);
+
+    	Expression d = new Expression(
+			_(THE._, "d", _(AN._, "A1", _(HAVE._, "B1", text("."))))
+		);
+        assertAnimoResult(d, "the d the A1 have B1 \".\"");
 	}
 	
 	@Test
@@ -176,7 +185,7 @@ public class GetTest extends ATest {
                 _(AN._, "B")
         )));
         //assertXMLResult(C3, "<the:C3/>");
-        assertAnimoResult(C3, "the C3\n");
+        assertAnimoResult(C3, "the C3");
 
         Expression C4 = new Expression(
         _(THE._, "C4",
