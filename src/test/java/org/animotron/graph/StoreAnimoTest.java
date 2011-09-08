@@ -21,6 +21,7 @@ package org.animotron.graph;
 import org.animotron.ATest;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.THE;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -64,6 +65,7 @@ public class StoreAnimoTest extends ATest {
 		"</the:B>";
 
 	@Test
+    @Ignore
 	public void storeAndSerialize() throws IOException, XMLStreamException {
         System.out.println("Test processing flow interator ...");
         
