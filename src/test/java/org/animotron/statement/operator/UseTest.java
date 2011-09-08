@@ -82,7 +82,7 @@ public class UseTest extends ATest {
             _(THE._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
         //assertXMLResult(x, "<the:x><the:A><is:X/></the:A><the:B><is:X/></the:B></the:x>");
-        assertAnimoResult(x, "the x the A is X the B is X");
+        assertAnimoResult(x, "the x (the A is X) (the B is X)");
     }
 
     @Test
@@ -103,6 +103,6 @@ public class UseTest extends ATest {
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
         //assertXMLResult(x, "<the:x><the:q><the:A><is:X/></the:A><the:B><is:X/></the:B></the:q></the:x>");
-        assertAnimoResult(x, "the x the q the A is X the B is X");
+        assertAnimoResult(x, "the x the q (the A is X) (the B is X)");
     }
 }
