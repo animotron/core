@@ -19,7 +19,6 @@
 package org.animotron.statement.ml;
 
 import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.Cachable;
 import org.animotron.statement.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -33,7 +32,7 @@ import static org.animotron.graph.AnimoGraph.order;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class ELEMENT extends AbstractStatement implements Cachable, Result {
+public class ELEMENT extends AbstractStatement implements Result {
 	
 	public static final ELEMENT _ = new ELEMENT();
 	

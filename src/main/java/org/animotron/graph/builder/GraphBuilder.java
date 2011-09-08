@@ -26,8 +26,8 @@ import org.animotron.manipulator.Manipulators.Catcher;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Cachable;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.relation.Relation;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -264,7 +264,7 @@ public abstract class GraphBuilder {
             	//"Internal error: parent can not be null."
                 throw new AnimoException((Relationship)item[4]);
 
-            if (statement instanceof Cachable) {
+            if (!(statement instanceof Relation)) {
                 String hash = hash(item);
                 Node node = getCache(hash);
                 if (node == null) {

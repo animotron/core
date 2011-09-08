@@ -23,7 +23,6 @@ import org.animotron.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.operator.Cachable;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Q;
 import org.jetlang.channels.Subscribable;
@@ -38,7 +37,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class COUNT extends Instruction implements Evaluable, Cachable {
+public class COUNT extends Instruction implements Evaluable {
 
 	public static final COUNT _ = new COUNT();
 

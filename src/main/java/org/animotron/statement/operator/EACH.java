@@ -37,7 +37,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EACH extends Operator implements Evaluable, Cachable {
+public class EACH extends Operator implements Evaluable {
 
 	public static final EACH _ = new EACH();
 

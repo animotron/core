@@ -25,7 +25,7 @@ package org.animotron.statement.operator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class PTRN extends Operator implements Cachable, Property {
+public class PTRN extends Operator implements Property {
 	
 	public static final PTRN _ = new PTRN();
 	

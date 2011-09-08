@@ -24,8 +24,6 @@ import org.animotron.Executor;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoPath;
 import org.animotron.graph.GraphOperation;
-import org.animotron.io.PipedInput;
-import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -59,7 +57,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends Operator implements Evaluable, Query, Cachable {
+public class GET extends Operator implements Evaluable, Query {
 
 	public static final GET _ = new GET();
 	

@@ -47,7 +47,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class AbstractQuery extends Operator implements Cachable, Evaluable, Query {
+public abstract class AbstractQuery extends Operator implements Evaluable, Query {
 
     public AbstractQuery(String name) {
         super(name);

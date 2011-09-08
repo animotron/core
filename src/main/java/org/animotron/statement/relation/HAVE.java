@@ -18,7 +18,6 @@
  */
 package org.animotron.statement.relation;
 
-import org.animotron.statement.operator.Cachable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Property;
 
@@ -28,7 +27,7 @@ import org.animotron.statement.operator.Property;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAVE extends Operator implements Cachable, Property {
+public class HAVE extends Operator implements Property {
 	
 	public static final HAVE _ = new HAVE();
 

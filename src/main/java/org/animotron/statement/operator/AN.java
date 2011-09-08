@@ -32,7 +32,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends Operator implements Reference, Evaluable, Cachable {
+public class AN extends Operator implements Reference, Evaluable {
 	
 	public static final AN _ = new AN();
 	
