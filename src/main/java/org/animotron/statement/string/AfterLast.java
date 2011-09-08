@@ -19,21 +19,28 @@
 package org.animotron.statement.string;
 
 import org.animotron.Expression;
+import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.animotron.Expression.text;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * String instruction 'after-last'.
@@ -56,7 +63,7 @@ public class AfterLast extends Instruction implements Evaluable {
 
     private OnQuestion question = new OnQuestion(){
         @Override
-        public void onMessage(PFlow pf) {
+        public void onMessage(final PFlow pf) {
 
             //UNDERSTAND: if we have more that 2 params, what to do?
 
@@ -93,8 +100,19 @@ public class AfterLast extends Instruction implements Evaluable {
 					pf.sendException(e);
 					return;
 				}
-	
-	            pf.sendAnswer(r.getEndNode().getSingleRelationship(TEXT._.relationshipType(), OUTGOING));
+				final Node rNode = r.getEndNode();
+				final long rID = r.getEndNode().getSingleRelationship(TEXT._.relationshipType(), OUTGOING).getId(); 
+				r = AnimoGraph.execute(new GraphOperation<Relationship>() {
+					@Override
+					public Relationship execute() {
+						Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._.relationshipType(), INCOMING).getStartNode();
+						Relationship res = sNode.createRelationshipTo(rNode, RESULT);
+						Properties.RID.set(res, rID);
+						return res;
+					}
+				});
+
+				pf.sendAnswer(r);
             }
 
             pf.done();
