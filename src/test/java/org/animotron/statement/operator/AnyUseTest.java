@@ -60,13 +60,11 @@ public class AnyUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        //assertXMLResult(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
         assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        //assertXMLResult(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
     }
 
@@ -99,13 +97,11 @@ public class AnyUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        //assertXMLResult(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
         assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        //assertXMLResult(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
     }
 
@@ -136,13 +132,11 @@ public class AnyUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        //assertXMLResult(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
         assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        //assertXMLResult(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
     }
 
@@ -181,13 +175,11 @@ public class AnyUseTest extends ATest {
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        //assertXMLResult(b, "<the:b><the:s><the:B><is:A/><have:Y>β</have:Y></the:B></the:s></the:b>");
         assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        //assertXMLResult(c, "<the:c><the:s><the:C><is:B/><have:Z>γ</have:Z><have:X>αα</have:X></the:C></the:s></the:c>");
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
     }
 }
