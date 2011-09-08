@@ -23,7 +23,6 @@ import org.animotron.Expression;
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
@@ -33,7 +32,6 @@ import java.security.MessageDigest;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static org.animotron.Expression._;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
 
@@ -113,23 +111,31 @@ public class BinaryBuilder extends AbstractExpression {
                     Expression prev = null;
                     for (String part : parts) {
                         if (!part.isEmpty()) {
-                            if (prev == null) {
-                                prev = new Expression(
-                                        _(IS._, part)
-                                );
-                            } else {
-                                prev = new Expression(
-                                    _(IS._, THE._.name(prev)),
-                                    _(IS._, part)
-                                );
-                            }
+                            start(IS._, part);
+                            end();
                         }
                     }
 
-                    if (prev != null) {
-                        start(IS._, THE._.name(prev));
-                        end();
-                    }
+//                    Expression prev = null;
+//                    for (String part : parts) {
+//                        if (!part.isEmpty()) {
+//                            if (prev == null) {
+//                                prev = new Expression(
+//                                        _(IS._, part)
+//                                );
+//                            } else {
+//                                prev = new Expression(
+//                                    _(IS._, THE._.name(prev)),
+//                                    _(IS._, part)
+//                                );
+//                            }
+//                        }
+//                    }
+//
+//                    if (prev != null) {
+//                        start(IS._, THE._.name(prev));
+//                        end();
+//                    }
 
                 endGraph(new SetBinHash(this, hash));
 
