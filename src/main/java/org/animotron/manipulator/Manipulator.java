@@ -62,15 +62,20 @@ public abstract class Manipulator {
 	}
 
 	public final PipedInput execute(final PFlow pflow, PropertyContainer op) throws IOException {
+		return execute(pflow, op, null);
+	}
+
+	public final PipedInput execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
         final PipedOutput out = new PipedOutput();
         PipedInput in = out.getInputStream();
-		
-        Subscribable<PFlow> sub;
-		if (op instanceof Node) {
-			sub = onQuestion(null);
-		} else {
-			sub = onQuestion((Relationship)op);
-		}
+
+        if (sub == null) {
+			if (op instanceof Node) {
+				sub = onQuestion(null);
+			} else {
+				sub = onQuestion((Relationship)op);
+			}
+        }
 		
 		if (sub == null) {
 			out.write(op);
@@ -108,7 +113,14 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                            ((Evaluable) s).onCalcQuestion().onMessage(new PFlow(pf, msg));
+                        	PipedInput in = execute(pf, msg, ((Evaluable) s).onCalcQuestion());
+                            for (Object obj : in) {
+                                if (obj instanceof Relationship) {
+                                    out.write(obj);
+                                } else {
+                                    System.out.println("UNHANDLED "+obj);
+                                }
+                            }
                         } else if (s == null){
                             s = Statements.relationshipType(msg.getType());
                             if (s instanceof Query || s instanceof Evaluable) {
