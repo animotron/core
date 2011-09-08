@@ -313,7 +313,7 @@ public class PFlow {
 	}
 
 	public Relationship getLastContext() {
-		return path.get(1);
+		return path.firstElement();
 	}
 
 	private TraversalDescription td_flow =

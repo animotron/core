@@ -123,28 +123,47 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 							pf.countDown();
 							return;
 						}
-						Set<Relationship> res = getByTraversal(underHAVE, op, context, name);
-						if (!res.isEmpty()) {
-							for (Relationship r : res)
-								pf.sendAnswer(r);
 
+//						Set<Relationship> res = getByTraversal(underHAVE, op, context, name);
+//						if (!res.isEmpty()) {
+//							for (Relationship r : res)
+//								pf.sendAnswer(r);
+//
+//							return;
+//						}
+
+						Relationship r = null;
+						
+						final Relationship have = searchForHAVE(context, name);
+						if (have != null) {
+							
+							r = AnimoGraph.execute(new GraphOperation<Relationship>() {
+								@Override
+								public Relationship execute() {
+									Relationship res = pf.getOPNode().createRelationshipTo(have.getEndNode(), HAVE._.relationshipType());
+									//RID.set(res, r.getId());
+									return res;
+								}
+							});
+
+							pf.sendAnswer(r);
 							return;
 						}
 
-						PipedInput in;
-						try {
-							in = Evaluator._.execute(pf, context.getEndNode());
-						
-							for (Object n : in) {
-								Relationship r = get(((Relationship)n).getEndNode(), name);
-								
-								if (r != null)
-									pf.sendAnswer(createResult(node, r));
-							}
-						} catch (Exception e) {
-							//XXX: what to do?
-							e.printStackTrace();
-						}
+//						PipedInput in;
+//						try {
+//							in = Evaluator._.execute(pf, r.getEndNode());
+//						
+//							for (Object n : in) {
+//								r = get(((Relationship)n).getEndNode(), name);
+//								
+//								if (r != null)
+//									pf.sendAnswer(createResult(node, r));
+//							}
+//						} catch (Exception e) {
+//							//XXX: what to do?
+//							e.printStackTrace();
+//						}
 					}
 
 					@Override
@@ -163,8 +182,10 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 					for (Relationship st : pf.getPFlowPath()) {
 						Set<Relationship> rSet = get(st, name);
 						if (rSet != null) {
-							for (Relationship r : rSet)
+							for (Relationship r : rSet) {
 								pf.sendAnswer(createResult(node, r));
+							}
+							break;
 						}
 					}
 					
@@ -180,7 +201,7 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 	};
 
 	public Set<Relationship> get(Relationship ref, final String name) {
-		System.out.println("GET get context = "+ref);
+		System.out.println("GET context = "+ref);
 		
 		Set<Relationship> set = new FastSet<Relationship>(); 
 
@@ -201,18 +222,26 @@ public class GET extends Operator implements Evaluable, Query, Cachable {
 
 			List<Relationship> newREFs = new FastList<Relationship>();
 
-			for (Relationship n : nextREFs)
+			for (Relationship n : nextREFs) {
 				for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
 					if (r.equals(n)) continue;
 					
 					Statement st = Statements.relationshipType(r);
 					if (st instanceof AN) {
 						Relationship t = AN._.getREF(r);
-						if (t.equals(n)) continue;
-						
 						newREFs.add(t);
 					}
 				}
+
+				for (Relationship r : n.getEndNode().getRelationships(OUTGOING)) {
+					Statement st = Statements.relationshipType(r);
+					if (st instanceof AN) {
+						Relationship t = AN._.getREF(r);
+						newREFs.add(t);
+					}
+				}
+				
+			}
 
 			if (newREFs.size() == 0) return null;
 			
