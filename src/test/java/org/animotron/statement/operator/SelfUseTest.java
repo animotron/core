@@ -57,14 +57,12 @@ public class SelfUseTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(AN._, "D", _(USE._, "A")))
         );
-        //assertXMLResult(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
-        assertAnimoResult(a, "the a (the D is C have A \".\")");
+        assertAnimoResult(a, "the a the D (is C) (have A \".\")");
 
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "D", _(USE._, "B")))
         );
-        //assertAnimoResult(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
-        assertAnimoResult(b, "the b (the D is C have B \"..\")");
+        assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
     }
 	
     @Test
@@ -97,13 +95,11 @@ public class SelfUseTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(AN._, "D", _(AN._, "ua")))
         );
-        //assertXMLResult(a, "<the:a><the:D><is:C/><have:A>.</have:A></the:D></the:a>");
-        assertAnimoResult(a, "the a (the D is C have A \".\")");
+        assertAnimoResult(a, "the a the D (is C) (have A \".\")");
 
         Expression b = new Expression(
             _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
         );
-        //assertXMLResult(b, "<the:b><the:D><is:C/><have:B>..</have:B></the:D></the:b>");
-        assertAnimoResult(b, "the b (the D is C have B \"..\")");
+        assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
     }
 }
