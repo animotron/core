@@ -54,19 +54,16 @@ public class YetAnotherAnyTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
         );
-        //assertXMLResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
         assertAnimoResult(a, "the a the A (is S) (have X \"α\")");
 
         Expression b = new Expression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", text("β"))))
         );
-        //assertXMLResult(b, "<the:b><the:B><is:A/><have:Y>β</have:Y></the:B></the:b>");
         assertAnimoResult(b, "the b the B (is A) (have Y \"β\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", text("γ"))))
         );
-        //assertXMLResult(c, "<the:c><the:C><is:B/><have:Z>γ</have:Z></the:C></the:c>");
         assertAnimoResult(c, "the c the C (is B) (have Z \"γ\")");
     }
 
@@ -88,19 +85,16 @@ public class YetAnotherAnyTest extends ATest {
         Expression a = new Expression(
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
         );
-        //assertXMLResult(a, "<the:a><the:A><is:S/><have:X>α</have:X></the:A></the:a>");
         assertAnimoResult(a, "the a the A (is S) (have X \"α\")");
 
         Expression b = new Expression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "X", text("β"))))
         );
-        //assertXMLResult(b, "<the:b><the:B><is:A/><have:X>β</have:X></the:B></the:b>");
         assertAnimoResult(b, "the b the B (is A) (have X \"β\")");
 
         Expression c = new Expression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "X", text("γ"))))
         );
-        //assertXMLResult(c, "<the:c><the:C><is:B/><have:X>γ</have:X></the:C></the:c>");
         assertAnimoResult(c, "the c the C (is B) (have X \"γ\")");
     }
 }
