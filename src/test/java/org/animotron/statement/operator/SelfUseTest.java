@@ -101,5 +101,6 @@ public class SelfUseTest extends ATest {
             _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
         );
         assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
+
     }
 }
