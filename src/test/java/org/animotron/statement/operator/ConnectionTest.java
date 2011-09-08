@@ -80,7 +80,6 @@ public class ConnectionTest extends ATest {
             _(GET._, "name",
                 _(AN._, "fileA")
         )));
-        //assertXMLResult(A, "<the:A><have:name>file</have:name></the:A>");
         assertAnimoResult(A, "the A have name \"file\"");
 
         Expression B = new Expression(
@@ -88,7 +87,6 @@ public class ConnectionTest extends ATest {
             _(GET._, "path",
                 _(AN._, "fileA")
         )));
-        //assertXMLResult(B, "<the:B><have:path>/home/test.txt</have:path></the:B>");
         assertAnimoResult(B, "the B have path \"/home/test.txt\"");
 
         Expression C = new Expression(
@@ -96,7 +94,6 @@ public class ConnectionTest extends ATest {
             _(GET._, "extension",
                 _(AN._, "fileA")
         )));
-        //assertXMLResult(C, "<the:C><have:extension>txt</have:extension></the:C>");
         assertAnimoResult(C, "the C have extension \"txt\"");
 
         Expression D = new Expression(
@@ -104,7 +101,6 @@ public class ConnectionTest extends ATest {
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
-        //assertXMLResult(D, "<the:D><have:mime-type><the:text-plain><is:mime-type/><have:type>text/plain</have:type><have:extension>txttext</have:extension></the:text-plain></have:mime-type></the:D>");
         assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
 
         Expression E = new Expression(
@@ -113,7 +109,6 @@ public class ConnectionTest extends ATest {
                 _(GET._, "mime-type",
                     _(AN._, "fileA")
         ))));
-        //assertXMLResult(E, "<the:E><have:type>text/plain</have:type></the:E>");
         assertAnimoResult(E, "the E have type \"text/plain\"");
     }
 	

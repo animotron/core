@@ -18,9 +18,9 @@
  */
 package org.animotron.graph;
 
-import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
@@ -35,13 +35,9 @@ import static org.animotron.Expression._;
 public class IsLoopTest extends ATest {
 	
 	@Test
-	public void storeAndSerializeResult() {
-		try {
-			new Expression(_(THE._, "A", _(IS._, "C")));
-			new Expression(_(THE._, "B", _(IS._, "A")));
-			new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
+	public void storeAndSerializeResult() throws AnimoException {
+        new Expression(_(THE._, "A", _(IS._, "C")));
+        new Expression(_(THE._, "B", _(IS._, "A")));
+        new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
 	}
 }
