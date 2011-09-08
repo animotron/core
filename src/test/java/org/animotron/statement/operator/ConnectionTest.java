@@ -105,7 +105,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //assertXMLResult(D, "<the:D><have:mime-type><the:text-plain><is:mime-type/><have:type>text/plain</have:type><have:extension>txttext</have:extension></the:text-plain></have:mime-type></the:D>");
-        assertAnimoResult(D, "the D have mime-type (the text-plain is mime-type have type \"text/plain\" (have extension \"txt\" \"text\"))");
+        assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
 
         Expression E = new Expression(
         _(THE._, "E",
@@ -187,7 +187,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //assertXMLResult(D, "<the:D><have:mime-type><the:text-plain><is:mime-type/><have:type>text/plain</have:type><have:extension>txttext</have:extension></the:text-plain></have:mime-type></the:D>");
-        assertAnimoResult(D, "the D have mime-type (the text-plain is mime-type have type \"text/plain\" (have extension \"txt\" \"text\"))");
+        assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
 
         Expression E = new Expression(
         _(THE._, "E",
