@@ -66,16 +66,18 @@ public class PFlow {
 		this.m = m;
 	};
 	
+	//XXX: remove Manipulator m
 	public PFlow(Manipulator m, PFlow pf, Relationship op) {
-		parent = new PFlow(m);
+		parent = pf;
 		this.m = m;
 		this.op = op;
 		
 		path.addAll(pf.path);
 	}
 
+	//XXX: remove Manipulator m
 	public PFlow(Manipulator m, PFlow pf, Node opNode) {
-		parent = new PFlow(m);
+		parent = pf;
 		this.m = m;
 		this.opNode = opNode;
 		
@@ -341,4 +343,11 @@ public class PFlow {
 					return EXCLUDE_AND_CONTINUE;
 				}
 			});
+
+	public boolean isInStack(Relationship r) {
+		if (op != null && op.equals(r)) return true;
+		
+		if (parent == null) return false;
+		return parent.isInStack(r);
+	}
 }

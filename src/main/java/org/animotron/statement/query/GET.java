@@ -179,7 +179,7 @@ public class GET extends Operator implements Evaluable, Query {
 					System.out.println("P-FLOW is context for GET!\n pflow = "+pf.getFlowPath());
 					
 					for (Relationship st : pf.getPFlowPath()) {
-						Set<Relationship> rSet = get(st, name);
+						Set<Relationship> rSet = get(pf, st, name);
 						if (rSet != null) {
 							for (Relationship r : rSet) {
 								pf.sendAnswer(createResult(node, r));
@@ -199,7 +199,7 @@ public class GET extends Operator implements Evaluable, Query {
 		}
 	};
 
-	public Set<Relationship> get(Relationship ref, final String name) {
+	public Set<Relationship> get(PFlow pf, Relationship ref, final String name) {
 		System.out.println("GET context = "+ref);
 		
 		Set<Relationship> set = new FastSet<Relationship>(); 
@@ -212,8 +212,9 @@ public class GET extends Operator implements Evaluable, Query {
 		while (true) {
 
 			for (Relationship n : nextREFs) {
+				System.out.println("checking "+n);
 				have = searchForHAVE(n, name);
-				if (have != null) 
+				if (have != null && !pf.isInStack(have)) 
 					set.add(have);
 			}
 			
