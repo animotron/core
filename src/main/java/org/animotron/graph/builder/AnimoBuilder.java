@@ -50,19 +50,28 @@ public class AnimoBuilder extends GraphBuilder {
             for (int i = 0; i < len; i++){
                 char ch = buff[i];
                 if (ch == '\"') {
-                    text = text ? text && prev == '\\' : true;                    
+                    text = text ? prev == '\\' : true;
                 }
                 if (!text) {
                     switch (ch) {
                         case ' '  :
                         case '\t' :
                         case '\n' :
-                        case '('  : startList();
-                        case ')'  : endList();
+                            start = end;
+                            break;
+                        case '('  :
+                            start = end;
+                            startList();
+                            break;
+                        case ')'  :
+                            start = end;
+                            endList();
+                            break;
                         default   : token(buff, start, end, text);
                     }
                 }
                 prev = ch;
+                end = i;
             }
         }
 
