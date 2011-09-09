@@ -50,27 +50,35 @@ public class AnimoBuilder extends GraphBuilder {
             for (int i = 0; i < len; i++){
                 char ch = buff[i];
                 if (ch == '\"') {
+                    if (text && prev == '\\') {
+                        s.append(ch);
+                    }
                     text = text ? prev == '\\' : true;
-                }
-                if (!text) {
-                    switch (ch) {
-                        case ' '  :
-                        case '\t' :
-                        case '\n' :
-                            token(s, text);
-                            if (s.length() > 0) s = new StringBuilder();
-                            break;
-                        case '('  :
-                            startList();
-                            token(s, text);
-                            if (s.length() > 0) s = new StringBuilder();
-                            break;
-                        case ')'  :
-                            token(s, text);
-                            if (s.length() > 0) s = new StringBuilder();
-                            endList();
-                            break;
-                        default   : s.append(ch);
+                } else {
+                    if (text) {
+                        if (ch != '\\') {
+                            s.append(ch);
+                        }
+                    } else {
+                        switch (ch) {
+                            case ' '  :
+                            case '\t' :
+                            case '\n' :
+                                token(s, text);
+                                if (s.length() > 0) s = new StringBuilder();
+                                break;
+                            case '('  :
+                                startList();
+                                token(s, text);
+                                if (s.length() > 0) s = new StringBuilder();
+                                break;
+                            case ')'  :
+                                token(s, text);
+                                if (s.length() > 0) s = new StringBuilder();
+                                endList();
+                                break;
+                            default   : s.append(ch);
+                        }
                     }
                 }
                 prev = ch;
