@@ -131,7 +131,8 @@ public class ResultTraverser extends AnimoTraverser {
             if (isFirst) {
                 if (it.hasNext()) {
                     build(handler, pf, i, level, false);
-                    build(handler, pf, it.next(), level, false);
+                    i = it.next();
+                    build(handler, pf, i, level, false);
                 } else {
                     build(handler, pf, i, level, true);
                 }
@@ -152,7 +153,8 @@ public class ResultTraverser extends AnimoTraverser {
             if (isFirst) {
                 if (it.hasNext()) {
                     build(handler, pf, i, level, false);
-                    build(handler, pf, (Relationship) it.next(), level, false);
+                    i = (Relationship) it.next();
+                    build(handler, pf, i, level, false);
                 } else {
                     build(handler, pf, i, level, true);
                 }
