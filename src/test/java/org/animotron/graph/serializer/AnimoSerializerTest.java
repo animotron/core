@@ -172,7 +172,23 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
+
         assertAnimo(A, "the A (is X) (have B (C (have D \"1\") (have E \"2\")) (F (have G \"3\") (have H \"4\"))) (have I (J (have K \"5\") (have L \"6\")) (M (have N \"7\") (have O \"8\")))");
+
 	}
+
+    @Test
+    public void test1() throws Exception {
+
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(AN._, "B"),
+                _(AN._, "C")
+            )
+        );
+
+        assertAnimoResult(A, "the A (the B) (the C)");
+
+    }
 	
 }
