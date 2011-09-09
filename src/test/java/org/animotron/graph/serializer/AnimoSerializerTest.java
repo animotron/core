@@ -178,6 +178,19 @@ public class AnimoSerializerTest extends ATest {
 	}
 
     @Test
+    public void test0() throws Exception {
+
+        Expression A = new Expression(
+            _(THE._, "A",
+                text("bla"), text("bla")
+            )
+        );
+
+        assertAnimo(A, "the A (\"bla\") (\"bla\")");
+
+    }
+	
+    @Test
     public void test1() throws Exception {
 
         Expression A = new Expression(
@@ -190,5 +203,5 @@ public class AnimoSerializerTest extends ATest {
         assertAnimoResult(A, "the A (the B) (the C)");
 
     }
-	
+
 }
