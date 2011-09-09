@@ -76,7 +76,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level);
+                result(handler, pf, r, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof IS || s instanceof USE) {
 				handler.start(s, r, level++, isOne);

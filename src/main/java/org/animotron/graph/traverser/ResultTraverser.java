@@ -91,7 +91,7 @@ public class ResultTraverser extends AnimoTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level);
+                result(handler, pf, r, level, isOne);
 			} else if (!(s instanceof IS || s instanceof USE)) {
                 if (s instanceof Result)
                     handler.start(s, r, level++, isOne);
@@ -108,7 +108,7 @@ public class ResultTraverser extends AnimoTraverser {
 
     }
 
-    protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level) throws IOException {
+    protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
         Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
         boolean found = _iterate(handler, pf, i, level);
         if (!found) {
@@ -116,7 +116,7 @@ public class ResultTraverser extends AnimoTraverser {
             //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
             in = Evaluator._.execute(pf, r);
-            iterate(handler, pf, in, level);
+            iterate(handler, pf, in, level, isOne);
         }
 
         return found;
@@ -144,10 +144,9 @@ public class ResultTraverser extends AnimoTraverser {
         return found;
     }
 
-    private void iterate(GraphHandler handler, PFlow pf, PipedInput in, int level) throws IOException {
-    	
+    private void iterate(GraphHandler handler, PFlow pf, PipedInput in, int level, boolean isOne) throws IOException {
         Iterator<Object> it = in.iterator();
-        boolean isFirst = true;
+        boolean isFirst = isOne;
         while (it.hasNext()) {
             Relationship i = (Relationship) it.next();
             if (isFirst) {
