@@ -41,8 +41,8 @@ public class AnimoBuilder extends GraphBuilder {
 
         int len;
         char[] buff = new char[4 * 1024];
+        StringBuilder s = new StringBuilder();
 
-        int start = 0, end = 0;
         boolean text = false;
         char prev = '\0';
 
@@ -57,27 +57,34 @@ public class AnimoBuilder extends GraphBuilder {
                         case ' '  :
                         case '\t' :
                         case '\n' :
-                            start = end;
+                            token(s, text);
+                            if (s.length() > 0) s = new StringBuilder();
                             break;
                         case '('  :
-                            start = end;
                             startList();
+                            token(s, text);
+                            if (s.length() > 0) s = new StringBuilder();
                             break;
                         case ')'  :
-                            start = end;
+                            token(s, text);
+                            if (s.length() > 0) s = new StringBuilder();
                             endList();
                             break;
-                        default   : token(buff, start, end, text);
+                        default   : s.append(ch);
                     }
                 }
                 prev = ch;
-                end = i;
             }
+            token(s, text);
         }
 
     }
 
-    private void token(char[] buff, int start, int end, boolean text) {
+    private void token(StringBuilder s, boolean text) {
+        if (s.length()>0) {
+            System.out.print(s);
+            System.out.println();
+        }
     }
 
     private void startList() {
