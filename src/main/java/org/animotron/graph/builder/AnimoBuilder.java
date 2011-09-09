@@ -64,17 +64,23 @@ public class AnimoBuilder extends GraphBuilder {
                             case ' '  :
                             case '\t' :
                             case '\n' :
-                                token(s, text);
-                                if (s.length() > 0) s = new StringBuilder();
+                                if (s.length() > 0) {
+                                    token(s, text);
+                                    s = new StringBuilder();
+                                }
                                 break;
                             case '('  :
                                 startList();
-                                token(s, text);
-                                if (s.length() > 0) s = new StringBuilder();
+                                if (s.length() > 0) {
+                                    token(s, text);
+                                    s = new StringBuilder();
+                                }
                                 break;
                             case ')'  :
-                                token(s, text);
-                                if (s.length() > 0) s = new StringBuilder();
+                                if (s.length() > 0) {
+                                    token(s, text);
+                                    s = new StringBuilder();
+                                }
                                 endList();
                                 break;
                             default   : s.append(ch);
@@ -83,16 +89,16 @@ public class AnimoBuilder extends GraphBuilder {
                 }
                 prev = ch;
             }
-            token(s, text);
+            if (s.length() > 0) {
+                token(s, text);
+            }
         }
 
     }
 
     private void token(StringBuilder s, boolean text) {
-        if (s.length()>0) {
-            System.out.print(s);
-            System.out.println();
-        }
+        System.out.print(s);
+        System.out.println();
     }
 
     private void startList() {
