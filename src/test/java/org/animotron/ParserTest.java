@@ -32,7 +32,7 @@ public class ParserTest extends ATest {
 
     @Test
 	public void test() throws IOException {
-        new AnimoBuilder("x(the a)(b)").build();
+        new AnimoBuilder("the a have b \"test is \\\"working as well\\\"\" bla-bla").build();
 	}
 
 }
