@@ -139,6 +139,7 @@ public class GET extends Operator implements Evaluable, Query {
 								@Override
 								public Relationship execute() {
 									Relationship res = pf.getOPNode().createRelationshipTo(have.getEndNode(), HAVE._.relationshipType());
+									AnimoGraph.result(res, pf.getLastContext().getId());
 									//RID.set(res, r.getId());
 									return res;
 								}

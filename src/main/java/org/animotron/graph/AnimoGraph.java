@@ -22,7 +22,9 @@ import javolution.util.FastMap;
 import org.animotron.Executor;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.io.IOException;
@@ -42,6 +44,8 @@ public class AnimoGraph {
 	
 	private static Node ROOT, CACHE, TOP; //EMPTY
 	private static OrderIndex ORDER;
+	public static RelationshipIndex RESULT_INDEX;
+	private static String RESULT = "RESULT";
 	
 	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
 	
@@ -55,6 +59,9 @@ public class AnimoGraph {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         ORDER = new OrderIndex(INDEX);
+
+        RESULT_INDEX = INDEX.forRelationships(RESULT);
+
         execute(
             new GraphOperation<Void> () {
                 @Override
@@ -202,5 +209,13 @@ public class AnimoGraph {
 	public static void order (Relationship r, int order) {
 		ORDER.add(r, order);
 		//ORDER.set(r, order);
+	}
+	
+	public static void result (Relationship r, long id) {
+		RESULT_INDEX.add(r, RESULT, id);
+	}
+
+	public static IndexHits<Relationship> getResult(Relationship ref, Node node) {
+		return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
 	}
 }

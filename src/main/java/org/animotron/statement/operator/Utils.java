@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
@@ -49,18 +50,24 @@ public class Utils {
 	}
 	
 	public static boolean results(Node node, PFlow pf) {
-		
 		boolean haveSome = false;
-		for (Relationship res : node.getRelationships(OUTGOING)) {
+		
+		for (Relationship r : AnimoGraph.getResult(pf.getLastContext(), node)) {
+			pf.sendAnswer(r);
 			
-			if (res.getType().name().startsWith("RESULT")) {
-				//System.out.println("GET result = "+res);
-				
-				pf.sendAnswer(res);
-				
-				haveSome = true;
-			}
+			haveSome = true;
 		}
+		
+//		for (Relationship res : node.getRelationships(OUTGOING)) {
+//			
+//			if (res.getType().name().startsWith("RESULT")) {
+//				//System.out.println("GET result = "+res);
+//				
+//				pf.sendAnswer(res);
+//				
+//				haveSome = true;
+//			}
+//		}
 		return haveSome;
 	}
 	
