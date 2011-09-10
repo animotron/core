@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-json xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/json</have:type>
-    <have:name>JSON</have:name>
-    <have:extension>json</have:extension>
-</the:application-json>
+the application-json
+    (is   mime-type)
+    (is   application)
+    (have type      "application/json")
+    (have name      "JSON")
+    (have extension "json")

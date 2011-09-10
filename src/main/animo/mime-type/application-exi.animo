@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-exi xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/exi</have:type>
-    <have:name>Efficient XML Interchange</have:name>
-    <have:extension>exi</have:extension>
-</the:application-exi>
+the application-exi
+    (is   mime-type)
+    (is   application)
+    (have type      "application/exi")
+    (have name      "Efficient XML Interchange")
+    (have extension "exi")

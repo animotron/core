@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:image-jpeg xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:image/>
-    <have:type>image/jpeg</have:type>
-    <have:name>JPEG image</have:name>
-    <have:extension>jpg</have:extension>
-    <have:extension>jpeg</have:extension>
-</the:image-jpeg>
+the image-jpeg
+    (is   mime-type)
+    (is   image)
+    (have type      "image/jpeg")
+    (have name      "JPEG Image")
+    (have extension "jpg" "jpeg")

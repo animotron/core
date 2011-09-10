@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.sun.xml.impress xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.sun.xml.impress</have:type>
-    <have:name>OpenOffice.org Document</have:name>
-    <have:extension>sxi</have:extension>
-</the:application-vnd.sun.xml.impress>
+the application-vnd.sun.xml.impress
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.sun.xml.impress")
+    (have name      "OpenOffice.org Document")
+    (have extension "sxi")

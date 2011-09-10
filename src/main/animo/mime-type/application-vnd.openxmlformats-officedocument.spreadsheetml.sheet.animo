@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.openxmlformats-officedocument.spreadsheetml.sheet xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</have:type>
-    <have:name>OOXML Spreadsheet</have:name>
-    <have:extension>xlsx</have:extension>
-</the:application-vnd.openxmlformats-officedocument.spreadsheetml.sheet>
+the application-vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.oasis.openxmlformats-officedocument.spreadsheetml.sheet")
+    (have name      "OOXML Spreadsheet")
+    (have extension "xlsx")

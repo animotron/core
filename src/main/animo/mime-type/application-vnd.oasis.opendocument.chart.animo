@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.oasis.opendocument.chart xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.oasis.opendocument.chart</have:type>
-    <have:name>OpenOffice.org Diagram Chart</have:name>
-    <have:extension>odc</have:extension>
-</the:application-vnd.oasis.opendocument.chart>
+the application-vnd.oasis.opendocument.chart
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.oasis.opendocument.chart")
+    (have name      "OpenOffice.org Diagram Chart")
+    (have extension "odc")

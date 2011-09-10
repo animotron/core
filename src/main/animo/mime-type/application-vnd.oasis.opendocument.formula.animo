@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.oasis.opendocument.formula xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.oasis.opendocument.formula</have:type>
-    <have:name>OpenOffice.org Formula</have:name>
-    <have:extension>odf</have:extension>
-</the:application-vnd.oasis.opendocument.formula>
+the application-vnd.oasis.opendocument.formula
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.oasis.opendocument.formula")
+    (have name      "OpenOffice.org Formula")
+    (have extension "odf")

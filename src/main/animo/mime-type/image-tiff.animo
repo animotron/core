@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:image-tiff xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:image/>
-    <have:type>image/tiff</have:type>
-    <have:name>Tag Image File Format</have:name>
-    <have:extension>tif</have:extension>
-</the:image-tiff>
+the image-tiff
+    (is   mime-type)
+    (is   image)
+    (have type      "image/tiff")
+    (have name      "TIF Image")
+    (have extension "tif" "tiff")

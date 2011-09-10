@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-expath-xar xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/expath+xar</have:type>
-    <have:name>package XAR archive</have:name>
-    <have:extension>xar</have:extension>
-</the:application-expath-xar>
+the application-expath-xar
+    (is   mime-type)
+    (is   application)
+    (have type      "application/expath-xar")
+    (have name      "Package XAR Archive")
+    (have extension "xar")

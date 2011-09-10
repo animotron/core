@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.openxmlformats-officedocument.wordprocessingml.template xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.openxmlformats-officedocument.wordprocessingml.template</have:type>
-    <have:name>OOXML Text Template</have:name>
-    <have:extension>dotx</have:extension>
-</the:application-vnd.openxmlformats-officedocument.wordprocessingml.template>
+the application-vnd.openxmlformats-officedocument.wordprocessingml.template
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.oasis.openxmlformats-officedocument.wordprocessingml.template")
+    (have name      "OOXML Text Template")
+    (have extension "dotx")

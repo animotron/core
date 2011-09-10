@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-xml-xproc xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/xml+xproc</have:type>
-    <have:name>XML pipeline (XProc)</have:name>
-    <have:extension>xpl</have:extension>
-    <have:extension>xproc</have:extension>
-</the:application-xml-xproc>
+the application-xml-proc
+    (is   mime-type)
+    (is   application)
+    (have type      "application/xproc+xml")
+    (have name      "XML pipeline (XProc)")
+    (have extension "xpl" "xproc")

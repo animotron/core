@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.oasis.opendocument.text xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.oasis.opendocument.text</have:type>
-    <have:name>OpenOffice.org Text Document</have:name>
-    <have:extension>odt</have:extension>
-</the:application-vnd.oasis.opendocument.text>
+the application-vnd.oasis.opendocument.text
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.oasis.opendocument.text")
+    (have name      "OpenOffice.org Formatted Text Document")
+    (have extension "odt")

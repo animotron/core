@@ -1,13 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:text-plain xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:text/>
-    <have:type>text/plain</have:type>
-    <have:name>Plain text</have:name>
-    <have:extension>txt</have:extension>
-    <have:extension>text</have:extension>
-    <have:extension>java</have:extension>
-    <have:extension>dtd</have:extension>
-    <have:extension>rnc</have:extension>
-    <have:extension>properties</have:extension>
-</the:text-plain>
+the text-plain
+    (is   mime-type)
+    (is   text)
+    (have type      "text/plain")
+    (have name      "Plain Text")
+    (have extension "txt" "text")

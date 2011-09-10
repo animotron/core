@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-epub-zip xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/epub+zip</have:type>
-    <have:name>EPUB document</have:name>
-    <have:extension>epub</have:extension>
-</the:application-epub-zip>

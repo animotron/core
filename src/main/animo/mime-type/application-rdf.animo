@@ -1,9 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-rdf xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/rdf+xml</have:type>
-    <have:name>RDF document</have:name>
-    <have:extension>rdf</have:extension>
-    <have:extension>rdfs</have:extension>
-</the:application-rdf>
+the application-rdf
+    (is   mime-type)
+    (is   application)
+    (have type      "application/rdf")
+    (have name      "RDF Document")
+    (have extension "rdf" "rdfs")

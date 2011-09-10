@@ -1,31 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-xml xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/xml</have:type>
-    <have:name>XML document</have:name>
-    <have:extension>xml</have:extension>
-    <have:extension>xsd</have:extension>
-    <have:extension>rng</have:extension>
-    <have:extension>mods</have:extension>
-    <have:extension>xmp</have:extension>
-    <have:extension>xmi</have:extension>
-    <have:extension>xconf</have:extension>
-    <have:extension>xmap</have:extension>
-    <have:extension>xsp</have:extension>
-    <have:extension>wsdl</have:extension>
-    <have:extension>x3d</have:extension>
-    <have:extension>owl</have:extension>
-    <have:extension>dbx</have:extension>
-    <have:extension>tei</have:extension>
-    <have:extension>xces</have:extension>
-    <have:extension>ead</have:extension>
-    <have:extension>xqx</have:extension>
-    <have:extension>xform</have:extension>
-    <have:extension>gml</have:extension>
-    <have:extension>fo</have:extension>
-    <have:extension>nvdl</have:extension>
-    <have:extension>sch</have:extension>
-    <have:extension>imdi</have:extension>
-    <have:extension>cmdi</have:extension>
-</the:application-xml>
+the application-xml
+    (is   mime-type)
+    (is   application)
+    (have type      "application/xml")
+    (have name      "XML Document")
+    (have extension "xml")

@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.sun.xml.writer xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.sun.xml.writer</have:type>
-    <have:name>OpenOffice.org Document</have:name>
-    <have:extension>sxw</have:extension>
-</the:application-vnd.sun.xml.writer>
+the application-vnd.sun.xml.writer
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.sun.xml.writer")
+    (have name      "OpenOffice.org Document")
+    (have extension "sxw")

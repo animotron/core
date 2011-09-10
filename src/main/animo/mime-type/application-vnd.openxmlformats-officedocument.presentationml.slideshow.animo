@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-vnd.openxmlformats-officedocument.presentationml.slideshow xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/vnd.openxmlformats-officedocument.presentationml.slideshow</have:type>
-    <have:name>OOXML Presentation Slideshow</have:name>
-    <have:extension>ppsx</have:extension>
-</the:application-vnd.openxmlformats-officedocument.presentationml.slideshow>
+the application-vnd.openxmlformats-officedocument.presentationml.slideshow
+    (is   mime-type)
+    (is   application)
+    (have type      "application/vnd.oasis.openxmlformats-officedocument.presentationml.slideshow")
+    (have name      "OOXML Presentation Slideshow")
+    (have extension "ppsx")

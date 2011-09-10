@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:image-vnd.microsoft.icon xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:image/>
-    <have:type>image/vnd.microsoft.icon</have:type>
-    <have:name>Icon image</have:name>
-    <have:extension>ico</have:extension>
-</the:image-vnd.microsoft.icon>
+the image-vnd.microsoft.icon
+    (is   mime-type)
+    (is   image)
+    (have type      "image/vnd.microsoft.icon")
+    (have name      "Icon Image")
+    (have extension "ico")

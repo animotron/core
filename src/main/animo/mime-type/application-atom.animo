@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-atom xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/atom+xml</have:type>
-    <have:name>Atom Feed Document</have:name>
-    <have:extension>atom</have:extension>
-</the:application-atom>
+the application-atom
+    (is   mime-type)
+    (is   application)
+    (have type      "application/atom+xml")
+    (have name      "Atom Feed Document")
+    (have extension "atom")

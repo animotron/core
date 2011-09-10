@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-stx xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/stx+xml</have:type>
-    <have:name>STX document</have:name>
-    <have:extension>stx</have:extension>
-</the:application-stx>
+the application-stx
+    (is   mime-type)
+    (is   application)
+    (have type      "application/std+xml")
+    (have name      "STX Document")
+    (have extension "stx")

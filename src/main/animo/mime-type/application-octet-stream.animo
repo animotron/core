@@ -1,11 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-octet-stream xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/octet-stream</have:type>
-    <have:name>Generic binary stream</have:name>
-    <have:extension>jar</have:extension>
-    <have:extension>exe</have:extension>
-    <have:extension>dll</have:extension>
-    <have:extension>o</have:extension>
-</the:application-octet-stream>
+the application-octet-stream
+    (is   mime-type)
+    (is   application)
+    (have type      "application/octet-stream")
+    (have name      "Generic binary stream")

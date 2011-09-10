@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:text-css xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:text/>
-    <have:type>text/css</have:type>
-    <have:name>CSS stylesheet</have:name>
-    <have:extension>css</have:extension>
-</the:text-css>
+the text-css
+    (is   mime-type)
+    (is   text)
+    (have type      "text/css")
+    (have name      "CSS stylesheet")
+    (have extension "css")

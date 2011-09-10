@@ -1,8 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<the:application-oebps-package xmlns:is="animo/relation/is" xmlns:have="animo/relation/have" xmlns:the="animo/instance">
-    <is:mime-type/>
-    <is:application/>
-    <have:type>application/oebps-package+xml</have:type>
-    <have:name>Open Packaging Format (OPF) Document</have:name>
-    <have:extension>opf</have:extension>
-</the:application-oebps-package>
+the application-oebps-package
+    (is   mime-type)
+    (is   application)
+    (have type      "application/oebps-package+xml")
+    (have name      "Open Packaging Format (OPF) Document")
+    (have extension "opf")
