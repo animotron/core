@@ -116,24 +116,24 @@ public class BinaryBuilder extends AbstractExpression {
                         }
                     }
 
-//                    Expression prev = null;
+//                    Expression op = null;
 //                    for (String part : parts) {
 //                        if (!part.isEmpty()) {
-//                            if (prev == null) {
-//                                prev = new Expression(
+//                            if (op == null) {
+//                                op = new Expression(
 //                                        _(IS._, part)
 //                                );
 //                            } else {
-//                                prev = new Expression(
-//                                    _(IS._, THE._.name(prev)),
+//                                op = new Expression(
+//                                    _(IS._, THE._.name(op)),
 //                                    _(IS._, part)
 //                                );
 //                            }
 //                        }
 //                    }
 //
-//                    if (prev != null) {
-//                        start(IS._, THE._.name(prev));
+//                    if (op != null) {
+//                        start(IS._, THE._.name(op));
 //                        end();
 //                    }
 

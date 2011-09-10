@@ -18,6 +18,7 @@
  */
 package org.animotron;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.AnimoBuilder;
 import org.junit.Test;
 
@@ -30,9 +31,49 @@ import java.io.IOException;
  */
 public class ParserTest extends ATest {
 
+    private void test(String exp) throws AnimoException, IOException {
+        test(exp, exp);
+    }
+
+    private void test(String in, String out) throws AnimoException, IOException {
+        AnimoBuilder builder = new AnimoBuilder(in);
+        builder.build();
+        assertAnimo(builder.getRelationship(), out);
+    }
+
     @Test
-	public void test() throws IOException {
-        new AnimoBuilder("the a have b \"test is \\\"working as well\\\"\" bla-bla").build();
+	public void test_00() throws IOException, AnimoException {
+        test("the a");
+	}
+
+    @Test
+	public void test_01() throws IOException, AnimoException {
+        test("the a have b");
+	}
+
+    @Test
+	public void test_02() throws IOException, AnimoException {
+        test("the a have b \"test\"");
+	}
+
+    @Test
+	public void test_03() throws IOException, AnimoException {
+        test("the a (have b) (have c)");
+	}
+
+    @Test
+	public void test_04() throws IOException, AnimoException {
+        test("the a (have b (any x) (all y)) (have c)");
+	}
+
+    @Test
+	public void test_05() throws IOException, AnimoException {
+        test("the a b");
+	}
+
+    @Test
+	public void test_06() throws IOException, AnimoException {
+        test("the a the b", "the a b");
 	}
 
 }

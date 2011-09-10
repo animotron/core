@@ -18,7 +18,14 @@
  */
 package org.animotron.graph.builder;
 
+import org.animotron.exception.AnimoException;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Operator;
+
 import java.io.*;
+import java.util.Stack;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -28,6 +35,9 @@ import java.io.*;
 public class AnimoBuilder extends GraphBuilder {
 
     private Reader reader;
+    private StringBuilder s = new StringBuilder();
+    private int level = 0;
+    private Stack<Integer> stack = new Stack<Integer>();
 
     public AnimoBuilder (InputStream stream) {
         reader = new InputStreamReader(stream);
@@ -37,74 +47,105 @@ public class AnimoBuilder extends GraphBuilder {
         reader = new StringReader(str);
     }
 
-    public void build() throws IOException {
+    public void build() throws IOException, AnimoException {
 
         int len;
         char[] buff = new char[4 * 1024];
-        StringBuilder s = new StringBuilder();
 
         boolean text = false;
         char prev = '\0';
 
+        startGraph();
+        startList();
+
         while ((len=reader.read(buff))>0) {
-            for (int i = 0; i < len; i++){
+            for (int i = 0; i < len; i++) {
                 char ch = buff[i];
                 if (ch == '\"') {
-                    if (text && prev == '\\') {
+                    if (!text) {
+                        newToken(s, text);
+                        text = true;
+                    } else if (prev == '\\') {
                         s.append(ch);
+                    } else {
+                        newToken(s, text);
+                        text = false;
                     }
-                    text = text ? prev == '\\' : true;
                 } else {
                     if (text) {
-                        if (ch != '\\') {
+                        if (prev == '\\' || ch != '\\') {
                             s.append(ch);
                         }
                     } else {
                         switch (ch) {
                             case ' '  :
                             case '\t' :
-                            case '\n' :
-                                if (s.length() > 0) {
-                                    token(s, text);
-                                    s = new StringBuilder();
-                                }
-                                break;
-                            case '('  :
-                                startList();
-                                if (s.length() > 0) {
-                                    token(s, text);
-                                    s = new StringBuilder();
-                                }
-                                break;
-                            case ')'  :
-                                if (s.length() > 0) {
-                                    token(s, text);
-                                    s = new StringBuilder();
-                                }
-                                endList();
-                                break;
+                            case '\n' : newToken(s, text);
+                                        break;
+                            case '('  : startList();
+                                        newToken(s, text);
+                                        break;
+                            case ')'  : newToken(s, text);
+                                        endList();
+                                        break;
                             default   : s.append(ch);
                         }
                     }
                 }
-                prev = ch;
+                prev = prev == '\\' ? '\0' : ch;
             }
-            if (s.length() > 0) {
-                token(s, text);
-            }
+            lastToken(s, text);
         }
+
+        endList();
+        endGraph();
 
     }
 
-    private void token(StringBuilder s, boolean text) {
-        System.out.print(s);
-        System.out.println();
+    private void newToken(StringBuilder s, boolean text) {
+        if (s.length() > 0) {
+            token(s.toString(), text);
+            this.s = new StringBuilder();
+        }
+    }
+
+    private void lastToken(StringBuilder s, boolean text) {
+        if (s.length() > 0) {
+            token(s.toString(), text);
+        }
+    }
+
+    Statement op = null;
+    private void token(String token, boolean text) {
+        if (text) {
+            start(token);
+            end();
+            op = null;
+        } else {
+            if (op instanceof Operator) {
+                start(op, token);
+                op = null;
+                level++;
+            } else {
+                op = Statements.name(token);
+                if (!(op instanceof Operator)) {
+                    start(AN._, token);
+                    level ++;
+                }
+            }
+        }
     }
 
     private void startList() {
+        stack.push(level);
+        level = 0;
     }
 
     private void endList() {
+        for (int i = 0; i < level; i++) {
+            end();
+        }
+        level = stack.pop();
     }
 
 }
