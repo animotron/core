@@ -18,12 +18,9 @@
  */
 package org.animotron.graph.builder;
 
-import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.exception.AnimoException;
 import org.neo4j.graphdb.Relationship;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.*;
 
 /**
@@ -33,14 +30,8 @@ import java.io.*;
  */
 public class CommonBuilder {
 	
-	private final static WstxInputFactory INPUT_FACTORY = new WstxInputFactory();
-	
-	private static XMLStreamReader createXMLStreamReader(InputStream stream) throws XMLStreamException {
-		return INPUT_FACTORY.createXMLStreamReader(stream);
-	}
-	
-	public static Relationship build(String data) throws XMLStreamException {
-		return build(new ByteArrayInputStream(data.getBytes()));
+	public static Relationship build(String data) throws AnimoException, IOException {
+        return storeAnimo(new AnimoBuilder(data));
 	}
 	
     public static Relationship build(File file) throws IOException, AnimoException {
@@ -51,29 +42,22 @@ public class CommonBuilder {
         return build(new FileInputStream(file), path);
     }
 
-	public static Relationship build(InputStream stream) throws XMLStreamException {
-		return storeAnimo(stream);
+	public static Relationship build(InputStream stream) throws AnimoException, IOException {
+		return storeAnimo(new AnimoBuilder(stream));
 	}
 	
 	public static Relationship build(InputStream stream, String path) throws IOException, AnimoException {
-		try {
-			return 
-				isAnimo(path) ? storeAnimo(stream) : storeBinary(stream, path);
-			
-		} catch (XMLStreamException e) {
-			//XXX: log this
-			e.printStackTrace();
-			return 
-				storeBinary(stream, path);
-		}
-	}
+        return  isAnimo(path) ? storeAnimo(new AnimoBuilder(stream)) : storeBinary(stream, path);
+
+    }
 	
 	private static boolean isAnimo(String path) {
 		return path.endsWith(".animo");
 	}
 	
-	private static Relationship storeAnimo(InputStream stream) throws XMLStreamException {
-		return null; //new AnimoGraphBuilder(stream).build();
+	private static Relationship storeAnimo(AnimoBuilder builder) throws AnimoException, IOException {
+        builder.build();
+		return builder.getRelationship();
 	}
 
 	private static Relationship storeBinary(InputStream stream, String path) throws IOException, AnimoException {
