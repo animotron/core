@@ -24,6 +24,8 @@ import org.animotron.Executor;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoPath;
 import org.animotron.graph.GraphOperation;
+import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -43,6 +45,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -230,6 +233,23 @@ public class GET extends Operator implements Evaluable, Query {
 					if (st instanceof AN) {
 						Relationship t = AN._.getREF(r);
 						newREFs.add(t);
+					} else if (st instanceof Reference) {
+						try {
+							PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
+							
+							for (Object rr : in) {
+								if (rr instanceof Relationship) {
+									newREFs.add((Relationship) rr);
+									
+								} else
+									System.out.println("UNHANDLED "+rr);
+								
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
 					}
 				}
 
