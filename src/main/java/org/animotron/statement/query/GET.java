@@ -632,7 +632,7 @@ public class GET extends Operator implements Evaluable, Query {
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Node target, String type) {
-			System.out.println(path);
+			//System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
