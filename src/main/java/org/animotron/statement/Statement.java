@@ -30,14 +30,12 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public interface Statement {
 	
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound;
+	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) throws ENotFound;
 	
     public String name();
 
     public RelationshipType relationshipType();
 
-    public String name(Relationship r);
-
-	public String value(Relationship r);
+    public String reference(Relationship r);
 
 }

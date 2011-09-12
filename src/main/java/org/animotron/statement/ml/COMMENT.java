@@ -19,13 +19,14 @@
 package org.animotron.statement.ml;
 
 /**
- * Instruction 'ml:comment'.
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class COMMENT extends Value {
+public class COMMENT extends MLOperator {
 	
 	public static final COMMENT _ = new COMMENT();
 	
-	private COMMENT() { super("comment"); }
+	private COMMENT() { super("!--"); }
+
 }

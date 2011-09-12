@@ -40,8 +40,8 @@ public abstract class Relation extends AbstractStatement {
 	}
 
 	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
-		Node target = THE._.getOrCreate(name, ignoreNotFound).getEndNode();
+	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) throws ENotFound {
+		Node target = THE._.getOrCreate(reference, ignoreNotFound).getEndNode();
 		if (!parent.equals(target)) {
 			Relationship r = parent.createRelationshipTo(target, relationshipType());
 			order(r, order);
@@ -51,7 +51,7 @@ public abstract class Relation extends AbstractStatement {
 	}
 	
 	@Override
-	public String name(Relationship r){
+	public String reference(Relationship r){
 		return NAME.get(r.getEndNode());
 	}
 	

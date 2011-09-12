@@ -94,7 +94,7 @@ public class GET extends Operator implements Evaluable, Query {
 			return null;
 		
 		for (Relationship p : pflow.relationships()) {
-			if (p.getType().name().equals(HAVE._.rType) && _.name(p).equals(name)) {
+			if (p.getType().name().equals(HAVE._.rType) && _.reference(p).equals(name)) {
 				return p;
 			}
 		}
@@ -108,9 +108,9 @@ public class GET extends Operator implements Evaluable, Query {
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
-			final String name = name(op);
+			final String name = reference(op);
 			
-			System.out.println("GET '"+name(op)+"'");
+			System.out.println("GET '"+ reference(op)+"'");
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
@@ -126,7 +126,7 @@ public class GET extends Operator implements Evaluable, Query {
 							return;
 						}
 
-//						Set<Relationship> res = getByTraversal(underHAVE, op, context, name);
+//						Set<Relationship> res = getByTraversal(underHAVE, op, context, reference);
 //						if (!res.isEmpty()) {
 //							for (Relationship r : res)
 //								pf.sendAnswer(r);
@@ -158,7 +158,7 @@ public class GET extends Operator implements Evaluable, Query {
 //							in = Evaluator._.execute(pf, r.getEndNode());
 //						
 //							for (Object n : in) {
-//								r = get(((Relationship)n).getEndNode(), name);
+//								r = get(((Relationship)n).getEndNode(), reference);
 //								
 //								if (r != null)
 //									pf.sendAnswer(createResult(node, r));
@@ -192,7 +192,7 @@ public class GET extends Operator implements Evaluable, Query {
 						}
 					}
 					
-//					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), name); //get(context.getEndNode(), name);
+//					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), reference); //get(context.getEndNode(), reference);
 //					if (!res.isEmpty())
 //						for (Relationship r : res)
 //							pf.sendAnswer(r);
@@ -333,7 +333,7 @@ public class GET extends Operator implements Evaluable, Query {
 			} else if (st instanceof IC) {
 				System.out.print("GET IC -> "+tdR);
 				
-				if (name.equals(name(tdR))) {
+				if (name.equals(reference(tdR))) {
 					System.out.println(" MATCH");
 					
 					//store
@@ -436,11 +436,11 @@ public class GET extends Operator implements Evaluable, Query {
 								return INCLUDE_AND_PRUNE;
 							} 
 
-//							String rType = r.getType().name();
+//							String rType = r.getType().reference();
 							
 							//second must be REF
 							// or it can be IS ! so, REF and HAVE after IS
-//							if (path.length() == 1 && !(rType.equals(RelationshipTypes.REF.name()) || rType.equals(IS._.rType)) ) {
+//							if (path.length() == 1 && !(rType.equals(RelationshipTypes.REF.reference()) || rType.equals(IS._.rType)) ) {
 //								return EXCLUDE_AND_PRUNE;
 //							} else if (path.length() == 2 && !(rType.equals(HAVE._.rType) || rType.equals(IC._.rType))) {
 //								return EXCLUDE_AND_PRUNE;
@@ -525,7 +525,7 @@ public class GET extends Operator implements Evaluable, Query {
 
 					if (type.equals(USE._.rType)) {
 						thisDeep += 2;
-					} else  if (type.equals(IS._.rType)) { //type.equals(REF.name()) ||
+					} else  if (type.equals(IS._.rType)) { //type.equals(REF.reference()) ||
 						if (!REFcase) {
 							REFcase = true;
 							thisDeep++;
@@ -548,7 +548,7 @@ public class GET extends Operator implements Evaluable, Query {
 				lastNode = r.getStartNode();
 				
 				if (type.equals(IS._.relationshipType().name())) {
-					if (name.equals(IS._.name(r))) {
+					if (name.equals(IS._.reference(r))) {
 						foundIS = true;
 						continue;
 					}
@@ -560,7 +560,7 @@ public class GET extends Operator implements Evaluable, Query {
 						continue;
 					}
 					
-				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
+				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.reference(r)) || foundIS)) {
 					//ignore empty have 
 					if (!Utils.haveContext(r.getEndNode()))
 						break;
@@ -573,7 +573,7 @@ public class GET extends Operator implements Evaluable, Query {
 					thisDeep++;
 					REFcase = false;
 				
-				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
+				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.reference(r)) || foundIS)) {
 					if (foundIS) {
 						thisResult = ICresult(context, r);
 						thisDeep++;

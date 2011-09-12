@@ -49,7 +49,7 @@ public class CurrentSite_Test extends ATest {
         new Expression (
             _(THE._, "current-site",
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
+                    _(WITH._, "server-reference", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
@@ -63,7 +63,7 @@ public class CurrentSite_Test extends ATest {
         new Expression (
             _(THE._, "localhost-site",
                 _(IS._, "site"),
-                _(HAVE._, "server-name", text("localhost"))
+                _(HAVE._, "server-reference", text("localhost"))
             )
         );
 

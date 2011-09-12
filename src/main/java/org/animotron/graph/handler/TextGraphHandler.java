@@ -42,7 +42,7 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         if (statement instanceof TEXT) {
-            write(statement.value(r));
+            write(statement.reference(r));
         }
     }
 

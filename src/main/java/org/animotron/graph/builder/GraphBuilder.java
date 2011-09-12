@@ -4,7 +4,7 @@
  *
  *  This program is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public License
- *  as published by the Free Software Foundation; either version 3
+ *  as published by the Free Software Foundation; either version 2
  *  of the License, or (at your option) any later version.
  *
  *  This program is distributed in the hope that it will be useful,
@@ -14,7 +14,7 @@
  *
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02129, USA.
  */
 package org.animotron.graph.builder;
 
@@ -40,7 +40,6 @@ import java.util.Stack;
 import java.util.StringTokenizer;
 
 import static org.animotron.Properties.HASH;
-import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.*;
 
 /**
@@ -54,8 +53,8 @@ import static org.animotron.graph.AnimoGraph.*;
  * startGraph()
  * endGraph()
  * 
- * start(String prefix, String ns, String name, String value)
- * start(Statement statement, String prefix, String ns, String name, String value)
+ * start(String prefix, String ns, String reference, String value)
+ * start(Statement statement, String prefix, String ns, String reference, String value)
  * end()
  * 
  * getRelationship()
@@ -119,7 +118,7 @@ public abstract class GraphBuilder {
 				build(item, i++);
 			}
 
-            the = (Relationship) flow.get(0)[4];
+            the = (Relationship) flow.get(0)[3];
 
             if (o != null) o.execute();
 
@@ -138,14 +137,10 @@ public abstract class GraphBuilder {
 	}
 
     final protected void start(String value) {
-        start(TEXT._, null, value);
+        start(TEXT._, value);
     }
 
-    final protected void start(Statement statement, String name) {
-        start(statement, name, null);
-    }
-
-	final protected void start(Statement statement, String name, String value) {
+	final protected void start(Statement statement, String reference) {
 		
         if (flow.isEmpty() && !(statement instanceof THE)) {
             start(THE._, null);
@@ -155,7 +150,7 @@ public abstract class GraphBuilder {
 		
 		if (!statements.empty()) {
 			if (statement instanceof THE) {
-				start(AN._, name);
+				start(AN._, reference);
 				end();
 			} else {
 				parent = statements.peek();
@@ -164,26 +159,18 @@ public abstract class GraphBuilder {
 		
 		MessageDigest md = MessageDigester.md();
 		
-        if (name != null)
-            md.update(name.getBytes());
+        if (reference != null)
+            md.update(reference.getBytes());
         md.update(statement.name().getBytes());
 		
-		Node val = null;
-		if (value != null) {
-			byte[] bytes = value.getBytes();
-			val = value(value, bytes);
-			md.update(bytes);
-		}
-		
-		Object[] item = {	
+		Object[] item = {
 				statement,	// 0  statement
-                name,       // 1 name
-				val, 		// 2  value
-				md, 		// 3  message digest
-				null,	 	// 4  current relationship
-				null,		// 5  current node
-				parent, 	// 6  parent item
-				false,		// 7  builded
+                reference,       // 1  reference or value
+				md, 		// 2  message digest
+				null,	 	// 3  current relationship
+				null,		// 4  current node
+				parent, 	// 5  parent item
+				false,		// 6  done
 			};
 		
 		statements.push(item);
@@ -192,12 +179,12 @@ public abstract class GraphBuilder {
 	
 	final protected void end() {
 		Object[] current = statements.pop();
-		byte[] hash = ((MessageDigest) current[3]).digest();
-		Object[] parent = (Object[]) current[6];
+		byte[] hash = ((MessageDigest) current[2]).digest();
+		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
-			((MessageDigest) (parent[3])).update(hash);
+			((MessageDigest) (parent[2])).update(hash);
 		}
-		current[3] = hash;
+		current[2] = hash;
 	}
 	
 	final protected String removeWS(String value) {
@@ -223,10 +210,10 @@ public abstract class GraphBuilder {
 	
 	private void build(Object[] item, int order) throws AnimoException {
 
-		Object[] p =  (Object[]) item[6];
+		Object[] p =  (Object[]) item[5];
 		if (p != null) {
-			if ((Boolean) p[7]) {
-				item[7] = true; 
+			if ((Boolean) p[6]) {
+				item[6] = true; 
 				return;
 			}
 		}
@@ -248,7 +235,7 @@ public abstract class GraphBuilder {
                         catcher.renew(r);
                         HASH.set(r, hash);
                     } else {
-                        item[7] = true;
+                        item[6] = true;
                     }
                 } else {
                     catcher.creative(r);
@@ -259,10 +246,10 @@ public abstract class GraphBuilder {
                 catcher.creative(r);
             }
         } else {
-            Node parent = (Node) p[5];
+            Node parent = (Node) p[4];
             if (parent == null)
             	//"Internal error: parent can not be null."
-                throw new AnimoException((Relationship)item[4]);
+                throw new AnimoException((Relationship)item[3]);
 
             if (!(statement instanceof Relation)) {
                 String hash = hash(item);
@@ -273,14 +260,14 @@ public abstract class GraphBuilder {
                 } else {
                     r = parent.createRelationshipTo(node, statement.relationshipType());
                     order(r, order);
-                    item[7] = true;
+                    item[6] = true;
                 }
             } else {
                 r = build(statement, parent, item, order);
             }
         }
-        item[4] = r;
-        item[5] = r.getEndNode();
+        item[3] = r;
+        item[4] = r.getEndNode();
 
 	}
 	
@@ -289,28 +276,11 @@ public abstract class GraphBuilder {
 	}
 	
 	private String hash(Object[] item) {
-		return hash((byte[]) item[3]);
-	}
-	
-	private Node value(String value, byte[] bytes) {
-		try{
-			MessageDigest md = MessageDigester.md();
-			md.update(bytes);
-			String hash = hash(md.digest());
-			Node cache = getCache(hash);
-			if (cache == null) {
-				cache = createCache(hash);
-				VALUE.set(cache, value);
-			}
-			return cache;
-		} catch (Exception e){
-			fail(e);
-			return null;
-		}
+		return hash((byte[]) item[2]);
 	}
 	
 	private Relationship build(Statement statement, Node parent, Object[] item, int order) throws ENotFound {
-		return statement.build(parent, (String) item[1], (Node) item[2], order, ignoreNotFound);
+		return statement.build(parent, (String) item[1], order, ignoreNotFound);
 	}
 	
 	protected void fail(Exception e){

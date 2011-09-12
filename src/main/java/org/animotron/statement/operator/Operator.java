@@ -44,16 +44,16 @@ public abstract class Operator extends AbstractStatement {
     }
 
     @Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) throws ENotFound {
+	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) throws ENotFound {
 		Node child = createNode();
 		Relationship r = parent.createRelationshipTo(child, relationshipType());
 		order(r, order);
-		child.createRelationshipTo(THE._.getOrCreate(name, ignoreNotFound).getEndNode(), REF);
+		child.createRelationshipTo(THE._.getOrCreate(reference, ignoreNotFound).getEndNode(), REF);
 		return r;
 	}
 
 	@Override
-	public String name(Relationship r) {
+	public String reference(Relationship r) {
 		Node node = r.getEndNode().getSingleRelationship(REF, OUTGOING).getEndNode(); 
 		return NAME.get(node);
 	}

@@ -40,7 +40,7 @@ public class IntervalNode extends TimestampNode {
 	public IntervalNode(GraphDatabaseService db, String name) {
 		super(db, name);
 		
-		interval = null; //new Interval(name);
+		interval = null; //new Interval(reference);
 		
 		//XXX: get sub-nodes somehow!
 	}

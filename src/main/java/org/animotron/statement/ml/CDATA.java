@@ -19,13 +19,14 @@
 package org.animotron.statement.ml;
 
 /**
- * Instruction 'ml:cdata'.
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class CDATA extends Value {
+public class CDATA extends MLOperator {
 	
 	public static final CDATA _ = new CDATA();
 	
-	private CDATA() { super("cdata"); }
+	private CDATA() { super("[!CDATA["); }
+
 }

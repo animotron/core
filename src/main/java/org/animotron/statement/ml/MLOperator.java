@@ -23,30 +23,24 @@ import org.animotron.statement.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.order;
 
 /**
- * 
+ *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public abstract class Value extends AbstractStatement implements Result {
+public abstract class MLOperator extends AbstractStatement implements Result {
 	
-	public Value(String name) {
+	public MLOperator(String name) {
 		super(name);
 	}
 
 	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) {
-		Relationship r = parent.createRelationshipTo(value, relationshipType());
+	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) {
+		Relationship r = parent.createRelationshipTo(createNode(), relationshipType());
 		order(r, order);
 		return r;
 	}
-	
-    @Override
-    public String value(Relationship r){
-        return VALUE.get(r.getEndNode());
-    }
-
 	
 }

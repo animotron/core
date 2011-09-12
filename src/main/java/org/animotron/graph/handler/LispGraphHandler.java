@@ -50,17 +50,17 @@ public class LispGraphHandler extends AbstractTextGraphHandler {
         }
         if (statement instanceof TEXT) {
             write("\"");
-            write(statement.value(r));
+            write(statement.reference(r));
             write("\"");
         } else {
             if (!(statement instanceof AN)) {
                 write(statement.name());
-                String name = statement.name(r);
+                String name = statement.reference(r);
                 if (name != null) {
                     write(" ");
                 }
             }
-            write(statement.name(r));
+            write(statement.reference(r));
         }
     }
 

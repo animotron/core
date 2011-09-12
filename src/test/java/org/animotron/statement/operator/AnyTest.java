@@ -103,7 +103,7 @@ public class AnyTest extends ATest {
 				_(IS._, "mime-type"),
 				_(IS._, "text"),
 				_(HAVE._, "type", text("text/plain")),
-				_(HAVE._, "name", text("Plain text")),
+				_(HAVE._, "reference", text("Plain text")),
 				_(HAVE._, "extension", text("txt"))
 				)
 		);
@@ -113,7 +113,7 @@ public class AnyTest extends ATest {
 					_(IS._, "mime-type"),
 					_(IS._, "application"),
 					_(HAVE._, "type", text("application/atom+xml")),
-					_(HAVE._, "name", text("Atom Feed Document")),
+					_(HAVE._, "reference", text("Atom Feed Document")),
 					_(HAVE._, "extension", text("atom"))
 					)
 			);
@@ -123,6 +123,6 @@ public class AnyTest extends ATest {
 				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 			)
 		);
-        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have name \"Plain text\") (have extension \"txt\")");
+        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have reference \"Plain text\") (have extension \"txt\")");
 	}
 }

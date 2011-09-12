@@ -60,7 +60,7 @@ public class Utils {
 		
 //		for (Relationship res : node.getRelationships(OUTGOING)) {
 //			
-//			if (res.getType().name().startsWith("RESULT")) {
+//			if (res.getType().reference().startsWith("RESULT")) {
 //				//System.out.println("GET result = "+res);
 //				
 //				pf.sendAnswer(res);

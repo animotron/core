@@ -106,10 +106,10 @@ public abstract class Manipulator {
             						(Long)msg.getProperty(RID.name())
             					);
                             try {
-                                s = Statements.name(THE._.name(msg));
+                                s = Statements.name(THE._.reference(msg));
                             } catch (Exception e){}
             			} else if (REF.equals(msg)){
-                            s = Statements.name(THE._.name(msg));
+                            s = Statements.name(THE._.reference(msg));
                         }
 
                         if (s instanceof Evaluable) {

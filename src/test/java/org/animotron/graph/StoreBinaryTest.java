@@ -70,7 +70,7 @@ public class StoreBinaryTest extends ATest {
         AnimoSerializer.serialize(r, System.out);
 
         Expression s = new Expression(
-          _(AN._, THE._.name(r))
+          _(AN._, THE._.reference(r))
         );
         assertBinary(s, TXT);
         
