@@ -91,9 +91,21 @@ public class Expression extends AbstractExpression {
         return _(COMMENT._, text(value));
 	}
 
-	public static Object[] cdata(String value) {
+    public static Object[] cdata(String value) {
         return _(CDATA._, text(value));
-	}
+    }
+
+    public static Object[] pi(String value) {
+        return _(PI._, text(value));
+    }
+
+    public static Object[] namespace(String name, String value) {
+        return _(NS._, text(name), text(value));
+    }
+
+    public static Object[] namespace(String value) {
+        return _(NS._, text(value));
+    }
 
     public static Object[] text(String value) {
         return _(TEXT._, value);
