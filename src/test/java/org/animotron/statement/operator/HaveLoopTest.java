@@ -24,6 +24,7 @@ import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.Expression._;
@@ -184,6 +185,7 @@ public class HaveLoopTest extends ATest {
     }
 
     @Test
+    @Ignore //because context for get B under the C unclear
     public void loop_get_test1() throws Exception {
 
         new Expression(
@@ -211,6 +213,7 @@ public class HaveLoopTest extends ATest {
     }
 
     @Test
+    @Ignore //because context for get B under the C unclear
     public void loop_get_test2() throws Exception {
 
         new Expression(
@@ -244,6 +247,7 @@ public class HaveLoopTest extends ATest {
     }
 
     @Test
+    @Ignore //because context for get B under the C unclear
     public void loop_get_test3() throws Exception {
 
         new Expression(
