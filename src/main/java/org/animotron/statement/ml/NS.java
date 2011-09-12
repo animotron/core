@@ -18,29 +18,15 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.Result;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
-
 /**
- *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public abstract class MLOperator extends Operator implements Result {
-	
-	public MLOperator(String name) {
-		super(name);
-	}
+public class NS extends MLOperator implements Prefix {
 
-	@Override
-	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) {
-		Relationship r = parent.createRelationshipTo(createNode(), relationshipType());
-		order(r, order);
-		return r;
-	}
+	public static final NS _ = new NS();
+
+	private NS() { super("@:"); }
 	
 }
