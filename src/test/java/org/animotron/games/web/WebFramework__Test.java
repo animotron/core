@@ -30,7 +30,6 @@ import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -44,7 +43,6 @@ import static org.animotron.Expression.*;
  */
 public class WebFramework__Test extends ATest {
 
-	@Ignore
 	@Test
 	public void test() throws IOException, AnimoException {
     	new Expression(
@@ -146,21 +144,22 @@ public class WebFramework__Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the s " +
-                                "the current-service " +
-                                    "the root-service " +
-                                        "(is service) " +
-                                        "(haver uti \"/\") " +
-                                        "(the html " +
-                                            "(is composition) " +
-                                            "(have content " +
-                                                "element html " +
-                                                    "(the html-head element head element title have title \"Welcome to Animotron\") " +
-                                                    "(element body the theme-concrete-root-layout " +
-                                                        "(is root-layout) " +
-                                                        "(have content " +
-                                                            "(element div (attribute id \"title\") (have title \"Welcom to Animotron\"))" +
-                                                            "(element div (attribute id \"content\") (have title \"Owervie\"))))))");
+        //XXX: check animo structure, that is wrong now
+//        assertAnimoResult(s,  "the s " +
+//                                "the current-service " +
+//                                    "the root-service " +
+//                                        "(is service) " +
+//                                        "(have uri \"/\") " +
+//                                        "(the html " +
+//                                            "(is composition) " +
+//                                            "(have content " +
+//                                                "element html " +
+//                                                    "(the html-head element head element title have title \"Welcome to Animotron\") " +
+//                                                    "(element body the theme-concrete-root-layout " +
+//                                                        "(is root-layout) " +
+//                                                        "(have content " +
+//                                                            "(element div (attribute id \"title\") (have title \"Welcom to Animotron\"))" +
+//                                                            "(element div (attribute id \"content\") (have title \"Owervie\"))))))");
 
         assertXMLResult(s,  "<html>" +
                                 "<head>" +
