@@ -33,6 +33,7 @@ import java.io.IOException;
 public class StAXGraphHandler implements GraphHandler {
 	
 	private XMLStreamWriter writer;
+	private long level = 0;
 	
 	public StAXGraphHandler(XMLStreamWriter writer) {
 		this.writer = writer;
@@ -41,29 +42,32 @@ public class StAXGraphHandler implements GraphHandler {
 	@Override
 	public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
 		try {
-			if (statement instanceof ATTRIBUTE) {
-				String prefix = null;//statement.prefix(r);
-				String ns = null;//statement.namespace(r);
-				String name = statement.name(r);
-				String value = statement.value(r);
-				if (prefix == null && ns == null) {
-					writer.writeAttribute(name, value);
-				} else if (prefix == null) {
-					writer.writeAttribute(ns, name, value);
-				} else {
-					writer.writeAttribute(prefix, ns, name, value);
+			if (level > 0) {
+				if (statement instanceof ATTRIBUTE) {
+					String prefix = null;//statement.prefix(r);
+					String ns = null;//statement.namespace(r);
+					String name = statement.name(r);
+					String value = statement.value(r);
+					if (prefix == null && ns == null) {
+						writer.writeAttribute(name, value);
+					} else if (prefix == null) {
+						writer.writeAttribute(ns, name, value);
+					} else {
+						writer.writeAttribute(prefix, ns, name, value);
+					}
+					
+				} else if (statement instanceof TEXT) {
+					writer.writeCharacters(statement.value(r));
+					
+				} else if (statement instanceof COMMENT){
+					writer.writeComment(statement.value(r));
+					
+				} else if (statement instanceof CDATA){
+					writer.writeCData(statement.value(r));
 				}
+			}
 				
-			} else if (statement instanceof TEXT) {
-				writer.writeCharacters(statement.value(r));
-				
-			} else if (statement instanceof COMMENT){
-				writer.writeComment(statement.value(r));
-				
-			} else if (statement instanceof CDATA){
-				writer.writeCData(statement.value(r));
-				
-			} else if (statement instanceof ELEMENT) {
+			if (statement instanceof ELEMENT) {
 				String prefix = null;//statement.prefix(r);
 				String ns = null;//statement.namespace(r);
 				String name = statement.name(r);
@@ -74,7 +78,7 @@ public class StAXGraphHandler implements GraphHandler {
 				} else {
 					writer.writeStartElement(prefix, name, ns);
 				}
-				
+				level++;
 			}
 			
 		} catch (XMLStreamException e) {
@@ -87,6 +91,7 @@ public class StAXGraphHandler implements GraphHandler {
 		try {
 			if (statement instanceof ELEMENT) {
 				writer.writeEndElement();
+				level--;
 			}
 		} catch (XMLStreamException e) {
             throw new IOException(e);
@@ -97,6 +102,7 @@ public class StAXGraphHandler implements GraphHandler {
 	public void startGraph() throws IOException {
 		try {
 			writer.writeStartDocument();
+			level = 0;
 		} catch (XMLStreamException e) {
             throw new IOException(e);
 		}
