@@ -19,7 +19,6 @@
 package org.animotron.statement.compare;
 
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.neo4j.graphdb.Node;

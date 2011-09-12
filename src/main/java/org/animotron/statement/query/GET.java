@@ -66,22 +66,26 @@ public class GET extends Operator implements Evaluable, Query {
 	
 	private GET() { super("get"); }
 
-	private static TraversalDescription td_eval = 
-		Traversal.description().
-			breadthFirst().
-			relationships(HAVE._.relationshipType(), OUTGOING);
-			//.evaluator(Evaluators.excludeStartPosition());
+	TraversalDescription td = Traversal.description().
+			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
 
-	private static TraversalDescription td_eval_ic = 
+	private static TraversalDescription td_eval_IS = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS._.relationshipType(), OUTGOING).
-			relationships(IC._.relationshipType(), OUTGOING);
+			relationships(IS._.relationshipType(), OUTGOING);
+			//relationships(IC._.relationshipType(), OUTGOING);
 	
+	private static TraversalDescription td_eval_ic = 
+			Traversal.description().
+				breadthFirst().
+				relationships(IS._.relationshipType(), OUTGOING).
+				relationships(IC._.relationshipType(), OUTGOING);
+
 	public OnQuestion onCalcQuestion() {
 		return question;
 	}
 	
+	//in-use by WITH
 	public static Relationship getHaveAtPFlow(PFlow pf, String name) {
 		final Path pflow = pf.getFlowPath();
 		
@@ -104,10 +108,7 @@ public class GET extends Operator implements Evaluable, Query {
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
-			
 			final String name = name(op);
-			
-			final Relationship underHAVE = getHaveAtPFlow(pf, name);
 			
 			System.out.println("GET '"+name(op)+"'");
 
@@ -270,7 +271,6 @@ public class GET extends Operator implements Evaluable, Query {
 	}
 	
 	private Relationship searchForHAVE(final Relationship ref, final String name) {
-		Relationship prevTHE = null;
 		
 		//search for local 'HAVE'
 		Relationship have = getByHave(ref.getStartNode(), name);
@@ -281,39 +281,22 @@ public class GET extends Operator implements Evaluable, Query {
 		if (have != null) return have;
 
 		//search 'IC' by 'IS' topology
-		for (Relationship tdR : td_eval_ic.traverse(ref.getEndNode()).relationships()) {
-			System.out.println(" "+tdR);
-			Statement st = Statements.relationshipType(tdR.getType());
-			if (st instanceof IS) {
-				System.out.println("GET IC -> IS "+tdR);
-				if (prevTHE != null) {
-					//search for have
-					have = getByHave(prevTHE.getEndNode(), name);
-					if (have != null) return have;
-				}
-				prevTHE = tdR;
-				
-			} else if (st instanceof IC) {
-				System.out.print("GET IC -> "+tdR);
-				
-				if (name.equals(name(tdR))) {
-					System.out.println(" MATCH");
-					
-					return tdR;
-				}
-				System.out.println();
-			}
-		}
-		
-		if (prevTHE != null) {
+		for (Relationship tdR : td_eval_IS.traverse(ref.getEndNode()).relationships()) {
+
+			System.out.println("GET IC -> IS "+tdR);
+			
+			Relationship r = getByIC(tdR.getEndNode(), name);
+			if (r != null) return r;
+			
 			//search for have
-			have = getByHave(prevTHE.getEndNode(), name);
+			have = getByHave(tdR.getEndNode(), name);
 			if (have != null) return have;
 		}
-
+		
 		return null;
 	}
 
+	//in-use by SELF
 	public Relationship get(Node context, final String name) {
 		
 		System.out.println("GET get context = "+context);
@@ -387,18 +370,52 @@ public class GET extends Operator implements Evaluable, Query {
 		return null;
 	}
 	
-	private Relationship getByHave(Node context, final String name) {
-		for (Relationship tdR : td_eval.traverse(context).relationships()) {
-			
-			System.out.println("GET check = "+tdR);
-			
-			if (name.equals(name(tdR)))
-				return tdR;
-		}
+	private Relationship getByHave(final Node context, final String name) {
+		final Node target = THE._.get(name).getEndNode();
 		
-		return null;
+		TraversalDescription trav = td.
+		evaluator(new Searcher(){
+			@Override
+			public Evaluation evaluate(Path path) {
+				return _evaluate_(path, target, HAVE._.rType);
+			}
+		});
+
+		Relationship res = null;
+		for (Path path : trav.traverse(context)) {
+			//TODO: check that this is only one answer
+			//System.out.println(path);
+			for (Relationship r : path.relationships()) {
+				res = r;
+				break;
+			}
+		}
+		return res;
 	}
 	
+	private Relationship getByIC(final Node context, final String name) {
+		final Node target = THE._.get(name).getEndNode();
+		
+		TraversalDescription trav = td.
+		evaluator(new Searcher(){
+			@Override
+			public Evaluation evaluate(Path path) {
+				return _evaluate_(path, target, IC._.rType);
+			}
+		});
+
+		Relationship res = null;
+		for (Path path : trav.traverse(context)) {
+			//TODO: check that this is only one answer
+			//System.out.println(path);
+			for (Relationship r : path.relationships()) {
+				res = r;
+				break;
+			}
+		}
+		return res;
+	}
+
 	public Set<Relationship> getByTraversal(final Relationship underHAVE, final Relationship start_op, final PropertyContainer context, final String name) {
 		
 		TraversalDescription td;
@@ -610,5 +627,42 @@ public class GET extends Operator implements Evaluable, Query {
 				return res;
 			}
 		});
+	}
+
+	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
+
+		public Evaluation _evaluate_(Path path, Node target, String type) {
+			System.out.println(path);
+			
+			if (path.length() == 0)
+				return EXCLUDE_AND_CONTINUE;
+			
+			Relationship r = path.lastRelationship(); 
+			String rType = r.getType().name();
+
+			if (path.length() == 1) {
+				if (rType.equals(type))
+					return EXCLUDE_AND_CONTINUE;
+					
+				return EXCLUDE_AND_PRUNE;
+				
+			} else if (path.length() >= 2) {
+				if (rType.equals(REF.name())) {
+					Node node = r.getEndNode();
+					if (target.equals(node)) 
+						return INCLUDE_AND_PRUNE;
+
+					return EXCLUDE_AND_CONTINUE;
+				
+				//XXX: check direction!
+				} else if (rType.equals(IS._.rType)) {
+					if (r.getEndNode().equals(path.endNode())) {
+						return EXCLUDE_AND_CONTINUE;
+					}
+					return EXCLUDE_AND_PRUNE;
+				}
+			}
+			return EXCLUDE_AND_PRUNE;
+		}
 	}
 }

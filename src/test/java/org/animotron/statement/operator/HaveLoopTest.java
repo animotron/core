@@ -180,7 +180,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\"");
+        assertAnimoResult(s, "the s have B \"test\"");
     }
 
     @Test
