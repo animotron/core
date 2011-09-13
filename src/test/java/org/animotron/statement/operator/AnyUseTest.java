@@ -66,6 +66,10 @@ public class AnyUseTest extends ATest {
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+
+        //check cache
+        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
+        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
     }
 
     @Test
