@@ -19,6 +19,7 @@
 package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
+import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.AN;
 import org.neo4j.graphdb.Relationship;
@@ -30,43 +31,47 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class LispGraphHandler extends AbstractTextGraphHandler {
+public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
-    public LispGraphHandler(OutputStream stream) {
+    public AnimoGraphHandler(OutputStream stream) {
         super(stream);
     }
 
-    public LispGraphHandler(StringBuilder builder) {
+    public AnimoGraphHandler(StringBuilder builder) {
         super(builder);
     }
 
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (level != 0) {
+        if (level != 0 && !(statement instanceof NAME)) {
             write(" ");
             if (!isOne) {
                 write("(");
             }
         }
-        if (statement instanceof TEXT) {
+        if (statement instanceof NAME) {
+            write(statement.reference(r));
+        } else if (statement instanceof TEXT) {
             write("\"");
-            write(statement.value(r));
+            write(statement.reference(r));
             write("\"");
         } else {
-            if (!(statement instanceof AN)) {
+            if (statement instanceof AN) {
+                write(statement.reference(r));
+            } else {
                 write(statement.name());
-                String name = statement.name(r);
+                String name = statement.reference(r);
                 if (name != null) {
                     write(" ");
+                    write(statement.reference(r));
                 }
             }
-            write(statement.name(r));
         }
     }
 
     @Override
     public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (level != 0 && !isOne) {
+        if (level != 0 && !(statement instanceof NAME) && !isOne) {
             write(")");
         }
     }

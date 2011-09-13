@@ -51,53 +51,68 @@ public class Expression extends AbstractExpression {
 	}
 	
 	private void buildStatement(Object[] e) {
-		start((Statement) e[0], (String) e[1], (String) e[2]);
-		buildExpression((Object[][]) e[3]);
+		start((Statement) e[0], (String) e[1]);
+		buildExpression((Object[][]) e[2]);
 		end();
 	}
 	
-	public static Object[] _(Statement statement, String name) {
-		Object[] e = {statement, name, null, null};
+	public static Object[] _(Statement statement, String reference) {
+		Object[] e = {statement, reference, null};
 		return e;
 	}
 
     public static Object[] _(Statement statement, Object[]... p) {
-        Object[] e = {statement, null, null, p};
+        Object[] e = {statement, null, p};
         return e;
     }
 
-    public static Object[] _(Statement statement, String name, Object[]... p) {
-        Object[] e = {statement, name, null, p};
+    public static Object[] _(Statement statement, String reference, Object[]... p) {
+        Object[] e = {statement, reference, p};
         return e;
     }
 
 	public static Object[] element(String name) {
-		Object[] e = {ELEMENT._, name, null, null};
-		return e;
+		return _(ELEMENT._, name(name));
 	}
 
 	public static Object[] element(String name, Object[]... p) {
-		Object[] e = {ELEMENT._, name, null, p};
-		return e;
+		return _(ELEMENT._, name(name), p);
 	}
 	
-	public static Object[] attribute(String name, String value) {
-		Object[] e = {ATTRIBUTE._, name, value, null};
-		return e;
-	}
+    public static Object[] attribute(String name) {
+        return _(ATTRIBUTE._, name(name));
+    }
 
-	public static Object[] text(String value) {
-		Object[] e = {TEXT._, null, value, null};
-		return e;
-	}
+    public static Object[] attribute(String name, String value) {
+        return _(ATTRIBUTE._, name(name), text(value));
+    }
 
 	public static Object[] comment(String value) {
-		Object[] e = {COMMENT._, null, value, null};
-		return e;
+        return _(COMMENT._, text(value));
 	}
 
-	public static Object[] cdata(String value) {
-		Object[] e = {CDATA._, null, value, null};
-		return e;
-	}
+    public static Object[] cdata(String value) {
+        return _(CDATA._, text(value));
+    }
+
+    public static Object[] pi(String value) {
+        return _(PI._, text(value));
+    }
+
+    public static Object[] namespace(String name, String value) {
+        return _(NS._, name(name), text(value));
+    }
+
+    public static Object[] namespace(String value) {
+        return _(NS._, text(value));
+    }
+
+    public static Object[] name(String value) {
+        return _(NAME._, value);
+    }
+
+    public static Object[] text(String value) {
+        return _(TEXT._, value);
+    }
+
 }

@@ -22,6 +22,7 @@ import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.ml.NAME;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -55,32 +57,22 @@ public class AnimoTraverser {
 		handler.start(statement, r, level++, isOne);
 		if (!(statement instanceof Relation)) {
             IndexHits<Relationship> q = getORDER().query(r.getEndNode());
-            Iterator<Relationship> it = q.iterator();
 			try {
-                iterate(handler, pf, it, level);
+                int size = q.size();
+                if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
+                iterate(handler, pf, q.iterator(), level, size);
 			} finally {
 				q.close();
 			}
 		}
-		handler.end(statement, r, level--, isOne);
+		handler.end(statement, r, --level, isOne);
 	}
 
-    protected void iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
-        boolean isFirst = true;
+    protected void iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level, int count) throws IOException {
+        boolean isOne = count == 1;
         while (it.hasNext()) {
             Relationship i = it.next();
-            if (isFirst) {
-                if (it.hasNext()) {
-                    build(handler, new PFlow(pf, i), i, level, false);
-                    i = it.next();
-                    build(handler, new PFlow(pf, i), i, level, false);
-                } else {
-                    build(handler, new PFlow(pf, i), i, level, true);
-                }
-            } else {
-                build(handler, new PFlow(pf, i), i, level, false);
-            }
-            isFirst = false;
+            build(handler, new PFlow(pf, i), i, level, isOne);
         }
     }
 	

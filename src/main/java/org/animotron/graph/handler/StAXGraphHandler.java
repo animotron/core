@@ -46,31 +46,31 @@ public class StAXGraphHandler implements GraphHandler {
 				if (statement instanceof ATTRIBUTE) {
 					String prefix = null;//statement.prefix(r);
 					String ns = null;//statement.namespace(r);
-					String name = statement.name(r);
-					String value = statement.value(r);
+					String name = statement.reference(r);
+					//String value = statement.value(r);
 					if (prefix == null && ns == null) {
-						writer.writeAttribute(name, value);
+						//writer.writeAttribute(name, value);
 					} else if (prefix == null) {
-						writer.writeAttribute(ns, name, value);
+						//writer.writeAttribute(ns, name, value);
 					} else {
-						writer.writeAttribute(prefix, ns, name, value);
+						//writer.writeAttribute(prefix, ns, name, value);
 					}
 					
 				} else if (statement instanceof TEXT) {
-					writer.writeCharacters(statement.value(r));
+					//writer.writeCharacters(statement.value(r));
 					
 				} else if (statement instanceof COMMENT){
-					writer.writeComment(statement.value(r));
+					//writer.writeComment(statement.value(r));
 					
 				} else if (statement instanceof CDATA){
-					writer.writeCData(statement.value(r));
+					//writer.writeCData(statement.value(r));
 				}
 			}
 				
 			if (statement instanceof ELEMENT) {
 				String prefix = null;//statement.prefix(r);
 				String ns = null;//statement.namespace(r);
-				String name = statement.name(r);
+				String name = statement.reference(r);
 				if (prefix == null && ns == null) {
 					writer.writeStartElement(name);
 				} else if (prefix == null) {

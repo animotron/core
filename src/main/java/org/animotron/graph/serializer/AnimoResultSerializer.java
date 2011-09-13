@@ -18,7 +18,7 @@
  */
 package org.animotron.graph.serializer;
 
-import org.animotron.graph.handler.LispGraphHandler;
+import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.traverser.AnimoResultTraverser;
 import org.animotron.graph.traverser.ResultTraverser;
 import org.neo4j.graphdb.Relationship;
@@ -38,7 +38,7 @@ public class AnimoResultSerializer {
     }
 
     public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
-        ResultTraverser._.traverse(new LispGraphHandler(out), start_op, r);
+        ResultTraverser._.traverse(new AnimoGraphHandler(out), start_op, r);
     }
 
     public static String serialize(Relationship r) throws IOException {
@@ -47,7 +47,7 @@ public class AnimoResultSerializer {
 
     public static String serialize(Relationship start_op, Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(new LispGraphHandler(out), start_op, r);
+        AnimoResultTraverser._.traverse(new AnimoGraphHandler(out), start_op, r);
         return out.toString();
     }
 

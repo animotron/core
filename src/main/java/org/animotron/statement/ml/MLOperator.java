@@ -16,46 +16,32 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.handler;
+package org.animotron.statement.ml;
 
-import org.animotron.statement.Statement;
-import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.Result;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.order;
 
 /**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TextGraphHandler extends AbstractTextGraphHandler {
+public abstract class MLOperator extends AbstractStatement implements Result {
+	
+	public MLOperator(String name) {
+		super(name);
+	}
 
-    public TextGraphHandler (OutputStream stream) {
-        super(stream);
-    }
-
-    public TextGraphHandler (StringBuilder builder) {
-        super(builder);
-    }
-
-    @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (statement instanceof TEXT) {
-            write(statement.reference(r));
-        }
-    }
-
-    @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne) {
-    }
-
-    @Override
-    public void startGraph() {
-    }
-
-    @Override
-    public void endGraph() throws IOException {
-    }
-
+	@Override
+	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) {
+		Relationship r = parent.createRelationshipTo(createNode(), relationshipType());
+		order(r, order);
+		return r;
+	}
+	
 }

@@ -24,7 +24,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
 import static org.animotron.Expression._;

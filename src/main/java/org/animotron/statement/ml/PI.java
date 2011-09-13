@@ -23,10 +23,10 @@ package org.animotron.statement.ml;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class CDATA extends MLOperator {
-	
-	public static final CDATA _ = new CDATA();
-	
-	private CDATA() { super("[!CDATA["); }
+public class PI extends MLOperator {
 
+	public static final PI _ = new PI();
+
+	private PI() { super("??"); }
+	
 }

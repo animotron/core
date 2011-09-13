@@ -81,7 +81,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	public Relationship create(String name, String hash) {
-        //TODO do we really need a name?
+        //TODO do we really need a reference?
         if (name == null) name = hash;
 		Relationship r = create(name);
 		HASH.set(r, hash);
@@ -110,12 +110,12 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) {
+	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) {
 		return null;
 	}
 
 	@Override
-	public String name(Relationship r) {
+	public String reference(Relationship r) {
 		return Properties.NAME.get(r.getEndNode());
 	}
 

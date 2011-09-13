@@ -118,7 +118,7 @@ public class WHouseTest extends ATest {
 		//Stock Keeping Unit
 		new Expression(
     		_(THE._, "SKU",
-				_(HAVE._, "name"),
+				_(HAVE._, "reference"),
 				_(HAVE._, "qty"),
 				_(HAVE._, "price"),
 				_(HAVE._, "cost")
@@ -168,7 +168,7 @@ public class WHouseTest extends ATest {
 				_(HAVE._, "receipt-party", _(AN._, "I")),
 				_(HAVE._, "SKU", 
 					_(THE._, "item01", 
-						_(HAVE._, "name", text("item01")),
+						_(HAVE._, "reference", text("item01")),
 						_(HAVE._, "qty", 
 							_(HAVE._, "number", _(Q._, "N2")),
 							_(HAVE._, "UoM", _(AN._, "KG")) //TODO: _(HAVE._, "UoM", KG)) 
@@ -202,12 +202,12 @@ public class WHouseTest extends ATest {
                 "<input id='receipt-party' value='an:I'>I</input>" +
                 "<table>" +
                 "<head>" +
-                "<col id='name'>name</col>" +
+                "<col id='reference'>reference</col>" +
                 "<col id='qty'>qty</col>" +
                 "<col id='price'>price</col>" +
                 "<head>" +
                 "<row>" +
-                "<col><input id='item01*name' value='item01'>item01</input></col>" +
+                "<col><input id='item01*reference' value='item01'>item01</input></col>" +
                 "<col><input id='item01*qty' value='have:number Q:N2; have:UoM an:KG'>2 kg</input></col>" +
                 "<col><input id='item01*price' value='have:number Q:N2; have:UoM an:KG'>5 USD per gram</input></col>" +
                 "<row>" +

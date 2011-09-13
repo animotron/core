@@ -87,7 +87,7 @@ public class CurrentWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "current-site",
                 _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+                    _(WITH._, "server-reference", _(GET._, "host"))
                 )
             )
         );
@@ -95,7 +95,7 @@ public class CurrentWebFrameworkTest extends ATest {
         new Expression (
             _(THE._, "localhost-site",
                 _(IS._, "site"),
-                _(HAVE._, "server-name", text("localhost")),
+                _(HAVE._, "server-reference", text("localhost")),
                 _(USE._, "theme-concrete-root-layout"),
                 _(USE._, "it-working")
             )

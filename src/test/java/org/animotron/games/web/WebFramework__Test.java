@@ -58,7 +58,7 @@ public class WebFramework__Test extends ATest {
     	new Expression(
 			_(THE._, "test-site", //site-context 
 				_(IS._, "site"),
-				_(HAVE._, "server-name", 
+				_(HAVE._, "server-reference",
 					text("animotron.org"), 
 					text("localhost")),
 				_(USE._, "local-cdn"),

@@ -47,8 +47,8 @@ public abstract class AbstractStatement implements Statement {
 		rType = this.relationshipType.name(); 
 	}
 
-//	public AbstractStatement(String name, String resultRelationshipType) {
-//        this(name);
+//	public AbstractStatement(String reference, String resultRelationshipType) {
+//        this(reference);
 //	}
 
 	@Override
@@ -85,13 +85,8 @@ public abstract class AbstractStatement implements Statement {
 	}
 
     @Override
-    public String name(Relationship r) {
+    public String reference(Relationship r) {
         return null;
     }
 	
-    @Override
-    public String value(Relationship r) {
-        return null;
-    }
-
 }

@@ -76,4 +76,94 @@ public class ParserTest extends ATest {
         test("the a the b", "the a b");
 	}
 
+    @Test
+    public void test_07() throws IOException, AnimoException {
+        test("the a \\ get element-name");
+    }
+
+    @Test
+    public void test_08() throws IOException, AnimoException {
+        test("the a \\ b");
+    }
+
+    @Test
+    public void test_09() throws IOException, AnimoException {
+        test("the a \\ an b", "the a \\ b");
+    }
+
+    @Test
+	public void test_10() throws IOException, AnimoException {
+        test("the a \\ \"b\"", "the a \\b");
+	}
+
+    @Test
+	public void test_11() throws IOException, AnimoException {
+        test("the a \\b");
+	}
+
+    @Test
+    public void test_12() throws IOException, AnimoException {
+        test("the a @b \"c\"");
+    }
+
+    @Test
+    public void test_13() throws IOException, AnimoException {
+        test("the a @b (get c)", "the a @b get c");
+    }
+
+    @Test
+    public void test_14() throws IOException, AnimoException {
+        test("the a @b get c");
+    }
+
+    @Test
+    public void test_15() throws IOException, AnimoException {
+        test("the a @b get c d");
+    }
+
+    @Test
+    public void test_16() throws IOException, AnimoException {
+        test("the a @b (get c) (all d)");
+    }
+
+    @Test
+    public void test_17() throws IOException, AnimoException {
+        test("the a @ (get c) (all d)");
+    }
+
+    @Test
+    public void test_18() throws IOException, AnimoException {
+        test("the a @b (get c) (all d)");
+    }
+
+    @Test
+    public void test_19() throws IOException, AnimoException {
+        test("the a @b (get c x) (all d y)");
+    }
+
+    @Test
+    public void test_20() throws IOException, AnimoException {
+        test("the a @(b c)", "the a @ b c");
+    }
+
+    @Test
+    public void test_21() throws IOException, AnimoException {
+        test("the a @((b) (c))", "the a @ (b) (c)");
+    }
+
+    @Test
+    public void test_22() throws IOException, AnimoException {
+        test("the a @(\"b\" c)", "the a @b c");
+    }
+
+    @Test
+    public void test_23() throws IOException, AnimoException {
+        test("the a @((\"b\") (c))", "the a @b c");
+    }
+
+    @Test
+    public void test_24() throws IOException, AnimoException {
+        test("the a @ ((\"b\") (c) (d))", "the a @b (c) (d)");
+    }
+
 }

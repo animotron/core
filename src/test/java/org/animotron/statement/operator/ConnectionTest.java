@@ -48,7 +48,7 @@ public class ConnectionTest extends ATest {
 
         new Expression(
         _(THE._, "file",
-            _(HAVE._, "name", text("file")),
+            _(HAVE._, "reference", text("file")),
             _(HAVE._, "path"),
 
             _(IC._, "extension",
@@ -77,10 +77,10 @@ public class ConnectionTest extends ATest {
 
         Expression A = new Expression(
         _(THE._, "A",
-            _(GET._, "name",
+            _(GET._, "reference",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(A, "the A have name \"file\"");
+        assertAnimoResult(A, "the A have reference \"file\"");
 
         Expression B = new Expression(
         _(THE._, "B",
@@ -122,7 +122,7 @@ public class ConnectionTest extends ATest {
 
         new Expression(
         _(THE._, "file",
-            _(HAVE._, "name", text("file")),
+            _(HAVE._, "reference", text("file")),
             _(HAVE._, "path1", text("some.path.text")),
 
             _(IC._, "path2",

@@ -125,7 +125,7 @@ public class BinaryBuilder extends AbstractExpression {
 //                                );
 //                            } else {
 //                                op = new Expression(
-//                                    _(IS._, THE._.name(op)),
+//                                    _(IS._, THE._.reference(op)),
 //                                    _(IS._, part)
 //                                );
 //                            }
@@ -133,7 +133,7 @@ public class BinaryBuilder extends AbstractExpression {
 //                    }
 //
 //                    if (op != null) {
-//                        start(IS._, THE._.name(op));
+//                        start(IS._, THE._.reference(op));
 //                        end();
 //                    }
 

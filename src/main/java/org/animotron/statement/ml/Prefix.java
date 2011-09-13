@@ -18,35 +18,9 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.Result;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.order;
-
 /**
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public abstract class Value extends AbstractStatement implements Result {
-	
-	public Value(String name) {
-		super(name);
-	}
-
-	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) {
-		Relationship r = parent.createRelationshipTo(value, relationshipType());
-		order(r, order);
-		return r;
-	}
-	
-    @Override
-    public String value(Relationship r){
-        return VALUE.get(r.getEndNode());
-    }
-
-	
-}
+public interface Prefix {}

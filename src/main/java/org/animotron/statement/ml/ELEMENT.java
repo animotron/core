@@ -18,38 +18,15 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.Result;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
-
 /**
- * Instruction 'ml:element'.
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class ELEMENT extends AbstractStatement implements Result {
-	
+public class ELEMENT extends MLOperator implements Prefix {
+
 	public static final ELEMENT _ = new ELEMENT();
-	
-	private ELEMENT() { super("element"); }
-	
-	@Override
-	public Relationship build(Node parent, String name, Node value, int order, boolean ignoreNotFound) {
-		Node child = createNode();
-		Relationship r = parent.createRelationshipTo(child, relationshipType());
-		order(r, order);
-		NAME.set(child, name);
-		return r;
-	}
-	
-	@Override
-	public String name(Relationship r){
-		return NAME.get(r.getEndNode());
-	}
-	
+
+	private ELEMENT() { super("\\"); }
+
 }

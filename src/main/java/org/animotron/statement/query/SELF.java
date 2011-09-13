@@ -54,11 +54,11 @@ public class SELF extends AbstractQuery {
 	private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-            System.out.println("SELF '"+name(pf.getOP())+"' op = "+pf.getOP());
+            System.out.println("SELF '"+ reference(pf.getOP())+"' op = "+pf.getOP());
 
             Relationship op = pf.getOP();
             
-			Relationship res = selfByTraversal(pf, op, op.getStartNode(), name(op));
+			Relationship res = selfByTraversal(pf, op, op.getStartNode(), reference(op));
 			if (res != null) {
 				pf.sendAnswer(res);
 				pf.done();
@@ -88,14 +88,14 @@ public class SELF extends AbstractQuery {
 
             if (ref != null) {
                 //reference in processing flow
-                res = GET._.get(ref.getEndNode(), name(pf.getOP()));
+                res = GET._.get(ref.getEndNode(), reference(pf.getOP()));
 
                 if (res != null)
                     pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
 
             } else if (searchHave == 2) {
                 //the instance self in have
-                res = GET._.get(pf.getStartNode(), name(pf.getOP()));
+                res = GET._.get(pf.getStartNode(), reference(pf.getOP()));
 
                 if (res != null)
                     pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
@@ -149,14 +149,14 @@ public class SELF extends AbstractQuery {
 				}
 				String type = r.getType().name();
 				
-				if (type.equals(IS._.relationshipType().name()) && name.equals(IS._.name(r))) {
+				if (type.equals(IS._.relationshipType().name()) && name.equals(IS._.reference(r))) {
 					foundIS = true;
 					
-				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.name(r)) || foundIS)) {
+				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.reference(r)) || foundIS)) {
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.name(r)) || foundIS)) {
+				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.reference(r)) || foundIS)) {
 					if (foundIS) {
 						//store
 						final Node sN = eNode;
