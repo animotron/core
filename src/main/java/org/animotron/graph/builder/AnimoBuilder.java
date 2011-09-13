@@ -21,6 +21,9 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.ml.MLOperator;
+import org.animotron.statement.ml.Prefix;
+import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
 
@@ -36,8 +39,10 @@ public class AnimoBuilder extends GraphBuilder {
 
     private Reader reader;
     private StringBuilder s = new StringBuilder();
-    private int level = 0;
     private Stack<Integer> stack = new Stack<Integer>();
+    private Statement op = null;
+    private int level = 0;
+    private boolean prefix = false;
 
     public AnimoBuilder (InputStream stream) {
         reader = new InputStreamReader(stream);
@@ -89,6 +94,14 @@ public class AnimoBuilder extends GraphBuilder {
                                         endList();
                                         break;
                             default   : s.append(ch);
+                                        Statement st = Statements.name(s.toString());
+                                        if (st instanceof Prefix) {
+                                            start(st);
+                                            level++;
+                                            op = st;
+                                            prefix = true;
+                                            s = new StringBuilder();
+                                        }
                         }
                     }
                 }
@@ -106,29 +119,44 @@ public class AnimoBuilder extends GraphBuilder {
         if (s.length() > 0) {
             token(s.toString(), text);
             this.s = new StringBuilder();
+        } else {
+            prefix = false;
         }
     }
 
     private void lastToken(StringBuilder s, boolean text) {
         if (s.length() > 0) {
             token(s.toString(), text);
+        } else {
+            prefix = false;
         }
     }
 
-    Statement op = null;
     private void token(String token, boolean text) {
         if (text) {
-            start(token);
+            if (op instanceof Prefix) {
+                start(NAME._, token);
+            } else {
+                start(token);
+            }
             end();
             op = null;
         } else {
-            if (op instanceof Operator) {
+            if (prefix) {
+                start(NAME._, token);
+                end();
+                op = null;
+                prefix = false;
+            } else if (op instanceof Operator) {
                 start(op, token);
                 op = null;
                 level++;
             } else {
                 op = Statements.name(token);
-                if (!(op instanceof Operator)) {
+                if (op instanceof MLOperator) {
+                    start(op);
+                    level++;
+                } else if (!(op instanceof Operator)) {
                     start(AN._, token);
                     level ++;
                 }

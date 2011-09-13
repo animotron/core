@@ -22,6 +22,7 @@ import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.THE;
@@ -38,6 +39,7 @@ import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -80,16 +82,18 @@ public class AnimoResultTraverser extends ResultTraverser {
 			//workaround IS and USE
 			} else if (s instanceof IS || s instanceof USE) {
 				handler.start(s, r, level++, isOne);
-				handler.end(s, r, level--, isOne);
+				handler.end(s, r, --level, isOne);
             } else {
                 handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pflow, q.iterator(), level);
+                    int size = q.size();
+                    if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
+                    iterate(handler, pf, q.iterator(), level, size);
                 } finally {
                     q.close();
                 }
-                handler.end(s, r, level--, isOne);
+                handler.end(s, r, --level, isOne);
             }
         }
 

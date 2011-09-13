@@ -18,38 +18,15 @@
  */
 package org.animotron.statement.ml;
 
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends MLOperator {
-	
-	public static final TEXT _ = new TEXT();
-	
-	private TEXT() { super("text"); }
+public class NAME extends TEXT {
 
-    protected TEXT(String name) { super(name); }
+	public static final NAME _ = new NAME();
 
-    @Override
-    public Relationship build(Node parent, String value, int order, boolean ignoreNotFound) {
-        Node child = createNode();
-        Relationship r = parent.createRelationshipTo(child, relationshipType());
-        VALUE.set(child, value);
-        order(r, order);
-        return r;
-    }
-
-    @Override
-    public String reference(Relationship r) {
-        return VALUE.get(r.getEndNode());
-    }
+	private NAME() { super("name"); }
 
 }

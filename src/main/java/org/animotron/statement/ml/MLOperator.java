@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.operator.Operator;
+import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.operator.Result;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -27,10 +27,11 @@ import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.order;
 
 /**
- *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public abstract class MLOperator extends Operator implements Result {
+public abstract class MLOperator extends AbstractStatement implements Result {
 	
 	public MLOperator(String name) {
 		super(name);

@@ -24,6 +24,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.Result;
@@ -61,10 +62,6 @@ public class ResultTraverser extends AnimoTraverser {
         handler.endGraph();
     }
 
-    protected void build(GraphHandler handler, Relationship r, int level, boolean isOne) throws IOException {
-        build(handler, new PFlow(Evaluator._, r, r), r, level, isOne);
-    }
-
     @Override
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
@@ -97,12 +94,14 @@ public class ResultTraverser extends AnimoTraverser {
                     handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pflow, q.iterator(), level);
+                    int size = q.size();
+                    if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
+                    iterate(handler, pf, q.iterator(), level, size);
                 } finally {
                     q.close();
                 }
                 if (s instanceof Result)
-                    handler.end(s, r, level--, isOne);
+                    handler.end(s, r, --level, isOne);
             }
         }
 
@@ -110,7 +109,7 @@ public class ResultTraverser extends AnimoTraverser {
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
         Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
-        boolean found = _iterate(handler, pf, i, level);
+        boolean found = iterate(handler, pf, i, level);
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
@@ -123,7 +122,7 @@ public class ResultTraverser extends AnimoTraverser {
 
     }
 
-    protected boolean _iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
         boolean found = false;
         boolean isFirst = true;
         while (it.hasNext()) {

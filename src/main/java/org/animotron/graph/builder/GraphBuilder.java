@@ -136,6 +136,10 @@ public abstract class GraphBuilder {
 			
 	}
 
+    final protected void start(Statement statement) {
+        start(statement, null);
+    }
+
     final protected void start(String value) {
         start(TEXT._, value);
     }
@@ -165,7 +169,7 @@ public abstract class GraphBuilder {
 		
 		Object[] item = {
 				statement,	// 0  statement
-                reference,       // 1  reference or value
+                reference,  // 1  name or value
 				md, 		// 2  message digest
 				null,	 	// 3  current relationship
 				null,		// 4  current node

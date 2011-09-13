@@ -72,19 +72,19 @@ public class Expression extends AbstractExpression {
     }
 
 	public static Object[] element(String name) {
-		return _(ELEMENT._, text(name));
+		return _(ELEMENT._, name(name));
 	}
 
 	public static Object[] element(String name, Object[]... p) {
-		return _(ELEMENT._, text(name), p);
+		return _(ELEMENT._, name(name), p);
 	}
 	
     public static Object[] attribute(String name) {
-        return _(ATTRIBUTE._, text(name));
+        return _(ATTRIBUTE._, name(name));
     }
 
     public static Object[] attribute(String name, String value) {
-        return _(ATTRIBUTE._, text(name), text(value));
+        return _(ATTRIBUTE._, name(name), text(value));
     }
 
 	public static Object[] comment(String value) {
@@ -100,11 +100,15 @@ public class Expression extends AbstractExpression {
     }
 
     public static Object[] namespace(String name, String value) {
-        return _(NS._, text(name), text(value));
+        return _(NS._, name(name), text(value));
     }
 
     public static Object[] namespace(String value) {
         return _(NS._, text(value));
+    }
+
+    public static Object[] name(String value) {
+        return _(NAME._, value);
     }
 
     public static Object[] text(String value) {
