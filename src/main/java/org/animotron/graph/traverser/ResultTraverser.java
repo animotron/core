@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
@@ -108,7 +109,8 @@ public class ResultTraverser extends AnimoTraverser {
     }
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
-        Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
+    	Iterator<Relationship> i = AnimoGraph.getResult(pf.getLastContext(), r.getEndNode());
+    	//Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
         boolean found = iterate(handler, pf, i, level);
         if (!found) {
             //UNDERSTAND: calculate current r!

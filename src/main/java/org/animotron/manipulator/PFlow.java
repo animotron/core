@@ -24,7 +24,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Channel;
@@ -44,8 +43,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -324,7 +321,11 @@ public class PFlow {
 	}
 
 	public Relationship getLastContext() {
-		return path.firstElement();
+		for (Relationship r : path) {
+			if (AN._.rType.equals(r.getType().name()))
+				return r; 
+		}
+		return path.lastElement();
 	}
 
 	private TraversalDescription td_flow =

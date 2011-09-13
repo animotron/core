@@ -216,6 +216,7 @@ public class AnimoGraph {
 	}
 
 	public static IndexHits<Relationship> getResult(Relationship ref, Node node) {
-		return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
+		return RESULT_INDEX.get(RESULT, ref.getId(), node, null);
+		//return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
 	}
 }
