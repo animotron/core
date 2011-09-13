@@ -96,23 +96,19 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 
     @Override
-    public void startMl(Statement statement, String name) throws IOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void start(Statement statement, String name, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void endMl(Statement statement, String name) throws IOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void end(Statement statement, String name, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void ml(Statement statement, String name, String value) throws IOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void start(Statement statement, String name, String value, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void ml(Statement statement, String name) throws IOException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void end(Statement statement, String name, String value, int level, boolean isOne) throws IOException {
     }
 
     @Override
