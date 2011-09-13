@@ -134,34 +134,25 @@ public class GET extends Operator implements Evaluable, Query {
 //							return;
 //						}
 
-						Relationship r = null;
-						
-						final Relationship have = searchForHAVE(context, name);
-						if (have != null) {
-							
-							r = AnimoGraph.execute(new GraphOperation<Relationship>() {
-								@Override
-								public Relationship execute() {
-									Relationship res = pf.getOPNode().createRelationshipTo(have.getEndNode(), HAVE._.relationshipType());
-									AnimoGraph.result(res, pf.getLastContext().getId());
-									//RID.set(res, r.getId());
-									return res;
-								}
-							});
-
-							pf.sendAnswer(r);
+						//final Relationship have = searchForHAVE(context, name);
+						final Set<Relationship> rSet = get(pf, context, name);
+						if (rSet != null) {
+							for (Relationship r : rSet) {
+								pf.sendAnswer(createResult(pf, node, r, HAVE._.relationshipType));
+							}
 							return;
 						}
 
 //						PipedInput in;
 //						try {
-//							in = Evaluator._.execute(pf, r.getEndNode());
+//							in = Evaluator._.execute(pf, context.getEndNode());
 //						
 //							for (Object n : in) {
-//								r = get(((Relationship)n).getEndNode(), name);
+//								r = searchForHAVE((Relationship)n, name);
 //								
-//								if (r != null)
-//									pf.sendAnswer(createResult(node, r));
+//								if (r != null) {
+//									pf.sendAnswer(createResult(pf, node, r, HAVE._.relationshipType));
+//								}
 //							}
 //						} catch (Exception e) {
 //							//XXX: what to do?
@@ -227,33 +218,42 @@ public class GET extends Operator implements Evaluable, Query {
 			List<Relationship> newREFs = new FastList<Relationship>();
 
 			for (Relationship n : nextREFs) {
-				for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
-					if (r.equals(n)) continue;
-					
-					Statement st = Statements.relationshipType(r);
-					if (st instanceof AN) {
-						Relationship t = AN._.getREF(r);
-						newREFs.add(t);
-					} else if (st instanceof Reference) {
-						try {
-							PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
-							
-							for (Object rr : in) {
-								if (rr instanceof Relationship) {
-									newREFs.add((Relationship) rr);
-									
-								} else
-									System.out.println("UNHANDLED "+rr);
+				//System.out.println(""+n);
+				//System.out.println("getStartNode OUTGOING");
+				if (!n.equals(ref)) {
+					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
+						if (r.equals(n)) continue;
+						
+						//System.out.println(r);
+						
+						Statement st = Statements.relationshipType(r);
+						if (st instanceof AN) {
+							Relationship t = AN._.getREF(r);
+							newREFs.add(t);
+						} else if (st instanceof Reference) {
+							try {
+								PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
 								
+								for (Object rr : in) {
+									if (rr instanceof Relationship) {
+										newREFs.add((Relationship) rr);
+										
+									} else
+										System.out.println("UNHANDLED "+rr);
+									
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
 							}
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
 						}
 					}
 				}
 
+				//System.out.println("getEndNode OUTGOING");
 				for (Relationship r : n.getEndNode().getRelationships(OUTGOING)) {
+					//System.out.println(r);
+
 					Statement st = Statements.relationshipType(r);
 					if (st instanceof AN) {
 						Relationship t = AN._.getREF(r);

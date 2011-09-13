@@ -20,7 +20,11 @@ package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Channel;
@@ -40,6 +44,8 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -108,8 +114,11 @@ public class PFlow {
 		path.addAll(parent.path);
 		
 		RelationshipType type = op.getType();
-		//Statement s = Statements.relationshipType(type);
-		if (RelationshipTypes.REF.name().equals(type.name())) { //s instanceof Reference || 
+		Statement s = Statements.relationshipType(type);
+		if (s instanceof Reference) {
+			path.insertElementAt(op, 0);
+		
+		} else if (RelationshipTypes.RESULT.name().equals(type.name())) {
 			path.insertElementAt(op, 0);
 		}
 		
