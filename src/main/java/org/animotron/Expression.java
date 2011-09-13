@@ -18,6 +18,9 @@
  */
 package org.animotron;
 
+import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.animotron.graph.AnimoGraph.isTransactionActive;
+
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
@@ -37,11 +40,18 @@ public class Expression extends AbstractExpression {
 	}
 	
 	private void build() throws AnimoException {
-		startGraph();
-		for(Object[] i : e) {
-			buildExpression(i);
+		try {
+			startGraph();
+			for(Object[] i : e) {
+				buildExpression(i);
+			}
+			endGraph();
+		} finally {
+			if (isTransactionActive(tx)) {
+				tx.failure();
+				finishTx(tx);
+			}
 		}
-		endGraph();
 	}
 	
 	private void buildExpression(Object[]... e) {
