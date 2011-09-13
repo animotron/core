@@ -18,8 +18,11 @@
  */
 package org.animotron.statement.ml;
 
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import java.security.MessageDigest;
 
 import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.createNode;
@@ -50,6 +53,14 @@ public class TEXT extends MLOperator {
     @Override
     public String reference(Relationship r) {
         return VALUE.get(r.getEndNode());
+    }
+
+    @Override
+    public MessageDigest hash(String reference) {
+        MessageDigest md = MessageDigester.md();
+        if (reference != null)
+            md.update(reference.getBytes());
+        return md;
     }
 
 }

@@ -166,4 +166,9 @@ public class ParserTest extends ATest {
         test("the a @ ((\"b\") (c) (d))", "the a @b (c) (d)");
     }
 
+    @Test
+    public void test_25() throws IOException, AnimoException {
+        test("the a @x \"x\"");
+    }
+
 }

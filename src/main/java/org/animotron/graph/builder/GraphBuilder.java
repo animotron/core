@@ -160,12 +160,8 @@ public abstract class GraphBuilder {
 				parent = statements.peek();
 			}
 		}
-		
-		MessageDigest md = MessageDigester.md();
-		
-        if (reference != null)
-            md.update(reference.getBytes());
-        md.update(statement.name().getBytes());
+
+        MessageDigest md = statement.hash(reference);
 		
 		Object[] item = {
 				statement,	// 0  statement

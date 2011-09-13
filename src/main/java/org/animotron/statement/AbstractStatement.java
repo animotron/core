@@ -23,9 +23,12 @@ import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.manipulator.PFlow;
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+
+import java.security.MessageDigest;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -89,4 +92,13 @@ public abstract class AbstractStatement implements Statement {
         return null;
     }
 	
+    @Override
+    public MessageDigest hash(String reference) {
+        MessageDigest md = MessageDigester.md();
+        if (reference != null)
+            md.update(reference.getBytes());
+        md.update(name().getBytes());
+        return md;
+    }
+
 }

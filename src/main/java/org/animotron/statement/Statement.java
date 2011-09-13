@@ -23,6 +23,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
+import java.security.MessageDigest;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -38,4 +40,5 @@ public interface Statement {
 
     public String reference(Relationship r);
 
+    public MessageDigest hash(String reference);
 }
