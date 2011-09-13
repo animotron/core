@@ -22,6 +22,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -60,13 +61,15 @@ public abstract class AbstractStatement implements Statement {
 		return relationshipType;
 	}
 	
-	protected Relationship createResult(final Node node, final Relationship r) {
+	protected Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
-				Relationship res = node.createRelationshipTo(r.getEndNode(), RESULT);
+				Relationship res = node.createRelationshipTo(r.getEndNode(), rType);
 				//store to relationship arrow 
 				RID.set(res, r.getId());
+
+				AnimoGraph.result(res, pf.getLastContext().getId());
 				
 				return res;
 			}

@@ -186,7 +186,7 @@ public class GET extends Operator implements Evaluable, Query {
 						Set<Relationship> rSet = get(pf, st, name);
 						if (rSet != null) {
 							for (Relationship r : rSet) {
-								pf.sendAnswer(createResult(node, r));
+								pf.sendAnswer(createResult(pf, node, r, HAVE._.relationshipType));
 							}
 							break;
 						}
@@ -250,7 +250,6 @@ public class GET extends Operator implements Evaluable, Query {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						
 					}
 				}
 
@@ -259,6 +258,25 @@ public class GET extends Operator implements Evaluable, Query {
 					if (st instanceof AN) {
 						Relationship t = AN._.getREF(r);
 						newREFs.add(t);
+
+					} else if (st instanceof Reference) {
+						if (!pf.isInStack(r)) {
+							try {
+								PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
+								
+								for (Object rr : in) {
+									if (rr instanceof Relationship) {
+										newREFs.add((Relationship) rr);
+										
+									} else
+										System.out.println("UNHANDLED "+rr);
+									
+								}
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
 					}
 				}
 				

@@ -68,15 +68,6 @@ public class CurrentSiteTest extends ATest {
             )
         );
 
-    	Expression cs = new Expression (
-            _(THE._, "current-site-test",
-                _(AN._, "current-site",
-                    _(HAVE._, "server-name", text("localhost"))
-                )
-            )
-        );
-    	assertAnimoResult(cs, "the current-site-test the current-site the localhost-site");
-
 		new Expression(
             _(THE._, "rest",
                 _(ANY._, "service",
@@ -92,8 +83,11 @@ public class CurrentSiteTest extends ATest {
         );
 
         assertAnimoResult(s, "the 54556610e0014d687f3e646f0dd79d50e62778d752985cc03350428142bf2264 " +
-            "the rest the test-service (is service) (have server-name \"localhost\") (have host \"localhost\")");
-
+            "the rest " +
+             "the test-service " +
+              "(is service) " +
+              "(have server-name \"localhost\") " +
+              "(have host \"localhost\")");
     }
 
 }
