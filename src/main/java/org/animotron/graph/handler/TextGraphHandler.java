@@ -51,6 +51,22 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
+    public void startMl(Statement statement, String name) throws IOException {
+    }
+
+    @Override
+    public void endMl(Statement statement, String name) throws IOException {
+    }
+
+    @Override
+    public void ml(Statement statement, String name, String value) throws IOException {
+    }
+
+    @Override
+    public void ml(Statement statement, String name) throws IOException {
+    }
+
+    @Override
     public void startGraph() {
     }
 

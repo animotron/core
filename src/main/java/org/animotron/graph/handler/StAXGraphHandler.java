@@ -33,8 +33,7 @@ import java.io.IOException;
 public class StAXGraphHandler implements GraphHandler {
 	
 	private XMLStreamWriter writer;
-	private long level = 0;
-	
+
 	public StAXGraphHandler(XMLStreamWriter writer) {
 		this.writer = writer;
 	}
@@ -78,9 +77,8 @@ public class StAXGraphHandler implements GraphHandler {
 				} else {
 					writer.writeStartElement(prefix, name, ns);
 				}
-				level++;
 			}
-			
+
 		} catch (XMLStreamException e) {
             throw new IOException(e);
 		}
@@ -91,18 +89,36 @@ public class StAXGraphHandler implements GraphHandler {
 		try {
 			if (statement instanceof ELEMENT) {
 				writer.writeEndElement();
-				level--;
 			}
 		} catch (XMLStreamException e) {
             throw new IOException(e);
 		}
 	}
 
-	@Override
+    @Override
+    public void startMl(Statement statement, String name) throws IOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void endMl(Statement statement, String name) throws IOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void ml(Statement statement, String name, String value) throws IOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void ml(Statement statement, String name) throws IOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public void startGraph() throws IOException {
 		try {
 			writer.writeStartDocument();
-			level = 0;
 		} catch (XMLStreamException e) {
             throw new IOException(e);
 		}

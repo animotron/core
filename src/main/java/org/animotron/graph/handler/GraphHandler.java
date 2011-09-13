@@ -32,9 +32,17 @@ import java.io.IOException;
  */
 public interface GraphHandler {
 	
-	public abstract void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException;
+    public abstract void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException;
 
-	public abstract void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException;
+    public abstract void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException;
+
+    public abstract void start(Statement statement, String name, int level, boolean isOne) throws IOException;
+
+    public abstract void end(Statement statement, String name, int level, boolean isOne) throws IOException;
+
+    public abstract void start(Statement statement, String name, String value, int level, boolean isOne) throws IOException;
+
+    public abstract void end(Statement statement, String name, String value, int level, boolean isOne) throws IOException;
 
 	public void startGraph() throws IOException;
 

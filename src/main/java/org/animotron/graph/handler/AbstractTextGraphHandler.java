@@ -64,4 +64,5 @@ public abstract class AbstractTextGraphHandler implements GraphHandler {
             out.append(s);
         }
     }
+
 }
