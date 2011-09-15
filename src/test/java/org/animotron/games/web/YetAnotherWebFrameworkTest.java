@@ -117,17 +117,16 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        //XXX: check animo structure, that is wrong now
-//        assertAnimoResult(s,  "the a3d92ce51483e950185dd2b05dec8558634d393ead87a6e41a3a174482aae745" + //718357e13084578d5c7f571bae55ea8bb583a8da53f3f391ae7d4a9fd1869475
-//                                "have content " +
-//                                    "element html " +
-//                                        "(element head element title have title \"Welcome to Animo\") " +
-//                                        "(element body the theme-concrete-root-layout (is root-layout) " +
-//                                            "(element h1 have title \"Welcome to Animo\") " +
-//                                            "(element p have content \"It is working\") " +
-//                                            "(element ul " +
-//                                                "(element li (\"host:\") (element strong have host \"localhost\")) " +
-//                                                "(element li (\"uri:\") (element strong have uri \"/\"))))");
+        assertAnimoResult(s,  "the 6a40e5b412692b64b8e07615e06e442dc05c3c4d44c09faa70e4cd34bf3abf25 " +
+                                "have content " +
+                                    "\\html " +
+                                        "(\\head \\title have title \"Welcome to Animo\") " +
+                                        "(\\body the theme-concrete-root-layout (is root-layout) " +
+                                            "(\\h1 have title \"Welcome to Animo\") " +
+                                            "(\\p have content \"It is working\") " +
+                                            "(\\ul " +
+                                                "(\\li (\"host:\") (\\strong have host \"localhost\")) " +
+                                                "(\\li (\"uri:\") (\\strong have uri \"/\"))))");
 
 
         assertXMLResult(s,  "<html>" +

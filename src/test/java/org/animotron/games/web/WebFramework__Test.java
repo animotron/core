@@ -144,22 +144,21 @@ public class WebFramework__Test extends ATest {
             )
         );
 
-        //XXX: check animo structure, that is wrong now
-//        assertAnimoResult(s,  "the s " +
-//                                "the current-service " +
-//                                    "the root-service " +
-//                                        "(is service) " +
-//                                        "(have uri \"/\") " +
-//                                        "(the html " +
-//                                            "(is composition) " +
-//                                            "(have content " +
-//                                                "element html " +
-//                                                    "(the html-head element head element title have title \"Welcome to Animotron\") " +
-//                                                    "(element body the theme-concrete-root-layout " +
-//                                                        "(is root-layout) " +
-//                                                        "(have content " +
-//                                                            "(element div (attribute id \"title\") (have title \"Welcom to Animotron\"))" +
-//                                                            "(element div (attribute id \"content\") (have title \"Owervie\"))))))");
+        assertAnimoResult(s,  "the s " +
+                                "the current-service " +
+                                    "the root-service " +
+                                        "(is service) " +
+                                        "(have uri \"/\") " +
+                                        "(the html " +
+                                            "(is composition) " +
+                                            "(have content " +
+                                                "\\html " +
+                                                    "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
+                                                    "(\\body the theme-concrete-root-layout " +
+                                                        "(is root-layout) " +
+                                                        "(have content " +
+                                                            "(\\div (attribute id \"title\") (have title \"Welcom to Animotron\"))" +
+                                                            "(\\div (attribute id \"content\") (have title \"Owervie\"))))))");
 
         assertXMLResult(s,  "<html>" +
                                 "<head>" +
