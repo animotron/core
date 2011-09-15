@@ -78,7 +78,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
         new Expression (
             _(THE._, "localhost-site",
                 _(IS._, "site"),
-                _(HAVE._, "server-reference", text("localhost")),
+                _(HAVE._, "server-name", text("localhost")),
                 _(USE._, "theme-concrete-root-layout"),
                 _(USE._, "it-working")
             )
@@ -197,7 +197,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
-                    _(WITH._, "server-reference", _(GET._, "host", _(ANY._, "request")))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
@@ -217,7 +217,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
         test(
             _(AN._, "current-service",
                 _(ANY._, "site",
-                    _(WITH._, "server-reference", _(GET._, "host", _(ANY._, "request")))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );
@@ -229,7 +229,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             _(ANY._, "resource",
                 _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
                 _(ANY._, "site",
-                    _(WITH._, "server-reference", _(GET._, "host", _(ANY._, "request")))
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
             )
         );

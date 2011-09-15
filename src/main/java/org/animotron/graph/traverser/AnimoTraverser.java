@@ -69,7 +69,7 @@ public class AnimoTraverser {
 	}
 
     protected void iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level, int count) throws IOException {
-        boolean isOne = count == 1;
+        boolean isOne = count < 2;
         while (it.hasNext()) {
             Relationship i = it.next();
             build(handler, new PFlow(pf, i), i, level, isOne);
