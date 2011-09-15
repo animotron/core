@@ -29,8 +29,7 @@ import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.IS;
-import org.animotron.statement.relation.USE;
+import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
@@ -108,7 +107,7 @@ public class MLResultTraverser extends ResultTraverser {
             } else if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pflow, r, level, isOne);
 			//workaround IS and USE
-			} else if (!(s instanceof IS || s instanceof USE)) {
+			} else if (!(s instanceof Relation)) {
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
                     iterate(handler, pflow, q.iterator(), level, q.size());
