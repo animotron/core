@@ -19,10 +19,13 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.ELEMENT;
+import org.animotron.statement.ml.MLOperator;
+import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.THE;
@@ -33,24 +36,24 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class XMLResultTraverser extends ResultTraverser {
+public class MLResultTraverser extends ResultTraverser {
 
-    public static XMLResultTraverser _ = new XMLResultTraverser();
+    public static MLResultTraverser _ = new MLResultTraverser();
 
-    protected XMLResultTraverser() {}
+    protected MLResultTraverser() {}
 
     @Override
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
@@ -77,26 +80,51 @@ public class XMLResultTraverser extends ResultTraverser {
         }
 
         if (s != null) {
-            if (s instanceof Query || s instanceof Evaluable) {
+            if (s instanceof MLOperator) {
+                if (s instanceof Prefix) {
+                    IndexHits<Relationship> q = getORDER().query(r.getEndNode());
+                    Iterator<Relationship> it = q.iterator();
+                    String[] param = {null, null};
+                    try {
+                        param[0] = param(pf, it);
+                        int size = q.size();
+                        if (s instanceof ELEMENT) {
+                            size = size - 1;
+                        } else {
+                            param[1] = param(pf, it);
+                            size = size - 2;
+                        }
+                        handler.start(s, param, level++, isOne);
+                        iterate(handler, pf, it, level, size);
+                        handler.end(s, param, --level, isOne);
+                    } finally {
+                        q.close();
+                    }
+                } else {
+                    String param = StringResultSerializer.serialize(pf.getStartOP(), r);
+                    handler.start(s, param, level++, isOne);
+                    handler.end(s, param, --level, isOne);
+                }
+            } else if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			//workaround IS and USE
-			} else if (s instanceof IS || s instanceof USE) {
-				handler.start(s, r, level++, isOne);
-				handler.end(s, r, --level, isOne);
-            } else {
-                handler.start(s, r, level++, isOne);
+			} else if (!(s instanceof IS || s instanceof USE)) {
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    int size = q.size();
-                    if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                    iterate(handler, pf, q.iterator(), level, size);
+                    iterate(handler, pf, q.iterator(), level, q.size());
                 } finally {
                     q.close();
                 }
-                handler.end(s, r, --level, isOne);
             }
         }
 
+    }
+
+    private String param(PFlow pf, Iterator<Relationship> it) throws IOException {
+        if (it.hasNext()) {
+            return StringResultSerializer.serialize(pf.getStartOP(), it.next());
+        }
+        return null;
     }
 
 }

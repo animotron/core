@@ -40,75 +40,53 @@ public class StAXGraphHandler implements GraphHandler {
 	
 	@Override
 	public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-		try {
-			if (level > 0) {
-				if (statement instanceof ATTRIBUTE) {
-					String prefix = null;//statement.prefix(r);
-					String ns = null;//statement.namespace(r);
-					String name = statement.reference(r);
-					//String value = statement.value(r);
-					if (prefix == null && ns == null) {
-						//writer.writeAttribute(name, value);
-					} else if (prefix == null) {
-						//writer.writeAttribute(ns, name, value);
-					} else {
-						//writer.writeAttribute(prefix, ns, name, value);
-					}
-					
-				} else if (statement instanceof TEXT) {
-					//writer.writeCharacters(statement.value(r));
-					
-				} else if (statement instanceof COMMENT){
-					//writer.writeComment(statement.value(r));
-					
-				} else if (statement instanceof CDATA){
-					//writer.writeCData(statement.value(r));
-				}
-			}
-				
-			if (statement instanceof ELEMENT) {
-				String prefix = null;//statement.prefix(r);
-				String ns = null;//statement.namespace(r);
-				String name = statement.reference(r);
-				if (prefix == null && ns == null) {
-					writer.writeStartElement(name);
-				} else if (prefix == null) {
-					writer.writeStartElement(ns, name);
-				} else {
-					writer.writeStartElement(prefix, name, ns);
-				}
-			}
-
-		} catch (XMLStreamException e) {
-            throw new IOException(e);
-		}
 	}
 
 	@Override
 	public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-		try {
-			if (statement instanceof ELEMENT) {
-				writer.writeEndElement();
-			}
-		} catch (XMLStreamException e) {
-            throw new IOException(e);
-		}
 	}
 
     @Override
-    public void start(Statement statement, String name, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+        try {
+            if (statement instanceof ATTRIBUTE) {
+                writer.writeAttribute(param[0], param[1]);
+            } else if (statement instanceof ELEMENT) {
+                writer.writeStartElement(param[0]);
+            }
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
-    public void end(Statement statement, String name, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+        try {
+            if (statement instanceof ELEMENT) {
+                writer.writeEndElement();
+            }
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
-    public void start(Statement statement, String name, String value, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
+        try {
+            if (statement instanceof TEXT) {
+                writer.writeCharacters(param);
+            } else if (statement instanceof COMMENT){
+                writer.writeComment(param);
+            } else if (statement instanceof CDATA){
+                writer.writeCData(param);
+            }
+        } catch (XMLStreamException e) {
+            throw new IOException(e);
+        }
     }
 
     @Override
-    public void end(Statement statement, String name, String value, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
     }
 
     @Override

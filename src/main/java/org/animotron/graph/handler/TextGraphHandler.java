@@ -51,19 +51,19 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, String name, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String name, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, String[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void start(Statement statement, String name, String value, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String name, String value, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
     }
 
     @Override

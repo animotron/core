@@ -25,7 +25,6 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.Result;
@@ -95,9 +94,7 @@ public class ResultTraverser extends AnimoTraverser {
                     handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    int size = q.size();
-                    if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                    iterate(handler, pf, q.iterator(), level, size);
+                    iterate(handler, pf, q.iterator(), level, q.size());
                 } finally {
                     q.close();
                 }

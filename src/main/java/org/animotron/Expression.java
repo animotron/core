@@ -56,8 +56,12 @@ public class Expression extends AbstractExpression {
 	
 	private void buildExpression(Object[]... e) {
 		if (e != null)
-			for (Object i : e) 
-				buildStatement((Object[]) i);
+			for (Object i : e)
+                if (i instanceof Object[][]) {
+                    buildExpression((Object[][]) i);
+                } else {
+				    buildStatement((Object[]) i);
+                }
 	}
 	
 	private void buildStatement(Object[] e) {

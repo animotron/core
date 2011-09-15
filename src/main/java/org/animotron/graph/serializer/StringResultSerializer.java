@@ -36,7 +36,15 @@ public class StringResultSerializer {
         serialize(r, r, out);
     }
 
+    public static void serialize(Relationship r, StringBuilder out) throws IOException {
+        serialize(r, r, out);
+    }
+
     public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
+    }
+
+    public static void serialize(Relationship start_op, Relationship r, StringBuilder out) throws IOException {
         AnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
     }
 

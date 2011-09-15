@@ -21,13 +21,7 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.handler.StAXGraphHandler;
-import org.animotron.graph.serializer.AnimoResultSerializer;
-import org.animotron.graph.serializer.AnimoSerializer;
-import org.animotron.graph.serializer.BinarySerializer;
-import org.animotron.graph.serializer.StringResultSerializer;
-import org.animotron.graph.traverser.ResultTraverser;
-import org.animotron.manipulator.Evaluator;
+import org.animotron.graph.serializer.*;
 import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -37,8 +31,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -134,18 +126,12 @@ public abstract class ATest {
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
-        System.out.println("Result serializer...");
+        System.out.println("XML Result serializer...");
 
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream(in);
 
-        XMLStreamWriter writer;
-        try {
-            writer = OUTPUT_FACTORY.createXMLStreamWriter(out);
-        } catch (XMLStreamException e) {
-            throw new IOException(e);
-        }
-        ResultTraverser._.traverse(new StAXGraphHandler(writer), new PFlow(Evaluator._, op, op), op);
+        XMLResultSerializer.serialize(op, out);
         out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();

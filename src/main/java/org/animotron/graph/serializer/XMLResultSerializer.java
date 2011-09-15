@@ -21,7 +21,7 @@ package org.animotron.graph.serializer;
 import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.graph.handler.StAXGraphHandler;
-import org.animotron.graph.traverser.ResultTraverser;
+import org.animotron.graph.traverser.MLResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
@@ -57,6 +57,6 @@ public class XMLResultSerializer {
 
     public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
         XMLStreamWriter writer = getXMLStreamWriter(out);
-		ResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
+		MLResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
     }
 }
