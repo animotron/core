@@ -43,7 +43,6 @@ import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -108,7 +107,7 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
     	Iterator<Relationship> i = AnimoGraph.getResult(pf.getLastContext(), r.getEndNode());
     	//Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
-        boolean found = iterate(handler, pf, i, level);
+        boolean found = iterate(handler, pf, i, level, isOne);
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
@@ -121,9 +120,9 @@ public class ResultTraverser extends AnimoTraverser {
 
     }
 
-    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level, boolean isOne) throws IOException {
         boolean found = false;
-        boolean isFirst = true;
+        boolean isFirst = isOne;
         while (it.hasNext()) {
             Relationship i = it.next();
             if (isFirst) {
