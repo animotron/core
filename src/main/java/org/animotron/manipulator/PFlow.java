@@ -38,6 +38,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -59,18 +60,14 @@ public class PFlow {
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Throwable> stop = new MemoryChannel<Throwable>();
 	
-	protected PFlow parent = null;
+	protected final PFlow parent;
 	private Relationship op = null;
 	private Node opNode = null;
 	
 	private Vector<Relationship> path = new Vector<Relationship>();
 	
-	private PFlow(Manipulator m) {
-		this.m = m;
-	};
-	
 	public PFlow(Manipulator m, Relationship op) {
-		parent = new PFlow(m);
+		parent = null;
 		this.m = m;
 		this.op = op;
 		
@@ -85,14 +82,15 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 		
-		RelationshipType type = op.getType();
-		Statement s = Statements.relationshipType(type);
-		if (s instanceof Reference) {
+		//RelationshipType type = op.getType();
+		//Statement s = Statements.relationshipType(type);
+		//if (s instanceof Reference) {
+		if (!path.firstElement().equals(op))
 			path.insertElementAt(op, 0);
 		
-		} else if (RelationshipTypes.RESULT.name().equals(type.name())) {
-			path.insertElementAt(op, 0);
-		}
+		//} else if (RelationshipTypes.RESULT.name().equals(type.name())) {
+		//	path.insertElementAt(op, 0);
+		//}
 		
 		this.op = op;
 	}
@@ -199,10 +197,10 @@ public class PFlow {
 	}
 
 	public Path getFlowPath() {
-		System.out.println("Path:");
-		for (Relationship r : path) {
-			System.out.println(r);
-		}
+//		System.out.println("Path:");
+//		for (Relationship r : path) {
+//			System.out.println(r);
+//		}
 //		int i = 0;
 //		for (Path path : td_flow.traverse(getOPNode())) {
 //			System.out.println(" path = "+path);
@@ -338,5 +336,22 @@ public class PFlow {
 		
 		if (parent == null) return false;
 		return parent.isInStack(r);
+	}
+	
+	public void debug() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("DEBUG PFlow ");
+		sb.append(PFlowToString(this));
+		sb.append("\nPath = ");
+		sb.append(Arrays.toString(path.toArray()));
+		sb.append("\n");
+		sb.append("OPs ");
+		ops(sb);
+		System.out.println(sb.toString());
+	}
+	
+	private void ops(StringBuilder sb) {
+		if (op != null) { sb.append(op); sb.append(" ");}
+		if (parent != null) parent.ops(sb);
 	}
 }

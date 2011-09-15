@@ -173,6 +173,7 @@ public class GET extends Operator implements Evaluable, Query {
 					super.onMessage(pf);
 				} else {
 					System.out.println("P-FLOW is context for GET!\n pflow = "+pf.getFlowPath());
+					pf.debug();
 					
 					for (Relationship st : pf.getPFlowPath()) {
 						Set<Relationship> rSet = get(pf, st, name);
