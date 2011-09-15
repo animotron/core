@@ -87,7 +87,11 @@ public abstract class Manipulator {
 		if (op instanceof Node) {
 			pf = new PFlow(pflow, (Node)op);
 		} else {
-			pf = new PFlow(pflow, (Relationship)op);
+			if (pflow.getOP().equals(op))
+				pf = pflow;
+			else
+				pf = new PFlow(pflow, (Relationship)op);
+				
 		}
 		pf.question.subscribe(sub);
 
