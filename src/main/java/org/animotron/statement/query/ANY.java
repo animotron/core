@@ -67,13 +67,13 @@ public class ANY extends AbstractQuery implements Reference {
 					node = directed.iterator().next();
 				}
 	
-				System.out.println(" node = "+node);
+				//System.out.println(" node = "+node);
 	
 				if (underUSE && filtering(pf, node, uses)) {
 					pf.sendAnswer( createResult( pf, n, getThe(node), RESULT ) );
 				} else {
 		            for (Relationship tdR : td_IS.traverse(node).relationships()) {
-	                    System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
+	                    //System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
 	                    Node res = tdR.getStartNode();
 	                    if (filtering(pf, res, uses)) {
 	

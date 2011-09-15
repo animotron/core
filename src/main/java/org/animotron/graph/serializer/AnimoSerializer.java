@@ -35,12 +35,12 @@ import java.io.OutputStream;
 public class AnimoSerializer {
 
     public static void serialize(Relationship r, OutputStream out) throws IOException {
-        AnimoTraverser._.traverse(new AnimoGraphHandler(out), new PFlow(Evaluator._, r, r), r);
+        AnimoTraverser._.traverse(new AnimoGraphHandler(out), new PFlow(Evaluator._, r), r);
     }
 
     public static String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoTraverser._.traverse(new AnimoGraphHandler(out), new PFlow(Evaluator._, r, r), r);
+        AnimoTraverser._.traverse(new AnimoGraphHandler(out), new PFlow(Evaluator._, r), r);
         return out.toString();
     }
 

@@ -55,9 +55,15 @@ public class ResultTraverser extends AnimoTraverser {
 
     protected ResultTraverser() {}
 
-    public void traverse(GraphHandler handler, Relationship start_op, Relationship r) throws IOException {
+    public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, new PFlow(Evaluator._, start_op, r), r, 0, true);
+        build(handler, new PFlow(Evaluator._, r), r, 0, true);
+        handler.endGraph();
+    }
+
+    public void traverse(PFlow pf, GraphHandler handler, Relationship r) throws IOException {
+        handler.startGraph();
+        build(handler, pf, r, 0, true);
         handler.endGraph();
     }
 

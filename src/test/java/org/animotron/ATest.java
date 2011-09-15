@@ -22,6 +22,7 @@ import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.*;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -141,7 +142,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("String result serializer...");
-        String result = StringResultSerializer.serialize(op);
+        String result = StringResultSerializer.serialize(new PFlow(Evaluator._, op), op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 

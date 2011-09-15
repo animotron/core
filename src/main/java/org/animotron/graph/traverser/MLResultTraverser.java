@@ -101,7 +101,7 @@ public class MLResultTraverser extends ResultTraverser {
                         q.close();
                     }
                 } else {
-                    String param = StringResultSerializer.serialize(pflow.getStartOP(), r);
+                    String param = StringResultSerializer.serialize(pflow, r);
                     handler.start(s, param, level++, isOne);
                     handler.end(s, param, --level, isOne);
                 }
@@ -122,7 +122,7 @@ public class MLResultTraverser extends ResultTraverser {
 
     private String param(PFlow pf, Iterator<Relationship> it) throws IOException {
         if (it.hasNext()) {
-            return StringResultSerializer.serialize(pf.getStartOP(), it.next());
+            return StringResultSerializer.serialize(pf, it.next());
         }
         return null;
     }

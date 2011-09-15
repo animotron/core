@@ -51,12 +51,9 @@ public class XMLResultSerializer {
             throw new IOException(e);
         }
     }
-    public static void serialize(Relationship r, OutputStream out) throws IOException {
-        serialize(r, r, out);
-    }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
+    public static void serialize(Relationship r, OutputStream out) throws IOException {
         XMLStreamWriter writer = getXMLStreamWriter(out);
-		MLResultTraverser._.traverse(new StAXGraphHandler(writer), start_op, r);
+		MLResultTraverser._.traverse(new StAXGraphHandler(writer), r);
     }
 }

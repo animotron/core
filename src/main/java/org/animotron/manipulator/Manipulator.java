@@ -54,7 +54,7 @@ public abstract class Manipulator {
 	}
 	
 	public final PipedInput execute(Relationship op) throws IOException {
-		return execute(new PFlow(this, op, op), (PropertyContainer)op);
+		return execute(new PFlow(this, op), (PropertyContainer)op);
 	}
 
 	public final PipedInput execute(final PFlow pflow, Node op) throws IOException {
@@ -85,9 +85,9 @@ public abstract class Manipulator {
 		
 		final PFlow pf;
 		if (op instanceof Node) {
-			pf = new PFlow(this, pflow, (Node)op);
+			pf = new PFlow(pflow, (Node)op);
 		} else {
-			pf = new PFlow(this, pflow, (Relationship)op);
+			pf = new PFlow(pflow, (Relationship)op);
 		}
 		pf.question.subscribe(sub);
 

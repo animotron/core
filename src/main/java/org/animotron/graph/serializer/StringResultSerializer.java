@@ -20,6 +20,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.TextGraphHandler;
 import org.animotron.graph.traverser.AnimoResultTraverser;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -33,28 +34,20 @@ import java.io.OutputStream;
 public class StringResultSerializer {
 	
     public static void serialize(Relationship r, OutputStream out) throws IOException {
-        serialize(r, r, out);
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
     }
 
     public static void serialize(Relationship r, StringBuilder out) throws IOException {
-        serialize(r, r, out);
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
+	public static void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
+        AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
     }
 
-    public static void serialize(Relationship start_op, Relationship r, StringBuilder out) throws IOException {
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
-    }
-
-    public static String serialize(Relationship r) throws IOException {
-        return serialize(r, r);
-    }
-
-    public static String serialize(Relationship start_op, Relationship r) throws IOException {
+    public static String serialize(PFlow pf, Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), start_op, r);
+        AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
         return out.toString();
     }
 }

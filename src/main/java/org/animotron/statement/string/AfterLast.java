@@ -73,14 +73,14 @@ public class AfterLast extends Instruction implements Evaluable {
             //pattern
             String pattern;
 			try {
-				pattern = StringResultSerializer.serialize(pf.getStartOP(), params[0]);
+				pattern = StringResultSerializer.serialize(pf, params[0]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;
 			}
             String source;
 			try {
-				source = StringResultSerializer.serialize(pf.getStartOP(), params[1]);
+				source = StringResultSerializer.serialize(pf, params[1]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;

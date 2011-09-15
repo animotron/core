@@ -34,22 +34,12 @@ import java.io.OutputStream;
 public class AnimoResultSerializer {
 	
     public static void serialize(Relationship r, OutputStream out) throws IOException {
-        serialize(r, r, out);
-    }
-
-    public static void serialize(Relationship start_op, Relationship r, OutputStream out) throws IOException {
-        ResultTraverser._.traverse(new AnimoGraphHandler(out), start_op, r);
+        ResultTraverser._.traverse(new AnimoGraphHandler(out), r);
     }
 
     public static String serialize(Relationship r) throws IOException {
-        return serialize(r, r);
-    }
-
-    public static String serialize(Relationship start_op, Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(new AnimoGraphHandler(out), start_op, r);
+        AnimoResultTraverser._.traverse(new AnimoGraphHandler(out), r);
         return out.toString();
     }
-
-
 }

@@ -69,41 +69,16 @@ public class PFlow {
 		this.m = m;
 	};
 	
-	//XXX: remove Manipulator m
-	public PFlow(Manipulator m, PFlow pf, Relationship op) {
-		parent = pf;
-		this.m = m;
-		this.op = op;
-		
-		path.addAll(pf.path);
-	}
-
-	//XXX: remove Manipulator m
-	public PFlow(Manipulator m, PFlow pf, Node opNode) {
-		parent = pf;
-		this.m = m;
-		this.opNode = opNode;
-		
-		path.addAll(pf.path);
-	}
-
-	public PFlow(Manipulator m, Relationship start_op, Relationship op) {
+	public PFlow(Manipulator m, Relationship op) {
 		parent = new PFlow(m);
 		this.m = m;
 		this.op = op;
 		
-		path.add(start_op);
-	}
-
-	public PFlow(Manipulator m, Relationship start_op, Node opNode) {
-		parent = new PFlow(m);
-		this.m = m;
-		this.opNode = opNode;
-
-		path.add(start_op);
+		path.add(op);
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
+		System.out.println("new PFlow this = "+PFlowToString(this)+" parent = "+PFlowToString(parent));
 		this.parent = parent;
 		this.m = parent.m;
 		
@@ -120,6 +95,10 @@ public class PFlow {
 		}
 		
 		this.op = op;
+	}
+
+	private String PFlowToString(PFlow pf) {
+		return pf.toString().substring(pf.toString().indexOf("@"));
 	}
 
 	public PFlow(PFlow parent, Node opNode) {
