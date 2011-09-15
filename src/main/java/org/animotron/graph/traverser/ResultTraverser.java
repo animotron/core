@@ -87,13 +87,13 @@ public class ResultTraverser extends AnimoTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, pflow, r, level, isOne);
 			} else if (!(s instanceof IS || s instanceof USE)) {
                 if (s instanceof Result)
                     handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pf, q.iterator(), level, q.size());
+                    iterate(handler, pflow, q.iterator(), level, q.size());
                 } finally {
                     q.close();
                 }

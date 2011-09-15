@@ -86,32 +86,32 @@ public class MLResultTraverser extends ResultTraverser {
                     Iterator<Relationship> it = q.iterator();
                     String[] param = {null, null};
                     try {
-                        param[0] = param(pf, it);
+                        param[0] = param(pflow, it);
                         int size = q.size();
                         if (s instanceof ELEMENT) {
                             size = size - 1;
                         } else {
-                            param[1] = param(pf, it);
+                            param[1] = param(pflow, it);
                             size = size - 2;
                         }
                         handler.start(s, param, level++, isOne);
-                        iterate(handler, pf, it, level, size);
+                        iterate(handler, pflow, it, level, size);
                         handler.end(s, param, --level, isOne);
                     } finally {
                         q.close();
                     }
                 } else {
-                    String param = StringResultSerializer.serialize(pf.getStartOP(), r);
+                    String param = StringResultSerializer.serialize(pflow.getStartOP(), r);
                     handler.start(s, param, level++, isOne);
                     handler.end(s, param, --level, isOne);
                 }
             } else if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, pflow, r, level, isOne);
 			//workaround IS and USE
 			} else if (!(s instanceof IS || s instanceof USE)) {
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pf, q.iterator(), level, q.size());
+                    iterate(handler, pflow, q.iterator(), level, q.size());
                 } finally {
                     q.close();
                 }

@@ -78,7 +78,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, pflow, r, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof IS || s instanceof USE) {
 				handler.start(s, r, level++, isOne);
@@ -89,7 +89,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 try {
                     int size = q.size();
                     if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                    iterate(handler, pf, q.iterator(), level, size);
+                    iterate(handler, pflow, q.iterator(), level, size);
                 } finally {
                     q.close();
                 }
