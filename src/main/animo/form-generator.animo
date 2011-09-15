@@ -1,7 +1,7 @@
 the form-generator
     THE
 		\form
-		    (@id af "getID")
+		    (@id getID)
 			(HAVEs
 				(AGraph)
 				(\input (@id getID) (@value QGraph))
