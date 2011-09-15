@@ -76,11 +76,15 @@ public class ResultTraverser extends AnimoTraverser {
 
         PFlow pflow = pf;
 
-        if (RESULT.name().equals(typeName)) {
-            Relationship context = getDb().getRelationshipById(
+        try {
+        	Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
-            pflow = new PFlow(pf, context); 
+            pflow = new PFlow(pf, context);
+        } catch (Exception e) {
+		}
+
+        if (RESULT.name().equals(typeName)) {
 
         	r = getDb().getRelationshipById(
                 (Long)r.getProperty(RID.name())
@@ -125,7 +129,7 @@ public class ResultTraverser extends AnimoTraverser {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
-            in = Evaluator._.execute(new PFlow(pf, r), r);
+            in = Evaluator._.execute(pf, r);
             iterate(handler, pf, in, level, isOne);
         }
 
