@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static org.animotron.Properties.RID;
+import static org.animotron.Properties.CID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -73,17 +74,27 @@ public class ResultTraverser extends AnimoTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
+        PFlow pflow = pf;
+
+        try {
+        	Relationship context = getDb().getRelationshipById(
+                (Long)r.getProperty(CID.name())
+            );
+            pflow = new PFlow(pf, context);
+        } catch (Exception e) {
+		}
+
         if (RESULT.name().equals(typeName)) {
-            r = getDb().getRelationshipById(
-                    (Long)r.getProperty(RID.name())
-                );
+
+        	r = getDb().getRelationshipById(
+                (Long)r.getProperty(RID.name())
+            );
 
             type = r.getType();
             typeName = type.name();
         }
         
         Statement s;
-        PFlow pflow = pf;
         if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
             s = THE._;
             pflow = new PFlow(pf, r);

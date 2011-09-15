@@ -24,12 +24,14 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
@@ -44,7 +46,10 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
+import javolution.util.FastList;
+
 import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
@@ -82,15 +87,15 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 		
-		//RelationshipType type = op.getType();
+		RelationshipType type = op.getType();
 		//Statement s = Statements.relationshipType(type);
 		//if (s instanceof Reference) {
-		if (!path.firstElement().equals(op))
+		if (!path.firstElement().equals(op) &&(
+				RESULT.name().equals(type.name()) || 
+				REF.name().equals(type.name())
+				)
+			)
 			path.insertElementAt(op, 0);
-		
-		//} else if (RelationshipTypes.RESULT.name().equals(type.name())) {
-		//	path.insertElementAt(op, 0);
-		//}
 		
 		this.op = op;
 	}
@@ -193,9 +198,15 @@ public class PFlow {
 	}
 	
 	public List<Relationship> getPFlowPath() {
-		return path;
+		List<Relationship> list = new FastList<Relationship>();
+		for (Relationship r : getFlowPath().relationships()) {
+			if (REF.name().equals(r.getType().name()))
+				list.add(r);
+		}
+		return list;
+		//return path;
 	}
-
+	
 	public Path getFlowPath() {
 //		System.out.println("Path:");
 //		for (Relationship r : path) {
@@ -298,10 +309,17 @@ public class PFlow {
 	}
 
 	public Relationship getLastContext() {
+		System.out.print("PFlow get last context ");
 		for (Relationship r : path) {
-			if (AN._.rType.equals(r.getType().name()))
-				return r; 
+			if (AN._.rType.equals(r.getType().name())) {
+				System.out.println(r);
+				return r;
+			} else if (r.getStartNode().equals(THE._.THE_NODE())) { 
+				System.out.println(r);
+				return r;
+			}
 		}
+		System.out.println("WRONG LAST CONTEXT !!!!");
 		return path.lastElement();
 	}
 
@@ -332,10 +350,15 @@ public class PFlow {
 			});
 
 	public boolean isInStack(Relationship r) {
-		if (op != null && op.equals(r)) return true;
-		
-		if (parent == null) return false;
-		return parent.isInStack(r);
+//		if (op != null && op.equals(r)) return true;
+//		
+//		if (parent == null) return false;
+//		return parent.isInStack(r);
+		for (Relationship rr : getFlowPath().relationships()) {
+			if (rr.equals(r)) return true;
+		}
+		return false;
+
 	}
 	
 	public void debug() {

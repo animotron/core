@@ -31,6 +31,7 @@ import org.neo4j.graphdb.RelationshipType;
 import java.security.MessageDigest;
 
 import static org.animotron.Properties.RID;
+import static org.animotron.Properties.CID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
@@ -71,6 +72,8 @@ public abstract class AbstractStatement implements Statement {
 				Relationship res = node.createRelationshipTo(r.getEndNode(), rType);
 				//store to relationship arrow 
 				RID.set(res, r.getId());
+				//for debug
+				CID.set(res, pf.getLastContext().getId());
 
 				AnimoGraph.result(res, pf.getLastContext().getId());
 				
