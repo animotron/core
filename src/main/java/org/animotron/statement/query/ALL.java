@@ -20,6 +20,7 @@ package org.animotron.statement.query;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.operator.Reference;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -36,7 +37,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ALL extends AbstractQuery {
+public class ALL extends AbstractQuery implements Reference {
 	
 	public static final ALL _ = new ALL();
 	
