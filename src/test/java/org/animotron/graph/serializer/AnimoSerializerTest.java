@@ -36,27 +36,30 @@ import static org.animotron.Expression.text;
 public class AnimoSerializerTest extends ATest {
 	
 	@Test
-	public void test() throws Exception {
-
-        Expression A;
-
-        A = new Expression(
+	public void test_00() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(USE._, "Y")
             )
         );
         assertAnimo(A, "the A (is X) (use Y)");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_01() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(HAVE._, "X"),
                 _(HAVE._, "Y")
             )
         );
         assertAnimo(A, "the A (have X) (have Y)");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_02() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(HAVE._, "X",
                     _(HAVE._, "Y")
@@ -64,16 +67,22 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A have X have Y");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_03() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(AN._, "X"),
                 _(AN._, "Y")
             )
         );
         assertAnimo(A, "the A (X) (Y)");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_04() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(AN._, "X",
                     _(AN._, "Y")
@@ -81,8 +90,11 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A X Y");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_05() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(HAVE._, "B",
                     _(AN._, "C",
@@ -92,8 +104,11 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A have B C have D \".\"");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_06() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(HAVE._, "B",
                     _(AN._, "C",
@@ -104,8 +119,11 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A have B C (have D) (\".\")");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_07() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(HAVE._, "B",
                     _(AN._, "C",
@@ -116,8 +134,11 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A have B C (have D \".\") (have E \"_\")");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_08() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(HAVE._, "B",
@@ -129,8 +150,11 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A (is X) (have B C (have D \".\") (have E \"_\"))");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_09() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(HAVE._, "B",
@@ -146,8 +170,11 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A (is X) (have B (C (have D \".\") (have E \"_\")) (F (have G \":\") (have H \";\")))");
+    }
 
-        A = new Expression(
+    @Test
+    public void test_0A() throws Exception {
+        Expression A = new Expression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(HAVE._, "B",
@@ -172,36 +199,28 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-
         assertAnimo(A, "the A (is X) (have B (C (have D \"1\") (have E \"2\")) (F (have G \"3\") (have H \"4\"))) (have I (J (have K \"5\") (have L \"6\")) (M (have N \"7\") (have O \"8\")))");
-
 	}
 
     @Test
-    public void test0() throws Exception {
-
+    public void test_0B() throws Exception {
         Expression A = new Expression(
             _(THE._, "A",
                 text("bla"), text("bla")
             )
         );
-
         assertAnimo(A, "the A (\"bla\") (\"bla\")");
-
     }
 	
     @Test
-    public void test1() throws Exception {
-
+    public void test_0C() throws Exception {
         Expression A = new Expression(
             _(THE._, "A",
                 _(AN._, "B"),
                 _(AN._, "C")
             )
         );
-
         assertAnimoResult(A, "the A (the B) (the C)");
-
     }
 
 }
