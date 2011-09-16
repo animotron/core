@@ -55,7 +55,7 @@ public class ANY extends AbstractQuery implements Reference {
 			final Node n = pf.getOP().getEndNode();
 			Node node = Utils.getByREF(n);
 
-			if (!Utils.results(node, pf)) {
+			//if (!Utils.results(node, pf)) {
 			
 				Set<Node>[] lists = getUSEs(node, pf.getStartOP());
 				Set<Node> uses = lists[1];
@@ -70,19 +70,19 @@ public class ANY extends AbstractQuery implements Reference {
 				//System.out.println(" node = "+node);
 	
 				if (underUSE && filtering(pf, node, uses)) {
-					pf.sendAnswer( createResult( pf, n, getThe(node), RESULT ) );
+					pf.sendAnswer( createResult( pf.getLastContext(), n, getThe(node), RESULT ) );
 				} else {
 		            for (Relationship tdR : td_IS.traverse(node).relationships()) {
 	                    //System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
 	                    Node res = tdR.getStartNode();
 	                    if (filtering(pf, res, uses)) {
 	
-	                        pf.sendAnswer( createResult( pf, n, getThe(res), RESULT ) );
+	                        pf.sendAnswer( createResult( pf.getLastContext(), n, getThe(res), RESULT ) );
 	                        break;
 	                    }
 	                }
 				}
-			}
+			//}
             pf.done();
         }
 

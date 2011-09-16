@@ -19,11 +19,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.RelationshipTypes;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
@@ -31,7 +27,6 @@ import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;

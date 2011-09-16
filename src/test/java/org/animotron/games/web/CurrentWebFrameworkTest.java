@@ -49,7 +49,6 @@ public class CurrentWebFrameworkTest extends ATest {
             _(THE._, "service",
                 _(IS._, "resource")
             )
-
         );
 
         new Expression (

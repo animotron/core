@@ -78,7 +78,7 @@ public class AnimoPath {
 	}
 	
 	private void parse() {
-		int pos = 0;
+		//int pos = 0;
 		
 		List<Step> steps = new FastList<Step>();
 		for (Pattern pattern : patterns) {
@@ -110,7 +110,7 @@ public class AnimoPath {
 					parsed.add(new Step(new Pattern(ALL._)));
 			}
 				
-			pos++;
+			//pos++;
 		}
 	}
 	
@@ -145,9 +145,9 @@ public class AnimoPath {
 		return new Many(st.relationshipType());
 	}
 
-	private Many many(RelationshipType rt) {
-		return new Many(rt);
-	}
+//	private Many many(RelationshipType rt) {
+//		return new Many(rt);
+//	}
 
 	abstract class Cardinality {
 		RelationshipType type;

@@ -55,4 +55,8 @@ public class AnimoException extends Exception {
 	public void addToStack(Relationship op) {
 		stack.add(op);
 	}
+	
+	public String toString() {
+		return super.toString()+" @"+op;
+	}
 }
