@@ -206,6 +206,8 @@ public class GET extends Operator implements Evaluable, Query {
 		List<Relationship> nextREFs = new FastList<Relationship>();
 		nextREFs.add(ref);
 		
+		boolean first = true;
+		
 		while (true) {
 
 			for (Relationship n : nextREFs) {
@@ -222,7 +224,7 @@ public class GET extends Operator implements Evaluable, Query {
 			for (Relationship n : nextREFs) {
 				//System.out.println(""+n);
 				//System.out.println("getStartNode OUTGOING");
-				//if (!n.equals(ref)) {
+				if (first || !n.equals(ref)) {
 					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
 						if (r.equals(n)) continue;
 						
@@ -250,7 +252,8 @@ public class GET extends Operator implements Evaluable, Query {
 							}
 						}
 					}
-				//}
+				}
+				first = false;
 
 				//System.out.println("getEndNode OUTGOING");
 				for (Relationship r : n.getEndNode().getRelationships(OUTGOING)) {
