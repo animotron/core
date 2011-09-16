@@ -222,7 +222,7 @@ public class GET extends Operator implements Evaluable, Query {
 			for (Relationship n : nextREFs) {
 				//System.out.println(""+n);
 				//System.out.println("getStartNode OUTGOING");
-				if (!n.equals(ref)) {
+				//if (!n.equals(ref)) {
 					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
 						if (r.equals(n)) continue;
 						
@@ -250,7 +250,7 @@ public class GET extends Operator implements Evaluable, Query {
 							}
 						}
 					}
-				}
+				//}
 
 				//System.out.println("getEndNode OUTGOING");
 				for (Relationship r : n.getEndNode().getRelationships(OUTGOING)) {
@@ -291,6 +291,9 @@ public class GET extends Operator implements Evaluable, Query {
 	}
 	
 	private Relationship searchForHAVE(final Relationship ref, final String name) {
+		
+		if (!REF.name().equals(ref.getType().name()))
+			System.out.println("WRONG WRONG WRONG WRONG ref = "+ref+" type "+ref.getType());
 		
 		//search for local 'HAVE'
 		Relationship have = getByHave(ref.getStartNode(), name);
