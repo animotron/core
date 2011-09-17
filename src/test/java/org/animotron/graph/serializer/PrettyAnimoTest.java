@@ -90,9 +90,7 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
     public void test_09() throws IOException, AnimoException {
-        test("the a\n" +
-             "    \\b\n" +
-             "        \\c\n" +
+        test("the a \\b \\c\n" +
              "            @d\n" +
              "                (e)\n" +
              "                (f)");

@@ -20,6 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.Prefix;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -65,7 +66,9 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     @Override
     public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         root = stack.pop();
-        root[5] = (Boolean)root[5] || ((List<Object[]>)root[4]).size() > 1;
+        int size = ((List<Object[]>)root[4]).size();
+        if (statement instanceof Prefix) size--;
+        root[5] = (Boolean)root[5] || size > 1;
     }
 
     @Override
