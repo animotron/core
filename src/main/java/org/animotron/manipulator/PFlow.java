@@ -191,6 +191,9 @@ public class PFlow {
 	}
 
 	public void countDown() {
+		if (waitBeforeClosePipe == null)
+			waitBeforeClosePipe(1);
+		
 		waitBeforeClosePipe.countDown();
 		System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
