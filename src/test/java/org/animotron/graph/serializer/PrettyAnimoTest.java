@@ -83,4 +83,19 @@ public class PrettyAnimoTest extends ATest {
         test("the a @b (get c)", "the a @b get c");
     }
 
+    @Test
+    public void test_08() throws IOException, AnimoException {
+        test("the a \\b \\c @d e");
+    }
+
+    @Test
+    public void test_09() throws IOException, AnimoException {
+        test("the a\n" +
+             "    \\b\n" +
+             "        \\c\n" +
+             "            @d\n" +
+             "                (e)\n" +
+             "                (f)");
+    }
+
 }
