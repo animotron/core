@@ -103,10 +103,14 @@ public abstract class ATest {
 	}
 
     protected void assertAnimo(Relationship op, String expected) throws IOException {
+        assertAnimo(op, expected, false);
+    }
+
+    protected void assertAnimo(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
 
         System.out.println("Animo serializer...");
-        String result = AnimoSerializer.serialize(op);
+        String result = AnimoSerializer.serialize(op, pretty);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -114,10 +118,14 @@ public abstract class ATest {
     }
 
     protected void assertAnimoResult(Relationship op, String expected) throws IOException {
+        assertAnimoResult(op, expected, false);
+    }
+
+    protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
-        String result = AnimoResultSerializer.serialize(op);
+        String result = AnimoResultSerializer.serialize(op, pretty);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 

@@ -34,21 +34,14 @@ import java.io.OutputStream;
 public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     public AnimoGraphHandler(OutputStream stream) {
-        super(stream);
+        super (stream);
     }
 
     public AnimoGraphHandler(StringBuilder builder) {
         super(builder);
     }
 
-    @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (level != 0 && !(statement instanceof NAME)) {
-            write(" ");
-            if (!isOne) {
-                write("(");
-            }
-        }
+    protected void write(Statement statement, Relationship r) throws IOException {
         if (statement instanceof NAME) {
             write(statement.reference(r));
         } else if (statement instanceof TEXT) {
@@ -67,6 +60,17 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                 }
             }
         }
+    }
+
+    @Override
+    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+        if (level != 0 && !(statement instanceof NAME)) {
+            write(" ");
+            if (!isOne) {
+                write("(");
+            }
+        }
+        write(statement, r);
     }
 
     @Override
@@ -98,7 +102,6 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void endGraph() throws IOException {
-        //write("\n");
     }
 
 }

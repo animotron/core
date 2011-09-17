@@ -19,6 +19,8 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.AnimoGraphHandler;
+import org.animotron.graph.handler.AnimoPrettyGraphHandler;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
@@ -35,13 +37,29 @@ import java.io.OutputStream;
 public class AnimoSerializer {
 
     public static void serialize(Relationship r, OutputStream out) throws IOException {
-        AnimoTraverser._.traverse(new AnimoGraphHandler(out), new PFlow(Evaluator._), r);
+        serialize(r, out, false);
+    }
+
+    public static void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
+        AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
     }
 
     public static String serialize(Relationship r) throws IOException {
+        return serialize(r, false);
+    }
+
+    public static String serialize(Relationship r, boolean pretty) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoTraverser._.traverse(new AnimoGraphHandler(out), new PFlow(Evaluator._), r);
+        AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
         return out.toString();
+    }
+
+    public static GraphHandler handler(OutputStream out, boolean pretty) {
+        return pretty ? new AnimoPrettyGraphHandler(out) : new AnimoGraphHandler(out);
+    }
+
+    public static GraphHandler handler(StringBuilder out, boolean pretty) {
+        return pretty ? new AnimoPrettyGraphHandler(out) : new AnimoGraphHandler(out);
     }
 
 }

@@ -18,9 +18,7 @@
  */
 package org.animotron.graph.serializer;
 
-import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.animotron.graph.traverser.ResultTraverser;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -32,14 +30,22 @@ import java.io.OutputStream;
  *
  */
 public class AnimoResultSerializer {
-	
+
     public static void serialize(Relationship r, OutputStream out) throws IOException {
-        ResultTraverser._.traverse(new AnimoGraphHandler(out), r);
+        serialize(r, out, false);
+    }
+
+    public static void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
+        AnimoResultTraverser._.traverse(AnimoSerializer.handler(out, pretty), r);
     }
 
     public static String serialize(Relationship r) throws IOException {
+        return serialize(r, false);
+    }
+
+    public static String serialize(Relationship r, boolean pretty) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(new AnimoGraphHandler(out), r);
+        AnimoResultTraverser._.traverse(AnimoSerializer.handler(out, pretty), r);
         return out.toString();
     }
 }
