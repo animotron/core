@@ -103,7 +103,7 @@ public abstract class Manipulator {
             			pf.countDown(out);
             		} else {
                         Statement s = null;
-            			if (RESULT.equals(msg)) {
+            			if (RESULT.name().equals(msg.getType())) {
             				Relationship context = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())
         					);
@@ -115,7 +115,7 @@ public abstract class Manipulator {
                             try {
                                 s = Statements.name(THE._.reference(msg));
                             } catch (Exception e){}
-            			} else if (REF.equals(msg)){
+            			} else if (REF.name().equals(msg.getType().name())){
                             s = Statements.name(THE._.reference(msg));
                         }
 

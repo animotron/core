@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Relationship;
 import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -50,7 +51,8 @@ public class ALL extends AbstractQuery implements Reference {
     private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-            final Node n = pf.getOP().getEndNode();
+        	final Relationship op = pf.getOP();
+            final Node n = op.getEndNode();
             Relationship ref = n.getSingleRelationship( REF, OUTGOING );
 
             Node node = ref.getEndNode();
@@ -68,13 +70,13 @@ public class ALL extends AbstractQuery implements Reference {
 			}
 
 			if (underUSE && filtering(pf, node, uses))
-				pf.sendAnswer( createResultInMemory( n, getThe(node) ) );
+				pf.sendAnswer( createResult( op, n, getThe(node), RESULT ) );
 
 	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
 	            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
 	            Node res = tdR.getStartNode();
 	            if (filtering(pf, res, uses)) {
-	                pf.sendAnswer( createResultInMemory( n, getThe(res) ) );
+	                pf.sendAnswer( createResult( op, n, getThe(res), RESULT ) );
 	            }
 	        }
 

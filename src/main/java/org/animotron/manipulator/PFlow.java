@@ -84,6 +84,14 @@ public class PFlow {
 		path.add(op);
 	}
 
+	public PFlow(PFlow parent) {
+		this.parent = parent;
+		this.m = parent.m;
+		
+		//XXX: maybe, clone faster?
+		path.addAll(parent.path);
+	}
+
 	public PFlow(PFlow parent, Relationship op) {
 		System.out.print("new PFlow ");
 		System.out.println("this = "+Utils.shortID(this)+" parent = "+Utils.shortID(parent));

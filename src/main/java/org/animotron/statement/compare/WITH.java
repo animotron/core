@@ -69,7 +69,7 @@ public class WITH extends Operator implements Predicate {
 		
 		System.out.println("Eval actual");
 		for (Relationship have : haveSet) {
-			in = Evaluator._.execute(pf, have.getEndNode());
+			in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
 			for (Object e : in) {
 				actual.add((Relationship) e);
 				System.out.println("actual "+e);
@@ -77,7 +77,7 @@ public class WITH extends Operator implements Predicate {
 		}
 
 		System.out.println("Eval expected");
-		in = Evaluator._.execute(pf, op.getEndNode());
+		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
 		for (Object e : in) {
 			expected.add((Relationship) e);
 			System.out.println("expected "+e);
