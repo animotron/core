@@ -111,6 +111,7 @@ public class GET extends Operator implements Evaluable, Query {
 			final String name = reference(op);
 			
 			System.out.println("GET '"+ reference(op)+"'");
+			System.out.println(pf.getPFlowPath());
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
@@ -172,8 +173,11 @@ public class GET extends Operator implements Evaluable, Query {
 					pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
-					System.out.println("P-FLOW is context for GET!\n pflow = "+pf.getFlowPath());
-					pf.debug();
+					System.out.println("P-FLOW is context for GET!");
+					System.out.println("pflow = "+pf.getFlowPath());
+					//pf.debug();
+					System.out.println(pf.getPFlowPath());
+					
 					
 					for (Relationship st : pf.getPFlowPath()) {
 						Set<Relationship> rSet = get(pf, st, name);

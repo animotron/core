@@ -93,10 +93,10 @@ public class PFlow {
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
-		System.out.print("new PFlow ");
-		System.out.println("this = "+Utils.shortID(this)+" parent = "+Utils.shortID(parent));
-		System.out.print(" "+(new IOException()).getStackTrace()[1]);
-		System.out.println(" "+op);
+//		System.out.print("new PFlow ");
+//		System.out.println("this = "+Utils.shortID(this)+" parent = "+Utils.shortID(parent));
+//		System.out.print(" "+(new IOException()).getStackTrace()[1]);
+//		System.out.println(" "+op);
 		
 		this.parent = parent;
 		this.m = parent.m;
@@ -184,7 +184,7 @@ public class PFlow {
 	protected CountDownLatch waitBeforeClosePipe = null;
 	
 	public void waitBeforeClosePipe(int count) {
-		System.out.println("waitBeforeClosePipe "+count+" "+this);
+		//System.out.println("waitBeforeClosePipe "+count+" "+this);
 		waitBeforeClosePipe = new CountDownLatch(count);
 //		if (parent == null) answer.publish(null);
 //		else parent.answer.publish(null);
@@ -195,7 +195,7 @@ public class PFlow {
 			waitBeforeClosePipe(1);
 		
 		waitBeforeClosePipe.countDown();
-		System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
+		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 	
 	public void countDown(PipedOutput out) {
@@ -234,13 +234,13 @@ public class PFlow {
 	}
 	
 	public List<Relationship> getPFlowPath() {
-		List<Relationship> list = new FastList<Relationship>();
-		for (Relationship r : getFlowPath().relationships()) {
-			if (REF.name().equals(r.getType().name()))
-				list.add(r);
-		}
-		return list;
-		//return path;
+//		List<Relationship> list = new FastList<Relationship>();
+//		for (Relationship r : getFlowPath().relationships()) {
+//			if (REF.name().equals(r.getType().name()))
+//				list.add(r);
+//		}
+//		return list;
+		return path;
 	}
 	
 	public Path getFlowPath() {
@@ -341,13 +341,16 @@ public class PFlow {
 
 
 	public void addContextPoint(Relationship r) {
-		path.insertElementAt(r, 1);
+		path.insertElementAt(r, 0);
 	}
 
 	public Relationship getLastContext() {
 		System.out.print("PFlow get last context ");
 		for (Relationship r : path) {
-			if (REF.name().equals(r.getType().name())) {
+			if (AN._.rType.equals(r.getType().name())) {
+				System.out.println(r);
+				return r;
+			} else if (REF.name().equals(r.getType().name())) {
 				System.out.println(r);
 				return r;
 			} else if (RESULT.name().equals(r.getType().name())) {

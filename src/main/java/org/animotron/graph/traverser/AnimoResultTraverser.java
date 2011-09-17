@@ -25,6 +25,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
@@ -58,15 +59,19 @@ public class AnimoResultTraverser extends ResultTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
-        if (RESULT.name().equals(typeName)) {
-            Relationship context = getDb().getRelationshipById(
+        try {
+	        Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
-            pf.addContextPoint(context);
+	        pf.addContextPoint(context);
+        } catch (Exception e) {
+		}
+        
+        if (RESULT.name().equals(typeName)) {
 
         	r = getDb().getRelationshipById(
-                    (Long)r.getProperty(RID.name())
-                );
+                (Long)r.getProperty(RID.name())
+            );
 
             type = r.getType();
             typeName = type.name();
@@ -78,6 +83,10 @@ public class AnimoResultTraverser extends ResultTraverser {
         } else {
             s = Statements.relationshipType(typeName);
         }
+        
+        if (s instanceof Reference) {
+	        pf.addContextPoint(r);
+        }
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
@@ -88,6 +97,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 				handler.end(s, r, --level, isOne);
             } else {
                 handler.start(s, r, level++, isOne);
+                //System.out.println("build "+r+" "+r.getType());
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
                     int size = q.size();

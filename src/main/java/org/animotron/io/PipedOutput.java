@@ -61,7 +61,7 @@ public class PipedOutput implements Cloneable {
 	}
 	
     public void write(Object obj) throws IOException {
-    	System.out.println("Write to pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
+    	//System.out.println("Write to pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
         
     	if (connection == null) throw new IOException("Pipe not connected");
 
@@ -69,7 +69,7 @@ public class PipedOutput implements Cloneable {
     }
     
     public void close()  throws IOException {
-    	System.out.println("Closing pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
+    	//System.out.println("Closing pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
     	if (connection != null) {
     		connection.receivedLast();
     	}
