@@ -21,6 +21,8 @@ package org.animotron.io;
 import java.io.IOException;
 import java.util.Iterator;
 
+import org.animotron.utils.Utils;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
@@ -117,9 +119,12 @@ public class PipedInput implements Cloneable, Iterable<Object> {
         if (!connected) {
             throw new IOException("Pipe not connected");
             
-        } else if (closedByWriter || closedByReader) {
-        	throw new IOException("Pipe closed");
+        } else if (closedByWriter) {
+        	throw new IOException("Pipe closed by writer "+Utils.shortID(this));
         	
+        } else if (closedByReader) {
+        	throw new IOException("Pipe closed by reader");
+
         } else if (readSide != null && !readSide.isAlive()) {
             throw new IOException("Read end dead");
             

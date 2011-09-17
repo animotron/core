@@ -73,13 +73,11 @@ public class ResultTraverser extends AnimoTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
-        PFlow pflow = pf;
-
         try {
         	Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
-            pflow = new PFlow(pf, context);
+            pf.addContextPoint(context);
         } catch (Exception e) {
 		}
 
@@ -96,20 +94,19 @@ public class ResultTraverser extends AnimoTraverser {
         Statement s;
         if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
             s = THE._;
-            pflow = new PFlow(pf, r);
         } else {
             s = Statements.relationshipType(typeName);
         }
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pflow, r, level, isOne);
+                result(handler, pf, r, level, isOne);
 			} else if (!(s instanceof Relation)) {
                 if (s instanceof Result)
                     handler.start(s, r, level++, isOne);
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pflow, q.iterator(), level, q.size());
+                    iterate(handler, pf, q.iterator(), level, q.size());
                 } finally {
                     q.close();
                 }

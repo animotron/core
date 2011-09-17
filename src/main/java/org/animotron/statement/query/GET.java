@@ -236,7 +236,7 @@ public class GET extends Operator implements Evaluable, Query {
 							newREFs.add(t);
 						} else if (st instanceof Reference) {
 							try {
-								PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
+								PipedInput in = Evaluator._.execute(pf, r);
 								
 								for (Object rr : in) {
 									if (rr instanceof Relationship) {
@@ -295,12 +295,19 @@ public class GET extends Operator implements Evaluable, Query {
 	
 	private Relationship searchForHAVE(final Relationship ref, final String name) {
 		
-		if (!REF.name().equals(ref.getType().name()))
+		boolean checkStart = true;
+		if (!REF.name().equals(ref.getType().name())) {
 			System.out.println("WRONG WRONG WRONG WRONG ref = "+ref+" type "+ref.getType());
+			checkStart = false;
+		}
+		
+		Relationship have = null;
 		
 		//search for local 'HAVE'
-		Relationship have = getByHave(ref.getStartNode(), name);
-		if (have != null) return have;
+		if (checkStart) {
+			have = getByHave(ref.getStartNode(), name);
+			if (have != null) return have;
+		}
 
 		//search for inside 'HAVE'
 		have = getByHave(ref.getEndNode(), name);
@@ -325,7 +332,7 @@ public class GET extends Operator implements Evaluable, Query {
 	//in-use by SELF
 	public Relationship get(Node context, final String name) {
 		
-		System.out.println("GET get context = "+context);
+		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
 		Relationship have = getByHave(context, name);
@@ -348,7 +355,7 @@ public class GET extends Operator implements Evaluable, Query {
 			
 			Statement st = Statements.relationshipType(tdR.getType());
 			if (st instanceof IS) {
-				System.out.println("GET IC -> IS "+tdR);
+				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
 					have = getByHave(prevTHE.getEndNode(), name);
@@ -357,10 +364,10 @@ public class GET extends Operator implements Evaluable, Query {
 				prevTHE = tdR;
 				
 			} else if (st instanceof IC) {
-				System.out.print("GET IC -> "+tdR);
+				//System.out.print("GET IC -> "+tdR);
 				
 				if (name.equals(reference(tdR))) {
-					System.out.println(" MATCH");
+					//System.out.println(" MATCH");
 					
 					//store
 					final Node sNode = context;
@@ -509,7 +516,7 @@ public class GET extends Operator implements Evaluable, Query {
 			});
 		}
 		
-		System.out.println("context = "+context+" start_op = "+start_op);
+		//System.out.println("context = "+context+" start_op = "+start_op);
 		
 		Node node = Utils.getByREF(start_op.getEndNode());
 //		for (Path path : td.traverse(node)) {

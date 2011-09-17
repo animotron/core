@@ -48,6 +48,7 @@ public class EACH extends Operator implements Evaluable {
 		return question;
 	}
 
+	//XXX: out of date!
 	private OnQuestion question = new OnQuestion() {
 
 		@Override

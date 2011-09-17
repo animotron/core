@@ -20,6 +20,8 @@ package org.animotron.io;
 
 import java.io.IOException;
 
+import org.animotron.utils.Utils;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
@@ -59,6 +61,7 @@ public class PipedOutput implements Cloneable {
 	}
 	
     public void write(Object obj) throws IOException {
+    	System.out.println("Write to pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
         
     	if (connection == null) throw new IOException("Pipe not connected");
 
@@ -66,6 +69,7 @@ public class PipedOutput implements Cloneable {
     }
     
     public void close()  throws IOException {
+    	System.out.println("Closing pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
     	if (connection != null) {
     		connection.receivedLast();
     	}

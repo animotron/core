@@ -36,6 +36,7 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 
 import static org.animotron.Properties.RID;
+import static org.animotron.Properties.CID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -54,7 +55,7 @@ public abstract class Manipulator {
 	}
 	
 	public final PipedInput execute(Relationship op) throws IOException {
-		return execute(new PFlow(this, op), (PropertyContainer)op);
+		return execute(new PFlow(this), (PropertyContainer)op);
 	}
 
 	public final PipedInput execute(final PFlow pflow, Node op) throws IOException {
@@ -87,10 +88,7 @@ public abstract class Manipulator {
 		if (op instanceof Node) {
 			pf = new PFlow(pflow, (Node)op);
 		} else {
-//			if (pflow != null && pflow.getOP() != null && pflow.getOP().equals(op))
-//				pf = pflow;
-//			else
-				pf = new PFlow(pflow, (Relationship)op);
+			pf = new PFlow(pflow, (Relationship)op);
 				
 		}
 		pf.question.subscribe(sub);
@@ -101,14 +99,19 @@ public abstract class Manipulator {
             public void onMessage(Relationship msg) {
             	System.out.println("get answer "+msg);
             	try {
-            		if (msg == null)
-            			out.close();
-            		else {
+            		if (msg == null) {
+            			pf.countDown(out);
+            		} else {
                         Statement s = null;
             			if (RESULT.equals(msg)) {
+            				Relationship context = getDb().getRelationshipById(
+        						(Long)msg.getProperty(CID.name())
+        					);
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
             					);
+            				pf.addContextPoint(context);
+
                             try {
                                 s = Statements.name(THE._.reference(msg));
                             } catch (Exception e){}
@@ -128,18 +131,13 @@ public abstract class Manipulator {
                         } else if (s == null){
                             s = Statements.relationshipType(msg.getType());
                             if (s instanceof Query || s instanceof Evaluable) {
-                                try {
-                                    PipedInput in = Evaluator._.execute(pf, msg);
-                                    for (Object obj : in) {
-                                        if (obj instanceof Relationship) {
-                                            out.write(obj);
-                                        } else {
-                                            System.out.println("UNHANDLED "+obj);
-                                        }
+                                PipedInput in = Evaluator._.execute(pf, msg);
+                                for (Object obj : in) {
+                                    if (obj instanceof Relationship) {
+                                        out.write(obj);
+                                    } else {
+                                        System.out.println("UNHANDLED "+obj);
                                     }
-                                } catch (Exception e) {
-                                    //XXX: log error
-                                    out.close();
                                 }
                             } else {
                                 out.write(msg);

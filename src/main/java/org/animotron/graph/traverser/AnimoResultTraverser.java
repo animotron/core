@@ -34,6 +34,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 
 import static org.animotron.Properties.RID;
+import static org.animotron.Properties.CID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -58,7 +59,12 @@ public class AnimoResultTraverser extends ResultTraverser {
         String typeName = type.name();
 
         if (RESULT.name().equals(typeName)) {
-            r = getDb().getRelationshipById(
+            Relationship context = getDb().getRelationshipById(
+                (Long)r.getProperty(CID.name())
+            );
+            pf.addContextPoint(context);
+
+        	r = getDb().getRelationshipById(
                     (Long)r.getProperty(RID.name())
                 );
 
@@ -67,17 +73,15 @@ public class AnimoResultTraverser extends ResultTraverser {
         }
 
         Statement s;
-        PFlow pflow = pf;
         if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
             s = THE._;
-            pflow = new PFlow(pf, r);
         } else {
             s = Statements.relationshipType(typeName);
         }
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pflow, r, level, isOne);
+                result(handler, pf, r, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof Relation) {
 				handler.start(s, r, level++, isOne);
@@ -88,7 +92,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 try {
                     int size = q.size();
                     if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                    iterate(handler, pflow, q.iterator(), level, size);
+                    iterate(handler, pf, q.iterator(), level, size);
                 } finally {
                     q.close();
                 }

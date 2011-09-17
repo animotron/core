@@ -142,7 +142,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("String result serializer...");
-        String result = StringResultSerializer.serialize(new PFlow(Evaluator._, op), op);
+        String result = StringResultSerializer.serialize(new PFlow(Evaluator._), op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 

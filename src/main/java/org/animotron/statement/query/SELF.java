@@ -33,6 +33,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * Query operator 'self'.
@@ -66,7 +67,7 @@ public class SELF extends AbstractQuery {
 			}
 
             Path path = pf.getFlowPath();
-            System.out.println("path = "+path);
+            //System.out.println("path = "+path);
             
 
             Relationship lastContext = pf.getLastContext();
@@ -91,14 +92,14 @@ public class SELF extends AbstractQuery {
                 res = GET._.get(ref.getEndNode(), reference(pf.getOP()));
 
                 if (res != null)
-                    pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+                    pf.sendAnswer(createResult(pf.getLastContext(), pf.getOPNode(), res, RESULT));
 
             } else if (searchHave == 2) {
                 //the instance self in have
                 res = GET._.get(pf.getStartNode(), reference(pf.getOP()));
 
                 if (res != null)
-                    pf.sendAnswer(createResultInMemory(pf.getOPNode(), res));
+                    pf.sendAnswer(createResult(pf.getLastContext(), pf.getOPNode(), res, RESULT));
                     //TODO Why don't create persistent relationship?
 
             } else
@@ -112,7 +113,7 @@ public class SELF extends AbstractQuery {
 		
 		Node node = Utils.getByREF(start_op.getEndNode());
 
-		System.out.println("start_op = "+start_op+" eNode = "+eNode+" sNode = "+node);
+		//System.out.println("start_op = "+start_op+" eNode = "+eNode+" sNode = "+node);
 
 		boolean underUSE = false;
 		for (Path path : getUSEtravers(pf.getStartOP()).traverse(node)) {
@@ -128,9 +129,9 @@ public class SELF extends AbstractQuery {
 
 		TraversalDescription td = getDirectedTravers(eNode);
 		
-		for (Path path : td.traverse(node)) {
-			System.out.println("path = "+path);
-		}
+//		for (Path path : td.traverse(node)) {
+//			System.out.println("path = "+path);
+//		}
 		
 		int deep = Integer.MAX_VALUE;
 		Relationship result = null;

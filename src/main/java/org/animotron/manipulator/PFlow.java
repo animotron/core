@@ -19,10 +19,12 @@
 package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.io.PipedOutput;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
+import org.animotron.utils.Utils;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
@@ -35,6 +37,8 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -66,16 +70,26 @@ public class PFlow {
 	
 	private Vector<Relationship> path = new Vector<Relationship>();
 	
+	public PFlow(Manipulator m) {
+		parent = null;
+		this.m = m;
+
+	}
+
 	public PFlow(Manipulator m, Relationship op) {
 		parent = null;
 		this.m = m;
-		this.op = op;
-		
+
+		this.op = op; 
 		path.add(op);
 	}
 
 	public PFlow(PFlow parent, Relationship op) {
-		System.out.println("new PFlow this = "+PFlowToString(this)+" parent = "+PFlowToString(parent));
+		System.out.print("new PFlow ");
+		System.out.println("this = "+Utils.shortID(this)+" parent = "+Utils.shortID(parent));
+		System.out.print(" "+(new IOException()).getStackTrace()[1]);
+		System.out.println(" "+op);
+		
 		this.parent = parent;
 		this.m = parent.m;
 		
@@ -85,18 +99,13 @@ public class PFlow {
 		RelationshipType type = op.getType();
 		//Statement s = Statements.relationshipType(type);
 		//if (s instanceof Reference) {
-		if (!path.firstElement().equals(op) &&(
+		if (
 				RESULT.name().equals(type.name()) || 
 				REF.name().equals(type.name())
-				)
 			)
 			path.insertElementAt(op, 0);
 		
 		this.op = op;
-	}
-
-	private String PFlowToString(PFlow pf) {
-		return pf.toString().substring(pf.toString().indexOf("@"));
 	}
 
 	public PFlow(PFlow parent, Node opNode) {
@@ -140,8 +149,7 @@ public class PFlow {
 	public void sendAnswer(Relationship r) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
-			//System.out.println("send answer to "+answer+" (this = "+this+")");
-			answer.publish(r);
+			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 			parent.answer.publish(r);
@@ -168,6 +176,7 @@ public class PFlow {
 	protected CountDownLatch waitBeforeClosePipe = null;
 	
 	public void waitBeforeClosePipe(int count) {
+		System.out.println("waitBeforeClosePipe "+count+" "+this);
 		waitBeforeClosePipe = new CountDownLatch(count);
 //		if (parent == null) answer.publish(null);
 //		else parent.answer.publish(null);
@@ -175,8 +184,29 @@ public class PFlow {
 
 	public void countDown() {
 		waitBeforeClosePipe.countDown();
+		System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 	
+	public void countDown(PipedOutput out) {
+		if (waitBeforeClosePipe == null) {
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return;
+		}
+		
+		waitBeforeClosePipe.countDown();
+		if (waitBeforeClosePipe.getCount() == 0)
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
+	}
+
 	public void await() {
 		if (waitBeforeClosePipe == null) return;
 		
@@ -214,7 +244,7 @@ public class PFlow {
 //		}
 //		System.out.println("PFLOW ********************* "+i);
 		
-		System.out.println("OPNode = "+getOPNode());
+		//System.out.println("OPNode = "+getOPNode());
 
 		Path first = null;
 		for (Path path : td_flow.traverse(getOPNode())) {
@@ -306,15 +336,15 @@ public class PFlow {
 	public Relationship getLastContext() {
 		System.out.print("PFlow get last context ");
 		for (Relationship r : path) {
-			if (AN._.rType.equals(r.getType().name())) {
+			if (REF.name().equals(r.getType().name())) {
 				System.out.println(r);
 				return r;
-			} else if (r.getStartNode().equals(THE._.THE_NODE())) { 
+			} else if (RESULT.name().equals(r.getType().name())) {
 				System.out.println(r);
 				return r;
 			}
 		}
-		System.out.println("WRONG LAST CONTEXT !!!!");
+		System.out.println(path.lastElement());
 		return path.lastElement();
 	}
 
@@ -359,7 +389,7 @@ public class PFlow {
 	public void debug() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DEBUG PFlow ");
-		sb.append(PFlowToString(this));
+		sb.append(Utils.shortID(this));
 		sb.append("\nPath = ");
 		sb.append(Arrays.toString(path.toArray()));
 		sb.append("\n");

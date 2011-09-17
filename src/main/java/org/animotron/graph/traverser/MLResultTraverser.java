@@ -37,6 +37,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getORDER;
@@ -61,19 +62,22 @@ public class MLResultTraverser extends ResultTraverser {
         String typeName = type.name();
 
         if (RESULT.name().equals(typeName)) {
+            Relationship context = getDb().getRelationshipById(
+                (Long)r.getProperty(CID.name())
+            );
+            pf.addContextPoint(context);
+
             r = getDb().getRelationshipById(
-                    (Long)r.getProperty(RID.name())
-                );
+                (Long)r.getProperty(RID.name())
+            );
 
             type = r.getType();
             typeName = type.name();
         }
 
         Statement s;
-        PFlow pflow = pf;
         if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
             s = THE._;
-            pflow = new PFlow(pf, r);
         } else {
             s = Statements.relationshipType(typeName);
         }
@@ -85,32 +89,32 @@ public class MLResultTraverser extends ResultTraverser {
                     Iterator<Relationship> it = q.iterator();
                     String[] param = {null, null};
                     try {
-                        param[0] = param(pflow, it);
+                        param[0] = param(pf, it);
                         int size = q.size();
                         if (s instanceof ELEMENT) {
                             size = size - 1;
                         } else {
-                            param[1] = param(pflow, it);
+                            param[1] = param(pf, it);
                             size = size - 2;
                         }
                         handler.start(s, param, level++, isOne);
-                        iterate(handler, pflow, it, level, size);
+                        iterate(handler, pf, it, level, size);
                         handler.end(s, param, --level, isOne);
                     } finally {
                         q.close();
                     }
                 } else {
-                    String param = StringResultSerializer.serialize(pflow, r);
+                    String param = StringResultSerializer.serialize(pf, r);
                     handler.start(s, param, level++, isOne);
                     handler.end(s, param, --level, isOne);
                 }
             } else if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pflow, r, level, isOne);
+                result(handler, pf, r, level, isOne);
 			//workaround IS and USE
 			} else if (!(s instanceof Relation)) {
                 IndexHits<Relationship> q = getORDER().query(r.getEndNode());
                 try {
-                    iterate(handler, pflow, q.iterator(), level, q.size());
+                    iterate(handler, pf, q.iterator(), level, q.size());
                 } finally {
                     q.close();
                 }

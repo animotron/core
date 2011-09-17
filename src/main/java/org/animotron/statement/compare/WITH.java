@@ -52,7 +52,7 @@ public class WITH extends Operator implements Predicate {
 	private WITH() { super("with"); }
 
 	@Override
-	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) throws InterruptedException, IOException {
+	public boolean filter(PFlow pf, Relationship op, Node ref) throws InterruptedException, IOException {
 		
 		System.out.println("==================================================");
 		System.out.println("WITH op "+op+" ref "+ref);

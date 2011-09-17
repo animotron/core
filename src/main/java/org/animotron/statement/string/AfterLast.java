@@ -108,6 +108,7 @@ public class AfterLast extends Instruction implements Evaluable {
 						Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._.relationshipType(), INCOMING).getStartNode();
 						Relationship res = sNode.createRelationshipTo(rNode, RESULT);
 						Properties.RID.set(res, rID);
+						Properties.CID.set(res, pf.getLastContext().getId());
 						return res;
 					}
 				});

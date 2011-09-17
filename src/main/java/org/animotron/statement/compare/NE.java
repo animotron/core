@@ -37,7 +37,7 @@ public class NE extends Operator implements Predicate {
 	private NE() { super("ne"); }
 
 	@Override
-	public boolean filter(PFlow pf, Relationship start_op, Relationship op, Node ref) {
+	public boolean filter(PFlow pf, Relationship op, Node ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}
