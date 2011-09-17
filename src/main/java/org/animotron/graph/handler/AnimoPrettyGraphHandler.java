@@ -19,6 +19,8 @@
 package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
+import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.Prefix;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -64,7 +66,9 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     @Override
     public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         root = stack.pop();
-        root[5] = (Boolean)root[5] || ((List<Object[]>)root[4]).size() > 1;
+        int size = ((List<Object[]>)root[4]).size();
+        if (statement instanceof Prefix) size--;
+        root[5] = (Boolean)root[5] || size > 1;
     }
 
     @Override
@@ -74,9 +78,10 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     }
 
     private void write(Object[] o) throws IOException {
+        Statement statement = (Statement) o[0];
         int level = (Integer) o[2];
         boolean isOne = (Boolean) o[3];
-        if (level > 0) {
+        if (level != 0 && !(statement instanceof NAME)) {
             if ((Boolean) o[5]) {
                 write("\n");
                 for (int i = 0; i < level; i++) {
@@ -89,11 +94,11 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                 write("(");
             }
         }
-        write((Statement) o[0], (Relationship) o[1]);
+        write(statement, (Relationship) o[1]);
         for (Object[] i : (List<Object[]>) o[4]) {
             write(i);
         }
-        if (level > 0 && !isOne) {
+        if (level != 0 && !(statement instanceof NAME) && !isOne) {
             write(")");
         }
     }
