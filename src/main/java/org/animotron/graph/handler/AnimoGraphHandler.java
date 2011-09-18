@@ -46,7 +46,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             write(statement.reference(r));
         } else if (statement instanceof TEXT) {
             write("\"");
-            write(statement.reference(r));
+            write(statement.reference(r).replaceAll("\"", "\\\\\""));
             write("\"");
         } else {
             if (statement instanceof AN) {

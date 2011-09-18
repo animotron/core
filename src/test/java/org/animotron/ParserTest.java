@@ -171,4 +171,9 @@ public class ParserTest extends ATest {
         test("the a @x \"x\"");
     }
 
+    @Test
+    public void test_26() throws IOException, AnimoException {
+        test("the a \"\\\"\"");
+    }
+
 }

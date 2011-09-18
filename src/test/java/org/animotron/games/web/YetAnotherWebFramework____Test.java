@@ -124,16 +124,20 @@ public class YetAnotherWebFramework____Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 6a40e5b412692b64b8e07615e06e442dc05c3c4d44c09faa70e4cd34bf3abf25 " +
-                                "have content " +
-                                    "\\html " +
-                                        "(\\head \\title have title \"Welcome to Animo\") " +
-                                        "(\\body the theme-concrete-root-layout (is root-layout) " +
-                                            "(\\h1 have title \"Welcome to Animo\") " +
-                                            "(\\p have content \"It is working\") " +
-                                            "(\\ul " +
-                                                "(\\li (\"host:\") (\\strong have host \"localhost\")) " +
-                                                "(\\li (\"uri:\") (\\strong have uri \"/\"))))");
+        assertAnimoResult(s,  "the 87956ef44ea067768cfc5e90fa8e0c17f5a0eb99904923a5a70060f3c4302d07 " +
+                                "the rest " +
+                                    "the root-service " +
+                                    "(is service) " +
+                                    "(have uri \"/\") " +
+                                    "(the html " +
+                                        "\\html " +
+                                            "(\\head \\title have title \"Welcome to Animo\") " +
+                                            "(\\body the theme-concrete-root-layout (is root-layout) " +
+                                                "(\\h1 have title \"Welcome to Animo\") " +
+                                                "(\\p have content \"It is working!\") " +
+                                                "(\\ul " +
+                                                    "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
+                                                    "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
 
 
         assertXMLResult(s,  "<html>" +
