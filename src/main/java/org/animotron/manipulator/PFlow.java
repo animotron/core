@@ -341,7 +341,13 @@ public class PFlow {
 
 
 	public void addContextPoint(Relationship r) {
+		System.out.println("adding "+this+" "+r);
 		path.insertElementAt(r, 0);
+	}
+
+	public void popContextPoint() {
+		System.out.println("pop "+this+" "+path);
+		path.remove(0);
 	}
 
 	public Relationship getLastContext() {

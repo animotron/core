@@ -27,6 +27,7 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -59,11 +60,13 @@ public class AnimoResultTraverser extends ResultTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
+        int addedContexts = 0;
         try {
 	        Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
 	        pf.addContextPoint(context);
+	        addedContexts++;
         } catch (Exception e) {
 		}
         
@@ -84,13 +87,14 @@ public class AnimoResultTraverser extends ResultTraverser {
             s = Statements.relationshipType(typeName);
         }
         
-        if (s instanceof Reference) {
+        if (s instanceof Reference || s instanceof HAVE) {
 	        pf.addContextPoint(r);
+	        addedContexts++;
         }
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, new PFlow(pf), r, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof Relation) {
 				handler.start(s, r, level++, isOne);
@@ -102,12 +106,17 @@ public class AnimoResultTraverser extends ResultTraverser {
                 try {
                     int size = q.size();
                     if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                    iterate(handler, pf, q.iterator(), level, size);
+                    iterate(handler, new PFlow(pf), q.iterator(), level, size);
                 } finally {
                     q.close();
                 }
                 handler.end(s, r, --level, isOne);
             }
+        }
+        
+        while (addedContexts > 0) {
+        	pf.popContextPoint();
+        	addedContexts--;
         }
 
     }

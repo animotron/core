@@ -102,15 +102,18 @@ public abstract class Manipulator {
             		if (msg == null) {
             			pf.countDown(out);
             		} else {
+            			int addedContexts = 0;
                         Statement s = null;
             			if (RESULT.name().equals(msg.getType())) {
             				Relationship context = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())
         					);
+            				pf.addContextPoint(context);
+            				addedContexts++;
+            				
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
             					);
-            				pf.addContextPoint(context);
 
                             try {
                                 s = Statements.name(THE._.reference(msg));
@@ -120,7 +123,7 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                        	PipedInput in = execute(pf, msg, ((Evaluable) s).onCalcQuestion());
+                        	PipedInput in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
                             for (Object obj : in) {
                                 if (obj instanceof Relationship) {
                                     out.write(obj);
@@ -131,7 +134,7 @@ public abstract class Manipulator {
                         } else if (s == null){
                             s = Statements.relationshipType(msg.getType());
                             if (s instanceof Query || s instanceof Evaluable) {
-                                PipedInput in = Evaluator._.execute(pf, msg);
+                                PipedInput in = Evaluator._.execute(new PFlow(pf), msg);
                                 for (Object obj : in) {
                                     if (obj instanceof Relationship) {
                                         out.write(obj);
@@ -144,6 +147,11 @@ public abstract class Manipulator {
                             }
                         } else {
                             out.write(msg);
+                        }
+                        
+                        while (addedContexts > 0) {
+                        	pf.popContextPoint();
+                        	addedContexts--;
                         }
             		}
 				} catch (IOException e) {

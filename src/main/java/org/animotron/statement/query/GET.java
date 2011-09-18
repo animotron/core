@@ -50,6 +50,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -424,6 +426,16 @@ public class GET extends Operator implements Evaluable, Query {
 			//System.out.println(path);
 			for (Relationship r : path.relationships()) {
 				res = r;
+				break;
+			}
+		}
+		
+		while (true) {
+			try {
+				res = getDb().getRelationshipById(
+	                (Long)res.getProperty(RID.name())
+	            );
+			} catch (Exception e) {
 				break;
 			}
 		}
