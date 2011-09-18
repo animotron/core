@@ -103,7 +103,7 @@ public class MLResultTraverser extends ResultTraverser {
                     } finally {
                         q.close();
                     }
-                } else {
+                } else if (level > 0) {
                     String param = StringResultSerializer.serialize(pf, r);
                     handler.start(s, param, level++, isOne);
                     handler.end(s, param, --level, isOne);
