@@ -55,7 +55,7 @@ public abstract class Manipulator {
 	}
 	
 	public final PipedInput execute(Relationship op) throws IOException {
-		return execute(new PFlow(this), (PropertyContainer)op);
+		return execute(new PFlow(this), op);
 	}
 
 	public final PipedInput execute(final PFlow pflow, Node op) throws IOException {

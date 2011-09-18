@@ -38,6 +38,6 @@ public class IsLoopTest extends ATest {
 	public void storeAndSerializeResult() throws AnimoException {
         new Expression(_(THE._, "A", _(IS._, "C")));
         new Expression(_(THE._, "B", _(IS._, "A")));
-        new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
+        //new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
 	}
 }
