@@ -68,23 +68,24 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         root = stack.pop();
         int size = ((List<Object[]>)root[4]).size();
         if (statement instanceof Prefix) size--;
-        root[5] = (Boolean)root[5] || size > 1;
+        root[5] = (Boolean)root[5] || size > 1 || level == 1;
     }
 
     @Override
     public void endGraph() throws IOException {
-        write(root);
+        write(root, 0);
         write("\n");
     }
 
-    private void write(Object[] o) throws IOException {
+    private void write(Object[] o, int indent) throws IOException {
         Statement statement = (Statement) o[0];
         int level = (Integer) o[2];
         boolean isOne = (Boolean) o[3];
         if (level != 0 && !(statement instanceof NAME)) {
             if ((Boolean) o[5]) {
+                indent++;
                 write("\n");
-                for (int i = 0; i < level; i++) {
+                for (int i = 0; i < indent; i++) {
                     write(INDENT);
                 }
             } else {
@@ -96,7 +97,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         }
         write(statement, (Relationship) o[1]);
         for (Object[] i : (List<Object[]>) o[4]) {
-            write(i);
+            write(i, indent);
         }
         if (level != 0 && !(statement instanceof NAME) && !isOne) {
             write(")");

@@ -49,12 +49,12 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
 	public void test_01() throws IOException, AnimoException {
-        test("the a have b");
+        test("the a\n    have b");
 	}
 
     @Test
 	public void test_02() throws IOException, AnimoException {
-        test("the a have b \"test\"");
+        test("the a\n    have b \"test\"");
 	}
 
     @Test
@@ -80,39 +80,39 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
     public void test_07() throws IOException, AnimoException {
-        test("the a @b (get c)", "the a @b get c");
+        test("the a @b (get c)", "the a\n    @b get c");
     }
 
     @Test
     public void test_08() throws IOException, AnimoException {
-        test("the a \\b \\c @d e");
+        test("the a\n    \\b \\c @d e");
     }
 
     @Test
     public void test_09() throws IOException, AnimoException {
-        test(   "the a \\b \\c\n" +
-                "            @d\n" +
-                "                (e)\n" +
-                "                (f)");
+        test("the a\n    \\b \\c\n        @d\n            (e)\n            (f)");
     }
 
     @Test
     public void test_0A() throws IOException, AnimoException {
-        test(   "the rest have content\n" +
-                "        \\html\n" +
-                "            (\\head \\title have title \"Welcome to Animo\")\n" +
-                "            (\\body\n" +
-                "                theme-concrete-root-layout\n" +
-                "                    (is root-layout)\n" +
-                "                    (\\h1 have title \"Welcome to Animo\")\n" +
-                "                    (\\p have content \"It is working\")\n" +
-                "                    (\\ul\n" +
-                "                        (\\li\n" +
-                "                            (\"host:\")\n" +
-                "                            (\\strong have host \"localhost\"))\n" +
-                "                        (\\li\n" +
-                "                            (\"uri:\")\n" +
-                "                            (\\strong have uri \"/\"))))");
+        test(
+            "the rest\n" +
+            "    have content\n" +
+            "        \\html\n" +
+            "            (\\head \\title have title \"Welcome to Animo\")\n" +
+            "            (\\body\n" +
+            "                theme-concrete-root-layout\n" +
+            "                    (is root-layout)\n" +
+            "                    (\\h1 have title \"Welcome to Animo\")\n" +
+            "                    (\\p have content \"It is working\")\n" +
+            "                    (\\ul\n" +
+            "                        (\\li\n" +
+            "                            (\"host:\")\n" +
+            "                            (\\strong have host \"localhost\"))\n" +
+            "                        (\\li\n" +
+            "                            (\"uri:\")\n" +
+            "                            (\\strong have uri \"/\"))))"
+        );
     }
 
 }
