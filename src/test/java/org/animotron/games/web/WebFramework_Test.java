@@ -138,20 +138,20 @@ public class WebFramework_Test extends ATest {
         );
 
         assertAnimoResult(s,  "the s " +
-                                "the current-service " +
-                                    "the root-service " +
-                                        "(is service) " +
-                                        "(have uti \"/\") " +
+                                "the root-service " +
+                                    "(is service) " +
+                                    "(have uri \"/\") " +
                                         "(the html " +
-                                            "(is composition) " +
-                                            "(have content " +
-                                                "\\html " +
-                                                    "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
-                                                    "(\\body the theme-concrete-root-layout " +
-                                                        "(is root-layout) " +
-                                                        "(have content " +
-                                                            "(\\div (attribute id \"title\") (have title \"Welcom to Animotron\"))" +
-                                                            "(\\div (attribute id \"content\") (have title \"Owervie\"))))))");
+                                            "the html-composition " +
+                                                "(is composition) " +
+                                                "(have content " +
+                                                    "\\html " +
+                                                        "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
+                                                        "(\\body the theme-concrete-root-layout " +
+                                                            "(is root-layout) " +
+                                                            "(have content " +
+                                                                "(\\div (@id \"title\") (have title \"Welcome to Animotron\")) " +
+                                                                "(\\div (@id \"content\") (have content \"Overview\"))))))");
 
         assertXMLResult(s,  "<html>" +
                                 "<head>" +
