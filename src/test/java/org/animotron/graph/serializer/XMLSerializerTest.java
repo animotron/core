@@ -165,7 +165,6 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_12() throws IOException, AnimoException {
-        //TODO implement startDTD()/endDTD()
         test("the a \\html &#amp", "<html>&amp;</html>");
     }
 
