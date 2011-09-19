@@ -33,6 +33,7 @@ import java.io.IOException;
 public class StAXGraphHandler implements GraphHandler {
 	
 	private XMLStreamWriter writer;
+	private long pos = 0;
 
 	public StAXGraphHandler(XMLStreamWriter writer) {
 		this.writer = writer;
@@ -50,9 +51,12 @@ public class StAXGraphHandler implements GraphHandler {
     public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
         try {
             if (statement instanceof ATTRIBUTE) {
-                writer.writeAttribute(param[0], param[1]);
+            	if (pos > 0)
+            		writer.writeAttribute(param[0], param[1]);
+            	
             } else if (statement instanceof ELEMENT) {
                 writer.writeStartElement(param[0]);
+                pos++;
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -64,6 +68,7 @@ public class StAXGraphHandler implements GraphHandler {
         try {
             if (statement instanceof ELEMENT) {
                 writer.writeEndElement();
+                pos--;
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -73,13 +78,15 @@ public class StAXGraphHandler implements GraphHandler {
     @Override
     public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
         try {
-            if (statement instanceof TEXT) {
-                writer.writeCharacters(param);
-            } else if (statement instanceof COMMENT){
-                writer.writeComment(param);
-            } else if (statement instanceof CDATA){
-                writer.writeCData(param);
-            }
+        	if (pos > 0) { 
+	            if (statement instanceof TEXT) {
+	                writer.writeCharacters(param);
+	            } else if (statement instanceof COMMENT){
+	                writer.writeComment(param);
+	            } else if (statement instanceof CDATA){
+	                writer.writeCData(param);
+	            }
+        	}
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
@@ -93,6 +100,7 @@ public class StAXGraphHandler implements GraphHandler {
 	public void startGraph() throws IOException {
 		try {
 			writer.writeStartDocument();
+			pos = 0;
 		} catch (XMLStreamException e) {
             throw new IOException(e);
 		}
