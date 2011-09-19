@@ -59,6 +59,8 @@ public class StAXGraphHandler implements GraphHandler {
                 } else {
                     writer.writeProcessingInstruction (param[0], param[1]);
                 }
+            } else if (statement instanceof NS) {
+                writer.writeNamespace(param[0], param[1]);
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);

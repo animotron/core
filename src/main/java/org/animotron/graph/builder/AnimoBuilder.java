@@ -22,8 +22,9 @@ import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.MLOperator;
-import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.NS;
+import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
 
@@ -134,7 +135,7 @@ public class AnimoBuilder extends GraphBuilder {
 
     private void token(String token, boolean text) {
         if (text) {
-            if (op instanceof Prefix) {
+            if (op instanceof Prefix && !(op instanceof NS)) {
                 start(NAME._, token);
             } else {
                 start(token);

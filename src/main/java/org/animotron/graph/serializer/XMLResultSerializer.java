@@ -41,7 +41,7 @@ public class XMLResultSerializer {
     static {
         WriterConfig conf = OUTPUT_FACTORY.getConfig();
         conf.doSupportNamespaces(true);
-        conf.enableAutomaticNamespaces(true);
+        conf.enableAutomaticNamespaces(false);
     }
 
     private static XMLStreamWriter getXMLStreamWriter(OutputStream out) throws IOException {

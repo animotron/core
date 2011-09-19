@@ -133,4 +133,24 @@ public class XMLSerializerTest extends ATest {
         test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 
+    @Test
+    public void test_0D() throws IOException, AnimoException {
+        test("the a \\x:root $x \"x-namespace\"", "<x:root xmlns:x=\"x-namespace\"/>");
+    }
+
+    @Test
+    public void test_0E() throws IOException, AnimoException {
+        test("the a \\x:root $ \"x\" \"x-namespace\"", "<x:root xmlns:x=\"x-namespace\"/>");
+    }
+
+    @Test
+    public void test_0F() throws IOException, AnimoException {
+        test("the a \\x:root $x", "<x:root xmlns:x=\"\"/>");
+    }
+
+    @Test
+    public void test_10() throws IOException, AnimoException {
+        test("the a \\root $ \"x-namespace\"", "<root xmlns=\"x-namespace\"/>");
+    }
+
 }

@@ -27,6 +27,6 @@ public class NS extends MLOperator implements Prefix {
 
 	public static final NS _ = new NS();
 
-	private NS() { super("@:"); }
+	private NS() { super("$"); }
 	
 }

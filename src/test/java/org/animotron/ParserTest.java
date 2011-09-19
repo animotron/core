@@ -185,4 +185,15 @@ public class ParserTest extends ATest {
     public void test_28() throws IOException, AnimoException {
         test("the a ??stylesheet b");
     }
+
+    @Test
+    public void test_29() throws IOException, AnimoException {
+        test("the a $b");
+    }
+
+    @Test
+    public void test_30() throws IOException, AnimoException {
+        test("the a $b c");
+    }
+
 }

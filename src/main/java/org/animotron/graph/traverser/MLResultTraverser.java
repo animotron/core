@@ -23,10 +23,7 @@ import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.ml.ELEMENT;
-import org.animotron.statement.ml.MLOperator;
-import org.animotron.statement.ml.Prefix;
-import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.THE;
@@ -90,17 +87,32 @@ public class MLResultTraverser extends ResultTraverser {
                     Iterator<Relationship> it = q.iterator();
                     String[] param = {null, null};
                     try {
-                        param[0] = param(pf, it);
-                        int size = q.size();
-                        if (s instanceof ELEMENT) {
-                            size = size - 1;
-                        } else {
-                            param[1] = param(pf, it);
-                            size = size - 2;
+                        if (it.hasNext()) {
+                            int size = q.size();
+                            Relationship p = it.next();
+                            param[0] = param(pf, p);
+                            if (s instanceof ELEMENT) {
+                                size = size - 1;
+                            } else {
+                                param[1] = param(pf, it);
+                                if (param[1] == null) {
+                                    if (s instanceof NS) {
+                                        if (NAME._.name().equals(p.getType().name())) {
+                                            param[1] = "";
+                                        } else {
+                                            param[1] = param[0];
+                                            param[0] = null;
+                                        }
+                                    }
+                                    size = size - 1;
+                                } else {
+                                    size = size - 2;
+                                }
+                            }
+                            handler.start(s, param, level++, isOne);
+                            iterate(handler, pf, it, level, size);
+                            handler.end(s, param, --level, isOne);
                         }
-                        handler.start(s, param, level++, isOne);
-                        iterate(handler, pf, it, level, size);
-                        handler.end(s, param, --level, isOne);
                     } finally {
                         q.close();
                     }
@@ -126,9 +138,13 @@ public class MLResultTraverser extends ResultTraverser {
 
     private String param(PFlow pf, Iterator<Relationship> it) throws IOException {
         if (it.hasNext()) {
-            return StringResultSerializer.serialize(pf, it.next());
+            return param(pf, it.next());
         }
         return null;
+    }
+
+    private String param(PFlow pf, Relationship r) throws IOException {
+        return StringResultSerializer.serialize(pf, r);
     }
 
 }
