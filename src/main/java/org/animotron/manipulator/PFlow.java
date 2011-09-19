@@ -21,7 +21,6 @@ package org.animotron.manipulator;
 import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedOutput;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.animotron.utils.Utils;
@@ -38,14 +37,11 @@ import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
-
-import javolution.util.FastList;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;

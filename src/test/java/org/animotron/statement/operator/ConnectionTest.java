@@ -75,19 +75,19 @@ public class ConnectionTest extends ATest {
             _(HAVE._, "extension", text("txt"), text("text"))
         ));
 
-//        Expression A = new Expression(
-//        _(THE._, "A",
-//            _(GET._, "reference",
-//                _(AN._, "fileA")
-//        )));
-//        assertAnimoResult(A, "the A have reference \"file\"");
-//
-//        Expression B = new Expression(
-//        _(THE._, "B",
-//            _(GET._, "path",
-//                _(AN._, "fileA")
-//        )));
-//        assertAnimoResult(B, "the B have path \"/home/test.txt\"");
+        Expression A = new Expression(
+        _(THE._, "A",
+            _(GET._, "reference",
+                _(AN._, "fileA")
+        )));
+        assertAnimoResult(A, "the A have reference \"file\"");
+
+        Expression B = new Expression(
+        _(THE._, "B",
+            _(GET._, "path",
+                _(AN._, "fileA")
+        )));
+        assertAnimoResult(B, "the B have path \"/home/test.txt\"");
 
         Expression C = new Expression(
         _(THE._, "C",

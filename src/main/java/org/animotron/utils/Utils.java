@@ -18,6 +18,11 @@
  */
 package org.animotron.utils;
 
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
+
+import org.neo4j.graphdb.Relationship;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
@@ -28,5 +33,18 @@ public class Utils {
 		String str = obj.toString();
 		return str.substring(str.indexOf("@"));
 	}
-
+	
+	public static Relationship relax(Relationship relation) {
+		Relationship r = relation;
+		while (true) {
+			try {
+	        	r = getDb().getRelationshipById(
+	                (Long)r.getProperty(RID.name())
+	            );
+			} catch (Exception ex) {
+				break;
+			}
+		}
+		return r;
+	}
 }

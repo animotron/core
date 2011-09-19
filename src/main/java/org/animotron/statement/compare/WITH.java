@@ -29,6 +29,7 @@ import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.query.GET;
+import org.animotron.utils.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -79,8 +80,9 @@ public class WITH extends Operator implements Predicate {
 		System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
 		for (Object e : in) {
-			expected.add((Relationship) e);
-			System.out.println("expected "+e);
+			Relationship r = Utils.relax((Relationship) e);
+			expected.add(r);
+			System.out.println("expected "+r);
 		}
 		
 		if (actual.size() >= 1 && expected.size() == 1) {
@@ -118,8 +120,9 @@ public class WITH extends Operator implements Predicate {
     				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
     				PipedInput in = Evaluator._.execute(pf, i);
     				for (Object e : in) {
-    					list.add((Relationship) e);
-    					System.out.println("get from Evaluator "+e);
+    					Relationship r = Utils.relax((Relationship) e);
+    					list.add(r);
+    					System.out.println("get from Evaluator "+r);
     				}
     			} else {
     				list.add(i);
