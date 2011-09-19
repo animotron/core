@@ -145,12 +145,33 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0F() throws IOException, AnimoException {
-        test("the a \\x:root $x", "<x:root xmlns:x=\"\"/>");
+        try {
+            test("the a \\x:root $x", "<x:root xmlns:x=\"\"/>");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
     public void test_10() throws IOException, AnimoException {
         test("the a \\root $ \"x-namespace\"", "<root xmlns=\"x-namespace\"/>");
+    }
+
+    @Test
+    public void test_11() throws IOException, AnimoException {
+        //TODO implement startDTD()/endDTD()
+        test("the a (!! \"<!DOCTYPE html>\") (\\html)", "<!DOCTYPE html><html/>");
+    }
+
+    @Test
+    public void test_12() throws IOException, AnimoException {
+        //TODO implement startDTD()/endDTD()
+        test("the a \\html &#amp", "<html>&amp;</html>");
+    }
+
+    @Test
+    public void test_13() throws IOException, AnimoException {
+        test("the a \\html @x \"&\"", "<html x=\"&amp;\"/>");
     }
 
 }

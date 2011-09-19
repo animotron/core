@@ -51,6 +51,8 @@ public class StAXGraphHandler implements GraphHandler {
         try {
             if (statement instanceof ATTRIBUTE) {
                 writer.writeAttribute(param[0], param[1]);
+            } else if (statement instanceof ENTITY){
+                writer.writeEntityRef(param[0]);
             } else if (statement instanceof ELEMENT) {
                 writer.writeStartElement(param[0]);
             } else if (statement instanceof PI) {
@@ -81,12 +83,14 @@ public class StAXGraphHandler implements GraphHandler {
     @Override
     public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
         try {
-            if (statement instanceof TEXT) {
-                writer.writeCharacters(param);
-            } else if (statement instanceof COMMENT){
+            if (statement instanceof COMMENT){
                 writer.writeComment(param);
             } else if (statement instanceof CDATA){
                 writer.writeCData(param);
+            } else if (statement instanceof DTD){
+                writer.writeDTD(param);
+            } else if (statement instanceof TEXT) {
+                writer.writeCharacters(param);
             }
 
         } catch (XMLStreamException e) {

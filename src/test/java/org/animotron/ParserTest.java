@@ -196,4 +196,14 @@ public class ParserTest extends ATest {
         test("the a $b c");
     }
 
+    @Test
+    public void test_31() throws IOException, AnimoException {
+        test("the a !! \"html\"");
+    }
+
+    @Test
+    public void test_32() throws IOException, AnimoException {
+        test("the a &#amp");
+    }
+
 }
