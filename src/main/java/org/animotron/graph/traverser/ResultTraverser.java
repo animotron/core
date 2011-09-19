@@ -63,7 +63,9 @@ public class ResultTraverser extends AnimoTraverser {
 
     public void traverse(PFlow pf, GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
+        pf.addContextPoint(r);
         build(handler, pf, r, 0, true);
+        pf.popContextPoint();
         handler.endGraph();
     }
 

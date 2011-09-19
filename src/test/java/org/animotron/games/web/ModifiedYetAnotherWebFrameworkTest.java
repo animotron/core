@@ -141,7 +141,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 6a40e5b412692b64b8e07615e06e442dc05c3c4d44c09faa70e4cd34bf3abf25 " +
+        assertAnimoResult(s,  "the b4a4bf0977fe4f877e4bf2c1757cdc1e7acd4993d5a7948a4821f2061973bec7 " +
                                 "have content " +
                                     "\\html " +
                                         "(\\head \\title have title \"Welcome to Animo\") " +
