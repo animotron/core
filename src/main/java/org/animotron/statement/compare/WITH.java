@@ -59,8 +59,8 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 		String name = reference(op);
 
-		Set<Relationship> haveSet = GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
-		if (haveSet.isEmpty()) return false;
+		Set<Relationship> haveSet = GET._.get(pf, ref, name);//GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
+		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();
 		List<Relationship> expected = new FastList<Relationship>();

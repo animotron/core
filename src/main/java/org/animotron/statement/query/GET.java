@@ -203,14 +203,36 @@ public class GET extends Operator implements Evaluable, Query {
 	};
 
 	public Set<Relationship> get(PFlow pf, Relationship ref, final String name) {
-		System.out.println("GET context = "+ref);
+		List<Relationship> refs = new FastList<Relationship>();
+		refs.add(ref);
 		
-		Set<Relationship> set = new FastSet<Relationship>(); 
+		return get(pf, refs, name); 
+	}
 
-		Relationship have = null;
+	public Set<Relationship> get(PFlow pf, Node ref, final String name) {
+		Set<Relationship> set = new FastSet<Relationship>();
+		
+		Relationship have = searchForHAVE(ref, name);
+		if (have != null && !pf.isInStack(have)) 
+			set.add(have);
+		
+		if (!set.isEmpty()) return set;
+
+		List<Relationship> newREFs = new FastList<Relationship>();
+		getOutgoingReferences(pf, ref, newREFs);
+		
+		return get(pf, newREFs, name); 
+	}
+
+	public Set<Relationship> get(PFlow pf, List<Relationship> REFs, final String name) {
+		//System.out.println("GET context = "+ref);
+		
+		Set<Relationship> set = new FastSet<Relationship>();
 		
 		List<Relationship> nextREFs = new FastList<Relationship>();
-		nextREFs.add(ref);
+		nextREFs.addAll(REFs);
+
+		Relationship have = null;
 		
 		boolean first = true;
 		
@@ -230,7 +252,7 @@ public class GET extends Operator implements Evaluable, Query {
 			for (Relationship n : nextREFs) {
 				//System.out.println(""+n);
 				//System.out.println("getStartNode OUTGOING");
-				if (first || !n.equals(ref)) {
+				if (first || !REFs.contains(n)) {
 					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
 						if (r.equals(n)) continue;
 						
@@ -262,40 +284,44 @@ public class GET extends Operator implements Evaluable, Query {
 				first = false;
 
 				//System.out.println("getEndNode OUTGOING");
-				for (Relationship r : n.getEndNode().getRelationships(OUTGOING)) {
-					//System.out.println(r);
-
-					Statement st = Statements.relationshipType(r);
-					if (st instanceof AN) {
-						Relationship t = AN._.getREF(r);
-						newREFs.add(t);
-
-					} else if (st instanceof Reference) {
-						if (!pf.isInStack(r)) {
-							try {
-								PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
-								
-								for (Object rr : in) {
-									if (rr instanceof Relationship) {
-										newREFs.add((Relationship) rr);
-										
-									} else
-										System.out.println("UNHANDLED "+rr);
-									
-								}
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-					}
-				}
-				
+				getOutgoingReferences(pf, n.getEndNode(), newREFs);
 			}
 
 			if (newREFs.size() == 0) return null;
 			
 			nextREFs = newREFs;
+		}
+	}
+	
+	private void getOutgoingReferences(PFlow pf, Node node, List<Relationship> newREFs) {
+
+		for (Relationship r : node.getRelationships(OUTGOING)) {
+			//System.out.println(r);
+
+			Statement st = Statements.relationshipType(r);
+			if (st instanceof AN) {
+				Relationship t = AN._.getREF(r);
+				newREFs.add(t);
+
+			} else if (st instanceof Reference) {
+				if (!pf.isInStack(r)) {
+					try {
+						PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
+						
+						for (Object rr : in) {
+							if (rr instanceof Relationship) {
+								newREFs.add((Relationship) rr);
+								
+							} else
+								System.out.println("UNHANDLED "+rr);
+							
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
 		}
 	}
 	
@@ -316,11 +342,19 @@ public class GET extends Operator implements Evaluable, Query {
 		}
 
 		//search for inside 'HAVE'
-		have = getByHave(ref.getEndNode(), name);
+		return searchForHAVE(ref.getEndNode(), name);
+	}
+
+	private Relationship searchForHAVE(final Node ref, final String name) {
+		
+		Relationship have = null;
+
+		//search for inside 'HAVE'
+		have = getByHave(ref, name);
 		if (have != null) return have;
 
 		//search 'IC' by 'IS' topology
-		for (Relationship tdR : td_eval_IS.traverse(ref.getEndNode()).relationships()) {
+		for (Relationship tdR : td_eval_IS.traverse(ref).relationships()) {
 
 			System.out.println("GET IC -> IS "+tdR);
 			
