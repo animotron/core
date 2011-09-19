@@ -23,7 +23,7 @@ package org.animotron.statement.ml;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class PI extends MLOperator {
+public class PI extends MLOperator implements Prefix {
 
 	public static final PI _ = new PI();
 

@@ -176,4 +176,13 @@ public class ParserTest extends ATest {
         test("the a \"\\\"\"");
     }
 
+    @Test
+    public void test_27() throws IOException, AnimoException {
+        test("the a ??stylesheet");
+    }
+
+    @Test
+    public void test_28() throws IOException, AnimoException {
+        test("the a ??stylesheet b");
+    }
 }

@@ -53,6 +53,12 @@ public class StAXGraphHandler implements GraphHandler {
                 writer.writeAttribute(param[0], param[1]);
             } else if (statement instanceof ELEMENT) {
                 writer.writeStartElement(param[0]);
+            } else if (statement instanceof PI) {
+                if (param[1] == null) {
+                    writer.writeProcessingInstruction (param[0]);
+                } else {
+                    writer.writeProcessingInstruction (param[0], param[1]);
+                }
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -80,6 +86,7 @@ public class StAXGraphHandler implements GraphHandler {
             } else if (statement instanceof CDATA){
                 writer.writeCData(param);
             }
+
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }

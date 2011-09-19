@@ -117,4 +117,20 @@ public class XMLSerializerTest extends ATest {
         test("the a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
 
+    @Test
+    public void test_0A() throws IOException, AnimoException {
+        test("the a (??stylesheet) \\root", "<?stylesheet?><root/>");
+    }
+
+    @Test
+    public void test_0B() throws IOException, AnimoException {
+        test("the a (??stylesheet \"path\") \\root", "<?stylesheet path?><root/>");
+    }
+
+    @Test
+    public void test_0C() throws IOException, AnimoException {
+        new Expression(_(THE._, "b", text("path")));
+        test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
+    }
+
 }
