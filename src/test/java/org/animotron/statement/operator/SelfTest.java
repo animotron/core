@@ -112,7 +112,7 @@ public class SelfTest extends ATest {
         //second try to be sure
         assertAnimoResult(C, "the C (have A \".\") (have B have A \".\")");
         assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\")");
-        assertAnimoResult(D, "the D (is C) have A \":\"");
+        assertAnimoResult(D, "the D (is C) (have A \":\")");
         assertAnimoResult(E, "the E have B have A \".\"");
         assertAnimoResult(F, "the F have B have A \":\"");
     }
