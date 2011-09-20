@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.TEXT;
@@ -48,29 +49,31 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             write("\"");
             write(statement.reference(r).replaceAll("\"", "\\\\\""));
             write("\"");
-        } else {
-            if (statement instanceof AN) {
+        } else if (statement instanceof AN) {
                 write(statement.reference(r));
-            } else {
-                write(statement.name());
-                String name = statement.reference(r);
-                if (name != null) {
-                    write(" ");
-                    write(statement.reference(r));
-                }
+        } else if (!(statement instanceof LINK)){
+            write(statement.name());
+            String name = statement.reference(r);
+            if (name != null) {
+                write(" ");
+                write(statement.reference(r));
             }
         }
     }
 
+    private Statement ps = null;
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         if (level != 0 && !(statement instanceof NAME)) {
-            write(" ");
+            if (!(ps instanceof LINK)) {
+                write(" ");
+            }
             if (!isOne) {
                 write("(");
             }
         }
         write(statement, r);
+        ps = statement;
     }
 
     @Override

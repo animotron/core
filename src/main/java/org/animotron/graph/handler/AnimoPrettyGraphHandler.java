@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.Prefix;
@@ -77,6 +78,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         write("\n");
     }
 
+    private Statement ps = null;
     private void write(Object[] o, int indent) throws IOException {
         Statement statement = (Statement) o[0];
         int level = (Integer) o[2];
@@ -88,7 +90,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                 for (int i = 0; i < indent; i++) {
                     write(INDENT);
                 }
-            } else {
+            } else if (!(ps instanceof LINK)) {
                 write(" ");
             }
             if (!isOne) {
@@ -102,6 +104,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         if (level != 0 && !(statement instanceof NAME) && !isOne) {
             write(")");
         }
+        ps = statement;
     }
 
 }

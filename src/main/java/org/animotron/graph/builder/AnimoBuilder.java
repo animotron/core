@@ -19,14 +19,17 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
+import org.animotron.statement.relation.Relation;
 
 import java.io.*;
 import java.util.Stack;
@@ -148,16 +151,16 @@ public class AnimoBuilder extends GraphBuilder {
                 end();
                 op = null;
                 prefix = false;
-            } else if (op instanceof Operator) {
+            } else if (op instanceof Operator || op instanceof Relation) {
                 start(op, token);
                 op = null;
                 level++;
             } else {
                 op = Statements.name(token);
-                if (op instanceof MLOperator) {
+                if (op instanceof MLOperator || op instanceof LINK) {
                     start(op);
                     level++;
-                } else if (!(op instanceof Operator)) {
+                } else if (op == null || op instanceof Instruction) {
                     start(AN._, token);
                     level ++;
                 }
@@ -166,6 +169,7 @@ public class AnimoBuilder extends GraphBuilder {
     }
 
     private void startList() {
+
         stack.push(level);
         level = 0;
     }

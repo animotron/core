@@ -206,4 +206,19 @@ public class ParserTest extends ATest {
         test("the a &#amp");
     }
 
+    @Test
+    public void test_33() throws IOException, AnimoException {
+        test("the a is b");
+    }
+
+    @Test
+    public void test_34() throws IOException, AnimoException {
+        test("the a (b) (c) (d) (e)");
+    }
+
+    @Test
+    public void test_35() throws IOException, AnimoException {
+        test("the a (--> (b) (c)) (--> (d) (e))", "the a ((b) (c)) ((d) (e))");
+    }
+
 }

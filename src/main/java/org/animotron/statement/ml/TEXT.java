@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.ml;
 
+import org.animotron.statement.AbstractLink;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -33,7 +34,7 @@ import static org.animotron.graph.AnimoGraph.order;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends MLOperator {
+public class TEXT extends AbstractLink implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
