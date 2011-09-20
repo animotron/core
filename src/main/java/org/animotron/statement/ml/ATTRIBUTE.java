@@ -18,12 +18,14 @@
  */
 package org.animotron.statement.ml;
 
+import org.animotron.statement.AbstractLink;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ATTRIBUTE extends MLOperator implements Prefix {
+public class ATTRIBUTE extends AbstractLink implements Prefix {
 	
 	public static final ATTRIBUTE _ = new ATTRIBUTE();
 	

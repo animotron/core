@@ -18,12 +18,14 @@
  */
 package org.animotron.statement.ml;
 
+import org.animotron.statement.AbstractLink;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class CDATA extends MLOperator {
+public class CDATA extends AbstractLink implements MLOperator {
 	
 	public static final CDATA _ = new CDATA();
 	

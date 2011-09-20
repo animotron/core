@@ -19,6 +19,7 @@
 package org.animotron;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 
@@ -84,6 +85,11 @@ public class Expression extends AbstractExpression {
         return e;
     }
 
+    public static Object[] _(Object[]... p) {
+        Object[] e = _(LINK._, p);
+        return e;
+    }
+
 	public static Object[] element(String name) {
 		return _(ELEMENT._, name(name));
 	}
@@ -100,6 +106,10 @@ public class Expression extends AbstractExpression {
         return _(ATTRIBUTE._, name(name), text(value));
     }
 
+    public static Object[] entity(String name, String value) {
+        return _(ENTITY._, name(name), text(value));
+    }
+
 	public static Object[] comment(String value) {
         return _(COMMENT._, text(value));
 	}
@@ -108,8 +118,16 @@ public class Expression extends AbstractExpression {
         return _(CDATA._, text(value));
     }
 
+    public static Object[] pi(String name, String value) {
+        return _(PI._, name(name), text(value));
+    }
+
     public static Object[] pi(String value) {
         return _(PI._, text(value));
+    }
+
+    public static Object[] dtd(String value) {
+        return _(DTD._, text(value));
     }
 
     public static Object[] namespace(String name, String value) {
