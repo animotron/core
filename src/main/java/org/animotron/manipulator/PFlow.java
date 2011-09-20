@@ -211,7 +211,7 @@ public class PFlow {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
+		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 
 	public void await() {
@@ -337,30 +337,31 @@ public class PFlow {
 
 
 	public void addContextPoint(Relationship r) {
-		System.out.println("adding "+this+" "+r);
+		//System.out.println("adding "+this+" "+r);
 		path.insertElementAt(r, 0);
 	}
 
 	public void popContextPoint() {
-		System.out.println("pop "+this+" "+path);
+		//System.out.println("pop "+this+" "+path);
 		path.remove(0);
 	}
 
 	public Relationship getLastContext() {
-		System.out.print("PFlow get last context ");
+		boolean debug = false;
+		if (debug) System.out.print("PFlow get last context ");
 		for (Relationship r : path) {
 			if (AN._.rType.equals(r.getType().name())) {
-				System.out.println(r);
+				if (debug) System.out.println(r);
 				return r;
 			} else if (REF.name().equals(r.getType().name())) {
-				System.out.println(r);
+				if (debug) System.out.println(r);
 				return r;
 			} else if (RESULT.name().equals(r.getType().name())) {
-				System.out.println(r);
+				if (debug) System.out.println(r);
 				return r;
 			}
 		}
-		System.out.println(path.lastElement());
+		if (debug) System.out.println(path.lastElement());
 		return path.lastElement();
 	}
 
