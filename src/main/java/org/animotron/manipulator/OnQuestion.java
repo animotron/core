@@ -23,6 +23,7 @@ import org.animotron.graph.RelationshipTypes;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import javolution.util.FastList;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getORDER;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -43,33 +45,33 @@ public class OnQuestion implements Subscribable<PFlow> {
 		
 		List<PFlow> list = new FastList<PFlow>();
 		
-		int count = 0;
-		Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
-		while (it.hasNext()) {
-			Relationship r = it.next();
-			Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
-			
-			if (onQuestion != null) {
-				PFlow nextPF = new PFlow(pf, r);
-				nextPF.question.subscribe(onQuestion);
+		IndexHits<Relationship> q = getORDER().query(pf.getOPNode());
+		try {
+			Iterator<Relationship> it = q.iterator();
+			while (it.hasNext()) {
+				Relationship r = it.next();
+				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
-				list.add(nextPF);
-				
-				count++;
-				
-			} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
-				//ignore REF
-			} else {
-				if (!r.hasProperty(RID.name()))
-					//UNDERSTAND: why do we need this?
+				if (onQuestion != null) {
+					PFlow nextPF = new PFlow(pf, r);
+					nextPF.question.subscribe(onQuestion);
+					
+					list.add(nextPF);
+					
+//				} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+//					//ignore REF
+				} else {
 					pf.sendAnswer(r);
+				}
 			}
+		} finally {
+			q.close();
 		}
 		
-		if (count == 0)
+		if (list.isEmpty())
 			pf.done();
 		else
-			pf.waitBeforeClosePipe(count);
+			pf.waitBeforeClosePipe(list.size());
 		
 		for (PFlow nextPF : list) {
 			nextPF.question.publish(nextPF);
