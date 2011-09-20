@@ -45,6 +45,7 @@ public class Expression extends AbstractExpression {
 			endGraph();
 //		} finally {
         ///TODO is it possible? endGraph always closes transaction
+			//what will happen if buildExpression throw exception???
 //			if (isTransactionActive(tx)) {
 //				tx.failure();
 //				finishTx(tx);
