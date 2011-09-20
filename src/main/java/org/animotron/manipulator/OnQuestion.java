@@ -30,6 +30,7 @@ import java.util.List;
 import javolution.util.FastList;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.animotron.Properties.RID;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -59,7 +60,9 @@ public class OnQuestion implements Subscribable<PFlow> {
 			} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
 				//ignore REF
 			} else {
-				pf.sendAnswer(r);
+				if (!r.hasProperty(RID.name()))
+					//UNDERSTAND: why do we need this?
+					pf.sendAnswer(r);
 			}
 		}
 		
