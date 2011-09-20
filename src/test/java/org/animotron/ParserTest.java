@@ -148,22 +148,22 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_21() throws IOException, AnimoException {
-        test("the a @((b) (c))", "the a @ (b) (c)");
+        test("the a @((b) (c))", "the a @ ((b) (c))");
     }
 
     @Test
     public void test_22() throws IOException, AnimoException {
-        test("the a @(\"b\" c)", "the a @b c");
+        test("the a @(\"b\" c)", "the a @ \"b\" c");
     }
 
     @Test
     public void test_23() throws IOException, AnimoException {
-        test("the a @((\"b\") (c))", "the a @b c");
+        test("the a @((\"b\") (c))", "the a @ ((\"b\") (c))");
     }
 
     @Test
     public void test_24() throws IOException, AnimoException {
-        test("the a @ ((\"b\") (c) (d))", "the a @b (c) (d)");
+        test("the a @ ((\"b\") (c) (d))");
     }
 
     @Test
@@ -219,6 +219,36 @@ public class ParserTest extends ATest {
     @Test
     public void test_35() throws IOException, AnimoException {
         test("the a (--> (b) (c)) (--> (d) (e))", "the a ((b) (c)) ((d) (e))");
+    }
+
+    @Test
+    public void test_36() throws IOException, AnimoException {
+        test("the a ((b) (c)) ((d) (e))");
+    }
+
+    @Test
+    public void test_37() throws IOException, AnimoException {
+        test("the a \"b\" c");
+    }
+
+    @Test
+    public void test_38() throws IOException, AnimoException {
+        test("the a (\"b\" c)", "the a \"b\" c");
+    }
+
+    @Test
+    public void test_39() throws IOException, AnimoException {
+        test("the a (b (c d))", "the a b c d");
+    }
+
+    @Test
+    public void test_40() throws IOException, AnimoException {
+        test("the a ((b (c d)))", "the a (b c d)");
+    }
+
+    @Test
+    public void test_41() throws IOException, AnimoException {
+        test("the a (b (c (d)))", "the a b c d");
     }
 
 }

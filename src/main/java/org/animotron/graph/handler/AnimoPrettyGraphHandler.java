@@ -93,7 +93,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
             } else if (!(ps instanceof LINK)) {
                 write(" ");
             }
-            if (!isOne) {
+            if (!isOne || statement instanceof LINK) {
                 write("(");
             }
         }
@@ -101,7 +101,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         for (Object[] i : (List<Object[]>) o[4]) {
             write(i, indent);
         }
-        if (level != 0 && !(statement instanceof NAME) && !isOne) {
+        if (level != 0 && !(statement instanceof NAME) && !isOne || statement instanceof LINK) {
             write(")");
         }
         ps = statement;

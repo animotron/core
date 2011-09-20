@@ -103,8 +103,8 @@ public class XMLSerializerTest extends ATest {
         new Expression(_(THE._, "c", text("c")));
         new Expression(_(THE._, "d", text("d")));
         new Expression(_(THE._, "e", text("e")));
-        test("\\((b) (@ (c) (d)) (e))", "<b c=\"d\">e</b>");
-        test("the a \\((b) (@ (c) (d)) (e))", "<b c=\"d\">e</b>");
+        test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
+        test("the a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
@@ -140,7 +140,7 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0E() throws IOException, AnimoException {
-        test("the a \\x:root $ \"x\" \"x-namespace\"", "<x:root xmlns:x=\"x-namespace\"/>");
+        test("the a \\x:root $ (\"x\") (\"x-namespace\")", "<x:root xmlns:x=\"x-namespace\"/>");
     }
 
     @Test

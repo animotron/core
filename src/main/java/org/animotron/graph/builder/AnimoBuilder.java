@@ -47,6 +47,7 @@ public class AnimoBuilder extends GraphBuilder {
     private Statement op = null;
     private int level = 0;
     private boolean prefix = false;
+    boolean link = false;
 
     public AnimoBuilder (InputStream stream) {
         reader = new InputStreamReader(stream);
@@ -103,6 +104,7 @@ public class AnimoBuilder extends GraphBuilder {
                                             start(st);
                                             level++;
                                             op = st;
+                                            link = false;
                                             prefix = true;
                                             s = new StringBuilder();
                                         }
@@ -138,13 +140,13 @@ public class AnimoBuilder extends GraphBuilder {
 
     private void token(String token, boolean text) {
         if (text) {
-            if (op instanceof Prefix && !(op instanceof NS)) {
+            if (op instanceof Prefix && !(op instanceof NS) && !link) {
                 start(NAME._, token);
+                end();
             } else {
                 start(token);
+                level++;
             }
-            end();
-            op = null;
         } else {
             if (prefix) {
                 start(NAME._, token);
@@ -166,10 +168,17 @@ public class AnimoBuilder extends GraphBuilder {
                 }
             }
         }
+        link = false;
     }
 
     private void startList() {
-
+        if (link) {
+            start(LINK._);
+            op = null;
+            level++;
+        } else {
+            link = true;
+        }
         stack.push(level);
         level = 0;
     }

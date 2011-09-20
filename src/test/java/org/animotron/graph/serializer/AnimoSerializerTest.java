@@ -223,4 +223,45 @@ public class AnimoSerializerTest extends ATest {
         assertAnimoResult(A, "the A (the B) (the C)");
     }
 
+    @Test
+    public void test_0D() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                text("B", text("C"))
+            )
+        );
+        assertAnimo(A, "the A \"B\" \"C\"");
+    }
+
+    @Test
+    public void test_0E() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(AN._, "B"), _(AN._, "C"))
+            )
+        );
+        assertAnimo(A, "the A ((B) (C))");
+    }
+
+    @Test
+    public void test_0F() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(AN._, "B", _(AN._, "C")))
+            )
+        );
+        assertAnimo(A, "the A (B C)");
+    }
+
+    @Test
+    public void test_10() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(AN._, "B"), _(AN._, "C")),
+                _(_(AN._, "D"), _(AN._, "E"))
+            )
+        );
+        assertAnimo(A, "the A ((B) (C)) ((D) (E))");
+    }
+
 }

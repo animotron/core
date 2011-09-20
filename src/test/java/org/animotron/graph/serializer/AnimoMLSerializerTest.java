@@ -95,7 +95,7 @@ public class AnimoMLSerializerTest extends ATest {
         new Expression(_(THE._, "c", text("c")));
         new Expression(_(THE._, "d", text("d")));
         new Expression(_(THE._, "e", text("e")));
-        test("the a \\((b) (@ (c) (d)) (e))", "the a \\ (the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \"e\")");
+        test("the a \\((b) (@ (c) (d)) (e))", "the a \\ ((the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \"e\"))");
     }
 
     @Test
