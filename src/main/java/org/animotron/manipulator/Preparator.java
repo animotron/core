@@ -28,14 +28,17 @@ import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
 import java.util.Iterator;
+
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_CONTINUE;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -47,23 +50,24 @@ public class Preparator extends StatementManipulator {
 	
 	private Preparator() {};
 	
-	@SuppressWarnings("deprecation")
-	private static TraversalDescription TD = 
+	private static TraversalDescription TD =
 	     Traversal.description()
 		.depthFirst()
 		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-		.evaluator(Evaluators.atDepth(2))
-		.filter(new Predicate<Path> (){
-				@Override
-				public boolean accept(Path path) {
-					if (THE._.THE_NODE().equals(path.startNode()))
-						return true;
-					Relationship r = path.lastRelationship();
-					if (r != null && RelationshipTypes.REF.equals(r.getType()))
-						return true;
-					return false;
-				}
-			});
+        .evaluator(new Evaluator() {
+            @Override
+            public Evaluation evaluate(Path path) {
+                if (path.length() == 2) {
+                    if (THE._.THE_NODE().equals(path.endNode()))
+                        return INCLUDE_AND_CONTINUE;
+                    Relationship r = path.relationships().iterator().next();
+                    if (RelationshipTypes.REF.equals(r.getType()))
+                        return INCLUDE_AND_CONTINUE;
+                    return EXCLUDE_AND_CONTINUE;
+                }
+                return EXCLUDE_AND_CONTINUE;
+            }
+        });
 	
 	
 	public void execute(Node op) throws IOException {

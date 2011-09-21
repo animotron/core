@@ -18,12 +18,16 @@
  */
 package org.animotron.graph;
 
+import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 
 import static org.animotron.Expression._;
 
@@ -34,10 +38,23 @@ import static org.animotron.Expression._;
  */
 public class IsLoopTest extends ATest {
 	
+    private void test(String op) {
+        Node n = AnimoGraph.getTOP().getSingleRelationship(RelationshipTypes.TOP, Direction.OUTGOING).getEndNode();
+        Assert.assertEquals("", op, Properties.NAME.get(n));
+    }
+
 	@Test
 	public void storeAndSerializeResult() throws AnimoException {
+        new Expression(_(THE._, "A"));
+        test("A");
         new Expression(_(THE._, "A", _(IS._, "C")));
+        test("C");
         new Expression(_(THE._, "B", _(IS._, "A")));
-        //new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
+        test("C");
+        new Expression(_(THE._, "C", _(IS._, "B")));
+        test("C");
+        new Expression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
+        test("D");
 	}
+
 }
