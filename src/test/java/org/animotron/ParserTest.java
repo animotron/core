@@ -68,7 +68,7 @@ public class ParserTest extends ATest {
 
     @Test
 	public void test_05() throws IOException, AnimoException {
-        test("the a b");
+        test("the a \"b c\"");
 	}
 
     @Test
@@ -249,6 +249,226 @@ public class ParserTest extends ATest {
     @Test
     public void test_41() throws IOException, AnimoException {
         test("the a (b (c (d)))", "the a b c d");
+    }
+
+    @Test
+    public void test_42() throws IOException, AnimoException {
+        test("the a b");
+    }
+
+    @Test
+    public void test_43() throws IOException, AnimoException {
+        test("the a (b)", "the a b");
+    }
+
+    @Test
+    public void test_44() throws IOException, AnimoException {
+        test("the a ((b))", "the a (b)");
+    }
+
+    @Test
+    public void test_45() throws IOException, AnimoException {
+        test("the a (((b)))", "the a ((b))");
+    }
+
+    @Test
+    public void test_46() throws IOException, AnimoException {
+        test("the a ((((b))))", "the a (((b)))");
+    }
+
+    @Test
+    public void test_47() throws IOException, AnimoException {
+        test("the a (--> b)", "the a (b)");
+    }
+
+    @Test
+    public void test_48() throws IOException, AnimoException {
+        test("the a (--> (b))", "the a (b)");
+    }
+
+    @Test
+    public void test_49() throws IOException, AnimoException {
+        test("the a (--> --> b)", "the a ((b))");
+    }
+
+    @Test
+    public void test_50() throws IOException, AnimoException {
+        test("the a (--> --> (b))", "the a ((b))");
+    }
+
+    @Test
+    public void test_51() throws IOException, AnimoException {
+        test("the a (--> (--> b))", "the a ((b))");
+    }
+
+    @Test
+    public void test_52() throws IOException, AnimoException {
+        test("the a (--> (--> (b)))", "the a ((b))");
+    }
+
+    @Test
+    public void test_53() throws IOException, AnimoException {
+        test("the a ((--> (b)))", "the a ((b))");
+    }
+
+    @Test
+    public void test_54() throws IOException, AnimoException {
+        test("the a (--> ((b)))", "the a ((b))");
+    }
+
+    @Test
+    public void test_55() throws IOException, AnimoException {
+        test("the a (--> (((b))))", "the a (((b)))");
+    }
+
+    @Test
+    public void test_56() throws IOException, AnimoException {
+        test("the a ((--> ((b))))", "the a (((b)))");
+    }
+
+    @Test
+    public void test_57() throws IOException, AnimoException {
+        test("the a (((--> (b))))", "the a (((b)))");
+    }
+
+    @Test
+    public void test_58() throws IOException, AnimoException {
+        test("the a ((((--> b))))", "the a ((((b))))");
+    }
+
+    @Test
+    public void test_59() throws IOException, AnimoException {
+        test("the a (((--> (b)(c))))", "the a ((((b) (c))))");
+    }
+
+    @Test
+    public void test_60() throws IOException, AnimoException {
+        test("the a (((--> (b)(c))(d)))", "the a ((((b) (c)) (d)))");
+    }
+
+    @Test
+    public void test_61() throws IOException, AnimoException {
+        test("the a (((--> (b)(c))(d)(e)))", "the a ((((b) (c)) (d) (e)))");
+    }
+
+    @Test
+    public void test_62() throws IOException, AnimoException {
+        test("the a (((--> (b)(c))(d)(e))(f))", "the a ((((b) (c)) (d) (e)) (f))");
+    }
+
+    @Test
+    public void test_63() throws IOException, AnimoException {
+        test("the a (((--> (b)(c))(d)(e))(f)(g))", "the a ((((b) (c)) (d) (e)) (f) (g))");
+    }
+
+    @Test
+    public void test_64() throws IOException, AnimoException {
+        test("the a (b) c", "the a (b) (c)");
+    }
+
+    @Test
+    public void test_65() throws IOException, AnimoException {
+        test("the a (b)c", "the a (b) (c)");
+    }
+
+    @Test
+    public void test_66() throws IOException, AnimoException {
+        test("the a b (c)", "the a b c");
+    }
+
+    @Test
+    public void test_67() throws IOException, AnimoException {
+        test("the a b(c)", "the a b c");
+    }
+
+    @Test
+    public void test_68() throws IOException, AnimoException {
+        test("the a(b(c))", "the a b c");
+    }
+
+    @Test
+    public void test_69() throws IOException, AnimoException {
+        test("the a ((b))", "the a (b)");
+    }
+
+    @Test
+    public void test_70() throws IOException, AnimoException {
+        test("the a((b))", "the a (b)");
+    }
+
+    @Test
+    public void test_71() throws IOException, AnimoException {
+        test("the a((b)c)", "the a ((b) (c))");
+    }
+
+    @Test
+    public void test_72() throws IOException, AnimoException {
+        test("the a ((b)c)", "the a ((b) (c))");
+    }
+
+    @Test
+    public void test_73() throws IOException, AnimoException {
+        test("the a (((--> (b)c)(d)e)(f)g)", "the a ((((b) (c)) (d) (e)) (f) (g))");
+    }
+
+    @Test
+    public void test_74() throws IOException, AnimoException {
+        test("the a (b c)", "the a b c");
+    }
+
+    @Test
+    public void test_75() throws IOException, AnimoException {
+        test("the a ((b)(c))", "the a ((b) (c))");
+    }
+
+    @Test
+    public void test_76() throws IOException, AnimoException {
+        test("the a (-->(b)(c))", "the a ((b) (c))");
+    }
+
+    @Test
+    public void test_77() throws IOException, AnimoException {
+        test("the a (x (b)(c))", "the a x (b) (c)");
+    }
+
+    @Test
+    public void test_78() throws IOException, AnimoException {
+        test("the a (x(b)(c))", "the a x (b) (c)");
+    }
+
+    @Test
+    public void test_79() throws IOException, AnimoException {
+        test("the a (--> x (b)(c))", "the a (x (b) (c))");
+    }
+
+    @Test
+    public void test_80() throws IOException, AnimoException {
+        test("the a (--> x(b)(c))", "the a (x (b) (c))");
+    }
+
+    @Test
+    public void test_81() throws IOException, AnimoException {
+        test("the a (((b)(c)))", "the a (((b) (c)))");
+    }
+
+    @Test
+    public void test_82() throws IOException, AnimoException {
+        test("the a ((x (b)(c)))", "the a (x (b) (c))");
+    }
+
+    @Test
+    public void test_83() throws IOException, AnimoException {
+        test("the a ((x(b)(c)))", "the a (x (b) (c))");
+    }
+
+    @Test
+    public void test_84() throws IOException, AnimoException {
+        test("the a (x ((--> (b)c)(d)e)(f)g)", "the a x (((b) (c)) (d) (e)) (f) (g)");
+    }
+
+    @Test
+    public void test_85() throws IOException, AnimoException {
+        test("the a (x((--> (b)c)(d)e)(f)g)", "the a x (((b) (c)) (d) (e)) (f) (g)");
     }
 
 }

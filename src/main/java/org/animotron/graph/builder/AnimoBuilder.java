@@ -92,8 +92,8 @@ public class AnimoBuilder extends GraphBuilder {
                             case '\t' :
                             case '\n' : newToken(s, text);
                                         break;
-                            case '('  : startList();
-                                        newToken(s, text);
+                            case '('  : newToken(s, text);
+                                        startList();
                                         break;
                             case ')'  : newToken(s, text);
                                         endList();
@@ -164,7 +164,7 @@ public class AnimoBuilder extends GraphBuilder {
                     level++;
                 } else if (op == null || op instanceof Instruction) {
                     start(AN._, token);
-                    level ++;
+                    level++;
                 }
             }
         }

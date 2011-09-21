@@ -19,6 +19,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
 import org.animotron.Expression;
+import org.animotron.statement.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
@@ -262,6 +263,96 @@ public class AnimoSerializerTest extends ATest {
             )
         );
         assertAnimo(A, "the A ((B) (C)) ((D) (E))");
+    }
+
+    @Test
+    public void test_11() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(AN._, "B")
+            )
+        );
+        assertAnimo(A, "the A B");
+    }
+
+    @Test
+    public void test_12() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(AN._, "B"))
+            )
+        );
+        assertAnimo(A, "the A (B)");
+    }
+
+    @Test
+    public void test_13() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(_(AN._, "B")))
+            )
+        );
+        assertAnimo(A, "the A ((B))");
+    }
+
+    @Test
+    public void test_14() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(_(_(AN._, "B"))))
+            )
+        );
+        assertAnimo(A, "the A (((B)))");
+    }
+
+    @Test
+    public void test_15() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(LINK._, _(AN._, "B"))
+            )
+        );
+        assertAnimo(A, "the A (B)");
+    }
+
+    @Test
+    public void test_16() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(LINK._, _(LINK._, _(AN._, "B")))
+            )
+        );
+        assertAnimo(A, "the A ((B))");
+    }
+
+    @Test
+    public void test_17() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(LINK._, _(LINK._, _(LINK._, _(AN._, "B"))))
+            )
+        );
+        assertAnimo(A, "the A (((B)))");
+    }
+
+    @Test
+    public void test_18() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(_(LINK._, _(AN._, "B")))
+            )
+        );
+        assertAnimo(A, "the A ((B))");
+    }
+
+    @Test
+    public void test_19() throws Exception {
+        Expression A = new Expression(
+            _(THE._, "A",
+                _(LINK._, _(_(AN._, "B")))
+            )
+        );
+        assertAnimo(A, "the A ((B))");
     }
 
 }
