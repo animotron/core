@@ -37,8 +37,7 @@ import org.neo4j.kernel.Uniqueness;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -59,13 +58,14 @@ public class Preparator extends StatementManipulator {
             public Evaluation evaluate(Path path) {
                 if (path.length() == 2) {
                     if (THE._.THE_NODE().equals(path.endNode()))
-                        return INCLUDE_AND_CONTINUE;
+                        return INCLUDE_AND_PRUNE;
                     Relationship r = path.relationships().iterator().next();
                     if (RelationshipTypes.REF.equals(r.getType()))
-                        return INCLUDE_AND_CONTINUE;
+                        return INCLUDE_AND_PRUNE;
+                } else if (path.length() < 2) {
                     return EXCLUDE_AND_CONTINUE;
                 }
-                return EXCLUDE_AND_CONTINUE;
+                return EXCLUDE_AND_PRUNE;
             }
         });
 	
