@@ -22,6 +22,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.statement.ml.*;
 import org.neo4j.graphdb.Relationship;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
@@ -93,7 +94,7 @@ public class StAXBuilder extends GraphBuilder {
         start(PI._);
             String target = reader.getPITarget();
             String data = reader.getPIData();
-            if (target != null) {
+            if (!target.isEmpty()) {
                 start(NAME._, target);
                 end();
             }
@@ -105,7 +106,7 @@ public class StAXBuilder extends GraphBuilder {
     private void dtd() {
         start(DTD._);
             String text = reader.getText();
-            if (text != null) {
+            if (!text.isEmpty()) {
                 start(text);
                 end();
             }
@@ -121,7 +122,7 @@ public class StAXBuilder extends GraphBuilder {
 
     private void text() {
 		String text = removeWS(reader.getText());
-		if (text != null) {
+        if (!text.isEmpty()) {
 			start(text);
 			end();
 		}
@@ -130,7 +131,7 @@ public class StAXBuilder extends GraphBuilder {
 	private void comment() {
 		start(COMMENT._);
             String text = reader.getText();
-            if (text != null) {
+            if (!text.isEmpty()) {
                 start(text);
                 end();
             }
@@ -140,7 +141,7 @@ public class StAXBuilder extends GraphBuilder {
 	private void cdata() {
 		start(CDATA._);
             String text = reader.getText();
-            if (text != null) {
+            if (!text.isEmpty()) {
                 start(text);
                 end();
             }
@@ -149,7 +150,7 @@ public class StAXBuilder extends GraphBuilder {
 
 	private void startElement() {
         start(ELEMENT._);
-            start(NAME._, reader.getName().toString());
+            start(NAME._, qname(reader.getName()));
             end();
             for (int i = 0; i < reader.getNamespaceCount(); i++) {
                 start(NS._);
@@ -165,12 +166,23 @@ public class StAXBuilder extends GraphBuilder {
             }
             for (int i = 0; i < reader.getAttributeCount(); i++) {
                 start(ATTRIBUTE._);
-                    start(NAME._, reader.getAttributeName(i).toString());
+                    start(NAME._, qname(reader.getAttributeName(i)));
                     end();
                     start(reader.getAttributeValue(i));
                     end();
                 end();
             }
 	}
+
+    private String qname(QName qname) {
+
+        if (qname.getPrefix().isEmpty())
+            return qname.getLocalPart();
+
+        StringBuilder s = new StringBuilder();
+        s.append(qname.getPrefix()); s.append(":"); s.append(qname.getLocalPart());
+        return s.toString();
+
+    }
 	
 }

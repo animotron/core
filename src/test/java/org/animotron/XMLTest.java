@@ -38,7 +38,7 @@ import java.io.StringReader;
 public class XMLTest extends ATest {
 
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
-        
+
     private void test(String in, String out) throws AnimoException, IOException, XMLStreamException {
         Relationship r = new StAXBuilder(FACTORY.createXMLStreamReader(new StringReader(in))).build();
         assertAnimo(r.getEndNode().getRelationships(Direction.OUTGOING).iterator().next(), out);
@@ -47,6 +47,21 @@ public class XMLTest extends ATest {
     @Test
 	public void test_00() throws IOException, AnimoException, XMLStreamException {
         test("<a/>", "\\a");
+	}
+
+    @Test
+	public void test_01() throws IOException, AnimoException, XMLStreamException {
+        test("<x:a xmlns:x=\"x-namespace\"/>", "\\x:a $x \"x-namespace\"");
+	}
+
+    @Test
+	public void test_02() throws IOException, AnimoException, XMLStreamException {
+        test("<a xmlns=\"x-namespace\"/>", "\\a $ \"x-namespace\"");
+	}
+
+    @Test
+	public void test_03() throws IOException, AnimoException, XMLStreamException {
+        test("<a b=\"c\"/>", "\\a @b \"c\"");
 	}
 
 }
