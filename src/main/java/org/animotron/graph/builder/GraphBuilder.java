@@ -116,6 +116,15 @@ public abstract class GraphBuilder {
 
 			for (Object[] item : flow) {
 				build(item, i++);
+				if (i % 100 == 0)
+					System.out.println(i);
+
+				if (i % 10000 == 0) {
+					tx.success();
+					finishTx(tx);
+					
+					tx = beginTx();
+				}
 			}
 
             the = (Relationship) flow.get(0)[3];
