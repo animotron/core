@@ -19,6 +19,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.statement.ml.*;
 import org.neo4j.graphdb.Relationship;
 
@@ -41,52 +42,64 @@ public class StAXBuilder extends GraphBuilder {
 	}
 
 	public Relationship build() throws XMLStreamException, AnimoException {
+		long count = 0;
 		
 		startGraph();
-		
-        while (reader.hasNext()) {
+		try {
+	        while (reader.hasNext()) {
+	        	count++;
+	
+	            switch (reader.getEventType()) {
+	
+	                case XMLStreamConstants.START_ELEMENT :
+	                    startElement();
+	                    break;
+	
+	                case XMLStreamConstants.END_ELEMENT :
+	                    end();
+	                    break;
+	
+	                case XMLStreamConstants.PROCESSING_INSTRUCTION :
+	                    pi();
+	                    break;
+	
+	                case XMLStreamConstants.DTD :
+	                    dtd();
+	                    break;
+	
+	                case XMLStreamConstants.ENTITY_REFERENCE :
+	                    entity();
+	                    break;
+	
+	                case XMLStreamConstants.CDATA :
+	                    cdata();
+	                    break;
+	
+	                case XMLStreamConstants.COMMENT :
+	                    comment();
+	                    break;
+	
+	                case XMLStreamConstants.CHARACTERS :
+	                    text();
+	
+	            }
+	            if (count % 100 == 0)
+	            	System.out.println(count);
+	
+	            reader.next();
+	        }
+	
+	        System.out.println("ending...");
+	        endGraph();
 
-            switch (reader.getEventType()) {
-
-                case XMLStreamConstants.START_ELEMENT :
-                    startElement();
-                    break;
-
-                case XMLStreamConstants.END_ELEMENT :
-                    end();
-                    break;
-
-                case XMLStreamConstants.PROCESSING_INSTRUCTION :
-                    pi();
-                    break;
-
-                case XMLStreamConstants.DTD :
-                    dtd();
-                    break;
-
-                case XMLStreamConstants.ENTITY_REFERENCE :
-                    entity();
-                    break;
-
-                case XMLStreamConstants.CDATA :
-                    cdata();
-                    break;
-
-                case XMLStreamConstants.COMMENT :
-                    comment();
-                    break;
-
-                case XMLStreamConstants.CHARACTERS :
-                    text();
-
-            }
-
-            reader.next();
-        }
-
-        endGraph();
-
-        return getRelationship();
+	        return getRelationship();
+		} finally {
+	        System.out.println("done?");
+			if (AnimoGraph.isTransactionActive(tx)) {
+				tx.failure();
+				AnimoGraph.finishTx(tx);
+			}
+		}
 			
 	}
 
@@ -122,7 +135,7 @@ public class StAXBuilder extends GraphBuilder {
 
     private void text() {
 		String text = removeWS(reader.getText());
-        if (!text.isEmpty()) {
+        if (text != null && !text.isEmpty()) {
 			start(text);
 			end();
 		}
