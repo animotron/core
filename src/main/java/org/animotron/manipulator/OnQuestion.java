@@ -31,7 +31,6 @@ import java.util.List;
 import javolution.util.FastList;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
-import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getORDER;
 
 /**

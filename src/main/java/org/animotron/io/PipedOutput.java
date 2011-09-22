@@ -20,8 +20,6 @@ package org.animotron.io;
 
 import java.io.IOException;
 
-import org.animotron.utils.Utils;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 

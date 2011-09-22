@@ -19,7 +19,6 @@
 package org.animotron.graph.builder;
 
 import org.animotron.AbstractExpression;
-import org.animotron.Expression;
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
@@ -108,7 +107,7 @@ public class BinaryBuilder extends AbstractExpression {
 
                     String[] parts = path.split(Pattern.quote(File.separator));
                     
-                    Expression prev = null;
+                    //Expression prev = null;
                     for (String part : parts) {
                         if (!part.isEmpty()) {
                             start(IS._, part);
