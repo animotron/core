@@ -121,7 +121,7 @@ public class StAXBuilder extends GraphBuilder {
     }
 
     private void text() {
-		String text = removeWS(reader.getText());
+		String text = reader.getText();
         if (!text.isEmpty()) {
 			start(text);
 			end();

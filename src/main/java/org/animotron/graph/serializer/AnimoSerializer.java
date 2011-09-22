@@ -44,6 +44,14 @@ public class AnimoSerializer {
         AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
     }
 
+    public static void serialize(Relationship r, StringBuilder out) throws IOException {
+        serialize(r, out, false);
+    }
+
+    public static void serialize(Relationship r, StringBuilder out, boolean pretty) throws IOException {
+        AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
+    }
+
     public static String serialize(Relationship r) throws IOException {
         return serialize(r, false);
     }

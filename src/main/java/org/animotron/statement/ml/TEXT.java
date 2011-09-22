@@ -24,6 +24,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
+import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.createNode;
@@ -46,7 +47,7 @@ public class TEXT extends AbstractLink implements MLOperator {
     public Relationship build(Node parent, String value, int order, boolean ignoreNotFound) {
         Node child = createNode();
         Relationship r = parent.createRelationshipTo(child, relationshipType());
-        VALUE.set(child, value);
+        VALUE.set(child, removeWS(value));
         order(r, order);
         return r;
     }
@@ -62,6 +63,18 @@ public class TEXT extends AbstractLink implements MLOperator {
         if (reference != null)
             md.update(reference.getBytes());
         return md;
+    }
+
+    private String removeWS(String value) {
+        StringBuilder buf = new StringBuilder();
+        if (value.length() > 0) {
+            StringTokenizer tok = new StringTokenizer(value);
+            while (tok.hasMoreTokens()) {
+                buf.append(tok.nextToken());
+                if (tok.hasMoreTokens()) buf.append(' ');
+            }
+        }
+        return buf.toString();
     }
 
 }

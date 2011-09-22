@@ -19,8 +19,10 @@
 package org.animotron;
 
 import com.ctc.wstx.stax.WstxInputFactory;
+import junit.framework.Assert;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.StAXBuilder;
+import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Test;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
@@ -29,6 +31,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Iterator;
 
 
 /**
@@ -41,7 +44,14 @@ public class XMLTest extends ATest {
 
     private void test(String in, String out) throws AnimoException, IOException, XMLStreamException {
         Relationship r = new StAXBuilder(FACTORY.createXMLStreamReader(new StringReader(in))).build();
-        assertAnimo(r.getEndNode().getRelationships(Direction.OUTGOING).iterator().next(), out);
+        Iterator<Relationship> it = r.getEndNode().getRelationships(Direction.OUTGOING).iterator();
+        StringBuilder s = new StringBuilder();
+        AnimoSerializer.serialize(it.next(), s);
+        while (it.hasNext()){
+            s.append(" ");
+            AnimoSerializer.serialize(it.next(), s);
+        }
+        Assert.assertEquals(s.toString(), out);
     }
 
     @Test
@@ -62,6 +72,11 @@ public class XMLTest extends ATest {
     @Test
 	public void test_03() throws IOException, AnimoException, XMLStreamException {
         test("<a b=\"c\"/>", "\\a @b \"c\"");
+	}
+
+    @Test
+	public void test_04() throws IOException, AnimoException, XMLStreamException {
+        test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a");
 	}
 
 }

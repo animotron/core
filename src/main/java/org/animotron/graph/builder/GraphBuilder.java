@@ -187,24 +187,6 @@ public abstract class GraphBuilder {
 		current[2] = hash;
 	}
 	
-	final protected String removeWS(String value) {
-		
-		StringBuilder buf = new StringBuilder();
-		
-		if (value.length() > 0) {
-			StringTokenizer tok = new StringTokenizer(value);
-			while (tok.hasMoreTokens()) {
-                buf.append(tok.nextToken());
-				if (tok.hasMoreTokens()) buf.append(' ');
-			}
-		}
-		
-		if (buf.length() > 0)
-			return buf.toString();
-			
-		return null;
-	}
-	
 	//TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
