@@ -162,9 +162,9 @@ public class AnimoGraph {
 		try {
 			result = operation.execute();
 			tx.success();
-			return result;
-		} finally {
+        } finally {
 			finishTx(tx);
+            return result;
 		}
 	}
 	

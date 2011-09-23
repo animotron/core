@@ -20,6 +20,7 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.manipulator.Manipulators.Catcher;
@@ -31,13 +32,11 @@ import org.animotron.statement.relation.Relation;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 
 import java.security.MessageDigest;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
-import java.util.StringTokenizer;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
@@ -71,8 +70,6 @@ public abstract class GraphBuilder {
 
 	private List<Object[]> flow;
 
-	protected Transaction tx;
-
     private boolean ignoreNotFound;
 
     public GraphBuilder() {
@@ -93,7 +90,6 @@ public abstract class GraphBuilder {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
 		the = null;
-		tx = beginTx();
 	}
 	
 	final public boolean successful() {
@@ -104,45 +100,25 @@ public abstract class GraphBuilder {
         endGraph(null);
     }
 
-	final protected void endGraph(GraphOperation<?> o) throws AnimoException {
-
+	final protected void endGraph(final GraphOperation<?> o) throws AnimoException {
         if (!statements.empty()) {
             end();
+            AnimoGraph.execute(new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    int i = 0;
+                    for (Object[] item : flow) {
+                        build(item, i++);
+                        if (i % 100 == 0)
+                            System.out.println(i);
+                    }
+                    the = (Relationship) flow.get(0)[3];
+                    if (o != null) o.execute();
+                    catcher.push();
+                    return null;
+                }
+            });
         }
-
-		try {
-			
-			int i = 0;
-
-			for (Object[] item : flow) {
-				build(item, i++);
-				if (i % 100 == 0)
-					System.out.println(i);
-
-				if (i % 10000 == 0) {
-					tx.success();
-					finishTx(tx);
-					
-					tx = beginTx();
-				}
-			}
-
-            the = (Relationship) flow.get(0)[3];
-
-            if (o != null) o.execute();
-
-			tx.success();
-			finishTx(tx);
-			
-			catcher.push();
-
-        } catch (AnimoException e) {
-            fail(e);
-            throw e;
-		} catch (Exception e) {
-			fail(e);
-		}
-			
 	}
 
     final protected void start(Statement statement) {
@@ -272,12 +248,6 @@ public abstract class GraphBuilder {
 	
 	private Relationship build(Statement statement, Node parent, Object[] item, int order) throws ENotFound {
 		return statement.build(parent, (String) item[1], order, ignoreNotFound);
-	}
-	
-	protected void fail(Exception e){
-		e.printStackTrace(System.out);
-		finishTx(tx);
-        the = null;
 	}
 	
 }
