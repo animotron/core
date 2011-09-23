@@ -24,6 +24,6 @@ package org.animotron.graph;
  */
 public interface GraphOperation<T> {
 
-	public T execute() throws Exception;
+	public T execute();
 
 }
