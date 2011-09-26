@@ -52,15 +52,18 @@ public class Manipulators {
 			creative.add(r.getEndNode());
 		}
 		
-		public void renew(Relationship r) {
-			for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
-				destructive(i);
-			}
-			Node node = r.getEndNode();
-			getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
-			
-			creative(r);
-		}
+        public void renew(Relationship r) {
+            renew(r, r);
+        }
+
+        public void renew(Relationship old, Relationship r) {
+            for (Relationship i : old.getEndNode().getRelationships(OUTGOING)) {
+                destructive(i);
+            }
+            Node node = r.getEndNode();
+            getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
+            creative(r);
+        }
 
 		public void destructive(Relationship r) {
 			destructive.add(r.getEndNode());

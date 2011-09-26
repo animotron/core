@@ -97,14 +97,23 @@ public class StreamGraphBuilder extends GraphBuilder {
             String hash = MessageDigester.byteArrayToHex(md);
             if (statement instanceof THE) {
                 String  reference = (String) item[3];
-                the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
-                HASH.set(the, hash);
                 Relationship old = THE._.get(reference);
-                if (old != null) {
-                    catcher.destructive(old);
+                if (old == null) {
+                    the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
+                    HASH.set(the, hash);
+                    catcher.creative(the);
+                    r.delete();
+                } else {
+                    if (hash.equals(HASH.get(old))) {
+                        catcher.destructive(r);
+                        the = old;
+                    } else {
+                        the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
+                        HASH.set(the, hash);
+                        catcher.renew(old, the);
+                        r.delete();
+                    }
                 }
-                catcher.creative(r);
-                the = r;
             } else {
                 Node node = getCache(hash);
                 if (node == null){
