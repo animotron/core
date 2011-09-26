@@ -19,7 +19,7 @@
 package org.animotron;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.AnimoBuilder;
+import org.animotron.expression.AnimoExpression;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,9 +36,8 @@ public class ParserTest extends ATest {
     }
 
     private void test(String in, String out) throws AnimoException, IOException {
-        AnimoBuilder builder = new AnimoBuilder(in);
-        builder.build();
-        assertAnimo(builder.getRelationship(), out);
+        AnimoExpression expression = new AnimoExpression(in);
+        assertAnimo(expression, out);
     }
 
     @Test

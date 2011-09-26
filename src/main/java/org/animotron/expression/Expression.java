@@ -16,12 +16,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
+package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.GraphOperation;
+import org.animotron.graph.builder.FastGraphBuilder;
+import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
+
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -32,45 +37,51 @@ public class Expression extends AbstractExpression {
 	
 	Object[][] e;
 	
-	public Expression(Object[]... e) throws AnimoException {
-		this.e = e;
-		build();
+    public Expression(Object[]... e) throws IOException {
+        this(new FastGraphBuilder(), e);
+    }
+
+    public Expression(GraphBuilder builder, Object[]... e) throws IOException {
+        super(builder);
+        this.e = e;
+        build();
+    }
+
+    @Override
+    protected GraphOperation operation() {
+        return operation;
 	}
-	
-	private void build() throws AnimoException {
-//		try {
-			startGraph();
-			for(Object[] i : e) {
-				buildExpression(i);
-			}
-			endGraph();
-//		} finally {
-        ///TODO is it possible? endGraph always closes transaction
-        ///Q: What will happen if buildExpression throw exception???
-        ///A: GraphBuilder.fail(Exception e) will be called
-//			if (isTransactionActive(tx)) {
-//				tx.failure();
-//				finishTx(tx);
-//			}
-//		}
-	}
-	
-	private void buildExpression(Object[]... e) {
-		if (e != null)
-			for (Object i : e)
-                if (i instanceof Object[][]) {
-                    buildExpression((Object[][]) i);
-                } else {
-				    buildStatement((Object[]) i);
-                }
-	}
-	
-	private void buildStatement(Object[] e) {
-		start((Statement) e[0], (String) e[1]);
-		buildExpression((Object[][]) e[2]);
-		end();
-	}
-	
+
+    private GraphOperation<Void> operation = new GraphOperation<Void>() {
+
+        @Override
+        public Void execute() throws AnimoException {
+            builder.startGraph();
+            for(Object[] i : e) {
+                buildExpression(i);
+            }
+            builder.endGraph();
+            return null;
+        }
+
+        private void buildExpression(Object[]... e) throws AnimoException {
+            if (e != null)
+                for (Object i : e)
+                    if (i instanceof Object[][]) {
+                        buildExpression((Object[][]) i);
+                    } else {
+                        buildStatement((Object[]) i);
+                    }
+        }
+
+        private void buildStatement(Object[] e) throws AnimoException {
+            builder.start((Statement) e[0], (String) e[1]);
+            buildExpression((Object[][]) e[2]);
+            builder.end();
+        }
+
+    };
+
 	public static Object[] _(Statement statement, String reference) {
 		Object[] e = {statement, reference, null};
 		return e;

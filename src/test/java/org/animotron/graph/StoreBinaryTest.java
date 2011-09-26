@@ -19,9 +19,9 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.CommonExpression;
+import org.animotron.expression.Expression;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.CommonBuilder;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -33,7 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
-import static org.animotron.Expression._;
+import static org.animotron.expression.Expression._;
 
 
 /**
@@ -66,7 +66,7 @@ public class StoreBinaryTest extends ATest {
 	public void storeAndSerialize() throws IOException, AnimoException {
         System.out.println("Test binary stream ...");
         
-    	Relationship r = CommonBuilder.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
+    	Relationship r = CommonExpression.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
         AnimoSerializer.serialize(r, System.out);
 
         Expression s = new Expression(

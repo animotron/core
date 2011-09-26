@@ -21,7 +21,7 @@ package org.animotron.games.geo;
 import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.ATest;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.StAXBuilder;
+import org.animotron.expression.StAXExpression;
 import org.junit.Test;
 
 import javax.xml.stream.XMLInputFactory;
@@ -43,12 +43,8 @@ public class GeoTest extends ATest {
 
     @Test
 	public void test() throws IOException, AnimoException, XMLStreamException {
-
         XMLStreamReader reader = FACTORY.createXMLStreamReader(OSM);
-
-        new StAXBuilder(reader).build();
-
+        new StAXExpression(reader);
 	}
-
 
 }

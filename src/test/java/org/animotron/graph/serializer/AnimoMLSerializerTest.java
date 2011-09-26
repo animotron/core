@@ -19,16 +19,16 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.AnimoBuilder;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.Expression.*;
+import static org.animotron.expression.Expression.*;
 
 
 /**
@@ -38,9 +38,8 @@ import static org.animotron.Expression.*;
 public class AnimoMLSerializerTest extends ATest {
 
     private void test(String in, String out) throws AnimoException, IOException {
-        AnimoBuilder builder = new AnimoBuilder(in);
-        builder.build();
-        assertAnimoResult(builder.getRelationship(), out);
+        AnimoExpression expression = new AnimoExpression(in);
+        assertAnimoResult(expression, out);
     }
 
     @Test

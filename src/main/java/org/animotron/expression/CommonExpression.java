@@ -16,22 +16,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.builder;
+package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
 import org.neo4j.graphdb.Relationship;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class CommonBuilder {
+public class CommonExpression {
 	
 	public static Relationship build(String data) throws AnimoException, IOException {
-        return storeAnimo(new AnimoBuilder(data));
+        return new AnimoExpression(data);
 	}
 	
     public static Relationship build(File file) throws IOException, AnimoException {
@@ -43,11 +46,11 @@ public class CommonBuilder {
     }
 
 	public static Relationship build(InputStream stream) throws AnimoException, IOException {
-		return storeAnimo(new AnimoBuilder(stream));
+		return new AnimoExpression(stream);
 	}
 	
 	public static Relationship build(InputStream stream, String path) throws IOException, AnimoException {
-        return  isAnimo(path) ? storeAnimo(new AnimoBuilder(stream)) : storeBinary(stream, path);
+        return  isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path);
 
     }
 	
@@ -55,13 +58,4 @@ public class CommonBuilder {
 		return path.endsWith(".animo");
 	}
 	
-	private static Relationship storeAnimo(AnimoBuilder builder) throws AnimoException, IOException {
-        builder.build();
-		return builder.getRelationship();
-	}
-
-	private static Relationship storeBinary(InputStream stream, String path) throws IOException, AnimoException {
-		return new BinaryBuilder(stream, path);
-	}
-
 }

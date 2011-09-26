@@ -80,7 +80,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		return THE_NODE().getSingleRelationship(type, OUTGOING);
 	}
 
-	public Relationship create(String name, String hash) {
+	public Relationship create(String name, String hash) throws ENotFound {
         //TODO do we really need a reference?
         if (name == null) name = hash;
 		Relationship r = create(name);
@@ -88,20 +88,18 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		return r;
 	}
 
-	private Relationship create(String name) {
-		Node node = createNode();
-		RelationshipType type = relationshipType(name);
-		Relationship r = THE_NODE().createRelationshipTo(node, type);
-		Properties.NAME.set(node, name);
-		getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
-		return r;
+	private Relationship create(String name) throws ENotFound {
+        Relationship r = build(THE_NODE(), name, 0, true);
+        Node node = r.getEndNode();
+        getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
+        return r;
 	}
 
 	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws ENotFound {
 		Relationship r = get(name);
 		if (r == null) {
             if (ignoreNotFound) {
-			    r = create(name);
+                r = create(name);
             } else {
                 throw new ENotFound(null, "Internal error: \"the:" + name + "\" not found");
             }
@@ -110,8 +108,12 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	@Override
-	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) {
-		return null;
+	public Relationship build(Node parent, String name, int order, boolean ignoreNotFound) {
+        Node node = createNode();
+        RelationshipType type = relationshipType(name);
+        Relationship r = THE_NODE().createRelationshipTo(node, type);
+        Properties.NAME.set(node, name);
+        return r;
 	}
 
 	@Override

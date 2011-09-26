@@ -19,14 +19,14 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.Expression._;
+import static org.animotron.expression.Expression._;
 
 
 /**

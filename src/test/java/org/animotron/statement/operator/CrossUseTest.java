@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.IS;
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.Expression._;
+import static org.animotron.expression.Expression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -67,7 +67,7 @@ public class CrossUseTest extends ATest {
         );
         assertAnimoResult(b, "the b the B (is S) (is Y)");
 
-        Expression c = new Expression (
+        Expression c = new Expression(
             _(THE._, "c", _(ANY._, "S", _(USE._, "X"), _(USE._, "Y")))
         );
         assertAnimoResult(c, "the c the C (is S) (is X) (is Y)");

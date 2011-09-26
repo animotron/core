@@ -19,8 +19,7 @@
 package org.animotron.statement.instruction;
 
 import org.animotron.Executor;
-import org.animotron.Expression;
-import org.animotron.exception.AnimoException;
+import org.animotron.expression.Expression;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Evaluable;
@@ -29,6 +28,7 @@ import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
 
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -64,12 +64,12 @@ public class COUNT extends Instruction implements Evaluable {
 						//XXX: optimize
 						Expression r;
 						try {
-							r = new Expression(Expression._(Q._, "N"+value.get()));
-						} catch (AnimoException e) {
-							pf.sendException(e);
-							return;
-						}
-						pf.sendAnswer(r);
+							r = new Expression(Expression._(Q._, "N" + value.get()));
+						} catch (IOException e) {
+                            pf.sendException(e);
+                            return;
+                        }
+                        pf.sendAnswer(r);
 						pf.done();
 						return;
 					}

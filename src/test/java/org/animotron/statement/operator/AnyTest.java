@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.statement.compare.EQ;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
+import static org.animotron.expression.Expression._;
+import static org.animotron.expression.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

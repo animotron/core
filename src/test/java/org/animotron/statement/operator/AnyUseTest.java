@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.HAVE;
@@ -29,8 +29,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
+import static org.animotron.expression.Expression._;
+import static org.animotron.expression.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

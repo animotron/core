@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
@@ -29,7 +29,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.Expression.*;
+import static org.animotron.expression.Expression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -79,7 +79,7 @@ public class EachTest extends ATest {
             _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
         );
 
-        Expression s = new Expression (
+        Expression s = new Expression(
             _(THE._, "s", element("p", _(EACH._, "P", _(ALL._, "S"))))
         );
         assertAnimoResult(s, "the s (element p the A (is A) (is S) (is P) (have content \"α\")) (element p the B (is S) (is P) (have content \"β\"))");

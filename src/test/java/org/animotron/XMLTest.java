@@ -21,7 +21,7 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.StAXBuilder;
+import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Test;
 import org.neo4j.graphdb.Direction;
@@ -43,7 +43,7 @@ public class XMLTest extends ATest {
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
 
     private void test(String in, String out) throws AnimoException, IOException, XMLStreamException {
-        Relationship r = new StAXBuilder(FACTORY.createXMLStreamReader(new StringReader(in))).build();
+        Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
         Iterator<Relationship> it = r.getEndNode().getRelationships(Direction.OUTGOING).iterator();
         StringBuilder s = new StringBuilder();
         AnimoSerializer.serialize(it.next(), s);

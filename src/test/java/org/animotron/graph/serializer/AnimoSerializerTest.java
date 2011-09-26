@@ -18,7 +18,7 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.statement.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
+import static org.animotron.expression.Expression._;
+import static org.animotron.expression.Expression.text;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

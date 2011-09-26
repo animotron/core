@@ -19,7 +19,7 @@
 package org.animotron.graph.handler;
 
 import org.animotron.Properties;
-import org.animotron.graph.builder.BinaryBuilder;
+import org.animotron.expression.BinaryExpression;
 import org.animotron.statement.Statement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -41,7 +41,7 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     public static void write(Node n, OutputStream out) throws IOException {
-        File bin = BinaryBuilder.getFile(Properties.BIN.get(n));
+        File bin = BinaryExpression.getFile(Properties.BIN.get(n));
         InputStream in = null;
             in = new FileInputStream(bin);
         byte buf[] = new byte[1024 * 4];

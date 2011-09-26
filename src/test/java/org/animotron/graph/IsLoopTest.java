@@ -20,7 +20,7 @@ package org.animotron.graph;
 
 import junit.framework.Assert;
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
@@ -29,7 +29,9 @@ import org.junit.Test;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
-import static org.animotron.Expression._;
+import java.io.IOException;
+
+import static org.animotron.expression.Expression._;
 
 
 /**
@@ -44,7 +46,7 @@ public class IsLoopTest extends ATest {
     }
 
 	@Test
-	public void storeAndSerializeResult() throws AnimoException {
+	public void storeAndSerializeResult() throws AnimoException, IOException {
         new Expression(_(THE._, "A"));
         test("A");
         new Expression(_(THE._, "A", _(IS._, "C")));

@@ -19,6 +19,7 @@
 package org.animotron;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.expression.Expression;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
@@ -29,8 +30,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.Expression._;
-import static org.animotron.Expression.text;
+import static org.animotron.expression.Expression._;
+import static org.animotron.expression.Expression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,7 +39,7 @@ import static org.animotron.Expression.text;
  */
 public class DownUpTest extends ATest {
 	
-	private void common() throws AnimoException {
+	private void common() throws IOException {
 		new Expression(
 				_(THE._, "B", 
 					_(IS._, "A"), 

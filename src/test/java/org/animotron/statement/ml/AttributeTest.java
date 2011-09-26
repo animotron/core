@@ -19,7 +19,7 @@
 package org.animotron.statement.ml;
 
 import org.animotron.ATest;
-import org.animotron.graph.builder.CommonBuilder;
+import org.animotron.expression.CommonExpression;
 import org.animotron.statement.operator.THE;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class AttributeTest extends ATest {
     @Ignore
 	public void check() throws Exception {
 
-		CommonBuilder.build(new File("src/main/animo/form-generator.animo"));
+		CommonExpression.build(new File("src/main/animo/form-generator.animo"));
         
         Relationship r = THE._.get("form-generator");
         

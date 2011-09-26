@@ -19,7 +19,7 @@
 package org.animotron.games;
 
 import org.animotron.ATest;
-import org.animotron.Expression;
+import org.animotron.expression.Expression;
 import org.animotron.statement.instruction.COUNT;
 import org.animotron.statement.instruction.compare.GE;
 import org.animotron.statement.operator.AN;
@@ -33,7 +33,7 @@ import org.animotron.statement.relation.IS_NOT;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.Expression._;
+import static org.animotron.expression.Expression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

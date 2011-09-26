@@ -18,9 +18,8 @@
  */
 package org.animotron.statement.string;
 
-import org.animotron.Expression;
 import org.animotron.Properties;
-import org.animotron.exception.AnimoException;
+import org.animotron.expression.Expression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.StringResultSerializer;
@@ -36,11 +35,11 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.animotron.Expression.text;
+import static org.animotron.expression.Expression.text;
 import static org.animotron.graph.AnimoGraph.getORDER;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * String instruction 'after-last'.
@@ -96,7 +95,7 @@ public class AfterLast extends Instruction implements Evaluable {
 					        source.substring(index + 1)
 					    )
 					);
-				} catch (AnimoException e) {
+				} catch (IOException e) {
 					pf.sendException(e);
 					return;
 				}

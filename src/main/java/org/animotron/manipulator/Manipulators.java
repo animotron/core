@@ -62,7 +62,7 @@ public class Manipulators {
 			creative(r);
 		}
 
-		private void destructive(Relationship r) {
+		public void destructive(Relationship r) {
 			destructive.add(r.getEndNode());
 			r.delete();
 		}

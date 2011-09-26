@@ -19,7 +19,7 @@
 package org.animotron.bridge;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.CommonBuilder;
+import org.animotron.expression.CommonExpression;
 
 import java.io.File;
 import java.io.IOException;
@@ -52,7 +52,7 @@ public class FSBridge {
 
     private static void loadFile (String root, File file) throws IOException, AnimoException {
         String path = file.getPath().substring(root.length());
-        CommonBuilder.build(file, path);
+        CommonExpression.build(file, path);
     }
 
 	private static void load (String root, File path) throws IOException, AnimoException {
