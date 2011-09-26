@@ -48,8 +48,12 @@ public class Manipulators {
 		
 		public Catcher() {}
 		
+        public void creative(Node node) {
+            creative.add(node);
+        }
+
 		public void creative(Relationship r) {
-			creative.add(r.getEndNode());
+			creative(r.getEndNode());
 		}
 		
         public void renew(Relationship r) {
@@ -65,11 +69,14 @@ public class Manipulators {
             creative(r);
         }
 
-		public void destructive(Relationship r) {
-			destructive.add(r.getEndNode());
-			r.delete();
-		}
+        public void destructive(Node node) {
+            destructive.add(node);
+        }
 		
+        public void destructive(Relationship r) {
+            destructive(r.getEndNode());
+            r.delete();
+        }
 
 		public void push() throws IOException {
 			creative();

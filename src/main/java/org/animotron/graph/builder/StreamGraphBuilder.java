@@ -57,6 +57,7 @@ public class StreamGraphBuilder extends GraphBuilder {
 	private Node root, parent;
 	private Stack<Object[]> stack;
     private int order;
+    private String hash;
 
     @Override
 	public void startGraph() {
@@ -68,7 +69,25 @@ public class StreamGraphBuilder extends GraphBuilder {
 
     @Override
 	public void endGraph() throws AnimoException {
-        root.delete();
+        if (the == null) {
+            Relationship old = THE._.get(hash);
+            if (old == null) {
+                the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
+                HASH.set(the, hash);
+                catcher.creative(the);
+            } else {
+                if (hash.equals(HASH.get(old))) {
+                    catcher.destructive(root);
+                    the = old;
+                } else {
+                    the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
+                    HASH.set(the, hash);
+                    catcher.renew(old, the);
+                }
+            }
+        } else {
+            root.delete();
+        }
 	}
 
 	@Override
@@ -91,10 +110,10 @@ public class StreamGraphBuilder extends GraphBuilder {
 	public void end() {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
+        byte[] md = ((MessageDigest) item[1]).digest();
+        hash = MessageDigester.byteArrayToHex(md);
         if (!(statement instanceof Relation)) {
             Relationship r = (Relationship) item[2];
-            byte[] md = ((MessageDigest) item[1]).digest();
-            String hash = MessageDigester.byteArrayToHex(md);
             if (statement instanceof THE) {
                 String  reference = (String) item[3];
                 Relationship old = THE._.get(reference);
@@ -124,10 +143,10 @@ public class StreamGraphBuilder extends GraphBuilder {
                     catcher.destructive(r);
                 }
             }
-            if (!stack.empty()) {
-                ((MessageDigest) stack.peek()[1]).update(md);
-            }
             parent = r.getEndNode();
+        }
+        if (!stack.empty()) {
+            ((MessageDigest) stack.peek()[1]).update(md);
         }
 	}
 

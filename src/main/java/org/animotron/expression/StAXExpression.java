@@ -20,8 +20,8 @@ package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.graph.builder.StreamGraphBuilder;
 import org.animotron.statement.ml.*;
 
 import javax.xml.namespace.QName;
@@ -40,8 +40,7 @@ public class StAXExpression extends AbstractExpression {
 	private XMLStreamReader reader;
 	
     public StAXExpression(XMLStreamReader reader) throws XMLStreamException, AnimoException, IOException {
-//        this(new StreamGraphBuilder(), reader);
-        this(new FastGraphBuilder(), reader);
+        this(new StreamGraphBuilder(), reader);
     }
 
     public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws XMLStreamException, AnimoException, IOException {
