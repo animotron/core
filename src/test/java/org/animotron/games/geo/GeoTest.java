@@ -39,7 +39,7 @@ public class GeoTest extends ATest {
 
     private XMLInputFactory FACTORY = new WstxInputFactory();
 
-    private InputStream OSM = getClass().getResourceAsStream("map.osm");
+    private InputStream OSM = getClass().getResourceAsStream("sto.xml");
 
     @Test
 	public void test() throws IOException, AnimoException, XMLStreamException {

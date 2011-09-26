@@ -95,6 +95,8 @@ public class StreamGraphBuilder extends GraphBuilder {
 //        if (flow.isEmpty() && !(statement instanceof THE)) {
 //            start(THE._, null);
 //        }
+        if (order % 100 == 0)
+            System.out.println(order);
         Relationship r = statement.build(parent, reference, order++, ignoreNotFound);
         MessageDigest md = statement.hash(reference);
 		Object[] item = {

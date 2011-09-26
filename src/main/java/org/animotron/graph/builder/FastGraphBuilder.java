@@ -73,9 +73,11 @@ public class FastGraphBuilder extends GraphBuilder {
         if (!statements.empty()) {
             end();
         }
-        int i = 0;
+        int order = 0;
         for (Object[] item : flow) {
-            build(item, i++);
+            if (order % 100 == 0)
+                System.out.println(order);
+            build(item, order++);
         }
         the = (Relationship) flow.get(0)[3];
 	}
