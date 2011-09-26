@@ -74,6 +74,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             Relationship old = THE._.get(hash);
             if (old == null) {
                 the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
+                NAME.set(the, hash);
                 HASH.set(the, hash);
                 catcher.creative(the);
             } else {
@@ -126,6 +127,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                 Relationship old = THE._.get(reference);
                 if (old == null) {
                     the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
+                    NAME.set(the, hash);
                     HASH.set(the, hash);
                     catcher.creative(the);
                     r.delete();
@@ -135,6 +137,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                         the = old;
                     } else {
                         the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
+                        NAME.set(the, hash);
                         HASH.set(the, hash);
                         catcher.renew(old, the);
                         r.delete();
