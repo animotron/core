@@ -98,6 +98,9 @@ public class StreamGraphBuilder extends GraphBuilder {
         if (order % 100 == 0)
             System.out.println(order);
         Relationship r = statement.build(parent, reference, order++, ignoreNotFound);
+        if (!(statement instanceof Relation)) {
+            parent = r.getEndNode();
+        }
         MessageDigest md = statement.hash(reference);
 		Object[] item = {
 				statement,	    // 0  statement
@@ -145,7 +148,6 @@ public class StreamGraphBuilder extends GraphBuilder {
                     catcher.destructive(r);
                 }
             }
-            parent = r.getEndNode();
         }
         if (!stack.empty()) {
             ((MessageDigest) stack.peek()[1]).update(md);
