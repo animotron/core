@@ -30,6 +30,7 @@ import java.security.MessageDigest;
 import java.util.Stack;
 
 import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
 
 /**
@@ -81,6 +82,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                     the = old;
                 } else {
                     the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
+                    NAME.set(the, hash);
                     HASH.set(the, hash);
                     catcher.renew(old, the);
                 }
