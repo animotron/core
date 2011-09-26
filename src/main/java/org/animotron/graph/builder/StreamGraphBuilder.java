@@ -58,7 +58,7 @@ public class StreamGraphBuilder extends GraphBuilder {
 	private Node root, parent;
 	private Stack<Object[]> stack;
     private int order;
-    private String hash;
+    private byte[] md;
 
     @Override
 	public void startGraph() {
@@ -71,6 +71,9 @@ public class StreamGraphBuilder extends GraphBuilder {
     @Override
 	public void endGraph() throws AnimoException {
         if (the == null) {
+            MessageDigest m = THE._.hash(null);
+            m.update(md);
+            String hash = MessageDigester.byteArrayToHex(m.digest());
             Relationship old = THE._.get(hash);
             if (old == null) {
                 the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
@@ -120,8 +123,8 @@ public class StreamGraphBuilder extends GraphBuilder {
 	public void end() {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
-        byte[] md = ((MessageDigest) item[1]).digest();
-        hash = MessageDigester.byteArrayToHex(md);
+        md = ((MessageDigest) item[1]).digest();
+        String hash = MessageDigester.byteArrayToHex(md);
         if (!(statement instanceof Relation)) {
             Relationship r = (Relationship) item[2];
             if (statement instanceof THE) {
