@@ -51,7 +51,7 @@ public class XMLTest extends ATest {
             s.append(" ");
             AnimoSerializer.serialize(it.next(), s);
         }
-        Assert.assertEquals(s.toString(), out);
+        Assert.assertEquals(out, s.toString());
     }
 
     @Test
