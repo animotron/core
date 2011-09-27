@@ -64,7 +64,7 @@ public class StreamGraphBuilder extends GraphBuilder {
     @Override
 	public void startGraph() {
         stack = new Stack<Object[]>();
-        parent = root = createNode();
+        root = createNode();
 	}
 
     @Override
@@ -101,9 +101,7 @@ public class StreamGraphBuilder extends GraphBuilder {
 	@Override
     public void start(Statement statement, String reference) throws AnimoException {
         step();
-        if (!stack.empty()) {
-            parent = ((Relationship) stack.peek()[2]).getEndNode();
-        }
+        parent = stack.empty() ? root : ((Relationship) stack.peek()[2]).getEndNode();
         Relationship r = statement.build(parent, reference, ignoreNotFound);
         MessageDigest md = statement.hash(reference);
 		Object[] item = {
