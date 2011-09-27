@@ -19,9 +19,8 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.graph.builder.StreamGraphBuilder;
+import org.animotron.graph.builder.StAXGraphBuilder;
 import org.animotron.statement.ml.*;
 
 import javax.xml.namespace.QName;
@@ -35,154 +34,144 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXExpression extends AbstractExpression {
+public class StAXExpression extends Expression {
 	
 	private XMLStreamReader reader;
 	
-    public StAXExpression(XMLStreamReader reader) throws XMLStreamException, AnimoException, IOException {
-        this(new StreamGraphBuilder(), reader);
+    public StAXExpression(XMLStreamReader reader) throws IOException {
+        this(new StAXGraphBuilder(), reader);
     }
 
-    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws XMLStreamException, AnimoException, IOException {
+    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws IOException {
         super(builder);
         this.reader = reader;
-        build();
+        builder.build(this);
     }
 
     @Override
-    public GraphOperation<Void> operation() {
-        return operation;
+    public void build() throws XMLStreamException, AnimoException {
+        builder.startGraph();
+        while (reader.hasNext()) {
+            switch (reader.getEventType()) {
+                case XMLStreamConstants.START_ELEMENT :
+                    startElement();
+                    break;
+                case XMLStreamConstants.END_ELEMENT :
+                    builder.end();
+                    break;
+                case XMLStreamConstants.PROCESSING_INSTRUCTION :
+                    pi();
+                    break;
+                case XMLStreamConstants.DTD :
+                    dtd();
+                    break;
+                case XMLStreamConstants.ENTITY_REFERENCE :
+                    entity();
+                    break;
+                case XMLStreamConstants.CDATA :
+                    cdata();
+                    break;
+                case XMLStreamConstants.COMMENT :
+                    comment();
+                    break;
+                case XMLStreamConstants.CHARACTERS :
+                    text();
+            }
+            reader.next();
+        }
+        builder.endGraph();
     }
 
-    private GraphOperation<Void> operation = new GraphOperation<Void>() {
-
-        @Override
-        public Void execute() throws Exception {
-            builder.startGraph();
-            while (reader.hasNext()) {
-                switch (reader.getEventType()) {
-                    case XMLStreamConstants.START_ELEMENT :
-                        startElement();
-                        break;
-                    case XMLStreamConstants.END_ELEMENT :
-                        builder.end();
-                        break;
-                    case XMLStreamConstants.PROCESSING_INSTRUCTION :
-                        pi();
-                        break;
-                    case XMLStreamConstants.DTD :
-                        dtd();
-                        break;
-                    case XMLStreamConstants.ENTITY_REFERENCE :
-                        entity();
-                        break;
-                    case XMLStreamConstants.CDATA :
-                        cdata();
-                        break;
-                    case XMLStreamConstants.COMMENT :
-                        comment();
-                        break;
-                    case XMLStreamConstants.CHARACTERS :
-                        text();
-                }
-                reader.next();
+    private void pi() throws AnimoException {
+        builder.start(PI._);
+            String target = reader.getPITarget();
+            String data = reader.getPIData();
+            if (!target.isEmpty()) {
+                builder.start(NAME._, target);
+                builder.end();
             }
-            builder.endGraph();
-            return null;
-        }
-
-        private void pi() throws AnimoException {
-            builder.start(PI._);
-                String target = reader.getPITarget();
-                String data = reader.getPIData();
-                if (!target.isEmpty()) {
-                    builder.start(NAME._, target);
-                    builder.end();
-                }
-                builder.start(TEXT._, data);
-                builder.end();
+            builder.start(TEXT._, data);
             builder.end();
-        }
+        builder.end();
+    }
 
-        private void dtd() throws AnimoException {
-            builder.start(DTD._);
-                String text = reader.getText();
-                if (!text.isEmpty()) {
-                    builder.start(text);
-                    builder.end();
-                }
-            builder.end();
-        }
-
-        private void entity() throws AnimoException {
-            builder.start(ENTITY._);
-                builder.start(NAME._, reader.getText());
-                builder.end();
-            builder.end();
-        }
-
-        private void text() throws AnimoException {
+    private void dtd() throws AnimoException {
+        builder.start(DTD._);
             String text = reader.getText();
             if (!text.isEmpty()) {
                 builder.start(text);
                 builder.end();
             }
-        }
+        builder.end();
+    }
 
-        private void comment() throws AnimoException {
-            builder.start(COMMENT._);
-                String text = reader.getText();
-                if (!text.isEmpty()) {
-                    builder.start(text);
-                    builder.end();
-                }
+    private void entity() throws AnimoException {
+        builder.start(ENTITY._);
+            builder.start(NAME._, reader.getText());
+            builder.end();
+        builder.end();
+    }
+
+    private void text() throws AnimoException {
+        String text = reader.getText();
+        if (!text.isEmpty()) {
+            builder.start(text);
             builder.end();
         }
+    }
 
-        private void cdata() throws AnimoException {
-            builder.start(CDATA._);
-                String text = reader.getText();
-                if (!text.isEmpty()) {
-                    builder.start(text);
-                    builder.end();
-                }
-            builder.end();
-        }
-
-        private void startElement() throws AnimoException {
-            builder.start(ELEMENT._);
-                builder.start(NAME._, qname(reader.getName()));
+    private void comment() throws AnimoException {
+        builder.start(COMMENT._);
+            String text = reader.getText();
+            if (!text.isEmpty()) {
+                builder.start(text);
                 builder.end();
-                for (int i = 0; i < reader.getNamespaceCount(); i++) {
-                    builder.start(NS._);
-                        String namespace = reader.getNamespaceURI(i);
-                        String prefix = reader.getNamespacePrefix(i);
-                        if (prefix != null) {
-                            builder.start(NAME._, prefix);
-                            builder.end();
-                        }
-                        builder.start(namespace);
-                        builder.end();
-                    builder.end();
-                }
-                for (int i = 0; i < reader.getAttributeCount(); i++) {
-                    builder.start(ATTRIBUTE._);
-                        builder.start(NAME._, qname(reader.getAttributeName(i)));
-                        builder.end();
-                        builder.start(reader.getAttributeValue(i));
-                        builder.end();
-                    builder.end();
-                }
-        }
+            }
+        builder.end();
+    }
 
-        private String qname(QName qname) {
-            if (qname.getPrefix().isEmpty())
-                return qname.getLocalPart();
-            StringBuilder s = new StringBuilder();
-            s.append(qname.getPrefix()); s.append(":"); s.append(qname.getLocalPart());
-            return s.toString();
-        }
+    private void cdata() throws AnimoException {
+        builder.start(CDATA._);
+            String text = reader.getText();
+            if (!text.isEmpty()) {
+                builder.start(text);
+                builder.end();
+            }
+        builder.end();
+    }
 
-    };
+    private void startElement() throws AnimoException {
+        builder.start(ELEMENT._);
+            builder.start(NAME._, qname(reader.getName()));
+            builder.end();
+            for (int i = 0; i < reader.getNamespaceCount(); i++) {
+                builder.start(NS._);
+                    String namespace = reader.getNamespaceURI(i);
+                    String prefix = reader.getNamespacePrefix(i);
+                    if (prefix != null) {
+                        builder.start(NAME._, prefix);
+                        builder.end();
+                    }
+                    builder.start(namespace);
+                    builder.end();
+                builder.end();
+            }
+            for (int i = 0; i < reader.getAttributeCount(); i++) {
+                builder.start(ATTRIBUTE._);
+                    builder.start(NAME._, qname(reader.getAttributeName(i)));
+                    builder.end();
+                    builder.start(reader.getAttributeValue(i));
+                    builder.end();
+                builder.end();
+            }
+    }
+
+    private String qname(QName qname) {
+        if (qname.getPrefix().isEmpty())
+            return qname.getLocalPart();
+        StringBuilder s = new StringBuilder();
+        s.append(qname.getPrefix()); s.append(":"); s.append(qname.getLocalPart());
+        return s.toString();
+    }
 
 }

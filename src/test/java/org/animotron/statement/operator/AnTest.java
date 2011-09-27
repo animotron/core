@@ -19,12 +19,12 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.relation.HAVE;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,12 +36,12 @@ public class AnTest extends ATest {
     @Test
     public void testAN() throws Exception {
 
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
         );
         assertAnimoResult(A, "the A the B");
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(HAVE._, "C", text("y")))
         );
         assertAnimoResult(A, "the A the B have C \"y\"");

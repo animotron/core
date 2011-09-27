@@ -18,148 +18,110 @@
  */
 package org.animotron.expression;
 
-import org.animotron.exception.AnimoException;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.LINK;
-import org.animotron.statement.Statement;
-import org.animotron.statement.ml.*;
-
-import java.io.IOException;
+import org.neo4j.graphdb.GraphDatabaseService;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Expression extends AbstractExpression {
-	
-	Object[][] e;
-	
-    public Expression(Object[]... e) throws IOException {
-        this(new FastGraphBuilder(), e);
+public abstract class Expression implements Relationship {
+
+    protected final GraphBuilder builder;
+
+    public Expression(GraphBuilder builder) {
+        this.builder = builder;
     }
 
-    public Expression(GraphBuilder builder, Object[]... e) throws IOException {
-        super(builder);
-        this.e = e;
-        build();
-    }
+    public abstract void build() throws Exception;
 
     @Override
-    protected GraphOperation operation() {
-        return operation;
+	public GraphDatabaseService getGraphDatabase() {
+		return builder.getRelationship().getGraphDatabase();
 	}
 
-    private GraphOperation<Void> operation = new GraphOperation<Void>() {
-
-        @Override
-        public Void execute() throws AnimoException {
-            builder.startGraph();
-            for(Object[] i : e) {
-                buildExpression(i);
-            }
-            builder.endGraph();
-            return null;
-        }
-
-        private void buildExpression(Object[]... e) throws AnimoException {
-            if (e != null)
-                for (Object i : e)
-                    if (i instanceof Object[][]) {
-                        buildExpression((Object[][]) i);
-                    } else {
-                        buildStatement((Object[]) i);
-                    }
-        }
-
-        private void buildStatement(Object[] e) throws AnimoException {
-            builder.start((Statement) e[0], (String) e[1]);
-            buildExpression((Object[][]) e[2]);
-            builder.end();
-        }
-
-    };
-
-	public static Object[] _(Statement statement, String reference) {
-		Object[] e = {statement, reference, null};
-		return e;
+	@Override
+	public boolean hasProperty(String key) {
+		return builder.getRelationship().hasProperty(key);
 	}
 
-    public static Object[] _(Statement statement, Object[]... p) {
-        Object[] e = {statement, null, p};
-        return e;
-    }
-
-    public static Object[] _(Statement statement, String reference, Object[]... p) {
-        Object[] e = {statement, reference, p};
-        return e;
-    }
-
-    public static Object[] _(Object[]... p) {
-        Object[] e = _(LINK._, p);
-        return e;
-    }
-
-	public static Object[] element(String name) {
-		return _(ELEMENT._, name(name));
+	@Override
+	public Object getProperty(String key) {
+		return builder.getRelationship().getProperty(key);
 	}
 
-	public static Object[] element(String name, Object[]... p) {
-		return _(ELEMENT._, name(name), p);
-	}
-	
-    public static Object[] attribute(String name) {
-        return _(ATTRIBUTE._, name(name));
-    }
-
-    public static Object[] attribute(String name, String value) {
-        return _(ATTRIBUTE._, name(name), text(value));
-    }
-
-    public static Object[] entity(String name, String value) {
-        return _(ENTITY._, name(name), text(value));
-    }
-
-	public static Object[] comment(String value) {
-        return _(COMMENT._, text(value));
+	@Override
+	public Object getProperty(String key, Object defaultValue) {
+		return builder.getRelationship().getProperty(key, defaultValue);
 	}
 
-    public static Object[] cdata(String value) {
-        return _(CDATA._, text(value));
-    }
+	@Override
+	public void setProperty(String key, Object value) {
+		builder.getRelationship().setProperty(key, value);
+	}
 
-    public static Object[] pi(String name, String value) {
-        return _(PI._, name(name), text(value));
-    }
+	@Override
+	public Object removeProperty(String key) {
+		return builder.getRelationship().removeProperty(key);
+	}
 
-    public static Object[] pi(String value) {
-        return _(PI._, text(value));
-    }
+	@Override
+	public Iterable<String> getPropertyKeys() {
+		return builder.getRelationship().getPropertyKeys();
+	}
 
-    public static Object[] dtd(String value) {
-        return _(DTD._, text(value));
-    }
+	@SuppressWarnings("deprecation")
+	@Override
+	public Iterable<Object> getPropertyValues() {
+		return builder.getRelationship().getPropertyValues();
+	}
 
-    public static Object[] namespace(String name, String value) {
-        return _(NS._, name(name), text(value));
-    }
+	@Override
+	public long getId() {
+		return builder.getRelationship().getId();
+	}
 
-    public static Object[] namespace(String value) {
-        return _(NS._, text(value));
-    }
+	@Override
+	public void delete() {
+		builder.getRelationship().delete();
+	}
 
-    public static Object[] name(String value) {
-        return _(NAME._, value);
-    }
+	@Override
+	public Node getStartNode() {
+		return builder.getRelationship().getStartNode();
+	}
 
-    public static Object[] text(String value) {
-        return _(TEXT._, value);
-    }
+	@Override
+	public Node getEndNode() {
+		return builder.getRelationship().getEndNode();
+	}
 
-    public static Object[] text(String value, Object[] p) {
-        return _(TEXT._, value, p);
-    }
-    
+	@Override
+	public Node getOtherNode(Node node) {
+		return builder.getRelationship().getOtherNode(node);
+	}
+
+	@Override
+	public Node[] getNodes() {
+		return builder.getRelationship().getNodes();
+	}
+
+	@Override
+	public RelationshipType getType() {
+		return builder.getRelationship().getType();
+	}
+
+	@Override
+	public boolean isType(RelationshipType type) {
+		return builder.getRelationship().isType(type);
+	}
+
+	public String toString() {
+		return builder.getRelationship().toString();
+	}
+
 }

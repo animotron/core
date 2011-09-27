@@ -20,7 +20,6 @@ package org.animotron.expression;
 
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
@@ -38,7 +37,7 @@ import static org.animotron.graph.AnimoGraph.getStorage;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinaryExpression extends AbstractExpression {
+public class BinaryExpression extends Expression {
 	
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
@@ -51,69 +50,58 @@ public class BinaryExpression extends AbstractExpression {
 		TMP_STORAGE.mkdirs();
 	}
 
-    public BinaryExpression(InputStream stream, String path) throws IOException, AnimoException {
+    public BinaryExpression(InputStream stream, String path) throws IOException {
         super(new FastGraphBuilder());
         this.stream = stream;
         this.path = path;
-        build();
+        builder.build(this);
     }
 
     @Override
-    public GraphOperation<Void> operation() {
-        return operation;
-    }
-
-    private GraphOperation<Void> operation = new GraphOperation<Void>() {
-
-        @Override
-        public Void execute() throws Exception {
-            String txID = UUID.randomUUID().toString();
-            File tmp = new File(TMP_STORAGE, txID);
-            tmp.createNewFile();
-            OutputStream out = new FileOutputStream(tmp);
-            byte buf[] = new byte[1024 * 4];
-            int len;
-            MessageDigest md = MessageDigester.md();
-            while((len=stream.read(buf))>0) {
-                out.write(buf,0,len);
-                md.update(buf,0,len);
-            }
-            out.close();
-            stream.close();
-            String hash = MessageDigester.byteArrayToHex(md.digest());
-            File dir = getFolder(hash);
-            File bin = getFile(dir, hash);
-            if (bin.exists()) {
-                tmp.delete();
-                System.out.println("File \"" + bin.getPath() + "\" already stored");
-            } else {
-                dir.mkdirs();
-                if (!tmp.renameTo(bin)) {
-                    tmp.delete();
-                    throw new IOException("transaction can not be finished");
-
-                } else {
-                    builder.startGraph();
-                        builder.start(IS._, "file");
-                        builder.end();
-                        String[] parts = path.split(Pattern.quote(File.separator));
-                        //Expression prev = null;
-                        for (String part : parts) {
-                            if (!part.isEmpty()) {
-                                builder.start(IS._, part);
-                                builder.end();
-                            }
-                        }
-                    builder.endGraph();
-                    Properties.BIN.set(getEndNode(), hash);
-                }
-                System.out.println("Store the file \"" + bin.getPath() + "\"");
-                return null;
-            }
-            return null;
+    public void build() throws IOException, AnimoException {
+        String txID = UUID.randomUUID().toString();
+        File tmp = new File(TMP_STORAGE, txID);
+        tmp.createNewFile();
+        OutputStream out = new FileOutputStream(tmp);
+        byte buf[] = new byte[1024 * 4];
+        int len;
+        MessageDigest md = MessageDigester.md();
+        while((len=stream.read(buf))>0) {
+            out.write(buf,0,len);
+            md.update(buf,0,len);
         }
+        out.close();
+        stream.close();
+        String hash = MessageDigester.byteArrayToHex(md.digest());
+        File dir = getFolder(hash);
+        File bin = getFile(dir, hash);
+        if (bin.exists()) {
+            tmp.delete();
+            System.out.println("File \"" + bin.getPath() + "\" already stored");
+        } else {
+            dir.mkdirs();
+            if (!tmp.renameTo(bin)) {
+                tmp.delete();
+                throw new IOException("transaction can not be finished");
 
-    };
+            } else {
+                builder.startGraph();
+                    builder.start(IS._, "file");
+                    builder.end();
+                    String[] parts = path.split(Pattern.quote(File.separator));
+                    //JExpression prev = null;
+                    for (String part : parts) {
+                        if (!part.isEmpty()) {
+                            builder.start(IS._, part);
+                            builder.end();
+                        }
+                    }
+                builder.endGraph();
+                Properties.BIN.set(getEndNode(), hash);
+            }
+            System.out.println("Store the file \"" + bin.getPath() + "\"");
+        }
+    }
 
     private static File getFolder(String hash) {
         return new File(new File(BIN_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));

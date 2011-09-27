@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,15 +40,15 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_test() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A",
                     _(HAVE._, "B", text("test"))
@@ -61,15 +61,15 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_test_() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A",
                     _(HAVE._, "B", text("test"))
@@ -82,21 +82,21 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_test1() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D",
                 _(HAVE._, "B", text("test"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A", _(AN._, "D"))
             )
@@ -107,27 +107,27 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_test2() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D",
                 _(AN._, "E")
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "E",
                 _(HAVE._, "B", text("test"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A", _(AN._, "D"))
             )
@@ -138,22 +138,22 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_test3() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D",
                 _(IS._, "d"),
                 _(HAVE._, "B", text("test"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A", _(ANY._, "d"))
             )
@@ -164,15 +164,15 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_get_test() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(GET._, "B",
                     _(AN._, "A",
@@ -188,21 +188,21 @@ public class HaveLoopTest extends ATest {
     @Ignore //because context for get B under the C unclear
     public void loop_get_test1() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D",
                 _(HAVE._, "B", text("test"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(GET._, "B",
                     _(AN._, "A", _(AN._, "D"))
@@ -216,27 +216,27 @@ public class HaveLoopTest extends ATest {
     @Ignore //because context for get B under the C unclear
     public void loop_get_test2() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D",
                 _(AN._, "E")
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "E",
                 _(HAVE._, "B", text("test"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(GET._, "B",
                     _(AN._, "A", _(AN._, "D"))
@@ -250,22 +250,22 @@ public class HaveLoopTest extends ATest {
     @Ignore //because context for get B under the C unclear
     public void loop_get_test3() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "B"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D",
                 _(IS._, "d"),
                 _(HAVE._, "B", text("test"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(GET._, "B",
                     _(AN._, "A", _(ANY._, "d"))

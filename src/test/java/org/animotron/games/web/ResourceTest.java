@@ -19,7 +19,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -32,8 +32,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,13 +45,13 @@ public class ResourceTest extends ATest {
     @Test
     public void test1() throws AnimoException, IOException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "service",
                 _(IS._, "resource")
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -59,7 +59,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -67,13 +67,13 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ANY._, "resource")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
@@ -88,13 +88,13 @@ public class ResourceTest extends ATest {
     @Test
     public void test2() throws AnimoException, IOException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "service",
                 _(IS._, "resource")
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -102,7 +102,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service1",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -110,7 +110,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -118,13 +118,13 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ALL._, "resource")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
@@ -139,13 +139,13 @@ public class ResourceTest extends ATest {
     @Test
     public void test3() throws AnimoException, IOException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "service",
                 _(IS._, "resource")
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -153,14 +153,14 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service1",
                 _(IS._, "root-service"),
                 _(HAVE._, "title", text("root1"))
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -168,13 +168,13 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ALL._, "resource")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
@@ -189,7 +189,7 @@ public class ResourceTest extends ATest {
     @Test
     public void test4() throws AnimoException, IOException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -197,7 +197,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -205,13 +205,13 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ANY._, "service")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
@@ -226,7 +226,7 @@ public class ResourceTest extends ATest {
     @Test
     public void test5() throws AnimoException, IOException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -234,7 +234,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service1",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -242,7 +242,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -250,13 +250,13 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ALL._, "service")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
@@ -270,7 +270,7 @@ public class ResourceTest extends ATest {
     @Test
     public void test6() throws AnimoException, IOException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -278,14 +278,14 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "root-service1",
                 _(IS._, "root-service"),
                 _(HAVE._, "title", text("root1"))
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -293,13 +293,13 @@ public class ResourceTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ALL._, "service")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")

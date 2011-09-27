@@ -19,7 +19,7 @@
 package org.animotron;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
@@ -30,8 +30,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,13 +40,13 @@ import static org.animotron.expression.Expression.text;
 public class DownUpTest extends ATest {
 	
 	private void common() throws IOException {
-		new Expression(
+		new JExpression(
 				_(THE._, "B", 
 					_(IS._, "A"), 
 					_(HAVE._, "X", text("B")))
 			);
 
-	    	new Expression(
+	    	new JExpression(
 				_(THE._, "C", 
 					_(IS._, "A"), 
 					_(HAVE._, "X", text("C")))
@@ -58,7 +58,7 @@ public class DownUpTest extends ATest {
     	
 		common();
 
-    	Expression a = new Expression(
+    	JExpression a = new JExpression(
 			_(THE._, "a", 
 				_(ALL._, "A",
 					text("bla "), _(GET._, "X"))
@@ -74,7 +74,7 @@ public class DownUpTest extends ATest {
     	
 		common();
 
-    	Expression a = new Expression(
+    	JExpression a = new JExpression(
 			_(THE._, "a", 
 				_(ALL._, "A", //XXX: how to set mode?
 					text("bla "), _(GET._, "X"))

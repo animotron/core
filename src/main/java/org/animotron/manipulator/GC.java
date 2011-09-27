@@ -42,12 +42,12 @@ public class GC extends Manipulator {
 	private OnQuestion question = new OnQuestion() {
 		
 		private void garbage(PFlow pf) {
-			Relationship op = pf.getOP();
-			Node node = op.getEndNode();
-			op.delete();
+			Node node = pf.getOPNode();
 			if (!node.hasRelationship(INCOMING)) {
-				pf.setOPNode(node);
 				super.onMessage(pf);
+                for (Relationship r : node.getRelationships()) {
+                    r.delete();
+                }
 				node.delete();
 			}
 		}

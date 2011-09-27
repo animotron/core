@@ -206,11 +206,14 @@ public class AnimoGraph {
 		return getNode(CACHE, type);
 	}
 	
-	public static void order (Relationship r, int order) {
-		ORDER.add(r, order);
-		//ORDER.set(r, order);
-	}
+    public static void order (Relationship r, int order) {
+        ORDER.add(r, order);
+    }
 	
+    public static void unorder (Relationship r) {
+        ORDER.remove(r);
+    }
+
 	public static void result (Relationship r, long id) {
 		RESULT_INDEX.add(r, RESULT, id);
 	}

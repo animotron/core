@@ -89,7 +89,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	private Relationship create(String name) throws ENotFound {
-        Relationship r = build(THE_NODE(), name, 0, true);
+        Relationship r = build(THE_NODE(), name, true);
         Node node = r.getEndNode();
         getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
         return r;
@@ -108,10 +108,10 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	@Override
-	public Relationship build(Node parent, String name, int order, boolean ignoreNotFound) {
+	public Relationship build(Node parent, String name, boolean ignoreNotFound) {
         Node node = createNode();
         RelationshipType type = relationshipType(name);
-        Relationship r = THE_NODE().createRelationshipTo(node, type);
+        Relationship r = parent.createRelationshipTo(node, type);
         Properties.NAME.set(node, name);
         return r;
 	}

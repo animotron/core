@@ -19,7 +19,7 @@
 package org.animotron.games;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.instruction.COUNT;
 import org.animotron.statement.instruction.compare.GE;
 import org.animotron.statement.operator.AN;
@@ -33,7 +33,7 @@ import org.animotron.statement.relation.IS_NOT;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
+import static org.animotron.expression.JExpression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -47,28 +47,28 @@ public class DescriptionLogicTest extends ATest {
 		//TODO: Person ≡ Female ⊔ Male?
 		
 		//Woman ≡ Person ⊓ Female
-		new Expression(
+		new JExpression(
 			_(THE._, "woman"),
 				_(IS._, "person"),
 				_(IS._, "female")
 		);
 
 		//Man ≡ Person ⊓ ¬Woman
-		new Expression(
+		new JExpression(
 			_(THE._, "man"),
 				_(IS._, "person"),
 				_(IS_NOT._, "woman")
 		);
 
 		//Mother ≡ Woman ⊓ ∃hasChild.Person
-		new Expression(
+		new JExpression(
 			_(THE._, "mother"),
 				_(IS._, "woman"),
 				_(HAVE._, "child", _(IS._, "person"))
 		);
 		
 		//Father ≡ Man ⊓ ∃hasChild.Person
-		new Expression(
+		new JExpression(
 			_(THE._, "father"),
 				_(IS._, "man"),
 				_(HAVE._, "child", _(IS._, "person"))
@@ -78,52 +78,52 @@ public class DescriptionLogicTest extends ATest {
 		//the:parents` is:mother` is:father` is:parent? 
 		
  		//Parent ≡ Mother ⊔ Father.
-		new Expression(
+		new JExpression(
 			_(THE._, "parent"),
 				_(IS._, "mother"),
 				_(IS._, "father")
 		);
 		
 		//Grandmother ≡ Mother ⊓ ∃hasChild.Parent
-		new Expression(
+		new JExpression(
 			_(THE._, "grandmother"),
 				_(IS._, "mother"),
 				_(HAVE._, "child", _(IS._, "parent"))
 		);
 
 		//MotherWith3Children  ≡ Mother ⊓ >= 3 hasChild
-		new Expression(
+		new JExpression(
 			_(THE._, "motherWith3Children"),
 				_(ANY._, "mother", _(GE._, _(COUNT._, "child"), _(Q._, "N3")))
 		);
 
 		//MotherWithoutDaughter ≡ Mother ⊓ ∀hasChild.¬Woman
-		new Expression(
+		new JExpression(
 			_(THE._, "motherWithoutDaughter"),
 				_(ANY._, "mother", _(HAVE_NOT._, "child", _(IS._, "woman")))
 		);
 
 		//Wife  ≡ Woman ⊓ ∃hasHusband.Man
-		new Expression(
+		new JExpression(
 			_(THE._, "wife"),
 				_(IS._, "woman", 
 				_(HAVE._, "husband", _(IS._, "man")))
 		);
 		
 
-		new Expression(
+		new JExpression(
 			_(THE._, "personA"),
 				_(IS._, "man")
 		);
 		
-		new Expression(
+		new JExpression(
 			_(THE._, "personB"),
 				_(IS._, "woman"),
 				_(HAVE._, "child", _(AN._, "personA"))
 		);
 
 		//TODO: Is personA mother? (personA is mother => is:mother an:personA)
-		Expression a = new Expression(
+		JExpression a = new JExpression(
 			_(THE._, "a"),
 				_(AN._, "Question", _(IS._, "mother", _(AN._, "personB")))
 				//is:personB an:mother?

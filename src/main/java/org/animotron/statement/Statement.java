@@ -32,7 +32,7 @@ import java.security.MessageDigest;
  */
 public interface Statement {
 	
-	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) throws ENotFound;
+	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound;
 	
     public String name();
 

@@ -19,7 +19,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -33,7 +33,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,14 +44,14 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
 
     private void test(Object[]... o) throws AnimoException, IOException, InterruptedException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "service",
                 _(IS._, "resource")
             )
 
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "html",
                 _(HAVE._, "mime-type", text("text/html")),
                 _(HAVE._, "content",
@@ -67,7 +67,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "it-working",
                 _(IS._, "root-content"),
                 _(HAVE._, "title", text("Welcome to Animo")),
@@ -75,7 +75,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "localhost-site",
                 _(IS._, "site"),
                 _(HAVE._, "server-name", text("localhost")),
@@ -84,7 +84,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(HAVE._, "uri", text("/")),
@@ -95,14 +95,14 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-layout",
                 _(IS._, "layout"),
                 element("p", text("Default layout"))
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
                 element("h1", _(GET._, "title", _(AN._, "current-service"))),
@@ -114,7 +114,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "current-service",
                 _(ANY._, "service",
                         _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))
@@ -122,7 +122,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "current-request",
                 _(IS._, "request"),
                 _(HAVE._, "uri", text("/")),
@@ -130,13 +130,13 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 o
             )
         );
 
-        Expression m = new Expression(
+        JExpression m = new JExpression(
             _(GET._, "mime-type",
                 _(AN._, "rest",
                     _(USE._, "current-request")
@@ -147,7 +147,7 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
         assertStringResult(m, "text/html");
 
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(GET._, "content",
                 _(AN._, "rest",
                     _(USE._, "current-request")

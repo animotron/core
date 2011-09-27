@@ -19,7 +19,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -34,7 +34,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,7 +45,7 @@ public class WebFrameworkTest extends ATest {
 
 	@Test
 	public void test() throws IOException, AnimoException {
-    	new Expression(
+    	new JExpression(
 			_(THE._, "request", 
 				_(HAVE._, "uri", text("/")),
 				_(HAVE._, "method", text("GET")),
@@ -55,7 +55,7 @@ public class WebFrameworkTest extends ATest {
 			)
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "test-site", //site-context 
 				_(IS._, "site"),
 				_(HAVE._, "server-name",
@@ -67,7 +67,7 @@ public class WebFrameworkTest extends ATest {
 			)
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "root-service", 
 				_(IS._, "service"),
 				_(HAVE._, "uri", text("/")),
@@ -76,12 +76,12 @@ public class WebFrameworkTest extends ATest {
 					_(USE._, "root-layout")
 		)	)	);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "html", 
                 _(AN._, "html-composition"
 		)	)	);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "html-composition", 
 				_(IS._, "composition"),
                 _(HAVE._, "content",
@@ -96,18 +96,18 @@ public class WebFrameworkTest extends ATest {
                             _(ANY._, "layout")
 			)   )	)	)	);
 
-        new Expression(
+        new JExpression(
             _(THE._, "html-head",
                 element("head",
                     element("title",
                         _(GET._, "title")
         )   )   )   );
 
-        new Expression(
+        new JExpression(
                 _(THE._, "root-layout", _(IS._, "layout"))
         );
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "theme-concrete-root-layout", 
 				_(IS._, "root-layout"),
 				_(HAVE._, "content",
@@ -117,18 +117,18 @@ public class WebFrameworkTest extends ATest {
                         _(GET._, "content"))
 		)	)	);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc", 
 				_(IS._, "root-content"),
 				_(HAVE._, "title", text("Welcome to Animotron")),
 				_(HAVE._, "content", text("Overview"))
 		)	);
 
-    	new Expression(
+    	new JExpression(
             _(THE._, "service")
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s", 
         		_(ANY._, "service",
     				_(WITH._, "uri", _(GET._, "uri", _(AN._, "request"))),

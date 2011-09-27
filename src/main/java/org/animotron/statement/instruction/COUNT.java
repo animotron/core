@@ -19,7 +19,7 @@
 package org.animotron.statement.instruction;
 
 import org.animotron.Executor;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Evaluable;
@@ -62,9 +62,9 @@ public class COUNT extends Instruction implements Evaluable {
 				public void onMessage(Relationship context) {
 					if (context == null) {
 						//XXX: optimize
-						Expression r;
+						JExpression r;
 						try {
-							r = new Expression(Expression._(Q._, "N" + value.get()));
+							r = new JExpression(JExpression._(Q._, "N" + value.get()));
 						} catch (IOException e) {
                             pf.sendException(e);
                             return;

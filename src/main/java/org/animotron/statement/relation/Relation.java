@@ -25,7 +25,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.order;
 
 
 /**
@@ -40,12 +39,10 @@ public abstract class Relation extends AbstractStatement {
 	}
 
 	@Override
-	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) throws ENotFound {
+	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound {
 		Node target = THE._.getOrCreate(reference, ignoreNotFound).getEndNode();
 		if (!parent.equals(target)) {
-			Relationship r = parent.createRelationshipTo(target, relationshipType());
-			order(r, order);
-			return r;
+			return parent.createRelationshipTo(target, relationshipType());
 		}
 		return null;
 	}

@@ -19,10 +19,10 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
+import static org.animotron.expression.JExpression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -34,7 +34,7 @@ public class TheTest extends ATest {
     @Test
     public void testTHE() throws Exception {
 
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A", _(THE._, "B", _(THE._, "C")))
         );
         assertAnimoResult(A, "the A the B the C");

@@ -19,7 +19,7 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -33,8 +33,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -48,75 +48,75 @@ public class WHouseTest extends ATest {
 		
 		//party: person & organization
 		// + receipt or issue
-		new Expression(
+		new JExpression(
     		_(THE._, "party")
         );
 
-		new Expression(
+		new JExpression(
     		_(THE._, "receipt-party", 
 				_(IS._, "party"),
 				_(IS._, "receipt")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "issue-party", 
 				_(IS._, "party"),
 				_(IS._, "issue")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "person", 
 				_(IS._, "party")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "organization", 
 				_(IS._, "party")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "ORG-01", 
 				_(IS._, "organization")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "ORG-02", 
 				_(IS._, "organization")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "I", 
 				_(IS._, "person")
 		)	);
 		
 		//unit of measure
-		new Expression(_(THE._, "UoM"));
+		new JExpression(_(THE._, "UoM"));
 		
-		new Expression(
+		new JExpression(
     		_(THE._, "kilo", 
 				_(HAVE._, "number", _(Q._, "N1000"))
 		)	);
 
 		//kg -> kilo + gramm
-		new Expression(
+		new JExpression(
     		_(THE._, "gram", 
 				_(IS._, "UoM")
 		)	);
 
-		new Expression(
+		new JExpression(
     		_(THE._, "kilogram", 
 				_(IS._, "kilo"),
 				_(IS._, "gram")
 		)	);
 
 		//currency
-		new Expression(
+		new JExpression(
     		_(THE._, "USD", 
 				_(IS._, "currency")
 		)	);
 		
 		//Stock Keeping Unit
-		new Expression(
+		new JExpression(
     		_(THE._, "SKU",
 				_(HAVE._, "reference"),
 				_(HAVE._, "qty"),
@@ -125,11 +125,11 @@ public class WHouseTest extends ATest {
 		)	);
 
 		//documents structure
-		new Expression(
+		new JExpression(
     		_(THE._, "document", _(HAVE._, "date"))
         );
 
-        new Expression(
+        new JExpression(
     		_(THE._, "whouse-document", 
 				_(IS._, "document"),
 				_(HAVE._, "issue-party"),
@@ -137,21 +137,21 @@ public class WHouseTest extends ATest {
 				_(HAVE._, "SKU") 
 		)	);
 
-        new Expression(
+        new JExpression(
     		_(THE._, "whouse-receipt", 
 				_(IS._, "whouse-document"),
 				//I do receipt
 				_(IS._, "receipt")
 		)	);
 
-        new Expression(
+        new JExpression(
     		_(THE._, "whouse-issue", 
 				_(IS._, "whouse-document"),
 				//I do issue
 				_(IS._, "issue")
 		)	);
 
-        new Expression(
+        new JExpression(
     		_(THE._, "whouse-transfer", 
 				_(IS._, "whouse-document"),
 				//I do receipt & issue
@@ -160,7 +160,7 @@ public class WHouseTest extends ATest {
 		)	);
         
         //documents
-        new Expression(
+        new JExpression(
     		_(THE._, "R01", 
 				_(IS._, "whouse-document"),
 				_(HAVE._, "date", text("T2011-08-07")), //TODO: date instruction
@@ -181,7 +181,7 @@ public class WHouseTest extends ATest {
 				)	)
 		)	);
         
-        Expression a = new Expression(
+        JExpression a = new JExpression(
     		_(THE._, "a", 
 				_(ALL._, "whouse-receive",
 					_(WITH._, "party", _(AN._, "I"))))
@@ -191,7 +191,7 @@ public class WHouseTest extends ATest {
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?
 
-        Expression f = new Expression(
+        JExpression f = new JExpression(
     		_(THE._, "f", 
 				_(AN._, "form", _(AN._, "R01")))
 		);

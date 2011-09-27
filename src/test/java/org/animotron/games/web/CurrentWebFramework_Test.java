@@ -19,7 +19,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -33,7 +33,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,14 +45,14 @@ public class CurrentWebFramework_Test extends ATest {
     @Test
     public void test() throws AnimoException, IOException, InterruptedException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "service",
                 _(IS._, "resource")
             )
 
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "html",
                 _(HAVE._, "mime-type", text("text/html")),
                 _(HAVE._, "content",
@@ -68,7 +68,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "resource-not-found",
                 _(IS._, "not-found-content"),
                 _(HAVE._, "title", text("Not found")),
@@ -76,7 +76,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "it-working",
                 _(IS._, "root-content"),
                 _(HAVE._, "title", text("Welcome to Animo")),
@@ -84,7 +84,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "current-site",
                 _(ANY._, "site",
                     _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
@@ -92,7 +92,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "localhost-site",
                 _(IS._, "site"),
                 _(HAVE._, "server-name", text("localhost")),
@@ -101,7 +101,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "not-found-service",
                 _(IS._, "service"),
                 _(IS._, "not-found"),
@@ -112,7 +112,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(IS._, "root"),
@@ -123,21 +123,21 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "not-found-layout",
                 _(IS._, "layout"),
                 element("p",  _(GET._, "content", _(ANY._, "service")))
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-layout",
                 _(IS._, "layout"),
                 element("p", text("The default root layout!"))
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
                 element("h1", _(GET._, "title", _(ANY._, "service"))),
@@ -149,7 +149,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ANY._, "resource",
                     _(AN._, "current-site")
@@ -157,7 +157,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "current-request",
                 _(USE._, "root"),
                 _(HAVE._, "uri", text("/")),
@@ -165,7 +165,7 @@ public class CurrentWebFramework_Test extends ATest {
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(GET._, "content",
                 _(AN._, "rest",
                     _(USE._, "current-request")

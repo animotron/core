@@ -20,7 +20,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 
 /**
@@ -56,14 +56,14 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("c")));
+        new JExpression(_(THE._, "b", text("c")));
         test("\\ b", "<c/>");
         test("the a \\ b", "<c/>");
     }
 
     @Test
     public void test_03() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("c")));
+        new JExpression(_(THE._, "b", text("c")));
         test("\\ an b", "<c/>");
         test("the a \\ an b", "<c/>");
     }
@@ -88,30 +88,30 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("b")));
-        new Expression(_(THE._, "c", text("c")));
-        new Expression(_(THE._, "d", text("d")));
-        new Expression(_(THE._, "e", text("e")));
+        new JExpression(_(THE._, "b", text("b")));
+        new JExpression(_(THE._, "c", text("c")));
+        new JExpression(_(THE._, "d", text("d")));
+        new JExpression(_(THE._, "e", text("e")));
         test("\\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
         test("the a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_08() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("b")));
-        new Expression(_(THE._, "c", text("c")));
-        new Expression(_(THE._, "d", text("d")));
-        new Expression(_(THE._, "e", text("e")));
+        new JExpression(_(THE._, "b", text("b")));
+        new JExpression(_(THE._, "c", text("c")));
+        new JExpression(_(THE._, "d", text("d")));
+        new JExpression(_(THE._, "e", text("e")));
         test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
         test("the a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
     public void test_09() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("b")));
-        new Expression(_(THE._, "c", text("c")));
-        new Expression(_(THE._, "d", text("d")));
-        new Expression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
+        new JExpression(_(THE._, "b", text("b")));
+        new JExpression(_(THE._, "c", text("c")));
+        new JExpression(_(THE._, "d", text("d")));
+        new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
         test("the a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
@@ -128,7 +128,7 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0C() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("path")));
+        new JExpression(_(THE._, "b", text("path")));
         test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 

@@ -19,7 +19,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -33,8 +33,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -46,7 +46,7 @@ public class CurrentSite_Test extends ATest {
     @Test
     public void test() throws AnimoException, IOException, InterruptedException {
 
-        new Expression (
+        new JExpression(
             _(THE._, "current-site",
                 _(ANY._, "site",
                     _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
@@ -54,20 +54,20 @@ public class CurrentSite_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "test-service",
                 _(IS._, "service")
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "localhost-site",
                 _(IS._, "site"),
                 _(HAVE._, "server-name", text("localhost"))
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 _(ANY._, "service",
                     _(AN._, "current-site")
@@ -75,14 +75,14 @@ public class CurrentSite_Test extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "current-request",
                 _(IS._, "request"),
                 _(HAVE._, "host", text("localhost"))
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(AN._, "rest",
                 _(USE._, "current-request")
             )

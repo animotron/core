@@ -19,10 +19,17 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.expression.Expression;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.TEXT;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
+
+import java.io.IOException;
+
+import static org.animotron.graph.AnimoGraph.beginTx;
+import static org.animotron.graph.AnimoGraph.finishTx;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -46,6 +53,8 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class GraphBuilder {
 
+    Transaction tx;
+    protected int order;
     protected Relationship the;
     protected final boolean ignoreNotFound;
     public final Manipulators.Catcher catcher;
@@ -78,5 +87,39 @@ public abstract class GraphBuilder {
 	public abstract void start(Statement statement, String reference) throws AnimoException;
 
 	public abstract void end();
+
+    final public void build(Expression exp) throws IOException {
+        order = 0;
+        the = null;
+        tx = beginTx();
+        try {
+            exp.build();
+            tx.success();
+        } catch (Exception e) {
+            tx.failure();
+            tx.finish();
+            tx = beginTx();
+            try {
+                fail(e);
+            } finally {
+                finishTx(tx);
+            }
+        }
+        finishTx(tx);
+        catcher.push();
+    }
+
+    final public void step() {
+        if (order % 1000 == 0) {
+            System.out.println(order);
+        }
+        if (order++ % 10000 == 0) {
+            tx.success();
+            finishTx(tx);
+            tx = beginTx();
+        }
+    }
+
+    abstract public void fail(Exception e);
 
 }

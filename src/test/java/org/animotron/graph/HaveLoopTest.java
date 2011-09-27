@@ -19,14 +19,14 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.expression.Expression._;
+import static org.animotron.expression.JExpression._;
 
 
 /**
@@ -38,9 +38,9 @@ public class HaveLoopTest extends ATest {
 	@Test
 	public void storeAndSerializeResult() throws Exception {
 		
-		Relationship A = new Expression(_(THE._, "A", _(HAVE._, "C")));
-		Relationship B = new Expression(_(THE._, "B", _(HAVE._, "A")));
-		Relationship C = new Expression(_(THE._, "C", _(HAVE._, "B")));
+		Relationship A = new JExpression(_(THE._, "A", _(HAVE._, "C")));
+		Relationship B = new JExpression(_(THE._, "B", _(HAVE._, "A")));
+		Relationship C = new JExpression(_(THE._, "C", _(HAVE._, "B")));
 
 		System.out.println("Prepare");
 		System.out.print("The a: ");

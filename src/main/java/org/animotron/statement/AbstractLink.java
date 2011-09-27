@@ -18,12 +18,10 @@
  */
 package org.animotron.statement;
 
-import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,10 +33,8 @@ public abstract class AbstractLink extends AbstractStatement {
 	public AbstractLink(String name) { super(name); }
 
 	@Override
-	public Relationship build(Node parent, String reference, int order, boolean ignoreNotFound) {
-		Relationship r = parent.createRelationshipTo(createNode(), relationshipType());
-		order(r, order);
-		return r;
+	public Relationship build(Node parent, String reference, boolean ignoreNotFound) {
+		return parent.createRelationshipTo(createNode(), relationshipType());
 	}
 
 	@Override

@@ -19,13 +19,13 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,19 +36,19 @@ public class ICTest extends ATest {
 	@Test
 	public void testIC() throws Exception {
         
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A")
 		);
 	
-    	new Expression(
+    	new JExpression(
 			_(THE._, "B", _(IC._, "A", text(".")))
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "C", _(IS._, "B") )
 		);
 
-    	Expression D = new Expression(
+    	JExpression D = new JExpression(
 			_(THE._, "D", _(GET._, "A", _(AN._, "C")))
 		);
 

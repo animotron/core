@@ -65,7 +65,6 @@ public class FastGraphBuilder extends GraphBuilder {
     public void startGraph() {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
-        the = null;
 	}
 	
 	@Override
@@ -73,11 +72,10 @@ public class FastGraphBuilder extends GraphBuilder {
         if (!statements.empty()) {
             end();
         }
-        int order = 0;
+        order = 0;
         for (Object[] item : flow) {
-            if (order % 100 == 0)
-                System.out.println(order);
-            build(item, order++);
+            step();
+            build(item);
         }
         the = (Relationship) flow.get(0)[3];
 	}
@@ -120,11 +118,16 @@ public class FastGraphBuilder extends GraphBuilder {
 		}
 		current[2] = hash;
 	}
-	
-	//TODO: Store hash for every node as byte[]
+
+    @Override
+    public void fail(Exception e) {
+        catcher.destructive((Relationship)flow.get(0)[3]);
+    }
+
+    //TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
-	private void build(Object[] item, int order) throws AnimoException {
+	private void build(Object[] item) throws AnimoException {
 		Object[] p =  (Object[]) item[5];
 		if (p != null) {
 			if ((Boolean) p[6]) {
@@ -163,32 +166,31 @@ public class FastGraphBuilder extends GraphBuilder {
             if (parent == null)
             	//"Internal error: parent can not be null."
                 throw new AnimoException((Relationship)item[3]);
-
             if (!(statement instanceof Relation)) {
                 String hash = hash(item);
                 Node node = getCache(hash);
                 if (node == null) {
-                    r = build(statement, parent, item, order);
+                    r = build(statement, parent, item);
                     createCache(r.getEndNode(), hash);
                 } else {
                     r = parent.createRelationshipTo(node, statement.relationshipType());
-                    order(r, order);
                     item[6] = true;
                 }
             } else {
-                r = build(statement, parent, item, order);
+                r = build(statement, parent, item);
             }
         }
         item[3] = r;
         item[4] = r.getEndNode();
+        order(r, order);
 	}
 	
 	private String hash(Object[] item) {
         return MessageDigester.byteArrayToHex((byte[]) item[2]);
 	}
 	
-	private Relationship build(Statement statement, Node parent, Object[] item, int order) throws ENotFound {
-		return statement.build(parent, (String) item[1], order, ignoreNotFound);
+	private Relationship build(Statement statement, Node parent, Object[] item) throws ENotFound {
+		return statement.build(parent, (String) item[1], ignoreNotFound);
 	}
 	
 }

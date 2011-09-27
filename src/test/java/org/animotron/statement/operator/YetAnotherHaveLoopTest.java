@@ -19,15 +19,15 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,7 +39,7 @@ public class YetAnotherHaveLoopTest extends ATest {
     @Test
     public void test() throws Exception {
 
-        new Expression (
+        new JExpression(
             _(THE._, "html",
                 _(HAVE._, "content",
                     _(AN._, "root-layout")
@@ -47,13 +47,13 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "it-working",
                 _(HAVE._, "content", text("It is working!"))
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "service",
                 _(AN._, "html",
                     _(AN._, "it-working")
@@ -61,14 +61,14 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-layout",
                 _(IS._, "layout"),
                 _(GET._, "content")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(GET._, "content",
                     _(AN._, "service",
@@ -86,7 +86,7 @@ public class YetAnotherHaveLoopTest extends ATest {
     @Test
     public void test1() throws Exception {
 
-        new Expression (
+        new JExpression(
             _(THE._, "html",
                 _(HAVE._, "content",
                     _(ANY._, "layout")
@@ -94,13 +94,13 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "it-working",
                 _(HAVE._, "content", text("It is working!"))
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "service",
                 _(AN._, "html",
                     _(AN._, "it-working")
@@ -108,14 +108,14 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-layout",
                 _(IS._, "layout"),
                 _(GET._, "content")
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s",
                 _(GET._, "content",
                     _(AN._, "service",

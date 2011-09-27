@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
@@ -29,7 +29,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
+import static org.animotron.expression.JExpression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,11 +40,11 @@ public class UseTest extends ATest {
 
     @Test
     public void any_use() throws IOException, AnimoException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
 
-        Expression x = new Expression(
+        JExpression x = new JExpression(
             _(THE._, "x", _(ANY._, "X", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x the A is X");
@@ -52,15 +52,15 @@ public class UseTest extends ATest {
 
     @Test
     public void an_any_use() throws IOException, AnimoException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "q", _(ANY._, "X"))
         );
 
-        Expression x = new Expression(
+        JExpression x = new JExpression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x the q the A is X");
@@ -68,15 +68,15 @@ public class UseTest extends ATest {
 
     @Test
     public void all_use() throws IOException, AnimoException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "X"))
         );
 
-        Expression x = new Expression(
+        JExpression x = new JExpression(
             _(THE._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x (the A is X) (the B is X)");
@@ -84,19 +84,19 @@ public class UseTest extends ATest {
 
     @Test
     public void an_all_use() throws IOException, AnimoException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "q", _(ALL._, "X"))
         );
 
-        Expression x = new Expression(
+        JExpression x = new JExpression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x the q (the A is X) (the B is X)");

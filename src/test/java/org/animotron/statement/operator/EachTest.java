@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
@@ -29,7 +29,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,23 +41,23 @@ public class EachTest extends ATest {
     @Test
     public void eachTest() throws IOException, AnimoException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "content", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "S"), _(HAVE._, "content", text("β")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "P", element("p", _(GET._, "content")))
         );
 
-        Expression s = new Expression (
+        JExpression s = new JExpression(
             _(THE._, "s", _(EACH._, "P", _(ALL._, "S")))
         );
         assertAnimoResult(s, "the s (element p have content \"α\") (element p have content \"β\") (element p have content \"γ\")");
@@ -67,19 +67,19 @@ public class EachTest extends ATest {
     @Test
     public void eachTest1() throws IOException, AnimoException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("β")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(THE._, "s", element("p", _(EACH._, "P", _(ALL._, "S"))))
         );
         assertAnimoResult(s, "the s (element p the A (is A) (is S) (is P) (have content \"α\")) (element p the B (is S) (is P) (have content \"β\"))");

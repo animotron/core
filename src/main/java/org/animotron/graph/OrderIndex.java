@@ -67,10 +67,14 @@ public class OrderIndex {
         return q.sort( new Sort( sortFields ) );
     }
 
-	public void add(Relationship r, int value) {
-		ORDER_INDEX.add(r, ORDER, value);
-	}
+    public void add(Relationship r, int value) {
+        ORDER_INDEX.add(r, ORDER, value);
+    }
 	
+    public void remove(Relationship r) {
+        ORDER_INDEX.remove(r, ORDER);
+    }
+
 	public IndexHits<Relationship> query(Node startNode) {
 		return ORDER_INDEX.query(ORDER, sort( ORDER ), startNode, null);
 	}

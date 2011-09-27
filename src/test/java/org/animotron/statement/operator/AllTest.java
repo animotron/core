@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.EQ;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ALL;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,19 +41,19 @@ public class AllTest extends ATest {
     @Test
     public void testALL() throws Exception {
         
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "value"))
         );
 	
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
         );
 
-        Expression D = new Expression(
+        JExpression D = new JExpression(
             _(THE._, "D", _(ALL._, "A"))
         );
         assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\"))");
@@ -62,31 +62,31 @@ public class AllTest extends ATest {
     @Test
     public void testALLwithWITH() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "value"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B1", _(IS._, "B"), _(HAVE._, "value", text("B")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "C1", _(IS._, "C"), _(HAVE._, "value", text("C")))
         );
 
-        Expression D = new Expression(
+        JExpression D = new JExpression(
             _(THE._, "D", _(ALL._, "A", _(WITH._, "value", text("B"))))
         );
         assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the B1 (is B) (have value \"B\"))");
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
             _(THE._, "E", _(ALL._, "A", _(WITH._, "value", text("C"))))
         );
         assertAnimoResult(E, "the E (the C (is B) (have value \"C\")) (the C1 (is C) (have value \"C\"))");
@@ -95,7 +95,7 @@ public class AllTest extends ATest {
 	@Test
 	public void ALLwithEQ() throws Exception {
 
-		new Expression(
+		new JExpression(
 			_(THE._, "text-plain", 
 				_(IS._, "mime-type"),
 				_(IS._, "text"),
@@ -105,7 +105,7 @@ public class AllTest extends ATest {
 				)
 		);
     	
-		new Expression(
+		new JExpression(
 				_(THE._, "application-atom", 
 					_(IS._, "mime-type"),
 					_(IS._, "application"),
@@ -115,7 +115,7 @@ public class AllTest extends ATest {
 					)
 			);
 
-		Expression test = new Expression(
+		JExpression test = new JExpression(
 			_(THE._, "test", 
 				_(ALL._, "mime-type", _(EQ._, "extension", text("txt")))
 			)

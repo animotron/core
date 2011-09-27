@@ -19,13 +19,13 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 
 /**
@@ -37,15 +37,15 @@ public class SimpleTest extends ATest {
 	@Test
 	public void an() throws Exception {
         
-    	new Expression(
+    	new JExpression(
 			_(THE._, "AA")
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "BB", _(HAVE._, "AA", text("a@b")))
 		);
 
-    	Expression C = new Expression(
+    	JExpression C = new JExpression(
 			_(THE._, "CC", _(AN._, "BB"))
 		);
         assertAnimoResult(C, "the CC the BB have AA \"a@b\"");
@@ -54,15 +54,15 @@ public class SimpleTest extends ATest {
 	@Test
 	public void get() throws Exception {
         
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A")
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "B", _(HAVE._, "A", text("a@b")))
 		);
 
-    	Expression C = new Expression(
+    	JExpression C = new JExpression(
 			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
 		);
         assertAnimoResult(C, "the C have A \"a@b\"");

@@ -18,7 +18,7 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -38,7 +38,7 @@ public class AnimoSerializerTest extends ATest {
 	
 	@Test
 	public void test_00() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(USE._, "Y")
@@ -49,7 +49,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_01() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(HAVE._, "X"),
                 _(HAVE._, "Y")
@@ -60,7 +60,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(HAVE._, "X",
                     _(HAVE._, "Y")
@@ -72,7 +72,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_03() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
                 _(AN._, "Y")
@@ -83,7 +83,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_04() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X",
                     _(AN._, "Y")
@@ -95,7 +95,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_05() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(HAVE._, "B",
                     _(AN._, "C",
@@ -109,7 +109,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_06() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(HAVE._, "B",
                     _(AN._, "C",
@@ -124,7 +124,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(HAVE._, "B",
                     _(AN._, "C",
@@ -139,7 +139,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_08() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(HAVE._, "B",
@@ -155,7 +155,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_09() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(HAVE._, "B",
@@ -175,7 +175,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_0A() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(IS._, "X"),
                 _(HAVE._, "B",
@@ -205,7 +205,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_0B() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 text("bla"), text("bla")
             )
@@ -215,7 +215,7 @@ public class AnimoSerializerTest extends ATest {
 	
     @Test
     public void test_0C() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B"),
                 _(AN._, "C")
@@ -226,7 +226,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_0D() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 text("B", text("C"))
             )
@@ -236,7 +236,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_0E() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B"), _(AN._, "C"))
             )
@@ -246,7 +246,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_0F() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B", _(AN._, "C")))
             )
@@ -256,7 +256,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_10() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B"), _(AN._, "C")),
                 _(_(AN._, "D"), _(AN._, "E"))
@@ -267,7 +267,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_11() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B")
             )
@@ -277,7 +277,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_12() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B"))
             )
@@ -287,7 +287,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_13() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(_(AN._, "B")))
             )
@@ -297,7 +297,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_14() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(_(_(AN._, "B"))))
             )
@@ -307,7 +307,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_15() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(AN._, "B"))
             )
@@ -317,7 +317,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_16() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(LINK._, _(AN._, "B")))
             )
@@ -327,7 +327,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_17() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(LINK._, _(LINK._, _(AN._, "B"))))
             )
@@ -337,7 +337,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_18() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(LINK._, _(AN._, "B")))
             )
@@ -347,7 +347,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_19() throws Exception {
-        Expression A = new Expression(
+        JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(_(AN._, "B")))
             )

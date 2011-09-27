@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
@@ -29,8 +29,8 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,12 +41,12 @@ public class ConnectionTest extends ATest {
     @Test
     public void mimeType_usecase() throws Exception {
         
-        new Expression(
+        new JExpression(
         _(THE._, "mime-type",
             _(HAVE._, "extension")
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "file",
             _(HAVE._, "reference", text("file")),
             _(HAVE._, "path"),
@@ -62,48 +62,48 @@ public class ConnectionTest extends ATest {
                         _(SELF._, "extension"))))
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "fileA",
             _(IS._, "file"),
             _(HAVE._, "path", text("/home/test.txt"))
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "text-plain",
             _(IS._, "mime-type"),
             _(HAVE._, "type", text("text/plain")),
             _(HAVE._, "extension", text("txt"), text("text"))
         ));
 
-        Expression A = new Expression(
+        JExpression A = new JExpression(
         _(THE._, "A",
             _(GET._, "reference",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(A, "the A have reference \"file\"");
 
-        Expression B = new Expression(
+        JExpression B = new JExpression(
         _(THE._, "B",
             _(GET._, "path",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(B, "the B have path \"/home/test.txt\"");
 
-        Expression C = new Expression(
+        JExpression C = new JExpression(
         _(THE._, "C",
             _(GET._, "extension",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(C, "the C have extension \"txt\"");
 
-        Expression D = new Expression(
+        JExpression D = new JExpression(
         _(THE._, "D",
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
         _(THE._, "E",
             _(GET._, "type",
                 _(GET._, "mime-type",
@@ -115,12 +115,12 @@ public class ConnectionTest extends ATest {
     @Test
     public void mimeType_one_more_usecase() throws Exception {
 
-        new Expression(
+        new JExpression(
         _(THE._, "mime-type",
             _(HAVE._, "extension")
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "file",
             _(HAVE._, "reference", text("file")),
             _(HAVE._, "path1", text("some.path.text")),
@@ -139,48 +139,48 @@ public class ConnectionTest extends ATest {
                         _(SELF._, "extension1"))))
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "fileA",
             _(IS._, "file"),
             _(HAVE._, "path", text("/home/test.txt"))
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "text-plain",
             _(IS._, "mime-type"),
             _(HAVE._, "type", text("text/plain")),
             _(HAVE._, "extension", text("txt"), text("text"))
         ));
 
-        Expression B1 = new Expression(
+        JExpression B1 = new JExpression(
         _(THE._, "B1",
             _(GET._, "path1",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(B1, "the B1 have path1 \"some.path.text\"");
 
-        Expression B2 = new Expression(
+        JExpression B2 = new JExpression(
         _(THE._, "B2",
             _(GET._, "path2",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(B2, "the B2 have path2 have path1 \"some.path.text\"");
 
-        Expression C1 = new Expression(
+        JExpression C1 = new JExpression(
         _(THE._, "C1",
             _(GET._, "extension1",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(C1, "the C1 have extension1 \"text\"");
 
-        Expression D = new Expression(
+        JExpression D = new JExpression(
         _(THE._, "D",
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
         assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
         _(THE._, "E",
             _(GET._, "type",
                 _(GET._, "mime-type",

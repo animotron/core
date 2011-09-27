@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.getTOP;
+import static org.animotron.graph.AnimoGraph.unorder;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**

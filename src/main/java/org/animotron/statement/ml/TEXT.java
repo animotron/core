@@ -28,7 +28,6 @@ import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.order;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,12 +43,10 @@ public class TEXT extends AbstractLink implements MLOperator {
     protected TEXT(String name) { super(name); }
 
     @Override
-    public Relationship build(Node parent, String value, int order, boolean ignoreNotFound) {
+    public Relationship build(Node parent, String value, boolean ignoreNotFound) {
         Node child = createNode();
-        Relationship r = parent.createRelationshipTo(child, relationshipType());
         VALUE.set(child, removeWS(value));
-        order(r, order);
-        return r;
+        return parent.createRelationshipTo(child, relationshipType());
     }
 
     @Override

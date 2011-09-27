@@ -18,14 +18,14 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -37,15 +37,15 @@ public class TheTest extends ATest {
 	public void getFromPFlow() throws Exception {
         System.out.println("Test the 'THE' ...");
         
-    	Expression A = new Expression(
+    	JExpression A = new JExpression(
 			_(THE._, "A", _(HAVE._, "B", _(THE._, "C", _(HAVE._, "D", text(".")))))
 		);
     	
-    	new Expression(
+    	new JExpression(
 			_(THE._, "C", _(HAVE._, "D", text(".")))
 		);
         
-    	Expression E = new Expression(
+    	JExpression E = new JExpression(
 			_(THE._, "E", _(AN._, "C"))
 		);
         	

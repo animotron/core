@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.EQ;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,24 +40,24 @@ public class AnyTest extends ATest {
     @Test
     public void testANY() throws Exception {
         
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "value"))
         );
 	
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
         );
 
-        Expression a = new Expression(
+        JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "A"))
         );
         assertAnimoResult(a, "the a the B (is A) (have value \"B\")");
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "B"))
         );
         assertAnimoResult(b, "the b the C (is B) (have value \"C\")");
@@ -66,30 +66,30 @@ public class AnyTest extends ATest {
     @Test
     public void testANYwithWITH() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "value"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "B1", _(IS._, "B"), _(HAVE._, "value", text("B")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "C1", _(IS._, "C"), _(HAVE._, "value", text("C")))
         );
 
-        Expression D = new Expression(
+        JExpression D = new JExpression(
             _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
         );
         assertAnimoResult(D, "the D the B (is A) (have value \"B\")");
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
             _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
         );
         assertAnimoResult(E, "the E the C (is B) (have value \"C\")");
@@ -98,7 +98,7 @@ public class AnyTest extends ATest {
 	@Test
 	public void ANYwithEQ() throws Exception {
 
-		new Expression(
+		new JExpression(
 			_(THE._, "text-plain", 
 				_(IS._, "mime-type"),
 				_(IS._, "text"),
@@ -108,7 +108,7 @@ public class AnyTest extends ATest {
 				)
 		);
     	
-		new Expression(
+		new JExpression(
 				_(THE._, "application-atom", 
 					_(IS._, "mime-type"),
 					_(IS._, "application"),
@@ -118,7 +118,7 @@ public class AnyTest extends ATest {
 					)
 			);
 
-		Expression test = new Expression(
+		JExpression test = new JExpression(
 			_(THE._, "test", 
 				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 			)

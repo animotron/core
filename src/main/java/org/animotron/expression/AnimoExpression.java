@@ -19,7 +19,6 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.LINK;
@@ -42,7 +41,7 @@ import java.util.Stack;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class AnimoExpression extends AbstractExpression {
+public class AnimoExpression extends Expression {
 
     private Reader reader;
 
@@ -69,154 +68,145 @@ public class AnimoExpression extends AbstractExpression {
     public AnimoExpression(GraphBuilder builder, Reader reader) throws IOException {
         super(builder);
         this.reader = reader;
-        build();
+        builder.build(this);
     }
 
-    @Override public GraphOperation<Void> operation() {
-        return operation;
-    }
+    private StringBuilder s = new StringBuilder();
+    private Stack<Integer> stack = new Stack<Integer>();
+    private Statement op = null;
+    private int level = 0;
+    private boolean prefix = false;
+    boolean link = false;
 
-    private GraphOperation<Void> operation = new GraphOperation<Void>() {
+    @Override
+    public void build() throws IOException, AnimoException {
+        int len;
+        char[] buff = new char[4 * 1024];
 
-        private StringBuilder s = new StringBuilder();
-        private Stack<Integer> stack = new Stack<Integer>();
-        private Statement op = null;
-        private int level = 0;
-        private boolean prefix = false;
-        boolean link = false;
+        boolean text = false;
+        char prev = '\0';
 
-        @Override
-        public Void execute() throws IOException, AnimoException {
-            int len;
-            char[] buff = new char[4 * 1024];
+        builder.startGraph();
+        startList();
 
-            boolean text = false;
-            char prev = '\0';
-
-            builder.startGraph();
-            startList();
-
-            while ((len=reader.read(buff))>0) {
-                for (int i = 0; i < len; i++) {
-                    char ch = buff[i];
-                    if (ch == '\"') {
-                        if (!text) {
-                            newToken(s, text);
-                            text = true;
-                        } else if (prev == '\\') {
+        while ((len=reader.read(buff))>0) {
+            for (int i = 0; i < len; i++) {
+                char ch = buff[i];
+                if (ch == '\"') {
+                    if (!text) {
+                        newToken(s, text);
+                        text = true;
+                    } else if (prev == '\\') {
+                        s.append(ch);
+                    } else {
+                        newToken(s, text);
+                        text = false;
+                    }
+                } else {
+                    if (text) {
+                        if (prev == '\\' || ch != '\\') {
                             s.append(ch);
-                        } else {
-                            newToken(s, text);
-                            text = false;
                         }
                     } else {
-                        if (text) {
-                            if (prev == '\\' || ch != '\\') {
-                                s.append(ch);
-                            }
-                        } else {
-                            switch (ch) {
-                                case ' '  :
-                                case '\t' :
-                                case '\n' : newToken(s, text);
-                                            break;
-                                case '('  : newToken(s, text);
-                                            startList();
-                                            break;
-                                case ')'  : newToken(s, text);
-                                            endList();
-                                            break;
-                                default   : s.append(ch);
-                                            Statement st = Statements.name(s.toString());
-                                            if (st instanceof Prefix) {
-                                                builder.start(st);
-                                                level++;
-                                                op = st;
-                                                link = false;
-                                                prefix = true;
-                                                s = new StringBuilder();
-                                            }
-                            }
+                        switch (ch) {
+                            case ' '  :
+                            case '\t' :
+                            case '\n' : newToken(s, text);
+                                        break;
+                            case '('  : newToken(s, text);
+                                        startList();
+                                        break;
+                            case ')'  : newToken(s, text);
+                                        endList();
+                                        break;
+                            default   : s.append(ch);
+                                        Statement st = Statements.name(s.toString());
+                                        if (st instanceof Prefix) {
+                                            builder.start(st);
+                                            level++;
+                                            op = st;
+                                            link = false;
+                                            prefix = true;
+                                            s = new StringBuilder();
+                                        }
                         }
                     }
-                    prev = prev == '\\' ? '\0' : ch;
                 }
-                lastToken(s, text);
+                prev = prev == '\\' ? '\0' : ch;
             }
-            endList();
-            builder.endGraph();
-            return null;
+            lastToken(s, text);
         }
+        endList();
+        builder.endGraph();
+    }
 
-        private void newToken(StringBuilder s, boolean text) throws AnimoException {
-            if (s.length() > 0) {
-                token(s.toString(), text);
-                this.s = new StringBuilder();
+    private void newToken(StringBuilder s, boolean text) throws AnimoException {
+        if (s.length() > 0) {
+            token(s.toString(), text);
+            this.s = new StringBuilder();
+        } else {
+            prefix = false;
+        }
+    }
+
+    private void lastToken(StringBuilder s, boolean text) throws AnimoException {
+        if (s.length() > 0) {
+            token(s.toString(), text);
+        } else {
+            prefix = false;
+        }
+    }
+
+    private void token(String token, boolean text) throws AnimoException {
+        if (text) {
+            if (op instanceof Prefix && !(op instanceof NS) && !link) {
+                builder.start(NAME._, token);
+                builder.end();
             } else {
+                builder.start(token);
+                level++;
+            }
+        } else {
+            if (prefix) {
+                builder.start(NAME._, token);
+                builder.end();
+                op = null;
                 prefix = false;
-            }
-        }
-
-        private void lastToken(StringBuilder s, boolean text) throws AnimoException {
-            if (s.length() > 0) {
-                token(s.toString(), text);
-            } else {
-                prefix = false;
-            }
-        }
-
-        private void token(String token, boolean text) throws AnimoException {
-            if (text) {
-                if (op instanceof Prefix && !(op instanceof NS) && !link) {
-                    builder.start(NAME._, token);
-                    builder.end();
-                } else {
-                    builder.start(token);
-                    level++;
-                }
-            } else {
-                if (prefix) {
-                    builder.start(NAME._, token);
-                    builder.end();
-                    op = null;
-                    prefix = false;
-                } else if (op instanceof Operator || op instanceof Relation) {
-                    builder.start(op, token);
-                    op = null;
-                    level++;
-                } else {
-                    op = Statements.name(token);
-                    if (op instanceof MLOperator || op instanceof LINK) {
-                        builder.start(op);
-                        level++;
-                    } else if (op == null || op instanceof Instruction) {
-                        builder.start(AN._, token);
-                        level++;
-                    }
-                }
-            }
-            link = false;
-        }
-
-        private void startList() throws AnimoException {
-            if (link) {
-                builder.start(LINK._);
+            } else if (op instanceof Operator || op instanceof Relation) {
+                builder.start(op, token);
                 op = null;
                 level++;
             } else {
-                link = true;
+                op = Statements.name(token);
+                if (op instanceof MLOperator || op instanceof LINK) {
+                    builder.start(op);
+                    level++;
+                } else if (op == null || op instanceof Instruction) {
+                    builder.start(AN._, token);
+                    level++;
+                }
             }
-            stack.push(level);
-            level = 0;
         }
+        link = false;
+    }
 
-        private void endList() {
-            for (int i = 0; i < level; i++) {
-                builder.end();
-            }
-            level = stack.pop();
+    private void startList() throws AnimoException {
+        if (link) {
+            builder.start(LINK._);
+            op = null;
+            level++;
+        } else {
+            link = true;
         }
+        stack.push(level);
+        level = 0;
+    }
 
-    };
+    private void endList() {
+        for (int i = 0; i < level; i++) {
+            builder.end();
+        }
+        level = stack.pop();
+    }
 
 }

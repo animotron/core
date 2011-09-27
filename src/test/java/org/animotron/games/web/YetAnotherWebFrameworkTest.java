@@ -19,7 +19,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -34,7 +34,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,7 +45,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
 
     private void test(Object[]... o) throws AnimoException, IOException {
 
-        new Expression (
+        new JExpression(
             _(THE._, "html",
                 element("html",
                     element("head",
@@ -58,7 +58,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "it-working",
                 _(IS._, "root-content"),
                 _(HAVE._, "title", text("Welcome to Animo")),
@@ -66,7 +66,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "localhost-site",
                 _(IS._, "site"),
                 _(HAVE._, "server-name", text("localhost")),
@@ -75,7 +75,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-service",
                 _(IS._, "service"),
                 _(HAVE._, "uri", text("/")),
@@ -86,14 +86,14 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "root-layout",
                 _(IS._, "layout"),
                 element("p", text("Default layout"))
             )
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "theme-concrete-root-layout",
                 _(IS._, "root-layout"),
                 element("h1", _(GET._, "title")),
@@ -105,13 +105,13 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "rest",
                 o
             )
         );
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
             _(AN._, "rest",
                 _(HAVE._, "uri", text("/")),
                 _(HAVE._, "host", text("localhost"))

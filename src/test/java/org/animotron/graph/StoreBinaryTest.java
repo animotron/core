@@ -20,7 +20,7 @@ package org.animotron.graph;
 
 import org.animotron.ATest;
 import org.animotron.expression.CommonExpression;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.AN;
@@ -33,7 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
+import static org.animotron.expression.JExpression._;
 
 
 /**
@@ -69,27 +69,27 @@ public class StoreBinaryTest extends ATest {
     	Relationship r = CommonExpression.build(new ByteArrayInputStream(TXT.getBytes()), PATH);
         AnimoSerializer.serialize(r, System.out);
 
-        Expression s = new Expression(
+        JExpression s = new JExpression(
           _(AN._, THE._.reference(r))
         );
         assertBinary(s, TXT);
         
-        Expression f = new Expression(
+        JExpression f = new JExpression(
           _(ANY._, "file")
         );
         assertBinary(f, TXT);
 
-        Expression t = new Expression(
+        JExpression t = new JExpression(
           _(ANY._, "test.txt")
         );
         assertBinary(t, TXT);
 
-        Expression a = new Expression(
+        JExpression a = new JExpression(
           _(ANY._, "article")
         );
         assertBinary(a, TXT);
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
           _(ANY._, "content")
         );
         assertBinary(c, TXT);

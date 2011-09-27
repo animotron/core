@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.relation.HAVE;
@@ -29,8 +29,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,28 +41,28 @@ public class AllUseTest extends ATest {
 
     @Test
     public void simple_all_Use() throws AnimoException, IOException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "s", _(ALL._, "S"))
         );
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
         assertAnimoResult(b, "the b the s (the B (is A) (have Y \"β\")) (the C (is B) (have Z \"γ\") (have X \"αα\"))");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
@@ -70,36 +70,36 @@ public class AllUseTest extends ATest {
 
     @Test
     public void simple_all_Use_1() throws AnimoException, IOException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "s", _(ALL._, "S"))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "ub", _(USE._, "B"))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "uc", _(USE._, "C"))
         );
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
         assertAnimoResult(b, "the b the s (the B (is A) (have Y \"β\")) (the C (is B) (have Z \"γ\") (have X \"αα\"))");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
@@ -107,34 +107,34 @@ public class AllUseTest extends ATest {
 
     @Test
     public void complex_all_Use() throws AnimoException, IOException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")),  _(HAVE._, "X", text("ααα")))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "s", _(ALL._, "S"))
         );
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
         assertAnimoResult(b, "the b the s (the B (is A) (have Y \"β\")) (the B1 (is B) (have Y \"ββ\")) (the C (is B) (have Z \"γ\") (have X \"αα\")) (the C1 (is C) (have Z \"γγ\") (have X \"ααα\"))");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
         assertAnimoResult(c, "the c the s (the C (is B) (have Z \"γ\") (have X \"αα\")) (the C1 (is C) (have Z \"γγ\") (have X \"ααα\"))");
@@ -142,42 +142,42 @@ public class AllUseTest extends ATest {
 
     @Test
     public void complex_all_Use_1() throws AnimoException, IOException {
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
-        new Expression(
+        new JExpression(
             _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")),  _(HAVE._, "X", text("ααα")))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "s", _(ALL._, "S"))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "ub", _(USE._, "B"))
         );
 
-        new Expression (
+        new JExpression(
             _(THE._, "uc", _(USE._, "C"))
         );
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
         assertAnimoResult(b, "the b the s (the B (is A) (have Y \"β\")) (the B1 (is B) (have Y \"ββ\")) (the C (is B) (have Z \"γ\") (have X \"αα\")) (the C1 (is C) (have Z \"γγ\") (have X \"ααα\"))");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
         assertAnimoResult(c, "the c the s (the C (is B) (have Z \"γ\") (have X \"αα\")) (the C1 (is C) (have Z \"γγ\") (have X \"ααα\"))");

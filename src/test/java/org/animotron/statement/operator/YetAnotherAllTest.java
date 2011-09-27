@@ -19,15 +19,15 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,29 +39,29 @@ public class YetAnotherAllTest extends ATest {
     @Test
     public void deep_all() throws Exception {
 
-    	new Expression(
+    	new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
         );
 
-        Expression a = new Expression(
+        JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
         assertAnimoResult(a, "the a (the A (is S) (have X \"α\")) (the B (is A) (have Y \"β\"))");
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
         assertAnimoResult(b, "the b (the B (is A) (have Y \"β\")) (the C (is B) (have Z \"γ\") (have X \"αα\"))");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
         assertAnimoResult(c, "the c the C (is B) (have Z \"γ\") (have X \"αα\")");
@@ -70,29 +70,29 @@ public class YetAnotherAllTest extends ATest {
     @Test
     public void one_more_deep_all() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "A"), _(HAVE._, "X", text("β")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
         );
 
-        Expression a = new Expression(
+        JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
         assertAnimoResult(a, "the a the A (is S) (have X \"α\")");
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "X", text("β"))))
         );
         assertAnimoResult(b, "the b the B (is A) (have X \"β\")");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
         assertAnimoResult(c, "the c the C (is B) (have X \"γ\")");

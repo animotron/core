@@ -20,7 +20,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.*;
+import static org.animotron.expression.JExpression.*;
 
 
 /**
@@ -54,13 +54,13 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("c")));
+        new JExpression(_(THE._, "b", text("c")));
         test("the a \\ b", "the a \\ the b \"c\"");
     }
 
     @Test
     public void test_03() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("c")));
+        new JExpression(_(THE._, "b", text("c")));
         test("the a \\ an b", "the a \\ the b \"c\"");
     }
 
@@ -81,28 +81,28 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("b")));
-        new Expression(_(THE._, "c", text("c")));
-        new Expression(_(THE._, "d", text("d")));
-        new Expression(_(THE._, "e", text("e")));
+        new JExpression(_(THE._, "b", text("b")));
+        new JExpression(_(THE._, "c", text("c")));
+        new JExpression(_(THE._, "d", text("d")));
+        new JExpression(_(THE._, "e", text("e")));
         test("the a \\ (b) (@ (c) (d)) (e)", "the a \\ (the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \"e\")");
     }
 
     @Test
     public void test_08() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("b")));
-        new Expression(_(THE._, "c", text("c")));
-        new Expression(_(THE._, "d", text("d")));
-        new Expression(_(THE._, "e", text("e")));
+        new JExpression(_(THE._, "b", text("b")));
+        new JExpression(_(THE._, "c", text("c")));
+        new JExpression(_(THE._, "d", text("d")));
+        new JExpression(_(THE._, "e", text("e")));
         test("the a \\((b) (@ (c) (d)) (e))", "the a \\ ((the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \"e\"))");
     }
 
     @Test
     public void test_09() throws IOException, AnimoException {
-        new Expression(_(THE._, "b", text("b")));
-        new Expression(_(THE._, "c", text("c")));
-        new Expression(_(THE._, "d", text("d")));
-        new Expression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
+        new JExpression(_(THE._, "b", text("b")));
+        new JExpression(_(THE._, "c", text("c")));
+        new JExpression(_(THE._, "d", text("d")));
+        new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
         test("the a \\(b) (@ (c) (d)) (e)", "the a \\ (the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \\e (the b \"b\") (the c \"c\") (the d \"d\"))");
     }
 

@@ -19,7 +19,7 @@
 package org.animotron.statement.string;
 
 import org.animotron.Properties;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.StringResultSerializer;
@@ -35,7 +35,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression.text;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
@@ -90,7 +90,7 @@ public class AfterLast extends Instruction implements Evaluable {
 
 	            Relationship r;
 				try {
-					r = new Expression(
+					r = new JExpression(
 					    text(
 					        source.substring(index + 1)
 					    )

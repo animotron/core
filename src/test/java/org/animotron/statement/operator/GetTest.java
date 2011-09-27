@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.HAVE;
@@ -27,8 +27,8 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,15 +39,15 @@ public class GetTest extends ATest {
 	
 	@Test
 	public void getOnManyAN() throws Exception {
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A", _(HAVE._, "Z", text("A")))
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "B", _(HAVE._, "Z", text("B")))
 		);
 
-    	Expression d = new Expression(
+    	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "B")))
 		);
         assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\")");
@@ -55,20 +55,20 @@ public class GetTest extends ATest {
 
 	@Test
 	public void getFromPFlow_an_with_param() throws Exception {
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
 
-    	Expression D = new Expression(
+    	JExpression D = new JExpression(
 			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
 		);
         assertAnimoResult(D, "the D the A have B have C \".\"");
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A1", _(GET._, "B1"))
 		);
 
-    	Expression d = new Expression(
+    	JExpression d = new JExpression(
 			_(THE._, "d", _(AN._, "A1", _(HAVE._, "B1", text("."))))
 		);
         assertAnimoResult(d, "the d the A1 have B1 \".\"");
@@ -77,15 +77,15 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Exception {
         
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
     	
-    	new Expression(
+    	new JExpression(
 			_(THE._, "D", _(HAVE._, "E", _(GET._, "B")))
 		);
     	
-    	Expression X = new Expression(
+    	JExpression X = new JExpression(
 			_(THE._, "X", _(AN._, "D", _(AN._, "A", _(HAVE._, "C", text(":")))))
 		);
         assertAnimoResult(X, "the X the D have E have B have C \":\"");
@@ -94,15 +94,15 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_an() throws Exception {
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "D", _(HAVE._, "C", text(".")))
 		);
 
-    	Expression E = new Expression(
+    	JExpression E = new JExpression(
 			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
 		);
     	assertAnimoResult(E, "the E the A have B have C \".\"");
@@ -111,19 +111,19 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Exception {
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "D", _(HAVE._, "C", text(".")))
 		);
 
-    	new Expression(
+    	new JExpression(
 			_(THE._, "E", _(HAVE._, "C", text(":")))
 		);
 
-    	Expression F = new Expression(
+    	JExpression F = new JExpression(
 			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
 		);
     	assertAnimoResult(F, "the F the A have B (have C \".\") (have C \"_\")");
@@ -132,7 +132,7 @@ public class GetTest extends ATest {
     @Test
     public void checkIConIS() throws Exception {
 
-        new Expression(
+        new JExpression(
         _(THE._, "A",
             _(HAVE._, "A1", text("some.path")),
 
@@ -145,41 +145,41 @@ public class GetTest extends ATest {
                     _(SELF._, "A1")))
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "B",
             _(IS._, "A"),
             _(HAVE._, "A1", text("test.txt"))
         ));
 
-        Expression C0 = new Expression(
+        JExpression C0 = new JExpression(
         _(THE._, "C0",
             _(GET._, "A1",
                 _(AN._, "A")
         )));
         assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
 
-        Expression C1 = new Expression(
+        JExpression C1 = new JExpression(
         _(THE._, "C1",
             _(GET._, "A1",
                 _(AN._, "B")
         )));
         assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
 
-        Expression C2 = new Expression(
+        JExpression C2 = new JExpression(
         _(THE._, "C2",
             _(GET._, "A2",
                 _(AN._, "B")
         )));
         assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
 
-        Expression C3 = new Expression(
+        JExpression C3 = new JExpression(
         _(THE._, "C3",
             _(GET._, "E1",
                 _(AN._, "B")
         )));
         assertAnimoResult(C3, "the C3");
 
-        Expression C4 = new Expression(
+        JExpression C4 = new JExpression(
         _(THE._, "C4",
             _(GET._, "B1",
                 _(AN._, "B")
@@ -189,7 +189,7 @@ public class GetTest extends ATest {
 
     @Test
     public void checkHAVEonIS() throws Exception {
-        new Expression(
+        new JExpression(
         _(THE._, "A",
             _(HAVE._, "A1", text("some.path")),
 
@@ -202,41 +202,41 @@ public class GetTest extends ATest {
                     _(SELF._, "A1")))
         ));
 
-        new Expression(
+        new JExpression(
         _(THE._, "B",
             _(IS._, "A"),
             _(HAVE._, "A1", text("test.txt"))
         ));
 
-//        Expression C0 = new Expression(
+//        JExpression C0 = new JExpression(
 //        _(THE._, "C0",
 //            _(GET._, "A1",
 //                _(AN._, "A")
 //        )));
 //        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
 //
-//        Expression C1 = new Expression(
+//        JExpression C1 = new JExpression(
 //        _(THE._, "C1",
 //            _(GET._, "A1",
 //                _(AN._, "B")
 //        )));
 //        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
 //
-//        Expression C2 = new Expression(
+//        JExpression C2 = new JExpression(
 //        _(THE._, "C2",
 //            _(GET._, "A2",
 //                _(AN._, "B")
 //        )));
 //        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
 //
-//        Expression C3 = new Expression(
+//        JExpression C3 = new JExpression(
 //        _(THE._, "C3",
 //            _(GET._, "E1",
 //                _(AN._, "B")
 //        )));
 //        assertAnimoResult(C3, "the C3");
 
-        Expression C4 = new Expression(
+        JExpression C4 = new JExpression(
         _(THE._, "C4",
             _(GET._, "B1",
                 _(AN._, "B")
@@ -247,19 +247,19 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_with_stack() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(GET._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "Z"), _(AN._, "B"))
         );
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
             _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "Y", text("β")), _(HAVE._, "Z", text("γ"))))
         );
         assertAnimoResult(E, "the E the C (have Z \"γ\") (the B (have Y \"β\") (the A have X \"α\"))");
@@ -268,19 +268,19 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_more_an_with_stack() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "Z"))
         );
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(HAVE._, "B", text("β")))))
         );
         assertAnimoResult(E, "the E the C have Z \"γ\"");
@@ -289,19 +289,19 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_one_more_an_with_stack() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(GET._, "Y"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "Z"))
         );
 
-        Expression E = new Expression(
+        JExpression E = new JExpression(
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
         );
         assertAnimoResult(E, "the E the C have Z \"γ\"");
@@ -310,19 +310,19 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_an_an() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(HAVE._, "Y", _(GET._, "X")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(HAVE._, "Z", _(GET._, "Y")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(GET._, "Z"))
         );
 
-        Expression D = new Expression(
+        JExpression D = new JExpression(
             _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(HAVE._, "X", text("."))))))
         );
         assertAnimoResult(D, "the D the C have Z have Y have X \".\"");

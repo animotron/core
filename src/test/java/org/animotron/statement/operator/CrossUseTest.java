@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.IS;
@@ -28,7 +28,7 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.animotron.expression.Expression._;
+import static org.animotron.expression.JExpression._;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,34 +40,34 @@ public class CrossUseTest extends ATest {
     @Test
     public void cross_use_case() throws IOException, AnimoException {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "S"), _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "S"), _(IS._, "Y"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(IS._, "S"), _(IS._, "X"), _(IS._, "Y"))
         );
 
-        Expression s = new Expression (
+        JExpression s = new JExpression(
             _(THE._, "s", _(ANY._, "S"))
         );
         assertAnimoResult(s, "the s the A (is S) (is X)");
 
-        Expression a = new Expression (
+        JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "S", _(USE._, "X")))
         );
         assertAnimoResult(a, "the a the A (is S) (is X)");
 
-        Expression b = new Expression (
+        JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(USE._, "Y")))
         );
         assertAnimoResult(b, "the b the B (is S) (is Y)");
 
-        Expression c = new Expression(
+        JExpression c = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(USE._, "X"), _(USE._, "Y")))
         );
         assertAnimoResult(c, "the c the C (is S) (is X) (is Y)");

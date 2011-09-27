@@ -19,15 +19,15 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
 import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression._;
-import static org.animotron.expression.Expression.text;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.text;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,28 +38,28 @@ public class SelfUseTest extends ATest {
     @Test
     public void selfTest() throws Exception {
         
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
     	
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "X"))
         );
     	
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
         );
 
-        Expression a = new Expression(
+        JExpression a = new JExpression(
             _(THE._, "a", _(AN._, "D", _(USE._, "A")))
         );
         assertAnimoResult(a, "the a the D (is C) (have A \".\")");
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "D", _(USE._, "B")))
         );
         assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
@@ -68,36 +68,36 @@ public class SelfUseTest extends ATest {
     @Test
     public void selfTest1() throws Exception {
 
-        new Expression(
+        new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "B", _(IS._, "X"))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
         );
 
-        new Expression(
+        new JExpression(
             _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
         );
 
-        new Expression(
+        new JExpression(
           _(THE._, "ua", _(USE._, "A"))
         );
 
-        new Expression(
+        new JExpression(
           _(THE._, "ub", _(USE._, "B"))
         );
 
-        Expression a = new Expression(
+        JExpression a = new JExpression(
             _(THE._, "a", _(AN._, "D", _(AN._, "ua")))
         );
         assertAnimoResult(a, "the a the D (is C) (have A \".\")");
 
-        Expression b = new Expression(
+        JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
         );
         assertAnimoResult(b, "the b the D (is C) (have B \"..\")");

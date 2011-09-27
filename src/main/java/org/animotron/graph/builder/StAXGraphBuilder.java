@@ -22,7 +22,6 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.Relation;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -55,7 +54,7 @@ import static org.animotron.graph.AnimoGraph.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class StreamGraphBuilder extends GraphBuilder {
+public class StAXGraphBuilder extends GraphBuilder {
 	
 	private Node root, parent;
 	private Stack<Object[]> stack;
@@ -69,31 +68,27 @@ public class StreamGraphBuilder extends GraphBuilder {
 
     @Override
 	public void endGraph() throws AnimoException {
-        if (the == null) {
-            MessageDigest m = THE._.hash(null);
-            m.update(md);
-            String hash = MessageDigester.byteArrayToHex(m.digest());
-            Relationship old = THE._.get(hash);
-            if (old == null) {
+        MessageDigest m = THE._.hash(null);
+        m.update(md);
+        String hash = MessageDigester.byteArrayToHex(m.digest());
+        Relationship old = THE._.get(hash);
+        if (old == null) {
+            the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
+            NAME.set(root, hash);
+            NAME.set(the, hash);
+            HASH.set(the, hash);
+            catcher.creative(the);
+        } else {
+            if (hash.equals(HASH.get(old))) {
+                destructive(root);
+                the = old;
+            } else {
                 the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
                 NAME.set(root, hash);
                 NAME.set(the, hash);
                 HASH.set(the, hash);
-                catcher.creative(the);
-            } else {
-                if (hash.equals(HASH.get(old))) {
-                    destructive(root);
-                    the = old;
-                } else {
-                    the = THE._.THE_NODE().createRelationshipTo(root, THE._.relationshipType(hash));
-                    NAME.set(root, hash);
-                    NAME.set(the, hash);
-                    HASH.set(the, hash);
-                    catcher.renew(old, the);
-                }
+                catcher.renew(old, the);
             }
-        } else {
-            root.delete();
         }
         getTOP().createRelationshipTo(the.getEndNode(), RelationshipTypes.TOP);
 	}
@@ -122,41 +117,14 @@ public class StreamGraphBuilder extends GraphBuilder {
         md = ((MessageDigest) item[1]).digest();
         Relationship r = (Relationship) item[2];
         String hash = MessageDigester.byteArrayToHex(md);
-        if (!(statement instanceof Relation)) {
-            if (statement instanceof THE) {
-                String  reference = (String) item[3];
-                Relationship old = THE._.get(reference);
-                if (old == null) {
-                    the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
-                    NAME.set(the, reference);
-                    HASH.set(the, hash);
-                    catcher.creative(the);
-                    r.delete();
-                } else {
-                    if (hash.equals(HASH.get(old))) {
-                        destructive(r);
-                        the = old;
-                    } else {
-                        the = THE._.THE_NODE().createRelationshipTo(r.getEndNode(), r.getType());
-                        NAME.set(the, reference);
-                        HASH.set(the, hash);
-                        catcher.renew(old, the);
-                        r.delete();
-                    }
-                }
-            } else {
-                Node node = getCache(hash);
-                if (node == null) {
-                    createCache(r.getEndNode(), hash);
-                    HASH.set(r, hash);
-                    order(r, order);
-                } else {
-                    order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
-                    destructive(r);
-                }
-            }
-        } else {
+        Node node = getCache(hash);
+        if (node == null) {
+            createCache(r.getEndNode(), hash);
+            HASH.set(r, hash);
             order(r, order);
+        } else {
+            order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
+            destructive(r);
         }
         if (!stack.empty()) {
             ((MessageDigest) stack.peek()[1]).update(md);

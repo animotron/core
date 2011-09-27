@@ -52,24 +52,24 @@ public class GraphBuilderTest extends ATest {
 
     private void test_1(String animo) throws AnimoException, IOException, XMLStreamException {
         AnimoExpression e;
-        e = new AnimoExpression(new FastGraphBuilder(), animo);
-        String inA = AnimoSerializer.serialize(e);
-        String inH = HASH.get(e);
         e = new AnimoExpression(new StreamGraphBuilder(), animo);
         String outA = AnimoSerializer.serialize(e);
         String outH = HASH.get(e);
+        e = new AnimoExpression(new FastGraphBuilder(), animo);
+        String inA = AnimoSerializer.serialize(e);
+        String inH = HASH.get(e);
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
 
     private void test_2(String animo) throws AnimoException, IOException, XMLStreamException {
         AnimoExpression e;
-        e = new AnimoExpression(new StreamGraphBuilder(), animo);
-        String outA = AnimoSerializer.serialize(e);
-        String outH = HASH.get(e);
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
         String inH = HASH.get(e);
+        e = new AnimoExpression(new StreamGraphBuilder(), animo);
+        String outA = AnimoSerializer.serialize(e);
+        String outH = HASH.get(e);
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
@@ -105,6 +105,16 @@ public class GraphBuilderTest extends ATest {
     @Test
 	public void test_04() throws IOException, AnimoException, XMLStreamException {
         test("??stylesheet \"path\" \\a");
+	}
+
+    @Test
+	public void test_05() throws IOException, AnimoException, XMLStreamException {
+        test("the a (b) (b)");
+	}
+
+    @Test
+	public void test_06() throws IOException, AnimoException, XMLStreamException {
+        test("the a (b) (c b)");
 	}
 
 }
