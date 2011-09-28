@@ -29,6 +29,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -72,12 +73,37 @@ public class FastGraphBuilder extends GraphBuilder {
         if (!statements.empty()) {
             end();
         }
-        order = 0;
-        for (Object[] item : flow) {
-            step();
-            build(item);
+        Iterator<Object[]> it = flow.iterator();
+        Object[] item = it.next();
+        String hash = hash(item);
+        String name = item[1] != null ? (String) item[1] : hash;
+        the = THE._.get(name);
+        if (the != null) {
+            if (HASH.has(the)) {
+                String h = HASH.get(the);
+                if (h == null) {
+                    catcher.creative(the);
+                    HASH.set(the, hash);
+                } else if (!h.equals(hash)) {
+                    catcher.renew(the);
+                    HASH.set(the, hash);
+                } else {
+                    return;
+                }
+            } else {
+                catcher.creative(the);
+                HASH.set(the, hash);
+            }
+        } else {
+            the = THE._.create(name, hash);
+            catcher.creative(the);
         }
-        the = (Relationship) flow.get(0)[3];
+        item[3] = the;
+        item[4] = the.getEndNode();
+        order = 0;
+        while(it.hasNext()) {
+            build(it.next());
+        }
 	}
 
     @Override
@@ -135,50 +161,25 @@ public class FastGraphBuilder extends GraphBuilder {
 				return;
 			}
 		}
+        step();
         Relationship r;
         Statement statement = (Statement) item[0];
-        if (statement instanceof THE) {
+        Node parent = (Node) p[4];
+        if (parent == null)
+            //"Internal error: parent can not be null."
+            throw new AnimoException((Relationship)item[3]);
+        if (!(statement instanceof Relation)) {
             String hash = hash(item);
-            String name = item[1] != null ? (String) item[1] : hash;
-            r = THE._.get(name);
-            if (r != null) {
-                if (HASH.has(r)) {
-                    String h = HASH.get(r);
-                    if (h == null) {
-                        catcher.creative(r);
-                        HASH.set(r, hash);
-                    } else if (!h.equals(hash)) {
-                        catcher.renew(r);
-                        HASH.set(r, hash);
-                    } else {
-                        item[6] = true;
-                    }
-                } else {
-                    catcher.creative(r);
-                    HASH.set(r, hash);
-                }
+            Node node = getCache(hash);
+            if (node == null) {
+                r = build(statement, parent, item);
+                createCache(r.getEndNode(), hash);
             } else {
-                r = THE._.create(name, hash);
-                catcher.creative(r);
+                r = parent.createRelationshipTo(node, statement.relationshipType());
+                item[6] = true;
             }
         } else {
-            Node parent = (Node) p[4];
-            if (parent == null)
-            	//"Internal error: parent can not be null."
-                throw new AnimoException((Relationship)item[3]);
-            if (!(statement instanceof Relation)) {
-                String hash = hash(item);
-                Node node = getCache(hash);
-                if (node == null) {
-                    r = build(statement, parent, item);
-                    createCache(r.getEndNode(), hash);
-                } else {
-                    r = parent.createRelationshipTo(node, statement.relationshipType());
-                    item[6] = true;
-                }
-            } else {
-                r = build(statement, parent, item);
-            }
+            r = build(statement, parent, item);
         }
         item[3] = r;
         item[4] = r.getEndNode();

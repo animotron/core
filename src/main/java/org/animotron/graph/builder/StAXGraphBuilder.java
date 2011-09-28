@@ -21,6 +21,7 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
+import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.THE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Direction;
@@ -96,14 +97,34 @@ public class StAXGraphBuilder extends GraphBuilder {
 	@Override
     public void start(Statement statement, String reference) throws AnimoException {
         step();
-        parent = stack.empty() ? root : ((Relationship) stack.peek()[2]).getEndNode();
-        Relationship r = statement.build(parent, reference, ignoreNotFound);
+        Relationship r;
         MessageDigest md = statement.hash(reference);
+        if (stack.empty()) {
+            parent = root;
+            r = statement.build(parent, reference, ignoreNotFound);
+        } else {
+            Object[] p = stack.peek();
+            parent = ((Relationship) p[2]).getEndNode();
+            if (statement instanceof TEXT) {
+                this.md = md.digest();
+                ((MessageDigest) p[1]).update(this.md);
+                String hash = MessageDigester.byteArrayToHex(this.md);
+                Node node = getCache(hash);
+                if (node == null) {
+                    r = statement.build(parent, reference, ignoreNotFound);
+                    createCache(r.getEndNode(), hash);
+                } else {
+                    r =  parent.createRelationshipTo(node, statement.relationshipType());
+                }
+                order(r, order);
+            } else {
+                r = statement.build(parent, reference, ignoreNotFound);
+            }
+        }
 		Object[] item = {
 				statement,	    // 0  statement
 				md,             // 1  message digest
-				r,              // 2  node
-                reference       // 3 reference
+				r               // 2  node
 			};
 		stack.push(item);
 	}
@@ -112,20 +133,21 @@ public class StAXGraphBuilder extends GraphBuilder {
 	public void end() {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
-        md = ((MessageDigest) item[1]).digest();
-        Relationship r = (Relationship) item[2];
-        String hash = MessageDigester.byteArrayToHex(md);
-        Node node = getCache(hash);
-        if (node == null) {
-            createCache(r.getEndNode(), hash);
-            HASH.set(r, hash);
-            order(r, order);
-        } else {
-            order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
-            destructive(r);
-        }
-        if (!stack.empty()) {
-            ((MessageDigest) stack.peek()[1]).update(md);
+        if (!(statement instanceof TEXT)) {
+            md = ((MessageDigest) item[1]).digest();
+            Relationship r = (Relationship) item[2];
+            String hash = MessageDigester.byteArrayToHex(md);
+            Node node = getCache(hash);
+            if (node == null) {
+                createCache(r.getEndNode(), hash);
+                order(r, order);
+            } else {
+                order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
+                destructive(r);
+            }
+            if (!stack.empty()) {
+                ((MessageDigest) stack.peek()[1]).update(md);
+            }
         }
 	}
 
