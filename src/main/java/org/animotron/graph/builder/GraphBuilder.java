@@ -97,7 +97,7 @@ public abstract class GraphBuilder {
             tx.success();
         } catch (Exception e) {
             tx.failure();
-            tx.finish();
+            finishTx(tx);
             tx = beginTx();
             try {
                 fail(e);
