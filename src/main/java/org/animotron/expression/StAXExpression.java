@@ -20,7 +20,7 @@ package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.graph.builder.StAXGraphBuilder;
+import org.animotron.graph.builder.MLGraphBuilder;
 import org.animotron.statement.ml.*;
 
 import javax.xml.namespace.QName;
@@ -39,7 +39,7 @@ public class StAXExpression extends Expression {
 	private XMLStreamReader reader;
 	
     public StAXExpression(XMLStreamReader reader) throws IOException {
-        this(new StAXGraphBuilder(), reader);
+        this(new MLGraphBuilder(), reader);
     }
 
     public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws IOException {

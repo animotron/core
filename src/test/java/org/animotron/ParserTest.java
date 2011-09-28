@@ -20,6 +20,7 @@ package org.animotron;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AnimoExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -71,6 +72,7 @@ public class ParserTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_06() throws IOException, AnimoException {
         test("the a the b", "the a b");
 	}
