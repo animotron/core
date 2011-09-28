@@ -169,7 +169,7 @@ public class FastGraphBuilder extends GraphBuilder {
             //"Internal error: parent can not be null."
             throw new AnimoException((Relationship)item[3]);
         if (!(statement instanceof Relation)) {
-            String hash = hash(item);
+            byte[] hash = (byte[]) item[2];
             Node node = getCache(hash);
             if (node == null) {
                 r = build(statement, parent, item);

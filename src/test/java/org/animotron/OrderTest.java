@@ -59,9 +59,9 @@ public class OrderTest extends ATest {
 			for (Relationship r : q ) {
 
 //					System.out.print(q.currentScore() + " ");
-//					System.out.println(r.getEndNode().getProperty(ORDER+"-P"));
+//					System.out.println(r.getEndNode().getProperty(NAME+"-P"));
 				
-				Assert.assertEquals(i, r.getEndNode().getProperty("ORDER-P"));
+				Assert.assertEquals(i, r.getEndNode().getProperty("NAME-P"));
 				i++;
 			}
 		} finally {
@@ -74,7 +74,7 @@ public class OrderTest extends ATest {
 		
 		for (int i = 1; i <= num; i++) {
 			Node child = createNode();
-			child.setProperty("ORDER-P", i);
+			child.setProperty("NAME-P", i);
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
 			getORDER().add(r, i);
 		}

@@ -33,20 +33,20 @@ import org.neo4j.index.lucene.QueryContext;
  */
 public class OrderIndex {
 	
-	public static final String ORDER = "ORDER";
+	public static final String NAME = "NAME";
 	
 //	private static final QueryContext SORT;
 //	static {
 //		QueryContext q = new QueryContext( "*" );
 //        SortField[] sortFields = new SortField[1];
-//        sortFields[0] = new SortField(ORDER, SortField.LONG );
+//        sortFields[0] = new SortField(NAME, SortField.LONG );
 //        SORT = q.sort( new Sort( sortFields ) );
 //	}
 
-	protected final RelationshipIndex ORDER_INDEX;
+	protected final RelationshipIndex INDEX;
 	
 	public OrderIndex(IndexManager indexManager) {
-		ORDER_INDEX = indexManager.forRelationships(ORDER);
+		INDEX = indexManager.forRelationships(NAME);
 	}
 
 	protected QueryContext sort( String key, String... additionalKeys ) {
@@ -68,15 +68,15 @@ public class OrderIndex {
     }
 
     public void add(Relationship r, int value) {
-        ORDER_INDEX.add(r, ORDER, value);
+        INDEX.add(r, NAME, value);
     }
 	
     public void remove(Relationship r) {
-        ORDER_INDEX.remove(r, ORDER);
+        INDEX.remove(r, NAME);
     }
 
 	public IndexHits<Relationship> query(Node startNode) {
-		return ORDER_INDEX.query(ORDER, sort( ORDER ), startNode, null);
+		return INDEX.query(NAME, sort(NAME), startNode, null);
 	}
 
 	public Relationship position(long position, Node startNode) {

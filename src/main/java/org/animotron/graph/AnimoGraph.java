@@ -42,8 +42,9 @@ public class AnimoGraph {
 	
 	private static String STORAGE;
 	
-	private static Node ROOT, CACHE, TOP; //EMPTY
-	private static OrderIndex ORDER;
+	private static Node ROOT, TOP; //EMPTY
+    private static CacheIndex CACHE;
+    private static OrderIndex ORDER;
 	public static RelationshipIndex RESULT_INDEX;
 	private static String RESULT = "RESULT";
 	
@@ -58,6 +59,7 @@ public class AnimoGraph {
     public static void initDB() {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
+        CACHE = new CacheIndex(INDEX);
         ORDER = new OrderIndex(INDEX);
 
         RESULT_INDEX = INDEX.forRelationships(RESULT);
@@ -68,7 +70,6 @@ public class AnimoGraph {
                 public Void execute() {
                     TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
                     //EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
-                    CACHE = getOrCreateNode(ROOT, RelationshipTypes.CACHE);
                     return null;
                 }
             }
@@ -85,10 +86,6 @@ public class AnimoGraph {
 	
 	public static Node getROOT() {
 		return ROOT;
-	}
-	
-	public static Node getCACHE() {
-		return CACHE;
 	}
 	
 	public static Node getTOP() {
@@ -191,19 +188,12 @@ public class AnimoGraph {
 		return node;
 	}
 
-	public static Node createCache(String hash) {
-		return createCache(createNode(), hash);
+	public static void createCache(Node node, byte[] hash) {
+		CACHE.add(node, hash);
 	}
 
-	public static Node createCache(Node node, String hash) {
-		RelationshipType type = AnimoRelationshipType.get(CACHE_PREFIX, hash);
-		CACHE.createRelationshipTo(node, type);
-		return node;
-	}
-
-	public static Node getCache(String hash) {
-		RelationshipType type = AnimoRelationshipType.get(CACHE_PREFIX, hash);
-		return getNode(CACHE, type);
+	public static Node getCache(byte[] hash) {
+        return CACHE.get(hash);
 	}
 	
     public static void order (Relationship r, int order) {

@@ -472,4 +472,9 @@ public class ParserTest extends ATest {
         test("the a (x((--> (b)c)(d)e)(f)g)", "the a x (((b) (c)) (d) (e)) (f) (g)");
     }
 
+    @Test
+    public void test_86() throws IOException, AnimoException {
+        test("the a (is b) (have c \"x\") (have c \"x\") (\"c\")");
+    }
+
 }

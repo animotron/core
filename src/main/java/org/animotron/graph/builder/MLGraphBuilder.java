@@ -108,11 +108,10 @@ public class MLGraphBuilder extends GraphBuilder {
             if (statement instanceof TEXT) {
                 this.md = md.digest();
                 ((MessageDigest) p[1]).update(this.md);
-                String hash = MessageDigester.byteArrayToHex(this.md);
-                Node node = getCache(hash);
+                Node node = getCache(this.md);
                 if (node == null) {
                     r = statement.build(parent, reference, ignoreNotFound);
-                    createCache(r.getEndNode(), hash);
+                    createCache(r.getEndNode(), this.md);
                 } else {
                     r =  parent.createRelationshipTo(node, statement.relationshipType());
                 }
@@ -136,10 +135,9 @@ public class MLGraphBuilder extends GraphBuilder {
         if (!(statement instanceof TEXT)) {
             md = ((MessageDigest) item[1]).digest();
             Relationship r = (Relationship) item[2];
-            String hash = MessageDigester.byteArrayToHex(md);
-            Node node = getCache(hash);
+            Node node = getCache(md);
             if (node == null) {
-                createCache(r.getEndNode(), hash);
+                createCache(r.getEndNode(), md);
                 order(r, order);
             } else {
                 order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
