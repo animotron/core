@@ -22,13 +22,16 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.ATest;
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.StAXExpression;
+import org.animotron.graph.builder.FastGraphBuilder;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
-import java.io.InputStream;
+
+import static org.animotron.Properties.HASH;
 
 
 /**
@@ -39,12 +42,41 @@ public class GeoTest extends ATest {
 
     private XMLInputFactory FACTORY = new WstxInputFactory();
 
-    private InputStream OSM = getClass().getResourceAsStream("map.osm");
+    private static final String OSM = "map.osm";
+
+    private XMLStreamReader osm() throws XMLStreamException {
+        return osm(OSM);
+    }
+
+    private XMLStreamReader osm(String resource) throws XMLStreamException {
+        return FACTORY.createXMLStreamReader(getClass().getResourceAsStream(resource));
+    }
+
+    @Test
+	public void test_01() throws IOException, AnimoException, XMLStreamException {
+        String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        cleanDb();
+        String out = HASH.get(new StAXExpression(osm()));
+        Assert.assertEquals(in, out);
+	}
+
+    @Test
+	public void test_02() throws IOException, AnimoException, XMLStreamException {
+        String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        String out = HASH.get(new StAXExpression(osm()));
+        Assert.assertEquals(in, out);
+	}
+
+    @Test
+	public void test_03() throws IOException, AnimoException, XMLStreamException {
+        String in = HASH.get(new StAXExpression(osm()));
+        String out = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        Assert.assertEquals(in, out);
+	}
 
     @Test
 	public void test() throws IOException, AnimoException, XMLStreamException {
-        XMLStreamReader reader = FACTORY.createXMLStreamReader(OSM);
-        new StAXExpression(reader);
+        new StAXExpression(osm());
 	}
 
 }

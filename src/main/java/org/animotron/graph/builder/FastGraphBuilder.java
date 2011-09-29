@@ -102,6 +102,7 @@ public class FastGraphBuilder extends GraphBuilder {
         item[4] = the.getEndNode();
         order = 0;
         while(it.hasNext()) {
+            step();
             build(it.next());
         }
 	}
@@ -161,7 +162,6 @@ public class FastGraphBuilder extends GraphBuilder {
 				return;
 			}
 		}
-        step();
         Relationship r;
         Statement statement = (Statement) item[0];
         Node parent = (Node) p[4];

@@ -97,32 +97,13 @@ public class MLGraphBuilder extends GraphBuilder {
 	@Override
     public void start(Statement statement, String reference) throws AnimoException {
         step();
-        Relationship r;
-        MessageDigest md = statement.hash(reference);
-        if (stack.empty()) {
-            parent = root;
-            r = statement.build(parent, reference, ignoreNotFound);
-        } else {
-            Object[] p = stack.peek();
-            parent = ((Relationship) p[2]).getEndNode();
-            if (statement instanceof TEXT) {
-                this.md = md.digest();
-                ((MessageDigest) p[1]).update(this.md);
-                Node node = getCache(this.md);
-                if (node == null) {
-                    r = statement.build(parent, reference, ignoreNotFound);
-                    createCache(r.getEndNode(), this.md);
-                } else {
-                    r =  parent.createRelationshipTo(node, statement.relationshipType());
-                }
-                order(r, order);
-            } else {
-                r = statement.build(parent, reference, ignoreNotFound);
-            }
-        }
+        MessageDigest hash = statement.hash(reference);
+        parent = stack.empty() ? root : ((Relationship) stack.peek()[2]).getEndNode();
+        Relationship r = statement.build(parent, reference, ignoreNotFound);
+        order(r, order);
 		Object[] item = {
 				statement,	    // 0  statement
-				md,             // 1  message digest
+				hash,           // 1  message digest
 				r               // 2  node
 			};
 		stack.push(item);
@@ -132,8 +113,8 @@ public class MLGraphBuilder extends GraphBuilder {
 	public void end() {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
+        md = ((MessageDigest) item[1]).digest();
         if (!(statement instanceof TEXT)) {
-            md = ((MessageDigest) item[1]).digest();
             Relationship r = (Relationship) item[2];
             Node node = getCache(md);
             if (node == null) {
@@ -143,9 +124,9 @@ public class MLGraphBuilder extends GraphBuilder {
                 order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
                 destructive(r);
             }
-            if (!stack.empty()) {
-                ((MessageDigest) stack.peek()[1]).update(md);
-            }
+        }
+        if (!stack.empty()) {
+            ((MessageDigest) stack.peek()[1]).update(md);
         }
 	}
 

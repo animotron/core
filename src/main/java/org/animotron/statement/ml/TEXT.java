@@ -19,15 +19,15 @@
 package org.animotron.statement.ml;
 
 import org.animotron.statement.AbstractLink;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.security.MessageDigest;
 import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.createCache;
 import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getCache;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,22 +44,20 @@ public class TEXT extends AbstractLink implements MLOperator {
 
     @Override
     public Relationship build(Node parent, String value, boolean ignoreNotFound) {
-        Node child = createNode();
-        VALUE.set(child, removeWS(value));
+        value = removeWS(value);
+        byte[] hash = hashReference(value).digest();
+        Node child = getCache(hash);
+        if (child == null) {
+            child = createNode();
+            VALUE.set(child, value);
+            createCache(child, hash);
+        }
         return parent.createRelationshipTo(child, relationshipType());
     }
 
     @Override
     public String reference(Relationship r) {
         return VALUE.get(r.getEndNode());
-    }
-
-    @Override
-    public MessageDigest hash(String reference) {
-        MessageDigest md = MessageDigester.md();
-        if (reference != null)
-            md.update(reference.getBytes());
-        return md;
     }
 
     private String removeWS(String value) {

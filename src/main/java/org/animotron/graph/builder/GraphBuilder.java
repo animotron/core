@@ -113,11 +113,12 @@ public abstract class GraphBuilder {
         if (order % 1000 == 0) {
             System.out.println(order);
         }
-        if (order++ % 10000 == 0) {
+        if (order % 20000 == 0) {
             tx.success();
             finishTx(tx);
             tx = beginTx();
         }
+        order++;
     }
 
     abstract public void fail(Exception e);

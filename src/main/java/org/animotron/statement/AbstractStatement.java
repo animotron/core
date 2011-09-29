@@ -93,12 +93,17 @@ public abstract class AbstractStatement implements Statement {
     public String reference(Relationship r) {
         return null;
     }
-	
-    @Override
-    public MessageDigest hash(String reference) {
+
+    public MessageDigest hashReference(String reference) {
         MessageDigest md = MessageDigester.md();
         if (reference != null)
             md.update(reference.getBytes());
+        return md;
+    }
+
+    @Override
+    public MessageDigest hash(String reference) {
+        MessageDigest md = hashReference(reference);
         md.update(name().getBytes());
         return md;
     }
