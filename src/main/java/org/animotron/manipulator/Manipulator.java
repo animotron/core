@@ -95,20 +95,25 @@ public abstract class Manipulator {
 
 		
         //answers transfer to output
-        Subscribable<Relationship> onAnswer = new Subscribable<Relationship>() {
-            public void onMessage(Relationship msg) {
-            	System.out.println("get answer "+msg);
+        Subscribable<Relationship[]> onAnswer = new Subscribable<Relationship[]>() {
+            public void onMessage(Relationship[] context) {
+            	System.out.println("get answer "+context);
             	try {
-            		if (msg == null) {
+            		if (context == null) {
             			pf.countDown(out);
             		} else {
+            			if (context[0] != null)
+            				pf.addContextPoint(context[0]);
+            				
+            			Relationship msg = context[1];
+            			
             			int addedContexts = 0;
                         Statement s = null;
             			if (RESULT.name().equals(msg.getType())) {
-            				Relationship context = getDb().getRelationshipById(
+            				Relationship c = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())
         					);
-            				pf.addContextPoint(context);
+            				pf.addContextPoint(c);
             				addedContexts++;
             				
             				msg = getDb().getRelationshipById(

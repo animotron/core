@@ -52,8 +52,10 @@ public class Utils {
 	public static boolean results(Node node, PFlow pf) {
 		boolean haveSome = false;
 		
+		Relationship op = pf.getOP();
+		
 		for (Relationship r : AnimoGraph.getResult(pf.getLastContext(), node)) {
-			pf.sendAnswer(r);
+			pf.sendAnswer(op, r);
 			
 			haveSome = true;
 		}

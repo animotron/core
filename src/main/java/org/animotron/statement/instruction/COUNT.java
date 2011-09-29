@@ -54,12 +54,12 @@ public class COUNT extends Instruction implements Evaluable {
 		public void onMessage(final PFlow pf) {
 			//System.out.println("COUNT");
 			
-			Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
+			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 				
 				AtomicInteger value = new AtomicInteger(0);
 				
 				@Override
-				public void onMessage(Relationship context) {
+				public void onMessage(Relationship[] context) {
 					if (context == null) {
 						//XXX: optimize
 						JExpression r;
@@ -69,7 +69,7 @@ public class COUNT extends Instruction implements Evaluable {
                             pf.sendException(e);
                             return;
                         }
-                        pf.sendAnswer(r);
+                        pf.sendAnswer(null, r);
 						pf.done();
 						return;
 					}

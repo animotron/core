@@ -52,6 +52,7 @@ public class ANY extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
 			System.out.println("ANY ************************** "+pf.getOP());
             
+			final Relationship op = pf.getOP();
 			final Node n = pf.getOP().getEndNode();
 			Node node = Utils.getByREF(n);
 
@@ -70,14 +71,14 @@ public class ANY extends AbstractQuery implements Reference {
 				//System.out.println(" node = "+node);
 	
 				if (underUSE && filtering(pf, node, uses)) {
-					pf.sendAnswer( createResult( pf.getLastContext(), n, getThe(node), RESULT ) );
+					pf.sendAnswer( op, createResult( pf.getLastContext(), n, getThe(node), RESULT ) );
 				} else {
 		            for (Relationship tdR : td_IS.traverse(node).relationships()) {
 	                    //System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
 	                    Node res = tdR.getStartNode();
 	                    if (filtering(pf, res, uses)) {
 	
-	                        pf.sendAnswer( createResult( pf.getLastContext(), n, getThe(res), RESULT ) );
+	                        pf.sendAnswer( op, createResult( pf.getLastContext(), n, getThe(res), RESULT ) );
 	                        break;
 	                    }
 	                }

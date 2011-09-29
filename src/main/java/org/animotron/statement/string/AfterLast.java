@@ -112,7 +112,7 @@ public class AfterLast extends Instruction implements Evaluable {
 					}
 				});
 
-				pf.sendAnswer(r);
+				pf.sendAnswer(null, r);
             }
 
             pf.done();

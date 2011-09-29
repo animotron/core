@@ -60,7 +60,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 //				} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
 //					//ignore REF
 				} else {
-					pf.sendAnswer(r);
+					pf.sendAnswer(null, r);
 				}
 			}
 		} finally {

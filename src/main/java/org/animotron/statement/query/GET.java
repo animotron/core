@@ -119,9 +119,9 @@ public class GET extends Operator implements Evaluable, Query {
 			if (!Utils.results(node, pf)) {
 				//no pre-calculated result, calculate it
 				
-				Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
+				Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 					@Override
-					public void onMessage(Relationship context) {
+					public void onMessage(Relationship[] context) {
 						System.out.println("GET message ["+name+"] context "+context);
 						
 						if (context == null) {
@@ -138,10 +138,10 @@ public class GET extends Operator implements Evaluable, Query {
 //						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship> rSet = get(pf, context, name);
+						final Set<Relationship> rSet = get(pf, context[1], name);
 						if (rSet != null) {
 							for (Relationship r : rSet) {
-								pf.sendAnswer(createResult(pf.getLastContext(), node, r, HAVE._.relationshipType));
+								pf.sendAnswer(op, createResult(pf.getLastContext(), node, r, HAVE._.relationshipType));
 							}
 							return;
 						}
@@ -185,7 +185,7 @@ public class GET extends Operator implements Evaluable, Query {
 						Set<Relationship> rSet = get(pf, st, name);
 						if (rSet != null) {
 							for (Relationship r : rSet) {
-								pf.sendAnswer(createResult(pf.getLastContext(), node, r, HAVE._.relationshipType));
+								pf.sendAnswer(op, createResult(pf.getLastContext(), node, r, HAVE._.relationshipType));
 							}
 							break;
 						}

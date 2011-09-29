@@ -58,7 +58,7 @@ public class AN extends Operator implements Reference, Evaluable {
 			
 			//System.out.println("AN res = "+res);
 			
-			pf.sendAnswer(res);
+			pf.sendAnswer(op, res);
 			pf.done();
 		}
 	};

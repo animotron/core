@@ -55,12 +55,12 @@ public class EACH extends Operator implements Evaluable {
 		public void onMessage(final PFlow pf) {
 			System.out.println("EACH");
 			
-			Subscribable<Relationship> onContext = new Subscribable<Relationship>() {
+			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 				@Override
-				public void onMessage(Relationship context) {
+				public void onMessage(Relationship[] context) {
 					System.out.println("EACH message context "+context);
 					if (context == null) {
-						pf.sendAnswer(null);
+						pf.sendAnswer(null, null);
 						return;
 					}
 				}

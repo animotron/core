@@ -56,7 +56,7 @@ public class PFlow {
 	
 	private final Manipulator m;
 
-	public final Channel<Relationship> answer = new MemoryChannel<Relationship>();
+	public final Channel<Relationship[]> answer = new MemoryChannel<Relationship[]>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Throwable> stop = new MemoryChannel<Throwable>();
 	
@@ -150,13 +150,13 @@ public class PFlow {
 		this.op = null;
 	}
 
-	public void sendAnswer(Relationship r) {
+	public void sendAnswer(Relationship op, Relationship r) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
-			parent.answer.publish(r);
+			parent.answer.publish(new Relationship[] {op, r});
 		}
 	}
 
