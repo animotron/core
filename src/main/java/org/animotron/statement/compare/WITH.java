@@ -60,7 +60,7 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 		String name = reference(op);
 
-		Set<Relationship> haveSet = GET._.get(pf, ref, name);//GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
+		Set<Relationship[]> haveSet = GET._.get(pf, ref, name);//GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();
@@ -69,8 +69,8 @@ public class WITH extends Operator implements Predicate {
 		PipedInput in = null;
 		
 		System.out.println("Eval actual");
-		for (Relationship have : haveSet) {
-			in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
+		for (Relationship[] have : haveSet) {
+			in = Evaluator._.execute(new PFlow(pf), have[1].getEndNode());
 			for (Object e : in) {
 				actual.add((Relationship) e);
 				System.out.println("actual "+e);

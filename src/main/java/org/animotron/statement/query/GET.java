@@ -88,20 +88,20 @@ public class GET extends Operator implements Evaluable, Query {
 	}
 	
 	//in-use by WITH
-	public static Relationship getHaveAtPFlow(PFlow pf, String name) {
-		final Path pflow = pf.getFlowPath();
-		
-		//XXX: remove when getFlowPath fixed
-		if (pflow == null)
-			return null;
-		
-		for (Relationship p : pflow.relationships()) {
-			if (p.getType().name().equals(HAVE._.rType) && _.reference(p).equals(name)) {
-				return p;
-			}
-		}
-		return null;
-	}
+//	public static Relationship getHaveAtPFlow(PFlow pf, String name) {
+//		final Path pflow = pf.getFlowPath();
+//		
+//		//XXX: remove when getFlowPath fixed
+//		if (pflow == null)
+//			return null;
+//		
+//		for (Relationship p : pflow.relationships()) {
+//			if (p.getType().name().equals(HAVE._.rType) && _.reference(p).equals(name)) {
+//				return p;
+//			}
+//		}
+//		return null;
+//	}
 
 	private OnQuestion question = new OnQuestion() {
 
@@ -138,10 +138,10 @@ public class GET extends Operator implements Evaluable, Query {
 //						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship> rSet = get(pf, context[1], name);
+						final Set<Relationship[]> rSet = get(pf, context[1], name);
 						if (rSet != null) {
-							for (Relationship r : rSet) {
-								pf.sendAnswer(op, createResult(pf.getLastContext(), node, r, HAVE._.relationshipType));
+							for (Relationship[] r : rSet) {
+								pf.sendAnswer(context[0], createResult(pf.getLastContext(), node, r[1], HAVE._.relationshipType));
 							}
 							return;
 						}
@@ -175,17 +175,18 @@ public class GET extends Operator implements Evaluable, Query {
 					pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
-					System.out.println("P-FLOW is context for GET!");
-					System.out.println("pflow = "+pf.getFlowPath());
-					//pf.debug();
+					System.out.println("P-FLOW is context for GET! '"+reference(op)+"'");
+//					System.out.println("pflow = ");
+					pf.getFlowPath();
+//					pf.debug();
 					System.out.println(pf.getPFlowPath());
 					
 					
 					for (Relationship st : pf.getPFlowPath()) {
-						Set<Relationship> rSet = get(pf, st, name);
+						Set<Relationship[]> rSet = get(pf, st, name);
 						if (rSet != null) {
-							for (Relationship r : rSet) {
-								pf.sendAnswer(op, createResult(pf.getLastContext(), node, r, HAVE._.relationshipType));
+							for (Relationship[] r : rSet) {
+								pf.sendAnswer(r[0], createResult(pf.getLastContext(), node, r[1], HAVE._.relationshipType));
 							}
 							break;
 						}
@@ -202,19 +203,19 @@ public class GET extends Operator implements Evaluable, Query {
 		}
 	};
 
-	public Set<Relationship> get(PFlow pf, Relationship ref, final String name) {
+	public Set<Relationship[]> get(PFlow pf, Relationship ref, final String name) {
 		List<Relationship> refs = new FastList<Relationship>();
 		refs.add(ref);
 		
 		return get(pf, refs, name); 
 	}
 
-	public Set<Relationship> get(PFlow pf, Node ref, final String name) {
-		Set<Relationship> set = new FastSet<Relationship>();
+	public Set<Relationship[]> get(PFlow pf, Node ref, final String name) {
+		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
 		Relationship have = searchForHAVE(ref, name);
 		if (have != null && !pf.isInStack(have)) 
-			set.add(have);
+			set.add(new Relationship[] {null, have}); //XXX: is NULL correct here?
 		
 		if (!set.isEmpty()) return set;
 
@@ -224,10 +225,10 @@ public class GET extends Operator implements Evaluable, Query {
 		return get(pf, newREFs, name); 
 	}
 
-	public Set<Relationship> get(PFlow pf, List<Relationship> REFs, final String name) {
+	public Set<Relationship[]> get(PFlow pf, List<Relationship> REFs, final String name) {
 		//System.out.println("GET context = "+ref);
 		
-		Set<Relationship> set = new FastSet<Relationship>();
+		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
 		List<Relationship> nextREFs = new FastList<Relationship>();
 		nextREFs.addAll(REFs);
@@ -242,7 +243,7 @@ public class GET extends Operator implements Evaluable, Query {
 				System.out.println("checking "+n);
 				have = searchForHAVE(n, name);
 				if (have != null && !pf.isInStack(have)) 
-					set.add(have);
+					set.add(new Relationship[] {n, have});
 			}
 			
 			if (set.size() > 0) return set;
@@ -329,7 +330,13 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		boolean checkStart = true;
 		if (!REF.name().equals(ref.getType().name())) {
-			System.out.println("WRONG WRONG WRONG WRONG ref = "+ref+" type "+ref.getType());
+			System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" type "+ref.getType());
+			try {
+				System.out.print(" "+reference(ref));
+			} catch (Exception e) {
+			} finally {
+				System.out.println();
+			}
 			checkStart = false;
 		}
 		

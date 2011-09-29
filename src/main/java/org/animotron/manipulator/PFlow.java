@@ -244,12 +244,12 @@ public class PFlow {
 //		for (Relationship r : path) {
 //			System.out.println(r);
 //		}
-//		int i = 0;
-//		for (Path path : td_flow.traverse(getOPNode())) {
-//			System.out.println(" path = "+path);
-//			i++;
-//		}
-//		System.out.println("PFLOW ********************* "+i);
+		int i = 0;
+		for (Path path : td_flow.traverse(getOPNode())) {
+			System.out.println(" path = "+path);
+			i++;
+		}
+		System.out.println("PFLOW ********************* "+i);
 		
 		//System.out.println("OPNode = "+getOPNode());
 
@@ -396,7 +396,9 @@ public class PFlow {
 //		
 //		if (parent == null) return false;
 //		return parent.isInStack(r);
-		for (Relationship rr : getFlowPath().relationships()) {
+		
+//		for (Relationship rr : getFlowPath().relationships()) {
+		for (Relationship rr : path) {
 			if (rr.equals(r)) return true;
 		}
 		return false;
