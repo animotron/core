@@ -21,11 +21,14 @@ package org.animotron.statement.operator;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.PFlow;
+import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
+import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -85,5 +88,29 @@ public class Utils {
 		}
 		
 		return false;
+	}
+
+	public static boolean haveContext(PFlow pf) {
+		
+		IndexHits<Relationship> q = getORDER().query(pf.getOPNode());
+		try {
+			while (q.hasNext()) {
+				Relationship r = q.next();
+				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
+				
+				if (onQuestion != null) {
+					return true;
+					
+				} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+					//ignore REF
+				} else {
+					return true;
+				}
+			}
+			
+			return false;
+		} finally {
+			q.close();
+		}
 	}
 }

@@ -171,7 +171,7 @@ public class GET extends Operator implements Evaluable, Query {
 				};
 				pf.answer.subscribe(onContext);
 				
-				if (haveContext(pf)) {
+				if (Utils.haveContext(pf)) {
 					pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
