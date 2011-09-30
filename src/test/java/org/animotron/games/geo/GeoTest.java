@@ -52,18 +52,6 @@ public class GeoTest extends ATest {
         return FACTORY.createXMLStreamReader(getClass().getResourceAsStream(resource));
     }
 
-//    @BeforeClass
-//    public static void start() {
-//        Map<String, String> config = new HashMap<String, String>();
-//        config.put("cache_type", "weak");
-//        config.put("neostore.nodestore.db.mapped_memory", "50M");
-//        config.put("neostore.relationshipstore.db.mapped_memory", "200M");
-//        config.put("neostore.propertystore.db.mapped_memory", "10M");
-//        config.put("neostore.propertystore.db.strings.mapped_memory", "10M");
-//    	deleteDir(new File(DATA_FOLDER));
-//        startDB(DATA_FOLDER, config);
-//    }
-
     @Test
 	public void test_01() throws IOException, AnimoException, XMLStreamException {
         String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
@@ -88,7 +76,7 @@ public class GeoTest extends ATest {
 
     @Test
 	public void test() throws IOException, AnimoException, XMLStreamException {
-        new StAXExpression(osm("sto.xml"));
+        new StAXExpression(osm());
 	}
 
 }
