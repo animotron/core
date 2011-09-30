@@ -90,7 +90,7 @@ public class StAXExpression extends Expression {
                 builder.start(NAME._, target);
                 builder.end();
             }
-            builder.start(TEXT._, data);
+            builder.start(data);
             builder.end();
         builder.end();
     }

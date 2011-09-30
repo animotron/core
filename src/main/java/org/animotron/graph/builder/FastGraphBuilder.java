@@ -24,6 +24,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
+import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -48,8 +49,8 @@ import static org.animotron.graph.AnimoGraph.*;
  * startGraph()
  * endGraph()
  * 
- * start(String prefix, String ns, String reference, String value)
- * start(Statement statement, String prefix, String ns, String reference, String value)
+ * start(STRING prefix, STRING ns, STRING reference, STRING value)
+ * start(Statement statement, STRING prefix, STRING ns, STRING reference, STRING value)
  * end()
  * 
  * getRelationship()
@@ -168,7 +169,7 @@ public class FastGraphBuilder extends GraphBuilder {
         if (parent == null)
             //"Internal error: parent can not be null."
             throw new AnimoException((Relationship)item[3]);
-        if (!(statement instanceof Relation)) {
+        if (!(statement instanceof Relation || statement instanceof Value)) {
             byte[] hash = (byte[]) item[2];
             Node node = getCache(hash);
             if (node == null) {
@@ -181,9 +182,11 @@ public class FastGraphBuilder extends GraphBuilder {
         } else {
             r = build(statement, parent, item);
         }
-        item[3] = r;
-        item[4] = r.getEndNode();
-        order(r, order);
+        if (r != null) {
+            item[3] = r;
+            item[4] = r.getEndNode();
+            order(r, order);
+        }
 	}
 	
 	private String hash(Object[] item) {

@@ -22,7 +22,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.Expression;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.value.STRING;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
@@ -42,8 +42,8 @@ import static org.animotron.graph.AnimoGraph.finishTx;
  * startGraph()
  * endGraph()
  * 
- * start(String prefix, String ns, String reference, String value)
- * start(Statement statement, String prefix, String ns, String reference, String value)
+ * start(STRING prefix, STRING ns, STRING reference, STRING value)
+ * start(Statement statement, STRING prefix, STRING ns, STRING reference, STRING value)
  * end()
  * 
  * getRelationship()
@@ -81,7 +81,7 @@ public abstract class GraphBuilder {
     };
 
     final public void start(String value) throws AnimoException {
-        start(TEXT._, value);
+        start(STRING._, value);
     }
 
 	public abstract void start(Statement statement, String reference) throws AnimoException;
@@ -113,7 +113,7 @@ public abstract class GraphBuilder {
         if (order % 1000 == 0) {
             System.out.println(order);
         }
-        if (order % 20000 == 0) {
+        if (order % 100000 == 0) {
             tx.success();
             finishTx(tx);
             tx = beginTx();

@@ -21,8 +21,8 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -46,8 +46,8 @@ import static org.animotron.graph.AnimoGraph.*;
  * startGraph()
  * endGraph()
  * 
- * start(String prefix, String ns, String reference, String value)
- * start(Statement statement, String prefix, String ns, String reference, String value)
+ * start(STRING prefix, STRING ns, STRING reference, STRING value)
+ * start(Statement statement, STRING prefix, STRING ns, STRING reference, STRING value)
  * end()
  * 
  * getRelationship()
@@ -100,12 +100,14 @@ public class MLGraphBuilder extends GraphBuilder {
         MessageDigest hash = statement.hash(reference);
         parent = stack.empty() ? root : ((Relationship) stack.peek()[2]).getEndNode();
         Relationship r = statement.build(parent, reference, ignoreNotFound);
-        order(r, order);
-		Object[] item = {
-				statement,	    // 0  statement
-				hash,           // 1  message digest
-				r               // 2  node
-			};
+        if (r != null) {
+            order(r, order);
+        }
+        Object[] item = {
+                statement,	    // 0  statement
+                hash,           // 1  message digest
+                r               // 2  node
+            };
 		stack.push(item);
 	}
 	
@@ -113,16 +115,13 @@ public class MLGraphBuilder extends GraphBuilder {
 	public void end() {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
+        Relationship r = (Relationship) item[2];
         md = ((MessageDigest) item[1]).digest();
-        if (!(statement instanceof TEXT)) {
-            Relationship r = (Relationship) item[2];
+        if (!(statement instanceof Value)) {
             Node node = getCache(md);
             if (node == null) {
                 createCache(r.getEndNode(), md);
                 order(r, order);
-            } else {
-                order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
-                destructive(r);
             }
         }
         if (!stack.empty()) {

@@ -50,7 +50,7 @@ public abstract class AbstractStatement implements Statement {
 		rType = this.relationshipType.name(); 
 	}
 
-//	public AbstractStatement(String reference, String resultRelationshipType) {
+//	public AbstractStatement(STRING reference, STRING resultRelationshipType) {
 //        this(reference);
 //	}
 
@@ -73,9 +73,7 @@ public abstract class AbstractStatement implements Statement {
 				RID.set(res, r.getId());
 				//for debug
 				CID.set(res, context.getId());
-
 				AnimoGraph.result(res, context.getId());
-				
 				return res;
 			}
 		});

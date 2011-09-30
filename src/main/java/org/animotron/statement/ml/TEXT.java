@@ -18,29 +18,25 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.AbstractLink;
+import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.createCache;
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.getCache;
+import static org.animotron.graph.AnimoGraph.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends AbstractLink implements MLOperator {
+public class TEXT extends Value implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
 	private TEXT() { super("text"); }
-
-    protected TEXT(String name) { super(name); }
 
     @Override
     public Relationship build(Node parent, String value, boolean ignoreNotFound) {

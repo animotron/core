@@ -28,6 +28,7 @@ import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -48,14 +49,18 @@ public class AnimoGraph {
 	public static RelationshipIndex RESULT_INDEX;
 	private static String RESULT = "RESULT";
 	
-	private static final String CACHE_PREFIX = RelationshipTypes.CACHE.name().toLowerCase();
+    public static void startDB(String folder, Map<String, String> config) {
+        STORAGE = folder;
+        graphDb = new EmbeddedGraphDatabase(STORAGE, config);
+        initDB();
+    }
 	
     public static void startDB(String folder) {
         STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE);
         initDB();
     }
-	
+
     public static void initDB() {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
