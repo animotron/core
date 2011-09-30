@@ -244,12 +244,12 @@ public class PFlow {
 //		for (Relationship r : path) {
 //			System.out.println(r);
 //		}
-		int i = 0;
-		for (Path path : td_flow.traverse(getOPNode())) {
-			System.out.println(" path = "+path);
-			i++;
-		}
-		System.out.println("PFLOW ********************* "+i);
+//		int i = 0;
+//		for (Path path : td_flow.traverse(getOPNode())) {
+//			System.out.println(" path = "+path);
+//			i++;
+//		}
+//		System.out.println("PFLOW ********************* "+i);
 		
 		//System.out.println("OPNode = "+getOPNode());
 
@@ -337,8 +337,8 @@ public class PFlow {
 
 
 	public void addContextPoint(Relationship r) {
-		System.out.print("adding "+this+" "+r+" "+r.getType());
-		System.out.println(new IOException().getStackTrace()[1]);
+//		System.out.print("adding "+this+" "+r+" "+r.getType());
+//		System.out.println(new IOException().getStackTrace()[1]);
 		path.insertElementAt(r, 0);
 	}
 
