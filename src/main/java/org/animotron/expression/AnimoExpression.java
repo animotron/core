@@ -199,7 +199,7 @@ public class AnimoExpression extends Expression {
         level = 0;
     }
 
-    private void endList() {
+    private void endList() throws AnimoException {
         for (int i = 0; i < level; i++) {
             builder.end();
         }

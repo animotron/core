@@ -112,7 +112,7 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 	
     @Override
-	public void end() {
+	public void end() throws AnimoException {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
         Relationship r = (Relationship) item[2];

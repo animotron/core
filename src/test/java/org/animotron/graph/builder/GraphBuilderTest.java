@@ -24,6 +24,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Test;
+import org.xtreemfs.babudb.api.exception.BabuDBException;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
@@ -37,7 +38,7 @@ import static org.animotron.Properties.HASH;
  */
 public class GraphBuilderTest extends ATest {
 
-    private void test_0(String animo) throws AnimoException, IOException, XMLStreamException {
+    private void test_0(String animo) throws AnimoException, IOException, XMLStreamException, BabuDBException {
         AnimoExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
@@ -74,7 +75,7 @@ public class GraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test(String animo) throws AnimoException, IOException, XMLStreamException {
+    private void test(String animo) throws AnimoException, IOException, XMLStreamException, BabuDBException {
         test_0(animo);
         cleanDb();
         test_1(animo);
@@ -83,27 +84,27 @@ public class GraphBuilderTest extends ATest {
     }
 
     @Test
-	public void test_00() throws IOException, AnimoException, XMLStreamException {
+	public void test_00() throws IOException, AnimoException, XMLStreamException, BabuDBException {
         test("\\a");
 	}
 
     @Test
-	public void test_01() throws IOException, AnimoException, XMLStreamException {
+	public void test_01() throws IOException, AnimoException, XMLStreamException, BabuDBException {
         test("\\x:a $x \"x-namespace\"");
 	}
 
     @Test
-	public void test_02() throws IOException, AnimoException, XMLStreamException {
+	public void test_02() throws IOException, AnimoException, XMLStreamException, BabuDBException {
         test("\\a $ \"x-namespace\"");
 	}
 
     @Test
-	public void test_03() throws IOException, AnimoException, XMLStreamException {
+	public void test_03() throws IOException, AnimoException, XMLStreamException, BabuDBException {
         test("\\a @b \"c\"");
 	}
 
     @Test
-	public void test_04() throws IOException, AnimoException, XMLStreamException {
+	public void test_04() throws IOException, AnimoException, XMLStreamException, BabuDBException {
         test("(??stylesheet \"path\") (\\a)");
 	}
 

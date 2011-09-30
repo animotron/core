@@ -86,7 +86,7 @@ public abstract class GraphBuilder {
 
 	public abstract void start(Statement statement, String reference) throws AnimoException;
 
-	public abstract void end();
+	public abstract void end() throws AnimoException;
 
     final public void build(Expression exp) throws IOException {
         order = 0;
@@ -96,6 +96,7 @@ public abstract class GraphBuilder {
             exp.build();
             tx.success();
         } catch (Exception e) {
+        	e.printStackTrace();
             tx.failure();
             finishTx(tx);
             tx = beginTx();

@@ -25,6 +25,7 @@ import org.animotron.expression.StAXExpression;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.junit.Assert;
 import org.junit.Test;
+import org.xtreemfs.babudb.api.exception.BabuDBException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -65,7 +66,7 @@ public class GeoTest extends ATest {
 //    }
 
     @Test
-	public void test_01() throws IOException, AnimoException, XMLStreamException {
+	public void test_01() throws IOException, AnimoException, XMLStreamException, BabuDBException {
         String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
         cleanDb();
         String out = HASH.get(new StAXExpression(osm()));
@@ -88,7 +89,7 @@ public class GeoTest extends ATest {
 
     @Test
 	public void test() throws IOException, AnimoException, XMLStreamException {
-        new StAXExpression(osm("sto.xml"));
+        new StAXExpression(osm("UZ.osm"));
 	}
 
 }

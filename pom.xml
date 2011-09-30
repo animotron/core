@@ -28,6 +28,7 @@
 			<groupId>org.neo4j</groupId>
 			<artifactId>neo4j</artifactId>
 			<version>1.5.M01</version>
+			<type>pom</type>
 		</dependency>
 		
 		<!-- 

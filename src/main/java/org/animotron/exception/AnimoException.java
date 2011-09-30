@@ -52,6 +52,10 @@ public class AnimoException extends Exception {
 		this.op = op;
 	}
 
+	public AnimoException(Exception e) {
+		super(e);
+	}
+
 	public void addToStack(Relationship op) {
 		stack.add(op);
 	}

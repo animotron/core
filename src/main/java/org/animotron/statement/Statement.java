@@ -18,6 +18,7 @@
  */
 package org.animotron.statement;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -32,7 +33,7 @@ import java.security.MessageDigest;
  */
 public interface Statement {
 	
-	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound;
+	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound, AnimoException;
 	
     public String name();
 

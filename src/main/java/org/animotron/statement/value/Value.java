@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.value;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -32,7 +33,7 @@ public abstract class Value extends AbstractStatement {
     public Value(String name) { super(name); }
 
     @Override
-    public Relationship build(Node parent, String value, boolean ignoreNotFound) {
+    public Relationship build(Node parent, String value, boolean ignoreNotFound) throws AnimoException {
         parent.setProperty(name(), value);
         return null;
     }

@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.ml;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -39,7 +40,7 @@ public class TEXT extends Value implements MLOperator {
 	private TEXT() { super("text"); }
 
     @Override
-    public Relationship build(Node parent, String value, boolean ignoreNotFound) {
+    public Relationship build(Node parent, String value, boolean ignoreNotFound) throws AnimoException {
         value = removeWS(value);
         byte[] hash = hashReference(value).digest();
         Node child = getCache(hash);
