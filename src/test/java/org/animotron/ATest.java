@@ -47,7 +47,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public abstract class ATest {
 
-    private static final String DATA_FOLDER = "data-test";
+    public static final String DATA_FOLDER = "data-test";
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
@@ -149,7 +149,7 @@ public abstract class ATest {
     protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
-        System.out.println("String result serializer...");
+        System.out.println("STRING result serializer...");
         String result = StringResultSerializer.serialize(new PFlow(Evaluator._), op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
@@ -248,7 +248,7 @@ public abstract class ATest {
     @BeforeClass
     public static void start() {
     	deleteDir(new File(DATA_FOLDER));
-    	startDB(DATA_FOLDER);
+        startDB(DATA_FOLDER);
     }
 
     @AfterClass

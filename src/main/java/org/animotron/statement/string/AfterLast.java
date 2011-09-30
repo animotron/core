@@ -42,7 +42,7 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
- * String instruction 'after-last'.
+ * STRING instruction 'after-last'.
  *
  * Return last chars from input string after last-found defined pattern.
  *

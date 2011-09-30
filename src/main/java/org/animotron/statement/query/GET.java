@@ -88,7 +88,7 @@ public class GET extends Operator implements Evaluable, Query {
 	}
 	
 	//in-use by WITH
-//	public static Relationship getHaveAtPFlow(PFlow pf, String name) {
+//	public static Relationship getHaveAtPFlow(PFlow pf, STRING name) {
 //		final Path pflow = pf.getFlowPath();
 //		
 //		//XXX: remove when getFlowPath fixed
@@ -526,7 +526,7 @@ public class GET extends Operator implements Evaluable, Query {
 								return INCLUDE_AND_PRUNE;
 							} 
 
-//							String rType = r.getType().reference();
+//							STRING rType = r.getType().reference();
 							
 							//second must be REF
 							// or it can be IS ! so, REF and HAVE after IS

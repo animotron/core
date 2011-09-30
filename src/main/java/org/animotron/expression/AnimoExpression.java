@@ -25,10 +25,7 @@ import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.ml.MLOperator;
-import org.animotron.statement.ml.NAME;
-import org.animotron.statement.ml.NS;
-import org.animotron.statement.ml.Prefix;
+import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.relation.Relation;
@@ -163,7 +160,7 @@ public class AnimoExpression extends Expression {
                 builder.start(NAME._, token);
                 builder.end();
             } else {
-                builder.start(token);
+                builder.start(TEXT._, token);
                 level++;
             }
         } else {

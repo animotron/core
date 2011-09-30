@@ -16,19 +16,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.ml;
-
-import org.animotron.statement.value.Value;
+package org.animotron.statement.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class NAME extends Value implements MLOperator {
+public class STRING extends Value {
 
-	public static final NAME _ = new NAME();
+    public final static STRING _ = new STRING();
 
-	private NAME() { super("name"); }
+    private STRING() { super("string"); }
 
 }

@@ -16,19 +16,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.ml;
+package org.animotron.statement.value;
 
-import org.animotron.statement.value.Value;
+import org.animotron.statement.AbstractStatement;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class NAME extends Value implements MLOperator {
+public abstract class Value extends AbstractStatement {
+	
+    public Value(String name) { super(name); }
 
-	public static final NAME _ = new NAME();
+    @Override
+    public Relationship build(Node parent, String value, boolean ignoreNotFound) {
+        parent.setProperty(name(), value);
+        return null;
+    }
 
-	private NAME() { super("name"); }
+    @Override
+    public String reference(Relationship r) {
+        return (String) r.getEndNode().getProperty(name());
+    }
 
 }

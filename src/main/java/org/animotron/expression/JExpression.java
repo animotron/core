@@ -24,6 +24,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
+import org.animotron.statement.value.STRING;
 
 import java.io.IOException;
 
@@ -104,11 +105,11 @@ public class JExpression extends Expression {
     }
 
     public static Object[] attribute(String name, String value) {
-        return _(ATTRIBUTE._, name(name), text(value));
+        return _(ATTRIBUTE._, name(name), string(value));
     }
 
     public static Object[] entity(String name, String value) {
-        return _(ENTITY._, name(name), text(value));
+        return _(ENTITY._, name(name), string(value));
     }
 
 	public static Object[] comment(String value) {
@@ -120,11 +121,11 @@ public class JExpression extends Expression {
     }
 
     public static Object[] pi(String name, String value) {
-        return _(PI._, name(name), text(value));
+        return _(PI._, name(name), string(value));
     }
 
     public static Object[] pi(String value) {
-        return _(PI._, text(value));
+        return _(PI._, string(value));
     }
 
     public static Object[] dtd(String value) {
@@ -132,15 +133,19 @@ public class JExpression extends Expression {
     }
 
     public static Object[] namespace(String name, String value) {
-        return _(NS._, name(name), text(value));
+        return _(NS._, name(name), string(value));
     }
 
     public static Object[] namespace(String value) {
-        return _(NS._, text(value));
+        return _(NS._, string(value));
     }
 
     public static Object[] name(String value) {
         return _(NAME._, value);
+    }
+
+    public static Object[] string(String value) {
+        return _(STRING._, value);
     }
 
     public static Object[] text(String value) {

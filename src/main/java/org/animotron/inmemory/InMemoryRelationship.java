@@ -57,7 +57,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#hasProperty(java.lang.String)
+	 * @see org.neo4j.graphdb.PropertyContainer#hasProperty(java.lang.STRING)
 	 */
 	@Override
 	public boolean hasProperty(String key) {
@@ -65,7 +65,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.String)
+	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.STRING)
 	 */
 	@Override
 	public Object getProperty(String key) {
@@ -73,7 +73,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.String, java.lang.Object)
+	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.STRING, java.lang.Object)
 	 */
 	@Override
 	public Object getProperty(String key, Object defaultValue) {
@@ -86,7 +86,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#setProperty(java.lang.String, java.lang.Object)
+	 * @see org.neo4j.graphdb.PropertyContainer#setProperty(java.lang.STRING, java.lang.Object)
 	 */
 	@Override
 	public void setProperty(String key, Object value) {
@@ -94,7 +94,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#removeProperty(java.lang.String)
+	 * @see org.neo4j.graphdb.PropertyContainer#removeProperty(java.lang.STRING)
 	 */
 	@Override
 	public Object removeProperty(String key) {
