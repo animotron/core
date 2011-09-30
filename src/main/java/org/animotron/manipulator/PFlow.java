@@ -337,7 +337,8 @@ public class PFlow {
 
 
 	public void addContextPoint(Relationship r) {
-		//System.out.println("adding "+this+" "+r);
+		System.out.print("adding "+this+" "+r+" "+r.getType());
+		System.out.println(new IOException().getStackTrace()[1]);
 		path.insertElementAt(r, 0);
 	}
 

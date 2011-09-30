@@ -27,8 +27,10 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Result;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -75,11 +77,13 @@ public class ResultTraverser extends AnimoTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
+        int addedContexts = 0;
         try {
         	Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
             pf.addContextPoint(context);
+            addedContexts++;
         } catch (Exception e) {
 		}
 
@@ -99,6 +103,11 @@ public class ResultTraverser extends AnimoTraverser {
         } else {
             s = Statements.relationshipType(typeName);
         }
+        
+        if (s instanceof Reference || s instanceof HAVE) {
+	        pf.addContextPoint(r);
+	        addedContexts++;
+        }
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
@@ -117,6 +126,10 @@ public class ResultTraverser extends AnimoTraverser {
             }
         }
 
+        while (addedContexts > 0) {
+        	pf.popContextPoint();
+        	addedContexts--;
+        }
     }
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {

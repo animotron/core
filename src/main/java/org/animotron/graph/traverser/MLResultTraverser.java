@@ -26,7 +26,9 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -59,13 +61,19 @@ public class MLResultTraverser extends ResultTraverser {
         RelationshipType type = r.getType();
         String typeName = type.name();
 
-        if (RESULT.name().equals(typeName)) {
-            Relationship context = getDb().getRelationshipById(
+        int addedContexts = 0;
+        try {
+        	Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
             pf.addContextPoint(context);
+            addedContexts++;
+        } catch (Exception e) {
+		}
 
-            r = getDb().getRelationshipById(
+        if (RESULT.name().equals(typeName)) {
+
+        	r = getDb().getRelationshipById(
                 (Long)r.getProperty(RID.name())
             );
 
@@ -78,6 +86,11 @@ public class MLResultTraverser extends ResultTraverser {
             s = THE._;
         } else {
             s = Statements.relationshipType(typeName);
+        }
+
+        if (s instanceof Reference || s instanceof HAVE) {
+	        pf.addContextPoint(r);
+	        addedContexts++;
         }
 
         if (s != null) {
@@ -134,6 +147,10 @@ public class MLResultTraverser extends ResultTraverser {
             }
         }
 
+        while (addedContexts > 0) {
+        	pf.popContextPoint();
+        	addedContexts--;
+        }
     }
 
     private String param(PFlow pf, Iterator<Relationship> it) throws IOException {
