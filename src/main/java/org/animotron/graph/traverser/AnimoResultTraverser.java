@@ -31,17 +31,14 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
-import static org.animotron.Properties.RID;
 import static org.animotron.Properties.CID;
+import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -101,14 +98,14 @@ public class AnimoResultTraverser extends ResultTraverser {
 				handler.end(s, r, --level, isOne);
             } else {
                 handler.start(s, r, level++, isOne);
-                //System.out.println("build "+r+" "+r.getType());
-                IndexHits<Relationship> q = getORDER().query(r.getEndNode());
+                node = r.getEndNode();
+                It it = new It();
+                int size = it.size();
+                if (node.hasProperty(NAME._.name())) size--;
                 try {
-                    int size = q.size();
-                    if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                    iterate(handler, new PFlow(pf), q.iterator(), level, size);
+                    iterate(handler, pf, it, level, size);
                 } finally {
-                    q.close();
+                    it.remove();
                 }
                 handler.end(s, r, --level, isOne);
             }

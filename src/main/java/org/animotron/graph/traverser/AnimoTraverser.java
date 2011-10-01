@@ -41,7 +41,7 @@ import static org.animotron.graph.AnimoGraph.getORDER;
 public class AnimoTraverser {
 
     public static AnimoTraverser _ = new AnimoTraverser();
-    private Node node;
+    protected Node node;
 
     protected AnimoTraverser() {}
 	
@@ -51,7 +51,7 @@ public class AnimoTraverser {
 		handler.endGraph();
 	}
 	
-    private void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne) throws IOException {
         if (o instanceof Relationship) {
             build(handler, pf, (Relationship) o, level, isOne);
         } else {
@@ -81,14 +81,6 @@ public class AnimoTraverser {
 		}
 		handler.end(statement, r, --level, isOne);
 	}
-
-    protected void iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level, int count) throws IOException {
-        boolean isOne = count < 2;
-        while (it.hasNext()) {
-            Relationship i = it.next();
-            build(handler, new PFlow(pf, i), i, level, isOne);
-        }
-    }
 
     protected void iterate(GraphHandler handler, PFlow pf, It it, int level, int count) throws IOException {
         boolean isOne = count < 2;

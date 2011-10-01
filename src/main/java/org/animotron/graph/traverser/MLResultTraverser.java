@@ -32,15 +32,12 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -96,13 +93,13 @@ public class MLResultTraverser extends ResultTraverser {
         if (s != null) {
             if (s instanceof MLOperator) {
                 if (s instanceof Prefix) {
-                    IndexHits<Relationship> q = getORDER().query(r.getEndNode());
-                    Iterator<Relationship> it = q.iterator();
+                    node = r.getEndNode();
+                    It it = new It();
                     String[] param = {null, null};
                     try {
                         if (it.hasNext()) {
-                            int size = q.size();
-                            Relationship p = it.next();
+                            int size = it.size();
+                            Object p = it.next();
                             param[0] = param(pf, p);
                             if (s instanceof ELEMENT) {
                                 size = size - 1;
@@ -110,7 +107,7 @@ public class MLResultTraverser extends ResultTraverser {
                                 param[1] = param(pf, it);
                                 if (param[1] == null) {
                                     if (s instanceof NS) {
-                                        if (NAME._.name().equals(p.getType().name())) {
+                                        if (NAME._.name().equals(p)) {
                                             param[1] = "";
                                         } else {
                                             param[1] = param[0];
@@ -127,7 +124,7 @@ public class MLResultTraverser extends ResultTraverser {
                             handler.end(s, param, --level, isOne);
                         }
                     } finally {
-                        q.close();
+                        it.remove();
                     }
                 } else if (!(s instanceof TEXT) || (s instanceof TEXT && level > 0)) {
                     String param = StringResultSerializer.serialize(pf, r);
@@ -138,11 +135,13 @@ public class MLResultTraverser extends ResultTraverser {
                 result(handler, pf, r, level, isOne);
 			//workaround IS and USE
 			} else if (!(s instanceof Relation)) {
-                IndexHits<Relationship> q = getORDER().query(r.getEndNode());
+                node = r.getEndNode();
+                It it = new It();
+                int size = it.size();
                 try {
-                    iterate(handler, pf, q.iterator(), level, q.size());
+                    iterate(handler, pf, it, level, size);
                 } finally {
-                    q.close();
+                    it.remove();
                 }
             }
         }
@@ -153,15 +152,18 @@ public class MLResultTraverser extends ResultTraverser {
         }
     }
 
-    private String param(PFlow pf, Iterator<Relationship> it) throws IOException {
+    private String param(PFlow pf, It it) throws IOException {
         if (it.hasNext()) {
             return param(pf, it.next());
         }
         return null;
     }
 
-    private String param(PFlow pf, Relationship r) throws IOException {
-        return StringResultSerializer.serialize(pf, r);
+    private String param(PFlow pf, Object o) throws IOException {
+        return
+            o instanceof Relationship
+                ? StringResultSerializer.serialize(pf, (Relationship) o)
+                : (String) node.getProperty((String) o);
     }
 
 }
