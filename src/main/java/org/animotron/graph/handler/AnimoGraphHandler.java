@@ -21,8 +21,8 @@ package org.animotron.graph.handler;
 import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
-import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.value.STRING;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -43,20 +43,24 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     protected void write(Statement statement, Relationship r) throws IOException {
+        write(statement, statement.reference(r));
+    }
+
+    protected void write(Statement statement, String reference) throws IOException {
         if (statement instanceof NAME) {
-            write(statement.reference(r));
-        } else if (statement instanceof TEXT) {
+            write(reference);
+        } else if (statement instanceof STRING) {
             write("\"");
-            write(statement.reference(r).replaceAll("\"", "\\\\\""));
+            write(reference.replaceAll("\"", "\\\\\""));
             write("\"");
         } else if (statement instanceof AN) {
-                write(statement.reference(r));
+                write(reference);
         } else if (!(statement instanceof LINK)){
             write(statement.name());
-            String name = statement.reference(r);
+            String name = reference;
             if (name != null) {
                 write(" ");
-                write(statement.reference(r));
+                write(reference);
             }
         }
     }
@@ -64,23 +68,12 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     private Statement ps = null;
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (level != 0 && !(statement instanceof NAME)) {
-            if (!(ps instanceof LINK)) {
-                write(" ");
-            }
-            if (!isOne || statement instanceof LINK) {
-                write("(");
-            }
-        }
-        write(statement, r);
-        ps = statement;
+        start(statement, statement.reference(r), level, isOne);
     }
 
     @Override
     public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (level != 0 && !(statement instanceof NAME) && !isOne || statement instanceof LINK) {
-            write(")");
-        }
+        end(statement, level, isOne);
     }
 
     @Override
@@ -93,10 +86,27 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
+        if (level != 0 && !(statement instanceof NAME)) {
+            if (!(ps instanceof LINK)) {
+                write(" ");
+            }
+            if (!isOne || statement instanceof LINK) {
+                write("(");
+            }
+        }
+        write(statement, param);
+        ps = statement;
     }
 
     @Override
     public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
+        end(statement, level, isOne);
+    }
+
+    private void end(Statement statement, int level, boolean isOne) throws IOException {
+        if (level != 0 && !(statement instanceof NAME) && !isOne || statement instanceof LINK) {
+            write(")");
+        }
     }
 
     @Override

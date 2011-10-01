@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,6 +41,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 public class AnimoTraverser {
 
     public static AnimoTraverser _ = new AnimoTraverser();
+    private Node node;
 
     protected AnimoTraverser() {}
 	
@@ -51,20 +51,32 @@ public class AnimoTraverser {
 		handler.endGraph();
 	}
 	
+    private void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne) throws IOException {
+        if (o instanceof Relationship) {
+            build(handler, pf, (Relationship) o, level, isOne);
+        } else {
+            String name = (String) o;
+            Statement statement = Statements.name(name);
+            String reference = (String) node.getProperty(name);
+            handler.start(statement, reference, level, isOne);
+            handler.end(statement, reference, level, isOne);
+        }
+    }
+
 	protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
-		Statement statement = Statements.relationshipType(r.getType());
+		Statement statement = Statements.relationshipType(r);
 		if (statement == null)
 			return;
 		handler.start(statement, r, level++, isOne);
 		if (!(statement instanceof Relation)) {
-            Node node = r.getEndNode();
-            IndexHits<Relationship> q = getORDER().query(node);
+            node = r.getEndNode();
+            It it = new It();
+            int size = it.size();
+            if (node.hasProperty(NAME._.name())) size--;
 			try {
-                int size = q.size();
-                if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
-                iterate(handler, pf, q.iterator(), level, size);
+                iterate(handler, pf, it, level, size);
 			} finally {
-				q.close();
+				it.remove();
 			}
 		}
 		handler.end(statement, r, --level, isOne);
@@ -78,38 +90,41 @@ public class AnimoTraverser {
         }
     }
 
-    public static class It implements Iterator <Object[]>, Iterable<Object[]> {
+    protected void iterate(GraphHandler handler, PFlow pf, It it, int level, int count) throws IOException {
+        boolean isOne = count < 2;
+        while (it.hasNext()) {
+            build(handler, pf, it.next(), level, isOne);
+        }
+    }
 
-        private Node n;
-        private Iterator<String> p;
-        private Iterator<Relationship> r;
+    protected class It implements Iterator <Object>, Iterable<Object> {
+
+        private Iterator<?> c;
         private IndexHits<Relationship> q;
+        private int size;
 
-        private Next c;
-
-        public It (Node node) {
-            n = node;
-            p = n.getPropertyKeys().iterator();
-            c = P;
+        public It () {
+            c = node.getPropertyKeys().iterator();
+            q = getORDER().query(node);
+            size = q.size();
+            if (c.hasNext()) size++;
         }
 
         @Override
-        public Iterator<Object[]> iterator() {
+        public Iterator<Object> iterator() {
             return this;
         }
 
         @Override
         public boolean hasNext() {
-            if (p.hasNext())
+            if (c.hasNext())
                 return true;
-            q = getORDER().query(n);
-            r = q.iterator();
-            c = R;
-            return r.hasNext();
+            c = q.iterator();
+            return c.hasNext();
         }
 
         @Override
-        public Object[] next() {
+        public Object next() {
             return c.next();
         }
 
@@ -118,34 +133,9 @@ public class AnimoTraverser {
             q.close();
         }
 
-        private interface Next {
-            public Object[] next();
+        public int size() {
+            return size;
         }
-
-        private final Next P = new Next(){
-            @Override
-            public Object[] next() {
-                String name = p.next();
-                Object[] o = {
-                    Statements.name(name),
-                    n.getProperty(name)
-                };
-                return o;
-            }
-        };
-
-        private final Next R = new Next(){
-            @Override
-            public Object[] next() {
-                Relationship op = r.next();
-                Object[] o = {
-                    Statements.relationshipType(op),
-                    op
-                };
-                return o;
-            }
-        };
-
     }
 	
 }
