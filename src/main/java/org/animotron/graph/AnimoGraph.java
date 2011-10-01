@@ -33,6 +33,7 @@ import org.xtreemfs.babudb.api.exception.BabuDBException;
 import org.xtreemfs.babudb.config.BabuDBConfig;
 import org.xtreemfs.babudb.log.DiskLogger.SyncMode;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -69,7 +70,8 @@ public class AnimoGraph {
     }
 
     public static void initDB() throws BabuDBException {
-        babuDB = BabuDBFactory.createBabuDB(new BabuDBConfig("babudb/databases/", "babudb/dblog/", 4, 1024*1024*16, 5*60, SyncMode.ASYNC, 50, 0, false, 16, 1024*1024*512));
+        BabuDBConfig config = new BabuDBConfig(new File(STORAGE, "babudb/databases/").getPath(), new File(STORAGE, "babudb/dblog/").getPath(), 4, 1024 * 1024 * 16, 5 * 60, SyncMode.ASYNC, 50, 0, false, 16, 1024 * 1024 * 512);
+        babuDB = BabuDBFactory.createBabuDB(config);
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         CACHE = new CacheIndex(INDEX);
