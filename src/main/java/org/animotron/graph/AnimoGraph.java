@@ -70,14 +70,11 @@ public class AnimoGraph {
 
     public static void initDB() throws BabuDBException {
         babuDB = BabuDBFactory.createBabuDB(new BabuDBConfig("babudb/databases/", "babudb/dblog/", 4, 1024*1024*16, 5*60, SyncMode.ASYNC, 50, 0, false, 16, 1024*1024*512));
-
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         CACHE = new CacheIndex(INDEX);
-//        ORDER = new OrderIndex(INDEX);
-
-//        RESULT_INDEX = INDEX.forRelationships(RESULT);
-
+        ORDER = new OrderIndex(INDEX);
+        RESULT_INDEX = INDEX.forRelationships(RESULT);
         execute(
             new GraphOperation<Void> () {
                 @Override
