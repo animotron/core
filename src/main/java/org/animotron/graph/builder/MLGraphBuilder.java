@@ -26,6 +26,7 @@ import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 import java.security.MessageDigest;
 import java.util.Stack;
@@ -121,8 +122,9 @@ public class MLGraphBuilder extends GraphBuilder {
                 createCache(r.getEndNode(), md);
             } else {
                 Node start = r.getStartNode();
+                RelationshipType type = r.getType();
                 destructive(r);
-                r = start.createRelationshipTo(node, r.getType());
+                r = start.createRelationshipTo(node, type);
             }
             order(r, order);
         }
