@@ -120,8 +120,9 @@ public class MLGraphBuilder extends GraphBuilder {
             if (node == null) {
                 createCache(r.getEndNode(), md);
             } else {
-                r = r.getStartNode().createRelationshipTo(node, r.getType());
+                Node start = r.getStartNode();
                 destructive(r);
+                r = start.createRelationshipTo(node, r.getType());
             }
             order(r, order);
         }
