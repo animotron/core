@@ -139,7 +139,7 @@ public class MLGraphBuilder extends GraphBuilder {
         Node node = r.getEndNode();
         r.delete();
         if (!node.hasRelationship(INCOMING)) {
-            node.delete();
+            destructive(node);
         }
     }
 
