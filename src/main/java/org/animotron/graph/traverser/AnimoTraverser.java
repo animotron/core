@@ -24,6 +24,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.relation.Relation;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -56,7 +57,8 @@ public class AnimoTraverser {
 			return;
 		handler.start(statement, r, level++, isOne);
 		if (!(statement instanceof Relation)) {
-            IndexHits<Relationship> q = getORDER().query(r.getEndNode());
+            Node node = r.getEndNode();
+            IndexHits<Relationship> q = getORDER().query(node);
 			try {
                 int size = q.size();
                 if (r.getEndNode().hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
@@ -74,6 +76,76 @@ public class AnimoTraverser {
             Relationship i = it.next();
             build(handler, new PFlow(pf, i), i, level, isOne);
         }
+    }
+
+    public static class It implements Iterator <Object[]>, Iterable<Object[]> {
+
+        private Node n;
+        private Iterator<String> p;
+        private Iterator<Relationship> r;
+        private IndexHits<Relationship> q;
+
+        private Next c;
+
+        public It (Node node) {
+            n = node;
+            p = n.getPropertyKeys().iterator();
+            c = P;
+        }
+
+        @Override
+        public Iterator<Object[]> iterator() {
+            return this;
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (p.hasNext())
+                return true;
+            q = getORDER().query(n);
+            r = q.iterator();
+            c = R;
+            return r.hasNext();
+        }
+
+        @Override
+        public Object[] next() {
+            return c.next();
+        }
+
+        @Override
+        public void remove() {
+            q.close();
+        }
+
+        private interface Next {
+            public Object[] next();
+        }
+
+        private final Next P = new Next(){
+            @Override
+            public Object[] next() {
+                String name = p.next();
+                Object[] o = {
+                    Statements.name(name),
+                    n.getProperty(name)
+                };
+                return o;
+            }
+        };
+
+        private final Next R = new Next(){
+            @Override
+            public Object[] next() {
+                Relationship op = r.next();
+                Object[] o = {
+                    Statements.relationshipType(op),
+                    op
+                };
+                return o;
+            }
+        };
+
     }
 	
 }
