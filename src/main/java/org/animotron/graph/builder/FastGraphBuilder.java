@@ -19,7 +19,6 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.exception.ENotFound;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -193,7 +192,7 @@ public class FastGraphBuilder extends GraphBuilder {
         return MessageDigester.byteArrayToHex((byte[]) item[2]);
 	}
 	
-	private Relationship build(Statement statement, Node parent, Object[] item) throws ENotFound {
+	private Relationship build(Statement statement, Node parent, Object[] item) throws AnimoException {
 		return statement.build(parent, (String) item[1], ignoreNotFound);
 	}
 	

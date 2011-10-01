@@ -31,6 +31,7 @@ import org.junit.BeforeClass;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
+import org.xtreemfs.babudb.api.exception.BabuDBException;
 
 import java.io.*;
 import java.util.Arrays;
@@ -169,11 +170,11 @@ public abstract class ATest {
     }
 
 	//database cleaning (thanks to mh)
-    public Map<String, Object> cleanDb() {
+    public Map<String, Object> cleanDb() throws BabuDBException {
         return cleanDb(Long.MAX_VALUE);
     }
 
-    public Map<String, Object> cleanDb(final long maxNodesToDelete) {
+    public Map<String, Object> cleanDb(final long maxNodesToDelete) throws BabuDBException {
         Map<String, Object> result = execute(new GraphOperation<Map<String, Object>>() {
             @Override
             public Map<String, Object> execute() {
@@ -224,7 +225,7 @@ public abstract class ATest {
     }	
 
     @Before
-    public void setup() {
+    public void setup() throws BabuDBException {
     	cleanDb();
     }
 
@@ -246,7 +247,7 @@ public abstract class ATest {
     }
     
     @BeforeClass
-    public static void start() {
+    public static void start() throws BabuDBException {
     	deleteDir(new File(DATA_FOLDER));
         startDB(DATA_FOLDER);
     }

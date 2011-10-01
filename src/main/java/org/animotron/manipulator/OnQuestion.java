@@ -19,7 +19,6 @@
 package org.animotron.manipulator;
 
 import org.animotron.Executor;
-import org.animotron.graph.RelationshipTypes;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -30,7 +29,6 @@ import java.util.List;
 
 import javolution.util.FastList;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.animotron.graph.AnimoGraph.getORDER;
 
 /**

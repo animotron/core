@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.AbstractLink;
+import org.animotron.statement.Link;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class DTD extends AbstractLink implements MLOperator {
+public class DTD extends Link implements MLOperator {
 
 	public static final DTD _ = new DTD();
 

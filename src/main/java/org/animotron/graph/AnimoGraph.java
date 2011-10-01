@@ -20,12 +20,18 @@ package org.animotron.graph;
 
 import javolution.util.FastMap;
 import org.animotron.Executor;
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
+import org.xtreemfs.babudb.BabuDBFactory;
+import org.xtreemfs.babudb.api.BabuDB;
+import org.xtreemfs.babudb.api.exception.BabuDBException;
+import org.xtreemfs.babudb.config.BabuDBConfig;
+import org.xtreemfs.babudb.log.DiskLogger.SyncMode;
 
 import java.io.IOException;
 import java.util.Map;
@@ -35,39 +41,42 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- * 
+ *
  */
 public class AnimoGraph {
 
 	private static GraphDatabaseService graphDb;
-	
+	private static BabuDB babuDB;
+
 	private static String STORAGE;
-	
+
 	private static Node ROOT, TOP; //EMPTY
     private static CacheIndex CACHE;
     private static OrderIndex ORDER;
 	public static RelationshipIndex RESULT_INDEX;
 	private static String RESULT = "RESULT";
-	
-    public static void startDB(String folder, Map<String, String> config) {
+
+    public static void startDB(String folder, Map<String, String> config) throws BabuDBException {
         STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
     }
-	
-    public static void startDB(String folder) {
+
+    public static void startDB(String folder) throws BabuDBException {
         STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE);
         initDB();
     }
 
-    public static void initDB() {
+    public static void initDB() throws BabuDBException {
+        babuDB = BabuDBFactory.createBabuDB(new BabuDBConfig("babudb/databases/", "babudb/dblog/", 4, 1024*1024*16, 5*60, SyncMode.ASYNC, 50, 0, false, 16, 1024*1024*512));
+
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         CACHE = new CacheIndex(INDEX);
-        ORDER = new OrderIndex(INDEX);
+//        ORDER = new OrderIndex(INDEX);
 
-        RESULT_INDEX = INDEX.forRelationships(RESULT);
+//        RESULT_INDEX = INDEX.forRelationships(RESULT);
 
         execute(
             new GraphOperation<Void> () {
@@ -84,69 +93,73 @@ public class AnimoGraph {
 	public static GraphDatabaseService getDb() {
 		return graphDb;
 	}
-	
+
+	public static BabuDB getBabuDB() {
+		return babuDB;
+	}
+
 	public static String getStorage() {
 		return STORAGE;
 	}
-	
+
 	public static Node getROOT() {
 		return ROOT;
 	}
-	
+
 	public static Node getTOP() {
 		return TOP;
 	}
-	
+
 	public static OrderIndex getORDER() {
 		return ORDER;
 	}
 
 	public static void shutdownDB() {
 		System.out.println("shotdown");
-		
+
 		Executor.shutdown();
 
 		while (!activeTx.isEmpty()) {
-		
+
 			System.out.println("Active transactions "+countTx);
 			if (countTx > 0) {
 				for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
 					e.getValue().printStackTrace();
 				}
 			}
-			
+
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
 		graphDb.shutdown();
-		
+
 		THE._.beforeShutdown();
 	}
-	
+
 	private static FastMap<Transaction, Exception> activeTx = new FastMap<Transaction, Exception>();
-	
+
 	private static int countTx = 0;
-	
+
 	private static synchronized void inc() {
 		countTx++;
 	}
-	
+
 	private static synchronized void dec() {
 		countTx--;
 	}
-	
+
 	public static Transaction beginTx() {
 		Transaction tx = graphDb.beginTx();
 		activeTx.put(tx, new IOException());
 		inc();
 		return tx;
 	}
-	
+
 	public static void finishTx(Transaction tx) {
 		tx.finish();
 		activeTx.remove(tx);
 		dec();
 	}
-	
+
 	public static boolean isTransactionActive(Transaction tx) {
 		return activeTx.containsKey(tx);
 	}
@@ -154,9 +167,9 @@ public class AnimoGraph {
 	/**
 	 * Execute operation with transaction.
 	 * @param <T>
-	 * 
+	 *
 	 * @param operation
-	 * @return 
+	 * @return
 	 */
 	public static <T> T execute(GraphOperation<T> operation) {
 		T result = null;
@@ -169,12 +182,12 @@ public class AnimoGraph {
             return result;
 		}
 	}
-	
+
 	public static Node getNode(Node parent, RelationshipType type) {
 		Relationship r = parent.getSingleRelationship(type, OUTGOING);
 		return r == null ? null : r.getEndNode();
 	}
-	
+
 	public static Node createNode(){
 		return graphDb.createNode();
 	}
@@ -184,7 +197,7 @@ public class AnimoGraph {
 		parent.createRelationshipTo(node, type);
 		return node;
 	}
-	
+
 	public static Node getOrCreateNode(Node parent, RelationshipType type) {
 		Relationship r = parent.getSingleRelationship(type, OUTGOING);
 		if (r != null)
@@ -197,8 +210,12 @@ public class AnimoGraph {
 		CACHE.add(node, hash);
 	}
 
-	public static Node getCache(byte[] hash) {
-        return CACHE.get(hash);
+	public static Node getCache(byte[] hash) throws AnimoException {
+        try {
+			return CACHE.get(hash);
+		} catch (BabuDBException e) {
+			throw new AnimoException(e);
+		}
 	}
 	
     public static void order (Relationship r, int order) {

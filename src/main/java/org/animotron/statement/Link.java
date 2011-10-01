@@ -28,9 +28,9 @@ import static org.animotron.graph.AnimoGraph.createNode;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractLink extends AbstractStatement {
+public abstract class Link extends AbstractStatement {
 
-	public AbstractLink(String name) { super(name); }
+	public Link(String name) { super(name); }
 
 	@Override
 	public Relationship build(Node parent, String reference, boolean ignoreNotFound) {

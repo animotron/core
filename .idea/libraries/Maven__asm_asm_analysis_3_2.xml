@@ -2,6 +2,7 @@
   <library name="Maven: asm:asm-analysis:3.2">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/asm/asm-analysis/3.2/asm-analysis-3.2.jar!/" />
+      <root url="file://$PROJECT_DIR$/jars" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/asm/asm-analysis/3.2/asm-analysis-3.2-javadoc.jar!/" />
@@ -9,5 +10,6 @@
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/asm/asm-analysis/3.2/asm-analysis-3.2-sources.jar!/" />
     </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/jars" recursive="false" />
   </library>
 </component>

@@ -18,11 +18,14 @@
  */
 package org.animotron.graph;
 
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.index.Index;
-import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.xtreemfs.babudb.api.DatabaseManager;
+import org.xtreemfs.babudb.api.database.Database;
+import org.xtreemfs.babudb.api.database.DatabaseRequestResult;
+import org.xtreemfs.babudb.api.exception.BabuDBException;
+
+import java.nio.ByteBuffer;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -32,25 +35,58 @@ public class CacheIndex {
 
 	public static final String NAME = "CACHE";
 
-	protected final Index<Node> INDEX;
+	//protected final Index<Node> INDEX;
+	protected Database db;
 
-	public CacheIndex(IndexManager indexManager) {
-		INDEX = indexManager.forNodes(NAME);
+	public CacheIndex(IndexManager indexManager) throws BabuDBException {
+		//INDEX = indexManager.forNodes(NAME);
+
+		DatabaseManager dbm = AnimoGraph.getBabuDB().getDatabaseManager();
+        if (dbm.getDatabases().containsKey("myDB"))
+		    db = dbm.getDatabase("myDB");
+        else
+            db = dbm.createDatabase("myDB",32);
 	}
 
-    public Node get(byte[] value) {
-        IndexHits<Node> q = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
-        Node node = null;
-        try {
-            node = q.next();
-        } finally {
-            q.close();
-            return node;
-        }
-    }
-	
-    public void add(Node n, byte[] value) {
-        INDEX.add(n, NAME, MessageDigester.byteArrayToHex(value));
+    public Node get(byte[] value) throws BabuDBException {
+//        IndexHits<Node> q = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
+//        Node node = null;
+//        try {
+//            node = q.next();
+//        } finally {
+//            q.close();
+//            return node;
+//        }
+
+    	DatabaseRequestResult<byte[]> result = db.lookup(2, value, NAME);
+    	byte[] bytes = result.get();
+    	if (bytes == null) return null;
+		long nodeID = bytes2long(bytes);
+		return AnimoGraph.getDb().getNodeById(nodeID);
     }
 
+    public void add(Node n, byte[] value) {
+//        INDEX.add(n, NAME, MessageDigester.byteArrayToHex(value));
+
+    	DatabaseRequestResult<Object> result = db.singleInsert(2, value, long2bytes(n.getId()), NAME);
+    	try {
+			result.get();
+		} catch (BabuDBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    public static byte[] long2bytes(long l) {
+		byte b[] = new byte[8];
+
+		ByteBuffer buf = ByteBuffer.wrap(b);
+		buf.putLong(l);
+		return b;
+	}
+
+    public static long bytes2long(byte[] b) {
+    	ByteBuffer buf = ByteBuffer.wrap(b);
+    	return buf.getLong();
+    }
 }

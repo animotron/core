@@ -29,4 +29,5 @@ public class STRING extends Value {
 
     private STRING() { super("string"); }
 
+    protected STRING(String name) { super(name); }
 }

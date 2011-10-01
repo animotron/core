@@ -24,7 +24,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -34,6 +33,8 @@ import java.util.Stack;
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -100,9 +101,6 @@ public class MLGraphBuilder extends GraphBuilder {
         MessageDigest hash = statement.hash(reference);
         parent = stack.empty() ? root : ((Relationship) stack.peek()[2]).getEndNode();
         Relationship r = statement.build(parent, reference, ignoreNotFound);
-        if (r != null) {
-            order(r, order);
-        }
         Object[] item = {
                 statement,	    // 0  statement
                 hash,           // 1  message digest
@@ -112,17 +110,20 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 	
     @Override
-	public void end() {
+	public void end() throws AnimoException {
 		Object[] item = stack.pop();
         Statement statement = (Statement) item[0];
-        Relationship r = (Relationship) item[2];
         md = ((MessageDigest) item[1]).digest();
         if (!(statement instanceof Value)) {
             Node node = getCache(md);
+            Relationship r = (Relationship) item[2];
             if (node == null) {
                 createCache(r.getEndNode(), md);
-                order(r, order);
+            } else {
+                r = r.getStartNode().createRelationshipTo(node, r.getType());
+                destructive(r);
             }
+            order(r, order);
         }
         if (!stack.empty()) {
             ((MessageDigest) stack.peek()[1]).update(md);
@@ -135,13 +136,16 @@ public class MLGraphBuilder extends GraphBuilder {
     }
 
     private void destructive(Relationship r) {
-        destructive(r.getEndNode());
+        Node node = r.getEndNode();
         r.delete();
+        if (node.hasRelationship(INCOMING)) {
+            node.delete();
+        }
     }
 
     private void destructive(Node n) {
-        for (Relationship r : n.getRelationships(Direction.OUTGOING)) {
-            r.delete();
+        for (Relationship r : n.getRelationships(OUTGOING)) {
+            destructive(r);
         }
         n.delete();
     }

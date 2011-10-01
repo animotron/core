@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.AbstractLink;
+import org.animotron.statement.Link;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ENTITY extends AbstractLink implements Prefix {
+public class ENTITY extends Link implements Prefix {
 
 	public static final ENTITY _ = new ENTITY();
 

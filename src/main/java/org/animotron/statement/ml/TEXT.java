@@ -18,7 +18,8 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.value.Value;
+import org.animotron.exception.AnimoException;
+import org.animotron.statement.value.STRING;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -32,14 +33,14 @@ import static org.animotron.graph.AnimoGraph.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends Value implements MLOperator {
+public class TEXT extends STRING implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
 	private TEXT() { super("text"); }
 
     @Override
-    public Relationship build(Node parent, String value, boolean ignoreNotFound) {
+    public Relationship build(Node parent, String value, boolean ignoreNotFound) throws AnimoException {
         value = removeWS(value);
         byte[] hash = hashReference(value).digest();
         Node child = getCache(hash);
