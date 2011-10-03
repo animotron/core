@@ -50,7 +50,7 @@ public class BinaryExpression extends Expression {
 		TMP_STORAGE.mkdirs();
 	}
 
-    public BinaryExpression(InputStream stream, String path) throws IOException {
+    public BinaryExpression(InputStream stream, String path) throws Exception {
         super(new FastGraphBuilder());
         this.stream = stream;
         this.path = path;

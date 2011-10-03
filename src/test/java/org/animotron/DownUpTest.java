@@ -18,7 +18,6 @@
  */
 package org.animotron;
 
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
@@ -27,8 +26,6 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
@@ -39,7 +36,7 @@ import static org.animotron.expression.JExpression.text;
  */
 public class DownUpTest extends ATest {
 	
-	private void common() throws IOException {
+	private void common() throws Exception {
 		new JExpression(
 				_(THE._, "B", 
 					_(IS._, "A"), 
@@ -54,7 +51,7 @@ public class DownUpTest extends ATest {
 	}
 
 	@Test
-	public void up() throws AnimoException, IOException {
+	public void up() throws Exception {
     	
 		common();
 
@@ -70,7 +67,7 @@ public class DownUpTest extends ATest {
 	
 	@Test
     @Ignore
-    public void down() throws AnimoException, IOException {
+    public void down() throws Exception {
     	
 		common();
 

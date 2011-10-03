@@ -20,7 +20,6 @@ package org.animotron.games.whouse;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Q;
@@ -30,8 +29,6 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
@@ -44,7 +41,7 @@ public class WHouseTest extends ATest {
 
 	@Test
     @Ignore
-	public void test() throws IOException, AnimoException {
+	public void test() throws Exception {
 		
 		//party: person & organization
 		// + receipt or issue

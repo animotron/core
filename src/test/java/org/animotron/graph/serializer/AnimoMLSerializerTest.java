@@ -21,12 +21,9 @@ package org.animotron.graph.serializer;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression.*;
 
@@ -37,50 +34,50 @@ import static org.animotron.expression.JExpression.*;
  */
 public class AnimoMLSerializerTest extends ATest {
 
-    private void test(String in, String out) throws AnimoException, IOException {
+    private void test(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
         assertAnimoResult(expression, out);
     }
 
     @Test
-    public void test_00() throws IOException, AnimoException {
+    public void test_00() throws Exception {
         test("the a \\b", "the a \\b");
     }
 
     @Test
-    public void test_01() throws IOException, AnimoException {
+    public void test_01() throws Exception {
         test("the a \\ get element-name have element-name \"b\"", "the a \\ have element-name \"b\"");
     }
 
     @Test
-    public void test_02() throws IOException, AnimoException {
+    public void test_02() throws Exception {
         new JExpression(_(THE._, "b", text("c")));
         test("the a \\ b", "the a \\ the b \"c\"");
     }
 
     @Test
-    public void test_03() throws IOException, AnimoException {
+    public void test_03() throws Exception {
         new JExpression(_(THE._, "b", text("c")));
         test("the a \\ an b", "the a \\ the b \"c\"");
     }
 
     @Test
-	public void test_04() throws IOException, AnimoException {
+	public void test_04() throws Exception {
         test("the a \\ \"b\"", "the a \\b");
 	}
 
     @Test
-	public void test_05() throws IOException, AnimoException {
+	public void test_05() throws Exception {
         test("the a \\b @c \"d\"", "the a \\b @c \"d\"");
 	}
 
     @Test
-    public void test_06() throws IOException, AnimoException {
+    public void test_06() throws Exception {
         test("the a \\b (@c \"d\") (\"e\")", "the a \\b (@c \"d\") (\"e\")");
     }
 
     @Test
-    public void test_07() throws IOException, AnimoException {
+    public void test_07() throws Exception {
         new JExpression(_(THE._, "b", text("b")));
         new JExpression(_(THE._, "c", text("c")));
         new JExpression(_(THE._, "d", text("d")));
@@ -89,7 +86,7 @@ public class AnimoMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_08() throws IOException, AnimoException {
+    public void test_08() throws Exception {
         new JExpression(_(THE._, "b", text("b")));
         new JExpression(_(THE._, "c", text("c")));
         new JExpression(_(THE._, "d", text("d")));
@@ -98,7 +95,7 @@ public class AnimoMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_09() throws IOException, AnimoException {
+    public void test_09() throws Exception {
         new JExpression(_(THE._, "b", text("b")));
         new JExpression(_(THE._, "c", text("c")));
         new JExpression(_(THE._, "d", text("d")));

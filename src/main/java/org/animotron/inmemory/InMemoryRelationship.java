@@ -18,12 +18,12 @@
  */
 package org.animotron.inmemory;
 
-import javolution.util.FastMap;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -32,7 +32,7 @@ import java.util.Map;
  */
 public class InMemoryRelationship implements Relationship {
 	
-	private final Map<String, Object> properties = new FastMap<String, Object>();
+	private final Map<String, Object> properties = new HashMap<String, Object>();
 	
 	private final Node sNode, eNode;
 	private final RelationshipType type;
@@ -57,7 +57,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#hasProperty(java.lang.STRING)
+	 * @see org.neo4j.graphdb.PropertyContainer#hasProperty(java.lang.VALUE)
 	 */
 	@Override
 	public boolean hasProperty(String key) {
@@ -65,7 +65,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.STRING)
+	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.VALUE)
 	 */
 	@Override
 	public Object getProperty(String key) {
@@ -73,7 +73,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.STRING, java.lang.Object)
+	 * @see org.neo4j.graphdb.PropertyContainer#getProperty(java.lang.VALUE, java.lang.Object)
 	 */
 	@Override
 	public Object getProperty(String key, Object defaultValue) {
@@ -86,7 +86,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#setProperty(java.lang.STRING, java.lang.Object)
+	 * @see org.neo4j.graphdb.PropertyContainer#setProperty(java.lang.VALUE, java.lang.Object)
 	 */
 	@Override
 	public void setProperty(String key, Object value) {
@@ -94,7 +94,7 @@ public class InMemoryRelationship implements Relationship {
 	}
 
 	/* (non-Javadoc)
-	 * @see org.neo4j.graphdb.PropertyContainer#removeProperty(java.lang.STRING)
+	 * @see org.neo4j.graphdb.PropertyContainer#removeProperty(java.lang.VALUE)
 	 */
 	@Override
 	public Object removeProperty(String key) {

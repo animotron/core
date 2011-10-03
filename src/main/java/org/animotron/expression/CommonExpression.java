@@ -18,12 +18,10 @@
  */
 package org.animotron.expression;
 
-import org.animotron.exception.AnimoException;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -33,23 +31,23 @@ import java.io.InputStream;
  */
 public class CommonExpression {
 	
-	public static Relationship build(String data) throws AnimoException, IOException {
+	public static Relationship build(String data) throws Exception {
         return new AnimoExpression(data);
 	}
 	
-    public static Relationship build(File file) throws IOException, AnimoException {
+    public static Relationship build(File file) throws Exception {
         return build(file, file.getName());
     }
 	
-    public static Relationship build(File file, String path) throws IOException, AnimoException {
+    public static Relationship build(File file, String path) throws Exception {
         return build(new FileInputStream(file), path);
     }
 
-	public static Relationship build(InputStream stream) throws AnimoException, IOException {
+	public static Relationship build(InputStream stream) throws Exception {
 		return new AnimoExpression(stream);
 	}
 	
-	public static Relationship build(InputStream stream, String path) throws IOException, AnimoException {
+	public static Relationship build(InputStream stream, String path) throws Exception {
         return  isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path);
 
     }

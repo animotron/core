@@ -24,9 +24,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
-import org.animotron.statement.value.STRING;
-
-import java.io.IOException;
+import org.animotron.statement.value.VALUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -37,11 +35,11 @@ public class JExpression extends Expression {
 	
 	Object[][] e;
 	
-    public JExpression(Object[]... e) throws IOException {
+    public JExpression(Object[]... e) throws Exception {
         this(new FastGraphBuilder(), e);
     }
 
-    public JExpression(GraphBuilder builder, Object[]... e) throws IOException {
+    public JExpression(GraphBuilder builder, Object[]... e) throws Exception {
         super(builder);
         this.e = e;
         builder.build(this);
@@ -145,7 +143,7 @@ public class JExpression extends Expression {
     }
 
     public static Object[] string(String value) {
-        return _(STRING._, value);
+        return _(VALUE._, value);
     }
 
     public static Object[] text(String value) {

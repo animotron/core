@@ -42,7 +42,7 @@ import static org.animotron.expression.JExpression.*;
  */
 public class YetAnotherWebFramework____Test extends ATest {
 
-    private void test(Object[]... o) throws AnimoException, IOException {
+    private void test(Object[]... o) throws Exception {
 
         new JExpression(
             _(THE._, "html",
@@ -157,7 +157,7 @@ public class YetAnotherWebFramework____Test extends ATest {
     }
 
     @Test
-    public void test1() throws AnimoException, IOException {
+    public void test1() throws Exception {
         test(
             _(AN._, "root-service",
                 _(AN._, "localhost-site")
@@ -166,7 +166,7 @@ public class YetAnotherWebFramework____Test extends ATest {
     }
 
     @Test
-    public void test2() throws AnimoException, IOException {
+    public void test2() throws Exception {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
@@ -177,7 +177,7 @@ public class YetAnotherWebFramework____Test extends ATest {
     }
 
     @Test
-    public void test3() throws AnimoException, IOException {
+    public void test3() throws Exception {
         test(
             _(ANY._, "service",
                 _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),
@@ -187,7 +187,7 @@ public class YetAnotherWebFramework____Test extends ATest {
     }
 
     @Test
-    public void test4() throws AnimoException, IOException {
+    public void test4() throws Exception {
         test(
             _(ANY._, "service",
                 _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),

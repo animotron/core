@@ -20,13 +20,10 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression._;
 
@@ -38,7 +35,7 @@ import static org.animotron.expression.JExpression._;
 public class CrossUseTest extends ATest {
 
     @Test
-    public void cross_use_case() throws IOException, AnimoException {
+    public void cross_use_case() throws Exception {
 
         new JExpression(
             _(THE._, "A", _(IS._, "S"), _(IS._, "X"))

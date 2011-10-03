@@ -19,7 +19,6 @@
 package org.animotron.statement;
 
 import javolution.util.FastList;
-import javolution.util.FastMap;
 import org.animotron.statement.operator.THE;
 import org.clapper.util.classutil.*;
 import org.neo4j.graphdb.Relationship;
@@ -28,7 +27,7 @@ import org.neo4j.graphdb.RelationshipType;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -42,10 +41,10 @@ public class Statements {
 	private static boolean run = false;
 	
 	private static Map<String, Statement> statementsByName =
-		new FastMap<String, Statement>();
+		new HashMap<String, Statement>();
 
 	@SuppressWarnings("unchecked")
-	private static void loadClass(String name, Map<String, List<Statement>> statements) {
+	private static void loadClass(String name) {
         Class<? extends Statement> clazz;
 		try {
 			clazz = (Class<? extends Statement>) Class.forName( name );
@@ -92,13 +91,9 @@ public class Statements {
 				//searching
 				finder.findClasses(foundClasses, filter);
 
-				//statements will be added to container
-            	Map<String, List<Statement>> statements =
-            		new FastMap<String, List<Statement>>();
-
 				//scan classes
 				for (ClassInfo classInfo : foundClasses)
-					loadClass(classInfo.getClassName(), statements);
+					loadClass(classInfo.getClassName());
 				
 				if (fast)
 					try {
@@ -121,15 +116,11 @@ public class Statements {
 		
 		if (fast) {
 			try {
-				//statement will be added to container
-            	Map<String, List<Statement>> statements =
-            		new FastMap<String, List<Statement>>();
-
 				//load classes
 				BufferedReader br = new BufferedReader(new FileReader("quantas.ser"));
 				String strLine;
 				while ((strLine = br.readLine()) != null)   {
-					loadClass( strLine, statements );
+					loadClass(strLine);
 				}
 				br.close();
 

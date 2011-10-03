@@ -20,7 +20,6 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -31,8 +30,6 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.animotron.expression.JExpression.*;
 
 /**
@@ -42,7 +39,7 @@ import static org.animotron.expression.JExpression.*;
  */
 public class ModifiedYetAnotherWebFramework___Test extends ATest {
 
-    private void test(Object[]... o) throws AnimoException, IOException, InterruptedException {
+    private void test(Object[]... o) throws Exception {
 
         new JExpression(
             _(THE._, "service",
@@ -184,7 +181,7 @@ public class ModifiedYetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
-    public void test1() throws AnimoException, IOException, InterruptedException {
+    public void test1() throws Exception {
         test(
             _(AN._, "root-service",
                 _(AN._, "localhost-site")
@@ -193,7 +190,7 @@ public class ModifiedYetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
-    public void test2() throws AnimoException, IOException, InterruptedException {
+    public void test2() throws Exception {
         test(
             _(AN._, "root-service",
                 _(ANY._, "site",
@@ -204,7 +201,7 @@ public class ModifiedYetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
-    public void test3() throws AnimoException, IOException, InterruptedException {
+    public void test3() throws Exception {
         test(
             _(AN._, "current-service",
                 _(AN._, "localhost-site")
@@ -213,7 +210,7 @@ public class ModifiedYetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
-    public void test4() throws AnimoException, IOException, InterruptedException {
+    public void test4() throws Exception {
         test(
             _(AN._, "current-service",
                 _(ANY._, "site",
@@ -224,7 +221,7 @@ public class ModifiedYetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
-    public void test5() throws AnimoException, IOException, InterruptedException {
+    public void test5() throws Exception {
         test(
             _(ANY._, "resource",
                 _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))),

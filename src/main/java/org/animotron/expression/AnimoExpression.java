@@ -42,27 +42,27 @@ public class AnimoExpression extends Expression {
 
     private Reader reader;
 
-    public AnimoExpression(InputStream stream) throws IOException {
+    public AnimoExpression(InputStream stream) throws Exception {
         this(new InputStreamReader(stream));
     }
 
-    public AnimoExpression(GraphBuilder builder, InputStream stream) throws IOException {
+    public AnimoExpression(GraphBuilder builder, InputStream stream) throws Exception {
         this(builder, new InputStreamReader(stream));
     }
 
-    public AnimoExpression(String str) throws IOException {
+    public AnimoExpression(String str) throws Exception {
         this(new StringReader(str));
     }
 
-    public AnimoExpression(GraphBuilder builder, String str) throws IOException {
+    public AnimoExpression(GraphBuilder builder, String str) throws Exception {
         this(builder, new StringReader(str));
     }
 
-    public AnimoExpression(Reader reader) throws IOException {
+    public AnimoExpression(Reader reader) throws Exception {
         this(new FastGraphBuilder(), reader);
     }
 
-    public AnimoExpression(GraphBuilder builder, Reader reader) throws IOException {
+    public AnimoExpression(GraphBuilder builder, Reader reader) throws Exception {
         super(builder);
         this.reader = reader;
         builder.build(this);

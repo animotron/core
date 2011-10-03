@@ -19,7 +19,6 @@
 package org.animotron.bridge;
 
 import org.animotron.ATest;
-import org.animotron.exception.AnimoException;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
@@ -45,7 +44,7 @@ public class FSBridgeTest extends ATest {
 	}
 	
 	@Test
-	public void loadAndSerialize() throws IOException, AnimoException {
+	public void loadAndSerialize() throws Exception {
         System.out.println("Test repository loader ...");
         FSBridge.load(PATH);
         System.out.println("loaded ...");

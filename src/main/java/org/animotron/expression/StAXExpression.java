@@ -27,7 +27,6 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,11 +37,11 @@ public class StAXExpression extends Expression {
 	
 	private XMLStreamReader reader;
 	
-    public StAXExpression(XMLStreamReader reader) throws IOException {
+    public StAXExpression(XMLStreamReader reader) throws Exception {
         this(new MLGraphBuilder(), reader);
     }
 
-    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws IOException {
+    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws Exception {
         super(builder);
         this.reader = reader;
         builder.build(this);

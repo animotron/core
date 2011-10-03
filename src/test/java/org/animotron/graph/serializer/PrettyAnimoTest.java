@@ -19,11 +19,8 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.AnimoExpression;
 import org.junit.Test;
-
-import java.io.IOException;
 
 
 /**
@@ -32,68 +29,68 @@ import java.io.IOException;
  */
 public class PrettyAnimoTest extends ATest {
 
-    private void test(String exp) throws AnimoException, IOException {
+    private void test(String exp) throws Exception {
         test(exp, exp);
     }
 
-    private void test(String in, String out) throws AnimoException, IOException {
+    private void test(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
         assertAnimo(expression, out + "\n", true);
     }
 
     @Test
-	public void test_00() throws IOException, AnimoException {
+	public void test_00() throws Exception {
         test("the a");
 	}
 
     @Test
-	public void test_01() throws IOException, AnimoException {
+	public void test_01() throws Exception {
         test("the a\n    have b");
 	}
 
     @Test
-	public void test_02() throws IOException, AnimoException {
+	public void test_02() throws Exception {
         test("the a\n    have b \"test\"");
 	}
 
     @Test
-	public void test_03() throws IOException, AnimoException {
+	public void test_03() throws Exception {
         test("the a (have b) (have c)", "the a\n    (have b)\n    (have c)");
 	}
 
     @Test
-	public void test_04() throws IOException, AnimoException {
+	public void test_04() throws Exception {
         test("the a\n    (have b\n        (any x)\n        (all y))\n    (have c)");
 	}
 
     @Test
-	public void test_05() throws IOException, AnimoException {
+	public void test_05() throws Exception {
         test("the a\n    have b\n        (any x)\n        (all y)");
 	}
 
 
     @Test
-	public void test_06() throws IOException, AnimoException {
+	public void test_06() throws Exception {
         test("the a\n    have b\n        (any x α)\n        (all y β)");
 	}
 
     @Test
-    public void test_07() throws IOException, AnimoException {
+    public void test_07() throws Exception {
         test("the a @b (get c)", "the a\n    @b get c");
     }
 
     @Test
-    public void test_08() throws IOException, AnimoException {
+    public void test_08() throws Exception {
         test("the a\n    \\b \\c @d e");
     }
 
     @Test
-    public void test_09() throws IOException, AnimoException {
+    public void test_09() throws Exception {
         test("the a\n    \\b \\c\n        @d\n            (e)\n            (f)");
     }
 
     @Test
-    public void test_0A() throws IOException, AnimoException {
+    public void test_0A() throws Exception {
         test(
             "the rest\n" +
             "    have content\n" +

@@ -50,7 +50,7 @@ public abstract class AbstractStatement implements Statement {
 		rType = this.relationshipType.name(); 
 	}
 
-//	public AbstractStatement(STRING reference, STRING resultRelationshipType) {
+//	public AbstractStatement(VALUE reference, VALUE resultRelationshipType) {
 //        this(reference);
 //	}
 

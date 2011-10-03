@@ -19,13 +19,13 @@
 package org.animotron.statement.ml;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.statement.value.STRING;
+import org.animotron.statement.Link;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.StringTokenizer;
 
-import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.*;
 
 /**
@@ -33,7 +33,7 @@ import static org.animotron.graph.AnimoGraph.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends STRING implements MLOperator {
+public class TEXT extends Link implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
@@ -46,15 +46,10 @@ public class TEXT extends STRING implements MLOperator {
         Node child = getCache(hash);
         if (child == null) {
             child = createNode();
-            VALUE.set(child, value);
+            VALUE._.build(child, value, ignoreNotFound);
             createCache(child, hash);
         }
         return parent.createRelationshipTo(child, relationshipType());
-    }
-
-    @Override
-    public String reference(Relationship r) {
-        return VALUE.get(r.getEndNode());
     }
 
     private String removeWS(String value) {

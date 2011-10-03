@@ -24,14 +24,23 @@
 	</developers>
 	
 	<dependencies>
-		<dependency>
-			<groupId>org.neo4j</groupId>
-			<artifactId>neo4j</artifactId>
-			<version>1.5.M01</version>
-			<type>pom</type>
-		</dependency>
-		
-		<!-- 
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j</artifactId>
+            <version>1.5.M01</version>
+            <type>pom</type>
+        </dependency>
+
+        <!--
+        <dependency>
+            <groupId>org.neo4j</groupId>
+            <artifactId>neo4j-berkeleydb-je-index</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <type>pom</type>
+        </dependency>
+        -->
+
+		<!--
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j-graph-collections</artifactId>

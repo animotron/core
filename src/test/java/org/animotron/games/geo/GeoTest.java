@@ -20,17 +20,14 @@ package org.animotron.games.geo;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.ATest;
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.junit.Assert;
 import org.junit.Test;
-import org.xtreemfs.babudb.api.exception.BabuDBException;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
-import java.io.IOException;
 
 import static org.animotron.Properties.HASH;
 
@@ -54,7 +51,7 @@ public class GeoTest extends ATest {
     }
 
     @Test
-	public void test_01() throws IOException, AnimoException, XMLStreamException, BabuDBException {
+	public void test_01() throws Exception {
         String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
         cleanDb();
         String out = HASH.get(new StAXExpression(osm()));
@@ -62,21 +59,21 @@ public class GeoTest extends ATest {
 	}
 
     @Test
-	public void test_02() throws IOException, AnimoException, XMLStreamException {
+	public void test_02() throws Exception {
         String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
         String out = HASH.get(new StAXExpression(osm()));
         Assert.assertEquals(in, out);
 	}
 
     @Test
-	public void test_03() throws IOException, AnimoException, XMLStreamException {
+	public void test_03() throws Exception {
         String in = HASH.get(new StAXExpression(osm()));
         String out = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
         Assert.assertEquals(in, out);
 	}
 
     @Test
-	public void test() throws IOException, AnimoException, XMLStreamException {
+	public void test() throws Exception {
         new StAXExpression(osm("sto.xml"));
 	}
 

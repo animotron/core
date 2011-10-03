@@ -22,11 +22,9 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.Expression;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
-import org.animotron.statement.value.STRING;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
-
-import java.io.IOException;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
@@ -42,8 +40,8 @@ import static org.animotron.graph.AnimoGraph.finishTx;
  * startGraph()
  * endGraph()
  * 
- * start(STRING prefix, STRING ns, STRING reference, STRING value)
- * start(Statement statement, STRING prefix, STRING ns, STRING reference, STRING value)
+ * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
+ * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
  * 
  * getRelationship()
@@ -81,14 +79,14 @@ public abstract class GraphBuilder {
     };
 
     final public void start(String value) throws AnimoException {
-        start(STRING._, value);
+        start(VALUE._, value);
     }
 
 	public abstract void start(Statement statement, String reference) throws AnimoException;
 
 	public abstract void end() throws AnimoException;
 
-    final public void build(Expression exp) throws IOException {
+    final public void build(Expression exp) throws Exception {
         order = 0;
         the = null;
         tx = beginTx();
@@ -105,6 +103,7 @@ public abstract class GraphBuilder {
             } finally {
                 finishTx(tx);
             }
+            throw e;
         }
         catcher.push();
     }

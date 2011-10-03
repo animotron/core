@@ -18,11 +18,9 @@
  */
 package org.animotron.bridge;
 
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.CommonExpression;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Repository loader
@@ -32,11 +30,11 @@ import java.io.IOException;
  */
 public class FSBridge {
 	
-    public static void load (String path) throws IOException, AnimoException {
+    public static void load (String path) throws Exception {
         load(new File(path));
     }
 
-    public static void load (File path) throws IOException, AnimoException {
+    public static void load (File path) throws Exception {
         if (path.isDirectory()) {
             loadDir(path.getPath(), path);
         } else {
@@ -44,18 +42,18 @@ public class FSBridge {
         }
     }
 
-    private static void loadDir (String root, File path) throws IOException, AnimoException {
+    private static void loadDir (String root, File path) throws Exception {
         for (File file : path.listFiles()) {
             load(root, file);
         }
     }
 
-    private static void loadFile (String root, File file) throws IOException, AnimoException {
+    private static void loadFile (String root, File file) throws Exception {
         String path = file.getPath().substring(root.length());
         CommonExpression.build(file, path);
     }
 
-	private static void load (String root, File path) throws IOException, AnimoException {
+	private static void load (String root, File path) throws Exception {
 		
 		if (path.isDirectory()) {
             loadDir(root, path);

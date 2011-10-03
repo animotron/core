@@ -20,14 +20,11 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression._;
 
@@ -39,7 +36,7 @@ import static org.animotron.expression.JExpression._;
 public class UseTest extends ATest {
 
     @Test
-    public void any_use() throws IOException, AnimoException {
+    public void any_use() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
@@ -51,7 +48,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void an_any_use() throws IOException, AnimoException {
+    public void an_any_use() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
@@ -67,7 +64,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void all_use() throws IOException, AnimoException {
+    public void all_use() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );
@@ -83,7 +80,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void an_all_use() throws IOException, AnimoException {
+    public void an_all_use() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "X"))
         );

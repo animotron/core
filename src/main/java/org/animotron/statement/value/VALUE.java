@@ -23,11 +23,10 @@ package org.animotron.statement.value;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class STRING extends Value {
+public class VALUE extends Value {
 
-    public final static STRING _ = new STRING();
+    public final static VALUE _ = new VALUE();
 
-    private STRING() { super("string"); }
+    private VALUE() { super("value"); }
 
-    protected STRING(String name) { super(name); }
 }

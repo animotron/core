@@ -42,7 +42,7 @@ import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
- * STRING instruction 'after-last'.
+ * VALUE instruction 'after-last'.
  *
  * Return last chars from input string after last-found defined pattern.
  *
@@ -95,7 +95,7 @@ public class AfterLast extends Instruction implements Evaluable {
 					        source.substring(index + 1)
 					    )
 					);
-				} catch (IOException e) {
+				} catch (Exception e) {
 					pf.sendException(e);
 					return;
 				}

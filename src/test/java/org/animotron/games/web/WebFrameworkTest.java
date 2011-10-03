@@ -20,7 +20,6 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -32,8 +31,6 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.animotron.expression.JExpression.*;
 
 /**
@@ -44,7 +41,7 @@ import static org.animotron.expression.JExpression.*;
 public class WebFrameworkTest extends ATest {
 
 	@Test
-	public void test() throws IOException, AnimoException {
+	public void test() throws Exception {
     	new JExpression(
 			_(THE._, "request", 
 				_(HAVE._, "uri", text("/")),

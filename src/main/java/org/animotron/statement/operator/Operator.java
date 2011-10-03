@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.Properties;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.statement.AbstractStatement;
@@ -45,14 +46,14 @@ public abstract class Operator extends AbstractStatement {
     @Override
 	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound {
 		Node child = createNode();
-        child.createRelationshipTo(THE._.getOrCreate(reference, ignoreNotFound).getEndNode(), REF);
+        Relationship ref = child.createRelationshipTo(THE._.getOrCreate(reference, ignoreNotFound).getEndNode(), REF);
+        Properties.NAME.set(ref, reference);
 		return parent.createRelationshipTo(child, relationshipType());
 	}
 
 	@Override
 	public String reference(Relationship r) {
-		Node node = r.getEndNode().getSingleRelationship(REF, OUTGOING).getEndNode(); 
-		return NAME.get(node);
+		return NAME.get(r.getEndNode().getSingleRelationship(REF, OUTGOING));
 	}
 	
 }

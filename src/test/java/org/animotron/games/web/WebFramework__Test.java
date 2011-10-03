@@ -44,7 +44,7 @@ import static org.animotron.expression.JExpression.*;
 public class WebFramework__Test extends ATest {
 
 	@Test
-	public void test() throws IOException, AnimoException {
+	public void test() throws Exception {
     	new JExpression(
 			_(THE._, "request", 
 				_(HAVE._, "uri", text("/")),

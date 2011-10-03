@@ -48,8 +48,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * startGraph()
  * endGraph()
  * 
- * start(STRING prefix, STRING ns, STRING reference, STRING value)
- * start(Statement statement, STRING prefix, STRING ns, STRING reference, STRING value)
+ * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
+ * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
  * 
  * getRelationship()

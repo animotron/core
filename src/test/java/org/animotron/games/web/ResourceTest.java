@@ -43,7 +43,7 @@ import static org.animotron.expression.JExpression.text;
 public class ResourceTest extends ATest {
 
     @Test
-    public void test1() throws AnimoException, IOException {
+    public void test1() throws Exception {
 
         new JExpression(
             _(THE._, "service",
@@ -86,7 +86,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test2() throws AnimoException, IOException {
+    public void test2() throws Exception {
 
         new JExpression(
             _(THE._, "service",
@@ -137,7 +137,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test3() throws AnimoException, IOException {
+    public void test3() throws Exception {
 
         new JExpression(
             _(THE._, "service",
@@ -187,7 +187,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test4() throws AnimoException, IOException {
+    public void test4() throws Exception {
 
         new JExpression(
             _(THE._, "root-service",
@@ -224,7 +224,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test5() throws AnimoException, IOException {
+    public void test5() throws Exception {
 
         new JExpression(
             _(THE._, "root-service",
@@ -268,7 +268,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test6() throws AnimoException, IOException {
+    public void test6() throws Exception {
 
         new JExpression(
             _(THE._, "root-service",

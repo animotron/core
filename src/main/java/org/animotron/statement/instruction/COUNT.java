@@ -65,7 +65,7 @@ public class COUNT extends Instruction implements Evaluable {
 						JExpression r;
 						try {
 							r = new JExpression(JExpression._(Q._, "N" + value.get()));
-						} catch (IOException e) {
+						} catch (Exception e) {
                             pf.sendException(e);
                             return;
                         }

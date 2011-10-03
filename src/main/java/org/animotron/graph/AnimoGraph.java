@@ -221,10 +221,6 @@ public class AnimoGraph {
         ORDER.add(r, order);
     }
 	
-    public static void unorder (Relationship r) {
-        ORDER.remove(r);
-    }
-
 	public static void result (Relationship r, long id) {
 		RESULT_INDEX.add(r, RESULT, id);
 	}

@@ -20,7 +20,6 @@ package org.animotron;
 
 import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Test;
@@ -28,8 +27,6 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.Iterator;
 
@@ -42,7 +39,7 @@ public class XMLTest extends ATest {
 
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
 
-    private void test(String in, String out) throws AnimoException, IOException, XMLStreamException {
+    private void test(String in, String out) throws Exception {
         Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
         Iterator<Relationship> it = r.getEndNode().getRelationships(Direction.OUTGOING).iterator();
         StringBuilder s = new StringBuilder();
@@ -55,27 +52,27 @@ public class XMLTest extends ATest {
     }
 
     @Test
-	public void test_00() throws IOException, AnimoException, XMLStreamException {
+	public void test_00() throws Exception {
         test("<a/>", "\\a");
 	}
 
     @Test
-	public void test_01() throws IOException, AnimoException, XMLStreamException {
+	public void test_01() throws Exception {
         test("<x:a xmlns:x=\"x-namespace\"/>", "\\x:a $x \"x-namespace\"");
 	}
 
     @Test
-	public void test_02() throws IOException, AnimoException, XMLStreamException {
+	public void test_02() throws Exception {
         test("<a xmlns=\"x-namespace\"/>", "\\a $ \"x-namespace\"");
 	}
 
     @Test
-	public void test_03() throws IOException, AnimoException, XMLStreamException {
+	public void test_03() throws Exception {
         test("<a b=\"c\"/>", "\\a @b \"c\"");
 	}
 
     @Test
-	public void test_04() throws IOException, AnimoException, XMLStreamException {
+	public void test_04() throws Exception {
         test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a");
 	}
 

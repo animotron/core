@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.text;
 public class AnyUseTest extends ATest {
 
     @Test
-    public void simple_any_Use() throws AnimoException, IOException {
+    public void simple_any_Use() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
@@ -73,7 +73,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void simple_any_Use_1() throws AnimoException, IOException {
+    public void simple_any_Use_1() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
@@ -110,7 +110,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void complex_any_Use() throws AnimoException, IOException {
+    public void complex_any_Use() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );
@@ -145,7 +145,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void complex_any_Use_1() throws AnimoException, IOException {
+    public void complex_any_Use_1() throws Exception {
         new JExpression(
             _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
         );

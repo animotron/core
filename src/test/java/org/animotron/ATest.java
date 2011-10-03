@@ -150,7 +150,7 @@ public abstract class ATest {
     protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
         assertNotNull(op);
 
-        System.out.println("STRING result serializer...");
+        System.out.println("VALUE result serializer...");
         String result = StringResultSerializer.serialize(new PFlow(Evaluator._), op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);

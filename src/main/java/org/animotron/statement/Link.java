@@ -18,6 +18,7 @@
  */
 package org.animotron.statement;
 
+import org.animotron.exception.AnimoException;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,7 +34,7 @@ public abstract class Link extends AbstractStatement {
 	public Link(String name) { super(name); }
 
 	@Override
-	public Relationship build(Node parent, String reference, boolean ignoreNotFound) {
+	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws AnimoException {
 		return parent.createRelationshipTo(createNode(), relationshipType());
 	}
 

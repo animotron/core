@@ -112,15 +112,14 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
         Node node = createNode();
         RelationshipType type = relationshipType(name);
         Relationship r = parent.createRelationshipTo(node, type);
-        Properties.NAME.set(node, name);
+        Properties.NAME.set(r, name);
         return r;
 	}
 
 	@Override
 	public String reference(Relationship r) {
-		return Properties.NAME.get(r.getEndNode());
+		return Properties.NAME.get(r);
 	}
-
 
     private Subscribable<PFlow> prepare = new OnQuestion();
 
