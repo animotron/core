@@ -22,7 +22,6 @@ import org.animotron.statement.LINK;
 import org.animotron.statement.Link;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
-import org.animotron.statement.ml.TEXT;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Relationship;
@@ -57,7 +56,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             write("\"");
         } else if (statement instanceof AN) {
                 write(reference);
-        } else if (!(statement instanceof TEXT)){
+        } else if (!(statement instanceof LINK)){
             write(statement.name());
             String name = reference;
             if (name != null) {
@@ -89,16 +88,14 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
         if (level != 0 && !(statement instanceof NAME)) {
-            if (!(ps instanceof Link)) {
+            if (!(ps instanceof LINK)) {
                 write(" ");
             }
             if (!isOne || statement instanceof LINK) {
                 write("(");
             }
         }
-        if (!(statement instanceof LINK)) {
-            write(statement, param);
-        }
+        write(statement, param);
         ps = statement;
     }
 

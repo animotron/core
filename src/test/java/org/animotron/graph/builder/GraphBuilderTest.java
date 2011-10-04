@@ -23,7 +23,6 @@ import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Test;
-import org.xtreemfs.babudb.api.exception.BabuDBException;
 
 import static org.animotron.Properties.HASH;
 
@@ -71,7 +70,7 @@ public class GraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test(String animo) throws Exception, BabuDBException {
+    private void test(String animo) throws Exception {
         test_0(animo);
         cleanDb();
         test_1(animo);

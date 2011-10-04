@@ -20,6 +20,7 @@ package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.*;
 import org.animotron.manipulator.Evaluator;
@@ -31,7 +32,6 @@ import org.junit.BeforeClass;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
-import org.xtreemfs.babudb.api.exception.BabuDBException;
 
 import java.io.*;
 import java.util.Arrays;
@@ -170,14 +170,14 @@ public abstract class ATest {
     }
 
 	//database cleaning (thanks to mh)
-    public Map<String, Object> cleanDb() throws BabuDBException {
+    public Map<String, Object> cleanDb() {
         return cleanDb(Long.MAX_VALUE);
     }
 
-    public Map<String, Object> cleanDb(final long maxNodesToDelete) throws BabuDBException {
+    public Map<String, Object> cleanDb(final long maxNodesToDelete) {
         Map<String, Object> result = execute(new GraphOperation<Map<String, Object>>() {
             @Override
-            public Map<String, Object> execute() {
+            public Map<String, Object> execute() throws AnimoException {
                 Map<String, Object> result = new HashMap<String, Object>();
                 clearIndex(result);
                 removeNodes(result,maxNodesToDelete);
@@ -212,7 +212,7 @@ public abstract class ATest {
 
     }
 
-    private void clearIndex(Map<String, Object> result) {
+    private void clearIndex(Map<String, Object> result) throws AnimoException {
         IndexManager indexManager = getDb().index();
         result.put("node-indexes", Arrays.asList(indexManager.nodeIndexNames()));
         result.put("relationship-indexes", Arrays.asList(indexManager.relationshipIndexNames()));
@@ -222,10 +222,10 @@ public abstract class ATest {
         for (String ix : indexManager.relationshipIndexNames()) {
             indexManager.forRelationships(ix).delete();
         }
-    }	
+    }
 
     @Before
-    public void setup() throws BabuDBException {
+    public void setup() {
     	cleanDb();
     }
 
@@ -247,7 +247,7 @@ public abstract class ATest {
     }
     
     @BeforeClass
-    public static void start() throws BabuDBException {
+    public static void start() {
     	deleteDir(new File(DATA_FOLDER));
         startDB(DATA_FOLDER);
     }

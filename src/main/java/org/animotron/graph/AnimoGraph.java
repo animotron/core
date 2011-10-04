@@ -20,20 +20,13 @@ package org.animotron.graph;
 
 import javolution.util.FastMap;
 import org.animotron.Executor;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
-import org.xtreemfs.babudb.BabuDBFactory;
-import org.xtreemfs.babudb.api.BabuDB;
-import org.xtreemfs.babudb.api.exception.BabuDBException;
-import org.xtreemfs.babudb.config.BabuDBConfig;
-import org.xtreemfs.babudb.log.DiskLogger.SyncMode;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -47,7 +40,6 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 public class AnimoGraph {
 
 	private static GraphDatabaseService graphDb;
-	private static BabuDB babuDB;
 
 	private static String STORAGE;
 
@@ -57,21 +49,19 @@ public class AnimoGraph {
 	public static RelationshipIndex RESULT_INDEX;
 	private static String RESULT = "RESULT";
 
-    public static void startDB(String folder, Map<String, String> config) throws BabuDBException {
+    public static void startDB(String folder, Map<String, String> config) {
         STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
     }
 
-    public static void startDB(String folder) throws BabuDBException {
+    public static void startDB(String folder) {
         STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE);
         initDB();
     }
 
-    public static void initDB() throws BabuDBException {
-        BabuDBConfig config = new BabuDBConfig(new File(STORAGE, "babudb/databases/").getPath(), new File(STORAGE, "babudb/dblog/").getPath(), 4, 1024 * 1024 * 16, 5 * 60, SyncMode.ASYNC, 50, 0, false, 16, 1024 * 1024 * 512);
-        babuDB = BabuDBFactory.createBabuDB(config);
+    public static void initDB() {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         CACHE = new CacheIndex(INDEX);
@@ -91,10 +81,6 @@ public class AnimoGraph {
 
 	public static GraphDatabaseService getDb() {
 		return graphDb;
-	}
-
-	public static BabuDB getBabuDB() {
-		return babuDB;
 	}
 
 	public static String getStorage() {
@@ -209,13 +195,9 @@ public class AnimoGraph {
 		CACHE.add(node, hash);
 	}
 
-	public static Node getCache(byte[] hash) throws AnimoException {
-        try {
-			return CACHE.get(hash);
-		} catch (BabuDBException e) {
-			throw new AnimoException(e);
-		}
-	}
+    public static Node getCache(byte[] hash) {
+        return CACHE.get(hash);
+    }
 	
     public static void order (Relationship r, int order) {
         ORDER.add(r, order);

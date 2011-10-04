@@ -31,14 +31,11 @@
             <type>pom</type>
         </dependency>
 
-        <!--
         <dependency>
-            <groupId>org.neo4j</groupId>
+            <groupId>org.neo4j.build</groupId>
             <artifactId>neo4j-berkeleydb-je-index</artifactId>
             <version>0.1-SNAPSHOT</version>
-            <type>pom</type>
         </dependency>
-        -->
 
 		<!--
         <dependency>
