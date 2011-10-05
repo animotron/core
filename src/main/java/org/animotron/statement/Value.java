@@ -37,9 +37,15 @@ public abstract class Value extends AbstractStatement {
         return null;
     }
 
+    public Object reference(Node n) {
+        if (n.hasProperty(name()))
+            return n.getProperty(name());
+        return null;
+    }
+
     @Override
     public Object reference(Relationship r) {
-        return r.getEndNode().getProperty(name());
+        return reference(r.getEndNode());
     }
 
 }

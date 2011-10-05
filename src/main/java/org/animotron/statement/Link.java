@@ -46,12 +46,6 @@ public abstract class Link extends Value {
             createCache(child, hash);
         }
         return parent.createRelationshipTo(child, relationshipType());
-
-	}
-
-	@Override
-	public Object reference(Relationship r) {
-		return null;
 	}
 
 }
