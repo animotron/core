@@ -19,11 +19,10 @@
 package org.animotron.graph.handler;
 
 import org.animotron.statement.LINK;
-import org.animotron.statement.Link;
 import org.animotron.statement.Statement;
+import org.animotron.statement.Value;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -47,21 +46,20 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         write(statement, statement.reference(r));
     }
 
-    protected void write(Statement statement, String reference) throws IOException {
+    protected void write(Statement statement, Object reference) throws IOException {
         if (statement instanceof NAME) {
-            write(reference);
+            write(reference.toString());
         } else if (statement instanceof Value) {
             write("\"");
-            write(reference.replaceAll("\"", "\\\\\""));
+            write(reference.toString().replaceAll("\"", "\\\\\""));
             write("\"");
         } else if (statement instanceof AN) {
-                write(reference);
+                write(reference.toString());
         } else if (!(statement instanceof LINK)){
             write(statement.name());
-            String name = reference;
-            if (name != null) {
+            if (reference != null) {
                 write(" ");
-                write(reference);
+                write(reference.toString());
             }
         }
     }
@@ -78,15 +76,15 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
         if (level != 0 && !(statement instanceof NAME)) {
             if (!(ps instanceof LINK)) {
                 write(" ");
@@ -100,7 +98,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
         end(statement, level, isOne);
     }
 

@@ -121,10 +121,10 @@ public abstract class Manipulator {
             					);
 
                             try {
-                                s = Statements.name(THE._.reference(msg));
+                                s = Statements.name((String) THE._.reference(msg));
                             } catch (Exception e){}
             			} else if (REF.name().equals(msg.getType().name())){
-                            s = Statements.name(THE._.reference(msg));
+                            s = Statements.name((String) THE._.reference(msg));
                         }
 
                         if (s instanceof Evaluable) {

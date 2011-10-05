@@ -42,7 +42,7 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         if (statement instanceof TEXT) {
-            write(statement.reference(r));
+            write(statement.reference(r).toString());
         }
     }
 
@@ -51,19 +51,19 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
     }
 
     @Override

@@ -24,7 +24,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.ml.VALUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

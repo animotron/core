@@ -36,7 +36,7 @@ public abstract class Instruction extends AbstractStatement {
     }
 
     @Override
-	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound {
+	public Relationship build(Node parent, Object reference, boolean ignoreNotFound) throws ENotFound {
         return AN._.build(parent, name(), ignoreNotFound);
 	}
 

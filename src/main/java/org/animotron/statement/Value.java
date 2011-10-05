@@ -16,10 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.value;
+package org.animotron.statement;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -30,17 +29,17 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class Value extends AbstractStatement {
 	
-    public Value(String name) { super(name); }
+    protected Value(String name) { super(name); }
 
     @Override
-    public Relationship build(Node parent, String value, boolean ignoreNotFound) throws AnimoException {
+    public Relationship build(Node parent, Object value, boolean ignoreNotFound) throws AnimoException {
         parent.setProperty(name(), value);
         return null;
     }
 
     @Override
-    public String reference(Relationship r) {
-        return (String) r.getEndNode().getProperty(name());
+    public Object reference(Relationship r) {
+        return r.getEndNode().getProperty(name());
     }
 
 }

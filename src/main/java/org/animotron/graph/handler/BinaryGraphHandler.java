@@ -65,19 +65,19 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
     }
 
     @Override

@@ -19,37 +19,26 @@
 package org.animotron.statement.ml;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.statement.value.VALUE;
-import org.animotron.statement.value.Value;
+import org.animotron.statement.Link;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.StringTokenizer;
-
-import static org.animotron.graph.AnimoGraph.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends Value implements MLOperator {
+public class TEXT extends Link implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
-	private TEXT() { super(""); }
+	private TEXT() { super("text"); }
 
     @Override
-    public Relationship build(Node parent, String value, boolean ignoreNotFound) throws AnimoException {
-        value = removeWS(value);
-        byte[] hash = hashReference(value).digest();
-        Node child = getCache(hash);
-        if (child == null) {
-            child = createNode();
-            VALUE._.build(child, value, ignoreNotFound);
-            createCache(child, hash);
-        }
-        return parent.createRelationshipTo(child, relationshipType());
+    public Relationship build(Node parent, Object value, boolean ignoreNotFound) throws AnimoException {
+        return super.build(parent, removeWS((String) value), ignoreNotFound);
     }
 
     private String removeWS(String value) {

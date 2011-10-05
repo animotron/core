@@ -22,7 +22,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.Expression;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.ml.VALUE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 

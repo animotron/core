@@ -69,7 +69,7 @@ public class StoreBinaryTest extends ATest {
         AnimoSerializer.serialize(r, System.out);
 
         JExpression s = new JExpression(
-          _(AN._, THE._.reference(r))
+          _(AN._, THE._.reference(r).toString())
         );
         assertBinary(s, TXT);
         

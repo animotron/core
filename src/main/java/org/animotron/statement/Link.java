@@ -22,24 +22,35 @@ import org.animotron.exception.AnimoException;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Link extends AbstractStatement {
+public abstract class Link extends Value {
 
-	public Link(String name) { super(name); }
+	protected Link(String name) { super(name); }
 
 	@Override
-	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws AnimoException {
-		return parent.createRelationshipTo(createNode(), relationshipType());
+	public Relationship build(Node parent, Object reference, boolean ignoreNotFound) throws AnimoException {
+        if (reference == null) {
+		    return parent.createRelationshipTo(createNode(), relationshipType());
+        }
+        byte[] hash = hashReference(reference).digest();
+        Node child = getCache(hash);
+        if (child == null) {
+            child = createNode();
+            super.build(child, reference, ignoreNotFound);
+            createCache(child, hash);
+        }
+        return parent.createRelationshipTo(child, relationshipType());
+
 	}
 
 	@Override
-	public String reference(Relationship r) {
+	public Object reference(Relationship r) {
 		return null;
 	}
 

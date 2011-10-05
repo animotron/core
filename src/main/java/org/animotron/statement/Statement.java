@@ -33,13 +33,14 @@ import java.security.MessageDigest;
  */
 public interface Statement {
 	
-	public Relationship build(Node parent, String reference, boolean ignoreNotFound) throws ENotFound, AnimoException;
+	public Relationship build(Node parent, Object reference, boolean ignoreNotFound) throws ENotFound, AnimoException;
 	
     public String name();
 
     public RelationshipType relationshipType();
 
-    public String reference(Relationship r);
+    public Object reference(Relationship r);
 
-    public MessageDigest hash(String reference);
+    public MessageDigest hash(Object reference);
+
 }

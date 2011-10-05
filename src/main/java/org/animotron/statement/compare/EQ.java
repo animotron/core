@@ -48,7 +48,7 @@ public class EQ extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
-		String name = reference(op);
+		String name = (String) reference(op);
 
 		Relationship have = GET._.get(ref, name);
 		if (have == null) return false;

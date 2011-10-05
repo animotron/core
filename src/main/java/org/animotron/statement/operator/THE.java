@@ -108,16 +108,16 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	@Override
-	public Relationship build(Node parent, String name, boolean ignoreNotFound) {
+	public Relationship build(Node parent, Object name, boolean ignoreNotFound) {
         Node node = createNode();
-        RelationshipType type = relationshipType(name);
+        RelationshipType type = relationshipType((String) name);
         Relationship r = parent.createRelationshipTo(node, type);
         Properties.NAME.set(r, name);
         return r;
 	}
 
 	@Override
-	public String reference(Relationship r) {
+	public Object reference(Relationship r) {
 		return Properties.NAME.get(r);
 	}
 

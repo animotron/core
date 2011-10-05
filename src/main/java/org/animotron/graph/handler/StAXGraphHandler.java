@@ -47,22 +47,22 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 
     @Override
-    public void start(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
         try {
             if (statement instanceof ATTRIBUTE) {
-                writer.writeAttribute(param[0], param[1]);
+                writer.writeAttribute(param[0].toString(), param[1].toString());
             } else if (statement instanceof ENTITY){
-                writer.writeEntityRef(param[0]);
+                writer.writeEntityRef(param[0].toString());
             } else if (statement instanceof ELEMENT) {
-                writer.writeStartElement(param[0]);
+                writer.writeStartElement(param[0].toString());
             } else if (statement instanceof PI) {
                 if (param[1] == null) {
-                    writer.writeProcessingInstruction (param[0]);
+                    writer.writeProcessingInstruction (param[0].toString());
                 } else {
-                    writer.writeProcessingInstruction (param[0], param[1]);
+                    writer.writeProcessingInstruction (param[0].toString(), param[1].toString());
                 }
             } else if (statement instanceof NS) {
-                writer.writeNamespace(param[0], param[1]);
+                writer.writeNamespace(param[0].toString(), param[1].toString());
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);
@@ -70,7 +70,7 @@ public class StAXGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void end(Statement statement, String[] param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
         try {
             if (statement instanceof ELEMENT) {
                 writer.writeEndElement();
@@ -81,16 +81,16 @@ public class StAXGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
         try {
             if (statement instanceof COMMENT){
-                writer.writeComment(param);
+                writer.writeComment(param.toString());
             } else if (statement instanceof CDATA){
-                writer.writeCData(param);
+                writer.writeCData(param.toString());
             } else if (statement instanceof DTD){
-                writer.writeDTD(param);
+                writer.writeDTD(param.toString());
             } else if (statement instanceof TEXT) {
-                writer.writeCharacters(param);
+                writer.writeCharacters(param.toString());
             }
 
         } catch (XMLStreamException e) {
@@ -99,7 +99,7 @@ public class StAXGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void end(Statement statement, String param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
     }
 
     @Override

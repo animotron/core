@@ -20,10 +20,10 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
+import org.animotron.statement.Value;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
-import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

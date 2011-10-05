@@ -58,7 +58,7 @@ public class WITH extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
-		String name = reference(op);
+		String name = (String) reference(op);
 
 		Set<Relationship[]> haveSet = GET._.get(pf, ref, name);//GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
 		if (haveSet == null || haveSet.isEmpty()) return false;
