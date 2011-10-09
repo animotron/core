@@ -54,7 +54,7 @@ public abstract class ObjectPool<T> {
 			while (e.hasMoreElements()) {
 				t = e.nextElement();
 				if ((now - unlocked.get(t)) > expirationTime) {
-					// object has expired
+					// object hasValue expired
 					unlocked.remove(t);
 					expire(t);
 					t = null;

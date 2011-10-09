@@ -26,7 +26,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -53,7 +52,7 @@ public abstract class Operator extends AbstractStatement {
 
 	@Override
 	public Object reference(Relationship r) {
-		return NAME.get(r.getEndNode().getSingleRelationship(REF, OUTGOING));
+		return THE._.reference(r.getEndNode().getSingleRelationship(REF, OUTGOING));
 	}
 	
 }

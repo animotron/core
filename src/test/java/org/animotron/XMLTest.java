@@ -76,4 +76,19 @@ public class XMLTest extends ATest {
         test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a");
 	}
 
+    @Test
+	public void test_05() throws Exception {
+        test("<a><b><x/></b><c><x/></c></a>", "??stylesheet \"path\" \\a");
+	}
+
+    @Test
+	public void test_06() throws Exception {
+        test("<a><b><x/></b><c><x/><y/></c><x><z/></x></a>", "??stylesheet \"path\" \\a");
+	}
+
+    @Test
+	public void test_07() throws Exception {
+        test("<a a=\"a\">a</a>", "\\a (@a \"a\") (\"a\")");
+	}
+
 }

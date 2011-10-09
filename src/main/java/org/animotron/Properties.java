@@ -29,8 +29,8 @@ public enum Properties  {
 	
 	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT, RID, CID, BIN;
 	
-	public String get(PropertyContainer container) {
-		return container.getProperty(name()).toString();
+	public Object get(PropertyContainer container) {
+		return container.getProperty(name());
 	}
 	
 	public void set(PropertyContainer container, Object value) {
@@ -40,14 +40,6 @@ public enum Properties  {
 	
 	public boolean has(PropertyContainer container) {
 		return container.hasProperty(name());
-	}
-
-	public void set(PropertyContainer container, int value) {
-		container.setProperty(name(), value);
-	}
-
-	public void set(PropertyContainer container, byte[] value) {
-		container.setProperty(name(), value);
 	}
 
 }

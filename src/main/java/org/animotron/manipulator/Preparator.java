@@ -23,7 +23,6 @@ import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Prepare;
-import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -37,6 +36,7 @@ import org.neo4j.kernel.Uniqueness;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static org.animotron.graph.AnimoGraph.getSTART;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
@@ -57,7 +57,7 @@ public class Preparator extends StatementManipulator {
             @Override
             public Evaluation evaluate(Path path) {
                 if (path.length() == 2) {
-                    if (THE._.THE_NODE().equals(path.endNode()))
+                    if (getSTART().equals(path.endNode()))
                         return INCLUDE_AND_PRUNE;
                     Relationship r = path.relationships().iterator().next();
                     if (RelationshipTypes.REF.equals(r.getType()))

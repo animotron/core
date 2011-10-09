@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.Link;
+import org.animotron.statement.value.Value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ELEMENT extends Link implements Prefix {
+public class ELEMENT extends Value implements Prefix {
 
 	public static final ELEMENT _ = new ELEMENT();
 

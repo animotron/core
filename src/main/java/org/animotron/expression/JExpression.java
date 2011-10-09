@@ -21,10 +21,10 @@ package org.animotron.expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.LINK;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
-import org.animotron.statement.ml.VALUE;
+import org.animotron.statement.value.LINK;
+import org.animotron.statement.value.VALUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -46,31 +46,31 @@ public class JExpression extends Expression {
     }
 
     @Override
-    public void build() throws AnimoException {
+    public void build() throws Exception {
         builder.startGraph();
         for(Object[] i : e) {
-            buildExpression(i);
+            build(i);
         }
         builder.endGraph();
     }
 
-    private void buildExpression(Object[]... e) throws AnimoException {
+    private void build(Object[]... e) throws AnimoException {
         if (e != null)
             for (Object i : e)
                 if (i instanceof Object[][]) {
-                    buildExpression((Object[][]) i);
+                    build((Object[][]) i);
                 } else {
                     buildStatement((Object[]) i);
                 }
     }
 
     private void buildStatement(Object[] e) throws AnimoException {
-        builder.start((Statement) e[0], (String) e[1]);
-        buildExpression((Object[][]) e[2]);
+        builder.start((Statement) e[0], e[1]);
+        build((Object[][]) e[2]);
         builder.end();
     }
 
-	public static Object[] _(Statement statement, String reference) {
+	public static Object[] _(Statement statement, Object reference) {
 		Object[] e = {statement, reference, null};
 		return e;
 	}
@@ -80,7 +80,7 @@ public class JExpression extends Expression {
         return e;
     }
 
-    public static Object[] _(Statement statement, String reference, Object[]... p) {
+    public static Object[] _(Statement statement, Object reference, Object[]... p) {
         Object[] e = {statement, reference, p};
         return e;
     }
@@ -102,28 +102,40 @@ public class JExpression extends Expression {
         return _(ATTRIBUTE._, name(name));
     }
 
-    public static Object[] attribute(String name, String value) {
-        return _(ATTRIBUTE._, name(name), string(value));
+    public static Object[] attribute(String name, Object value) {
+        return _(ATTRIBUTE._, name(name), value(value));
     }
 
-    public static Object[] entity(String name, String value) {
-        return _(ENTITY._, name(name), string(value));
+    public static Object[] entity(String name) {
+        return _(ENTITY._, name(name));
     }
 
-	public static Object[] comment(String value) {
+    public static Object[] comment() {
+        return _(COMMENT._);
+    }
+
+    public static Object[] comment(String value) {
         return _(COMMENT._, text(value));
-	}
+    }
+
+    public static Object[] cdata() {
+        return _(CDATA._);
+    }
 
     public static Object[] cdata(String value) {
         return _(CDATA._, text(value));
     }
 
     public static Object[] pi(String name, String value) {
-        return _(PI._, name(name), string(value));
+        return _(PI._, name(name), value(value));
     }
 
     public static Object[] pi(String value) {
-        return _(PI._, string(value));
+        return _(PI._, value(value));
+    }
+
+    public static Object[] dtd() {
+        return _(DTD._);
     }
 
     public static Object[] dtd(String value) {
@@ -131,22 +143,22 @@ public class JExpression extends Expression {
     }
 
     public static Object[] namespace(String name, String value) {
-        return _(NS._, name(name), string(value));
+        return _(NS._, name(name), value(value));
     }
 
     public static Object[] namespace(String value) {
-        return _(NS._, string(value));
+        return _(NS._, value(value));
     }
 
     public static Object[] name(String value) {
         return _(NAME._, value);
     }
 
-    public static Object[] string(String value) {
+    public static Object[] value(Object value) {
         return _(VALUE._, value);
     }
 
-    public static Object[] text(String value) {
+    public static Object[] text(Object value) {
         return _(TEXT._, value);
     }
 

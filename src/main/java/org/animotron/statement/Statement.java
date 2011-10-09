@@ -33,7 +33,7 @@ import java.security.MessageDigest;
  */
 public interface Statement {
 	
-	public Relationship build(Node parent, Object reference, boolean ignoreNotFound) throws ENotFound, AnimoException;
+	public Relationship build(Node parent, Object reference, boolean flag) throws ENotFound, AnimoException;
 	
     public String name();
 

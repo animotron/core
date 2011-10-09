@@ -98,7 +98,7 @@ public class MLResultTraverser extends ResultTraverser {
                     String[] param = {null, null};
                     try {
                         if (it.hasNext()) {
-                            int size = it.size();
+                            int size = 0;
                             Object p = it.next();
                             param[0] = param(pf, p);
                             if (s instanceof ELEMENT) {
@@ -137,9 +137,8 @@ public class MLResultTraverser extends ResultTraverser {
 			} else if (!(s instanceof Relation)) {
                 node = r.getEndNode();
                 It it = new It();
-                int size = it.size();
                 try {
-                    iterate(handler, pf, it, level, size);
+                    iterate(handler, pf, it, level, 0);
                 } finally {
                     it.remove();
                 }

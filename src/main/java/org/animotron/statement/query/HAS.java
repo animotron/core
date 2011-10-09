@@ -37,7 +37,7 @@ public class HAS extends Operator implements Query, Predicate {
 	
 	public static final HAS _ = new HAS();
 	
-	private HAS() { super("has"); }
+	private HAS() { super("hasValue"); }
 
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Node ref) {

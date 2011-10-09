@@ -41,7 +41,7 @@ public class BinaryGraphHandler implements GraphHandler {
     }
 
     public static void write(Node n, OutputStream out) throws IOException {
-        File bin = BinaryExpression.getFile(Properties.BIN.get(n));
+        File bin = BinaryExpression.getFile((String) Properties.BIN.get(n));
         InputStream in = null;
             in = new FileInputStream(bin);
         byte buf[] = new byte[1024 * 4];

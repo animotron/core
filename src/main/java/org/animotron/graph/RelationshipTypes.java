@@ -31,7 +31,7 @@ public enum RelationshipTypes implements RelationshipType {
 	
 	GC, EVAL, PREPARE, FILTER, CALC,
 	
-	CACHE, EMPTY, TOP,
+	CACHE, START, END, TOP, VALUE,
 	
 	REF, RESULT, SOURCE;
 	

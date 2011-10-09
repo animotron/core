@@ -20,10 +20,10 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
-import org.animotron.statement.Value;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
+import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -80,7 +80,7 @@ public class FastGraphBuilder extends GraphBuilder {
         the = THE._.get(name);
         if (the != null) {
             if (HASH.has(the)) {
-                String h = HASH.get(the);
+                String h = (String) HASH.get(the);
                 if (h == null) {
                     catcher.creative(the);
                     HASH.set(the, hash);
@@ -108,7 +108,7 @@ public class FastGraphBuilder extends GraphBuilder {
 	}
 
     @Override
-	public void start(Statement statement, String reference) {
+	public void start(Statement statement, Object reference) {
         if (flow.isEmpty() && !(statement instanceof THE)) {
             start(THE._, null);
         }
@@ -121,15 +121,17 @@ public class FastGraphBuilder extends GraphBuilder {
 				parent = statements.peek();
 			}
 		}
+        boolean ready = statement instanceof Value || ignoreNotFound;
         MessageDigest md = statement.hash(reference);
 		Object[] item = {
-				statement,	// 0  statement
-                reference,  // 1  name or value
-				md, 		// 2  message digest
-				null,	 	// 3  current relationship
-				null,		// 4  current node
-				parent, 	// 5  parent item
-				false,		// 6  done
+				statement,	    // 0 statement
+                reference,      // 1 name or value
+				md, 		    // 2 message digest
+				null,	 	    // 3 current relationship
+				null,		    // 4 current node
+				parent, 	    // 5 parent item
+				false,		    // 6 is done?
+                ready           // 7 is ready for cache?
 			};
 		statements.push(item);
 		flow.add(item);
@@ -142,6 +144,9 @@ public class FastGraphBuilder extends GraphBuilder {
 		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
 			((MessageDigest) (parent[2])).update(hash);
+            if (parent[0] instanceof Value) {
+                parent[7] = false;
+            }
 		}
 		current[2] = hash;
 	}
@@ -162,38 +167,35 @@ public class FastGraphBuilder extends GraphBuilder {
 				return;
 			}
 		}
-        Relationship r;
-        Statement statement = (Statement) item[0];
         Node parent = (Node) p[4];
         if (parent == null)
             //"Internal error: parent can not be null."
             throw new AnimoException((Relationship)item[3]);
+        Relationship r;
+        Statement statement = (Statement) item[0];
+        Object reference = item[1];
+        boolean ready = (Boolean) item[7];
         if (!(statement instanceof Relation || statement instanceof Value)) {
             byte[] hash = (byte[]) item[2];
             Node node = getCache(hash);
             if (node == null) {
-                r = build(statement, parent, item);
+                r = statement.build(parent, reference, ready);
                 createCache(r.getEndNode(), hash);
             } else {
                 r = parent.createRelationshipTo(node, statement.relationshipType());
                 item[6] = true;
             }
         } else {
-            r = build(statement, parent, item);
+            r = statement.build(parent, reference, ready);
         }
         if (r != null) {
             item[3] = r;
             item[4] = r.getEndNode();
-            order(r, order);
         }
 	}
 	
 	private String hash(Object[] item) {
         return MessageDigester.byteArrayToHex((byte[]) item[2]);
-	}
-	
-	private Relationship build(Statement statement, Node parent, Object[] item) throws AnimoException {
-		return statement.build(parent, (String) item[1], ignoreNotFound);
 	}
 	
 }

@@ -18,89 +18,285 @@
  */
 package org.animotron;
 
-import org.apache.lucene.search.Sort;
-import org.apache.lucene.search.SortField;
-import org.junit.Assert;
+import junit.framework.Assert;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.junit.Test;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
-import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.index.lucene.QueryContext;
 
-import java.util.List;
+import java.util.Iterator;
 
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.createNode;
 
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class OrderTest extends ATest {
 
+    private enum Rel implements RelationshipType { A, B, C}
+
     @Test
-	public void orderedRelationships() {
-		if (true) {
-			Transaction tx = beginTx();
-			try {
-				createChild(getROOT(), 10000);
-				tx.success();
-			} finally {
-				finishTx(tx);
-			}
-		}
-		
-		System.out.println("reading ...");
-		IndexHits<Relationship> q = getORDER().query(getROOT());
-		try {
-			int i = 1;
-			for (Relationship r : q ) {
+	public void test_00() {
 
-//					System.out.print(q.currentScore() + " ");
-//					System.out.println(r.getEndNode().getProperty(NAME+"-P"));
-				
-				Assert.assertEquals(i, r.getEndNode().getProperty("NAME-P"));
-				i++;
-			}
-		} finally {
-			q.close();
-		}
-		
-	}
+        Node node = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    Node node = createNode();
+                    node.createRelationshipTo(createNode(), Rel.A);
+                    node.createRelationshipTo(createNode(), Rel.B);
+                    node.createRelationshipTo(createNode(), Rel.C);
+                    return node;
+                }
+            }
+        );
 
-	private List<Node> createChild(Node parent, int num) {
-		
-		for (int i = 1; i <= num; i++) {
-			Node child = createNode();
-			child.setProperty("NAME-P", i);
-			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
-			getORDER().add(r, i);
-		}
+        Iterator<Relationship> it = node.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
 
-		return null;
-	}
-	
-	public QueryContext sort( String key, String... additionalKeys ) {
-		QueryContext q = new QueryContext( "*" );
-		
-        SortField firstSortField = new SortField( key, SortField.LONG );
-        if ( additionalKeys.length == 0 )
-        {
-            return q.sort( new Sort( firstSortField ) );
-        }
-        
-        SortField[] sortFields = new SortField[1+additionalKeys.length];
-        sortFields[0] = firstSortField;
-        for ( int i = 0; i < additionalKeys.length; i++ )
-        {
-            sortFields[1+i] = new SortField( additionalKeys[i], SortField.LONG );
-        }
-        return q.sort( new Sort( sortFields ) );
     }
 
-	enum RT implements RelationshipType {
-		CHILD
-	}
+    @Test
+	public void test_01() {
+
+        Node node = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    Node start = createNode();
+                    Node end = createNode();
+                    start.createRelationshipTo(end, Rel.A);
+                    start.createRelationshipTo(end, Rel.B);
+                    start.createRelationshipTo(end, Rel.C);
+                    return start;
+                }
+            }
+        );
+
+        Iterator<Relationship> it = node.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+    }
+
+    @Test
+	public void test_02() {
+
+        Node node = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    Node start = createNode();
+                    Node end = createNode();
+                    start.createRelationshipTo(end, Rel.A);
+                    start.createRelationshipTo(end, Rel.B);
+                    start.createRelationshipTo(end, Rel.C);
+                    return end;
+                }
+            }
+        );
+
+        Iterator<Relationship> it = node.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+    }
+
+    @Test
+	public void test_03() {
+
+        final Node node = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return createNode();
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    node.createRelationshipTo(createNode(), Rel.A);
+                    node.createRelationshipTo(createNode(), Rel.B);
+                    node.createRelationshipTo(createNode(), Rel.C);
+                    return null;
+                }
+            }
+        );
+
+        Iterator<Relationship> it = node.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+    }
+
+    @Test
+	public void test_04() {
+
+        final Node node = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return createNode();
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    node.createRelationshipTo(createNode(), Rel.A);
+                    return null;
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    node.createRelationshipTo(createNode(), Rel.B);
+                    return null;
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    node.createRelationshipTo(createNode(), Rel.C);
+                    return null;
+                }
+            }
+        );
+
+        Iterator<Relationship> it = node.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+    }
+
+    @Test
+	public void test_05() {
+
+        final Node start = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return createNode();
+                }
+            }
+        );
+
+        final Node end = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return createNode();
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    start.createRelationshipTo(end, Rel.A);
+                    start.createRelationshipTo(end, Rel.B);
+                    start.createRelationshipTo(end, Rel.C);
+                    return null;
+                }
+            }
+        );
+
+        Iterator<Relationship> it = start.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+        it = end.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+    }
+
+    @Test
+	public void test_06() {
+
+        final Node start = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return createNode();
+                }
+            }
+        );
+
+        final Node end = AnimoGraph.execute(
+            new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return createNode();
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    start.createRelationshipTo(end, Rel.A);
+                    return null;
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    start.createRelationshipTo(end, Rel.B);
+                   return null;
+                }
+            }
+        );
+
+        AnimoGraph.execute(
+            new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Exception {
+                    start.createRelationshipTo(end, Rel.C);
+                    return null;
+                }
+            }
+        );
+
+        Iterator<Relationship> it = start.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+        it = end.getRelationships().iterator();
+        Assert.assertEquals(it.next().getType(), Rel.A);
+        Assert.assertEquals(it.next().getType(), Rel.B);
+        Assert.assertEquals(it.next().getType(), Rel.C);
+
+    }
+
 }
+

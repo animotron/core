@@ -29,8 +29,8 @@ import org.neo4j.graphdb.RelationshipType;
 
 import java.security.MessageDigest;
 
-import static org.animotron.Properties.RID;
 import static org.animotron.Properties.CID;
+import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
@@ -40,6 +40,7 @@ import static org.animotron.graph.RelationshipTypes.RESULT;
  */
 public abstract class AbstractStatement implements Statement {
 	
+    private MessageDigest md;
 	private String name;
 	public final RelationshipType relationshipType;
 	public final String rType;
@@ -47,7 +48,9 @@ public abstract class AbstractStatement implements Statement {
 	public AbstractStatement(String name) {
 		this.name = name;
 		this.relationshipType = AnimoRelationshipType.get(name);
-		rType = this.relationshipType.name(); 
+		rType = this.relationshipType.name();
+        this.md = MessageDigester.md();
+        md.update(name.getBytes());
 	}
 
 //	public AbstractStatement(VALUE reference, VALUE resultRelationshipType) {
@@ -92,21 +95,22 @@ public abstract class AbstractStatement implements Statement {
         return null;
     }
 
-    protected byte[] getBytes(Object reference) {
-        return ((String) reference).getBytes();
-    }
-
-    protected MessageDigest hashReference(Object reference) {
-        MessageDigest md = MessageDigester.md();
-        if (reference != null)
-            md.update(getBytes(reference));
-        return md;
+    protected final MessageDigest md() {
+        try {
+            return (MessageDigest) md.clone();
+        } catch (CloneNotSupportedException e) {
+			//can't be, but throw runtime error
+			throw new RuntimeException(e);
+        }
     }
 
     @Override
     public MessageDigest hash(Object reference) {
-        MessageDigest md = hashReference(reference);
-        md.update(name().getBytes());
+        MessageDigest md = md();
+        if (reference instanceof String ||
+            reference instanceof Number ||
+            reference instanceof Boolean)
+            md.update(reference.toString().getBytes());
         return md;
     }
 

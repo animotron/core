@@ -25,9 +25,8 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
-
-import javolution.util.FastList;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
 
@@ -40,8 +39,9 @@ public class OnQuestion implements Subscribable<PFlow> {
 	@Override
 	public void onMessage(PFlow pf) {
 		
-		List<PFlow> list = new FastList<PFlow>();
-		
+//        List<PFlow> list = new FastList<PFlow>();
+        List<PFlow> list = new LinkedList<PFlow>();
+
 		IndexHits<Relationship> q = getORDER().query(pf.getOPNode());
 		try {
 			Iterator<Relationship> it = q.iterator();

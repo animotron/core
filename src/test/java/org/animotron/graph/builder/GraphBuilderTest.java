@@ -37,11 +37,11 @@ public class GraphBuilderTest extends ATest {
         AnimoExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
-        String inH = HASH.get(e);
+        String inH = (String) HASH.get(e);
         cleanDb();
         e = new AnimoExpression(new MLGraphBuilder(), animo);
         String outA = AnimoSerializer.serialize(e);
-        String outH = HASH.get(e);
+        String outH = (String) HASH.get(e);
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
@@ -50,10 +50,10 @@ public class GraphBuilderTest extends ATest {
         AnimoExpression e;
         e = new AnimoExpression(new MLGraphBuilder(), animo);
         String outA = AnimoSerializer.serialize(e);
-        String outH = HASH.get(e);
+        String outH = (String) HASH.get(e);
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
-        String inH = HASH.get(e);
+        String inH = (String) HASH.get(e);
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
@@ -62,10 +62,10 @@ public class GraphBuilderTest extends ATest {
         AnimoExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
-        String inH = HASH.get(e);
+        String inH = (String) HASH.get(e);
         e = new AnimoExpression(new MLGraphBuilder(), animo);
         String outA = AnimoSerializer.serialize(e);
-        String outH = HASH.get(e);
+        String outH = (String) HASH.get(e);
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }

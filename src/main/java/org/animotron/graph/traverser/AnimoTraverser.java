@@ -26,12 +26,11 @@ import org.animotron.statement.ml.NAME;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -71,8 +70,8 @@ public class AnimoTraverser {
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
             It it = new It();
-            int size = it.size();
-            if (node.hasProperty(NAME._.name())) size--;
+            int size = 0;
+            if (node.hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
 			try {
                 iterate(handler, pf, it, level, size);
 			} finally {
@@ -91,15 +90,11 @@ public class AnimoTraverser {
 
     protected class It implements Iterator <Object>, Iterable<Object> {
 
-        private Iterator<?> c;
-        private IndexHits<Relationship> q;
-        private int size;
+        private Iterator<?> c, r;
 
         public It () {
             c = node.getPropertyKeys().iterator();
-            q = getORDER().query(node);
-            size = q.size();
-            if (c.hasNext()) size++;
+            r = node.getRelationships(OUTGOING).iterator();
         }
 
         @Override
@@ -111,7 +106,7 @@ public class AnimoTraverser {
         public boolean hasNext() {
             if (c.hasNext())
                 return true;
-            c = q.iterator();
+            c = r;
             return c.hasNext();
         }
 
@@ -122,12 +117,8 @@ public class AnimoTraverser {
 
         @Override
         public void remove() {
-            q.close();
         }
 
-        public int size() {
-            return size;
-        }
     }
 	
 }

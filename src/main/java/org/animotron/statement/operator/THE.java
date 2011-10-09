@@ -20,7 +20,6 @@ package org.animotron.statement.operator;
 
 import org.animotron.Properties;
 import org.animotron.exception.ENotFound;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
@@ -29,7 +28,6 @@ import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.event.ErrorState;
 import org.neo4j.graphdb.event.KernelEventHandler;
 
@@ -49,27 +47,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 
 	public static final THE _ = new THE();
 
-	private THE() {
-		super(NAME);
-	}
-
-	private Node THE_NODE = null;
-
-	public Node THE_NODE() {
-		if (THE_NODE == null) {
-			synchronized (this) {
-				Transaction tx = beginTx();
-				try {
-					THE_NODE = getOrCreateNode(getROOT(), RelationshipTypes.THE);
-					AnimoGraph.getDb().registerKernelEventHandler(this);
-					tx.success();
-				} finally {
-					finishTx(tx);
-				}
-			}
-		}
-		return THE_NODE;
-	}
+	private THE() { super(NAME); }
 
 	public RelationshipType relationshipType(String name){
 		return AnimoRelationshipType.get(name(), name);
@@ -77,7 +55,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 
 	public Relationship get(String name) {
 		RelationshipType type = relationshipType(name);
-		return THE_NODE().getSingleRelationship(type, OUTGOING);
+		return getSTART().getSingleRelationship(type, OUTGOING);
 	}
 
 	public Relationship create(String name, String hash) throws ENotFound {
@@ -89,7 +67,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
 	private Relationship create(String name) throws ENotFound {
-        Relationship r = build(THE_NODE(), name, true);
+        Relationship r = build(getSTART(), name, true);
         Node node = r.getEndNode();
         getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
         return r;
@@ -128,13 +106,12 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
         return prepare;
 	}
 
-	@Override
-	public void beforeShutdown() {
-		THE_NODE = null;
+    @Override
+    public void beforeShutdown() {
+        //ignore
+    }
 
-	}
-
-	@Override
+    @Override
 	public void kernelPanic(ErrorState error) {
 		//ignore
 	}

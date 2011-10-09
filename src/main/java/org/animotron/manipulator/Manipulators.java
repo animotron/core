@@ -18,12 +18,12 @@
  */
 package org.animotron.manipulator;
 
-import javolution.util.FastList;
 import org.animotron.graph.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.getTOP;
@@ -43,9 +43,11 @@ public class Manipulators {
 	
 	public class Catcher {
 		
-		List<Node> creative = new FastList<Node>();
-		List<Node> destructive = new FastList<Node>();
-		
+//        List<Node> creative = new FastList<Node>();
+//        List<Node> destructive = new FastList<Node>();
+        List<Node> creative = new LinkedList<Node>();
+        List<Node> destructive = new LinkedList<Node>();
+
 		public Catcher() {}
 		
         public void creative(Node node) {

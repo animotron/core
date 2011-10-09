@@ -16,36 +16,17 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement;
-
-import org.animotron.exception.AnimoException;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+package org.animotron.statement.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Value extends AbstractStatement {
-	
-    protected Value(String name) { super(name); }
+public class VALUE extends Value {
 
-    @Override
-    public Relationship build(Node parent, Object value, boolean ignoreNotFound) throws AnimoException {
-        parent.setProperty(name(), value);
-        return null;
-    }
+    public final static VALUE _ = new VALUE();
 
-    public Object reference(Node n) {
-        if (n.hasProperty(name()))
-            return n.getProperty(name());
-        return null;
-    }
-
-    @Override
-    public Object reference(Relationship r) {
-        return reference(r.getEndNode());
-    }
+    private VALUE() { super("value"); }
 
 }

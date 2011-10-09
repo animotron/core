@@ -18,7 +18,7 @@
  */
 package org.animotron.graph;
 
-import javolution.util.FastMap;
+import javolution.util.FastList;
 import org.animotron.Executor;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
@@ -27,9 +27,8 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
-import java.io.IOException;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -43,7 +42,7 @@ public class AnimoGraph {
 
 	private static String STORAGE;
 
-	private static Node ROOT, TOP; //EMPTY
+	private static Node ROOT, START, END, TOP;
     private static CacheIndex CACHE;
     private static OrderIndex ORDER;
 	public static RelationshipIndex RESULT_INDEX;
@@ -71,8 +70,9 @@ public class AnimoGraph {
             new GraphOperation<Void> () {
                 @Override
                 public Void execute() {
+                    START = getOrCreateNode(ROOT,RelationshipTypes.START);
+                    END = getOrCreateNode(ROOT,RelationshipTypes.END);
                     TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
-                    //EMPTY = getOrCreateNode(ROOT,RelationshipTypes.EMPTY);
                     return null;
                 }
             }
@@ -91,9 +91,17 @@ public class AnimoGraph {
 		return ROOT;
 	}
 
-	public static Node getTOP() {
-		return TOP;
-	}
+    public static Node getSTART() {
+        return START;
+    }
+
+    public static Node getEND() {
+        return END;
+    }
+
+    public static Node getTOP() {
+        return TOP;
+    }
 
 	public static OrderIndex getORDER() {
 		return ORDER;
@@ -101,18 +109,14 @@ public class AnimoGraph {
 
 	public static void shutdownDB() {
 		System.out.println("shotdown");
-
 		Executor.shutdown();
-
 		while (!activeTx.isEmpty()) {
-
-			System.out.println("Active transactions "+countTx);
-			if (countTx > 0) {
-				for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
-					e.getValue().printStackTrace();
-				}
-			}
-
+			System.out.println("Active transactions "+activeTx.size());
+//			if (countTx > 0) {
+//				for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
+//					e.getValue().printStackTrace();
+//				}
+//			}
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
 		graphDb.shutdown();
@@ -120,34 +124,22 @@ public class AnimoGraph {
 		THE._.beforeShutdown();
 	}
 
-	private static FastMap<Transaction, Exception> activeTx = new FastMap<Transaction, Exception>();
-
-	private static int countTx = 0;
-
-	private static synchronized void inc() {
-		countTx++;
-	}
-
-	private static synchronized void dec() {
-		countTx--;
-	}
+	private static List<Transaction> activeTx = new FastList<Transaction>();
 
 	public static Transaction beginTx() {
 		Transaction tx = graphDb.beginTx();
-		activeTx.put(tx, new IOException());
-		inc();
+		activeTx.add(tx);
 		return tx;
 	}
 
 	public static void finishTx(Transaction tx) {
 		tx.finish();
 		activeTx.remove(tx);
-		dec();
 	}
 
-	public static boolean isTransactionActive(Transaction tx) {
-		return activeTx.containsKey(tx);
-	}
+//	public static boolean isTransactionActive(Transaction tx) {
+//		return activeTx.containsKey(tx);
+//	}
 
 	/**
 	 * Execute operation with transaction.
@@ -191,8 +183,8 @@ public class AnimoGraph {
 		return node;
 	}
 
-	public static void createCache(Node node, byte[] hash) {
-		CACHE.add(node, hash);
+	public static void createCache(Node n, byte[] hash) {
+		CACHE.add(n, hash);
 	}
 
     public static Node getCache(byte[] hash) {
@@ -211,4 +203,13 @@ public class AnimoGraph {
 		return RESULT_INDEX.get(RESULT, ref.getId(), node, null);
 		//return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
 	}
+
+    public static Relationship copy(Relationship r, Node n) {
+        Relationship c = n.createRelationshipTo(r.getEndNode(), r.getType());
+        for (String name : r.getPropertyKeys()) {
+            c.setProperty(name, r.getProperty(name));
+        }
+        return c;
+    }
+
 }

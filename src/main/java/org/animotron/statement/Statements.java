@@ -19,6 +19,7 @@
 package org.animotron.statement;
 
 import javolution.util.FastList;
+import javolution.util.FastMap;
 import org.animotron.statement.operator.THE;
 import org.clapper.util.classutil.*;
 import org.neo4j.graphdb.Relationship;
@@ -27,7 +28,6 @@ import org.neo4j.graphdb.RelationshipType;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -40,8 +40,7 @@ public class Statements {
 	private static boolean ready = false;
 	private static boolean run = false;
 	
-	private static Map<String, Statement> statementsByName =
-		new HashMap<String, Statement>();
+	private static Map<String, Statement> statementsByName = new FastMap<String, Statement>();
 
 	@SuppressWarnings("unchecked")
 	private static void loadClass(String name) {
@@ -87,7 +86,7 @@ public class Statements {
 						new NotClassFilter (new AbstractClassFilter()));
 				
 				Collection<ClassInfo> foundClasses = new FastList<ClassInfo>();
-				
+
 				//searching
 				finder.findClasses(foundClasses, filter);
 

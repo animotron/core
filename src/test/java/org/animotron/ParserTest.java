@@ -474,4 +474,9 @@ public class ParserTest extends ATest {
         test("the a (is b) (have c \"x\") (have c \"x\") (\"c\")");
     }
 
+    @Test
+    public void test_87() throws Exception {
+        test("the a (b \"x\") (c \"x\")");
+    }
+
 }

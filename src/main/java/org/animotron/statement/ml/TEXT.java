@@ -18,10 +18,7 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.exception.AnimoException;
-import org.animotron.statement.Link;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+import org.animotron.statement.value.Value;
 
 import java.util.StringTokenizer;
 
@@ -30,18 +27,13 @@ import java.util.StringTokenizer;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends Link implements MLOperator {
+public class TEXT extends Value implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
 	private TEXT() { super("text"); }
 
-    @Override
-    public Relationship build(Node parent, Object value, boolean ignoreNotFound) throws AnimoException {
-        return super.build(parent, removeWS((String) value), ignoreNotFound);
-    }
-
-    private String removeWS(String value) {
+    public String removeWS(String value) {
         StringBuilder buf = new StringBuilder();
         if (value.length() > 0) {
             StringTokenizer tok = new StringTokenizer(value);

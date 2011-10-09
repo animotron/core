@@ -22,6 +22,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -34,8 +35,8 @@ public class CacheIndex {
 	protected final Index<Node> INDEX;
 
 	public CacheIndex(IndexManager indexManager) {
-        INDEX = indexManager. forNodes(NAME);
-//        INDEX = indexManager. forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+//        INDEX = indexManager. forNodes(NAME);
+        INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
 
 //		DatabaseManager dbm = AnimoGraph.getBabuDB().getDatabaseManager();
 //        if (dbm.getDatabases().containsKey("myDB"))
@@ -46,12 +47,12 @@ public class CacheIndex {
 
     public Node get(byte[] value) {
         IndexHits<Node> q = INDEX.get(NAME, value);
-        Node node = null;
+        Node n = null;
         try {
-            node = q.next();
+            n = q.next();
         } finally {
             q.close();
-            return node;
+            return n;
         }
 
 //    	DatabaseRequestResult<byte[]> result = db.lookup(2, value, NAME);
@@ -64,7 +65,7 @@ public class CacheIndex {
     public void add(Node n, byte[] value) {
         INDEX.add(n, NAME, value);
 
-//    	DatabaseRequestResult<Object> result = db.singleInsert(2, value, long2bytes(n.getId()), NAME);
+//    	DatabaseRequestResult<Object> result = db.singleInsert(2, value, long2bytes(r.getId()), NAME);
 //    	try {
 //			result.get();
 //		} catch (BabuDBException e) {

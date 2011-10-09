@@ -19,7 +19,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.LINK;
+import org.animotron.statement.value.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;

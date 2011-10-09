@@ -21,11 +21,13 @@ package org.animotron.expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.graph.builder.MLGraphBuilder;
+import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
+import org.animotron.statement.value.VALUE;
+import org.animotron.statement.value.Value;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 /**
@@ -48,7 +50,7 @@ public class StAXExpression extends Expression {
     }
 
     @Override
-    public void build() throws XMLStreamException, AnimoException {
+    public void build() throws Exception {
         builder.startGraph();
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
@@ -59,110 +61,51 @@ public class StAXExpression extends Expression {
                     builder.end();
                     break;
                 case XMLStreamConstants.PROCESSING_INSTRUCTION :
-                    pi();
+                    String target = reader.getPITarget();
+                    String data = reader.getPIData();
+                    build(PI._, (target.isEmpty()) ? _(value(data)) : _(name(target), value(data)));
                     break;
                 case XMLStreamConstants.DTD :
-                    dtd();
+                    String dtd = reader.getText();
+                    build(DTD._, dtd.isEmpty() ? null : _(value(dtd)));
                     break;
                 case XMLStreamConstants.ENTITY_REFERENCE :
-                    entity();
+                    build(ENTITY._, _(name(reader.getText())));
                     break;
                 case XMLStreamConstants.CDATA :
-                    cdata();
+                    String cdata = reader.getText();
+                    build(CDATA._, cdata.isEmpty() ? null : _(value(cdata)));
                     break;
                 case XMLStreamConstants.COMMENT :
-                    comment();
+                    String comment = reader.getText();
+                    build(COMMENT._, comment.isEmpty() ? null : _(value(comment)));
                     break;
                 case XMLStreamConstants.CHARACTERS :
-                    text();
+                    String text = reader.getText();
+                    if (!text.isEmpty())
+                        build(TEXT._, _(value(Value.value(text))));
             }
             reader.next();
         }
         builder.endGraph();
     }
 
-    private void pi() throws AnimoException {
-        builder.start(PI._);
-            String target = reader.getPITarget();
-            String data = reader.getPIData();
-            if (!target.isEmpty()) {
-                builder.start(NAME._, target);
-                builder.end();
-            }
-            builder.start(data);
-            builder.end();
+    private void build(Statement s, Object[][] reference) throws AnimoException {
+        builder.start(s, reference);
         builder.end();
     }
 
-    private void dtd() throws AnimoException {
-        builder.start(DTD._);
-            String text = reader.getText();
-            if (!text.isEmpty()) {
-                builder.start(text);
-                builder.end();
-            }
-        builder.end();
-    }
-
-    private void entity() throws AnimoException {
-        builder.start(ENTITY._);
-            builder.start(NAME._, reader.getText());
-            builder.end();
-        builder.end();
-    }
-
-    private void text() throws AnimoException {
-        String text = reader.getText();
-        if (!text.isEmpty()) {
-            builder.start(text);
-            builder.end();
-        }
-    }
-
-    private void comment() throws AnimoException {
-        builder.start(COMMENT._);
-            String text = reader.getText();
-            if (!text.isEmpty()) {
-                builder.start(text);
-                builder.end();
-            }
-        builder.end();
-    }
-
-    private void cdata() throws AnimoException {
-        builder.start(CDATA._);
-            String text = reader.getText();
-            if (!text.isEmpty()) {
-                builder.start(text);
-                builder.end();
-            }
-        builder.end();
-    }
 
     private void startElement() throws AnimoException {
-        builder.start(ELEMENT._);
-            builder.start(NAME._, qname(reader.getName()));
-            builder.end();
-            for (int i = 0; i < reader.getNamespaceCount(); i++) {
-                builder.start(NS._);
-                    String namespace = reader.getNamespaceURI(i);
-                    String prefix = reader.getNamespacePrefix(i);
-                    if (prefix != null) {
-                        builder.start(NAME._, prefix);
-                        builder.end();
-                    }
-                    builder.start(namespace);
-                    builder.end();
-                builder.end();
-            }
-            for (int i = 0; i < reader.getAttributeCount(); i++) {
-                builder.start(ATTRIBUTE._);
-                    builder.start(NAME._, qname(reader.getAttributeName(i)));
-                    builder.end();
-                    builder.start(reader.getAttributeValue(i));
-                    builder.end();
-                builder.end();
-            }
+        builder.start(ELEMENT._, _(name(qname(reader.getName()))));
+        for (int i = 0; i < reader.getNamespaceCount(); i++) {
+            String namespace = reader.getNamespaceURI(i);
+            String prefix = reader.getNamespacePrefix(i);
+            build(NS._, prefix.isEmpty() ? _(value(namespace)) : _(name(prefix), value(namespace)));
+        }
+        for (int i = 0; i < reader.getAttributeCount(); i++) {
+            build(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(Value.value(reader.getAttributeValue(i)))));
+        }
     }
 
     private String qname(QName qname) {
@@ -171,6 +114,23 @@ public class StAXExpression extends Expression {
         StringBuilder s = new StringBuilder();
         s.append(qname.getPrefix()); s.append(":"); s.append(qname.getLocalPart());
         return s.toString();
+    }
+
+    private Object[][] _(Object[]... o) {
+        return o;
+    }
+
+    private Object[] _(Statement s, Object o) {
+        Object[] a = {s, o};
+        return a;
+    }
+
+    private Object[] name(String name) {
+        return _(NAME._, name);
+    }
+
+    private Object[] value(Object value) {
+        return _(VALUE._, value);
     }
 
 }

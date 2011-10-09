@@ -111,9 +111,8 @@ public class ResultTraverser extends AnimoTraverser {
                     handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
                 It it = new It();
-                int size = it.size();
                 try {
-                    iterate(handler, pf, it, level, size);
+                    iterate(handler, pf, it, level, 0);
                 } finally {
                     it.remove();
                 }

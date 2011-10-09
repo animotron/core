@@ -52,23 +52,23 @@ public class GeoTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-        String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        String in = (String) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
         cleanDb();
-        String out = HASH.get(new StAXExpression(osm()));
+        String out = (String) HASH.get(new StAXExpression(osm()));
         Assert.assertEquals(in, out);
 	}
 
     @Test
 	public void test_02() throws Exception {
-        String in = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        String out = HASH.get(new StAXExpression(osm()));
+        String in = (String) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        String out = (String) HASH.get(new StAXExpression(osm()));
         Assert.assertEquals(in, out);
 	}
 
     @Test
 	public void test_03() throws Exception {
-        String in = HASH.get(new StAXExpression(osm()));
-        String out = HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        String in = (String) HASH.get(new StAXExpression(osm()));
+        String out = (String) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
         Assert.assertEquals(in, out);
 	}
 

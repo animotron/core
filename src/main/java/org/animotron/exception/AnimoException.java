@@ -36,19 +36,16 @@ public class AnimoException extends Exception {
 
 	public AnimoException(Relationship op) {
 		super();
-		
 		this.op = op;
 	}
 
 	public AnimoException(Relationship op, Throwable cause) {
 		super(cause);
-		
 		this.op = op;
 	}
 
 	public AnimoException(Relationship op, String message) {
 		super(message);
-		
 		this.op = op;
 	}
 
@@ -63,4 +60,5 @@ public class AnimoException extends Exception {
 	public String toString() {
 		return super.toString()+" @"+op;
 	}
+
 }
