@@ -99,7 +99,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             } else {
                 handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
-                It it = new It();
+                It it = new It(node);
                 int size = hasStatement(node, NAME._) ? 1 : 0;
                 try {
                     iterate(handler, pf, it, level, size);

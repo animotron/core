@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -30,6 +31,8 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 import java.util.Iterator;
 
+import static org.animotron.Properties.CID;
+import static org.animotron.Properties.RID;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -69,7 +72,7 @@ public class AnimoTraverser {
 		handler.start(statement, r, level++, isOne);
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
-            It it = new It();
+            It it = new It(node);
             int size = hasStatement(node, NAME._) ? 1 : 0;
 			try {
                 iterate(handler, pf, it, level, size);
@@ -99,11 +102,19 @@ public class AnimoTraverser {
 
     protected class It implements Iterator <Object>, Iterable<Object> {
 
-        private Iterator<?> c, r;
+        private Iterator<String> p;
+        private Iterator<Relationship> r;
 
-        public It () {
-            c = node.getPropertyKeys().iterator();
-            r = node.getRelationships(OUTGOING).iterator();
+        Object current = null;
+
+        public It (Relationship r) {
+            this(r.getEndNode());
+        }
+
+        public It (Node n) {
+            p = n.getPropertyKeys().iterator();
+            r = n.getRelationships(OUTGOING).iterator();
+            next();
         }
 
         @Override
@@ -113,15 +124,30 @@ public class AnimoTraverser {
 
         @Override
         public boolean hasNext() {
-            if (c.hasNext())
-                return true;
-            c = r;
-            return c.hasNext();
+            return current != null;
         }
 
         @Override
         public Object next() {
-            return c.next();
+            Object next = current;
+            if (p.hasNext()) {
+                current = p.next();
+            } else {
+                current = step();
+            }
+            return next;
+        }
+
+        private Relationship step() {
+            if (r.hasNext()) {
+                Relationship o = r.next();
+                if (o.isType(RelationshipTypes.REF) || CID.has(o) || RID.has(o)) {
+                    return step();
+                } else {
+                    return o;
+                }
+            } else
+                return null;
         }
 
         @Override

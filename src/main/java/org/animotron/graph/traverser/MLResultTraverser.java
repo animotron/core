@@ -94,7 +94,7 @@ public class MLResultTraverser extends ResultTraverser {
             if (s instanceof MLOperator) {
                 if (s instanceof Prefix) {
                     node = r.getEndNode();
-                    It it = new It();
+                    It it = new It(node);
                     String[] param = {null, null};
                     try {
                         if (it.hasNext()) {
@@ -136,7 +136,7 @@ public class MLResultTraverser extends ResultTraverser {
 			//workaround IS and USE
 			} else if (!(s instanceof Relation)) {
                 node = r.getEndNode();
-                It it = new It();
+                It it = new It(node);
                 try {
                     iterate(handler, pf, it, level, 0);
                 } finally {

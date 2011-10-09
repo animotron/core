@@ -110,7 +110,7 @@ public class ResultTraverser extends AnimoTraverser {
                 if (s instanceof Result)
                     handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
-                It it = new It();
+                It it = new It(node);
                 try {
                     iterate(handler, pf, it, level, 0);
                 } finally {
