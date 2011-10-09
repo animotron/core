@@ -39,7 +39,6 @@ import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -101,8 +100,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
                 It it = new It();
-                int size = 0;
-                if (node.hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
+                int size = hasStatement(node, NAME._) ? 1 : 0;
                 try {
                     iterate(handler, pf, it, level, size);
                 } finally {

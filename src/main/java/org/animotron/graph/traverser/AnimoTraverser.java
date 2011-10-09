@@ -70,8 +70,7 @@ public class AnimoTraverser {
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
             It it = new It();
-            int size = 0;
-            if (node.hasRelationship(NAME._.relationshipType(), OUTGOING)) size--;
+            int size = hasStatement(node, NAME._) ? 1 : 0;
 			try {
                 iterate(handler, pf, it, level, size);
 			} finally {
@@ -82,10 +81,20 @@ public class AnimoTraverser {
 	}
 
     protected void iterate(GraphHandler handler, PFlow pf, It it, int level, int count) throws IOException {
-        boolean isOne = count < 2;
-        while (it.hasNext()) {
+        int n = 0;
+        Object[] o = {null, null, null};
+        while (it.hasNext() && n < 3)
+            o[n++] = it.next();
+        boolean isOne = n - count < 2;
+        for (int i = 0; i < n; i++)
+            build(handler, pf, o[i], level, isOne);
+        while (it.hasNext())
             build(handler, pf, it.next(), level, isOne);
-        }
+    }
+
+    protected boolean hasStatement(Node node, Statement s) {
+        return node.hasProperty(s.name()) ||
+               node.hasRelationship(s.relationshipType(), OUTGOING);
     }
 
     protected class It implements Iterator <Object>, Iterable<Object> {

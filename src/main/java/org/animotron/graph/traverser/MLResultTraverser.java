@@ -98,11 +98,11 @@ public class MLResultTraverser extends ResultTraverser {
                     String[] param = {null, null};
                     try {
                         if (it.hasNext()) {
-                            int size = 0;
+                            int size;
                             Object p = it.next();
                             param[0] = param(pf, p);
                             if (s instanceof ELEMENT) {
-                                size = size - 1;
+                                size = 1;
                             } else {
                                 param[1] = param(pf, it);
                                 if (param[1] == null) {
@@ -114,9 +114,9 @@ public class MLResultTraverser extends ResultTraverser {
                                             param[0] = null;
                                         }
                                     }
-                                    size = size - 1;
+                                    size = 1;
                                 } else {
-                                    size = size - 2;
+                                    size = 2;
                                 }
                             }
                             handler.start(s, param, level++, isOne);
