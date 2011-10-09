@@ -18,11 +18,11 @@
  */
 package org.animotron.graph;
 
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,8 +35,8 @@ public class CacheIndex {
 	protected final Index<Node> INDEX;
 
 	public CacheIndex(IndexManager indexManager) {
-//        INDEX = indexManager. forNodes(NAME);
-        INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+        INDEX = indexManager. forNodes(NAME);
+//        INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
 
 //		DatabaseManager dbm = AnimoGraph.getBabuDB().getDatabaseManager();
 //        if (dbm.getDatabases().containsKey("myDB"))
@@ -46,7 +46,8 @@ public class CacheIndex {
 	}
 
     public Node get(byte[] value) {
-        IndexHits<Node> q = INDEX.get(NAME, value);
+        IndexHits<Node> q = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
+//        IndexHits<Node> q = INDEX.get(NAME, value);
         Node n = null;
         try {
             n = q.next();
@@ -63,7 +64,8 @@ public class CacheIndex {
     }
 
     public void add(Node n, byte[] value) {
-        INDEX.add(n, NAME, value);
+        INDEX.add(n, NAME, MessageDigester.byteArrayToHex(value));
+//        INDEX.add(n, NAME, value);
 
 //    	DatabaseRequestResult<Object> result = db.singleInsert(2, value, long2bytes(r.getId()), NAME);
 //    	try {
