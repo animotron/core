@@ -66,17 +66,26 @@ public class JExpression extends Expression {
 
     private void buildStatement(Object[] e) throws AnimoException {
         builder.start((Statement) e[0], e[1]);
-        build((Object[][]) e[2]);
+        if (e[2] instanceof Object[][]) {
+            build((Object[][]) e[2]);
+        } else if (e[2] != null){
+            buildStatement((Object[]) e[2]);
+        }
         builder.end();
     }
 
-	public static Object[] _(Statement statement, Object reference) {
-		Object[] e = {statement, reference, null};
-		return e;
-	}
-
     public static Object[] _(Statement statement, Object[]... p) {
         Object[] e = {statement, null, p};
+        return e;
+    }
+
+    public static Object[] _(Statement statement, Object[] p) {
+        Object[] e = {statement, null, p};
+        return e;
+    }
+
+    public static Object[] _(Statement statement, Object reference) {
+        Object[] e = {statement, reference, null};
         return e;
     }
 
@@ -115,7 +124,7 @@ public class JExpression extends Expression {
     }
 
     public static Object[] comment(String value) {
-        return _(COMMENT._, text(value));
+        return _(COMMENT._, value);
     }
 
     public static Object[] cdata() {
@@ -123,7 +132,7 @@ public class JExpression extends Expression {
     }
 
     public static Object[] cdata(String value) {
-        return _(CDATA._, text(value));
+        return _(CDATA._, value);
     }
 
     public static Object[] pi(String name, String value) {
@@ -139,7 +148,7 @@ public class JExpression extends Expression {
     }
 
     public static Object[] dtd(String value) {
-        return _(DTD._, text(value));
+        return _(DTD._, value);
     }
 
     public static Object[] namespace(String name, String value) {

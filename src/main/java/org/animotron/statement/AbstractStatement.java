@@ -107,10 +107,9 @@ public abstract class AbstractStatement implements Statement {
     @Override
     public MessageDigest hash(Object reference) {
         MessageDigest md = md();
-        if (reference instanceof String ||
-            reference instanceof Number ||
-            reference instanceof Boolean)
-            md.update(reference.toString().getBytes());
+        if (md != null) {
+            md.update(((String) reference).getBytes());
+        }
         return md;
     }
 
