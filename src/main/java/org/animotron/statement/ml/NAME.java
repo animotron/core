@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.value.Value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class NAME extends VALUE implements MLOperator {
+public class NAME extends Value implements MLOperator {
 
 	public static final NAME _ = new NAME();
 
