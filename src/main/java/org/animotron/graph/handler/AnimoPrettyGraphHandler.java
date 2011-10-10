@@ -22,7 +22,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.value.LINK;
-import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -91,7 +90,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                 for (int i = 0; i < indent; i++) {
                     write(INDENT);
                 }
-            } else if (!(ps instanceof LINK || ps instanceof VALUE)) {
+            } else if (!(ps instanceof LINK)) {
                 write(" ");
             }
             if (!isOne || statement instanceof LINK) {
