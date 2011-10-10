@@ -80,25 +80,6 @@ public abstract class Value extends AbstractStatement {
         }
     }
 
-    @Override
-    public MessageDigest hash(Object reference) {
-        MessageDigest md = md();
-        if (reference instanceof Object[][]) {
-            for (Object[] o : (Object[][]) reference) {
-                md.update(((Statement) o[0]).hash(o[1]).digest());
-            }
-        } else if (reference instanceof Object[]) {
-            Object[] o = (Object[]) reference;
-            md.update(((Statement) o[0]).hash(o[1]).digest());
-        } else {
-            if (reference instanceof String ||
-                reference instanceof Number ||
-                reference instanceof Boolean)
-                md.update(reference.toString().getBytes());
-        }
-        return md;
-    }
-
     public static Object value(Object o) {
         if (o instanceof String) {
             String s = (String) o;
