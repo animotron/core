@@ -131,25 +131,25 @@ public class AnimoTraverser {
         @Override
         public Object next() {
             Object next = current;
-            if (p.hasNext()) {
-                String s = p.next();
-                current = VALUE.name().equals(s) ? next() : s;
-            } else {
-                current = step();
-            }
+            current = step1();
             return next;
         }
 
-        private Relationship step() {
+        private Object step1() {
+            if (p.hasNext()) {
+                String o = p.next();
+                if (VALUE.name().equals(o)) {
+                    return step1();
+                } else return o;
+            } else return step2();
+        }
+        private Object step2() {
             if (r.hasNext()) {
                 Relationship o = r.next();
                 if (o.isType(RelationshipTypes.REF) || CID.has(o) || RID.has(o)) {
-                    return step();
-                } else {
-                    return o;
-                }
-            } else
-                return null;
+                    return step2();
+                } else return o;
+            } else return null;
         }
 
         @Override
