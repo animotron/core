@@ -78,12 +78,12 @@ public class XMLTest extends ATest {
 
     @Test
 	public void test_05() throws Exception {
-        test("<a><b><x/></b><c><x/></c></a>", "??stylesheet \"path\" \\a");
+        test("<a><b><x/></b><c><x/></c></a>", "\\a (\\b \\x) (\\c \\x)");
 	}
 
     @Test
 	public void test_06() throws Exception {
-        test("<a><b><x/></b><c><x/><y/></c><x><z/></x></a>", "??stylesheet \"path\" \\a");
+        test("<a><b><x/></b><c><x/><y/></c><x><z/></x></a>", "\\a (\\b \\x) (\\c (\\x) (\\y)) (\\x \\z)");
 	}
 
     @Test

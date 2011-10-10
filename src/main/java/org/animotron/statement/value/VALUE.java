@@ -29,4 +29,6 @@ public class VALUE extends Value {
 
     private VALUE() { super("value"); }
 
+    protected VALUE(String name) { super(name); }
+
 }

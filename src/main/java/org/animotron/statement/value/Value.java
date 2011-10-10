@@ -25,6 +25,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
+import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.*;
@@ -38,7 +39,7 @@ public abstract class Value extends AbstractStatement {
 
 	protected Value(String name) { super(name); }
 
-	@Override
+    @Override
 	public Relationship build(Node parent, Object reference, boolean ready) throws AnimoException {
         if (reference == null)
             return parent.createRelationshipTo(ready ? getEND() : createNode(), relationshipType());
@@ -73,6 +74,18 @@ public abstract class Value extends AbstractStatement {
         return super.reference(r);
     }
 
+    @Override
+    public MessageDigest hash(Object reference) {
+        if (reference instanceof Object[][]) {
+            MessageDigest md = md();
+            for (Object[] o : (Object[][]) reference) {
+                md.update(((Statement) o[0]).hash(o[1]).digest());
+            }
+            return md;
+        }
+        return super.hash(reference);
+    }
+
     public static Object value(Object o) {
         if (o instanceof String) {
             String s = (String) o;
@@ -101,17 +114,16 @@ public abstract class Value extends AbstractStatement {
         return o;
     }
 
-    @Override
-    public MessageDigest hash(Object reference) {
-        if (reference instanceof Object[][]) {
-            MessageDigest md = md();
-            for (Object[] o : (Object[][]) reference) {
-                md.update(((Statement) o[0]).hash(o[1]).digest());
+    public static String removeWS(String value) {
+        StringBuilder buf = new StringBuilder();
+        if (value.length() > 0) {
+            StringTokenizer tok = new StringTokenizer(value);
+            while (tok.hasMoreTokens()) {
+                buf.append(tok.nextToken());
+                if (tok.hasMoreTokens()) buf.append(' ');
             }
-            return md;
         }
-        return super.hash(reference);
+        return buf.toString();
     }
-
 
 }

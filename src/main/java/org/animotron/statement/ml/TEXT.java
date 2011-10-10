@@ -18,31 +18,17 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.value.Value;
-
-import java.util.StringTokenizer;
+import org.animotron.statement.value.VALUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TEXT extends Value implements MLOperator {
+public class TEXT extends VALUE implements MLOperator {
 	
 	public static final TEXT _ = new TEXT();
 	
 	private TEXT() { super("text"); }
-
-    public String removeWS(String value) {
-        StringBuilder buf = new StringBuilder();
-        if (value.length() > 0) {
-            StringTokenizer tok = new StringTokenizer(value);
-            while (tok.hasMoreTokens()) {
-                buf.append(tok.nextToken());
-                if (tok.hasMoreTokens()) buf.append(' ');
-            }
-        }
-        return buf.toString();
-    }
 
 }

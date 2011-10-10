@@ -114,9 +114,9 @@ public class MLGraphBuilder extends GraphBuilder {
 	public void end() throws AnimoException {
 		Object[] item = stack.pop();
         md = ((MessageDigest) item[0]).digest();
+        Relationship r = (Relationship) item[1];
         if (!((Boolean)item[2])) {
             Node node = getCache(md);
-            Relationship r = (Relationship) item[1];
             if (node == null) {
                 createCache(r.getEndNode(), md);
                 order(r, order);
@@ -124,6 +124,8 @@ public class MLGraphBuilder extends GraphBuilder {
                 order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
                 destructive(r);
             }
+        } else {
+            order(r, order);
         }
         if (!stack.empty()) {
             ((MessageDigest) stack.peek()[0]).update(md);
