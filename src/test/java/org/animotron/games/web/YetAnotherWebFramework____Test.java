@@ -20,7 +20,6 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -30,8 +29,6 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression.*;
 
@@ -124,7 +121,7 @@ public class YetAnotherWebFramework____Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 0cf02921ccd4a68c5c877abe911934934e1ebe59db3ba8b82385c55c576bdb44 " +
+        assertAnimoResult(s,  "the 8f0dbda70f443506a24db4cca022992045434baceb63576087a2f528ee121d23 " +
                                 "the rest " +
                                     "the root-service " +
                                     "(is service) " +
