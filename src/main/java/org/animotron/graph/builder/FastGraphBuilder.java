@@ -191,6 +191,7 @@ public class FastGraphBuilder extends GraphBuilder {
         if (r != null) {
             item[3] = r;
             item[4] = r.getEndNode();
+            order(r, order);
         }
 	}
 	

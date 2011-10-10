@@ -18,7 +18,6 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -27,13 +26,13 @@ import org.animotron.statement.ml.NAME;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.animotron.Properties.CID;
-import static org.animotron.Properties.RID;
 import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -105,6 +104,7 @@ public class AnimoTraverser {
 
         private Iterator<String> p;
         private Iterator<Relationship> r;
+        private IndexHits<Relationship> q;
 
         Object current = null;
 
@@ -114,7 +114,8 @@ public class AnimoTraverser {
 
         public It (Node n) {
             p = n.getPropertyKeys().iterator();
-            r = n.getRelationships(OUTGOING).iterator();
+            q = getORDER().query(n);
+            r = q.iterator();
             next();
         }
 
@@ -131,29 +132,28 @@ public class AnimoTraverser {
         @Override
         public Object next() {
             Object next = current;
-            current = step1();
+            current = step();
             return next;
         }
 
-        private Object step1() {
+        private Object step() {
             if (p.hasNext()) {
                 String o = p.next();
                 if (VALUE.name().equals(o)) {
-                    return step1();
-                } else return o;
-            } else return step2();
-        }
-        private Object step2() {
-            if (r.hasNext()) {
-                Relationship o = r.next();
-                if (o.isType(RelationshipTypes.REF) || CID.has(o) || RID.has(o)) {
-                    return step2();
-                } else return o;
-            } else return null;
+                    return step();
+                } else {
+                    return o;
+                }
+            } else if (r.hasNext()) {
+                return r.next();
+            } else {
+                return null;
+            }
         }
 
         @Override
         public void remove() {
+            q.close();
         }
 
     }

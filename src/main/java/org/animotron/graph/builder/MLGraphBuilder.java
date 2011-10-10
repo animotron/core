@@ -119,8 +119,9 @@ public class MLGraphBuilder extends GraphBuilder {
             Relationship r = (Relationship) item[1];
             if (node == null) {
                 createCache(r.getEndNode(), md);
+                order(r, order);
             } else {
-                r.getStartNode().createRelationshipTo(node, r.getType());
+                order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
                 destructive(r);
             }
         }
