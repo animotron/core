@@ -68,10 +68,10 @@ public abstract class Value extends AbstractStatement {
     @Override
     public Object reference(Relationship r) {
         Node n = r.getEndNode();
-        if (VALUE.has(n)) {
-            return VALUE.get(n);
-        } else if (n.hasProperty(name())) {
+        if (n.hasProperty(name())) {
             return n.getProperty(name());
+        } else  if (VALUE.has(n)) {
+            return VALUE.get(n);
         } else {
             return null;
         }
