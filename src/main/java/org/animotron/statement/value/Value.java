@@ -70,8 +70,11 @@ public abstract class Value extends AbstractStatement {
         Node n = r.getEndNode();
         if (VALUE.has(n)) {
             return VALUE.get(n);
+        } else if (n.hasProperty(name())) {
+            return n.getProperty(name());
+        } else {
+            return super.reference(r);
         }
-        return super.reference(r);
     }
 
     @Override
