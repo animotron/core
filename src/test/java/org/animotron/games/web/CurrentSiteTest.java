@@ -79,7 +79,7 @@ public class CurrentSiteTest extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 947e1962c77fbc21ae6a103c4b243a52419996a30f830b6a4776aca13547edb1 " +
+        assertAnimoResult(s,  "the 0f7b73a28332d87d23ac1e29984c0e939760bb2de3609d412b3cec4dc25570ae " +
                                 "the rest " +
                                     "the test-service " +
                                         "(is service) " +
