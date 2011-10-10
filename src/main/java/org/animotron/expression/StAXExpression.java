@@ -63,7 +63,7 @@ public class StAXExpression extends Expression {
                 case XMLStreamConstants.PROCESSING_INSTRUCTION :
                     String target = reader.getPITarget();
                     String data = reader.getPIData();
-                    build(PI._, (target.isEmpty()) ? data : _(name(target), value(data)));
+                    build(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
                     break;
                 case XMLStreamConstants.DTD :
                     String dtd = reader.getText();

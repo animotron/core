@@ -74,12 +74,12 @@ public class JExpression extends Expression {
         builder.end();
     }
 
-    public static Object[] _(Statement statement, Object[]... p) {
+    public static Object[] _(Statement statement, Object[] p) {
         Object[] e = {statement, null, p};
         return e;
     }
 
-    public static Object[] _(Statement statement, Object[] p) {
+    public static Object[] _(Statement statement, Object[]... p) {
         Object[] e = {statement, null, p};
         return e;
     }
@@ -165,6 +165,10 @@ public class JExpression extends Expression {
 
     public static Object[] value(Object value) {
         return _(VALUE._, value);
+    }
+
+    public static Object[] value(Object value, Object[] p) {
+        return _(VALUE._, value, p);
     }
 
     public static Object[] text(Object value) {

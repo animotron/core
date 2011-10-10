@@ -107,7 +107,7 @@ public abstract class AbstractStatement implements Statement {
     @Override
     public MessageDigest hash(Object reference) {
         MessageDigest md = md();
-        if (md != null) {
+        if (reference != null) {
             md.update(((String) reference).getBytes());
         }
         return md;
