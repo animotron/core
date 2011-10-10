@@ -63,34 +63,34 @@ public class StAXExpression extends Expression {
                 case XMLStreamConstants.PROCESSING_INSTRUCTION :
                     String target = reader.getPITarget();
                     String data = reader.getPIData();
-                    build(PI._, (target.isEmpty()) ? _(value(data)) : _(name(target), value(data)));
+                    build(PI._, (target.isEmpty()) ? data : _(name(target), value(data)));
                     break;
                 case XMLStreamConstants.DTD :
                     String dtd = reader.getText();
-                    build(DTD._, dtd.isEmpty() ? null : _(value(dtd)));
+                    build(DTD._, dtd.isEmpty() ? null : dtd);
                     break;
                 case XMLStreamConstants.ENTITY_REFERENCE :
                     build(ENTITY._, _(name(reader.getText())));
                     break;
                 case XMLStreamConstants.CDATA :
                     String cdata = reader.getText();
-                    build(CDATA._, cdata.isEmpty() ? null : _(value(cdata)));
+                    build(CDATA._, cdata.isEmpty() ? null : cdata);
                     break;
                 case XMLStreamConstants.COMMENT :
                     String comment = reader.getText();
-                    build(COMMENT._, comment.isEmpty() ? null : _(value(comment)));
+                    build(COMMENT._, comment.isEmpty() ? null : comment);
                     break;
                 case XMLStreamConstants.CHARACTERS :
                     String text = reader.getText();
                     if (!text.isEmpty())
-                        build(TEXT._, _(value(Value.value(Value.removeWS(text)))));
+                        build(TEXT._, Value.value(Value.removeWS(text)));
             }
             reader.next();
         }
         builder.endGraph();
     }
 
-    private void build(Statement s, Object[][] reference) throws AnimoException {
+    private void build(Statement s, Object reference) throws AnimoException {
         builder.start(s, reference);
         builder.end();
     }
