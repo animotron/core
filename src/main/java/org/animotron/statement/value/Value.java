@@ -73,7 +73,7 @@ public abstract class Value extends AbstractStatement {
         } else if (n.hasProperty(name())) {
             return n.getProperty(name());
         } else {
-            return super.reference(r);
+            return null;
         }
     }
 
