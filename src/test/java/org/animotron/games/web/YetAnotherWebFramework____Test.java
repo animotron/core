@@ -124,7 +124,7 @@ public class YetAnotherWebFramework____Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 87956ef44ea067768cfc5e90fa8e0c17f5a0eb99904923a5a70060f3c4302d07 " +
+        assertAnimoResult(s,  "the 0cf02921ccd4a68c5c877abe911934934e1ebe59db3ba8b82385c55c576bdb44 " +
                                 "the rest " +
                                     "the root-service " +
                                     "(is service) " +
