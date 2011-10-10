@@ -33,6 +33,7 @@ import java.util.Iterator;
 
 import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
+import static org.animotron.Properties.VALUE;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -131,7 +132,8 @@ public class AnimoTraverser {
         public Object next() {
             Object next = current;
             if (p.hasNext()) {
-                current = p.next();
+                String s = p.next();
+                current = VALUE.name().equals(s) ? next() : s;
             } else {
                 current = step();
             }
