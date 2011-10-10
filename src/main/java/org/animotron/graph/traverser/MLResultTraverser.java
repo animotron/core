@@ -30,6 +30,7 @@ import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
@@ -91,7 +92,7 @@ public class MLResultTraverser extends ResultTraverser {
         }
 
         if (s != null) {
-            if (s instanceof MLOperator) {
+            if (s instanceof MLOperator || s instanceof VALUE) {
                 if (s instanceof Prefix) {
                     node = r.getEndNode();
                     It it = new It(node);
@@ -126,7 +127,7 @@ public class MLResultTraverser extends ResultTraverser {
                     } finally {
                         it.remove();
                     }
-                } else if (!(s instanceof TEXT) || (s instanceof TEXT && level > 0)) {
+                } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
                     String param = StringResultSerializer.serialize(pf, r);
                     handler.start(s, param, level++, isOne);
                     handler.end(s, param, --level, isOne);

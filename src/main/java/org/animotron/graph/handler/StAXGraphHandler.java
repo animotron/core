@@ -20,6 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
@@ -89,7 +90,7 @@ public class StAXGraphHandler implements GraphHandler {
                 writer.writeCData(param.toString());
             } else if (statement instanceof DTD){
                 writer.writeDTD(param.toString());
-            } else if (statement instanceof TEXT) {
+            } else if (statement instanceof VALUE) {
                 writer.writeCharacters(param.toString());
             }
 
