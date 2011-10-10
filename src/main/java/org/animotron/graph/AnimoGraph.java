@@ -193,6 +193,7 @@ public class AnimoGraph {
 	
     public static void order (Relationship r, int order) {
         ORDER.add(r, order);
+        r.setProperty("ORDER", order);
     }
 	
 	public static void result (Relationship r, long id) {

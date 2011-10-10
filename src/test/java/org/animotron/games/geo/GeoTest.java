@@ -74,7 +74,7 @@ public class GeoTest extends ATest {
 
     @Test
 	public void test() throws Exception {
-        new StAXExpression(osm("sto.xml"));
+        new StAXExpression(osm());
 	}
 
 }

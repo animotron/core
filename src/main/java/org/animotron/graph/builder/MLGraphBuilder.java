@@ -76,7 +76,6 @@ public class MLGraphBuilder extends GraphBuilder {
         Relationship old = THE._.get(hash);
         if (old == null) {
             the = getSTART().createRelationshipTo(root, THE._.relationshipType(hash));
-            NAME.set(root, hash);
             NAME.set(the, hash);
             HASH.set(the, hash);
             catcher.creative(the);
@@ -86,7 +85,6 @@ public class MLGraphBuilder extends GraphBuilder {
                 the = old;
             } else {
                 the = getSTART().createRelationshipTo(root, THE._.relationshipType(hash));
-                NAME.set(root, hash);
                 NAME.set(the, hash);
                 HASH.set(the, hash);
                 catcher.renew(old, the);
@@ -100,12 +98,13 @@ public class MLGraphBuilder extends GraphBuilder {
         step();
         MessageDigest hash = statement.hash(reference);
         parent = stack.empty() ? root : ((Relationship) stack.peek()[1]).getEndNode();
-        boolean ready = !(statement instanceof ELEMENT);
+        boolean ready = !(statement instanceof ELEMENT) && reference != null;
         Relationship r = statement.build(parent, reference, ready);
         Object[] item = {
                 hash,           // 0  message digest
                 r,              // 1  node
-                ready           // is ready for cache?
+                ready,          // 2 is ready for cache?
+                order           // 3 order;
             };
 		stack.push(item);
 	}
@@ -115,6 +114,7 @@ public class MLGraphBuilder extends GraphBuilder {
 		Object[] item = stack.pop();
         md = ((MessageDigest) item[0]).digest();
         Relationship r = (Relationship) item[1];
+        int order = (Integer) item[3];
         if (!((Boolean)item[2])) {
             Node node = getCache(md);
             if (node == null) {
