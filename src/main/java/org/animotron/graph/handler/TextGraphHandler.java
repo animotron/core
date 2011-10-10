@@ -19,7 +19,7 @@
 package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        if (statement instanceof TEXT) {
+        if (statement instanceof VALUE) {
             write(statement.reference(r).toString());
         }
     }
