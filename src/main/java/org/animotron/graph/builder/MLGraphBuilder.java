@@ -76,6 +76,7 @@ public class MLGraphBuilder extends GraphBuilder {
         Relationship old = THE._.get(hash);
         if (old == null) {
             the = getSTART().createRelationshipTo(root, THE._.relationshipType(hash));
+            NAME.set(root, hash);
             NAME.set(the, hash);
             HASH.set(the, hash);
             catcher.creative(the);
@@ -85,6 +86,7 @@ public class MLGraphBuilder extends GraphBuilder {
                 the = old;
             } else {
                 the = getSTART().createRelationshipTo(root, THE._.relationshipType(hash));
+                NAME.set(root, hash);
                 NAME.set(the, hash);
                 HASH.set(the, hash);
                 catcher.renew(old, the);

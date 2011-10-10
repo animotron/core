@@ -90,6 +90,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
         Node node = createNode();
         RelationshipType type = relationshipType((String) name);
         Relationship r = parent.createRelationshipTo(node, type);
+        Properties.NAME.set(r.getEndNode(), name);
         Properties.NAME.set(r, name);
         return r;
 	}

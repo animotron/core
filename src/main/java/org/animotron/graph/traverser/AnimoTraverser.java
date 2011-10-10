@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.Properties;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -31,7 +32,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -139,7 +139,7 @@ public class AnimoTraverser {
         private Object step() {
             if (p.hasNext()) {
                 String o = p.next();
-                if (VALUE.name().equals(o)) {
+                if (Properties.VALUE.name().equals(o) || Properties.NAME.name().equals(o)) {
                     return step();
                 } else {
                     return o;
