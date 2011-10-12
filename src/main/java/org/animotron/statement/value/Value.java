@@ -38,7 +38,9 @@ public abstract class Value extends AbstractStatement {
 	protected Value(String name) { super(name); }
 
     @Override
-    protected final Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
+    protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        if (reference == null)
+            return ready ? getEND() : createNode();
         Node child = createNode();
         if (reference instanceof Object[][]) {
             for (Object[] o : (Object[][]) reference) {
@@ -52,13 +54,6 @@ public abstract class Value extends AbstractStatement {
         }
         return child;
     }
-
-    @Override
-	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        if (reference == null)
-            return parent.createRelationshipTo(ready ? getEND() : createNode(), this);
-        return super.build(parent, reference, hash, ready, ignoreNotFound);
-	}
 
     @Override
     public Object reference(Relationship r) {

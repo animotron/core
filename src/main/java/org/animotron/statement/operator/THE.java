@@ -83,7 +83,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	}
 
     @Override
-    protected Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
+    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
         createCache(node, (String) reference);
         NAME.set(node, reference);

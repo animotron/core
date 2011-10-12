@@ -115,7 +115,7 @@ public abstract class AbstractStatement implements Statement {
         return md;
     }
 
-    protected Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
+    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         throw new AnimoException(null, "Can't create a child node");
     }
 
@@ -124,12 +124,12 @@ public abstract class AbstractStatement implements Statement {
         if (ready && hash != null) {
             Node child = getCache(hash);
             if (child == null) {
-                child = createChild(reference, ignoreNotFound);
+                child = createChild(reference, false, ignoreNotFound);
                 createCache(child, hash);
             }
             return child;
         } else {
-            return createChild(reference, ignoreNotFound);
+            return createChild(reference, false, ignoreNotFound);
         }
     }
 
