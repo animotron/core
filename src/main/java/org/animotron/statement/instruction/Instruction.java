@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.instruction;
 
-import org.animotron.exception.ENotFound;
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.operator.AN;
 import org.neo4j.graphdb.Node;
@@ -36,8 +36,8 @@ public abstract class Instruction extends AbstractStatement {
     }
 
     @Override
-	public Relationship build(Node parent, Object reference, boolean flag) throws ENotFound {
-        return AN._.build(parent, name(), flag);
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        return AN._.build(parent, name(), hash, ready, ignoreNotFound);
 	}
 
 }

@@ -183,17 +183,25 @@ public class AnimoGraph {
 		return node;
 	}
 
-	public static void createCache(Node n, byte[] hash) {
-		CACHE.add(n, hash);
-	}
+    public static void createCache(Node n, byte[] hash) {
+        CACHE.add(n, hash);
+    }
+
+    public static void createCache(Node n, String name) {
+        CACHE.add(n, name);
+    }
 
     public static Node getCache(byte[] hash) {
         return CACHE.get(hash);
     }
 	
+    public static Node getCache(String name) {
+        return CACHE.get(name);
+    }
+
     public static void order (Relationship r, int order) {
         ORDER.add(r, order);
-        r.setProperty("ORDER", order);
+        //r.setProperty("order", order);
     }
 	
 	public static void result (Relationship r, long id) {
@@ -205,11 +213,21 @@ public class AnimoGraph {
 		//return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
 	}
 
-    public static Relationship copy(Relationship r, Node n) {
-        Relationship c = n.createRelationshipTo(r.getEndNode(), r.getType());
-        for (String name : r.getPropertyKeys()) {
-            c.setProperty(name, r.getProperty(name));
+    public static void copyProperties(PropertyContainer src, PropertyContainer dst) {
+        for (String name : src.getPropertyKeys()) {
+            dst.setProperty(name, src.getProperty(name));
         }
+    }
+
+    public static Relationship copy(Node start, Relationship r) {
+        Relationship c = start.createRelationshipTo(r.getEndNode(), r.getType());
+        copyProperties(r, c);
+        return c;
+    }
+
+    public static Relationship copy(Relationship r, Node end) {
+        Relationship c = r.getStartNode().createRelationshipTo(end, r.getType());
+        copyProperties(r, c);
         return c;
     }
 

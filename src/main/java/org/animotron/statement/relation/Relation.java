@@ -18,8 +18,7 @@
  */
 package org.animotron.statement.relation;
 
-import org.animotron.Properties;
-import org.animotron.exception.ENotFound;
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -38,14 +37,13 @@ public abstract class Relation extends AbstractStatement {
 	}
 
 	@Override
-	public Relationship build(Node parent, Object reference, boolean ignoreNotFound) throws ENotFound {
-		Node target = THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode();
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        String name = (String) reference;
+		Node target = THE._.getOrCreate(name, ignoreNotFound).getEndNode();
 		if (!parent.equals(target)) {
-            Relationship r = parent.createRelationshipTo(target, relationshipType());
-            Properties.NAME.set(r, reference);
-			return r;
+            return parent.createRelationshipTo(target, this);
 		}
-		return null;
+		throw new AnimoException(null, "The statment \"" + name + "\" can't refer to self");
 	}
 	
 	@Override

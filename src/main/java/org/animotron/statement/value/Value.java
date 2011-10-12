@@ -20,11 +20,9 @@ package org.animotron.statement.value;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.Statement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.security.MessageDigest;
 import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
@@ -40,21 +38,8 @@ public abstract class Value extends AbstractStatement {
 	protected Value(String name) { super(name); }
 
     @Override
-	public Relationship build(Node parent, Object reference, boolean ready) throws AnimoException {
-        if (reference == null)
-            return parent.createRelationshipTo(ready ? getEND() : createNode(), relationshipType());
-        Node child;
-        byte[] hash = hash(reference).digest();
-        if (ready) {
-            child = getCache(hash);
-            if (child != null) {
-                return parent.createRelationshipTo(child, relationshipType());
-            }
-            child = createNode();
-            createCache(child, hash);
-        } else {
-            child = createNode();
-        }
+    protected final Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
+        Node child = createNode();
         if (reference instanceof Object[][]) {
             for (Object[] o : (Object[][]) reference) {
                 child.setProperty(((Value) o[0]).name(), o[1]);
@@ -65,7 +50,14 @@ public abstract class Value extends AbstractStatement {
         } else {
             VALUE.set(child, reference);
         }
-        return parent.createRelationshipTo(child, relationshipType());
+        return child;
+    }
+
+    @Override
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        if (reference == null)
+            return parent.createRelationshipTo(ready ? getEND() : createNode(), this);
+        return super.build(parent, reference, hash, ready, ignoreNotFound);
 	}
 
     @Override

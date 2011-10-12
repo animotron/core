@@ -260,7 +260,7 @@ public class PFlow {
 			}
 			boolean haveUse = false;
 			for (Relationship r : path.relationships()) {
-				if (r.getType().name().equals(USE._.rType)) {
+				if (r.getType().name().equals(USE._)) {
 					haveUse = true;
 					break;
 				}
@@ -292,7 +292,7 @@ public class PFlow {
 		private Relationship step() {
 			while (it.hasNext()) {
 				Relationship r = it.next();
-				if (AN._.relationshipType().name().equals(r.getType().name())){
+				if (AN._.equals(r.getType())){
 					return r;
 				}
 			}
@@ -328,11 +328,11 @@ public class PFlow {
 		
 		Node node = r.getEndNode();
 		
-		if (goDown && r.getType().name().equals(AN._.relationshipType().name())) {
+		if (goDown && r.getType().equals(AN._)) {
 			node = node.getSingleRelationship(REF, OUTGOING).getEndNode();
 		}
 		
-		return node.getRelationships(AN._.relationshipType(), OUTGOING);
+		return node.getRelationships(AN._, OUTGOING);
 	}
 
 
@@ -351,13 +351,13 @@ public class PFlow {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");
 		for (Relationship r : path) {
-			if (AN._.rType.equals(r.getType().name())) {
+			if (r.getType().equals(AN._)) {
 				if (debug) System.out.println(r);
 				return r;
-			} else if (REF.name().equals(r.getType().name())) {
+			} else if (r.getType().equals(REF)) {
 				if (debug) System.out.println(r);
 				return r;
-			} else if (RESULT.name().equals(r.getType().name())) {
+			} else if (r.getType().equals(RESULT)) {
 				if (debug) System.out.println(r);
 				return r;
 			}
@@ -383,7 +383,7 @@ public class PFlow {
 
 						//Allow ...<-IS->...
 						} if (path.length() > 1 && 
-								r.getType().name().equals(IS._.rType)) {
+								r.getType().equals(IS._)) {
 							return EXCLUDE_AND_CONTINUE;
 						}
 						return EXCLUDE_AND_PRUNE;

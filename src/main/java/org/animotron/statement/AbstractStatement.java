@@ -18,8 +18,8 @@
  */
 package org.animotron.statement;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.utils.MessageDigester;
@@ -31,6 +31,8 @@ import java.security.MessageDigest;
 
 import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.createCache;
+import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
@@ -42,13 +44,9 @@ public abstract class AbstractStatement implements Statement {
 	
     private MessageDigest md;
 	private String name;
-	public final RelationshipType relationshipType;
-	public final String rType;
-	
+
 	public AbstractStatement(String name) {
 		this.name = name;
-		this.relationshipType = AnimoRelationshipType.get(name);
-		rType = this.relationshipType.name();
         this.md = MessageDigester.md();
         md.update(name.getBytes());
 	}
@@ -62,17 +60,12 @@ public abstract class AbstractStatement implements Statement {
 		return name;
 	}
 	
-	@Override
-	public RelationshipType relationshipType() {
-		return relationshipType;
-	}
-	
 	protected Relationship createResult(final Relationship context, final Node node, final Relationship r, final RelationshipType rType) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
 				Relationship res = node.createRelationshipTo(r.getEndNode(), rType);
-				//store to relationship arrow 
+				//store to relationship arrow
 				RID.set(res, r.getId());
 				//for debug
 				CID.set(res, context.getId());
@@ -84,7 +77,7 @@ public abstract class AbstractStatement implements Statement {
 	
 	protected Relationship createResultInMemory(Node node, Relationship r) {
 		Relationship res = new InMemoryRelationship(node, r.getEndNode(), RESULT);
-		//store to relationship arrow 
+		//store to relationship arrow
 		RID.set(res, r.getId());
 		
 		return res;
@@ -121,5 +114,28 @@ public abstract class AbstractStatement implements Statement {
         }
         return md;
     }
+
+    protected Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
+        throw new AnimoException(null, "Can't create a child node");
+    }
+
+
+    protected final Node throwCache(Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        if (ready && hash != null) {
+            Node child = getCache(hash);
+            if (child == null) {
+                child = createChild(reference, ignoreNotFound);
+                createCache(child, hash);
+            }
+            return child;
+        } else {
+            return createChild(reference, ignoreNotFound);
+        }
+    }
+
+    @Override
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+		return parent.createRelationshipTo(throwCache(reference, hash, ready, ignoreNotFound), this);
+	}
 
 }

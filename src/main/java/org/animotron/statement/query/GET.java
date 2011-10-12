@@ -36,10 +36,7 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.PropertyContainer;
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
@@ -74,14 +71,14 @@ public class GET extends Operator implements Evaluable, Query {
 	private static TraversalDescription td_eval_IS = 
 		Traversal.description().
 			breadthFirst().
-			relationships(IS._.relationshipType(), OUTGOING);
+			relationships(IS._, OUTGOING);
 			//relationships(IC._.relationshipType(), OUTGOING);
 	
 	private static TraversalDescription td_eval_ic = 
 			Traversal.description().
 				breadthFirst().
-				relationships(IS._.relationshipType(), OUTGOING).
-				relationships(IC._.relationshipType(), OUTGOING);
+				relationships(IS._, OUTGOING).
+				relationships(IC._, OUTGOING);
 
 	public OnQuestion onCalcQuestion() {
 		return question;
@@ -141,7 +138,7 @@ public class GET extends Operator implements Evaluable, Query {
 						final Set<Relationship[]> rSet = get(pf, context[1], name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(context[0], createResult(pf.getLastContext(), node, r[1], HAVE._.relationshipType));
+								pf.sendAnswer(context[0], createResult(pf.getLastContext(), node, r[1], HAVE._));
 							}
 							return;
 						}
@@ -186,7 +183,7 @@ public class GET extends Operator implements Evaluable, Query {
 						Set<Relationship[]> rSet = get(pf, st, name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(r[0], createResult(pf.getLastContext(), node, r[1], HAVE._.relationshipType));
+								pf.sendAnswer(r[0], createResult(pf.getLastContext(), node, r[1], HAVE._));
 							}
 							break;
 						}
@@ -423,7 +420,7 @@ public class GET extends Operator implements Evaluable, Query {
 					return AnimoGraph.execute(new GraphOperation<Relationship>() {
 						@Override
 						public Relationship execute() {
-							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._.relationshipType());
+							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._);
 							//RID.set(res, r.getId());
 							return res;
 						}
@@ -457,7 +454,7 @@ public class GET extends Operator implements Evaluable, Query {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, target, HAVE._.rType);
+				return _evaluate_(path, target, HAVE._);
 			}
 		});
 
@@ -490,7 +487,7 @@ public class GET extends Operator implements Evaluable, Query {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, target, IC._.rType);
+				return _evaluate_(path, target, IC._);
 			}
 		});
 
@@ -537,7 +534,7 @@ public class GET extends Operator implements Evaluable, Query {
 //							}
 							return EXCLUDE_AND_CONTINUE;	
 						//Allow ...<-IS->...
-						} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+						} if (path.length() > 2 && r.getType().name().equals(IS._)) {
 							return EXCLUDE_AND_CONTINUE;
 						}
 						return EXCLUDE_AND_PRUNE;
@@ -563,7 +560,7 @@ public class GET extends Operator implements Evaluable, Query {
 							}
 							return EXCLUDE_AND_CONTINUE;	
 						//Allow ...<-IS->...
-						} if (path.length() > 2 && r.getType().name().equals(IS._.rType)) {
+						} if (path.length() > 2 && r.getType().name().equals(IS._)) {
 							return EXCLUDE_AND_CONTINUE;
 						} 
 						return EXCLUDE_AND_PRUNE;
@@ -602,20 +599,20 @@ public class GET extends Operator implements Evaluable, Query {
 			for (Relationship r : path.relationships()) {
 				step++;
 				
-				String type = r.getType().name();
+				RelationshipType type = r.getType();
 
 				if (thisDeep > 0) {
 
-					if (type.equals(IS._.relationshipType().name()) && r.getStartNode().equals(lastNode)) {
+					if (type.equals(IS._) && r.getStartNode().equals(lastNode)) {
 						lastNode = r.getEndNode();
 						foundBackIS = true;
 					} else {
 						lastNode = r.getStartNode();
 					}
 
-					if (type.equals(USE._.rType)) {
+					if (type.equals(USE._)) {
 						thisDeep += 2;
-					} else  if (type.equals(IS._.rType)) { //type.equals(REF.reference()) ||
+					} else  if (type.equals(IS._)) { //type.equals(REF.reference()) ||
 						if (!REFcase) {
 							REFcase = true;
 							thisDeep++;
@@ -631,13 +628,13 @@ public class GET extends Operator implements Evaluable, Query {
 				
 				if (step == 1 && type.equals(REF.name())) {
 					REFcase = true;
-				} else if (REFcase && step == 2 && !(type.equals(HAVE._.rType) || type.equals(IC._.rType))) {
+				} else if (REFcase && step == 2 && !(type.equals(HAVE._) || type.equals(IC._))) {
 					break;
 				}
 				
 				lastNode = r.getStartNode();
 				
-				if (type.equals(IS._.relationshipType().name())) {
+				if (type.equals(IS._)) {
 					if (name.equals(IS._.reference(r))) {
 						foundIS = true;
 						continue;
@@ -650,7 +647,7 @@ public class GET extends Operator implements Evaluable, Query {
 						continue;
 					}
 					
-				} else if (type.equals(HAVE._.relationshipType().name()) && (name.equals(HAVE._.reference(r)) || foundIS)) {
+				} else if (type.equals(HAVE._) && (name.equals(HAVE._.reference(r)) || foundIS)) {
 					//ignore empty have 
 					if (!Utils.haveContext(r.getEndNode()))
 						break;
@@ -663,7 +660,7 @@ public class GET extends Operator implements Evaluable, Query {
 					thisDeep++;
 					REFcase = false;
 				
-				} else if (type.equals(IC._.relationshipType().name()) && (name.equals(IC._.reference(r)) || foundIS)) {
+				} else if (type.equals(IC._) && (name.equals(IC._.reference(r)) || foundIS)) {
 					if (foundIS) {
 						thisResult = ICresult(context, r);
 						thisDeep++;
@@ -704,7 +701,7 @@ public class GET extends Operator implements Evaluable, Query {
 		final Node eNode = r.getEndNode();
 		
 		//avoid duplicate
-		for (Relationship h : sNode.getRelationships(HAVE._.relationshipType(), OUTGOING)) {
+		for (Relationship h : sNode.getRelationships(HAVE._, OUTGOING)) {
 			if (h.getEndNode().equals(eNode))
 				return h;
 		}
@@ -712,7 +709,7 @@ public class GET extends Operator implements Evaluable, Query {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
-				Relationship res = sNode.createRelationshipTo(eNode, HAVE._.relationshipType());
+				Relationship res = sNode.createRelationshipTo(eNode, HAVE._);
 				//RID.set(res, r.getId());
 				return res;
 			}
@@ -721,7 +718,7 @@ public class GET extends Operator implements Evaluable, Query {
 
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
-		public Evaluation _evaluate_(Path path, Node target, String type) {
+		public Evaluation _evaluate_(Path path, Node target, RelationshipType type) {
 			//System.out.println(path);
 			
 			if (path.length() == 0)
@@ -745,7 +742,7 @@ public class GET extends Operator implements Evaluable, Query {
 					return EXCLUDE_AND_CONTINUE;
 				
 				//XXX: check direction!
-				} else if (rType.equals(IS._.rType)) {
+				} else if (rType.equals(IS._)) {
 					if (r.getEndNode().equals(path.endNode())) {
 						return EXCLUDE_AND_CONTINUE;
 					}

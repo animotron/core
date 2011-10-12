@@ -20,7 +20,6 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -31,8 +30,6 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression.*;
 
@@ -68,7 +65,7 @@ public class WebFramework__Test extends ATest {
 		);
 
     	new JExpression(
-			_(THE._, "root-service", 
+			_(THE._, "root-service",
 				_(IS._, "service"),
 				_(HAVE._, "uri", text("/")),
 				_(AN._, "html",
@@ -108,7 +105,7 @@ public class WebFramework__Test extends ATest {
         );
 
     	new JExpression(
-			_(THE._, "theme-concrete-root-layout", 
+			_(THE._, "theme-concrete-root-layout",
 				_(IS._, "root-layout"),
 				_(HAVE._, "content",
 					element("div", attribute("id", "title"),
@@ -144,31 +141,33 @@ public class WebFramework__Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the s " +
-                                "the root-service " +
-                                    "(is service) " +
-                                    "(have uri \"/\") " +
-                                        "(the html " +
-                                            "the html-composition " +
-                                                "(is composition) " +
-                                                "(have content " +
-                                                    "\\html " +
-                                                        "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
-                                                        "(\\body the theme-concrete-root-layout " +
-                                                            "(is root-layout) " +
-                                                            "(have content " +
-                                                                "(\\div (@id \"title\") (have title \"Welcome to Animotron\")) " +
-                                                                "(\\div (@id \"content\") (have content \"Overview\"))))))");
+        assertAnimoResult(s,
+            "the s " +
+                "the root-service " +
+                    "(is service) " +
+                    "(have uri \"/\") " +
+                        "(the html " +
+                            "the html-composition " +
+                                "(is composition) " +
+                                "(have content " +
+                                    "\\html " +
+                                        "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
+                                        "(\\body the theme-concrete-root-layout " +
+                                            "(is root-layout) " +
+                                            "(have content " +
+                                                "(\\div (@id \"title\") (have title \"Welcome to Animotron\")) " +
+                                                "(\\div (@id \"content\") (have content \"Overview\"))))))");
 
-        assertXMLResult(s,  "<html>" +
-                                "<head>" +
-                                    "<title>Welcome to Animotron</title>" +
-                                "</head>" +
-                                "<body>" +
-                                    "<div id=\"title\">Welcome to Animotron</div>" +
-                                    "<div id=\"content\">Overview</div>" +
-                                "</body>" +
-                            "</html>");
+        assertXMLResult(s,
+            "<html>" +
+                "<head>" +
+                    "<title>Welcome to Animotron</title>" +
+                "</head>" +
+                "<body>" +
+                    "<div id=\"title\">Welcome to Animotron</div>" +
+                    "<div id=\"content\">Overview</div>" +
+                "</body>" +
+            "</html>");
 
 	}
 

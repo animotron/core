@@ -20,7 +20,6 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -30,8 +29,6 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression.*;
 
@@ -147,31 +144,32 @@ public class ModifiedYetAnotherWebFramework_Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 6a40e5b412692b64b8e07615e06e442dc05c3c4d44c09faa70e4cd34bf3abf25 " +
-                                "have content " +
-                                    "\\html " +
-                                        "(\\head \\title have title \"Welcome to Animo\") " +
-                                        "(\\body the theme-concrete-root-layout (is root-layout) " +
-                                            "(\\h1 have title \"Welcome to Animo\") " +
-                                            "(\\p have content \"It is working\") " +
-                                            "(\\ul " +
-                                                "(\\li (\"host:\") (\\strong have host \"localhost\")) " +
-                                                "(\\li (\"uri:\") (\\strong have uri \"/\"))))");
+        assertAnimoResult(s,
+            "have content " +
+                "\\html " +
+                    "(\\head \\title have title \"Welcome to Animo\") " +
+                    "(\\body the theme-concrete-root-layout (is root-layout) " +
+                        "(\\h1 have title \"Welcome to Animo\") " +
+                        "(\\p have content \"It is working\") " +
+                        "(\\ul " +
+                            "(\\li (\"host:\") (\\strong have host \"localhost\")) " +
+                            "(\\li (\"uri:\") (\\strong have uri \"/\"))))");
 
 
-        assertXMLResult(s,  "<html>" +
-                                "<head>" +
-                                    "<title>Welcome to Animo</title>" +
-                                "</head>" +
-                                    "<body>" +
-                                        "<h1>Welcome to Animo</h1>" +
-                                        "<p>It is working!</p>" +
-                                        "<ul>" +
-                                            "<li>host: \"<strong>localhost</strong>\"</li>" +
-                                            "<li>uri: \"<strong>/</strong>\"</li>" +
-                                        "</ul>" +
-                                    "</body>" +
-                                "</html>");
+        assertXMLResult(s,
+            "<html>" +
+                "<head>" +
+                    "<title>Welcome to Animo</title>" +
+                "</head>" +
+                "<body>" +
+                    "<h1>Welcome to Animo</h1>" +
+                    "<p>It is working!</p>" +
+                    "<ul>" +
+                        "<li>host: \"<strong>localhost</strong>\"</li>" +
+                        "<li>uri: \"<strong>/</strong>\"</li>" +
+                    "</ul>" +
+                "</body>" +
+            "</html>");
 
     }
 

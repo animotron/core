@@ -19,7 +19,6 @@
 package org.animotron.statement;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.exception.ENotFound;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -31,13 +30,11 @@ import java.security.MessageDigest;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Statement {
+public interface Statement extends RelationshipType {
 	
-	public Relationship build(Node parent, Object reference, boolean flag) throws ENotFound, AnimoException;
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException;
 	
     public String name();
-
-    public RelationshipType relationshipType();
 
     public Object reference(Relationship r);
 

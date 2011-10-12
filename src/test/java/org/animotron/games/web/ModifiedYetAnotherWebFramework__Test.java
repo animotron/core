@@ -152,31 +152,32 @@ public class ModifiedYetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 6a40e5b412692b64b8e07615e06e442dc05c3c4d44c09faa70e4cd34bf3abf25 " +
-                                "have content " +
-                                    "\\html " +
-                                        "(\\head \\title have title \"Welcome to Animo\") " +
-                                        "(\\body the theme-concrete-root-layout (is root-layout) " +
-                                            "(\\h1 have title \"Welcome to Animo\") " +
-                                            "(\\p have content \"It is working\") " +
-                                            "(\\ul " +
-                                                "(\\li (\"host:\") (\\strong have host \"localhost\")) " +
-                                                "(\\li (\"uri:\") (\\strong have uri \"/\"))))");
+        assertAnimoResult(s,
+            "have content " +
+                "\\html " +
+                    "(\\head \\title have title \"Welcome to Animo\") " +
+                    "(\\body the theme-concrete-root-layout (is root-layout) " +
+                        "(\\h1 have title \"Welcome to Animo\") " +
+                        "(\\p have content \"It is working\") " +
+                        "(\\ul " +
+                            "(\\li (\"host:\") (\\strong have host \"localhost\")) " +
+                            "(\\li (\"uri:\") (\\strong have uri \"/\"))))");
 
 
-        assertXMLResult(s,  "<html>" +
-                                "<head>" +
-                                    "<title>Welcome to Animo</title>" +
-                                "</head>" +
-                                    "<body>" +
-                                        "<h1>Welcome to Animo</h1>" +
-                                        "<p>It is working!</p>" +
-                                        "<ul>" +
-                                            "<li>host: \"<strong>localhost</strong>\"</li>" +
-                                            "<li>uri: \"<strong>/</strong>\"</li>" +
-                                        "</ul>" +
-                                    "</body>" +
-                                "</html>");
+        assertXMLResult(s,
+            "<html>" +
+                "<head>" +
+                    "<title>Welcome to Animo</title>" +
+                "</head>" +
+                "<body>" +
+                    "<h1>Welcome to Animo</h1>" +
+                    "<p>It is working!</p>" +
+                    "<ul>" +
+                        "<li>host: \"<strong>localhost</strong>\"</li>" +
+                        "<li>uri: \"<strong>/</strong>\"</li>" +
+                    "</ul>" +
+                "</body>" +
+            "</html>");
 
     }
 

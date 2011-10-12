@@ -27,13 +27,11 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public enum RelationshipTypes implements RelationshipType {
 	
-	THE,
-	
 	GC, EVAL, PREPARE, FILTER, CALC,
 	
-	CACHE, START, END, TOP, VALUE,
+	START, END, TOP, VALUE,
 	
-	REF, RESULT, SOURCE;
+	REF, RESULT;
 	
     public boolean equals(RelationshipType type) {
         return name().equals(type.name());

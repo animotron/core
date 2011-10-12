@@ -45,9 +45,7 @@ public class CacheIndex {
 //            db = dbm.createDatabase("myDB",32);
 	}
 
-    public Node get(byte[] value) {
-        IndexHits<Node> q = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
-//        IndexHits<Node> q = INDEX.get(NAME, value);
+    private Node get(IndexHits<Node> q) {
         Node n = null;
         try {
             n = q.next();
@@ -55,38 +53,22 @@ public class CacheIndex {
             q.close();
             return n;
         }
+    }
 
-//    	DatabaseRequestResult<byte[]> result = db.lookup(2, value, NAME);
-//    	byte[] bytes = result.get();
-//    	if (bytes == null) return null;
-//		long nodeID = bytes2long(bytes);
-//		return AnimoGraph.getDb().getNodeById(nodeID);
+    public Node get(byte[] value) {
+        return get(INDEX.get(NAME, MessageDigester.byteArrayToHex(value)));
+//        return get(IndexHits<Node> q = INDEX.get(NAME, value));
+    }
+    public Node get(String value) {
+        return  get(INDEX.get(NAME, value));
     }
 
     public void add(Node n, byte[] value) {
         INDEX.add(n, NAME, MessageDigester.byteArrayToHex(value));
 //        INDEX.add(n, NAME, value);
-
-//    	DatabaseRequestResult<Object> result = db.singleInsert(2, value, long2bytes(r.getId()), NAME);
-//    	try {
-//			result.get();
-//		} catch (BabuDBException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
     }
-
-//    public static byte[] long2bytes(long l) {
-//		byte b[] = new byte[8];
-//
-//		ByteBuffer buf = ByteBuffer.wrap(b);
-//		buf.putLong(l);
-//		return b;
-//	}
-//
-//    public static long bytes2long(byte[] b) {
-//    	ByteBuffer buf = ByteBuffer.wrap(b);
-//    	return buf.getLong();
-//    }
+    public void add(Node n, String value) {
+        INDEX.add(n, NAME, value);
+    }
 
 }

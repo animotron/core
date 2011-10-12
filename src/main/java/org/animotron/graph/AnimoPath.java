@@ -102,11 +102,11 @@ public class AnimoPath {
 			}
 			
 			if (!matched) {
-				if (r.getType().name().equals(AN._.rType))
+				if (r.getType().equals(AN._))
 					parsed.add(new Step(new Pattern(AN._)));
-				if (r.getType().name().equals(ANY._.rType))
+				if (r.getType().equals(ANY._))
 					parsed.add(new Step(new Pattern(ANY._)));
-				if (r.getType().name().equals(ALL._.rType))
+				if (r.getType().equals(ALL._))
 					parsed.add(new Step(new Pattern(ALL._)));
 			}
 				
@@ -134,7 +134,7 @@ public class AnimoPath {
 	}
 	
 	private One one(Statement st) {
-		return new One(st.relationshipType());
+		return new One(st);
 	}
 
 	private One one(RelationshipType rt) {
@@ -142,7 +142,7 @@ public class AnimoPath {
 	}
 
 	private Many many(Statement st) {
-		return new Many(st.relationshipType());
+		return new Many(st);
 	}
 
 //	private Many many(RelationshipType rt) {

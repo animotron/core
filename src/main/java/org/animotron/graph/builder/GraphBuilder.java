@@ -20,6 +20,7 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.Expression;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.VALUE;
@@ -44,7 +45,7 @@ import static org.animotron.graph.AnimoGraph.finishTx;
  * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
  * 
- * getRelationship()
+ * relationship()
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -52,8 +53,7 @@ import static org.animotron.graph.AnimoGraph.finishTx;
 public abstract class GraphBuilder {
 
     Transaction tx;
-    protected int order;
-    protected Relationship the;
+    private int order;
     protected final boolean ignoreNotFound;
     public final Manipulators.Catcher catcher;
 
@@ -66,10 +66,24 @@ public abstract class GraphBuilder {
         catcher = Manipulators.getCatcher();
     }
 
-	public final Relationship getRelationship() {
-		return the;
-	}
-	
+    protected final int order(){
+        return order;
+    }
+
+    protected final void order(Relationship r){
+        order(r, order);
+    }
+
+    protected final void order(Relationship r, int order){
+        if (order > 0) {
+            AnimoGraph.order(r, order);
+        }
+    }
+
+    public abstract Relationship relationship();
+
+    protected abstract void fail(Exception e);
+
     public abstract void startGraph();
 
     public abstract void endGraph() throws AnimoException;
@@ -88,14 +102,12 @@ public abstract class GraphBuilder {
 
     final public void build(Expression exp) throws Exception {
         order = 0;
-        the = null;
         tx = beginTx();
         try {
             exp.build();
             tx.success();
             finishTx(tx);
         } catch (Exception e) {
-            tx.failure();
             finishTx(tx);
             tx = beginTx();
             try {
@@ -104,11 +116,12 @@ public abstract class GraphBuilder {
                 finishTx(tx);
             }
             throw e;
+        } finally {
+            catcher.push();
         }
-        catcher.push();
     }
 
-    final public void step() {
+    final protected void step() {
         if (order % (30000) == 0) {
             tx.success();
             finishTx(tx);
@@ -119,7 +132,5 @@ public abstract class GraphBuilder {
             System.out.println(order);
         }
     }
-
-    abstract public void fail(Exception e);
 
 }

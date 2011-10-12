@@ -26,7 +26,7 @@ import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.ml.TEXT;
+import org.animotron.statement.value.VALUE;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
@@ -100,11 +100,11 @@ public class AfterLast extends Instruction implements Evaluable {
 					return;
 				}
 				final Node rNode = r.getEndNode();
-				final long rID = r.getEndNode().getSingleRelationship(TEXT._.relationshipType(), OUTGOING).getId(); 
+				final long rID = r.getEndNode().getSingleRelationship(VALUE._, OUTGOING).getId();
 				r = AnimoGraph.execute(new GraphOperation<Relationship>() {
 					@Override
 					public Relationship execute() {
-						Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._.relationshipType(), INCOMING).getStartNode();
+						Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
 						Relationship res = sNode.createRelationshipTo(rNode, RESULT);
 						Properties.RID.set(res, rID);
 						Properties.CID.set(res, pf.getLastContext().getId());

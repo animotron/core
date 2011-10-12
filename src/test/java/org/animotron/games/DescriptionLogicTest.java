@@ -75,7 +75,7 @@ public class DescriptionLogicTest extends ATest {
 		);
 
 		//TODO: find a way to describe ⊔ ....
-		//the:parents` is:mother` is:father` is:parent? 
+		//the:parents` is:mother` is:father` is:parent?
 		
  		//Parent ≡ Mother ⊔ Father.
 		new JExpression(

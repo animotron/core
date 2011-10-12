@@ -129,35 +129,36 @@ public class YetAnotherWebFramework__Test extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 8f0dbda70f443506a24db4cca022992045434baceb63576087a2f528ee121d23 " +
-                                "the rest " +
-                                    "the root-service " +
-                                    "(is service) " +
-                                    "(have uri \"/\") " +
-                                    "(the html " +
-                                        "\\html " +
-                                            "(\\head \\title have title \"Welcome to Animo\") " +
-                                            "(\\body the theme-concrete-root-layout (is root-layout) " +
-                                                "(\\h1 have title \"Welcome to Animo\") " +
-                                                "(\\p have content \"It is working!\") " +
-                                                "(\\ul " +
-                                                    "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
-                                                    "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
+        assertAnimoResult(s,
+            "the rest " +
+                "the root-service " +
+                "(is service) " +
+                "(have uri \"/\") " +
+                "(the html " +
+                    "\\html " +
+                        "(\\head \\title have title \"Welcome to Animo\") " +
+                        "(\\body the theme-concrete-root-layout (is root-layout) " +
+                            "(\\h1 have title \"Welcome to Animo\") " +
+                            "(\\p have content \"It is working!\") " +
+                            "(\\ul " +
+                                "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
+                                "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
 
 
-        assertXMLResult(s,  "<html>" +
-                                "<head>" +
-                                    "<title>Welcome to Animo</title>" +
-                                "</head>" +
-                                    "<body>" +
-                                        "<h1>Welcome to Animo</h1>" +
-                                        "<p>It is working!</p>" +
-                                        "<ul>" +
-                                            "<li>host: \"<strong>localhost</strong>\"</li>" +
-                                            "<li>uri: \"<strong>/</strong>\"</li>" +
-                                        "</ul>" +
-                                    "</body>" +
-                                "</html>");
+        assertXMLResult(s,
+            "<html>" +
+                "<head>" +
+                    "<title>Welcome to Animo</title>" +
+                "</head>" +
+                "<body>" +
+                    "<h1>Welcome to Animo</h1>" +
+                    "<p>It is working!</p>" +
+                    "<ul>" +
+                        "<li>host: \"<strong>localhost</strong>\"</li>" +
+                        "<li>uri: \"<strong>/</strong>\"</li>" +
+                    "</ul>" +
+                "</body>" +
+            "</html>");
 
     }
 

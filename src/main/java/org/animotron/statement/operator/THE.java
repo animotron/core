@@ -18,22 +18,21 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.Properties;
+import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
-import org.animotron.graph.AnimoRelationshipType;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.event.ErrorState;
 import org.neo4j.graphdb.event.KernelEventHandler;
 
 import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * Operator 'THE'.
@@ -43,22 +42,19 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class THE extends Operator implements Prepare, KernelEventHandler {
 
-	public static String NAME = "the";
-
 	public static final THE _ = new THE();
 
-	private THE() { super(NAME); }
-
-	public RelationshipType relationshipType(String name){
-		return AnimoRelationshipType.get(name(), name);
-	}
+	private THE() { super("the"); }
 
 	public Relationship get(String name) {
-		RelationshipType type = relationshipType(name);
-		return getSTART().getSingleRelationship(type, OUTGOING);
+        Node node = getCache(name);
+        if (node != null) {
+            return node.getSingleRelationship(this, INCOMING);
+        }
+        return null;
 	}
 
-	public Relationship create(String name, String hash) throws ENotFound {
+	public Relationship create(String name, String hash) throws AnimoException {
         //TODO do we really need a reference?
         if (name == null) name = hash;
 		Relationship r = create(name);
@@ -66,14 +62,15 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		return r;
 	}
 
-	private Relationship create(String name) throws ENotFound {
-        Relationship r = build(getSTART(), name, true);
+	private Relationship create(String name) throws AnimoException {
+        Relationship r;
+        r = build(getSTART(), name, null, true, true);
         Node node = r.getEndNode();
         getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
         return r;
 	}
 
-	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws ENotFound {
+	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws AnimoException {
 		Relationship r = get(name);
 		if (r == null) {
             if (ignoreNotFound) {
@@ -85,19 +82,17 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		return r;
 	}
 
-	@Override
-	public Relationship build(Node parent, Object name, boolean ignoreNotFound) {
+    @Override
+    protected Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
-        RelationshipType type = relationshipType((String) name);
-        Relationship r = parent.createRelationshipTo(node, type);
-        Properties.NAME.set(r.getEndNode(), name);
-        Properties.NAME.set(r, name);
-        return r;
-	}
+        createCache(node, (String) reference);
+        NAME.set(node, reference);
+        return node;
+    }
 
 	@Override
 	public Object reference(Relationship r) {
-		return Properties.NAME.get(r);
+		return NAME.get(r.getEndNode());
 	}
 
     private Subscribable<PFlow> prepare = new OnQuestion();

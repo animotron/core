@@ -20,7 +20,6 @@ package org.animotron.statement;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-import org.animotron.statement.operator.THE;
 import org.clapper.util.classutil.*;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -156,8 +155,7 @@ public class Statements {
 	}
 
 	public static Statement relationshipType(RelationshipType type) {
-		String name = type.name();
-		return name.startsWith(THE.NAME + ":") ? THE._ : relationshipType(name);
+		return relationshipType(type.name());
 	}
 
 	public static Statement relationshipType(String name) {

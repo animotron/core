@@ -20,7 +20,6 @@ package org.animotron.statement.relation;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Prepare;
@@ -35,6 +34,7 @@ import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import static org.animotron.graph.RelationshipTypes.TOP;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -55,7 +55,7 @@ public class IS extends Relation implements Prepare {
 		TD = Traversal.description()
 			.depthFirst()
 			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-			.relationships(relationshipType(), OUTGOING)
+			.relationships(this, OUTGOING)
 			.evaluator(Evaluators.fromDepth(1));
 	}
 	
@@ -68,7 +68,7 @@ public class IS extends Relation implements Prepare {
             	}
             	if (pos.endNode().equals(node)){
             		return false;
-            	} else if (pos.endNode().hasRelationship(relationshipType(), OUTGOING)) {
+            	} else if (pos.endNode().hasRelationship(_, OUTGOING)) {
             		return false;
             	} else {
             		done = true;
@@ -94,7 +94,7 @@ public class IS extends Relation implements Prepare {
 					new GraphOperation<Void>() {
 						@Override
 						public Void execute() {
-							for (Relationship r : start.getRelationships(RelationshipTypes.TOP, INCOMING)) {
+							for (Relationship r : start.getRelationships(TOP, INCOMING)) {
 								r.delete();
 							}
 							return null;

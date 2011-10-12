@@ -19,19 +19,14 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.ELEMENT;
-import org.animotron.statement.operator.THE;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
 import java.util.Stack;
 
-import static org.animotron.Properties.HASH;
-import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -51,16 +46,16 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
  * 
- * getRelationship()
+ * relationship()
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 public class MLGraphBuilder extends GraphBuilder {
 	
-	private Node root, parent;
+	private Node parent, root;
 	private Stack<Object[]> stack;
-    private byte[] md;
+    private Relationship relationship;
 
     @Override
 	public void startGraph() {
@@ -69,75 +64,61 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 
     @Override
+    public Relationship relationship() {
+        return relationship;
+    }
+
+    @Override
+    public void fail(Exception e) {
+        catcher.destructive(root);
+    }
+
+    @Override
 	public void endGraph() throws AnimoException {
-        MessageDigest m = THE._.hash(null);
-        m.update(md);
-        String hash = MessageDigester.byteArrayToHex(m.digest());
-        Relationship old = THE._.get(hash);
-        if (old == null) {
-            the = getSTART().createRelationshipTo(root, THE._.relationshipType(hash));
-            NAME.set(root, hash);
-            NAME.set(the, hash);
-            HASH.set(the, hash);
-            catcher.creative(the);
-        } else {
-            if (hash.equals(HASH.get(old))) {
-                destructive(root);
-                the = old;
-            } else {
-                the = getSTART().createRelationshipTo(root, THE._.relationshipType(hash));
-                NAME.set(root, hash);
-                NAME.set(the, hash);
-                HASH.set(the, hash);
-                catcher.renew(old, the);
-            }
+        for (Relationship r : root.getRelationships()) {
+            relationship = copy(getSTART(), r);
+            r.delete();
         }
-        getTOP().createRelationshipTo(the.getEndNode(), RelationshipTypes.TOP);
+        root.delete();
 	}
 
 	@Override
     public void start(Statement statement, Object reference) throws AnimoException {
-        step();
         MessageDigest hash = statement.hash(reference);
         parent = stack.empty() ? root : ((Relationship) stack.peek()[1]).getEndNode();
         boolean ready = !(statement instanceof ELEMENT) && reference != null;
-        Relationship r = statement.build(parent, reference, ready);
+        Relationship r = statement.build(parent, reference, null, ready, ignoreNotFound);
         Object[] item = {
                 hash,           // 0  message digest
                 r,              // 1  node
                 ready,          // 2 is ready for cache?
-                order           // 3 order;
+                order()         // 3 order;
             };
 		stack.push(item);
+        step();
 	}
 	
     @Override
 	public void end() throws AnimoException {
 		Object[] item = stack.pop();
-        md = ((MessageDigest) item[0]).digest();
+        byte[] md = ((MessageDigest) item[0]).digest();
         Relationship r = (Relationship) item[1];
         int order = (Integer) item[3];
         if (!((Boolean)item[2])) {
             Node node = getCache(md);
             if (node == null) {
                 createCache(r.getEndNode(), md);
-                order(r, order);
             } else {
-                order(r.getStartNode().createRelationshipTo(node, r.getType()), order);
-                destructive(r);
+                Relationship old = r;
+                r = old.getStartNode().createRelationshipTo(node, r.getType());
+                destructive(old);
             }
-        } else {
-            order(r, order);
         }
+        order(r, order);
         if (!stack.empty()) {
             ((MessageDigest) stack.peek()[0]).update(md);
         }
 	}
-
-    @Override
-    public void fail(Exception e) {
-        catcher.destructive(root);
-    }
 
     private void destructive(Relationship r) {
         Node node = r.getEndNode();

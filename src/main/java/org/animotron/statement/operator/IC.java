@@ -43,7 +43,8 @@ public class IC extends Operator implements Evaluable {
 	private OnQuestion question = new OnQuestion(){
 		@Override
 		public void onMessage(PFlow pf) {
-			if (GET._.relationshipType().equals(pf.getParent())) {
+            //TODO !!!
+			if (pf.getParent().getOP().equals(GET._)) {
 				// Evaluate IC here
 			} else {
 				pf.done();

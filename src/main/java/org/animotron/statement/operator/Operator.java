@@ -18,15 +18,13 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.Properties;
-import org.animotron.exception.ENotFound;
-import org.animotron.graph.AnimoRelationshipType;
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -36,19 +34,16 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public abstract class Operator extends AbstractStatement {
 
-	private static final RelationshipType REF = AnimoRelationshipType.get("REF");
-
     public Operator(String name) {
         super(name);
     }
 
     @Override
-	public Relationship build(Node parent, Object reference, boolean ignoreNotFound) throws ENotFound {
-		Node child = createNode();
-        Relationship ref = child.createRelationshipTo(THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode(), REF);
-        Properties.NAME.set(ref, reference);
-		return parent.createRelationshipTo(child, relationshipType());
-	}
+    protected Node createChild(Object reference, boolean ignoreNotFound) throws AnimoException {
+        Node child = createNode();
+        child.createRelationshipTo(THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode(), REF);
+        return child;
+    }
 
 	@Override
 	public Object reference(Relationship r) {

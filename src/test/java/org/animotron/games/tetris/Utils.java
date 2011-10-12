@@ -28,7 +28,7 @@ public class Utils {
 	
 	public static void the(Map<String, String> map, String id) {
 		map.put(id+".xml", 
-			"<the:"+id+" "+/*ATest.ANIMO_NSs+*/"/>");
+			"<exp:"+id+" "+/*ATest.ANIMO_NSs+*/"/>");
 	}
 
 	public static void the(Map<String, String> map, String id, String is) {

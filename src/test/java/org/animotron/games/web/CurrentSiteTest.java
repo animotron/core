@@ -79,11 +79,11 @@ public class CurrentSiteTest extends ATest {
             )
         );
 
-        assertAnimoResult(s,  "the 0f7b73a28332d87d23ac1e29984c0e939760bb2de3609d412b3cec4dc25570ae " +
-                                "the rest " +
-                                    "the test-service " +
-                                        "(is service) " +
-                                        "(have server-name \"localhost\") " +
-                                        "(have host \"localhost\")");
+        assertAnimoResult(s,
+            "the rest " +
+                "the test-service " +
+                "(is service) " +
+                    "(have server-name \"localhost\") " +
+                    "(have host \"localhost\")");
     }
 }

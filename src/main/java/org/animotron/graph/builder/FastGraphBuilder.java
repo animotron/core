@@ -20,9 +20,6 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.Value;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
@@ -34,8 +31,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -52,7 +49,7 @@ import static org.animotron.graph.AnimoGraph.*;
  * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
  * 
- * getRelationship()
+ * relationship()
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -61,67 +58,62 @@ public class FastGraphBuilder extends GraphBuilder {
 
 	private Stack<Object[]> statements;
 	private List<Object[]> flow;
+    private Relationship relationship;
+    private Node root;
 
-	@Override
+    @Override
+    protected void fail(Exception e) {
+        if (root != null) {
+            catcher.destructive(root);
+        }
+    }
+
+    @Override public Relationship relationship() {
+        return relationship;
+    }
+
+    @Override
     public void startGraph() {
 		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
+        root = null;
 	}
 	
 	@Override
     public void endGraph() throws AnimoException {
-        if (!statements.empty()) {
-            end();
-        }
+        Relationship r;
         Iterator<Object[]> it = flow.iterator();
-        Object[] item = it.next();
-        String hash = hash(item);
-        String name = item[1] != null ? (String) item[1] : hash;
-        the = THE._.get(name);
-        if (the != null) {
-            if (HASH.has(the)) {
-                String h = (String) HASH.get(the);
-                if (h == null) {
-                    catcher.creative(the);
-                    HASH.set(the, hash);
-                } else if (!h.equals(hash)) {
-                    catcher.renew(the);
-                    HASH.set(the, hash);
-                } else {
-                    return;
-                }
+        if (it.hasNext()) {
+            Object[] o = it.next();
+            Statement statement = (Statement) o[0];
+            byte[] hash = (byte[]) o[2];
+            Node node = getCache(hash);
+            if (node != null) {
+                r = node.getRelationships(statement, INCOMING).iterator().next();
+                relationship = copy(getSTART(), r);
             } else {
-                catcher.creative(the);
-                HASH.set(the, hash);
+                Object reference = o[1];
+                root = createNode();
+                r = statement.build(root, reference, hash, true, ignoreNotFound);
+                o[3] = r;
+                o[4] = r.getEndNode();
+                step();
+                root = r.getStartNode();
+                while (it.hasNext()) {
+                    build(it.next());
+                    step();
+                }
+                relationship = copy(getSTART(), r);
+                r.delete();
+                root.delete();
             }
-        } else {
-            the = THE._.create(name, hash);
-            catcher.creative(the);
-        }
-        item[3] = the;
-        item[4] = the.getEndNode();
-        order = 0;
-        while(it.hasNext()) {
-            step();
-            build(it.next());
         }
 	}
 
     @Override
 	public void start(Statement statement, Object reference) {
-        if (flow.isEmpty() && !(statement instanceof THE)) {
-            start(THE._, null);
-        }
-		Object[] parent = null;
-		if (!statements.empty()) {
-			if (statement instanceof THE) {
-				start(AN._, reference);
-				end();
-			} else {
-				parent = statements.peek();
-			}
-		}
-        boolean ready = statement instanceof Value || ignoreNotFound;
+		Object[] parent = statements.empty() ? null : statements.peek();
+        boolean ready = statement instanceof Value;
         MessageDigest md = statement.hash(reference);
 		Object[] item = {
 				statement,	    // 0 statement
@@ -131,7 +123,6 @@ public class FastGraphBuilder extends GraphBuilder {
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
 				false,		    // 6 is done?
-                ready           // 7 is ready for cache?
 			};
 		statements.push(item);
 		flow.add(item);
@@ -144,59 +135,35 @@ public class FastGraphBuilder extends GraphBuilder {
 		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
 			((MessageDigest) (parent[2])).update(hash);
-            if (parent[0] instanceof Value) {
-                parent[7] = false;
-            }
 		}
 		current[2] = hash;
 	}
-
-    @Override
-    public void fail(Exception e) {
-        catcher.destructive((Relationship)flow.get(0)[3]);
-    }
 
     //TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
 	
 	private void build(Object[] item) throws AnimoException {
 		Object[] p =  (Object[]) item[5];
-		if (p != null) {
-			if ((Boolean) p[6]) {
-				item[6] = true; 
-				return;
-			}
-		}
-        Node parent = (Node) p[4];
-        if (parent == null)
-            //"Internal error: parent can not be null."
-            throw new AnimoException((Relationship)item[3]);
+//		if (p != null) {
+//			if ((Boolean) p[6]) {
+//				item[6] = true;
+//				return;
+//			}
+//		}
         Relationship r;
         Statement statement = (Statement) item[0];
         Object reference = item[1];
-        boolean ready = (Boolean) item[7];
-        if (!(statement instanceof Relation || statement instanceof Value)) {
-            byte[] hash = (byte[]) item[2];
-            Node node = getCache(hash);
-            if (node == null) {
-                r = statement.build(parent, reference, ready);
-                createCache(r.getEndNode(), hash);
-            } else {
-                r = parent.createRelationshipTo(node, statement.relationshipType());
-                item[6] = true;
-            }
-        } else {
-            r = statement.build(parent, reference, ready);
-        }
-        if (r != null) {
-            item[3] = r;
-            item[4] = r.getEndNode();
-            order(r, order);
-        }
+        byte[] hash = (byte[]) item[2];
+        Node parent = (Node) p[4];
+        r = statement.build(parent, reference, hash, true, ignoreNotFound);
+        item[3] = r;
+        item[4] = r.getEndNode();
+        //item[6] = true;
+        order(r);
 	}
 	
 	private String hash(Object[] item) {
         return MessageDigester.byteArrayToHex((byte[]) item[2]);
 	}
-	
+
 }
