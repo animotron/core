@@ -21,7 +21,6 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.Value;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -122,7 +121,7 @@ public class FastGraphBuilder extends GraphBuilder {
 				null,	 	    // 3 current relationship
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
-				false,		    // 6 is done?
+				false           // 6 number of child
 			};
 		statements.push(item);
 		flow.add(item);
@@ -141,29 +140,25 @@ public class FastGraphBuilder extends GraphBuilder {
 
     //TODO: Store hash for every node as byte[]
 	//TODO: Build graph via single thread in sync and async modes 
-	
+
 	private void build(Object[] item) throws AnimoException {
 		Object[] p =  (Object[]) item[5];
-//		if (p != null) {
-//			if ((Boolean) p[6]) {
-//				item[6] = true;
-//				return;
-//			}
-//		}
+		if (p != null) {
+			if ((Boolean) p[6]) {
+				item[6] = true;
+				return;
+			}
+		}
         Relationship r;
         Statement statement = (Statement) item[0];
         Object reference = item[1];
         byte[] hash = (byte[]) item[2];
         Node parent = (Node) p[4];
+        item[6] = getCache(hash) != null;
         r = statement.build(parent, reference, hash, true, ignoreNotFound);
         item[3] = r;
         item[4] = r.getEndNode();
-        //item[6] = true;
         order(r);
 	}
 	
-	private String hash(Object[] item) {
-        return MessageDigester.byteArrayToHex((byte[]) item[2]);
-	}
-
 }
