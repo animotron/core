@@ -18,6 +18,8 @@
  */
 package org.animotron.manipulator;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
@@ -68,13 +70,26 @@ public class Preparator extends StatementManipulator {
                 return EXCLUDE_AND_PRUNE;
             }
         });
-	
-	
-	public void execute(Node op) throws IOException {
-		Iterator<Path> it = TD.traverse(op).iterator();
-		while (it.hasNext()) {
-			super.execute(it.next().relationships().iterator().next());
-		}
+
+    private void prepare(Relationship op) throws IOException {
+        super.execute(op);
+    }
+
+	public void execute(final Node op) throws IOException {
+        AnimoGraph.execute(new GraphOperation<Void>() {
+            @Override
+            public Void execute() throws Exception {
+                Iterator<Path> it = TD.traverse(op).iterator();
+                while (it.hasNext()) {
+                    prepare(it.next().relationships().iterator().next());
+                }
+                return null;
+            }
+        });
+//		Iterator<Path> it = TD.traverse(op).iterator();
+//		while (it.hasNext()) {
+//			super.execute(it.next().relationships().iterator().next());
+//		}
 	}
 	
 	@Override

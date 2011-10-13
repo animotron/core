@@ -23,7 +23,6 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -95,10 +94,10 @@ public class FastGraphBuilder extends GraphBuilder {
                 Object reference = o[1];
                 root = createNode();
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
+                Node end = r.getEndNode();
                 o[3] = r;
-                o[4] = r.getEndNode();
+                o[4] = end;
                 step();
-                root = r.getStartNode();
                 while (it.hasNext()) {
                     build(it.next());
                     step();
@@ -106,22 +105,22 @@ public class FastGraphBuilder extends GraphBuilder {
                 if (statement instanceof THE) {
                     relationship = Cache.getRelationship(o[1]);
                     if (relationship == null) {
-                        relationship = copy(getSTART(), r);
+                        relationship = getSTART().createRelationshipTo(end, r.getType());
                         Cache.putRelationship(relationship, o[1]);
-                        getTOP().createRelationshipTo(relationship.getEndNode(), RelationshipTypes.TOP);
+                        getTOP().createRelationshipTo(end, RelationshipTypes.TOP);
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
                             catcher.destructive(i);
                         }
-                        for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
+                        for (Relationship i : end.getRelationships(OUTGOING)) {
                             copy(start, i);
                             i.delete();
                         }
                     }
                     catcher.creative(relationship);
                 } else {
-                    relationship = copy(getSTART(), r);
+                    relationship = getSTART().createRelationshipTo(end, r.getType());
                 }
                 Cache.putRelationship(relationship, hash);
                 HASH.set(relationship, key(hash));
@@ -134,7 +133,6 @@ public class FastGraphBuilder extends GraphBuilder {
     @Override
 	public void start(Statement statement, Object reference) {
 		Object[] parent = statements.empty() ? null : statements.peek();
-        boolean ready = statement instanceof Value;
         MessageDigest md = statement.hash(reference);
 		Object[] item = {
 				statement,	    // 0 statement

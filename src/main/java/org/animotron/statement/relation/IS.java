@@ -18,8 +18,6 @@
  */
 package org.animotron.statement.relation;
 
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Prepare;
@@ -90,17 +88,20 @@ public class IS extends Relation implements Prepare {
 			Traverser t = TD.filter(predicate(start)).traverse(start);
 			
 			if (t.iterator().hasNext()) {
-				AnimoGraph.execute(
-					new GraphOperation<Void>() {
-						@Override
-						public Void execute() {
-							for (Relationship r : start.getRelationships(TOP, INCOMING)) {
-								r.delete();
-							}
-							return null;
-						}
-					}
-				);
+                for (Relationship r : start.getRelationships(TOP, INCOMING)) {
+                    r.delete();
+                }
+//				AnimoGraph.execute(
+//					new GraphOperation<Void>() {
+//						@Override
+//						public Void execute() {
+//							for (Relationship r : start.getRelationships(TOP, INCOMING)) {
+//								r.delete();
+//							}
+//							return null;
+//						}
+//					}
+//				);
 			}
 			
 		}
