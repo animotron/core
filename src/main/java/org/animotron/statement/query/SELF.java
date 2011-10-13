@@ -30,7 +30,6 @@ import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -77,10 +76,10 @@ public class SELF extends AbstractQuery {
 
             Relationship ref = null;
             for (Relationship step : path.relationships()) {
-                if (step.getType().equals(REF)) {
+                if (step.isType(REF)) {
                     ref = step;
                     searchHave = 0;
-                } else if (searchHave == 1 && step.getType().equals(HAVE._)) {
+                } else if (searchHave == 1 && step.isType(HAVE._)) {
                     searchHave = 2;
                 }
 
@@ -120,7 +119,7 @@ public class SELF extends AbstractQuery {
 		for (Path path : getUSEtravers(pf.getStartOP()).traverse(node)) {
 			System.out.println(" path = "+path);
 			for (Relationship p : path.relationships()) {
-				if (p.getType().equals(USE._)) {
+				if (p.isType(USE._)) {
 					node = p.getEndNode();
 					underUSE = true;
 					break;
@@ -150,16 +149,14 @@ public class SELF extends AbstractQuery {
 					continue;
 				}
 
-				RelationshipType type = r.getType();
-				
-				if (type.equals(IS._) && name.equals(IS._.reference(r))) {
+				if (r.isType(IS._) && name.equals(IS._.reference(r))) {
 					foundIS = true;
 					
-				} else if (type.equals(HAVE._) && (name.equals(HAVE._.reference(r)) || foundIS)) {
+				} else if (r.isType(HAVE._) && (name.equals(HAVE._.reference(r)) || foundIS)) {
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (type.equals(IC._) && (name.equals(IC._.reference(r)) || foundIS)) {
+				} else if (r.isType(IC._) && (name.equals(IC._.reference(r)) || foundIS)) {
 					if (foundIS) {
 						//store
 						final Node sN = eNode;

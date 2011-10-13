@@ -19,7 +19,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
@@ -29,6 +28,8 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
 import static org.animotron.graph.AnimoGraph.getORDER;
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -40,16 +41,12 @@ public class Utils {
 	public static TraversalDescription td_RESULT = 
 		Traversal.description().
 			breadthFirst().
-			relationships(RelationshipTypes.RESULT, OUTGOING );
+			relationships(RESULT, OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
 
 
 	public static Node getByREF(Node node) {
-		return 
-			node.getSingleRelationship(
-				RelationshipTypes.REF, 
-				OUTGOING
-			).getEndNode();
+		return node.getSingleRelationship(REF, OUTGOING).getEndNode();
 	}
 	
 	public static boolean results(Node node, PFlow pf) {
@@ -80,7 +77,7 @@ public class Utils {
 		
 		for (Relationship r : node.getRelationships(OUTGOING)) {
 			
-			if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+			if (r.isType(REF)) {
 				//ignore REF
 			} else {
 				return true;
@@ -101,7 +98,7 @@ public class Utils {
 				if (onQuestion != null) {
 					return true;
 					
-				} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
+				} else if (r.isType(REF)) {
 					//ignore REF
 				} else {
 					return true;

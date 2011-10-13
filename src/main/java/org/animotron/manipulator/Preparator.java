@@ -18,28 +18,21 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Prepare;
+import org.animotron.statement.relation.IS;
+import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluator;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
-import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
-import java.util.Iterator;
 
-import static org.animotron.graph.AnimoGraph.getSTART;
-import static org.neo4j.graphdb.traversal.Evaluation.*;
+import static org.animotron.graph.RelationshipTypes.PREPARE;
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -51,45 +44,12 @@ public class Preparator extends StatementManipulator {
 	
 	private Preparator() {};
 	
-	private static TraversalDescription TD =
-	     Traversal.description()
-		.depthFirst()
-		.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-        .evaluator(new Evaluator() {
-            @Override
-            public Evaluation evaluate(Path path) {
-                if (path.length() == 2) {
-                    if (getSTART().equals(path.endNode()))
-                        return INCLUDE_AND_PRUNE;
-                    Relationship r = path.relationships().iterator().next();
-                    if (RelationshipTypes.REF.equals(r.getType()))
-                        return INCLUDE_AND_PRUNE;
-                } else if (path.length() < 2) {
-                    return EXCLUDE_AND_CONTINUE;
-                }
-                return EXCLUDE_AND_PRUNE;
+	public void execute(Node op) throws IOException {
+        for (Relationship r : op.getRelationships(INCOMING)) {
+            if (r.isType(IS._) || r.isType(USE._) || r.isType(REF)) {
+			    super.execute(r);
             }
-        });
-
-    private void prepare(Relationship op) throws IOException {
-        super.execute(op);
-    }
-
-	public void execute(final Node op) throws IOException {
-        AnimoGraph.execute(new GraphOperation<Void>() {
-            @Override
-            public Void execute() throws Exception {
-                Iterator<Path> it = TD.traverse(op).iterator();
-                while (it.hasNext()) {
-                    prepare(it.next().relationships().iterator().next());
-                }
-                return null;
-            }
-        });
-//		Iterator<Path> it = TD.traverse(op).iterator();
-//		while (it.hasNext()) {
-//			super.execute(it.next().relationships().iterator().next());
-//		}
+		}
 	}
 	
 	@Override
@@ -110,7 +70,7 @@ public class Preparator extends StatementManipulator {
 	private static class PrepareMarker extends AbstractMarker {
 		
 		private static final Marker _ = new PrepareMarker();
-		private PrepareMarker() {super(RelationshipTypes.PREPARE);}
+		private PrepareMarker() {super(PREPARE);}
 
 		@Override
 		public Manipulator manipulator() {

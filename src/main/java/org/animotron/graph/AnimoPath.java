@@ -102,11 +102,11 @@ public class AnimoPath {
 			}
 			
 			if (!matched) {
-				if (r.getType().equals(AN._))
+				if (r.isType(AN._))
 					parsed.add(new Step(new Pattern(AN._)));
-				if (r.getType().equals(ANY._))
+				if (r.isType(ANY._))
 					parsed.add(new Step(new Pattern(ANY._)));
-				if (r.getType().equals(ALL._))
+				if (r.isType(ALL._))
 					parsed.add(new Step(new Pattern(ALL._)));
 			}
 				
@@ -149,16 +149,18 @@ public class AnimoPath {
 //		return new Many(rt);
 //	}
 
-	abstract class Cardinality {
+	abstract class Cardinality implements RelationshipType {
 		RelationshipType type;
 
 		public Cardinality(RelationshipType type) {
 			this.type = type;
 		}
-		
-		public RelationshipType getType() {
-			return type;
-		}
+
+        @Override
+        public String name(){
+            return type.name();
+        }
+
 	}
 	
 	class One extends Cardinality {
@@ -205,7 +207,7 @@ public class AnimoPath {
 			
 			Cardinality cardinality = pattern.patternSteps[pos];
 
-			if (cardinality.getType().name().equals(r.getType().name())) {
+			if (r.isType(cardinality)) {
 				if (cardinality instanceof One) {
 					pos++;
 					matched = null;

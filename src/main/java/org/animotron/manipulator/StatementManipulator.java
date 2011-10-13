@@ -50,7 +50,7 @@ public abstract class StatementManipulator extends Manipulator {
 
 	public final Subscribable<PFlow> onQuestion(final Relationship op) {
 		if (op != null) {
-			final Statement statement = Statements.relationshipType(op.getType());
+			final Statement statement = Statements.relationshipType(op);
 			if (canGo(statement))
 				return onQuestion(statement, op);
 			else 

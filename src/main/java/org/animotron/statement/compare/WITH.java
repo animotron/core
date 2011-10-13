@@ -99,7 +99,7 @@ public class WITH extends Operator implements Predicate {
 			
 			for (Relationship e : actual) {
 				System.out.println("***** actual = "+e.getEndNode());
-				if (   e.getType().name().equals(g.getType().name()) 
+				if (e.isType(g.getType())
 					&& e.getEndNode().equals(g.getEndNode()))
 					
 					return true;
@@ -115,7 +115,7 @@ public class WITH extends Operator implements Predicate {
 		IndexHits<Relationship> q = getORDER().query(node);
 		try {
 			for (Relationship i : q) {
-				Statement s = Statements.relationshipType(i.getType());
+				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
     				PipedInput in = Evaluator._.execute(pf, i);

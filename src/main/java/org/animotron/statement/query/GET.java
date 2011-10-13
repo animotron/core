@@ -326,7 +326,7 @@ public class GET extends Operator implements Evaluable, Query {
 	private Relationship searchForHAVE(final Relationship ref, final String name) {
 		
 		boolean checkStart = true;
-		if (!REF.name().equals(ref.getType().name())) {
+		if (!ref.isType(REF)) {
 			System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" type "+ref.getType());
 			try {
 				System.out.print(" "+reference(ref));
@@ -397,7 +397,7 @@ public class GET extends Operator implements Evaluable, Query {
 		//search 'IC' by 'IS' topology
 		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
 			
-			Statement st = Statements.relationshipType(tdR.getType());
+			Statement st = Statements.relationshipType(tdR);
 			if (st instanceof IS) {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
@@ -534,7 +534,7 @@ public class GET extends Operator implements Evaluable, Query {
 //							}
 							return EXCLUDE_AND_CONTINUE;	
 						//Allow ...<-IS->...
-						} if (path.length() > 2 && r.getType().name().equals(IS._)) {
+						} if (path.length() > 2 && r.isType(IS._)) {
 							return EXCLUDE_AND_CONTINUE;
 						}
 						return EXCLUDE_AND_PRUNE;
@@ -560,7 +560,7 @@ public class GET extends Operator implements Evaluable, Query {
 							}
 							return EXCLUDE_AND_CONTINUE;	
 						//Allow ...<-IS->...
-						} if (path.length() > 2 && r.getType().name().equals(IS._)) {
+						} if (path.length() > 2 && r.isType(IS._)) {
 							return EXCLUDE_AND_CONTINUE;
 						} 
 						return EXCLUDE_AND_PRUNE;
@@ -599,20 +599,18 @@ public class GET extends Operator implements Evaluable, Query {
 			for (Relationship r : path.relationships()) {
 				step++;
 				
-				RelationshipType type = r.getType();
-
 				if (thisDeep > 0) {
 
-					if (type.equals(IS._) && r.getStartNode().equals(lastNode)) {
+					if (r.isType(IS._) && r.getStartNode().equals(lastNode)) {
 						lastNode = r.getEndNode();
 						foundBackIS = true;
 					} else {
 						lastNode = r.getStartNode();
 					}
 
-					if (type.equals(USE._)) {
+					if (r.isType(USE._)) {
 						thisDeep += 2;
-					} else  if (type.equals(IS._)) { //type.equals(REF.reference()) ||
+					} else  if (r.isType(IS._)) { //type.equals(REF.reference()) ||
 						if (!REFcase) {
 							REFcase = true;
 							thisDeep++;
@@ -626,15 +624,15 @@ public class GET extends Operator implements Evaluable, Query {
 					continue;
 				}
 				
-				if (step == 1 && type.equals(REF.name())) {
+				if (step == 1 && r.isType(REF)) {
 					REFcase = true;
-				} else if (REFcase && step == 2 && !(type.equals(HAVE._) || type.equals(IC._))) {
+				} else if (REFcase && step == 2 && !(r.isType(HAVE._) || r.isType(IC._))) {
 					break;
 				}
 				
 				lastNode = r.getStartNode();
 				
-				if (type.equals(IS._)) {
+				if (r.isType(IS._)) {
 					if (name.equals(IS._.reference(r))) {
 						foundIS = true;
 						continue;
@@ -647,7 +645,7 @@ public class GET extends Operator implements Evaluable, Query {
 						continue;
 					}
 					
-				} else if (type.equals(HAVE._) && (name.equals(HAVE._.reference(r)) || foundIS)) {
+				} else if (r.isType(HAVE._) && (name.equals(HAVE._.reference(r)) || foundIS)) {
 					//ignore empty have 
 					if (!Utils.haveContext(r.getEndNode()))
 						break;
@@ -660,7 +658,7 @@ public class GET extends Operator implements Evaluable, Query {
 					thisDeep++;
 					REFcase = false;
 				
-				} else if (type.equals(IC._) && (name.equals(IC._.reference(r)) || foundIS)) {
+				} else if (r.isType(IC._) && (name.equals(IC._.reference(r)) || foundIS)) {
 					if (foundIS) {
 						thisResult = ICresult(context, r);
 						thisDeep++;
@@ -725,16 +723,15 @@ public class GET extends Operator implements Evaluable, Query {
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship(); 
-			String rType = r.getType().name();
 
 			if (path.length() == 1) {
-				if (rType.equals(type))
+				if (r.isType(type))
 					return EXCLUDE_AND_CONTINUE;
 					
 				return EXCLUDE_AND_PRUNE;
 				
 			} else if (path.length() >= 2) {
-				if (rType.equals(REF.name())) {
+				if (r.isType(REF)) {
 					Node node = r.getEndNode();
 					if (target.equals(node)) 
 						return INCLUDE_AND_PRUNE;
@@ -742,7 +739,7 @@ public class GET extends Operator implements Evaluable, Query {
 					return EXCLUDE_AND_CONTINUE;
 				
 				//XXX: check direction!
-				} else if (rType.equals(IS._)) {
+				} else if (r.isType(IS._)) {
 					if (r.getEndNode().equals(path.endNode())) {
 						return EXCLUDE_AND_CONTINUE;
 					}

@@ -74,7 +74,7 @@ public class EQ extends Operator implements Predicate {
 			Relationship e = actual.get(0);
 			Relationship g = expected.get(0);
 			
-			if (   e.getType().name().equals(g.getType().name()) 
+			if (e.isType(g.getType())
 				&& e.getEndNode().equals(g.getEndNode()))
 				
 				return true;

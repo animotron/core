@@ -29,7 +29,6 @@ import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -68,9 +67,6 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
-        RelationshipType type = r.getType();
-        String typeName = type.name();
-
         int addedContexts = 0;
         try {
         	Relationship context = getDb().getRelationshipById(
@@ -81,21 +77,17 @@ public class ResultTraverser extends AnimoTraverser {
         } catch (Exception e) {
 		}
 
-        if (RESULT.name().equals(typeName)) {
-
+        if (r.isType(RESULT)) {
         	r = getDb().getRelationshipById(
-                (Long)r.getProperty(RID.name())
+                    (Long) r.getProperty(RID.name())
             );
-
-            type = r.getType();
-            typeName = type.name();
         }
         
         Statement s;
-        if (REF.equals(r)|| typeName.startsWith(THE._.name())) {
+        if (r.isType(REF) || r.isType(THE._)) {
             s = THE._;
         } else {
-            s = Statements.relationshipType(typeName);
+            s = Statements.relationshipType(r);
         }
         
         if (s instanceof Reference || s instanceof HAVE) {

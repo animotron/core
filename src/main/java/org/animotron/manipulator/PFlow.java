@@ -29,7 +29,6 @@ import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -100,13 +99,9 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 		
-		RelationshipType type = op.getType();
-		//Statement s = Statements.relationshipType(type);
+		//Statement s = Statements.relationshipType(op);
 		//if (s instanceof Reference) {
-		if (
-				RESULT.name().equals(type.name()) || 
-				REF.name().equals(type.name())
-			)
+		if (op.isType(RESULT) || op.isType(REF))
 			path.insertElementAt(op, 0);
 		
 		this.op = op;
@@ -260,7 +255,7 @@ public class PFlow {
 			}
 			boolean haveUse = false;
 			for (Relationship r : path.relationships()) {
-				if (r.getType().name().equals(USE._)) {
+				if (r.isType(USE._)) {
 					haveUse = true;
 					break;
 				}
@@ -292,7 +287,7 @@ public class PFlow {
 		private Relationship step() {
 			while (it.hasNext()) {
 				Relationship r = it.next();
-				if (AN._.equals(r.getType())){
+				if (r.isType(AN._)){
 					return r;
 				}
 			}
@@ -328,7 +323,7 @@ public class PFlow {
 		
 		Node node = r.getEndNode();
 		
-		if (goDown && r.getType().equals(AN._)) {
+		if (goDown && r.isType(AN._)) {
 			node = node.getSingleRelationship(REF, OUTGOING).getEndNode();
 		}
 		
@@ -351,13 +346,13 @@ public class PFlow {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");
 		for (Relationship r : path) {
-			if (r.getType().equals(AN._)) {
+			if (r.isType(AN._)) {
 				if (debug) System.out.println(r);
 				return r;
-			} else if (r.getType().equals(REF)) {
+			} else if (r.isType(REF)) {
 				if (debug) System.out.println(r);
 				return r;
-			} else if (r.getType().equals(RESULT)) {
+			} else if (r.isType(RESULT)) {
 				if (debug) System.out.println(r);
 				return r;
 			}
@@ -383,7 +378,7 @@ public class PFlow {
 
 						//Allow ...<-IS->...
 						} if (path.length() > 1 && 
-								r.getType().equals(IS._)) {
+								r.isType(IS._)) {
 							return EXCLUDE_AND_CONTINUE;
 						}
 						return EXCLUDE_AND_PRUNE;

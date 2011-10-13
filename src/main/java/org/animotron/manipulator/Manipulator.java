@@ -109,7 +109,7 @@ public abstract class Manipulator {
             			
             			int addedContexts = 0;
                         Statement s = null;
-            			if (RESULT.name().equals(msg.getType())) {
+            			if (msg.isType(RESULT)) {
             				Relationship c = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())
         					);
@@ -123,7 +123,7 @@ public abstract class Manipulator {
                             try {
                                 s = Statements.name((String) THE._.reference(msg));
                             } catch (Exception e){}
-            			} else if (REF.name().equals(msg.getType().name())){
+            			} else if (msg.isType(REF)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
 
@@ -137,7 +137,7 @@ public abstract class Manipulator {
                                 }
                             }
                         } else if (s == null){
-                            s = Statements.relationshipType(msg.getType());
+                            s = Statements.relationshipType(msg);
                             if (s instanceof Query || s instanceof Evaluable) {
                                 PipedInput in = Evaluator._.execute(new PFlow(pf), msg);
                                 for (Object obj : in) {

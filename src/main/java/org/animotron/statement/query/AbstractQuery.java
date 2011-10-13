@@ -29,7 +29,6 @@ import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -102,7 +101,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			boolean isDirected = true;
 			deep = 0;
 			for (Relationship p : path.relationships()) {
-				if (p.getType().equals(USE._)) {
+				if (p.isType(USE._)) {
 					
 					if (isDirected) {
 						if (directed == null) directed = new FastSet<Node>();
@@ -119,7 +118,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					}
 					break;
 				
-				} else if (!(p.getType().equals(IS._))) {
+				} else if (!(p.isType(IS._))) {
 					break;
 				}
 				
@@ -156,7 +155,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					//System.out.println(" "+path);
 					
 					Relationship r = path.lastRelationship();
-					if (!r.getType().equals(IS._))
+					if (!r.isType(IS._))
 						return EXCLUDE_AND_PRUNE;
 						
 					Node sNode = r.getEndNode();
@@ -188,15 +187,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							return INCLUDE_AND_PRUNE;
 						} 
 
-						RelationshipType rType = r.getType();
-						
-						if (path.length() == 1 && !(rType.equals(USE._) || rType.equals(IS._)) ) {
+						if (path.length() == 1 && !(r.isType(USE._) || r.isType(IS._))) {
 							return EXCLUDE_AND_PRUNE;
 						}
 						return EXCLUDE_AND_CONTINUE;
 					
 					//Allow IS<-USE<-IS->... and IS<-IS->...<-USE 
-					} if (path.length() > 1 && r.getType().equals(IS._)) {
+					} if (path.length() > 1 && r.isType(IS._)) {
 						return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;
