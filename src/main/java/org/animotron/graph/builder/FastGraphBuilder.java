@@ -23,6 +23,7 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -91,7 +92,7 @@ public class FastGraphBuilder extends GraphBuilder {
             byte[] hash = (byte[]) o[2];
             relationship = Cache.getRelationship(hash);
             if (relationship == null) {
-                Object reference = o[1];
+                Object reference = statement instanceof THE && o[1] == null ? MessageDigester.byteArrayToHex(hash) : o[1];
                 root = createNode();
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 Node end = r.getEndNode();
@@ -103,10 +104,10 @@ public class FastGraphBuilder extends GraphBuilder {
                     step();
                 }
                 if (statement instanceof THE) {
-                    relationship = Cache.getRelationship(o[1]);
+                    relationship = Cache.getRelationship(reference);
                     if (relationship == null) {
                         relationship = getSTART().createRelationshipTo(end, r.getType());
-                        Cache.putRelationship(relationship, o[1]);
+                        Cache.putRelationship(relationship, reference);
                         getTOP().createRelationshipTo(end, RelationshipTypes.TOP);
                     } else {
                         Node start = relationship.getEndNode();

@@ -21,6 +21,7 @@ package org.animotron.expression;
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
 
@@ -86,16 +87,18 @@ public class BinaryExpression extends Expression {
 
             } else {
                 builder.startGraph();
-                    builder.start(IS._, "file");
-                    builder.end();
-                    String[] parts = path.split(Pattern.quote(File.separator));
-                    //JExpression prev = null;
-                    for (String part : parts) {
-                        if (!part.isEmpty()) {
-                            builder.start(IS._, part);
-                            builder.end();
+                    builder.start(THE._, null);
+                        builder.start(IS._, "file");
+                        builder.end();
+                        String[] parts = path.split(Pattern.quote(File.separator));
+                        //JExpression prev = null;
+                        for (String part : parts) {
+                            if (!part.isEmpty()) {
+                                builder.start(IS._, part);
+                                builder.end();
+                            }
                         }
-                    }
+                    builder.end();
                 builder.endGraph();
                 Properties.BIN.set(getEndNode(), hash);
             }
