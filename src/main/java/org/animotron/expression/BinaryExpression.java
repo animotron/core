@@ -87,7 +87,7 @@ public class BinaryExpression extends Expression {
 
             } else {
                 builder.startGraph();
-                    builder.start(THE._, null);
+                    builder.start(THE._);
                         builder.start(IS._, "file");
                         builder.end();
                         String[] parts = path.split(Pattern.quote(File.separator));
