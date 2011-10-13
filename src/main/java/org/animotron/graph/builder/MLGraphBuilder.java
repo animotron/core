@@ -56,7 +56,8 @@ public class MLGraphBuilder extends GraphBuilder {
 	
 	private Node parent, root;
 	private Stack<Object[]> stack;
-    private Relationship relationship;
+    private Relationship relationship, r;
+    private byte[] md;
 
     @Override
 	public void startGraph() {
@@ -76,11 +77,12 @@ public class MLGraphBuilder extends GraphBuilder {
 
     @Override
 	public void endGraph() throws AnimoException {
-        for (Relationship r : root.getRelationships()) {
+        relationship = Cache.getRelationship(md);
+        if (relationship == null) {
             relationship = copy(getSTART(), r);
-            r.delete();
+            Cache.putRelationship(relationship, md);
         }
-        root.delete();
+        destructive(root);
 	}
 
 	@Override
@@ -102,8 +104,8 @@ public class MLGraphBuilder extends GraphBuilder {
     @Override
 	public void end() throws AnimoException {
 		Object[] item = stack.pop();
-        byte[] md = ((MessageDigest) item[0]).digest();
-        Relationship r = (Relationship) item[1];
+        md = ((MessageDigest) item[0]).digest();
+        r = (Relationship) item[1];
         int order = (Integer) item[3];
         if (!((Boolean)item[2])) {
             Node node = Cache.getNode(md);

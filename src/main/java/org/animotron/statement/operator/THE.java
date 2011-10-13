@@ -30,10 +30,8 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.event.ErrorState;
 import org.neo4j.graphdb.event.KernelEventHandler;
 
-import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
-import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * Operator 'THE'.
@@ -48,19 +46,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	private THE() { super("the"); }
 
 	public Relationship get(String name) {
-        Node node = Cache.getNode(name);
-        if (node != null) {
-            return node.getSingleRelationship(this, INCOMING);
-        }
-        return null;
-	}
-
-	public Relationship create(String name, String hash) throws AnimoException {
-        //TODO do we really need a reference?
-        if (name == null) name = hash;
-		Relationship r = create(name);
-		HASH.set(r, hash);
-		return r;
+        return Cache.getRelationship(name);
 	}
 
 	private Relationship create(String name) throws AnimoException {
@@ -68,6 +54,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
         r = build(getSTART(), name, null, true, true);
         Node node = r.getEndNode();
         getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
+        Cache.putRelationship(r, name);
         return r;
 	}
 

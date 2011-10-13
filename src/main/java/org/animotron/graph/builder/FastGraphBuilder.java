@@ -21,6 +21,7 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.Cache;
 import org.animotron.statement.Statement;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -32,7 +33,6 @@ import java.util.List;
 import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.*;
-import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -81,20 +81,16 @@ public class FastGraphBuilder extends GraphBuilder {
 	
 	@Override
     public void endGraph() throws AnimoException {
-        Relationship r;
         Iterator<Object[]> it = flow.iterator();
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[0];
             byte[] hash = (byte[]) o[2];
-            Node node = Cache.getNode(hash);
-            if (node != null) {
-                r = node.getRelationships(statement, INCOMING).iterator().next();
-                relationship = copy(getSTART(), r);
-            } else {
+            relationship = Cache.getRelationship(hash);
+            if (relationship == null) {
                 Object reference = o[1];
                 root = createNode();
-                r = statement.build(root, reference, hash, true, ignoreNotFound);
+                Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 o[3] = r;
                 o[4] = r.getEndNode();
                 step();
@@ -104,6 +100,10 @@ public class FastGraphBuilder extends GraphBuilder {
                     step();
                 }
                 relationship = copy(getSTART(), r);
+                Cache.putRelationship(relationship, hash);
+                if (statement instanceof THE) {
+                    Cache.putRelationship(relationship, o[1]);
+                }
                 r.delete();
                 root.delete();
             }
