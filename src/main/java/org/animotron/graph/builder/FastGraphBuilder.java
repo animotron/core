@@ -36,6 +36,7 @@ import java.util.Stack;
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Cache.key;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -102,13 +103,28 @@ public class FastGraphBuilder extends GraphBuilder {
                     build(it.next());
                     step();
                 }
-                relationship = copy(getSTART(), r);
+                if (statement instanceof THE) {
+                    relationship = Cache.getRelationship(o[1]);
+                    if (relationship == null) {
+                        relationship = copy(getSTART(), r);
+                        Cache.putRelationship(relationship, o[1]);
+                        getTOP().createRelationshipTo(relationship.getEndNode(), RelationshipTypes.TOP);
+                    } else {
+                        Node start = relationship.getEndNode();
+                        for (Relationship i : start.getRelationships(OUTGOING)) {
+                            catcher.destructive(i);
+                        }
+                        for (Relationship i : r.getEndNode().getRelationships(OUTGOING)) {
+                            copy(start, i);
+                            i.delete();
+                        }
+                    }
+                    catcher.creative(relationship);
+                } else {
+                    relationship = copy(getSTART(), r);
+                }
                 Cache.putRelationship(relationship, hash);
                 HASH.set(relationship, key(hash));
-                if (statement instanceof THE) {
-                    Cache.putRelationship(relationship, o[1]);
-                    getTOP().createRelationshipTo(relationship.getEndNode(), RelationshipTypes.TOP);
-                }
                 r.delete();
                 root.delete();
             }

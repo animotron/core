@@ -18,16 +18,12 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.graph.RelationshipTypes;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.animotron.graph.AnimoGraph.getTOP;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -58,19 +54,6 @@ public class Manipulators {
 			creative(r.getEndNode());
 		}
 		
-        public void renew(Relationship r) {
-            renew(r, r);
-        }
-
-        public void renew(Relationship old, Relationship r) {
-            for (Relationship i : old.getEndNode().getRelationships(OUTGOING)) {
-                destructive(i);
-            }
-            Node node = r.getEndNode();
-            getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
-            creative(r);
-        }
-
         public void destructive(Node node) {
             destructive.add(node);
         }
