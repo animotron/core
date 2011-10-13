@@ -20,6 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
+import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -47,7 +48,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 	private THE() { super("the"); }
 
 	public Relationship get(String name) {
-        Node node = getCache(name);
+        Node node = Cache.getNode(name);
         if (node != null) {
             return node.getSingleRelationship(this, INCOMING);
         }
@@ -85,7 +86,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
-        createCache(node, (String) reference);
+        Cache.putNode(node, reference);
         NAME.set(node, reference);
         return node;
     }

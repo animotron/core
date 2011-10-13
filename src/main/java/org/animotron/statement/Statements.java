@@ -69,7 +69,7 @@ public class Statements {
 				//create class finder
 				ClassFinder finder = new ClassFinder();
 				
-				//add class paths as searching place
+				//put class paths as searching place
 				finder.addClassPath();
 				
 				//create filter for 'Quanta' implementations
@@ -170,7 +170,7 @@ public class Statements {
 	public static void ready() {
 		while (!ready) {
 			try {
-				//TODO: add timeout
+				//TODO: put timeout
 				Thread.sleep(1000);
 				//System.out.println("ready?");
 			} catch (InterruptedException e) {
@@ -182,7 +182,7 @@ public class Statements {
 	public static boolean run() {
 		while (!run) {
 			try {
-				//TODO: add timeout
+				//TODO: put timeout
 				Thread.sleep(1000);
 				//System.out.println("run?");
 			} catch (InterruptedException e) {

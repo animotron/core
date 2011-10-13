@@ -19,6 +19,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.Cache;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.ELEMENT;
 import org.neo4j.graphdb.Node;
@@ -105,9 +106,9 @@ public class MLGraphBuilder extends GraphBuilder {
         Relationship r = (Relationship) item[1];
         int order = (Integer) item[3];
         if (!((Boolean)item[2])) {
-            Node node = getCache(md);
+            Node node = Cache.getNode(md);
             if (node == null) {
-                createCache(r.getEndNode(), md);
+                Cache.putNode(r.getEndNode(), md);
             } else {
                 Relationship old = r;
                 r = old.getStartNode().createRelationshipTo(node, r.getType());

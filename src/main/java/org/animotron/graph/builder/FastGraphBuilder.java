@@ -19,6 +19,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.Cache;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.Value;
 import org.neo4j.graphdb.Node;
@@ -86,7 +87,7 @@ public class FastGraphBuilder extends GraphBuilder {
             Object[] o = it.next();
             Statement statement = (Statement) o[0];
             byte[] hash = (byte[]) o[2];
-            Node node = getCache(hash);
+            Node node = Cache.getNode(hash);
             if (node != null) {
                 r = node.getRelationships(statement, INCOMING).iterator().next();
                 relationship = copy(getSTART(), r);
@@ -154,7 +155,7 @@ public class FastGraphBuilder extends GraphBuilder {
         Object reference = item[1];
         byte[] hash = (byte[]) item[2];
         Node parent = (Node) p[4];
-        item[6] = getCache(hash) != null;
+        item[6] = Cache.getNode(hash) != null;
         r = statement.build(parent, reference, hash, true, ignoreNotFound);
         item[3] = r;
         item[4] = r.getEndNode();

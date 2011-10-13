@@ -43,7 +43,6 @@ public class AnimoGraph {
 	private static String STORAGE;
 
 	private static Node ROOT, START, END, TOP;
-    private static CacheIndex CACHE;
     private static OrderIndex ORDER;
 	public static RelationshipIndex RESULT_INDEX;
 	private static String RESULT = "RESULT";
@@ -63,7 +62,7 @@ public class AnimoGraph {
     public static void initDB() {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
-        CACHE = new CacheIndex(INDEX);
+        Cache.init(INDEX);
         ORDER = new OrderIndex(INDEX);
         RESULT_INDEX = INDEX.forRelationships(RESULT);
         execute(
@@ -182,22 +181,6 @@ public class AnimoGraph {
 		Node node = createNode(parent, type);
 		return node;
 	}
-
-    public static void createCache(Node n, byte[] hash) {
-        CACHE.add(n, hash);
-    }
-
-    public static void createCache(Node n, String name) {
-        CACHE.add(n, name);
-    }
-
-    public static Node getCache(byte[] hash) {
-        return CACHE.get(hash);
-    }
-	
-    public static Node getCache(String name) {
-        return CACHE.get(name);
-    }
 
     public static void order (Relationship r, int order) {
         ORDER.add(r, order);

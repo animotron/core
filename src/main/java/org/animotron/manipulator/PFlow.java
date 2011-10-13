@@ -233,7 +233,7 @@ public class PFlow {
 //		List<Relationship> list = new FastList<Relationship>();
 //		for (Relationship r : getFlowPath().relationships()) {
 //			if (REF.name().equals(r.getType().name()))
-//				list.add(r);
+//				list.put(r);
 //		}
 //		return list;
 		return path;

@@ -20,6 +20,7 @@ package org.animotron.statement;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.utils.MessageDigester;
@@ -31,8 +32,6 @@ import java.security.MessageDigest;
 
 import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.createCache;
-import static org.animotron.graph.AnimoGraph.getCache;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
@@ -122,10 +121,10 @@ public abstract class AbstractStatement implements Statement {
 
     protected final Node throwCache(Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
         if (ready && hash != null) {
-            Node child = getCache(hash);
+            Node child = Cache.getNode(hash);
             if (child == null) {
                 child = createChild(reference, false, ignoreNotFound);
-                createCache(child, hash);
+                Cache.putNode(child, hash);
             }
             return child;
         } else {
