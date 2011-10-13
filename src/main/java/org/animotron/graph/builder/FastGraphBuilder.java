@@ -20,6 +20,7 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.Cache;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.Value;
@@ -32,7 +33,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
+import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.Cache.key;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -101,8 +104,10 @@ public class FastGraphBuilder extends GraphBuilder {
                 }
                 relationship = copy(getSTART(), r);
                 Cache.putRelationship(relationship, hash);
+                HASH.set(relationship, key(hash));
                 if (statement instanceof THE) {
                     Cache.putRelationship(relationship, o[1]);
+                    getTOP().createRelationshipTo(relationship.getEndNode(), RelationshipTypes.TOP);
                 }
                 r.delete();
                 root.delete();

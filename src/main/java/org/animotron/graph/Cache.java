@@ -66,6 +66,12 @@ public class Cache {
         RCACHE.put(r, value);
     }
 
+    public static Object key(Object value) {
+        if (value instanceof byte[])
+            return MessageDigester.byteArrayToHex((byte[]) value);
+        return value;
+    }
+
     private abstract static class CacheIndex<T extends PropertyContainer> {
 
         protected Index<T> INDEX;
@@ -75,12 +81,6 @@ public class Cache {
         }
 
         public abstract void init(IndexManager indexManager);
-
-        private Object key(Object value) {
-            if (value instanceof byte[])
-                return MessageDigester.byteArrayToHex((byte[]) value);
-            return value;
-        }
 
         public T get(Object value) {
             IndexHits<T> q = INDEX.get(NAME, key(value));

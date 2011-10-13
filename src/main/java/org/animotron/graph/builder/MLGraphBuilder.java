@@ -28,7 +28,9 @@ import org.neo4j.graphdb.Relationship;
 import java.security.MessageDigest;
 import java.util.Stack;
 
+import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.Cache.key;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -81,6 +83,7 @@ public class MLGraphBuilder extends GraphBuilder {
         if (relationship == null) {
             relationship = copy(getSTART(), r);
             Cache.putRelationship(relationship, md);
+            HASH.set(relationship, key(md));
         }
         destructive(root);
 	}
