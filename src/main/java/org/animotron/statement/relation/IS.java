@@ -27,16 +27,17 @@ import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.traversal.Evaluators;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.graphdb.traversal.Traverser;
-import org.neo4j.helpers.Predicate;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import static org.animotron.graph.RelationshipTypes.TOP;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * Operator 'IS'.
@@ -55,27 +56,7 @@ public class IS extends Relation implements Prepare {
 		TD = Traversal.description()
 			.depthFirst()
 			.uniqueness(Uniqueness.RELATIONSHIP_PATH)
-			.relationships(this, OUTGOING)
-			.evaluator(Evaluators.fromDepth(1));
-	}
-	
-	private Predicate<Path> predicate(final Node node) {
-		return new Predicate<Path>() {
-			private boolean done = false;
-            public boolean accept(Path pos) {
-            	if (done) {
-            		return false;
-            	}
-            	if (pos.endNode().equals(node)){
-            		return false;
-            	} else if (pos.endNode().hasRelationship(_, OUTGOING)) {
-            		return false;
-            	} else {
-            		done = true;
-            		return true;
-            	}
-            }
-        };
+			.relationships(this, OUTGOING);
 	}
 	
 	private OnQuestion question = new OnQuestion() {
@@ -87,7 +68,18 @@ public class IS extends Relation implements Prepare {
 			final Node start = op.getStartNode();
 			
 			@SuppressWarnings("deprecation")
-			Traverser t = TD.filter(predicate(start)).traverse(start);
+			Traverser t = TD.evaluator(new Evaluator() {
+                @Override
+                public Evaluation evaluate(Path path) {
+                    if (path.length() == 0)
+                        return EXCLUDE_AND_CONTINUE;
+                    if (path.lastRelationship().isType(_))
+                        return Evaluation.EXCLUDE_AND_CONTINUE;
+                    if (path.endNode().equals(start))
+                        return INCLUDE_AND_PRUNE;
+                    return EXCLUDE_AND_PRUNE;
+                }
+            }).traverse(start);
 			
 			if (t.iterator().hasNext()) {
 				AnimoGraph.execute(
