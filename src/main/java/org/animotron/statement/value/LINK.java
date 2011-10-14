@@ -23,7 +23,7 @@ package org.animotron.statement.value;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class LINK extends Value {
+public class LINK extends AbstractValue {
 
     public static final LINK _ = new LINK();
 

@@ -24,7 +24,7 @@ import org.animotron.graph.builder.MLGraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.value.VALUE;
-import org.animotron.statement.value.Value;
+import org.animotron.statement.value.AbstractValue;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
@@ -83,7 +83,7 @@ public class StAXExpression extends Expression {
                 case XMLStreamConstants.CHARACTERS :
                     String text = reader.getText();
                     if (!text.isEmpty())
-                        build(TEXT._, Value.value(Value.removeWS(text)));
+                        build(TEXT._, AbstractValue.value(AbstractValue.removeWS(text)));
             }
             reader.next();
         }
@@ -104,7 +104,7 @@ public class StAXExpression extends Expression {
             build(NS._, prefix.isEmpty() ? _(value(namespace)) : _(name(prefix), value(namespace)));
         }
         for (int i = 0; i < reader.getAttributeCount(); i++) {
-            build(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(Value.value(reader.getAttributeValue(i)))));
+            build(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(AbstractValue.value(reader.getAttributeValue(i)))));
         }
     }
 

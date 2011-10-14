@@ -33,9 +33,9 @@ import static org.animotron.graph.AnimoGraph.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Value extends AbstractStatement {
+public abstract class AbstractValue extends AbstractStatement {
 
-	protected Value(String name) { super(name); }
+	protected AbstractValue(String name) { super(name); }
 
     @Override
     protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
@@ -44,11 +44,11 @@ public abstract class Value extends AbstractStatement {
         Node child = createNode();
         if (reference instanceof Object[][]) {
             for (Object[] o : (Object[][]) reference) {
-                child.setProperty(((Value) o[0]).name(), o[1]);
+                child.setProperty(((AbstractValue) o[0]).name(), o[1]);
             }
         } else  if (reference instanceof Object[]) {
             Object[] o = (Object[]) reference;
-            child.setProperty(((Value) o[0]).name(), o[1]);
+            child.setProperty(((AbstractValue) o[0]).name(), o[1]);
         } else {
             VALUE.set(child, reference);
         }

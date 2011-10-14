@@ -23,7 +23,7 @@ package org.animotron.statement.value;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class VALUE extends Value {
+public class VALUE extends AbstractValue {
 
     public final static VALUE _ = new VALUE();
 

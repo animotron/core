@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.value.Value;
+import org.animotron.statement.value.AbstractValue;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class PI extends Value implements Prefix {
+public class PI extends AbstractValue implements Prefix {
 
 	public static final PI _ = new PI();
 

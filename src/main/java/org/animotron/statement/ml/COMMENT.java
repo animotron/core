@@ -18,14 +18,14 @@
  */
 package org.animotron.statement.ml;
 
-import org.animotron.statement.value.Value;
+import org.animotron.statement.value.AbstractValue;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class COMMENT extends Value implements MLOperator {
+public class COMMENT extends AbstractValue implements MLOperator {
 	
 	public static final COMMENT _ = new COMMENT();
 	
