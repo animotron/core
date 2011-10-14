@@ -100,23 +100,26 @@ public abstract class Manipulator {
             public void onMessage(Relationship[] context) {
             	System.out.println("get answer "+Arrays.toString(context));
             	try {
+                    Relationship msg = context[1];
+
             		if (context == null) {
+
             			pf.countDown(out);
-            		} else {
+
+            		} else if (msg != null) {
+
             			if (context[0] != null)
             				pf.addContextPoint(context[0]);
             				
-            			Relationship msg = context[1];
-            			
             			int addedContexts = 0;
                         Statement s = null;
+
             			if (msg.isType(RESULT)) {
             				Relationship c = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())
         					);
             				pf.addContextPoint(c);
             				addedContexts++;
-            				
             				msg = getDb().getRelationshipById(
             						(Long)msg.getProperty(RID.name())
             					);
@@ -124,8 +127,11 @@ public abstract class Manipulator {
                             try {
                                 s = Statements.name((String) THE._.reference(msg));
                             } catch (Exception e){}
+
             			} else if (msg.isType(REF)) {
+
                             s = Statements.name((String) THE._.reference(msg));
+
                         }
 
                         if (s instanceof Evaluable) {
