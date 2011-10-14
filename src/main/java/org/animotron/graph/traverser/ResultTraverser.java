@@ -79,8 +79,10 @@ public class ResultTraverser extends AnimoTraverser {
 
         if (r.isType(RESULT)) {
         	r = getDb().getRelationshipById(
-                    (Long) r.getProperty(RID.name())
+                (Long) r.getProperty(RID.name())
             );
+            pf.addContextPoint(r);
+            addedContexts++;
         }
         
         Statement s;
