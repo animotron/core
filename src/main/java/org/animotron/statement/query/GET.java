@@ -119,7 +119,7 @@ public class GET extends Operator implements Evaluable, Query {
 				Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 					@Override
 					public void onMessage(Relationship[] context) {
-						System.out.println("GET message ["+name+"] context "+context);
+						System.out.println("GET message ["+name+"] context "+Arrays.toString(context));
 						
 						if (context == null) {
 							pf.countDown();

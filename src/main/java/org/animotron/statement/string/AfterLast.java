@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.expression.JExpression.text;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
@@ -89,7 +89,7 @@ public class AfterLast extends Instruction implements Evaluable {
 	            Relationship r;
 				try {
 					r = new JExpression(
-					    value(
+					    text(
 					        source.substring(index + 1)
 					    )
 					);
