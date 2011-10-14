@@ -100,13 +100,14 @@ public abstract class Manipulator {
             public void onMessage(Relationship[] context) {
             	System.out.println("get answer "+Arrays.toString(context));
             	try {
-                    Relationship msg = context[1];
-
             		if (context == null) {
 
             			pf.countDown(out);
 
-            		} else if (msg != null) {
+            		} else if (context[1] != null) {
+
+                        Relationship msg = context[1];
+
 
             			if (context[0] != null)
             				pf.addContextPoint(context[0]);
@@ -165,7 +166,7 @@ public abstract class Manipulator {
                         	pf.popContextPoint();
                         	addedContexts--;
                         }
-            		}
+                    }
 				} catch (IOException e) {
 					//XXX: what to do?
 					e.printStackTrace();
