@@ -26,7 +26,6 @@ import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.value.VALUE;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
@@ -35,11 +34,10 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * VALUE instruction 'after-last'.
@@ -91,7 +89,7 @@ public class AfterLast extends Instruction implements Evaluable {
 	            Relationship r;
 				try {
 					r = new JExpression(
-					    text(
+					    value(
 					        source.substring(index + 1)
 					    )
 					);
@@ -100,7 +98,7 @@ public class AfterLast extends Instruction implements Evaluable {
 					return;
 				}
 				final Node rNode = r.getEndNode();
-				final long rID = r.getEndNode().getSingleRelationship(VALUE._, OUTGOING).getId();
+				final long rID = r.getId();
 				r = AnimoGraph.execute(new GraphOperation<Relationship>() {
 					@Override
 					public Relationship execute() {
