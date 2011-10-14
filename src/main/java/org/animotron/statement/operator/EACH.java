@@ -27,6 +27,7 @@ import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -58,7 +59,7 @@ public class EACH extends Operator implements Evaluable {
 			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 				@Override
 				public void onMessage(Relationship[] context) {
-					System.out.println("EACH message context "+context);
+					System.out.println("EACH message context "+Arrays.toString(context));
 					if (context == null) {
 						pf.countDown();
 						return;
@@ -94,6 +95,10 @@ public class EACH extends Operator implements Evaluable {
 			
 			if (count == 0)
 				pf.done();
+			else {
+				pf.await();
+				pf.done();
+			}
 		}
 	};
 }
