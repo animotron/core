@@ -34,6 +34,7 @@ import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.Properties.CID;
@@ -97,7 +98,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<Relationship[]> onAnswer = new Subscribable<Relationship[]>() {
             public void onMessage(Relationship[] context) {
-            	System.out.println("get answer "+context);
+            	System.out.println("get answer "+Arrays.toString(context));
             	try {
             		if (context == null) {
             			pf.countDown(out);
