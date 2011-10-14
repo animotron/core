@@ -363,7 +363,19 @@ public class GET extends Operator implements Evaluable, Query {
 			System.out.println("GET IC -> IS "+tdR);
 			
 			Relationship r = getByIC(tdR.getEndNode(), name);
-			if (r != null) return r;
+			if (r != null) {
+				final Node sNode = ref;
+				final Node eNode = r.getEndNode();
+				final long id = r.getId();
+				return AnimoGraph.execute(new GraphOperation<Relationship>() {
+					@Override
+					public Relationship execute() {
+						Relationship res = sNode.createRelationshipTo(eNode, HAVE._);
+						RID.set(res, id);
+						return res;
+					}
+				});
+			}
 			
 			//search for have
 			have = getByHave(tdR.getEndNode(), name);

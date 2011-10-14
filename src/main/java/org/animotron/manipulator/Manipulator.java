@@ -113,26 +113,28 @@ public abstract class Manipulator {
                         
                         Relationship msg = context[1];
 
+//            			try {
+//            				Relationship c = getDb().getRelationshipById(
+//        						(Long)msg.getProperty(CID.name())
+//        					);
+//            				pf.addContextPoint(c);
+//            				addedContexts++;
+//            			} catch (Exception e) {
+//						}
             			try {
-            				Relationship c = getDb().getRelationshipById(
-        						(Long)msg.getProperty(CID.name())
-        					);
-            				pf.addContextPoint(c);
-            				addedContexts++;
-            			} catch (Exception e) {
-						}
-            			try {
-            				msg = getDb().getRelationshipById(
+            				Relationship r = getDb().getRelationshipById(
         						(Long)msg.getProperty(RID.name())
         					);
-            				pf.addContextPoint(msg);
+            				pf.addContextPoint(r);
             				addedContexts++;
+            				if (msg.isType(RESULT)) {
+            					msg = r;
 
-                            try {
-                                s = Statements.name((String) THE._.reference(msg));
-                            } catch (Exception e){}
-            			} catch (Exception e) {
-						}
+	                            try {
+	                                s = Statements.name((String) THE._.reference(msg));
+	                            } catch (Exception e){}
+            				}
+            			} catch (Exception e) {}
 
             			if (msg.isType(REF)) {
 
