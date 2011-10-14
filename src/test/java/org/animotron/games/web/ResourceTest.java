@@ -20,7 +20,6 @@ package org.animotron.games.web;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.exception.AnimoException;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
@@ -29,8 +28,6 @@ import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;

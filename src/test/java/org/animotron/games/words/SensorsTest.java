@@ -41,7 +41,7 @@ public class SensorsTest {
 
 		double spaceEnergy = -random.nextDouble();
 		
-		InputStream stream = getClass().getResourceAsStream("words.txt");
+		InputStream stream = getClass().getResourceAsStream("/words/words.txt");
 		InputStreamReader reader = new InputStreamReader(stream);
 		BufferedReader in = new BufferedReader(reader);
 		

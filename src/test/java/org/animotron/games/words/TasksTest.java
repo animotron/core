@@ -12,7 +12,7 @@ public class TasksTest {
 	public void test() {
 		String s = "If Mary has 5 sheep and the wolf kills 2. How many sheep Mary has?";
 		s = "(Mary has) 5 sheep. kills 2. (How many) sheep (Mary has)?";
-		fail("Not yet implemented");
+		fail(s);
 	}
 
 }

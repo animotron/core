@@ -40,7 +40,7 @@ public class GeoTest extends ATest {
 
     private XMLInputFactory FACTORY = new WstxInputFactory();
 
-    private static final String OSM = "map.osm";
+    private static final String OSM = "/geo/map.osm";
 
     private XMLStreamReader osm() throws XMLStreamException {
         return osm(OSM);
