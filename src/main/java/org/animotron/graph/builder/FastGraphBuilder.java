@@ -114,8 +114,9 @@ public class FastGraphBuilder extends GraphBuilder {
                         for (Relationship i : start.getRelationships(OUTGOING)) {
                             catcher.destructive(i);
                         }
+                        int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
-                            copy(start, i);
+                            order(copy(start, i), order++);
                             i.delete();
                         }
                     }
