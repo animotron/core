@@ -105,6 +105,7 @@ public abstract class Manipulator {
             			pf.countDown(out);
 
             		} else if (context[1] != null) {
+                        Relationship msg = context[1];
 
             			if (context[0] != null)
             				pf.addContextPoint(context[0]);
@@ -112,7 +113,6 @@ public abstract class Manipulator {
             			int addedContexts = 0;
                         Statement s = null;
                         
-                        Relationship msg = context[1];
             			if (msg.isType(RESULT)) {
             				Relationship c = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())
@@ -164,7 +164,7 @@ public abstract class Manipulator {
                         	pf.popContextPoint();
                         	addedContexts--;
                         }
-            		}
+                    }
 				} catch (IOException e) {
 					//XXX: what to do?
 					e.printStackTrace();
