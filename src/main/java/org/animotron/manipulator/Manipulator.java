@@ -100,20 +100,19 @@ public abstract class Manipulator {
             public void onMessage(Relationship[] context) {
             	System.out.println("get answer "+Arrays.toString(context));
             	try {
-                    Relationship msg = context[1];
-
             		if (context == null) {
 
             			pf.countDown(out);
 
-            		} else if (msg != null) {
+            		} else if (context[1] != null) {
 
             			if (context[0] != null)
             				pf.addContextPoint(context[0]);
             				
             			int addedContexts = 0;
                         Statement s = null;
-
+                        
+                        Relationship msg = context[1];
             			if (msg.isType(RESULT)) {
             				Relationship c = getDb().getRelationshipById(
         						(Long)msg.getProperty(CID.name())

@@ -60,7 +60,7 @@ public class EACH extends Operator implements Evaluable {
 				public void onMessage(Relationship[] context) {
 					System.out.println("EACH message context "+context);
 					if (context == null) {
-						pf.sendAnswer(null, null);
+						pf.countDown();
 						return;
 					}
 				}
