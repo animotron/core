@@ -20,7 +20,10 @@ package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedOutput;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Reference;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.animotron.utils.Utils;
@@ -99,9 +102,8 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 		
-		//Statement s = Statements.relationshipType(op);
-		//if (s instanceof Reference) {
-		if (op.isType(RESULT) || op.isType(REF))
+		Statement s = Statements.relationshipType(op);
+		if (s instanceof Reference || op.isType(RESULT) || op.isType(REF))
 			path.insertElementAt(op, 0);
 		
 		this.op = op;
