@@ -120,7 +120,10 @@ public abstract class AbstractStatement implements Statement {
 
 
     protected final Node throwCache(Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        if (ready && hash != null) {
+        if (ready) {
+            if (hash == null) {
+                hash = hash(reference).digest();
+            }
             Node child = Cache.getNode(hash);
             if (child == null) {
                 child = createChild(reference, false, ignoreNotFound);

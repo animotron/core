@@ -71,24 +71,16 @@ public abstract class AbstractValue extends AbstractStatement {
         if (o instanceof String) {
             String s = (String) o;
             try {
-                return Integer.valueOf(s);
-            } catch (NumberFormatException ei) {
+                return Long.valueOf(s);
+            } catch (NumberFormatException el) {
                 try {
-                    return Long.valueOf(s);
-                } catch (NumberFormatException el) {
-                    try {
-                        return Float.valueOf(s);
-                    } catch (NumberFormatException ef) {
-                        try {
-                            return Double.valueOf(s);
-                        } catch (NumberFormatException ed) {
-                            if (Boolean.FALSE.toString().equals(s))
-                                return Boolean.FALSE;
-                            if (Boolean.TRUE.toString().equals(s))
-                                return Boolean.TRUE;
-                            return s;
-                        }
-                    }
+                    return Double.valueOf(s);
+                } catch (NumberFormatException ed) {
+                    if (Boolean.FALSE.toString().equals(s))
+                        return Boolean.FALSE;
+                    if (Boolean.TRUE.toString().equals(s))
+                        return Boolean.TRUE;
+                    return s;
                 }
             }
         }
