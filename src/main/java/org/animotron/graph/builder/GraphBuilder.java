@@ -135,15 +135,6 @@ public abstract class GraphBuilder {
         }
     }
 
-    protected final MessageDigest cloneMD(MessageDigest md) {
-        try {
-            return (MessageDigest) md.clone();
-        } catch (CloneNotSupportedException e) {
-            //can't be, but throw runtime error
-            throw new RuntimeException(e);
-        }
-    }
-
     protected final void updateMD(MessageDigest md, Statement statement) {
         md.update(statement.name().getBytes());
     }

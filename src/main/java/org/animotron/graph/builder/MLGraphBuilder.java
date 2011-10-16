@@ -97,8 +97,7 @@ public class MLGraphBuilder extends GraphBuilder {
         byte[] hash = null;
         if (ready) {
             updateMD(md, reference);
-            hash = cloneMD(md).digest();
-            updateMD(md, statement);
+            hash = md.digest();
         }
         Relationship r = statement.build(parent, reference, hash, ready, ignoreNotFound);
         Object[] item = {
