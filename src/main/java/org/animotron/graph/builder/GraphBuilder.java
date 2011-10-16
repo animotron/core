@@ -24,7 +24,6 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.VALUE;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
@@ -156,7 +155,7 @@ public abstract class GraphBuilder {
     }
 
     protected final void updateMD(MessageDigest md, Object[] reference) {
-        md.update(hash((Statement) reference[0], reference[1]).digest());
+        updateMD(md, (Statement) reference[0], reference[1]);
     }
 
     protected final void updateMD(MessageDigest md, Object reference) {
@@ -171,16 +170,16 @@ public abstract class GraphBuilder {
         }
     }
 
-//    protected final void updateMD(MessageDigest md, Statement statement, Object reference) {
-//        updateMD(md, reference);
-//        updateMD(md, statement);
-//    }
-
-    private final MessageDigest hash(Statement statement, Object reference) {
-        MessageDigest md = MessageDigester.md();
+    protected final void updateMD(MessageDigest md, Statement statement, Object reference) {
         updateMD(md, reference);
         updateMD(md, statement);
-        return md;
     }
+
+//    private final MessageDigest hash(Statement statement, Object reference) {
+//        MessageDigest md = MessageDigester.md();
+//        updateMD(md, reference);
+//        updateMD(md, statement);
+//        return md;
+//    }
 
 }

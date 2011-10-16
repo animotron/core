@@ -23,7 +23,6 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.value.AbstractValue;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -90,7 +89,7 @@ public class FastGraphBuilder extends GraphBuilder {
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[0];
-            byte[] hash = (byte[]) o[2];
+            byte[] hash = (byte[]) o[7];
             relationship = Cache.getRelationship(hash);
             if (relationship == null) {
                 Object reference = statement instanceof THE && o[1] == null ? MessageDigester.byteArrayToHex(hash) : o[1];
@@ -137,7 +136,6 @@ public class FastGraphBuilder extends GraphBuilder {
 	public void start(Statement statement, Object reference) {
 		Object[] parent = statements.empty() ? null : statements.peek();
         MessageDigest md = MessageDigester.md();
-        updateMD(md, reference);
 		Object[] item = {
 				statement,	    // 0 statement
                 reference,      // 1 name or value
@@ -156,17 +154,17 @@ public class FastGraphBuilder extends GraphBuilder {
 	@Override
     public void end() {
 		Object[] current = statements.pop();
+        Statement statement = (Statement) current[0];
+        Object reference = current[1];
         MessageDigest md = (MessageDigest) current[2];
-        Object ref = current[1];
-        byte[] tmp = cloneMD(md).digest();
-        Statement s = (Statement) current[0];
-        updateMD(md, s);
-		byte[] hash = md.digest();
+        updateMD(md, reference);
+        byte[] hash = cloneMD(md).digest();
+        updateMD(md, statement);
 		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
-			((MessageDigest) (parent[2])).update(hash);
+			updateMD((MessageDigest) parent[2], statement, reference);
 		}
-		current[2] = s instanceof AbstractValue && ref != null ? tmp : hash;
+		current[7] = hash;
 	}
 
     //TODO: Store hash for every node as byte[]
@@ -183,7 +181,7 @@ public class FastGraphBuilder extends GraphBuilder {
         Relationship r;
         Statement statement = (Statement) item[0];
         Object reference = item[1];
-        byte[] hash = (byte[]) item[2];
+        byte[] hash = (byte[]) item[7];
         Node parent = (Node) p[4];
         item[6] = Cache.getNode(hash) != null;
         r = statement.build(parent, reference, hash, true, ignoreNotFound);

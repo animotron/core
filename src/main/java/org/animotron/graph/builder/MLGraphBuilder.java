@@ -94,15 +94,20 @@ public class MLGraphBuilder extends GraphBuilder {
         MessageDigest md = MessageDigester.md();
         Node parent = stack.empty() ? root : ((Relationship) stack.peek()[1]).getEndNode();
         boolean ready = !(statement instanceof ELEMENT) && reference != null;
-        updateMD(md, reference);
-        byte[] hash = ready ? cloneMD(md).digest() : null;
-        updateMD(md, statement);
+        byte[] hash = null;
+        if (ready) {
+            updateMD(md, reference);
+            hash = cloneMD(md).digest();
+            updateMD(md, statement);
+        }
         Relationship r = statement.build(parent, reference, hash, ready, ignoreNotFound);
         Object[] item = {
                 md,                 // 0 message digest
                 r,                  // 1 node
                 ready,              // 2 is ready?
-                order()             // 3 order
+                order(),            // 3 order
+                statement,          // 4 statement
+                reference           // 5 reference
             };
 		stack.push(item);
         step();
@@ -112,8 +117,13 @@ public class MLGraphBuilder extends GraphBuilder {
 	public void end() throws AnimoException {
 		Object[] item = stack.pop();
         r = (Relationship) item[1];
-        hash = ((MessageDigest) item[0]).digest();
+        MessageDigest md = (MessageDigest) item[0];
+        Object reference = item[5];
+        Statement statement = (Statement) item[4];
         if (!(Boolean) item[2]) {
+            updateMD(md, reference);
+            hash = cloneMD(md).digest();
+            updateMD(md, statement);
             Node node = Cache.getNode(hash);
             if (node == null) {
                 Cache.putNode(r.getEndNode(), hash);
@@ -125,7 +135,7 @@ public class MLGraphBuilder extends GraphBuilder {
         }
         order(r, (Integer) item[3]);
         if (!stack.empty()) {
-            ((MessageDigest) stack.peek()[0]).update(hash);
+            updateMD((MessageDigest) stack.peek()[0], statement, reference);
         }
 	}
 
