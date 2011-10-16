@@ -248,8 +248,8 @@ public class GET extends Operator implements Evaluable, Query {
 			List<Relationship> newREFs = new FastList<Relationship>();
 
 			for (Relationship n : nextREFs) {
-				//System.out.println(""+n);
-				//System.out.println("getStartNode OUTGOING");
+				System.out.println(""+n);
+				System.out.println("getStartNode OUTGOING");
 				if (first || !REFs.contains(n)) {
 					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
 						if (r.equals(n)) continue;
@@ -281,7 +281,7 @@ public class GET extends Operator implements Evaluable, Query {
 				}
 				first = false;
 
-				//System.out.println("getEndNode OUTGOING");
+				System.out.println("getEndNode OUTGOING");
 				getOutgoingReferences(pf, n.getEndNode(), newREFs);
 			}
 
@@ -294,7 +294,7 @@ public class GET extends Operator implements Evaluable, Query {
 	private void getOutgoingReferences(PFlow pf, Node node, List<Relationship> newREFs) {
 
 		for (Relationship r : node.getRelationships(OUTGOING)) {
-			//System.out.println(r);
+			System.out.println(r);
 
 			Statement st = Statements.relationshipType(r);
 			if (st instanceof AN) {
@@ -327,7 +327,7 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		boolean checkStart = true;
 		if (!ref.isType(REF)) {
-			System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" type "+ref.getType());
+			System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
 			try {
 				System.out.print(" "+reference(ref));
 			} catch (Exception e) {

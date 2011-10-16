@@ -158,8 +158,6 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
-    @Ignore
-    //XXX: cycling ... to fix! 
     public void test2() throws Exception {
         test(
             _(AN._, "root-service",
