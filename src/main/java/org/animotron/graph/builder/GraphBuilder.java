@@ -24,8 +24,11 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.VALUE;
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+
+import java.security.MessageDigest;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
@@ -90,7 +93,7 @@ public abstract class GraphBuilder {
 
     final public void start(Statement statement) throws AnimoException {
         start(statement, null);
-    };
+    }
 
     final public void start(Object value) throws AnimoException {
         start(VALUE._, value);
@@ -131,6 +134,53 @@ public abstract class GraphBuilder {
         if (order % 1000 == 0) {
             System.out.println(order);
         }
+    }
+
+    protected final MessageDigest cloneMD(MessageDigest md) {
+        try {
+            return (MessageDigest) md.clone();
+        } catch (CloneNotSupportedException e) {
+            //can't be, but throw runtime error
+            throw new RuntimeException(e);
+        }
+    }
+
+    protected final void updateMD(MessageDigest md, Statement statement) {
+        md.update(statement.name().getBytes());
+    }
+
+    protected final void updateMD(MessageDigest md, Object[][] reference) {
+        for (Object[] o : reference) {
+            updateMD(md, o);
+        }
+    }
+
+    protected final void updateMD(MessageDigest md, Object[] reference) {
+        md.update(hash((Statement) reference[0], reference[1]).digest());
+    }
+
+    protected final void updateMD(MessageDigest md, Object reference) {
+        if (reference instanceof Object[][]) {
+            updateMD(md, (Object[][]) reference);
+        } else if (reference instanceof Object[]) {
+            updateMD(md, (Object[]) reference);
+        } else if (reference instanceof String ||
+                        reference instanceof Number ||
+                            reference instanceof Boolean) {
+            md.update(reference.toString().getBytes());
+        }
+    }
+
+//    protected final void updateMD(MessageDigest md, Statement statement, Object reference) {
+//        updateMD(md, reference);
+//        updateMD(md, statement);
+//    }
+
+    private final MessageDigest hash(Statement statement, Object reference) {
+        MessageDigest md = MessageDigester.md();
+        updateMD(md, reference);
+        updateMD(md, statement);
+        return md;
     }
 
 }

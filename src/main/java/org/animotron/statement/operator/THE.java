@@ -51,7 +51,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r;
-        r = build(getSTART(), name, null, true, true);
+        r = build(getSTART(), name, null, false, true);
         Node node = r.getEndNode();
         getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
         Cache.putRelationship(r, name);

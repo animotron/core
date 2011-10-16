@@ -36,14 +36,15 @@ public class MessageDigester {
 
 	private static final String CACHE_ALGORITHM = "SHA-256";
 	
-	public static MessageDigest md() {
-		try {
-			return MessageDigest.getInstance(CACHE_ALGORITHM);
-		} catch (NoSuchAlgorithmException e) {
-			//can't be, but throw runtime error
-			throw new RuntimeException(e);
-		}
-	}
+    public static MessageDigest md() {
+        try {
+            return MessageDigest.getInstance(CACHE_ALGORITHM);
+        } catch (NoSuchAlgorithmException e) {
+            //can't be, but throw runtime error
+            throw new RuntimeException(e);
+        }
+    }
+
     public static String md5( String message, boolean base64) {
         MessageDigest md5 = null;
         String digest = message;

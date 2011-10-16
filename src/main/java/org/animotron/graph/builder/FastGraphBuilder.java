@@ -23,6 +23,7 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.value.AbstractValue;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -135,7 +136,8 @@ public class FastGraphBuilder extends GraphBuilder {
     @Override
 	public void start(Statement statement, Object reference) {
 		Object[] parent = statements.empty() ? null : statements.peek();
-        MessageDigest md = statement.hash(reference);
+        MessageDigest md = MessageDigester.md();
+        updateMD(md, reference);
 		Object[] item = {
 				statement,	    // 0 statement
                 reference,      // 1 name or value
@@ -143,7 +145,9 @@ public class FastGraphBuilder extends GraphBuilder {
 				null,	 	    // 3 current relationship
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
-				false           // 6 number of child
+				false,          // 6 is done before?
+                null,           // 7 hash
+                false           // 8 ready
 			};
 		statements.push(item);
 		flow.add(item);
@@ -152,12 +156,17 @@ public class FastGraphBuilder extends GraphBuilder {
 	@Override
     public void end() {
 		Object[] current = statements.pop();
-		byte[] hash = ((MessageDigest) current[2]).digest();
+        MessageDigest md = (MessageDigest) current[2];
+        Object ref = current[1];
+        byte[] tmp = cloneMD(md).digest();
+        Statement s = (Statement) current[0];
+        updateMD(md, s);
+		byte[] hash = md.digest();
 		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
 			((MessageDigest) (parent[2])).update(hash);
 		}
-		current[2] = hash;
+		current[2] = s instanceof AbstractValue && ref != null ? tmp : hash;
 	}
 
     //TODO: Store hash for every node as byte[]

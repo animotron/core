@@ -23,12 +23,9 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-
-import java.security.MessageDigest;
 
 import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
@@ -41,13 +38,10 @@ import static org.animotron.graph.RelationshipTypes.RESULT;
  */
 public abstract class AbstractStatement implements Statement {
 	
-    private MessageDigest md;
 	private String name;
 
 	public AbstractStatement(String name) {
 		this.name = name;
-        this.md = MessageDigester.md();
-        md.update(name.getBytes());
 	}
 
 //	public AbstractStatement(VALUE reference, VALUE resultRelationshipType) {
@@ -87,33 +81,6 @@ public abstract class AbstractStatement implements Statement {
         return null;
     }
 
-    protected final MessageDigest md() {
-        try {
-            return (MessageDigest) md.clone();
-        } catch (CloneNotSupportedException e) {
-			//can't be, but throw runtime error
-			throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public MessageDigest hash(Object reference) {
-        MessageDigest md = md();
-        if (reference instanceof Object[][]) {
-            for (Object[] o : (Object[][]) reference) {
-                md.update(((Statement) o[0]).hash(o[1]).digest());
-            }
-        } else if (reference instanceof Object[]) {
-            Object[] o = (Object[]) reference;
-            md.update(((Statement) o[0]).hash(o[1]).digest());
-        } else if (reference instanceof String ||
-                    reference instanceof Number ||
-                        reference instanceof Boolean) {
-            md.update(reference.toString().getBytes());
-        }
-        return md;
-    }
-
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         throw new AnimoException(null, "Can't create a child node");
     }
@@ -121,9 +88,6 @@ public abstract class AbstractStatement implements Statement {
 
     protected final Node throwCache(Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
         if (ready) {
-            if (hash == null) {
-                hash = hash(reference).digest();
-            }
             Node child = Cache.getNode(hash);
             if (child == null) {
                 child = createChild(reference, false, ignoreNotFound);

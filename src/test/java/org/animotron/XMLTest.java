@@ -84,4 +84,10 @@ public class XMLTest extends ATest {
         test("<a a=\"a\">a</a>", "\\a (@a \"a\") (\"a\")");
 	}
 
+    @Test
+	public void test_08() throws Exception {
+        test("<a xmlns:a=\"a\" a=\"a\">a</a>", "\\a ($a \"a\") (@a \"a\") (\"a\")");
+	}
+
 }
+           //27e865a503fe376fd238af273ed887bcf7a5f56bb92bade7ca37d5dc298780b5
