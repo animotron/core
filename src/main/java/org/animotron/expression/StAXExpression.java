@@ -81,9 +81,9 @@ public class StAXExpression extends Expression {
                     build(COMMENT._, comment.isEmpty() ? null : comment);
                     break;
                 case XMLStreamConstants.CHARACTERS :
-                    String text = reader.getText();
+                    String text = AbstractValue.removeWS(reader.getText());
                     if (!text.isEmpty())
-                        build(TEXT._, AbstractValue.value(AbstractValue.removeWS(text)));
+                        build(TEXT._, AbstractValue.value(text));
             }
             reader.next();
         }
