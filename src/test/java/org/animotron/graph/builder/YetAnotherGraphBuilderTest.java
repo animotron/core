@@ -21,6 +21,8 @@ package org.animotron.graph.builder;
 import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Ignore;
@@ -38,7 +40,7 @@ import static org.animotron.Properties.HASH;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class GraphBuilderTest_ extends ATest {
+public class YetAnotherGraphBuilderTest extends ATest {
     
     private final XMLInputFactory FACTORY = new WstxInputFactory();
 
@@ -46,9 +48,9 @@ public class GraphBuilderTest_ extends ATest {
         return FACTORY.createXMLStreamReader(new StringReader(xml));
     }
 
-    private void test_0(String xml) throws Exception {
-        StAXExpression e;
-        e = new StAXExpression(new FastGraphBuilder(), r(xml));
+    private void test_0(String animo, String xml) throws Exception {
+        Expression e;
+        e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) HASH.get(e);
         cleanDb();
@@ -59,9 +61,9 @@ public class GraphBuilderTest_ extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_1(String xml) throws Exception {
-        StAXExpression e;
-        e = new StAXExpression(new MLGraphBuilder(), r(xml));
+    private void test_1(String animo, String xml) throws Exception {
+        Expression e;
+        e = new AnimoExpression(new MLGraphBuilder(), animo);
         String outA = AnimoSerializer.serialize(e);
         String outH = (String) HASH.get(e);
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
@@ -71,9 +73,9 @@ public class GraphBuilderTest_ extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_2(String xml) throws Exception {
-        StAXExpression e;
-        e = new StAXExpression(new FastGraphBuilder(), r(xml));
+    private void test_2(String animo, String xml) throws Exception {
+        Expression e;
+        e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) HASH.get(e);
         e = new StAXExpression(new MLGraphBuilder(), r(xml));
@@ -83,38 +85,38 @@ public class GraphBuilderTest_ extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test(String xml) throws Exception {
-        test_0(xml);
+    private void test(String animo, String xml) throws Exception {
+        test_0(animo, xml);
         cleanDb();
-        test_1(xml);
+        test_1(animo, xml);
         cleanDb();
-        test_2(xml);
+        test_2(animo, xml);
     }
 
     @Test
 	public void test_00() throws Exception {
-        test("<a/>");
+        test("\\a", "<a/>");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        test("<x:a xmlns:x=\"x-namespace\"/>");
+        test("\\x:a $x \"x-namespace\"", "<x:a xmlns:x=\"x-namespace\"/>");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        test("<a xmlns=\"x-namespace\"/>");
+        test("\\a $ \"x-namespace\"", "<a xmlns=\"x-namespace\"/>");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        test("<a b=\"c\"/>");
+        test("\\a @b \"c\"", "<a b=\"c\"/>");
 	}
 
     @Test
     @Ignore
 	public void test_04() throws Exception {
-        test("<?stylesheet=\"path\"?><a/>");
+        test("(??stylesheet \"path\") (\\a)", "<?stylesheet=\"path\"?><a/>");
 	}
 
 }
