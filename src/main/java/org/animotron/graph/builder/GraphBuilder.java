@@ -175,11 +175,4 @@ public abstract class GraphBuilder {
         updateMD(md, statement);
     }
 
-//    private final MessageDigest hash(Statement statement, Object reference) {
-//        MessageDigest md = MessageDigester.md();
-//        updateMD(md, reference);
-//        updateMD(md, statement);
-//        return md;
-//    }
-
 }
