@@ -262,7 +262,7 @@ public class GET extends Operator implements Evaluable, Query {
 							newREFs.add(t);
 						} else if (st instanceof Reference) {
 							try {
-								PipedInput in = Evaluator._.execute(pf, r);
+								PipedInput in = Evaluator._.execute(new PFlow(pf), r);
 								
 								for (Object rr : in) {
 									if (rr instanceof Relationship) {

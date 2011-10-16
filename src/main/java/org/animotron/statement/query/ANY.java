@@ -56,7 +56,7 @@ public class ANY extends AbstractQuery implements Reference {
 			final Node n = pf.getOP().getEndNode();
 			Node node = Utils.getByREF(n);
 
-			//if (!Utils.results(node, pf)) {
+			if (!Utils.results(node, pf)) {
 			
 				Set<Node>[] lists = getUSEs(node, pf.getStartOP());
 				Set<Node> uses = lists[1];
@@ -83,7 +83,7 @@ public class ANY extends AbstractQuery implements Reference {
 	                    }
 	                }
 				}
-			//}
+			}
             pf.done();
         }
 
