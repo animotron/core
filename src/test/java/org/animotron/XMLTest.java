@@ -90,4 +90,3 @@ public class XMLTest extends ATest {
 	}
 
 }
-           //27e865a503fe376fd238af273ed887bcf7a5f56bb92bade7ca37d5dc298780b5

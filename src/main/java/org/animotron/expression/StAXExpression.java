@@ -23,8 +23,8 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.graph.builder.MLGraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
-import org.animotron.statement.value.VALUE;
 import org.animotron.statement.value.AbstractValue;
+import org.animotron.statement.value.VALUE;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
