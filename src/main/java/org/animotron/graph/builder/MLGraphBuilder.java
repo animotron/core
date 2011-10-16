@@ -122,8 +122,7 @@ public class MLGraphBuilder extends GraphBuilder {
         Statement statement = (Statement) item[4];
         if (!(Boolean) item[2]) {
             updateMD(md, reference);
-            hash = cloneMD(md).digest();
-            updateMD(md, statement);
+            hash = md.digest();
             Node node = Cache.getNode(hash);
             if (node == null) {
                 Cache.putNode(r.getEndNode(), hash);

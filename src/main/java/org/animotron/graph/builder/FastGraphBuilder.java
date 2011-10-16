@@ -23,6 +23,7 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.value.AbstractValue;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -89,7 +90,7 @@ public class FastGraphBuilder extends GraphBuilder {
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[0];
-            byte[] hash = (byte[]) o[7];
+            byte[] hash = (byte[]) o[2];
             relationship = Cache.getRelationship(hash);
             if (relationship == null) {
                 Object reference = statement instanceof THE && o[1] == null ? MessageDigester.byteArrayToHex(hash) : o[1];
@@ -144,8 +145,6 @@ public class FastGraphBuilder extends GraphBuilder {
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
 				false,          // 6 is done before?
-                null,           // 7 hash
-                false           // 8 ready
 			};
 		statements.push(item);
 		flow.add(item);
@@ -158,13 +157,14 @@ public class FastGraphBuilder extends GraphBuilder {
         Object reference = current[1];
         MessageDigest md = (MessageDigest) current[2];
         updateMD(md, reference);
-        byte[] hash = cloneMD(md).digest();
-        updateMD(md, statement);
+        if (!(statement instanceof AbstractValue && reference != null)) {
+            updateMD(md, statement);
+        }
 		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
 			updateMD((MessageDigest) parent[2], statement, reference);
 		}
-		current[7] = hash;
+        current[2] = md.digest();
 	}
 
     //TODO: Store hash for every node as byte[]
@@ -181,7 +181,7 @@ public class FastGraphBuilder extends GraphBuilder {
         Relationship r;
         Statement statement = (Statement) item[0];
         Object reference = item[1];
-        byte[] hash = (byte[]) item[7];
+        byte[] hash = (byte[]) item[2];
         Node parent = (Node) p[4];
         item[6] = Cache.getNode(hash) != null;
         r = statement.build(parent, reference, hash, true, ignoreNotFound);
