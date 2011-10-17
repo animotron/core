@@ -97,7 +97,8 @@ public class MLGraphBuilder extends GraphBuilder {
         byte[] hash = null;
         if (ready) {
             updateMD(md, reference);
-            hash = md.digest();
+            hash = cloneMD(md).digest();
+            updateMD(md, statement);
         }
         Relationship r = statement.build(parent, reference, hash, ready, ignoreNotFound);
         Object[] item = {
@@ -117,10 +118,9 @@ public class MLGraphBuilder extends GraphBuilder {
 		Object[] item = stack.pop();
         r = (Relationship) item[1];
         MessageDigest md = (MessageDigest) item[0];
-        Object reference = item[5];
-        Statement statement = (Statement) item[4];
         if (!(Boolean) item[2]) {
-            updateMD(md, reference);
+            updateMD(md, item[5]);
+            updateMD(md, (Statement) item[4]);
             hash = md.digest();
             Node node = Cache.getNode(hash);
             if (node == null) {
@@ -130,10 +130,12 @@ public class MLGraphBuilder extends GraphBuilder {
                 r = old.getStartNode().createRelationshipTo(node, r.getType());
                 destructive(old);
             }
+        } else {
+            hash = md.digest();
         }
         order(r, (Integer) item[3]);
         if (!stack.empty()) {
-            updateMD((MessageDigest) stack.peek()[0], statement, reference);
+            ((MessageDigest) stack.peek()[0]).update(hash);
         }
 	}
 
