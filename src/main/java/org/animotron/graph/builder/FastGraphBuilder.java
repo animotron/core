@@ -154,14 +154,14 @@ public class FastGraphBuilder extends GraphBuilder {
         MessageDigest md = (MessageDigest) o[0];
         updateMD(md, reference);
         byte[] hash;
-//        if (!((Boolean) o[7]) && reference != null) {
+        if (!((Boolean) o[7]) && reference != null) {
             o[0] = cloneMD(md).digest();
             updateMD(md, statement);
             hash = md.digest();
-//        } else {
-//            updateMD(md, statement);
-//            o[0] = hash = md.digest();
-//        }
+        } else {
+            updateMD(md, statement);
+            o[0] = hash = md.digest();
+        }
 		Object[] parent = (Object[]) o[5];
 		if (parent != null) {
             parent[7] = true;
