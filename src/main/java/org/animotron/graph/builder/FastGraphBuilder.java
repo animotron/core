@@ -157,9 +157,10 @@ public class FastGraphBuilder extends GraphBuilder {
         MessageDigest md = (MessageDigest) current[2];
         updateMD(md, reference);
         current[2] = md.digest();
+        updateMD(md, statement);
 		Object[] parent = (Object[]) current[5];
 		if (parent != null) {
-			updateMD((MessageDigest) parent[2], statement, reference);
+            ((MessageDigest) parent[2]).update(cloneMD(md).digest());
 		}
 	}
 
