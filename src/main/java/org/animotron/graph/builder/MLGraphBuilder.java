@@ -131,9 +131,10 @@ public class MLGraphBuilder extends GraphBuilder {
                 destructive(old);
             }
         }
+        updateMD(md, statement);
         order(r, (Integer) item[3]);
         if (!stack.empty()) {
-            updateMD((MessageDigest) stack.peek()[0], statement, reference);
+            ((MessageDigest) stack.peek()[0]).update(cloneMD(md).digest());
         }
 	}
 
