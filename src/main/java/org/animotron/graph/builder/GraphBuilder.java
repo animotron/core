@@ -151,11 +151,9 @@ public abstract class GraphBuilder {
 
     protected final void updateMD(MessageDigest md, Object reference) {
         if (reference instanceof Object[][]) {
-            for (Object[] o: (Object[][]) reference) {
-                updateMD(md, hash(o));
-            }
+            updateMD(md, (Object[][]) reference);
         } else if (reference instanceof Object[]) {
-            updateMD(md, hash((Object[]) reference));
+            updateMD(md, (Object[]) reference);
         } else if (reference instanceof String ||
                         reference instanceof Number ||
                             reference instanceof Boolean) {
@@ -163,10 +161,22 @@ public abstract class GraphBuilder {
         }
     }
 
-    private final byte[] hash(Object[] o) {
-        MessageDigest md = MessageDigester.md();
-        updateMD(md, o);
-        return md.digest();
+    private void updateMD(MessageDigest md, Object[][] reference) {
+        for (Object[] o: reference) {
+            updateMD(md, o);
+        }
     }
+
+    private void updateMD(MessageDigest md, Object[] reference) {
+        updateMD(md, (Statement) reference[0], reference[1]);
+    }
+
+    private void updateMD(MessageDigest md, Statement statement, Object reference) {
+        MessageDigest tmp = MessageDigester.md();
+        updateMD(tmp, reference);
+        updateMD(tmp, statement);
+        md.update(tmp.digest());
+    }
+
 
 }
