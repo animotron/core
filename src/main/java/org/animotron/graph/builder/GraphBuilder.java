@@ -149,31 +149,18 @@ public abstract class GraphBuilder {
         md.update(statement.name().getBytes());
     }
 
-    protected final void updateMD(MessageDigest md, Object[][] reference) {
-        for (Object[] o: reference) {
-            updateMD(md, hash(o));
-        }
-    }
-
-    protected final void updateMD(MessageDigest md, Object[] reference) {
-        updateMD(md, (Statement) reference[0], reference[1]);
-    }
-
     protected final void updateMD(MessageDigest md, Object reference) {
         if (reference instanceof Object[][]) {
-            updateMD(md, (Object[][]) reference);
+            for (Object[] o: (Object[][]) reference) {
+                updateMD(md, hash(o));
+            }
         } else if (reference instanceof Object[]) {
-            updateMD(md, (Object[]) reference);
+            updateMD(md, hash((Object[]) reference));
         } else if (reference instanceof String ||
                         reference instanceof Number ||
                             reference instanceof Boolean) {
             md.update(reference.toString().getBytes());
         }
-    }
-
-    protected final void updateMD(MessageDigest md, Statement statement, Object reference) {
-        updateMD(md, reference);
-        updateMD(md, statement);
     }
 
     private final byte[] hash(Object[] o) {
