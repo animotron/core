@@ -51,7 +51,6 @@ public class StAXExpression extends Expression {
 
     @Override
     public void build() throws Exception {
-        builder.startGraph();
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
                 case XMLStreamConstants.START_ELEMENT :
@@ -87,7 +86,6 @@ public class StAXExpression extends Expression {
             }
             reader.next();
         }
-        builder.endGraph();
     }
 
     private void build(Statement s, Object reference) throws AnimoException {

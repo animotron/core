@@ -29,27 +29,28 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 import java.security.MessageDigest;
+import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 
 /**
- * Animo graph builder, it do optimization/compression and 
+ * Animo graph builder, it do optimization/compression and
  * inform listeners on store/delete events.
- * 
+ *
  * Direct graph as input from top element to bottom processing strategy.
- * 
+ *
  * Methods to use:
- * 
+ *
  * startGraph()
  * endGraph()
- * 
+ *
  * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
- * 
+ *
  * relationship()
- * 
+ *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
@@ -59,6 +60,7 @@ public abstract class GraphBuilder {
     private int order;
     protected final boolean ignoreNotFound;
     public final Manipulators.Catcher catcher;
+    private Stack<Object[]> stack;
 
     public GraphBuilder() {
         this(true);
@@ -87,27 +89,49 @@ public abstract class GraphBuilder {
 
     protected abstract void fail(Exception e);
 
-    public abstract void startGraph();
+    protected abstract void startGraph();
 
-    public abstract void endGraph() throws AnimoException;
+    protected abstract void endGraph() throws AnimoException;
 
-    final public void start(Statement statement) throws AnimoException {
+    public final void start(Statement statement) throws AnimoException {
         start(statement, null);
     }
 
-    final public void start(Object value) throws AnimoException {
+    public final void start(Object value) throws AnimoException {
         start(VALUE._, value);
     }
 
-	public abstract void start(Statement statement, Object reference) throws AnimoException;
+    public final void start(Statement statement, Object reference) throws AnimoException{
+        stack.push(start(statement, reference, false));
+    }
 
-	public abstract void end() throws AnimoException;
+    protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
 
-    final public void build(Expression exp) throws Exception {
+    public final void end() throws AnimoException {
+        byte[] hash = end(stack.pop());
+        if (hasParent()) {
+            ((MessageDigest) getParent()[0]).update(hash);
+        }
+    }
+
+	protected abstract byte[] end(Object[] o) throws AnimoException;
+
+    protected final boolean hasParent() {
+        return !stack.empty();
+    }
+
+    protected final Object[] getParent() {
+        return stack.peek();
+    }
+
+    public final void build(Expression exp) throws Exception {
         order = 0;
         tx = beginTx();
         try {
+            stack = new Stack<Object[]>();
+            startGraph();
             exp.build();
+            endGraph();
             tx.success();
             finishTx(tx);
         } catch (Exception e) {
@@ -124,7 +148,7 @@ public abstract class GraphBuilder {
         }
     }
 
-    final protected void step() {
+    protected final void step() {
         if (order % (30000) == 0) {
             tx.success();
             finishTx(tx);
@@ -177,6 +201,5 @@ public abstract class GraphBuilder {
         updateMD(tmp, statement);
         md.update(tmp.digest());
     }
-
 
 }

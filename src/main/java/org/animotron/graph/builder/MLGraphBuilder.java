@@ -27,7 +27,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
-import java.util.Stack;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
@@ -58,13 +57,11 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
 public class MLGraphBuilder extends GraphBuilder {
 
     private Node root;
-	private Stack<Object[]> stack;
     private Relationship relationship, r;
     private byte[] hash;
 
     @Override
-	public void startGraph() {
-        stack = new Stack<Object[]>();
+    public void startGraph() {
         root = createNode();
 	}
 
@@ -79,7 +76,7 @@ public class MLGraphBuilder extends GraphBuilder {
     }
 
     @Override
-	public void endGraph() throws AnimoException {
+    public void endGraph() throws AnimoException {
         relationship = Cache.getRelationship(hash);
         if (relationship == null) {
             relationship = copy(getSTART(), r);
@@ -90,10 +87,10 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 
 	@Override
-    public void start(Statement statement, Object reference) throws AnimoException {
+    protected Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException {
         MessageDigest md = MessageDigester.md();
-        Node parent = stack.empty() ? root : ((Relationship) stack.peek()[1]).getEndNode();
-        boolean ready = !(statement instanceof ELEMENT) && reference != null;
+        Node parent = hasParent() ? ((Relationship) getParent()[1]).getEndNode() :  root;
+        ready = !(statement instanceof ELEMENT) && reference != null;
         byte[] hash = null;
         if (ready) {
             updateMD(md, reference);
@@ -101,7 +98,7 @@ public class MLGraphBuilder extends GraphBuilder {
             updateMD(md, statement);
         }
         Relationship r = statement.build(parent, reference, hash, ready, ignoreNotFound);
-        Object[] item = {
+        Object[] o = {
                 md,                 // 0 message digest
                 r,                  // 1 node
                 ready,              // 2 is ready?
@@ -109,19 +106,18 @@ public class MLGraphBuilder extends GraphBuilder {
                 statement,          // 4 statement
                 reference           // 5 reference
             };
-		stack.push(item);
         step();
+        return o;
 	}
 	
     @Override
-	public void end() throws AnimoException {
-		Object[] item = stack.pop();
+	protected byte[] end(Object[] item) throws AnimoException {
         r = (Relationship) item[1];
         MessageDigest md = (MessageDigest) item[0];
         if (!(Boolean) item[2]) {
             updateMD(md, item[5]);
+            hash = cloneMD(md).digest();
             updateMD(md, (Statement) item[4]);
-            hash = md.digest();
             Node node = Cache.getNode(hash);
             if (node == null) {
                 Cache.putNode(r.getEndNode(), hash);
@@ -130,13 +126,10 @@ public class MLGraphBuilder extends GraphBuilder {
                 r = old.getStartNode().createRelationshipTo(node, r.getType());
                 destructive(old);
             }
-        } else {
-            hash = md.digest();
         }
         order(r, (Integer) item[3]);
-        if (!stack.empty()) {
-            ((MessageDigest) stack.peek()[0]).update(hash);
-        }
+        hash = md.digest();
+        return hash;
 	}
 
     private void destructive(Relationship r) {

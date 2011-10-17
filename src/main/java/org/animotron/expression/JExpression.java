@@ -47,11 +47,9 @@ public class JExpression extends Expression {
 
     @Override
     public void build() throws Exception {
-        builder.startGraph();
         for(Object[] i : e) {
             build(i);
         }
-        builder.endGraph();
     }
 
     private void build(Object[]... e) throws AnimoException {

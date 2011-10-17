@@ -23,7 +23,6 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.value.AbstractValue;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -32,7 +31,6 @@ import java.security.MessageDigest;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Stack;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
@@ -61,7 +59,6 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class FastGraphBuilder extends GraphBuilder {
 
-	private Stack<Object[]> statements;
 	private List<Object[]> flow;
     private Relationship relationship;
     private Node root;
@@ -79,7 +76,6 @@ public class FastGraphBuilder extends GraphBuilder {
 
     @Override
     public void startGraph() {
-		statements = new Stack<Object[]>();
 		flow = new LinkedList<Object[]>();
         root = null;
 	}
@@ -89,11 +85,11 @@ public class FastGraphBuilder extends GraphBuilder {
         Iterator<Object[]> it = flow.iterator();
         if (it.hasNext()) {
             Object[] o = it.next();
-            Statement statement = (Statement) o[0];
-            byte[] hash = (byte[]) o[2];
+            Statement statement = (Statement) o[1];
+            byte[] hash = (byte[]) o[0];
             relationship = Cache.getRelationship(hash);
             if (relationship == null) {
-                Object reference = statement instanceof THE && o[1] == null ? MessageDigester.byteArrayToHex(hash) : o[1];
+                Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
                 root = createNode();
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 Node end = r.getEndNode();
@@ -134,42 +130,44 @@ public class FastGraphBuilder extends GraphBuilder {
 	}
 
     @Override
-	public void start(Statement statement, Object reference) {
-		Object[] parent = statements.empty() ? null : statements.peek();
+    protected Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException {
+		Object[] parent = hasParent() ? getParent() : null;
         MessageDigest md = MessageDigester.md();
-		Object[] item = {
-				statement,	    // 0 statement
-                reference,      // 1 name or value
-				md, 		    // 2 message digest
+		Object[] o = {
+                md,             // 0 message digest    
+				statement,	    // 1 statement
+                reference,      // 2 name or value
 				null,	 	    // 3 current relationship
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
-				false,          // 6 is done before?
+                false,          // 6 is done?
+                false,          // 7 has child?
 			};
-		statements.push(item);
-		flow.add(item);
+		flow.add(o);
+        return o;
 	}
 	
 	@Override
-    public void end() {
-		Object[] current = statements.pop();
-        Statement statement = (Statement) current[0];
-        Object reference = current[1];
-        MessageDigest md = (MessageDigest) current[2];
+    protected byte[] end(Object[] o) {
+        Statement statement = (Statement) o[1];
+        Object reference = o[2];
+        MessageDigest md = (MessageDigest) o[0];
         updateMD(md, reference);
         byte[] hash;
-        if (statement instanceof AbstractValue && reference != null) {
-            current[2] = cloneMD(md).digest();
+        if (!((Boolean) o[7]) && reference != null) {
+            o[0] = cloneMD(md).digest();
             updateMD(md, statement);
             hash = md.digest();
         } else {
             updateMD(md, statement);
-            current[2] = hash = md.digest();
+            o[0] = hash = md.digest();
         }
-		Object[] parent = (Object[]) current[5];
+		Object[] parent = (Object[]) o[5];
 		if (parent != null) {
-			((MessageDigest) parent[2]).update(hash);
+			((MessageDigest) parent[0]).update(hash);
+            parent[7] = true;
 		}
+        return hash;
 	}
 
     //TODO: Store hash for every node as byte[]
@@ -184,9 +182,9 @@ public class FastGraphBuilder extends GraphBuilder {
 			}
 		}
         Relationship r;
-        Statement statement = (Statement) item[0];
-        Object reference = item[1];
-        byte[] hash = (byte[]) item[2];
+        Statement statement = (Statement) item[1];
+        Object reference = item[2];
+        byte[] hash = (byte[]) item[0];
         Node parent = (Node) p[4];
         item[6] = Cache.getNode(hash) != null;
         r = statement.build(parent, reference, hash, true, ignoreNotFound);

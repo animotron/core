@@ -86,7 +86,6 @@ public class BinaryExpression extends Expression {
                 throw new IOException("transaction can not be finished");
 
             } else {
-                builder.startGraph();
                     builder.start(THE._);
                         builder.start(IS._, "file");
                         builder.end();
@@ -99,7 +98,6 @@ public class BinaryExpression extends Expression {
                             }
                         }
                     builder.end();
-                builder.endGraph();
                 Properties.BIN.set(getEndNode(), hash);
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");

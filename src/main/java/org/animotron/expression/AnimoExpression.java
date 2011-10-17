@@ -86,7 +86,6 @@ public class AnimoExpression extends Expression {
         boolean text = false;
         char prev = '\0';
 
-        builder.startGraph();
         startList();
 
         while ((len=reader.read(buff))>0) {
@@ -137,7 +136,6 @@ public class AnimoExpression extends Expression {
             lastToken(s, text);
         }
         endList();
-        builder.endGraph();
     }
 
     private void newToken(StringBuilder s, boolean text) throws AnimoException {
