@@ -131,7 +131,7 @@ public class FastGraphBuilder extends GraphBuilder {
 
     @Override
     protected Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException {
-		Object[] parent = hasParent() ? getParent() : null;
+		Object[] parent = hasParent() ? peekParent() : null;
         MessageDigest md = MessageDigester.md();
 		Object[] o = {
                 md,             // 0 message digest    
@@ -164,7 +164,6 @@ public class FastGraphBuilder extends GraphBuilder {
         }
 		Object[] parent = (Object[]) o[5];
 		if (parent != null) {
-			((MessageDigest) parent[0]).update(hash);
             parent[7] = true;
 		}
         return hash;

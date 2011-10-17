@@ -89,7 +89,7 @@ public class MLGraphBuilder extends GraphBuilder {
 	@Override
     protected Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException {
         MessageDigest md = MessageDigester.md();
-        Node parent = hasParent() ? ((Relationship) getParent()[1]).getEndNode() :  root;
+        Node parent = hasParent() ? ((Relationship) peekParent()[1]).getEndNode() :  root;
         ready = !(statement instanceof ELEMENT) && reference != null;
         byte[] hash = null;
         if (ready) {

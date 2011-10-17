@@ -44,7 +44,7 @@ public class IC extends Operator implements Evaluable {
 		@Override
 		public void onMessage(PFlow pf) {
             //TODO !!!
-//			if (pf.getParent().getOP().equals(GET._)) {
+//			if (pf.peekParent().getOP().equals(GET._)) {
 //				// Evaluate IC here
 //			} else {
 				pf.done();

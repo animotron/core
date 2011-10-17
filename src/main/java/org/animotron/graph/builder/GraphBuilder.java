@@ -108,9 +108,9 @@ public abstract class GraphBuilder {
     protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
 
     public final void end() throws AnimoException {
-        byte[] hash = end(stack.pop());
+        byte[] hash = end(popParent());
         if (hasParent()) {
-            ((MessageDigest) getParent()[0]).update(hash);
+            ((MessageDigest) peekParent()[0]).update(hash);
         }
     }
 
@@ -120,7 +120,11 @@ public abstract class GraphBuilder {
         return !stack.empty();
     }
 
-    protected final Object[] getParent() {
+    protected final Object[] popParent() {
+        return stack.pop();
+    }
+
+    protected final Object[] peekParent() {
         return stack.peek();
     }
 
