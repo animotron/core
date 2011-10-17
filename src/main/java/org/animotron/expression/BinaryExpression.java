@@ -98,6 +98,7 @@ public class BinaryExpression extends Expression {
                             }
                         }
                     builder.end();
+                /// TODO make a new statament BIN
                 Properties.BIN.set(getEndNode(), hash);
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
