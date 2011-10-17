@@ -151,11 +151,8 @@ public abstract class GraphBuilder {
 
     protected final void updateMD(MessageDigest md, Object[][] reference) {
         for (Object[] o: reference) {
-            updateMD(md, o);
+            updateMD(md, hash(o));
         }
-//        for (int i = reference.length - 1; i >= 0; i--) {
-//            updateMD(md, hash(reference[i]));
-//        }
     }
 
     protected final void updateMD(MessageDigest md, Object[] reference) {
