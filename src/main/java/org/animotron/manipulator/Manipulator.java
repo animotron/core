@@ -105,9 +105,6 @@ public abstract class Manipulator {
             			pf.countDown(out);
 
             		} else if (context[1] != null) {
-            			if (context[0] != null)
-            				pf.addContextPoint(context[0]);
-            				
             			int addedContexts = 0;
                         Statement s = null;
                         
@@ -136,6 +133,9 @@ public abstract class Manipulator {
             				}
             			} catch (Exception e) {}
 
+            			if (context[0] != null)
+            				pf.addContextPoint(context[0]);
+            				
             			if (msg.isType(REF)) {
 
                             s = Statements.name((String) THE._.reference(msg));

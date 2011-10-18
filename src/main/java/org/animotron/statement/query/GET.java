@@ -109,7 +109,7 @@ public class GET extends Operator implements Evaluable, Query {
 			final Node node = op.getEndNode();
 			final String name = (String) reference(op);
 			
-			System.out.println("GET '"+ reference(op)+"'");
+			System.out.println("GET '"+name+"'");
 			System.out.println(pf.getPFlowPath());
 
 			//check, maybe, result was already calculated
@@ -138,7 +138,7 @@ public class GET extends Operator implements Evaluable, Query {
 						final Set<Relationship[]> rSet = get(pf, context[1], name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(context[0], createResult(pf.getLastContext(), node, r[1], HAVE._));
+								pf.sendAnswer(context[0], createResult(r[0], node, r[1], HAVE._));
 							}
 							return;
 						}
@@ -207,10 +207,10 @@ public class GET extends Operator implements Evaluable, Query {
 		return get(pf, refs, name); 
 	}
 
-	public Set<Relationship[]> get(PFlow pf, Node ref, final String name) {
+	public Set<Relationship[]> get(final PFlow pf, Node ref, final String name) {
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
-		Relationship have = searchForHAVE(ref, name);
+		Relationship have = searchForHAVE(pf, ref, name);
 		if (have != null && !pf.isInStack(have)) 
 			set.add(new Relationship[] {null, have}); //XXX: is NULL correct here?
 		
@@ -235,10 +235,12 @@ public class GET extends Operator implements Evaluable, Query {
 		boolean first = true;
 		
 		while (true) {
+			
+			System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
 				System.out.println("checking "+n);
-				have = searchForHAVE(n, name);
+				have = searchForHAVE(pf, n, name);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});
 			}
@@ -323,7 +325,7 @@ public class GET extends Operator implements Evaluable, Query {
 		}
 	}
 	
-	private Relationship searchForHAVE(final Relationship ref, final String name) {
+	private Relationship searchForHAVE(final PFlow pf, final Relationship ref, final String name) {
 		
 		boolean checkStart = true;
 		if (!ref.isType(REF)) {
@@ -341,20 +343,20 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		//search for local 'HAVE'
 		if (checkStart) {
-			have = getByHave(ref.getStartNode(), name);
+			have = getByHave(pf, ref.getStartNode(), name);
 			if (have != null) return have;
 		}
 
 		//search for inside 'HAVE'
-		return searchForHAVE(ref.getEndNode(), name);
+		return searchForHAVE(pf, ref.getEndNode(), name);
 	}
 
-	private Relationship searchForHAVE(final Node ref, final String name) {
+	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final String name) {
 		
 		Relationship have = null;
 
 		//search for inside 'HAVE'
-		have = getByHave(ref, name);
+		have = getByHave(pflow, ref, name);
 		if (have != null) return have;
 
 		//search 'IC' by 'IS' topology
@@ -378,20 +380,20 @@ public class GET extends Operator implements Evaluable, Query {
 			}
 			
 			//search for have
-			have = getByHave(tdR.getEndNode(), name);
+			have = getByHave(pflow, tdR.getEndNode(), name);
 			if (have != null) return have;
 		}
 		
 		return null;
 	}
 
-	//in-use by SELF
-	public Relationship get(Node context, final String name) {
+	//XXX: in-use by SELF
+	public Relationship getBySELF(final PFlow pf, Node context, final String name) {
 		
 		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
-		Relationship have = getByHave(context, name);
+		Relationship have = getByHave(pf, context, name);
 		if (have != null) return have;
 
 		Relationship instance = context.getSingleRelationship(REF, OUTGOING);
@@ -400,7 +402,7 @@ public class GET extends Operator implements Evaluable, Query {
 			context = instance.getEndNode();
 			
 			//search for have
-			have = getByHave(context, name);
+			have = getByHave(pf, context, name);
 			if (have != null) return have;
 		}
 		
@@ -414,7 +416,7 @@ public class GET extends Operator implements Evaluable, Query {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
-					have = getByHave(prevTHE.getEndNode(), name);
+					have = getByHave(pf, prevTHE.getEndNode(), name);
 					if (have != null) return have;
 				}
 				prevTHE = tdR;
@@ -452,14 +454,14 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		if (prevTHE != null) {
 			//search for have
-			have = getByHave(prevTHE.getEndNode(), name);
+			have = getByHave(pf, prevTHE.getEndNode(), name);
 			if (have != null) return have;
 		}
 
 		return null;
 	}
 	
-	private Relationship getByHave(final Node context, final String name) {
+	private Relationship getByHave(final PFlow pflow, final Node context, final String name) {
 		final Node target = THE._.get(name).getEndNode();
 		
 		TraversalDescription trav = td.
@@ -475,8 +477,12 @@ public class GET extends Operator implements Evaluable, Query {
 			//TODO: check that this is only one answer
 			//System.out.println(path);
 			for (Relationship r : path.relationships()) {
-				res = r;
-				break;
+				if (!pflow.isInStack(r)) {
+					if (r.isType(HAVE._)) {
+						res = r;
+						break;
+					}
+				}
 			}
 		}
 		

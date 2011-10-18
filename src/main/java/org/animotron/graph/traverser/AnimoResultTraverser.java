@@ -54,15 +54,6 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
         int addedContexts = 0;
-        try {
-	        Relationship context = getDb().getRelationshipById(
-                (Long)r.getProperty(CID.name())
-            );
-	        pf.addContextPoint(context);
-	        addedContexts++;
-        } catch (Exception e) {
-		}
-        
         if (r.isType(RESULT)) {
         	r = getDb().getRelationshipById(
                 (Long)r.getProperty(RID.name())
@@ -80,6 +71,15 @@ public class AnimoResultTraverser extends ResultTraverser {
 	        pf.addContextPoint(r);
 	        addedContexts++;
         }
+        try {
+	        Relationship context = getDb().getRelationshipById(
+                (Long)r.getProperty(CID.name())
+            );
+	        pf.addContextPoint(context);
+	        addedContexts++;
+        } catch (Exception e) {
+		}
+        
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {

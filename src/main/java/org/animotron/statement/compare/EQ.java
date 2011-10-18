@@ -50,7 +50,7 @@ public class EQ extends Operator implements Predicate {
 		//XXX: fix
 		String name = (String) reference(op);
 
-		Relationship have = GET._.get(ref, name);
+		Relationship have = GET._.getBySELF(pf, ref, name);
 		if (have == null) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();

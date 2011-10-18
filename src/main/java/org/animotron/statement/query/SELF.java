@@ -89,14 +89,14 @@ public class SELF extends AbstractQuery {
 
             if (ref != null) {
                 //reference in processing flow
-                res = GET._.get(ref.getEndNode(), (String) reference(pf.getOP()));
+                res = GET._.getBySELF(pf, ref.getEndNode(), (String) reference(pf.getOP()));
 
                 if (res != null)
                     pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, RESULT));
 
             } else if (searchHave == 2) {
                 //the instance self in have
-                res = GET._.get(pf.getStartNode(), (String) reference(pf.getOP()));
+                res = GET._.getBySELF(pf, pf.getStartNode(), (String) reference(pf.getOP()));
 
                 if (res != null)
                     pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, RESULT));

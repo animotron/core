@@ -45,6 +45,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
+import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -398,6 +399,12 @@ public class PFlow {
 //		for (Relationship rr : getFlowPath().relationships()) {
 		for (Relationship rr : path) {
 			if (rr.equals(r)) return true;
+			try {
+				long id = (Long)rr.getProperty(RID.name());
+				if (r.getId() == id) return true;
+				
+			} catch (Exception e) {
+			}
 		}
 		return false;
 
