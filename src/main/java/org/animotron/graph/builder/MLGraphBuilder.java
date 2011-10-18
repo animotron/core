@@ -145,6 +145,7 @@ public class MLGraphBuilder extends GraphBuilder {
         for (Relationship r : n.getRelationships(OUTGOING)) {
             destructive(r);
         }
+        Cache.removeNode(n);
         n.delete();
     }
 

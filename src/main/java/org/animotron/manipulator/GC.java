@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.marker.AbstractMarker;
@@ -48,6 +49,7 @@ public class GC extends Manipulator {
                 for (Relationship r : node.getRelationships()) {
                     r.delete();
                 }
+                Cache.removeNode(node);
 				node.delete();
 			}
 		}

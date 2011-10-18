@@ -58,12 +58,28 @@ public class Cache {
         return RCACHE.get(value);
     }
 
+    public static void removeNode(Node n, Object value) {
+        NCACHE.remove(n, value);
+    }
+
+    public static void removeNode(Node n) {
+        NCACHE.remove(n);
+    }
+
     public static void putNode(Node n, Object value) {
         NCACHE.put(n, value);
     }
 
     public static void putRelationship(Relationship r, Object value) {
         RCACHE.put(r, value);
+    }
+
+    public static void removeRelationship(Relationship r, Object value) {
+        RCACHE.remove(r, value);
+    }
+
+    public static void removeRelationship(Relationship r) {
+        RCACHE.remove(r);
     }
 
     public static Object key(Object value) {
@@ -95,6 +111,14 @@ public class Cache {
 
         public void put(T c, Object value) {
             INDEX.add(c, NAME, key(value));
+        }
+
+        public void remove(T c, Object value) {
+            INDEX.remove(c, NAME, key(value));
+        }
+
+        public void remove(T c) {
+            INDEX.remove(c, NAME);
         }
 
     }

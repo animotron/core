@@ -101,6 +101,7 @@ public abstract class AbstractStatement implements Statement {
 
     @Override
 	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        System.out.println(parent);
 		return parent.createRelationshipTo(throwCache(reference, hash, ready, ignoreNotFound), this);
 	}
 
