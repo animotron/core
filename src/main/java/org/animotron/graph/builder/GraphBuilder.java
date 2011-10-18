@@ -29,7 +29,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
@@ -105,7 +104,6 @@ public abstract class GraphBuilder {
     Statement s = null; Object r = null; Object[] o;
 
     public final void start(Statement statement, Object reference) throws AnimoException{
-    	System.out.println("start statement "+statement);
     	if (s != null) {
     		stack.push(start(s, r, true));
         }
@@ -116,15 +114,12 @@ public abstract class GraphBuilder {
     protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
 
     public final void end() throws AnimoException {
-    	System.out.print("end statement ");
     	byte[] hash;
     	if (s != null) {
-    		System.out.println(s);
     		hash = end(start(s, r, false), false);
     		s = null; r = null;
     	} else {
     		Object[] p = popParent();
-    		System.out.println(Arrays.toString(p));
     		hash = end(p, true);
     	}
         if (hasParent()) {
@@ -193,6 +188,7 @@ public abstract class GraphBuilder {
     }
 
     protected final void updateMD(MessageDigest md, Statement statement) {
+        System.out.println("updateMD: " + statement.name());
         md.update(statement.name().getBytes());
     }
 
@@ -204,6 +200,7 @@ public abstract class GraphBuilder {
         } else if (reference instanceof String ||
                         reference instanceof Number ||
                             reference instanceof Boolean) {
+            System.out.println("updateMD: " + reference.toString());
             md.update(reference.toString().getBytes());
         }
     }
