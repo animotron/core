@@ -159,15 +159,11 @@ public class FastGraphBuilder extends GraphBuilder {
 	
 	@Override
     protected byte[] end(Object[] o, boolean hasChild) {
-        Statement statement = (Statement) o[1];
-        Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
         if (!(Boolean) o[7]) {
-            updateMD(md, statement);
-            o[8] = hash = md.digest();
-        } else {
-            o[8] = hash = md.digest();
+            updateMD(md, (Statement) o[1]);
         }
+        o[8] = hash = md.digest();
         return hash;
 	}
 

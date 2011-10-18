@@ -110,13 +110,12 @@ public class MLGraphBuilder extends GraphBuilder {
         step();
         return o;
 	}
-	
+
     @Override
 	protected byte[] end(Object[] item, boolean hasChild) throws AnimoException {
         r = (Relationship) item[1];
         MessageDigest md = (MessageDigest) item[0];
         if (!(Boolean) item[2]) {
-            //updateMD(md, item[5]);
             updateMD(md, (Statement) item[4]);
             hash = md.digest();
             Node node = Cache.getNode(hash);
