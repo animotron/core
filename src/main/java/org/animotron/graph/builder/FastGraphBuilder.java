@@ -23,7 +23,6 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.value.AbstractValue;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -135,12 +134,12 @@ public class FastGraphBuilder extends GraphBuilder {
 		Object[] parent = hasParent() ? peekParent() : null;
         MessageDigest md = MessageDigester.md();
         byte[] hash = null;
-        boolean ready = statement instanceof AbstractValue && !hasChild && reference != null;
+        boolean ready = !hasChild && reference != null;
         if (ready) {
             updateMD(md, reference);
             hash = cloneMD(md).digest();
             updateMD(md, statement);
-        } else if (statement instanceof AbstractValue && reference != null) {
+        } else if (reference != null) {
             updateMD(md, reference);
         }
 		Object[] o = {
@@ -164,9 +163,6 @@ public class FastGraphBuilder extends GraphBuilder {
         Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
         if (!(Boolean) o[7]) {
-            if (!(statement instanceof AbstractValue) && reference != null) {
-                updateMD(md, reference);
-            }
             updateMD(md, statement);
             o[8] = hash = md.digest();
         } else {
