@@ -62,6 +62,7 @@ public class FastGraphBuilder extends GraphBuilder {
 	private List<Object[]> flow;
     private Relationship relationship;
     private Node root;
+    private byte[] hash;
 
     @Override
     protected void fail(Exception e) {
@@ -86,7 +87,6 @@ public class FastGraphBuilder extends GraphBuilder {
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[1];
-            byte[] hash = (byte[]) o[0];
             relationship = Cache.getRelationship(hash);
             if (relationship == null) {
                 Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
@@ -152,7 +152,6 @@ public class FastGraphBuilder extends GraphBuilder {
         Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
         updateMD(md, reference);
-        byte[] hash;
         if (!hasChild && reference != null) {
             o[0] = cloneMD(md).digest();
             updateMD(md, statement);
