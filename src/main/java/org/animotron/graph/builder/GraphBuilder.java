@@ -105,8 +105,10 @@ public abstract class GraphBuilder {
     boolean isFirst, hasChild;
 
     public final void start(Statement statement, Object reference) throws AnimoException{
-        if (!isFirst)
-            stack.push(start(s, r, hasChild));
+        if (!isFirst) {
+            o = start(s, r, hasChild);
+            stack.push(o);
+        }
         s = statement;
         r = reference;
         isFirst = false;
@@ -116,8 +118,7 @@ public abstract class GraphBuilder {
 
     public final void end() throws AnimoException {
         if (stack.empty()) {
-            o = start(s, r, hasChild);
-            end(o, hasChild);
+            end(start(s, r, hasChild), hasChild);
             return;
         }
         Object[] p = popParent();
