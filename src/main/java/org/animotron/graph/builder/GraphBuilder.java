@@ -29,6 +29,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
 import java.security.MessageDigest;
+import java.util.Arrays;
 import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
@@ -101,28 +102,36 @@ public abstract class GraphBuilder {
         start(VALUE._, value);
     }
 
-    Statement s; Object r; Object[] o;
-    boolean isFirst, hasChild;
+    Statement s = null; Object r = null; Object[] o;
 
     public final void start(Statement statement, Object reference) throws AnimoException{
-        if (!isFirst) {
-            o = start(s, r, hasChild);
-            stack.push(o);
-        }
-        s = statement;
-        r = reference;
-        isFirst = false;
+    	System.out.println("start statement "+statement);
+    	
+    	if (s != null || r != null) {
+    		stack.add( start(s, r, true) );
+    		s = statement;
+    		r = reference;
+    	} else {
+    		s = statement;
+    		r = reference;
+    	}
     }
 
     protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
 
     public final void end() throws AnimoException {
-        if (stack.empty()) {
-            end(start(s, r, hasChild), hasChild);
-            return;
-        }
-        Object[] p = popParent();
-        byte[] hash = end(p, hasChild);
+    	System.out.print("end statement ");
+
+    	byte[] hash;
+    	if (s != null || r != null) {
+    		System.out.println(s);
+    		hash = end(start(s, r, false), false);
+    		s = null; r = null;
+    	} else {
+    		Object[] p = popParent();
+    		System.out.println(Arrays.toString(p));
+    		hash = end(p, false);
+    	}
         if (hasParent()) {
             ((MessageDigest) peekParent()[0]).update(hash);
         }
@@ -146,7 +155,7 @@ public abstract class GraphBuilder {
         order = 0;
         tx = beginTx();
         try {
-            hasChild = false; isFirst = true;
+        	s = null; r = null;
             stack = new Stack<Object[]>();
             startGraph();
             exp.build();
