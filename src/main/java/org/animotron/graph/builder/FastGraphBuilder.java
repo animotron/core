@@ -134,6 +134,15 @@ public class FastGraphBuilder extends GraphBuilder {
     protected Object[] start(Statement statement, Object reference, boolean hasChild) throws AnimoException {
 		Object[] parent = hasParent() ? peekParent() : null;
         MessageDigest md = MessageDigester.md();
+        byte[] hash = null;
+        boolean ready = statement instanceof AbstractValue && !hasChild && reference != null;
+        if (ready) {
+            updateMD(md, reference);
+            hash = cloneMD(md).digest();
+            updateMD(md, statement);
+        } else if (statement instanceof AbstractValue && reference != null) {
+            updateMD(md, reference);
+        }
 		Object[] o = {
                 md,             // 0 message digest    
 				statement,	    // 1 statement
@@ -141,7 +150,9 @@ public class FastGraphBuilder extends GraphBuilder {
 				null,	 	    // 3 current relationship
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
-                false           // 6 is done?
+                false,          // 6 is done?
+                ready,          // 7 is ready?
+                hash            // 8 hash
 			};
 		flow.add(o);
         return o;
@@ -152,14 +163,11 @@ public class FastGraphBuilder extends GraphBuilder {
         Statement statement = (Statement) o[1];
         Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
-        updateMD(md, reference);
-        if (statement instanceof AbstractValue && !hasChild && reference != null) {
-            o[0] = cloneMD(md).digest();
+        if (!(Boolean) o[7]) {
             updateMD(md, statement);
-            hash = md.digest();
+            o[8] = hash = md.digest();
         } else {
-            updateMD(md, statement);
-            o[0] = hash = md.digest();
+            o[8] = hash = md.digest();
         }
         return hash;
 	}
@@ -175,7 +183,7 @@ public class FastGraphBuilder extends GraphBuilder {
         Relationship r;
         Statement statement = (Statement) item[1];
         Object reference = item[2];
-        byte[] hash = (byte[]) item[0];
+        byte[] hash = (byte[]) item[8];
         Node parent = (Node) p[4];
         item[6] = Cache.getNode(hash) != null;
         r = statement.build(parent, reference, hash, true, ignoreNotFound);

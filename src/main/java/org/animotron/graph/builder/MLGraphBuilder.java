@@ -95,9 +95,8 @@ public class MLGraphBuilder extends GraphBuilder {
             updateMD(md, reference);
             hash = cloneMD(md).digest();
             updateMD(md, statement);
-        } else {
+        } else if (reference != null) {
             updateMD(md, reference);
-            updateMD(md, statement);
         }
         Relationship r = statement.build(parent, reference, hash, ready, ignoreNotFound);
         Object[] o = {
@@ -117,8 +116,8 @@ public class MLGraphBuilder extends GraphBuilder {
         r = (Relationship) item[1];
         MessageDigest md = (MessageDigest) item[0];
         if (!(Boolean) item[2]) {
-//            updateMD(md, item[5]);
-//            updateMD(md, (Statement) item[4]);
+            //updateMD(md, item[5]);
+            updateMD(md, (Statement) item[4]);
             hash = md.digest();
             Node node = Cache.getNode(hash);
             if (node == null) {

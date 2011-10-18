@@ -101,7 +101,7 @@ public abstract class GraphBuilder {
         start(VALUE._, value);
     }
 
-    Statement s = null; Object r = null; Object[] o;
+    Statement s; Object r;
 
     public final void start(Statement statement, Object reference) throws AnimoException{
     	if (s != null) {

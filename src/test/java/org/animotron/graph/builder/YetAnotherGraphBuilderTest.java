@@ -63,24 +63,24 @@ public class YetAnotherGraphBuilderTest extends ATest {
 
     private void test_1(String animo, String xml) throws Exception {
         Expression e;
-        e = new AnimoExpression(new MLGraphBuilder(), animo);
-        String outA = AnimoSerializer.serialize(e);
-        String outH = (String) HASH.get(e);
-        e = new StAXExpression(new FastGraphBuilder(), r(xml));
-        String inA = AnimoSerializer.serialize(e);
-        String inH = (String) HASH.get(e);
-        Assert.assertEquals(inH, outH);
-        Assert.assertEquals(inA, outA);
-    }
-
-    private void test_2(String animo, String xml) throws Exception {
-        Expression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) HASH.get(e);
         e = new StAXExpression(new MLGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
         String outH = (String) HASH.get(e);
+        Assert.assertEquals(inH, outH);
+        Assert.assertEquals(inA, outA);
+    }
+
+    private void test_2(String animo, String xml) throws Exception {
+        Expression e;
+        e = new AnimoExpression(new MLGraphBuilder(), animo);
+        String outA = AnimoSerializer.serialize(e);
+        String outH = (String) HASH.get(e);
+        e = new StAXExpression(new FastGraphBuilder(), r(xml));
+        String inA = AnimoSerializer.serialize(e);
+        String inH = (String) HASH.get(e);
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
