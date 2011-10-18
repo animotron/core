@@ -164,6 +164,9 @@ public class FastGraphBuilder extends GraphBuilder {
         Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
         if (!(Boolean) o[7]) {
+            if (!(statement instanceof AbstractValue) && reference != null) {
+                updateMD(md, reference);
+            }
             updateMD(md, statement);
             o[8] = hash = md.digest();
         } else {
