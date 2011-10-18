@@ -23,6 +23,7 @@ import org.animotron.graph.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.value.AbstractValue;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -152,7 +153,7 @@ public class FastGraphBuilder extends GraphBuilder {
         Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
         updateMD(md, reference);
-        if (!hasChild && reference != null) {
+        if (statement instanceof AbstractValue && !hasChild && reference != null) {
             o[0] = cloneMD(md).digest();
             updateMD(md, statement);
             hash = md.digest();
