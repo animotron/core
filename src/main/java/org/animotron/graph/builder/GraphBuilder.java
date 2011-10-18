@@ -188,7 +188,6 @@ public abstract class GraphBuilder {
     }
 
     protected final void updateMD(MessageDigest md, Statement statement) {
-        System.out.println("updateMD: " + statement.name());
         md.update(statement.name().getBytes());
     }
 
@@ -200,7 +199,6 @@ public abstract class GraphBuilder {
         } else if (reference instanceof String ||
                         reference instanceof Number ||
                             reference instanceof Boolean) {
-            System.out.println("updateMD: " + reference.toString());
             md.update(reference.toString().getBytes());
         }
     }
