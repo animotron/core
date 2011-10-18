@@ -101,7 +101,7 @@ public class MLGraphBuilder extends GraphBuilder {
         Object[] o = {
                 md,                 // 0 message digest
                 r,                  // 1 node
-                ready,              // 2 is ready?
+                ready,              // 2 is hasChild?
                 order(),            // 3 order
                 statement,          // 4 statement
                 reference           // 5 reference
@@ -111,7 +111,7 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 	
     @Override
-	protected byte[] end(Object[] item, boolean ready) throws AnimoException {
+	protected byte[] end(Object[] item, boolean hasChild) throws AnimoException {
         r = (Relationship) item[1];
         MessageDigest md = (MessageDigest) item[0];
         if (!(Boolean) item[2]) {

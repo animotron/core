@@ -101,13 +101,12 @@ public abstract class GraphBuilder {
         start(VALUE._, value);
     }
 
-    Statement s;
-    Object r;
-    boolean ready, isFirst;
+    Statement s; Object r;
+    boolean isFirst, hasChild;
 
     public final void start(Statement statement, Object reference) throws AnimoException{
         if (!isFirst)
-            stack.push(start(s, r, ready));
+            stack.push(start(s, r, hasChild));
         s = statement;
         r = reference;
         isFirst = false;
@@ -116,16 +115,17 @@ public abstract class GraphBuilder {
     protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
 
     public final void end() throws AnimoException {
-        if (stack.empty())
-            stack.push(start(s, r, ready));
+        if (stack.empty()) {
+            return;
+        }
         Object[] p = popParent();
-        byte[] hash = end(p, ready);
+        byte[] hash = end(p, hasChild);
         if (hasParent()) {
             ((MessageDigest) peekParent()[0]).update(hash);
         }
     }
 
-	protected abstract byte[] end(Object[] o, boolean ready) throws AnimoException;
+	protected abstract byte[] end(Object[] o, boolean hasChild) throws AnimoException;
 
     protected final boolean hasParent() {
         return !stack.empty();
@@ -143,7 +143,7 @@ public abstract class GraphBuilder {
         order = 0;
         tx = beginTx();
         try {
-            ready = false; isFirst = true;
+            hasChild = false; isFirst = true;
             stack = new Stack<Object[]>();
             startGraph();
             exp.build();
