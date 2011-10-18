@@ -130,7 +130,7 @@ public class FastGraphBuilder extends GraphBuilder {
 	}
 
     @Override
-    protected Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException {
+    protected Object[] start(Statement statement, Object reference, boolean hasChild) throws AnimoException {
 		Object[] parent = hasParent() ? peekParent() : null;
         MessageDigest md = MessageDigester.md();
 		Object[] o = {
