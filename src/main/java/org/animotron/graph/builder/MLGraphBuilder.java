@@ -115,8 +115,8 @@ public class MLGraphBuilder extends GraphBuilder {
         MessageDigest md = (MessageDigest) item[0];
         if (!(Boolean) item[2]) {
             updateMD(md, item[5]);
-            hash = cloneMD(md).digest();
             updateMD(md, (Statement) item[4]);
+            hash = md.digest();
             Node node = Cache.getNode(hash);
             if (node == null) {
                 Cache.putNode(r.getEndNode(), hash);
@@ -125,9 +125,10 @@ public class MLGraphBuilder extends GraphBuilder {
                 r = old.getStartNode().createRelationshipTo(node, r.getType());
                 destructive(old);
             }
+        } else {
+            hash = md.digest();
         }
         order(r, (Integer) item[3]);
-        hash = md.digest();
         return hash;
 	}
 
