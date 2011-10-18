@@ -106,15 +106,11 @@ public abstract class GraphBuilder {
 
     public final void start(Statement statement, Object reference) throws AnimoException{
     	System.out.println("start statement "+statement);
-    	
-    	if (s != null || r != null) {
+    	if (s != null) {
     		stack.add( start(s, r, true) );
-    		s = statement;
-    		r = reference;
-    	} else {
-    		s = statement;
-    		r = reference;
-    	}
+        }
+        s = statement;
+        r = reference;
     }
 
     protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
@@ -123,7 +119,7 @@ public abstract class GraphBuilder {
     	System.out.print("end statement ");
 
     	byte[] hash;
-    	if (s != null || r != null) {
+    	if (s != null) {
     		System.out.println(s);
     		hash = end(start(s, r, false), false);
     		s = null; r = null;
@@ -144,11 +140,11 @@ public abstract class GraphBuilder {
     }
 
     protected final Object[] popParent() {
-        return stack.empty() ? o : stack.pop();
+        return stack.pop();
     }
 
     protected final Object[] peekParent() {
-        return stack.empty() ? o : stack.peek();
+        return stack.peek();
     }
 
     public final void build(Expression exp) throws Exception {
