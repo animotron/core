@@ -111,7 +111,7 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 	
     @Override
-	protected byte[] end(Object[] item) throws AnimoException {
+	protected byte[] end(Object[] item, boolean ready) throws AnimoException {
         r = (Relationship) item[1];
         MessageDigest md = (MessageDigest) item[0];
         if (!(Boolean) item[2]) {

@@ -101,20 +101,31 @@ public abstract class GraphBuilder {
         start(VALUE._, value);
     }
 
+    Statement s;
+    Object r;
+    boolean ready, isFirst;
+
     public final void start(Statement statement, Object reference) throws AnimoException{
-        stack.push(start(statement, reference, false));
+        if (!isFirst)
+            stack.push(start(s, r, ready));
+        s = statement;
+        r = reference;
+        isFirst = false;
     }
 
     protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
 
     public final void end() throws AnimoException {
-        byte[] hash = end(popParent());
+        if (stack.empty())
+            stack.push(start(s, r, ready));
+        Object[] p = popParent();
+        byte[] hash = end(p, ready);
         if (hasParent()) {
             ((MessageDigest) peekParent()[0]).update(hash);
         }
     }
 
-	protected abstract byte[] end(Object[] o) throws AnimoException;
+	protected abstract byte[] end(Object[] o, boolean ready) throws AnimoException;
 
     protected final boolean hasParent() {
         return !stack.empty();
@@ -132,6 +143,7 @@ public abstract class GraphBuilder {
         order = 0;
         tx = beginTx();
         try {
+            ready = false; isFirst = true;
             stack = new Stack<Object[]>();
             startGraph();
             exp.build();

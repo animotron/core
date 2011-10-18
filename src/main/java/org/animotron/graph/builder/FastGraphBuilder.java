@@ -148,7 +148,7 @@ public class FastGraphBuilder extends GraphBuilder {
 	}
 	
 	@Override
-    protected byte[] end(Object[] o) {
+    protected byte[] end(Object[] o, boolean ready) {
         Statement statement = (Statement) o[1];
         Object reference = o[2];
         MessageDigest md = (MessageDigest) o[0];
