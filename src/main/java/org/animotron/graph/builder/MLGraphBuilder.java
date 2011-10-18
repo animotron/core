@@ -21,7 +21,6 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.Cache;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.ELEMENT;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -87,10 +86,10 @@ public class MLGraphBuilder extends GraphBuilder {
 	}
 
 	@Override
-    protected Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException {
+    protected Object[] start(Statement statement, Object reference, boolean hasChild) throws AnimoException {
         MessageDigest md = MessageDigester.md();
         Node parent = hasParent() ? ((Relationship) peekParent()[1]).getEndNode() :  root;
-        ready = !(statement instanceof ELEMENT) && reference != null;
+        boolean ready = !hasChild && reference != null;
         byte[] hash = null;
         if (ready) {
             updateMD(md, reference);

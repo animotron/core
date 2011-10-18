@@ -140,8 +140,7 @@ public class FastGraphBuilder extends GraphBuilder {
 				null,	 	    // 3 current relationship
 				null,		    // 4 current node
 				parent, 	    // 5 parent item
-                false,          // 6 is done?
-                false,          // 7 has child?
+                false           // 6 is done?
 			};
 		flow.add(o);
         return o;
@@ -154,7 +153,7 @@ public class FastGraphBuilder extends GraphBuilder {
         MessageDigest md = (MessageDigest) o[0];
         updateMD(md, reference);
         byte[] hash;
-        if (!((Boolean) o[7]) && reference != null) {
+        if (!hasChild && reference != null) {
             o[0] = cloneMD(md).digest();
             updateMD(md, statement);
             hash = md.digest();
@@ -162,10 +161,6 @@ public class FastGraphBuilder extends GraphBuilder {
             updateMD(md, statement);
             o[0] = hash = md.digest();
         }
-		Object[] parent = (Object[]) o[5];
-		if (parent != null) {
-            parent[7] = true;
-		}
         return hash;
 	}
 

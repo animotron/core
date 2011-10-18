@@ -107,7 +107,7 @@ public abstract class GraphBuilder {
     public final void start(Statement statement, Object reference) throws AnimoException{
     	System.out.println("start statement "+statement);
     	if (s != null) {
-    		stack.add( start(s, r, true) );
+    		stack.push(start(s, r, true));
         }
         s = statement;
         r = reference;
@@ -117,7 +117,6 @@ public abstract class GraphBuilder {
 
     public final void end() throws AnimoException {
     	System.out.print("end statement ");
-
     	byte[] hash;
     	if (s != null) {
     		System.out.println(s);
