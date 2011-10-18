@@ -125,7 +125,7 @@ public abstract class GraphBuilder {
     	} else {
     		Object[] p = popParent();
     		System.out.println(Arrays.toString(p));
-    		hash = end(p, false);
+    		hash = end(p, true);
     	}
         if (hasParent()) {
             ((MessageDigest) peekParent()[0]).update(hash);
