@@ -101,7 +101,7 @@ public abstract class GraphBuilder {
         start(VALUE._, value);
     }
 
-    Statement s; Object r;
+    Statement s; Object r; Object[] o;
     boolean isFirst, hasChild;
 
     public final void start(Statement statement, Object reference) throws AnimoException{
@@ -116,6 +116,8 @@ public abstract class GraphBuilder {
 
     public final void end() throws AnimoException {
         if (stack.empty()) {
+            o = start(s, r, hasChild);
+            end(o, hasChild);
             return;
         }
         Object[] p = popParent();
@@ -132,11 +134,11 @@ public abstract class GraphBuilder {
     }
 
     protected final Object[] popParent() {
-        return stack.pop();
+        return stack.empty() ? o : stack.pop();
     }
 
     protected final Object[] peekParent() {
-        return stack.peek();
+        return stack.empty() ? o : stack.peek();
     }
 
     public final void build(Expression exp) throws Exception {
