@@ -24,7 +24,6 @@ import org.animotron.graph.OrderIndex;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.VALUE;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -33,6 +32,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Stack;
 
+import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 
@@ -130,6 +130,15 @@ public abstract class GraphBuilder {
 
 	protected abstract byte[] end(Object[] o, boolean hasChild) throws AnimoException;
 
+    public void bind(Relationship r) {
+        if (hasParent()) {
+            MessageDigest md = (MessageDigest) peekParent()[0];
+            if (HASH.has(r)) {
+                md.update((byte[]) HASH.get(r));
+            }
+        }
+    };
+
     protected final boolean hasParent() {
         return !stack.empty();
     }
@@ -203,39 +212,6 @@ public abstract class GraphBuilder {
             //can't be, but throw runtime error
             throw new RuntimeException(e);
         }
-    }
-
-    protected final void updateMD(MessageDigest md, Statement statement) {
-        md.update(statement.name().getBytes());
-    }
-
-    protected final void updateMD(MessageDigest md, Object reference) {
-        if (reference instanceof Object[][]) {
-            updateMD(md, (Object[][]) reference);
-        } else if (reference instanceof Object[]) {
-            updateMD(md, (Object[]) reference);
-        } else if (reference instanceof String ||
-                        reference instanceof Number ||
-                            reference instanceof Boolean) {
-            md.update(reference.toString().getBytes());
-        }
-    }
-
-    private void updateMD(MessageDigest md, Object[][] reference) {
-        for (Object[] o: reference) {
-            updateMD(md, o);
-        }
-    }
-
-    private void updateMD(MessageDigest md, Object[] reference) {
-        updateMD(md, (Statement) reference[0], reference[1]);
-    }
-
-    private void updateMD(MessageDigest md, Statement statement, Object reference) {
-        MessageDigest tmp = MessageDigester.md();
-        updateMD(tmp, reference);
-        updateMD(tmp, statement);
-        md.update(tmp.digest());
     }
 
 }

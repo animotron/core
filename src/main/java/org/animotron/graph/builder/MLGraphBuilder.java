@@ -31,6 +31,7 @@ import java.security.MessageDigest;
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Cache.key;
+import static org.animotron.utils.MessageDigester.updateMD;
 
 /**
  * Animo graph builder, it do optimization/compression and 

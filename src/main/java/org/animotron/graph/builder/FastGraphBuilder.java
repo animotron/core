@@ -36,6 +36,7 @@ import java.util.List;
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Cache.key;
+import static org.animotron.utils.MessageDigester.updateMD;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**

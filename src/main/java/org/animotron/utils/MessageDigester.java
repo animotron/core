@@ -22,6 +22,7 @@ package org.animotron.utils;
  */
 
 
+import org.animotron.statement.Statement;
 import org.apache.log4j.Logger;
 
 import java.security.MessageDigest;
@@ -121,5 +122,39 @@ public class MessageDigester {
         System.out.println( "MD5:   " + MessageDigester.md5( args[0], false ) );
         System.out.println( "MD5 (base64):   " + MessageDigester.md5( args[0], true ) );
     }
+
+    public static void updateMD(MessageDigest md, Statement statement) {
+        md.update(statement.name().getBytes());
+    }
+
+    public static void updateMD(MessageDigest md, Object reference) {
+        if (reference instanceof Object[][]) {
+            updateMD(md, (Object[][]) reference);
+        } else if (reference instanceof Object[]) {
+            updateMD(md, (Object[]) reference);
+        } else if (reference instanceof String ||
+                        reference instanceof Number ||
+                            reference instanceof Boolean) {
+            md.update(reference.toString().getBytes());
+        }
+    }
+
+    private static void updateMD(MessageDigest md, Object[][] reference) {
+        for (Object[] o: reference) {
+            updateMD(md, o);
+        }
+    }
+
+    private static void updateMD(MessageDigest md, Object[] reference) {
+        updateMD(md, (Statement) reference[0], reference[1]);
+    }
+
+    private static void updateMD(MessageDigest md, Statement statement, Object reference) {
+        MessageDigest tmp = MessageDigester.md();
+        updateMD(tmp, reference);
+        updateMD(tmp, statement);
+        md.update(tmp.digest());
+    }
+
 }
 
