@@ -30,6 +30,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -52,23 +53,23 @@ public class GeoTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-        String in = (String) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        String in = (String) key(HASH.get(new StAXExpression(new FastGraphBuilder(), osm())));
         cleanDb();
-        String out = (String) HASH.get(new StAXExpression(osm()));
+        String out = (String) key(HASH.get(new StAXExpression(osm())));
         Assert.assertEquals(in, out);
 	}
 
     @Test
 	public void test_02() throws Exception {
-        String in = (String) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        String out = (String) HASH.get(new StAXExpression(osm()));
+        String in = (String) key(HASH.get(new StAXExpression(new FastGraphBuilder(), osm())));
+        String out = (String) key(HASH.get(new StAXExpression(osm())));
         Assert.assertEquals(in, out);
 	}
 
     @Test
 	public void test_03() throws Exception {
-        String in = (String) HASH.get(new StAXExpression(osm()));
-        String out = (String) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
+        String in = (String) key(HASH.get(new StAXExpression(osm())));
+        String out = (String) key(HASH.get(new StAXExpression(new FastGraphBuilder(), osm())));
         Assert.assertEquals(in, out);
 	}
 
