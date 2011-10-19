@@ -60,4 +60,11 @@ public class StringResultSerializer {
         AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
         return out.toString();
     }
+
+    public static String serialize(Relationship r) throws IOException {
+        StringBuilder out = new StringBuilder(1024);
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
+        return out.toString();
+    }
+
 }
