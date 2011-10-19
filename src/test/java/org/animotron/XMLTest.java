@@ -22,12 +22,16 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
+
+import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -40,6 +44,7 @@ public class XMLTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
+        org.junit.Assert.assertEquals(HASH.get(r), key(DigestSerializer.serialize(r)));
         Assert.assertEquals(out, AnimoSerializer.serialize(r));
     }
 
