@@ -21,6 +21,7 @@ package org.animotron.expression;
 import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
+import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
@@ -38,7 +39,7 @@ import static org.animotron.graph.AnimoGraph.getStorage;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinaryExpression extends Expression {
+public class BinaryExpression extends AbstractExpression {
 	
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
@@ -52,7 +53,11 @@ public class BinaryExpression extends Expression {
 	}
 
     public BinaryExpression(InputStream stream, String path) throws Exception {
-        super(new FastGraphBuilder());
+        this(new FastGraphBuilder(), stream, path);
+    }
+
+    public BinaryExpression(GraphBuilder builder, InputStream stream, String path) throws Exception {
+        super(builder);
         this.stream = stream;
         this.path = path;
         builder.build(this);

@@ -36,7 +36,7 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXExpression extends Expression {
+public class StAXExpression extends AbstractExpression {
 	
 	private XMLStreamReader reader;
 	

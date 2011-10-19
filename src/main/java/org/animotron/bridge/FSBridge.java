@@ -50,7 +50,7 @@ public class FSBridge {
 
     private static void loadFile (String root, File file) throws Exception {
         String path = file.getPath().substring(root.length());
-        CommonExpression.build(file, path);
+        new CommonExpression(file, path);
     }
 
 	private static void load (String root, File path) throws Exception {

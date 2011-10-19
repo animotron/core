@@ -41,7 +41,7 @@ import java.util.Stack;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class AnimoExpression extends Expression {
+public class AnimoExpression extends AbstractExpression {
 
     private Reader reader;
 

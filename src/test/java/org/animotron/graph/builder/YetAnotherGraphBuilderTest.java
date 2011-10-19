@@ -22,7 +22,7 @@ import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
+import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.junit.Ignore;
@@ -49,7 +49,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
     private void test_0(String animo, String xml) throws Exception {
-        Expression e;
+        AbstractExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) HASH.get(e);
@@ -62,7 +62,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
     private void test_1(String animo, String xml) throws Exception {
-        Expression e;
+        AbstractExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) HASH.get(e);
@@ -74,7 +74,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
     private void test_2(String animo, String xml) throws Exception {
-        Expression e;
+        AbstractExpression e;
         e = new AnimoExpression(new MLGraphBuilder(), animo);
         String outA = AnimoSerializer.serialize(e);
         String outH = (String) HASH.get(e);

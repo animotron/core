@@ -19,7 +19,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.expression.Expression;
+import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.OrderIndex;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
@@ -142,7 +142,7 @@ public abstract class GraphBuilder {
         return stack.peek();
     }
 
-    public final void build(Expression exp) throws Exception {
+    public final void build(AbstractExpression exp) throws Exception {
         order = 0;
         catcher = Manipulators.getCatcher();
         tx = beginTx();
