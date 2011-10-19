@@ -205,13 +205,4 @@ public abstract class GraphBuilder {
         catcher.destructive(n);
     }
 
-    protected final MessageDigest cloneMD(MessageDigest md) {
-        try {
-            return (MessageDigest) md.clone();
-        } catch (CloneNotSupportedException e) {
-            //can't be, but throw runtime error
-            throw new RuntimeException(e);
-        }
-    }
-
 }

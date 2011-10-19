@@ -123,6 +123,15 @@ public class MessageDigester {
         System.out.println( "MD5 (base64):   " + MessageDigester.md5( args[0], true ) );
     }
 
+    public static final MessageDigest cloneMD(MessageDigest md) {
+        try {
+            return (MessageDigest) md.clone();
+        } catch (CloneNotSupportedException e) {
+            //can't be, but throw runtime error
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void updateMD(MessageDigest md, Statement statement) {
         md.update(statement.name().getBytes());
     }
