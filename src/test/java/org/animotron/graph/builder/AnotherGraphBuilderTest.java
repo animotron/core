@@ -32,6 +32,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
 
 import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -50,11 +51,11 @@ public class AnotherGraphBuilderTest extends ATest {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
-        String inH = (String) HASH.get(e);
+        String inH = (String) key(HASH.get(e));
         cleanDb();
         e = new StAXExpression(new MLGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
-        String outH = (String) HASH.get(e);
+        String outH = (String) key(HASH.get(e));
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
@@ -63,10 +64,10 @@ public class AnotherGraphBuilderTest extends ATest {
         StAXExpression e;
         e = new StAXExpression(new MLGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
-        String outH = (String) HASH.get(e);
+        String outH = (String) key(HASH.get(e));
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
-        String inH = (String) HASH.get(e);
+        String inH = (String) key(HASH.get(e));
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
@@ -75,10 +76,10 @@ public class AnotherGraphBuilderTest extends ATest {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
-        String inH = (String) HASH.get(e);
+        String inH = (String) key(HASH.get(e));
         e = new StAXExpression(new MLGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
-        String outH = (String) HASH.get(e);
+        String outH = (String) key(HASH.get(e));
         Assert.assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }

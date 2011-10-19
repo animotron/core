@@ -21,6 +21,7 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.OrderIndex;
+import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.VALUE;
@@ -130,12 +131,11 @@ public abstract class GraphBuilder {
 
 	protected abstract byte[] end(Object[] o, boolean hasChild) throws AnimoException;
 
-    public void bind(Relationship r) {
+    public void bind(Relationship r) throws IOException {
         if (hasParent()) {
             MessageDigest md = (MessageDigest) peekParent()[0];
-            if (HASH.has(r)) {
-                md.update((byte[]) HASH.get(r));
-            }
+            byte[] hash = HASH.has(r) ? (byte[]) HASH.get(r) : DigestSerializer.serialize(r);
+            md.update(hash);
         }
     };
 

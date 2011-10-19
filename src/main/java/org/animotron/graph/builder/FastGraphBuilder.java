@@ -125,7 +125,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     relationship = getSTART().createRelationshipTo(end, r.getType());
                 }
                 Cache.putRelationship(relationship, hash);
-                HASH.set(relationship, key(hash));
+                HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
             }

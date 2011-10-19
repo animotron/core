@@ -30,7 +30,6 @@ import java.security.MessageDigest;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Cache.key;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
 
@@ -81,7 +80,7 @@ public class MLGraphBuilder extends GraphBuilder {
         if (relationship == null) {
             relationship = copy(getSTART(), r);
             Cache.putRelationship(relationship, hash);
-            HASH.set(relationship, key(hash));
+            HASH.set(relationship, hash);
         }
         destructive(root);
 	}

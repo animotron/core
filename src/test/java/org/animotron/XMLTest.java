@@ -44,7 +44,7 @@ public class XMLTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
-        org.junit.Assert.assertEquals(HASH.get(r), key(DigestSerializer.serialize(r)));
+        org.junit.Assert.assertEquals(key(HASH.get(r)), key(DigestSerializer.serialize(r)));
         Assert.assertEquals(out, AnimoSerializer.serialize(r));
     }
 
