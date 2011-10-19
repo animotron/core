@@ -43,7 +43,6 @@ public class AnimoGraph {
 	private static String STORAGE;
 
 	private static Node ROOT, START, END, TOP;
-    private static OrderIndex ORDER;
 	public static RelationshipIndex RESULT_INDEX;
 	private static String RESULT = "RESULT";
 
@@ -63,7 +62,7 @@ public class AnimoGraph {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         Cache.init(INDEX);
-        ORDER = new OrderIndex(INDEX);
+        OrderIndex.init(INDEX);
         RESULT_INDEX = INDEX.forRelationships(RESULT);
         execute(
             new GraphOperation<Void> () {
@@ -101,10 +100,6 @@ public class AnimoGraph {
     public static Node getTOP() {
         return TOP;
     }
-
-	public static OrderIndex getORDER() {
-		return ORDER;
-	}
 
 	public static void shutdownDB() {
 		System.out.println("shotdown");
@@ -182,11 +177,6 @@ public class AnimoGraph {
 		return node;
 	}
 
-    public static void order (Relationship r, int order) {
-        ORDER.add(r, order);
-        //r.setProperty("order", order);
-    }
-	
 	public static void result (Relationship r, long id) {
 		RESULT_INDEX.add(r, RESULT, id);
 	}

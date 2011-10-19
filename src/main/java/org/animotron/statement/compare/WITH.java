@@ -19,6 +19,7 @@
 package org.animotron.statement.compare;
 
 import javolution.util.FastList;
+import org.animotron.graph.OrderIndex;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
@@ -37,8 +38,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-
-import static org.animotron.graph.AnimoGraph.getORDER;
 
 /**
  * Compare operator 'WITH'.
@@ -66,7 +65,7 @@ public class WITH extends Operator implements Predicate {
 		List<Relationship> actual = new FastList<Relationship>();
 		List<Relationship> expected = new FastList<Relationship>();
 
-		PipedInput in = null;
+		PipedInput in;
 		
 		System.out.println("Eval actual");
 		for (Relationship[] have : haveSet) {
@@ -112,7 +111,7 @@ public class WITH extends Operator implements Predicate {
 	private List<Relationship> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
 		List<Relationship> list = new FastList<Relationship>();
 		
-		IndexHits<Relationship> q = getORDER().query(node);
+		IndexHits<Relationship> q = OrderIndex.query(node);
 		try {
 			for (Relationship i : q) {
 				Statement s = Statements.relationshipType(i);

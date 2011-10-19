@@ -19,6 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.OrderIndex;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
@@ -27,7 +28,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
-import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -89,7 +89,7 @@ public class Utils {
 
 	public static boolean haveContext(PFlow pf) {
 		
-		IndexHits<Relationship> q = getORDER().query(pf.getOPNode());
+		IndexHits<Relationship> q = OrderIndex.query(pf.getOPNode());
 		try {
 			while (q.hasNext()) {
 				Relationship r = q.next();

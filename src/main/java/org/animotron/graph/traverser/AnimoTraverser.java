@@ -19,6 +19,7 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.Properties;
+import org.animotron.graph.OrderIndex;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -32,7 +33,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.animotron.graph.AnimoGraph.getORDER;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -114,7 +114,7 @@ public class AnimoTraverser {
 
         public It (Node n) {
             p = n.getPropertyKeys().iterator();
-            q = getORDER().query(n);
+            q = OrderIndex.query(n);
             r = q.iterator();
             next();
         }

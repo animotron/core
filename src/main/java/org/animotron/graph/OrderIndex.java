@@ -33,7 +33,7 @@ import org.neo4j.index.lucene.QueryContext;
  */
 public class OrderIndex {
 	
-	public static final String NAME = "NAME";
+	public static final String NAME = "ORDER";
 	
 //	private static final QueryContext SORT;
 //	static {
@@ -43,43 +43,40 @@ public class OrderIndex {
 //        SORT = q.sort( new Sort( sortFields ) );
 //	}
 
-	protected final RelationshipIndex INDEX;
-	
-	public OrderIndex(IndexManager indexManager) {
+	private static RelationshipIndex INDEX;
+
+	public static void init(IndexManager indexManager) {
 		INDEX = indexManager.forRelationships(NAME);
 	}
 
-	protected QueryContext sort( String key, String... additionalKeys ) {
+	private static QueryContext sort( String key, String... additionalKeys ) {
 		QueryContext q = new QueryContext( "*" );
-		
         SortField firstSortField = new SortField( key, SortField.LONG );
-        if ( additionalKeys.length == 0 )
-        {
+        if ( additionalKeys.length == 0 ) {
             return q.sort( new Sort( firstSortField ) );
         }
-        
         SortField[] sortFields = new SortField[1+additionalKeys.length];
         sortFields[0] = firstSortField;
-        for ( int i = 0; i < additionalKeys.length; i++ )
-        {
+        for ( int i = 0; i < additionalKeys.length; i++ ) {
             sortFields[1+i] = new SortField( additionalKeys[i], SortField.LONG );
         }
         return q.sort( new Sort( sortFields ) );
     }
 
-    public void add(Relationship r, int value) {
+    public static void order(Relationship r, int value) {
         INDEX.add(r, NAME, value);
+        //r.setProperty(NAME, value);
     }
 	
-    public void remove(Relationship r) {
+    public static void unorder(Relationship r) {
         INDEX.remove(r, NAME);
     }
 
-	public IndexHits<Relationship> query(Node startNode) {
+	public static IndexHits<Relationship> query(Node startNode) {
 		return INDEX.query(NAME, sort(NAME), startNode, null);
 	}
 
-	public Relationship position(long position, Node startNode) {
+	public static Relationship position(long position, Node startNode) {
 		IndexHits<Relationship> q = query(startNode);
 		try {
 			if (q.hasNext()) return q.next();
@@ -89,7 +86,7 @@ public class OrderIndex {
 		return null;
 	}
 
-	public Relationship[] first(int qty, Node startNode) {
+	public static Relationship[] first(int qty, Node startNode) {
 		IndexHits<Relationship> q = query(startNode);
 		try {
 			Relationship[] res = new Relationship[qty]; 

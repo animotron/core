@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.Executor;
+import org.animotron.graph.OrderIndex;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -27,8 +28,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.animotron.graph.AnimoGraph.getORDER;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,7 +41,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 //        List<PFlow> list = new FastList<PFlow>();
         List<PFlow> list = new LinkedList<PFlow>();
 
-		IndexHits<Relationship> q = getORDER().query(pf.getOPNode());
+		IndexHits<Relationship> q = OrderIndex.query(pf.getOPNode());
 		try {
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {
