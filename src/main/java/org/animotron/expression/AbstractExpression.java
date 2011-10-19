@@ -41,4 +41,7 @@ public abstract class AbstractExpression extends Expression {
         return builder.relationship();
     }
 
+    public void start(){}
+    public void end(){}
+
 }

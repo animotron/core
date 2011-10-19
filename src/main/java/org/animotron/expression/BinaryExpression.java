@@ -18,7 +18,6 @@
  */
 package org.animotron.expression;
 
-import org.animotron.Properties;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
@@ -31,6 +30,7 @@ import java.security.MessageDigest;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import static org.animotron.Properties.BIN;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
 
@@ -46,6 +46,7 @@ public class BinaryExpression extends AbstractExpression {
 
     private InputStream stream;
     private String path;
+    private String hash;
 
     static {
 		BIN_STORAGE.mkdirs();
@@ -78,7 +79,7 @@ public class BinaryExpression extends AbstractExpression {
         }
         out.close();
         stream.close();
-        String hash = MessageDigester.byteArrayToHex(md.digest());
+        hash = MessageDigester.byteArrayToHex(md.digest());
         File dir = getFolder(hash);
         File bin = getFile(dir, hash);
         if (bin.exists()) {
@@ -89,13 +90,12 @@ public class BinaryExpression extends AbstractExpression {
             if (!tmp.renameTo(bin)) {
                 tmp.delete();
                 throw new IOException("transaction can not be finished");
-
             } else {
                     builder.start(THE._);
                         builder.start(IS._, "file");
                         builder.end();
                         String[] parts = path.split(Pattern.quote(File.separator));
-                        //JExpression prev = null;
+                        //Expression prev = null;
                         for (String part : parts) {
                             if (!part.isEmpty()) {
                                 builder.start(IS._, part);
@@ -104,7 +104,6 @@ public class BinaryExpression extends AbstractExpression {
                         }
                     builder.end();
                 /// TODO make a new statament BIN
-                Properties.BIN.set(getEndNode(), hash);
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
@@ -120,6 +119,11 @@ public class BinaryExpression extends AbstractExpression {
 
     public static File getFile(String hash){
         return new File(getFolder(hash),  hash);
+    }
+    
+    @Override
+    public void end() {
+        BIN.set(getEndNode(), hash);
     }
 
 }
