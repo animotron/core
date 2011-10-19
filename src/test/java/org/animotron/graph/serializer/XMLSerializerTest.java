@@ -23,11 +23,14 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.animotron.Properties.HASH;
 import static org.animotron.expression.JExpression.*;
+import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -38,6 +41,7 @@ public class XMLSerializerTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
+        Assert.assertEquals(HASH.get(expression), key(DigestSerializer.serialize(expression)));
         assertXMLResult(expression, out);
     }
 
