@@ -67,7 +67,7 @@ public class FastGraphBuilder extends GraphBuilder {
     @Override
     protected void fail(Exception e) {
         if (root != null) {
-            catcher.destructive(root);
+            destructive(root);
         }
     }
 
@@ -109,7 +109,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
-                            catcher.destructive(i);
+                            destructive(i);
                         }
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
@@ -117,7 +117,7 @@ public class FastGraphBuilder extends GraphBuilder {
                             i.delete();
                         }
                     }
-                    catcher.creative(relationship);
+                    creative(relationship);
                 } else {
                     relationship = getSTART().createRelationshipTo(end, r.getType());
                 }

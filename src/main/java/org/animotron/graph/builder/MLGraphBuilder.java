@@ -30,8 +30,6 @@ import java.security.MessageDigest;
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Cache.key;
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -71,7 +69,7 @@ public class MLGraphBuilder extends GraphBuilder {
 
     @Override
     public void fail(Exception e) {
-        catcher.destructive(root);
+        destructive(root);
     }
 
     @Override
@@ -132,21 +130,5 @@ public class MLGraphBuilder extends GraphBuilder {
         order(r, (Integer) item[3]);
         return hash;
 	}
-
-    private void destructive(Relationship r) {
-        Node node = r.getEndNode();
-        r.delete();
-        if (!node.hasRelationship(INCOMING)) {
-            destructive(node);
-        }
-    }
-
-    private void destructive(Node n) {
-        for (Relationship r : n.getRelationships(OUTGOING)) {
-            destructive(r);
-        }
-        Cache.removeNode(n);
-        n.delete();
-    }
 
 }

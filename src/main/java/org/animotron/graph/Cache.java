@@ -40,6 +40,7 @@ public class Cache {
 	public static void init (IndexManager indexManager) {
         NCACHE = new CacheIndex<Node>(indexManager) {
             public void init(IndexManager indexManager) {
+//                INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
                 INDEX = indexManager.forNodes(NAME);
             }
         };

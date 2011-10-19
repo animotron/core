@@ -25,6 +25,7 @@ import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.VALUE;
 import org.animotron.utils.MessageDigester;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
@@ -59,7 +60,7 @@ public abstract class GraphBuilder {
     Transaction tx;
     private int order;
     protected final boolean ignoreNotFound;
-    public final Manipulators.Catcher catcher;
+    private Manipulators.Catcher catcher;
     private Stack<Object[]> stack;
 
     public GraphBuilder() {
@@ -68,7 +69,6 @@ public abstract class GraphBuilder {
 
     public GraphBuilder(boolean ignoreNotFound) {
         this.ignoreNotFound = ignoreNotFound;
-        catcher = Manipulators.getCatcher();
     }
 
     protected final int order(){
@@ -143,6 +143,7 @@ public abstract class GraphBuilder {
 
     public final void build(Expression exp) throws Exception {
         order = 0;
+        catcher = Manipulators.getCatcher();
         tx = beginTx();
         try {
         	s = null; r = null;
@@ -167,15 +168,27 @@ public abstract class GraphBuilder {
     }
 
     protected final void step() {
-        if (order % (30000) == 0) {
+        if (order % (10000) == 0) {
             tx.success();
             finishTx(tx);
             tx = beginTx();
         }
         order++;
-        if (order % 1000 == 0) {
+        if (order % 10000 == 0) {
             System.out.println(order);
         }
+    }
+
+    protected final void creative(Relationship r) {
+        catcher.creative(r);
+    }
+
+    protected final void destructive(Relationship r) {
+        catcher.destructive(r);
+    }
+
+    protected final void destructive(Node n) {
+        catcher.destructive(n);
     }
 
     protected final MessageDigest cloneMD(MessageDigest md) {
