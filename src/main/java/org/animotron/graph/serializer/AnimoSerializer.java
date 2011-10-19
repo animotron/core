@@ -22,8 +22,6 @@ import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.AnimoPrettyGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -41,7 +39,7 @@ public class AnimoSerializer {
     }
 
     public static void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
-        AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
+        AnimoTraverser._.traverse(handler(out, pretty), null, r);
     }
 
     public static void serialize(Relationship r, StringBuilder out) throws IOException {
@@ -49,7 +47,7 @@ public class AnimoSerializer {
     }
 
     public static void serialize(Relationship r, StringBuilder out, boolean pretty) throws IOException {
-        AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
+        AnimoTraverser._.traverse(handler(out, pretty), null, r);
     }
 
     public static String serialize(Relationship r) throws IOException {
@@ -58,7 +56,7 @@ public class AnimoSerializer {
 
     public static String serialize(Relationship r, boolean pretty) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoTraverser._.traverse(handler(out, pretty), new PFlow(Evaluator._, r), r);
+        AnimoTraverser._.traverse(handler(out, pretty), null, r);
         return out.toString();
     }
 
