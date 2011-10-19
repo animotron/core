@@ -29,6 +29,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Stack;
 
@@ -91,19 +92,19 @@ public abstract class GraphBuilder {
 
     protected abstract void startGraph();
 
-    protected abstract void endGraph() throws AnimoException;
+    protected abstract void endGraph() throws AnimoException, IOException;
 
-    public final void start(Statement statement) throws AnimoException {
+    public final void start(Statement statement) throws AnimoException, IOException {
         start(statement, null);
     }
 
-    public final void start(Object value) throws AnimoException {
+    public final void start(Object value) throws AnimoException, IOException {
         start(VALUE._, value);
     }
 
     Statement s; Object r;
 
-    public final void start(Statement statement, Object reference) throws AnimoException{
+    public final void start(Statement statement, Object reference) throws AnimoException, IOException {
     	if (s != null) {
     		stack.push(start(s, r, true));
         }
@@ -111,9 +112,9 @@ public abstract class GraphBuilder {
         r = reference;
     }
 
-    protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException;
+    protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException, IOException;
 
-    public final void end() throws AnimoException {
+    public final void end() throws AnimoException, IOException {
     	byte[] hash;
     	if (s != null) {
     		hash = end(start(s, r, false), false);
@@ -167,10 +168,12 @@ public abstract class GraphBuilder {
         }
     }
 
-    protected final void step() {
+    protected final void step() throws IOException {
         if (order % (10000) == 0) {
             tx.success();
             finishTx(tx);
+            catcher.push();
+            catcher = Manipulators.getCatcher();
             tx = beginTx();
         }
         order++;

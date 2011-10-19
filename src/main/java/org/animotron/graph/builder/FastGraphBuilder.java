@@ -27,6 +27,7 @@ import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -82,7 +83,7 @@ public class FastGraphBuilder extends GraphBuilder {
 	}
 	
 	@Override
-    public void endGraph() throws AnimoException {
+    public void endGraph() throws AnimoException, IOException {
         Iterator<Object[]> it = flow.iterator();
         if (it.hasNext()) {
             Object[] o = it.next();

@@ -29,6 +29,7 @@ import org.animotron.statement.value.VALUE;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -88,13 +89,13 @@ public class StAXExpression extends Expression {
         }
     }
 
-    private void build(Statement s, Object reference) throws AnimoException {
+    private void build(Statement s, Object reference) throws AnimoException, IOException {
         builder.start(s, reference);
         builder.end();
     }
 
 
-    private void startElement() throws AnimoException {
+    private void startElement() throws AnimoException, IOException {
         builder.start(ELEMENT._, _(name(qname(reader.getName()))));
         for (int i = 0; i < reader.getNamespaceCount(); i++) {
             String namespace = reader.getNamespaceURI(i);

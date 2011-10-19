@@ -26,6 +26,8 @@ import org.animotron.statement.ml.*;
 import org.animotron.statement.value.LINK;
 import org.animotron.statement.value.VALUE;
 
+import java.io.IOException;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -52,7 +54,7 @@ public class JExpression extends Expression {
         }
     }
 
-    private void build(Object[]... e) throws AnimoException {
+    private void build(Object[]... e) throws AnimoException, IOException {
         if (e != null)
             for (Object i : e)
                 if (i instanceof Object[][]) {
@@ -62,7 +64,7 @@ public class JExpression extends Expression {
                 }
     }
 
-    private void buildStatement(Object[] e) throws AnimoException {
+    private void buildStatement(Object[] e) throws AnimoException, IOException {
         builder.start((Statement) e[0], e[1]);
         if (e[2] instanceof Object[][]) {
             build((Object[][]) e[2]);

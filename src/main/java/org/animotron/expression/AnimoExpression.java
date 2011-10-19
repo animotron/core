@@ -138,7 +138,7 @@ public class AnimoExpression extends Expression {
         endList();
     }
 
-    private void newToken(StringBuilder s, boolean text) throws AnimoException {
+    private void newToken(StringBuilder s, boolean text) throws AnimoException, IOException {
         if (s.length() > 0) {
             token(s.toString(), text);
             this.s = new StringBuilder();
@@ -147,7 +147,7 @@ public class AnimoExpression extends Expression {
         }
     }
 
-    private void lastToken(StringBuilder s, boolean text) throws AnimoException {
+    private void lastToken(StringBuilder s, boolean text) throws AnimoException, IOException {
         if (s.length() > 0) {
             token(s.toString(), text);
         } else {
@@ -155,7 +155,7 @@ public class AnimoExpression extends Expression {
         }
     }
 
-    private void token(String token, boolean text) throws AnimoException {
+    private void token(String token, boolean text) throws AnimoException, IOException {
         if (text) {
             if (op instanceof Prefix && !(op instanceof NS) && !link) {
                 builder.start(NAME._, token);
@@ -188,7 +188,7 @@ public class AnimoExpression extends Expression {
         link = false;
     }
 
-    private void startList() throws AnimoException {
+    private void startList() throws AnimoException, IOException {
         if (link) {
             builder.start(LINK._);
             op = null;
@@ -200,7 +200,7 @@ public class AnimoExpression extends Expression {
         level = 0;
     }
 
-    private void endList() throws AnimoException {
+    private void endList() throws AnimoException, IOException {
         for (int i = 0; i < level; i++) {
             builder.end();
         }
