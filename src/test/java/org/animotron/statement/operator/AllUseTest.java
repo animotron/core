@@ -38,20 +38,20 @@ public class AllUseTest extends ATest {
 
     @Test
     public void simple_all_Use() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
-        );
-
-        new JExpression(
-            _(THE._, "s", _(ALL._, "S"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")), _(HAVE._, "X", text("αα")))
+                ),
+                new JExpression(
+                        _(THE._, "s", _(ALL._, "S"))
+                )
         );
 
         JExpression b = new JExpression(
@@ -63,32 +63,31 @@ public class AllUseTest extends ATest {
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+
     }
 
     @Test
     public void simple_all_Use_1() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
-        );
-
-        new JExpression(
-            _(THE._, "s", _(ALL._, "S"))
-        );
-
-        new JExpression(
-            _(THE._, "ub", _(USE._, "B"))
-        );
-
-        new JExpression(
-            _(THE._, "uc", _(USE._, "C"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")), _(HAVE._, "X", text("αα")))
+                ),
+                new JExpression(
+                        _(THE._, "s", _(ALL._, "S"))
+                ),
+                new JExpression(
+                        _(THE._, "ub", _(USE._, "B"))
+                ),
+                new JExpression(
+                        _(THE._, "uc", _(USE._, "C"))
+                )
         );
 
         JExpression b = new JExpression(
@@ -100,30 +99,31 @@ public class AllUseTest extends ATest {
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
         assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+
     }
 
     @Test
     public void complex_all_Use() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-        new JExpression(
-            _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
-        );
-        new JExpression(
-            _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")),  _(HAVE._, "X", text("ααα")))
-        );
-
-        new JExpression(
-            _(THE._, "s", _(ALL._, "S"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")), _(HAVE._, "X", text("αα")))
+                ),
+                new JExpression(
+                        _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")), _(HAVE._, "X", text("ααα")))
+                ),
+                new JExpression(
+                        _(THE._, "s", _(ALL._, "S"))
+                )
         );
 
         JExpression b = new JExpression(
@@ -139,34 +139,32 @@ public class AllUseTest extends ATest {
 
     @Test
     public void complex_all_Use_1() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-        new JExpression(
-            _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
-        );
-        new JExpression(
-            _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")),  _(HAVE._, "X", text("ααα")))
-        );
-
-        new JExpression(
-            _(THE._, "s", _(ALL._, "S"))
-        );
-
-        new JExpression(
-            _(THE._, "ub", _(USE._, "B"))
-        );
-
-        new JExpression(
-            _(THE._, "uc", _(USE._, "C"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "B1", _(IS._, "B"), _(HAVE._, "Y", text("ββ")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")), _(HAVE._, "X", text("αα")))
+                ),
+                new JExpression(
+                        _(THE._, "C1", _(IS._, "C"), _(HAVE._, "Z", text("γγ")), _(HAVE._, "X", text("ααα")))
+                ),
+                new JExpression(
+                        _(THE._, "s", _(ALL._, "S"))
+                ),
+                new JExpression(
+                        _(THE._, "ub", _(USE._, "B"))
+                ),
+                new JExpression(
+                        _(THE._, "uc", _(USE._, "C"))
+                )
         );
 
         JExpression b = new JExpression(

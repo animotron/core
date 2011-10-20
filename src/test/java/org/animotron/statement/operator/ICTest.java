@@ -36,17 +36,17 @@ public class ICTest extends ATest {
 	@Test
 	public void testIC() throws Exception {
         
-    	new JExpression(
-			_(THE._, "A")
-		);
-	
-    	new JExpression(
-			_(THE._, "B", _(IC._, "A", text(".")))
-		);
-
-    	new JExpression(
-			_(THE._, "C", _(IS._, "B") )
-		);
+    	JExpression.__(
+                new JExpression(
+                        _(THE._, "A")
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IC._, "A", text(".")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"))
+                )
+        );
 
     	JExpression D = new JExpression(
 			_(THE._, "D", _(GET._, "A", _(AN._, "C")))

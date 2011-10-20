@@ -42,35 +42,34 @@ public class CurrentSiteTest extends ATest {
     @Test
     public void test() throws Exception {
 
-    	new JExpression(
-            _(THE._, "current-site",
-                _(ANY._, "site",
-                    _(WITH._, "server-name", _(GET._, "host"))
+    	JExpression.__(
+                new JExpression(
+                        _(THE._, "current-site",
+                                _(ANY._, "site",
+                                        _(WITH._, "server-name", _(GET._, "host"))
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "test-service",
+                                _(IS._, "service"),
+                                _(GET._, "server-name"),
+                                _(GET._, "host")
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "localhost-site",
+                                _(IS._, "site"),
+                                _(HAVE._, "server-name", text("localhost"))
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "rest",
+                                _(ANY._, "service",
+                                        _(AN._, "current-site")
+                                )
+                        )
                 )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "test-service",
-                _(IS._, "service"),
-                _(GET._, "server-name"),
-                _(GET._, "host")
-            )
-        );
-
-        new JExpression(
-            _(THE._, "localhost-site",
-                _(IS._, "site"),
-                _(HAVE._, "server-name", text("localhost"))
-            )
-        );
-
-		new JExpression(
-            _(THE._, "rest",
-                _(ANY._, "service",
-                    _(AN._, "current-site")
-                )
-            )
         );
 
         JExpression s = new JExpression(
@@ -85,5 +84,7 @@ public class CurrentSiteTest extends ATest {
                 "(is service) " +
                     "(have server-name \"localhost\") " +
                     "(have host \"localhost\")");
+
     }
+
 }

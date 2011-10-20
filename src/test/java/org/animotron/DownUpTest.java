@@ -37,17 +37,18 @@ import static org.animotron.expression.JExpression.text;
 public class DownUpTest extends ATest {
 	
 	private void common() throws Exception {
-		new JExpression(
-				_(THE._, "B", 
-					_(IS._, "A"), 
-					_(HAVE._, "X", text("B")))
-			);
-
-	    	new JExpression(
-				_(THE._, "C", 
-					_(IS._, "A"), 
-					_(HAVE._, "X", text("C")))
-			);
+		JExpression.__(
+                new JExpression(
+                        _(THE._, "B",
+                                _(IS._, "A"),
+                                _(HAVE._, "X", text("B")))
+                ),
+                new JExpression(
+                        _(THE._, "C",
+                                _(IS._, "A"),
+                                _(HAVE._, "X", text("C")))
+                )
+        );
 	}
 
 	@Test
@@ -63,6 +64,7 @@ public class DownUpTest extends ATest {
 		);
     	
     	assertAnimoResult(a, "the a (the B (is A) (have X \"B\")) (the C (is A) (have X \"C\"))");
+
 	}
 	
 	@Test
@@ -82,5 +84,7 @@ public class DownUpTest extends ATest {
 		);
     	
     	assertAnimoResult(a, "the a (\"bla\") (have X \"B\") (\"bla\") (have X \"C\")");
+
 	}
+
 }

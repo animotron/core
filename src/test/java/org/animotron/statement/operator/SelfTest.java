@@ -38,12 +38,13 @@ public class SelfTest extends ATest {
     @Test
     public void getFromPFlow() throws Exception {
         
-        new JExpression(
-            _(THE._, "A")
-        );
-    	
-        new JExpression(
-            _(THE._, "B")
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A")
+                ),
+                new JExpression(
+                        _(THE._, "B")
+                )
         );
     	
         JExpression C = new JExpression(
@@ -71,17 +72,19 @@ public class SelfTest extends ATest {
         assertAnimoResult(D, "the D (is C) (have A \":\")");
         assertAnimoResult(E, "the E have B have A \".\"");
         assertAnimoResult(F, "the F have B have A \":\"");
+
     }
 	
     @Test
     public void getFromPFlow_by_IS() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
-        );
-
-        new JExpression(
-            _(THE._, "B")
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "B")
+                )
         );
 
         JExpression C = new JExpression(
@@ -115,5 +118,7 @@ public class SelfTest extends ATest {
         assertAnimoResult(D, "the D (is C) (have A \":\")");
         assertAnimoResult(E, "the E have B have A \".\"");
         assertAnimoResult(F, "the F have B have A \":\"");
+
     }
+
 }

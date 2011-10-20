@@ -39,118 +39,120 @@ public class YetAnotherGetTest extends ATest{
     @Test
     public void get_via_is() throws Exception {
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(HAVE._, "B", text("π")))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "C")))
         );
-
         assertAnimoResult(E, "the E have B \"π\"");
+
     }
 
     @Test
     public void get_ic_via_is() throws Exception {
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IC._, "B", text("π")))
-        );
-
-        new JExpression(
-            _(THE._, "D", _(IS._, "C"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IC._, "B", text("π")))
+                ),
+                new JExpression(
+                        _(THE._, "D", _(IS._, "C"))
+                )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
-
         assertAnimoResult(E, "the E have B \"π\"");
+
     }
 
     @Test
     public void get_have_via_is() throws Exception {
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(HAVE._, "B", text("π")))
-        );
-
-        new JExpression(
-            _(THE._, "D", _(IS._, "C"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                ),
+                new JExpression(
+                        _(THE._, "D", _(IS._, "C"))
+                )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
-
         assertAnimoResult(E, "the E have B \"π\"");
+
     }
 
     @Test
     public void self_via_is() throws Exception {
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(HAVE._, "B", text("π")))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(IS._, "C"), _(SELF._, "A"))
         );
-
         assertAnimoResult(E, "the E (is C) (have B \"π\")");
+
     }
 
     @Test
     public void self_ic_via_is() throws Exception {
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IC._, "B", text("π")))
-        );
-
-        new JExpression(
-            _(THE._, "D", _(IS._, "C"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IC._, "B", text("π")))
+                ),
+                new JExpression(
+                        _(THE._, "D", _(IS._, "C"))
+                )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
         );
-
         assertAnimoResult(E, "the E (is D) (have B \"π\")");
+
     }
 
     @Test
     public void self_have_via_is() throws Exception {
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(HAVE._, "B", text("π")))
-        );
-
-        new JExpression(
-            _(THE._, "D", _(IS._, "C"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                ),
+                new JExpression(
+                        _(THE._, "D", _(IS._, "C"))
+                )
         );
 
         JExpression E = new JExpression(

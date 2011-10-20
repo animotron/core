@@ -37,16 +37,16 @@ public class CrossUseTest extends ATest {
     @Test
     public void cross_use_case() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(IS._, "X"))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "S"), _(IS._, "Y"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "S"), _(IS._, "X"), _(IS._, "Y"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "S"), _(IS._, "Y"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "S"), _(IS._, "X"), _(IS._, "Y"))
+                )
         );
 
         JExpression s = new JExpression(
@@ -68,5 +68,7 @@ public class CrossUseTest extends ATest {
             _(THE._, "c", _(ANY._, "S", _(USE._, "X"), _(USE._, "Y")))
         );
         assertAnimoResult(c, "the c the C (is S) (is X) (is Y)");
+
     }
+
 }

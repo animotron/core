@@ -38,20 +38,19 @@ public class EachTest extends ATest {
     @Test
     public void eachTest() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "content", text("α")))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "S"), _(HAVE._, "content", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
-        );
-
-        new JExpression(
-            _(THE._, "P", element("p", _(GET._, "content")))
+        __(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "content", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "S"), _(HAVE._, "content", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
+                ),
+                new JExpression(
+                        _(THE._, "P", element("p", _(GET._, "content")))
+                )
         );
 
         JExpression s = new JExpression(
@@ -64,16 +63,16 @@ public class EachTest extends ATest {
     @Test
     public void eachTest1() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
+        __(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
+                )
         );
 
         JExpression s = new JExpression(

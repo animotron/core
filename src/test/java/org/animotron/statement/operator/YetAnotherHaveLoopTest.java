@@ -39,33 +39,32 @@ public class YetAnotherHaveLoopTest extends ATest {
     @Test
     public void test() throws Exception {
 
-        new JExpression(
-            _(THE._, "html",
-                _(HAVE._, "content",
-                    _(AN._, "root-layout")
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "html",
+                                _(HAVE._, "content",
+                                        _(AN._, "root-layout")
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "it-working",
+                                _(HAVE._, "content", text("It is working!"))
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "service",
+                                _(AN._, "html",
+                                        _(AN._, "it-working")
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "root-layout",
+                                _(IS._, "layout"),
+                                _(GET._, "content")
+                        )
                 )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "it-working",
-                _(HAVE._, "content", text("It is working!"))
-            )
-        );
-
-        new JExpression(
-            _(THE._, "service",
-                _(AN._, "html",
-                    _(AN._, "it-working")
-                )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "root-layout",
-                _(IS._, "layout"),
-                _(GET._, "content")
-            )
         );
 
         JExpression s = new JExpression(
@@ -86,33 +85,32 @@ public class YetAnotherHaveLoopTest extends ATest {
     @Test
     public void test1() throws Exception {
 
-        new JExpression(
-            _(THE._, "html",
-                _(HAVE._, "content",
-                    _(ANY._, "layout")
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "html",
+                                _(HAVE._, "content",
+                                        _(ANY._, "layout")
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "it-working",
+                                _(HAVE._, "content", text("It is working!"))
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "service",
+                                _(AN._, "html",
+                                        _(AN._, "it-working")
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "root-layout",
+                                _(IS._, "layout"),
+                                _(GET._, "content")
+                        )
                 )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "it-working",
-                _(HAVE._, "content", text("It is working!"))
-            )
-        );
-
-        new JExpression(
-            _(THE._, "service",
-                _(AN._, "html",
-                    _(AN._, "it-working")
-                )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "root-layout",
-                _(IS._, "layout"),
-                _(GET._, "content")
-            )
         );
 
         JExpression s = new JExpression(

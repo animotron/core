@@ -22,6 +22,8 @@ import org.animotron.expression.CommonExpression;
 
 import java.io.File;
 
+import static org.animotron.expression.Expression.__;
+
 /**
  * Repository loader
  * 
@@ -50,17 +52,15 @@ public class FSBridge {
 
     private static void loadFile (String root, File file) throws Exception {
         String path = file.getPath().substring(root.length());
-        new CommonExpression(file, path);
+        __(new CommonExpression(file, path));
     }
 
 	private static void load (String root, File path) throws Exception {
-		
 		if (path.isDirectory()) {
             loadDir(root, path);
 		} else {
             loadFile(root, path);
 		}
-		
 	}
 	
 }

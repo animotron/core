@@ -37,34 +37,39 @@ public class SimpleTest extends ATest {
 	@Test
 	public void an() throws Exception {
         
-    	new JExpression(
-			_(THE._, "AA")
-		);
-
-    	new JExpression(
-			_(THE._, "BB", _(HAVE._, "AA", text("a@b")))
-		);
+    	JExpression.__(
+                new JExpression(
+                        _(THE._, "AA")
+                ),
+                new JExpression(
+                        _(THE._, "BB", _(HAVE._, "AA", text("a@b")))
+                )
+        );
 
     	JExpression C = new JExpression(
 			_(THE._, "CC", _(AN._, "BB"))
 		);
         assertAnimoResult(C, "the CC the BB have AA \"a@b\"");
+
 	}
 
 	@Test
 	public void get() throws Exception {
         
-    	new JExpression(
-			_(THE._, "A")
-		);
-
-    	new JExpression(
-			_(THE._, "B", _(HAVE._, "A", text("a@b")))
-		);
+    	JExpression.__(
+                new JExpression(
+                        _(THE._, "A")
+                ),
+                new JExpression(
+                        _(THE._, "B", _(HAVE._, "A", text("a@b")))
+                )
+        );
 
     	JExpression C = new JExpression(
 			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
 		);
         assertAnimoResult(C, "the C have A \"a@b\"");
+
 	}
+
 }

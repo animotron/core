@@ -38,20 +38,19 @@ public class SelfUseTest extends ATest {
     @Test
     public void selfTest() throws Exception {
         
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
-        );
-    	
-        new JExpression(
-            _(THE._, "B", _(IS._, "X"))
-        );
-    	
-        new JExpression(
-            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
-        );
-
-        new JExpression(
-            _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
+                ),
+                new JExpression(
+                        _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
+                )
         );
 
         JExpression a = new JExpression(
@@ -63,33 +62,31 @@ public class SelfUseTest extends ATest {
             _(THE._, "b", _(AN._, "D", _(USE._, "B")))
         );
         assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
+
     }
 	
     @Test
     public void selfTest1() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "X"))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
-        );
-
-        new JExpression(
-            _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
-        );
-
-        new JExpression(
-          _(THE._, "ua", _(USE._, "A"))
-        );
-
-        new JExpression(
-          _(THE._, "ub", _(USE._, "B"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", text("..")))
+                ),
+                new JExpression(
+                        _(THE._, "D", _(IS._, "C"), _(SELF._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "ua", _(USE._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "ub", _(USE._, "B"))
+                )
         );
 
         JExpression a = new JExpression(
@@ -103,4 +100,5 @@ public class SelfUseTest extends ATest {
         assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
 
     }
+
 }

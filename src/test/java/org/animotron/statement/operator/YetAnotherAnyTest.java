@@ -39,16 +39,16 @@ public class YetAnotherAnyTest extends ATest {
     @Test
     public void deep_any() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")))
+                )
         );
 
         JExpression a = new JExpression(
@@ -70,16 +70,16 @@ public class YetAnotherAnyTest extends ATest {
     @Test
     public void one_more_deep_any() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "X", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "X", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
+                )
         );
 
         JExpression a = new JExpression(

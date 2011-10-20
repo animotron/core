@@ -42,87 +42,92 @@ public class WebFrameworkTest extends ATest {
 
 	@Test
 	public void test() throws Exception {
-    	new JExpression(
-			_(THE._, "request", 
-				_(HAVE._, "uri", text("/")),
-				_(HAVE._, "method", text("GET")),
-				_(HAVE._, "host", text("localhost")),
-				_(USE._, "theme-concrete"), //why do we need this two here? theme def @test-site & layout @root-service
-				_(USE._, "root-layout")
-			)
-		);
 
-    	new JExpression(
-			_(THE._, "test-site", //site-context 
-				_(IS._, "site"),
-				_(HAVE._, "server-name",
-					text("animotron.org"), 
-					text("localhost")),
-				_(USE._, "local-cdn"),
-				_(USE._, "theme-concrete-root-layout"),
-				_(USE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc")
-			)
-		);
+        __(
 
-    	new JExpression(
-			_(THE._, "root-service",
-				_(IS._, "service"),
-				_(HAVE._, "uri", text("/")),
-				_(AN._, "html",
-					_(ANY._, "root-content"),
-					_(USE._, "root-layout")
-		)	)	);
+                new JExpression(
+                        _(THE._, "request",
+                                _(HAVE._, "uri", text("/")),
+                                _(HAVE._, "method", text("GET")),
+                                _(HAVE._, "host", text("localhost")),
+                                _(USE._, "theme-concrete"), //why do we need this two here? theme def @test-site & layout @root-service
+                                _(USE._, "root-layout")
+                        )
+                ),
 
-    	new JExpression(
-			_(THE._, "html", 
-                _(AN._, "html-composition"
-		)	)	);
+                new JExpression(
+                        _(THE._, "test-site", //site-context
+                                _(IS._, "site"),
+                                _(HAVE._, "server-name",
+                                        text("animotron.org"),
+                                        text("localhost")),
+                                _(USE._, "local-cdn"),
+                                _(USE._, "theme-concrete-root-layout"),
+                                _(USE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc")
+                        )
+                ),
 
-    	new JExpression(
-			_(THE._, "html-composition", 
-				_(IS._, "composition"),
-                _(HAVE._, "content",
-                    element("html",
-                        _(AN._, "html-head",
-                            _(HAVE._, "css",
-                                _(ALL._, "css")),
-                            _(HAVE._, "script",
-                                _(ALL._, "script"))
-                        ),
-                        element("body",
-                            _(ANY._, "layout")
-			)   )	)	)	);
+                new JExpression(
+                        _(THE._, "root-service",
+                                _(IS._, "service"),
+                                _(HAVE._, "uri", text("/")),
+                                _(AN._, "html",
+                                        _(ANY._, "root-content"),
+                                        _(USE._, "root-layout")
+                                ))),
 
-        new JExpression(
-            _(THE._, "html-head",
-                element("head",
-                    element("title",
-                        _(GET._, "title")
-        )   )   )   );
+                new JExpression(
+                        _(THE._, "html",
+                                _(AN._, "html-composition"
+                                ))),
 
-        new JExpression(
-                _(THE._, "root-layout", _(IS._, "layout"))
-        );
+                new JExpression(
+                        _(THE._, "html-composition",
+                                _(IS._, "composition"),
+                                _(HAVE._, "content",
+                                        element("html",
+                                                _(AN._, "html-head",
+                                                        _(HAVE._, "css",
+                                                                _(ALL._, "css")),
+                                                        _(HAVE._, "script",
+                                                                _(ALL._, "script"))
+                                                ),
+                                                element("body",
+                                                        _(ANY._, "layout")
+                                                ))))),
 
-    	new JExpression(
-			_(THE._, "theme-concrete-root-layout",
-				_(IS._, "root-layout"),
-				_(HAVE._, "content",
-					element("div", attribute("id", "title"),
-						_(GET._, "title")),
-					element("div", attribute("id", "content"),
-                        _(GET._, "content"))
-		)	)	);
+                new JExpression(
+                        _(THE._, "html-head",
+                                element("head",
+                                        element("title",
+                                                _(GET._, "title")
+                                        )))),
 
-    	new JExpression(
-			_(THE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc", 
-				_(IS._, "root-content"),
-				_(HAVE._, "title", text("Welcome to Animotron")),
-				_(HAVE._, "content", text("Overview"))
-		)	);
+                new JExpression(
+                        _(THE._, "root-layout", _(IS._, "layout"))
+                ),
 
-    	new JExpression(
-            _(THE._, "service")
+                new JExpression(
+                        _(THE._, "theme-concrete-root-layout",
+                                _(IS._, "root-layout"),
+                                _(HAVE._, "content",
+                                        element("div", attribute("id", "title"),
+                                                _(GET._, "title")),
+                                        element("div", attribute("id", "content"),
+                                                _(GET._, "content"))
+                                ))),
+
+                new JExpression(
+                        _(THE._, "uuid-c97fd56c-ae81-493a-a508-6fbb8fb12dc",
+                                _(IS._, "root-content"),
+                                _(HAVE._, "title", text("Welcome to Animotron")),
+                                _(HAVE._, "content", text("Overview"))
+                        )),
+
+                new JExpression(
+                        _(THE._, "service")
+                )
+
         );
 
         JExpression s = new JExpression(

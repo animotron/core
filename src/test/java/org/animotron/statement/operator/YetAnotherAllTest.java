@@ -39,16 +39,16 @@ public class YetAnotherAllTest extends ATest {
     @Test
     public void deep_all() throws Exception {
 
-    	new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")),  _(HAVE._, "X", text("αα")))
+    	JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")), _(HAVE._, "X", text("αα")))
+                )
         );
 
         JExpression a = new JExpression(
@@ -65,21 +65,22 @@ public class YetAnotherAllTest extends ATest {
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
         assertAnimoResult(c, "the c the C (is B) (have Z \"γ\") (have X \"αα\")");
+
     }
 
     @Test
     public void one_more_deep_all() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IS._, "A"), _(HAVE._, "X", text("β")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "X", text("β")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
+                )
         );
 
         JExpression a = new JExpression(
@@ -96,5 +97,7 @@ public class YetAnotherAllTest extends ATest {
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
         assertAnimoResult(c, "the c the C (is B) (have X \"γ\")");
+
     }
+
 }

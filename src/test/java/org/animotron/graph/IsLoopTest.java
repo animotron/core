@@ -44,15 +44,15 @@ public class IsLoopTest extends ATest {
 
 	@Test
 	public void storeAndSerializeResult() throws Exception {
-        new JExpression(_(THE._, "A"));
+        JExpression.__(new JExpression(_(THE._, "A")));
         test("A");
-        new JExpression(_(THE._, "A", _(IS._, "C")));
+        JExpression.__(new JExpression(_(THE._, "A", _(IS._, "C"))));
         test("C");
-        new JExpression(_(THE._, "B", _(IS._, "A")));
+        JExpression.__(new JExpression(_(THE._, "B", _(IS._, "A"))));
         test("C");
-        new JExpression(_(THE._, "C", _(IS._, "B")));
+        JExpression.__(new JExpression(_(THE._, "C", _(IS._, "B"))));
         test("C");
-        new JExpression(_(THE._, "C", _(IS._, "B"), _(IS._, "D")));
+        JExpression.__(new JExpression(_(THE._, "C", _(IS._, "B"), _(IS._, "D"))));
         test("D");
 	}
 

@@ -41,78 +41,73 @@ public class YetAnotherWebFramework____Test extends ATest {
 
     private void test(Object[]... o) throws Exception {
 
-        new JExpression(
-            _(THE._, "html",
-                element("html",
-                    element("head",
-                        element("title", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))))))
-                    ),
-                    element("body",
-                        _(ANY._, "layout")
-                    )
+        __(
+                new JExpression(
+                        _(THE._, "html",
+                                element("html",
+                                        element("head",
+                                                element("title", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request"))))))
+                                        ),
+                                        element("body",
+                                                _(ANY._, "layout")
+                                        )
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "it-working",
+                                _(IS._, "root-content"),
+                                _(HAVE._, "title", text("Welcome to Animo")),
+                                _(HAVE._, "content", text("It is working!"))
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "localhost-site",
+                                _(IS._, "site"),
+                                _(HAVE._, "server-name", text("localhost")),
+                                _(USE._, "theme-concrete-root-layout"),
+                                _(USE._, "it-working")
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "root-service",
+                                _(IS._, "service"),
+                                _(HAVE._, "uri", text("/")),
+                                _(AN._, "html",
+                                        _(ANY._, "root-content"),
+                                        _(USE._, "root-layout")
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "root-layout",
+                                _(IS._, "layout"),
+                                element("p", text("Default layout"))
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "theme-concrete-root-layout",
+                                _(IS._, "root-layout"),
+                                element("h1", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
+                                element("p", _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
+                                element("ul",
+                                        element("li", text("host: \""), element("strong", _(GET._, "host", _(ANY._, "request"))), text("\"")),
+                                        element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
+                                )
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "current-request",
+                                _(IS._, "request"),
+                                _(HAVE._, "uri", text("/")),
+                                _(HAVE._, "host", text("localhost"))
+                        )
+                ),
+                new JExpression(
+                        _(THE._, "rest",
+                                o
+                        )
                 )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "it-working",
-                _(IS._, "root-content"),
-                _(HAVE._, "title", text("Welcome to Animo")),
-                _(HAVE._, "content", text("It is working!"))
-            )
-        );
-
-        new JExpression(
-            _(THE._, "localhost-site",
-                _(IS._, "site"),
-                _(HAVE._, "server-name", text("localhost")),
-                _(USE._, "theme-concrete-root-layout"),
-                _(USE._, "it-working")
-            )
-        );
-
-        new JExpression(
-            _(THE._, "root-service",
-                _(IS._, "service"),
-                _(HAVE._, "uri", text("/")),
-                _(AN._, "html",
-                    _(ANY._, "root-content"),
-                    _(USE._, "root-layout")
-                )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "root-layout",
-                _(IS._, "layout"),
-                element("p", text("Default layout"))
-            )
-        );
-
-        new JExpression(
-            _(THE._, "theme-concrete-root-layout",
-                _(IS._, "root-layout"),
-                element("h1", _(GET._, "title", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
-                element("p", _(GET._, "content", _(ANY._, "service", _(WITH._, "uri", _(GET._, "uri", _(ANY._, "request")))))),
-                element("ul",
-                    element("li", text("host: \""), element("strong", _(GET._, "host", _(ANY._, "request"))), text("\"")),
-                    element("li", text("uri: \""), element("strong", _(GET._, "uri", _(ANY._, "request"))), text("\""))
-                )
-            )
-        );
-
-        new JExpression(
-            _(THE._, "current-request",
-                _(IS._, "request"),
-                _(HAVE._, "uri", text("/")),
-                _(HAVE._, "host", text("localhost"))
-            )
-        );
-
-        new JExpression(
-            _(THE._, "rest",
-                o
-            )
         );
 
         JExpression s = new JExpression(
@@ -122,19 +117,19 @@ public class YetAnotherWebFramework____Test extends ATest {
         );
 
         assertAnimoResult(s,
-            "the rest " +
-                "the root-service " +
-                "(is service) " +
-                "(have uri \"/\") " +
-                "(the html " +
-                    "\\html " +
+                "the rest " +
+                        "the root-service " +
+                        "(is service) " +
+                        "(have uri \"/\") " +
+                        "(the html " +
+                        "\\html " +
                         "(\\head \\title have title \"Welcome to Animo\") " +
                         "(\\body the theme-concrete-root-layout (is root-layout) " +
-                            "(\\h1 have title \"Welcome to Animo\") " +
-                            "(\\p have content \"It is working!\") " +
-                            "(\\ul " +
-                                "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
-                                "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
+                        "(\\h1 have title \"Welcome to Animo\") " +
+                        "(\\p have content \"It is working!\") " +
+                        "(\\ul " +
+                        "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
+                        "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
 
 
         assertXMLResult(s,

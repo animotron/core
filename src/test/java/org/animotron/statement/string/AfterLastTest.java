@@ -39,9 +39,9 @@ public class AfterLastTest extends ATest {
 	public void testAfterLast() throws Exception {
         System.out.println("Test 'AfterLast' ...");
         
-    	new JExpression(
-			JExpression._(THE._, "A", _(HAVE._, "B", text("x.y.z")))
-		);
+    	JExpression.__(new JExpression(
+                JExpression._(THE._, "A", _(HAVE._, "B", text("x.y.z")))
+        ));
     	
     	JExpression C = new JExpression(
 			_(THE._, "C", _(AfterLast._, text("."), _(GET._, "B", JExpression._(AN._, "A"))))

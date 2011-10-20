@@ -110,9 +110,6 @@ public class BindTest extends ATest {
 
     @Test
 	public void test_04() throws Exception {
-        Expression a = new JExpression(
-            _(ANY._, "a")
-        );
         Expression x = new JExpression(
             _(THE._, "x")
         );

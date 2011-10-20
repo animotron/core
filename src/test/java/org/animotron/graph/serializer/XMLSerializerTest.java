@@ -59,14 +59,14 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Exception {
-        new JExpression(_(THE._, "b", text("c")));
+        __(new JExpression(_(THE._, "b", text("c"))));
         test("\\ b", "<c/>");
         test("the a \\ b", "<c/>");
     }
 
     @Test
     public void test_03() throws Exception {
-        new JExpression(_(THE._, "b", text("c")));
+        __(new JExpression(_(THE._, "b", text("c"))));
         test("\\ an b", "<c/>");
         test("the a \\ an b", "<c/>");
     }
@@ -91,30 +91,36 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Exception {
-        new JExpression(_(THE._, "b", text("b")));
-        new JExpression(_(THE._, "c", text("c")));
-        new JExpression(_(THE._, "d", text("d")));
-        new JExpression(_(THE._, "e", text("e")));
+        __(
+                new JExpression(_(THE._, "b", text("b"))),
+                new JExpression(_(THE._, "c", text("c"))),
+                new JExpression(_(THE._, "d", text("d"))),
+                new JExpression(_(THE._, "e", text("e")))
+        );
         test("\\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
         test("the a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_08() throws Exception {
-        new JExpression(_(THE._, "b", text("b")));
-        new JExpression(_(THE._, "c", text("c")));
-        new JExpression(_(THE._, "d", text("d")));
-        new JExpression(_(THE._, "e", text("e")));
+        __(
+                new JExpression(_(THE._, "b", text("b"))),
+                new JExpression(_(THE._, "c", text("c"))),
+                new JExpression(_(THE._, "d", text("d"))),
+                new JExpression(_(THE._, "e", text("e")))
+        );
         test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
         test("the a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
     public void test_09() throws Exception {
-        new JExpression(_(THE._, "b", text("b")));
-        new JExpression(_(THE._, "c", text("c")));
-        new JExpression(_(THE._, "d", text("d")));
-        new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
+        __(
+                new JExpression(_(THE._, "b", text("b"))),
+                new JExpression(_(THE._, "c", text("c"))),
+                new JExpression(_(THE._, "d", text("d"))),
+                new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
+        );
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
         test("the a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
@@ -131,7 +137,7 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0C() throws Exception {
-        new JExpression(_(THE._, "b", text("path")));
+        __(new JExpression(_(THE._, "b", text("path"))));
         test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 

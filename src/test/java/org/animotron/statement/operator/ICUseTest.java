@@ -37,80 +37,78 @@ public class ICUseTest extends ATest {
 	@Test
 	public void testIC() throws Exception {
         
-        new JExpression(
-            _(THE._, "X", _(IS._, "A"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "X", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "Y", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"))
+                )
         );
-	
-        new JExpression(
-            _(THE._, "Y", _(IS._, "A"))
-        );
-
-    	new JExpression(
-			_(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
-		);
-
-    	new JExpression(
-			_(THE._, "C", _(IS._, "B") )
-		);
 
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(USE._, "X"))))
         );
         assertAnimoResult(D, "the D have X \"χ\"");
+
 	}
 
     @Test
     public void testIC_1() throws Exception {
 
-        new JExpression(
-            _(THE._, "X", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "Y", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B"), _(USE._, "X") )
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "X", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "Y", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"), _(USE._, "X"))
+                )
         );
 
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C")))
         );
         assertAnimoResult(D, "the D have X \"χ\"");
+
     }
 
     @Test
     public void testIC_2() throws Exception {
 
-        new JExpression(
-            _(THE._, "X", _(IS._, "A"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "X", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "Y", _(IS._, "A"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+                ),
+                new JExpression(
+                        _(THE._, "C", _(IS._, "B"))
+                ),
+                new JExpression(
+                        _(THE._, "U", _(USE._, "X"))
+                )
         );
-
-        new JExpression(
-            _(THE._, "Y", _(IS._, "A"))
-        );
-
-        new JExpression(
-            _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(IS._, "B") )
-        );
-
-        new JExpression(
-            _(THE._, "U", _(USE._, "X") )
-        );
-
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
         );
         assertAnimoResult(D, "the D have X \"χ\"");
+
     }
 
 }

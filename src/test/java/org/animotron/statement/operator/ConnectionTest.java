@@ -41,39 +41,43 @@ public class ConnectionTest extends ATest {
     @Test
     public void mimeType_usecase() throws Exception {
         
-        new JExpression(
-        _(THE._, "mime-type",
-            _(HAVE._, "extension")
-        ));
+        JExpression.__(
 
-        new JExpression(
-        _(THE._, "file",
-            _(HAVE._, "reference", text("file")),
-            _(HAVE._, "path"),
+                new JExpression(
+                        _(THE._, "mime-type",
+                                _(HAVE._, "extension")
+                        )),
 
-            _(IC._, "extension",
-                _(AfterLast._,
-                    text("."),
-                    _(SELF._, "path"))),
+                new JExpression(
+                        _(THE._, "file",
+                                _(HAVE._, "reference", text("file")),
+                                _(HAVE._, "path"),
 
-            _(IC._, "mime-type",
-                _(ANY._, "mime-type",
-                    _(WITH._, "extension",
-                        _(SELF._, "extension"))))
-        ));
+                                _(IC._, "extension",
+                                        _(AfterLast._,
+                                                text("."),
+                                                _(SELF._, "path"))),
 
-        new JExpression(
-        _(THE._, "fileA",
-            _(IS._, "file"),
-            _(HAVE._, "path", text("/home/test.txt"))
-        ));
+                                _(IC._, "mime-type",
+                                        _(ANY._, "mime-type",
+                                                _(WITH._, "extension",
+                                                        _(SELF._, "extension"))))
+                        )),
 
-        new JExpression(
-        _(THE._, "text-plain",
-            _(IS._, "mime-type"),
-            _(HAVE._, "type", text("text/plain")),
-            _(HAVE._, "extension", text("txt"), text("text"))
-        ));
+                new JExpression(
+                        _(THE._, "fileA",
+                                _(IS._, "file"),
+                                _(HAVE._, "path", text("/home/test.txt"))
+                        )),
+
+                new JExpression(
+                        _(THE._, "text-plain",
+                                _(IS._, "mime-type"),
+                                _(HAVE._, "type", text("text/plain")),
+                                _(HAVE._, "extension", text("txt"), text("text"))
+                        ))
+
+        );
 
         JExpression A = new JExpression(
         _(THE._, "A",
@@ -110,47 +114,52 @@ public class ConnectionTest extends ATest {
                     _(AN._, "fileA")
         ))));
         assertAnimoResult(E, "the E have type \"text/plain\"");
+
     }
 	
     @Test
     public void mimeType_one_more_usecase() throws Exception {
 
-        new JExpression(
-        _(THE._, "mime-type",
-            _(HAVE._, "extension")
-        ));
+        JExpression.__(
 
-        new JExpression(
-        _(THE._, "file",
-            _(HAVE._, "reference", text("file")),
-            _(HAVE._, "path1", text("some.path.text")),
+                new JExpression(
+                        _(THE._, "mime-type",
+                                _(HAVE._, "extension")
+                        )),
 
-            _(IC._, "path2",
-                _(SELF._, "path1")),
+                new JExpression(
+                        _(THE._, "file",
+                                _(HAVE._, "reference", text("file")),
+                                _(HAVE._, "path1", text("some.path.text")),
 
-            _(IC._, "extension1",
-                _(AfterLast._,
-                    text("."),
-                    _(SELF._, "path1"))),
+                                _(IC._, "path2",
+                                        _(SELF._, "path1")),
 
-            _(IC._, "mime-type",
-                _(ANY._, "mime-type",
-                    _(WITH._, "extension",
-                        _(SELF._, "extension1"))))
-        ));
+                                _(IC._, "extension1",
+                                        _(AfterLast._,
+                                                text("."),
+                                                _(SELF._, "path1"))),
 
-        new JExpression(
-        _(THE._, "fileA",
-            _(IS._, "file"),
-            _(HAVE._, "path", text("/home/test.txt"))
-        ));
+                                _(IC._, "mime-type",
+                                        _(ANY._, "mime-type",
+                                                _(WITH._, "extension",
+                                                        _(SELF._, "extension1"))))
+                        )),
 
-        new JExpression(
-        _(THE._, "text-plain",
-            _(IS._, "mime-type"),
-            _(HAVE._, "type", text("text/plain")),
-            _(HAVE._, "extension", text("txt"), text("text"))
-        ));
+                new JExpression(
+                        _(THE._, "fileA",
+                                _(IS._, "file"),
+                                _(HAVE._, "path", text("/home/test.txt"))
+                        )),
+
+                new JExpression(
+                        _(THE._, "text-plain",
+                                _(IS._, "mime-type"),
+                                _(HAVE._, "type", text("text/plain")),
+                                _(HAVE._, "extension", text("txt"), text("text"))
+                        ))
+
+        );
 
         JExpression B1 = new JExpression(
         _(THE._, "B1",
@@ -187,5 +196,7 @@ public class ConnectionTest extends ATest {
                     _(AN._, "fileA")
         ))));
         assertAnimoResult(E, "the E have type \"text/plain\"");
+
     }
+
 }

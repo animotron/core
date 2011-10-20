@@ -37,65 +37,77 @@ public class UseTest extends ATest {
 
     @Test
     public void any_use() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
+
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                )
         );
 
         JExpression x = new JExpression(
             _(THE._, "x", _(ANY._, "X", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x the A is X");
+
     }
 
     @Test
     public void an_any_use() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
-        );
 
-        new JExpression(
-            _(THE._, "q", _(ANY._, "X"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "q", _(ANY._, "X"))
+                )
         );
 
         JExpression x = new JExpression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x the q the A is X");
+
     }
 
     @Test
     public void all_use() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
-        );
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "X"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "X"))
+                )
         );
 
         JExpression x = new JExpression(
             _(THE._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x (the A is X) (the B is X)");
+
     }
 
     @Test
     public void an_all_use() throws Exception {
-        new JExpression(
-            _(THE._, "A", _(IS._, "X"))
-        );
 
-        new JExpression(
-            _(THE._, "B", _(IS._, "X"))
-        );
-
-        new JExpression(
-            _(THE._, "q", _(ALL._, "X"))
+        JExpression.__(
+                new JExpression(
+                        _(THE._, "A", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "B", _(IS._, "X"))
+                ),
+                new JExpression(
+                        _(THE._, "q", _(ALL._, "X"))
+                )
         );
 
         JExpression x = new JExpression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
         assertAnimoResult(x, "the x the q (the A is X) (the B is X)");
+
     }
 }
