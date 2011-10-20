@@ -171,7 +171,7 @@ public class BindTest extends ATest {
 	public void test_08() throws Exception {
         Expression a = new AnimoExpression("any a");
         Expression b = new AnimoExpression("all b");
-        Expression c = new AnimoExpression("the c");
+        Expression c = new AnimoExpression("the c bla bla bla");
         Expression x = new JExpression(
             _(HAVE._, c, _(a), _(b))
         );
