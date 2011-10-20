@@ -27,6 +27,7 @@ import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
 
@@ -112,23 +113,22 @@ public class HaveLoopTest extends ATest {
     @Test
     public void loop_test2() throws Exception {
 
-        new JExpression(
-            _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
-        );
-
-        new JExpression(
-            _(THE._, "C", _(GET._, "B"))
-        );
-
-        new JExpression(
-            _(THE._, "D",
-                _(AN._, "E")
-            )
-        );
-
-        new JExpression(
-            _(THE._, "E",
-                _(HAVE._, "B", text("test"))
+        __(
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "B"))
+            ),
+            new JExpression(
+                _(THE._, "D",
+                    _(AN._, "E")
+                )
+            ),
+            new JExpression(
+                _(THE._, "E",
+                    _(HAVE._, "B", text("test"))
+                )
             )
         );
 
