@@ -170,27 +170,35 @@ public class FastGraphBuilder extends GraphBuilder {
 	}
 
     @Override
-    public void bind(Relationship r, Object[] o) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void bind(Relationship r, Object[] p, byte[] hash) throws IOException {
+        step();
+        Object[] o = {p, r};
+        flow.add(o);
     }
 
     private void build(Object[] item) throws AnimoException {
-		Object[] p =  (Object[]) item[5];
-		if (p != null) {
-			if ((Boolean) p[6]) {
-				item[6] = true;
-				return;
-			}
-		}
         Relationship r;
-        Statement statement = (Statement) item[1];
-        Object reference = item[2];
-        byte[] hash = (byte[]) item[8];
-        Node parent = (Node) p[4];
-        item[6] = Cache.getNode(hash) != null;
-        r = statement.build(parent, reference, hash, true, ignoreNotFound);
-        item[3] = r;
-        item[4] = r.getEndNode();
+        if (item.length == 2) {
+            Object[] p =  (Object[]) item[0];
+            Relationship z = (Relationship) item[1];
+            r = ((Node) p[4]).createRelationshipTo(z.getEndNode(), z.getType());
+        } else {
+            Object[] p =  (Object[]) item[5];
+            if (p != null) {
+                if ((Boolean) p[6]) {
+                    item[6] = true;
+                    return;
+                }
+            }
+            Statement statement = (Statement) item[1];
+            Object reference = item[2];
+            byte[] hash = (byte[]) item[8];
+            Node parent = (Node) p[4];
+            item[6] = Cache.getNode(hash) != null;
+            r = statement.build(parent, reference, hash, true, ignoreNotFound);
+            item[3] = r;
+            item[4] = r.getEndNode();
+        }
         order(r);
 	}
 	

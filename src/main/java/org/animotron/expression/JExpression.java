@@ -25,6 +25,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.value.LINK;
 import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
@@ -65,13 +66,17 @@ public class JExpression extends AbstractExpression {
     }
 
     private void buildStatement(Object[] e) throws AnimoException, IOException {
-        builder.start((Statement) e[0], e[1]);
-        if (e[2] instanceof Object[][]) {
-            build((Object[][]) e[2]);
-        } else if (e[2] != null){
-            buildStatement((Object[]) e[2]);
+        if (e.length == 1) {
+            builder.bind((Relationship) e[0]);
+        } else {
+            builder.start((Statement) e[0], e[1]);
+            if (e[2] instanceof Object[][]) {
+                build((Object[][]) e[2]);
+            } else if (e[2] != null){
+                buildStatement((Object[]) e[2]);
+            }
+            builder.end();
         }
-        builder.end();
     }
 
     public static Object[] _(Statement statement, Object[] p) {
@@ -96,6 +101,11 @@ public class JExpression extends AbstractExpression {
 
     public static Object[] _(Object[]... p) {
         Object[] e = _(LINK._, p);
+        return e;
+    }
+
+    public static Object[] _(Relationship r) {
+        Object[] e = {r};
         return e;
     }
 

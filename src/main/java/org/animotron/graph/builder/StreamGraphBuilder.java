@@ -123,7 +123,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                 Cache.putNode(r.getEndNode(), hash);
             } else {
                 Relationship old = r;
-                r = old.getStartNode().createRelationshipTo(node, r.getType());
+                r = copy(old, node);
                 destructive(old);
             }
         } else {
@@ -134,8 +134,9 @@ public class StreamGraphBuilder extends GraphBuilder {
 	}
 
     @Override
-    public void bind(Relationship r, Object[] o) {
-        ((Relationship) o[1]).getEndNode().createRelationshipTo(r.getEndNode(), r.getType());
+    public void bind(Relationship r, Object[] o, byte[] hash) throws IOException {
+        step();
+        order(copy(((Relationship) o[1]).getEndNode(), r));
     }
 
 }

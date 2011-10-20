@@ -131,17 +131,26 @@ public abstract class GraphBuilder {
 
 	protected abstract byte[] end(Object[] o, boolean hasChild) throws AnimoException;
 
-    public void bind(Relationship r) throws IOException {
+    public void bind(Relationship e) throws IOException, AnimoException {
+        Object[] o = null;
+        byte[] hash = HASH.has(e) ? (byte[]) HASH.get(e) : DigestSerializer.serialize(e);
         if (hasParent()) {
-            Object[] p = peekParent();
-            bind(r, peekParent());
-            MessageDigest md = (MessageDigest) p[0];
-            byte[] hash = HASH.has(r) ? (byte[]) HASH.get(r) : DigestSerializer.serialize(r);
-            md.update(hash);
+            o = peekParent();
+            bind(e, peekParent(), hash);
+        } else {
+            if (s != null) {
+                o = start(s, r, true);
+                stack.push(o);
+                bind(e, o, hash);
+                s = null; r = null;
+            }
+        }
+        if (o != null) {
+            ((MessageDigest) o[0]).update(hash);
         }
     };
 
-    public abstract void bind(Relationship r, Object[] o);
+    protected abstract void bind(Relationship r, Object[] o, byte[] hash) throws IOException;
 
     protected final boolean hasParent() {
         return !stack.empty();
