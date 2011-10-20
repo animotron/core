@@ -38,14 +38,13 @@ public class JExpression extends AbstractExpression {
 	
 	Object[][] e;
 	
-    public JExpression(Object[]... e) throws Exception {
+    public JExpression(Object[]... e) {
         this(new FastGraphBuilder(), e);
     }
 
-    public JExpression(GraphBuilder builder, Object[]... e) throws Exception {
+    public JExpression(GraphBuilder builder, Object[]... e) {
         super(builder);
         this.e = e;
-        builder.build(this);
     }
 
     @Override

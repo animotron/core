@@ -45,30 +45,29 @@ public class AnimoExpression extends AbstractExpression {
 
     private Reader reader;
 
-    public AnimoExpression(InputStream stream) throws Exception {
+    public AnimoExpression(InputStream stream) {
         this(new InputStreamReader(stream));
     }
 
-    public AnimoExpression(GraphBuilder builder, InputStream stream) throws Exception {
+    public AnimoExpression(GraphBuilder builder, InputStream stream) {
         this(builder, new InputStreamReader(stream));
     }
 
-    public AnimoExpression(String str) throws Exception {
+    public AnimoExpression(String str) {
         this(new StringReader(str));
     }
 
-    public AnimoExpression(GraphBuilder builder, String str) throws Exception {
+    public AnimoExpression(GraphBuilder builder, String str) {
         this(builder, new StringReader(str));
     }
 
-    public AnimoExpression(Reader reader) throws Exception {
+    public AnimoExpression(Reader reader) {
         this(new FastGraphBuilder(), reader);
     }
 
-    public AnimoExpression(GraphBuilder builder, Reader reader) throws Exception {
+    public AnimoExpression(GraphBuilder builder, Reader reader) {
         super(builder);
         this.reader = reader;
-        builder.build(this);
     }
 
     private StringBuilder s = new StringBuilder();

@@ -40,14 +40,13 @@ public class StAXExpression extends AbstractExpression {
 	
 	private XMLStreamReader reader;
 	
-    public StAXExpression(XMLStreamReader reader) throws Exception {
+    public StAXExpression(XMLStreamReader reader) {
         this(new StreamGraphBuilder(), reader);
     }
 
-    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws Exception {
+    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) {
         super(builder);
         this.reader = reader;
-        builder.build(this);
     }
 
     @Override

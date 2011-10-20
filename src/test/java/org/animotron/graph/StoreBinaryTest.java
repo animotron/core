@@ -19,7 +19,6 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.CommonExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
@@ -62,7 +61,7 @@ public class StoreBinaryTest extends ATest {
     private static final String PATH = s+"content"+s+"article"+s+"test.txt";
 
 	@Test
-	public void storeAndSerialize() throws Exception, AnimoException {
+	public void storeAndSerialize() throws Exception {
         System.out.println("Test binary stream ...");
         
     	Relationship r = new CommonExpression(new ByteArrayInputStream(TXT.getBytes()), PATH);

@@ -21,6 +21,7 @@ package org.animotron.expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
@@ -31,6 +32,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static org.animotron.Properties.BIN;
+import static org.animotron.expression.JExpression._;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
 
@@ -43,6 +45,7 @@ public class BinaryExpression extends AbstractExpression {
 	
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
+    private final static Expression FILE = new JExpression(_(AN._, "file"));
 
     private InputStream stream;
     private String path;
@@ -53,15 +56,14 @@ public class BinaryExpression extends AbstractExpression {
 		TMP_STORAGE.mkdirs();
 	}
 
-    public BinaryExpression(InputStream stream, String path) throws Exception {
+    public BinaryExpression(InputStream stream, String path) {
         this(new FastGraphBuilder(), stream, path);
     }
 
-    public BinaryExpression(GraphBuilder builder, InputStream stream, String path) throws Exception {
+    public BinaryExpression(GraphBuilder builder, InputStream stream, String path) {
         super(builder);
         this.stream = stream;
         this.path = path;
-        builder.build(this);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class BinaryExpression extends AbstractExpression {
                 throw new IOException("transaction can not be finished");
             } else {
                     builder.start(THE._);
-                        builder._(IS._, "file");
+                        builder._(IS._, FILE);
                         String[] parts = path.split(Pattern.quote(File.separator));
                         //Expression prev = null;
                         for (String part : parts) {
