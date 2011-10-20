@@ -132,7 +132,7 @@ public abstract class GraphBuilder {
 	protected abstract byte[] end(Object[] o, boolean hasChild) throws AnimoException;
 
     public final void bind(Relationship e) throws IOException, AnimoException {
-        Object[] o = null;
+        Object[] o;
         byte[] hash = HASH.has(e) ? (byte[]) HASH.get(e) : DigestSerializer.serialize(e);
         if (s != null) {
             o = start(s, r, true);
@@ -150,8 +150,9 @@ public abstract class GraphBuilder {
 
     protected abstract void bind(Relationship r, Object[] o, byte[] hash) throws IOException;
 
-    public final byte[] _(Statement statement, Object reference) throws AnimoException, IOException {
-        return end(start(statement, reference, false), false);
+    public final void _(Statement statement, Object reference) throws AnimoException, IOException {
+        start(statement, reference);
+        end();
     }
 
     protected final boolean hasParent() {
