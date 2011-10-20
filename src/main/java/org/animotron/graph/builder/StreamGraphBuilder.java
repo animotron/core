@@ -53,7 +53,7 @@ import static org.animotron.utils.MessageDigester.updateMD;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class MLGraphBuilder extends GraphBuilder {
+public class StreamGraphBuilder extends GraphBuilder {
 
     private Node root;
     private Relationship relationship, r;
@@ -132,5 +132,10 @@ public class MLGraphBuilder extends GraphBuilder {
         order(r, (Integer) item[3]);
         return hash;
 	}
+
+    @Override
+    public void bind(Relationship r, Object[] o) {
+        ((Relationship) o[1]).getEndNode().createRelationshipTo(r.getEndNode(), r.getType());
+    }
 
 }

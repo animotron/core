@@ -53,7 +53,7 @@ public class AnotherGraphBuilderTest extends ATest {
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) key(HASH.get(e));
         cleanDb();
-        e = new StAXExpression(new MLGraphBuilder(), r(xml));
+        e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
         String outH = (String) key(HASH.get(e));
         Assert.assertEquals(inH, outH);
@@ -62,7 +62,7 @@ public class AnotherGraphBuilderTest extends ATest {
 
     private void test_1(String xml) throws Exception {
         StAXExpression e;
-        e = new StAXExpression(new MLGraphBuilder(), r(xml));
+        e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
         String outH = (String) key(HASH.get(e));
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
@@ -77,7 +77,7 @@ public class AnotherGraphBuilderTest extends ATest {
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
         String inH = (String) key(HASH.get(e));
-        e = new StAXExpression(new MLGraphBuilder(), r(xml));
+        e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
         String outH = (String) key(HASH.get(e));
         Assert.assertEquals(inH, outH);

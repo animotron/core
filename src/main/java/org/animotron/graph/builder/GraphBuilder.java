@@ -133,11 +133,15 @@ public abstract class GraphBuilder {
 
     public void bind(Relationship r) throws IOException {
         if (hasParent()) {
-            MessageDigest md = (MessageDigest) peekParent()[0];
+            Object[] p = peekParent();
+            bind(r, peekParent());
+            MessageDigest md = (MessageDigest) p[0];
             byte[] hash = HASH.has(r) ? (byte[]) HASH.get(r) : DigestSerializer.serialize(r);
             md.update(hash);
         }
     };
+
+    public abstract void bind(Relationship r, Object[] o);
 
     protected final boolean hasParent() {
         return !stack.empty();

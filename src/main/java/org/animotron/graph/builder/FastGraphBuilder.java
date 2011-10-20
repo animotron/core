@@ -35,7 +35,6 @@ import java.util.List;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Cache.key;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -170,7 +169,12 @@ public class FastGraphBuilder extends GraphBuilder {
         return hash;
 	}
 
-	private void build(Object[] item) throws AnimoException {
+    @Override
+    public void bind(Relationship r, Object[] o) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    private void build(Object[] item) throws AnimoException {
 		Object[] p =  (Object[]) item[5];
 		if (p != null) {
 			if ((Boolean) p[6]) {
