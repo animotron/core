@@ -179,9 +179,8 @@ public class FastGraphBuilder extends GraphBuilder {
     private void build(Object[] item) throws AnimoException {
         Relationship r;
         if (item.length == 2) {
-            Object[] p =  (Object[]) item[0];
-            Relationship z = (Relationship) item[1];
-            r = ((Node) p[4]).createRelationshipTo(z.getEndNode(), z.getType());
+            Object[] p = (Object[]) item[0];
+            r = copy((Node) p[4], (Relationship) item[1]);
         } else {
             Object[] p =  (Object[]) item[5];
             if (p != null) {
