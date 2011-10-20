@@ -92,14 +92,12 @@ public class BinaryExpression extends AbstractExpression {
                 throw new IOException("transaction can not be finished");
             } else {
                     builder.start(THE._);
-                        builder.start(IS._, "file");
-                        builder.end();
+                        builder._(IS._, "file");
                         String[] parts = path.split(Pattern.quote(File.separator));
                         //Expression prev = null;
                         for (String part : parts) {
                             if (!part.isEmpty()) {
-                                builder.start(IS._, part);
-                                builder.end();
+                                builder._(IS._, part);
                             }
                         }
                     builder.end();

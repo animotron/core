@@ -90,8 +90,7 @@ public class StAXExpression extends AbstractExpression {
     }
 
     private void build(Statement s, Object reference) throws AnimoException, IOException {
-        builder.start(s, reference);
-        builder.end();
+        builder._(s, reference);
     }
 
 
