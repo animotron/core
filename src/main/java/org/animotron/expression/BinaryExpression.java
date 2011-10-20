@@ -19,12 +19,13 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.animotron.utils.MessageDigester;
+import org.neo4j.graphdb.Node;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -32,7 +33,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static org.animotron.Properties.BIN;
-import static org.animotron.expression.JExpression._;
+import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
 
@@ -45,7 +46,13 @@ public class BinaryExpression extends AbstractExpression {
 	
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
-    private final static Expression FILE = new JExpression(_(AN._, "file"));
+    private final static Node FILE =
+            execute(new GraphOperation<Node>() {
+                @Override
+                public Node execute() throws Exception {
+                    return THE._.getOrCreate("file", true).getEndNode();
+                }
+            });
 
     private InputStream stream;
     private String path;
@@ -64,6 +71,11 @@ public class BinaryExpression extends AbstractExpression {
         super(builder);
         this.stream = stream;
         this.path = path;
+    }
+
+    @Override
+    public void start() {
+
     }
 
     @Override
