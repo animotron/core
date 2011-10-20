@@ -82,7 +82,7 @@ public class CommonExpression extends Expression {
 
     @Override
     protected Relationship relationship() {
-        return e;
+        return e.relationship();
     }
 
 }
