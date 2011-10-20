@@ -41,7 +41,7 @@ public abstract class Operator extends AbstractStatement {
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node child = createNode();
-        child.createRelationshipTo(THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode(), REF);
+        child.createRelationshipTo(reference(reference, ignoreNotFound), REF);
         return child;
     }
 

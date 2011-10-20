@@ -38,12 +38,11 @@ public abstract class Relation extends AbstractStatement {
 
 	@Override
 	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        String name = (String) reference;
-		Node target = THE._.getOrCreate(name, ignoreNotFound).getEndNode();
+		Node target = reference(reference, ignoreNotFound);
 		if (!parent.equals(target)) {
             return parent.createRelationshipTo(target, this);
 		}
-		throw new AnimoException(null, "The statment \"" + name + "\" can't refer to self");
+		throw new AnimoException(null, "Can't refer to self");
 	}
 	
 	@Override

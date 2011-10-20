@@ -24,6 +24,8 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
+import static org.animotron.Properties.HASH;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -32,6 +34,9 @@ import java.io.IOException;
 public class DigestSerializer {
 
     public static byte[] serialize(Relationship r) throws IOException {
+        if (HASH.has(r)) {
+            return (byte[]) HASH.get(r);
+        }
         DigestGraphHandler handler = new DigestGraphHandler();
         AnimoTraverser._.traverse(handler, null, r);
         return handler.digest();

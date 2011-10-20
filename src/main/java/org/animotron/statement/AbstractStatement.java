@@ -23,11 +23,13 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
+import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 import static org.animotron.Properties.CID;
+import static org.animotron.Properties.NAME;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -79,6 +81,21 @@ public abstract class AbstractStatement implements Statement {
     @Override
     public Object reference(Relationship r) {
         return null;
+    }
+
+    public Node reference(Object reference, boolean ignoreNotFound) throws AnimoException {
+        Node node;
+        if (reference instanceof Node) {
+            node = (Node) reference;
+        } else if (reference instanceof Relationship) {
+            node = ((Relationship) reference).getEndNode();
+        } else {
+            return THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode();
+        }
+        if (NAME.has(node)) {
+            return node;
+        }
+        throw new IllegalArgumentException("Referemce must be the \"THE\" object");
     }
 
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {

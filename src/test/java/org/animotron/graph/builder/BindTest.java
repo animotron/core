@@ -26,6 +26,8 @@ import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.query.ANY;
+import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Assert;
 import org.junit.Test;
@@ -96,6 +98,51 @@ public class BindTest extends ATest {
             _(THE._, "b", _(IS._, "x"), _(a))
         );
         test(b, "the b (is x) (a)");
+	}
+
+    @Test
+	public void test_04() throws Exception {
+        Expression a = new JExpression(
+            _(ANY._, "a")
+        );
+        Expression x = new JExpression(
+            _(THE._, "x")
+        );
+        Expression y = new JExpression(
+            _(THE._, "y")
+        );
+        Expression b = new JExpression(
+            _(THE._, "b", _(IS._, x), _(HAVE._, y))
+        );
+        test(b, "the b (is x) (have y)");
+	}
+
+    @Test
+	public void test_05() throws Exception {
+        Expression a = new JExpression(
+            _(ANY._, "a")
+        );
+        Expression b = new JExpression(
+            _(THE._, "b", _(HAVE._, "y", _(a)))
+        );
+        test(b, "the b have y any a");
+	}
+
+    @Test
+	public void test_06() throws Exception {
+        Expression a = new JExpression(
+            _(ANY._, "a")
+        );
+        Expression x = new JExpression(
+            _(THE._, "x")
+        );
+        Expression y = new JExpression(
+            _(THE._, "y")
+        );
+        Expression b = new JExpression(
+            _(THE._, "b", _(IS._, x), _(HAVE._, y, _(a)))
+        );
+        test(b, "the b (is x) (have y any a)");
 	}
 
 }

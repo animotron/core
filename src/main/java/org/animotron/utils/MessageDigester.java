@@ -24,9 +24,13 @@ package org.animotron.utils;
 
 import org.animotron.statement.Statement;
 import org.apache.log4j.Logger;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import static org.animotron.Properties.NAME;
 
 public class MessageDigester {
 
@@ -141,6 +145,10 @@ public class MessageDigester {
             updateMD(md, (Object[][]) reference);
         } else if (reference instanceof Object[]) {
             updateMD(md, (Object[]) reference);
+        } else if (reference instanceof Node) {
+            updateMD(md, NAME.get((Node) reference));
+        } else if (reference instanceof Relationship) {
+            updateMD(md, NAME.get(((Relationship) reference).getEndNode()));
         } else if (reference instanceof String ||
                         reference instanceof Number ||
                             reference instanceof Boolean) {

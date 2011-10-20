@@ -134,16 +134,14 @@ public abstract class GraphBuilder {
     public void bind(Relationship e) throws IOException, AnimoException {
         Object[] o = null;
         byte[] hash = HASH.has(e) ? (byte[]) HASH.get(e) : DigestSerializer.serialize(e);
-        if (hasParent()) {
+        if (s != null) {
+            o = start(s, r, true);
+            stack.push(o);
+            bind(e, o, hash);
+            s = null; r = null;
+        } else {
             o = peekParent();
             bind(e, peekParent(), hash);
-        } else {
-            if (s != null) {
-                o = start(s, r, true);
-                stack.push(o);
-                bind(e, o, hash);
-                s = null; r = null;
-            }
         }
         if (o != null) {
             ((MessageDigest) o[0]).update(hash);
