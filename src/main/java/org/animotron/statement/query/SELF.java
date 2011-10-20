@@ -59,16 +59,16 @@ public class SELF extends AbstractQuery {
 
             Relationship op = pf.getOP();
             
-			Relationship res = selfByTraversal(pf, op, op.getStartNode(), (String) reference(op));
+            Path path = pf.getFlowPath();
+            System.out.println("path = "+path);
+
+            Relationship res = selfByTraversal(pf, op, op.getStartNode(), (String) reference(op));
 			if (res != null) {
+				System.out.println("FOUND by traversal");
 				pf.sendAnswer(op, res);
 				pf.done();
 				return;
 			}
-
-            Path path = pf.getFlowPath();
-            //System.out.println("path = "+path);
-            
 
             Relationship lastContext = pf.getLastContext();
 
@@ -92,14 +92,14 @@ public class SELF extends AbstractQuery {
                 res = GET._.getBySELF(pf, ref.getEndNode(), (String) reference(pf.getOP()));
 
                 if (res != null)
-                    pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, RESULT));
+                    pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, HAVE._));
 
             } else if (searchHave == 2) {
                 //the instance self in have
                 res = GET._.getBySELF(pf, pf.getStartNode(), (String) reference(pf.getOP()));
 
                 if (res != null)
-                    pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, RESULT));
+                    pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, HAVE._));
                     //TODO Why don't create persistent relationship?
 
             } else
