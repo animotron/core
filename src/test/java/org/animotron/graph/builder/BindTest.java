@@ -18,22 +18,30 @@
  */
 package org.animotron.graph.builder;
 
+import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
+import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import javax.xml.stream.XMLInputFactory;
+import java.io.StringReader;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.element;
 import static org.animotron.graph.Cache.key;
 
 
@@ -143,6 +151,35 @@ public class BindTest extends ATest {
             _(THE._, "b", _(IS._, x), _(HAVE._, y, _(a)))
         );
         test(b, "the b (is x) (have y any a)");
+	}
+
+    @Test
+    @Ignore
+	public void test_07() throws Exception {
+        Expression x = new JExpression(
+            _(THE._, "x")
+        );
+        Expression b = new JExpression(
+            _(THE._, "y", _(x))
+        );
+        test(b, "the x y");
+	}
+
+    private static final XMLInputFactory FACTORY = new WstxInputFactory();
+
+    @Test
+	public void test_08() throws Exception {
+        Expression a = new AnimoExpression("any a");
+        Expression b = new AnimoExpression("all b");
+        Expression c = new AnimoExpression("the c");
+        Expression x = new JExpression(
+            _(HAVE._, c, _(a), _(b))
+        );
+        Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
+        Expression z = new JExpression(
+            element("z", _(GET._, "e", _(x)), _(y))
+        );
+        test(z, "\\z (get e have c (any a) (all b)) (\\y (@z \"test\") \"content\")");
 	}
 
 }
