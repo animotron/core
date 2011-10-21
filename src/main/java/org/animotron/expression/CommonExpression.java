@@ -23,6 +23,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
@@ -38,39 +39,37 @@ public class CommonExpression extends Expression {
     public CommonExpression(String data) throws Exception {
         e = new AnimoExpression(data);
     }
-    public CommonExpression(GraphBuilder builder, String data) throws Exception {
+    public CommonExpression(GraphBuilder builder, String data) {
         e = new AnimoExpression(builder, data);
     }
 
 
-    public CommonExpression(File file) throws Exception {
+    public CommonExpression(File file) throws IOException {
         this(file, file.getName());
     }
-    public CommonExpression(GraphBuilder builder, File file) throws Exception {
+    public CommonExpression(GraphBuilder builder, File file) throws IOException {
         this(builder, file, file.getName());
     }
 
 
-    public CommonExpression(File file, String path) throws Exception {
+    public CommonExpression(File file, String path) throws IOException {
         this(new FileInputStream(file), path);
     }
-    public CommonExpression(GraphBuilder builder, File file, String path) throws Exception {
+    public CommonExpression(GraphBuilder builder, File file, String path) throws IOException {
         this(builder, new FileInputStream(file), path);
     }
 
-
-    public CommonExpression(InputStream stream) throws Exception {
+    public CommonExpression(InputStream stream) {
         e = new AnimoExpression(stream);
     }
-    public CommonExpression(GraphBuilder builder, InputStream stream) throws Exception {
+    public CommonExpression(GraphBuilder builder, InputStream stream) {
         e = new AnimoExpression(builder, stream);
     }
 
-
-    public CommonExpression(InputStream stream, String path) throws Exception {
+    public CommonExpression(InputStream stream, String path) {
         e = isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path);
     }
-    public CommonExpression(GraphBuilder builder, InputStream stream, String path) throws Exception {
+    public CommonExpression(GraphBuilder builder, InputStream stream, String path) {
         e = isAnimo(path) ? new AnimoExpression(builder, stream) : new BinaryExpression(builder, stream, path);
     }
 
