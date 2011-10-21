@@ -20,7 +20,6 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.BinaryGraphHandler;
 import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -37,7 +36,4 @@ public class BinarySerializer {
         AnimoResultTraverser._.traverse(new BinaryGraphHandler(out), r);
     }
 
-    public static void serialize(Node n, OutputStream out) throws IOException {
-        BinaryGraphHandler.write(n, out);
-    }
 }

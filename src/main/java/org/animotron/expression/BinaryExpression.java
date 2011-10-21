@@ -24,6 +24,7 @@ import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
+import org.animotron.statement.value.STREAM;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 
@@ -32,7 +33,6 @@ import java.security.MessageDigest;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static org.animotron.Properties.BIN;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.AnimoGraph.getStorage;
 
@@ -74,11 +74,6 @@ public class BinaryExpression extends AbstractExpression {
     }
 
     @Override
-    public void start() {
-
-    }
-
-    @Override
     public void build() throws IOException, AnimoException {
         String txID = UUID.randomUUID().toString();
         File tmp = new File(TMP_STORAGE, txID);
@@ -107,6 +102,7 @@ public class BinaryExpression extends AbstractExpression {
             } else {
                     builder.start(THE._);
                         builder._(IS._, FILE);
+                        builder._(STREAM._, hash);
                         String[] parts = path.split(Pattern.quote(File.separator));
                         //Expression prev = null;
                         for (String part : parts) {
@@ -115,7 +111,6 @@ public class BinaryExpression extends AbstractExpression {
                             }
                         }
                     builder.end();
-                /// TODO make a new statament BIN
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
@@ -131,11 +126,6 @@ public class BinaryExpression extends AbstractExpression {
 
     public static File getFile(String hash){
         return new File(getFolder(hash),  hash);
-    }
-    
-    @Override
-    public void end() {
-        BIN.set(getEndNode(), hash);
     }
 
 }

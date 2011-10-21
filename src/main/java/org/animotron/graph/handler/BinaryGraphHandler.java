@@ -21,12 +21,11 @@ package org.animotron.graph.handler;
 import org.animotron.Properties;
 import org.animotron.expression.BinaryExpression;
 import org.animotron.statement.Statement;
+import org.animotron.statement.value.STREAM;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
-
-import static org.animotron.Properties.BIN;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -40,8 +39,8 @@ public class BinaryGraphHandler implements GraphHandler {
         this.out = out;
     }
 
-    public static void write(Node n, OutputStream out) throws IOException {
-        File bin = BinaryExpression.getFile((String) Properties.BIN.get(n));
+    private void write(Node n, OutputStream out) throws IOException {
+        File bin = BinaryExpression.getFile((String) Properties.VALUE.get(n));
         InputStream in = null;
             in = new FileInputStream(bin);
         byte buf[] = new byte[1024 * 4];
@@ -49,14 +48,12 @@ public class BinaryGraphHandler implements GraphHandler {
         while((len=in.read(buf))>0) {
             out.write(buf, 0, len);
         }
-
     }
 
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        Node n = r.getEndNode();
-        if (BIN.has(n)) {
-            write(n, out);
+        if (statement instanceof STREAM) {
+            write(r.getEndNode(), out);
         }
     }
 

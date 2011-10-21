@@ -174,11 +174,9 @@ public abstract class GraphBuilder {
         try {
         	s = null; r = null;
             stack = new Stack<Object[]>();
-            exp.start();
             startGraph();
             exp.build();
             endGraph();
-            exp.end();
             tx.success();
             finishTx(tx);
         } catch (Exception e) {

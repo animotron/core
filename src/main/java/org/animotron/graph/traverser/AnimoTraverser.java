@@ -139,7 +139,7 @@ public class AnimoTraverser {
         private Object step() {
             if (p.hasNext()) {
                 String o = p.next();
-                if (Properties.VALUE.name().equals(o) || Properties.NAME.name().equals(o)|| Properties.BIN.name().equals(o)) {
+                if (Properties.VALUE.name().equals(o) || Properties.NAME.name().equals(o)) {
                     return step();
                 } else {
                     return o;
