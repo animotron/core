@@ -18,16 +18,16 @@
  */
 package org.animotron.io;
 
+import org.animotron.utils.Utils;
+
 import java.io.IOException;
 import java.util.Iterator;
-
-import org.animotron.utils.Utils;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class PipedInput implements Cloneable, Iterable<Object> {
+public class PipedInput implements Cloneable, Iterable<Object>, Iterator<Object> {
     
 	protected boolean closedByWriter = false;
 	protected volatile boolean closedByReader = false;
@@ -145,52 +145,41 @@ public class PipedInput implements Cloneable, Iterable<Object> {
     	}
     }
 
+    private Object next = null;
+
 	@Override
 	public Iterator<Object> iterator() {
-		//XXX: this should be created only ones
-		return new StreamIterator();
+		//XXX: this should be called only ones
+        try {
+            next = read();
+        } catch (IOException e) {
+            next = e;
+        }
+		return this;
 	}
-	
-	/**
-	 * This class return next object or IOException.
-	 * 
-	 * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
-	 *
-	 */
-	class StreamIterator implements Iterator<Object> {
-		
-		Object next = null;
-		
-		public StreamIterator() {
-			try {
-				next = read();
-			} catch (IOException e) {
-				next = e;
-			}
-		}
-		
-		@Override
-		public boolean hasNext() {
-			return next != null;
-		}
 
-		@Override
-		public Object next() {
-			Object current = next;
-			if (current instanceof Exception) {
-				next = null;
-			} else {
-				try {
-					next = read();
-				} catch (IOException e) {
-					next = e;
-				}
-			}
-			return current;
-		}
+    @Override
+    public boolean hasNext() {
+        return next != null;
+    }
 
-		@Override
-		public void remove() {
-		}
-	}
+    @Override
+    public Object next() {
+        Object current = next;
+        if (current instanceof Exception) {
+            next = null;
+        } else {
+            try {
+                next = read();
+            } catch (IOException e) {
+                next = e;
+            }
+        }
+        return current;
+    }
+
+    @Override
+    public void remove() {
+    }
+
 }
