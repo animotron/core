@@ -39,7 +39,7 @@ public class BinaryGraphHandler implements GraphHandler {
         this.out = out;
     }
 
-    private void write(Node n, OutputStream out) throws IOException {
+    protected void write(Node n, OutputStream out) throws IOException {
         File bin = BinaryExpression.getFile((String) Properties.VALUE.get(n));
         InputStream in = null;
             in = new FileInputStream(bin);
