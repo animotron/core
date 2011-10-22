@@ -145,21 +145,24 @@ public class PipedInput implements Cloneable, Iterable<Object>, Iterator<Object>
     	}
     }
 
-    private Object next = null;
-
 	@Override
 	public Iterator<Object> iterator() {
-		//XXX: this should be called only ones
-        try {
-            next = read();
-        } catch (IOException e) {
-            next = e;
-        }
 		return this;
 	}
 
+    private Object next = null;
+    private boolean first = true;
+
     @Override
     public boolean hasNext() {
+        if (first) {
+            try {
+                next = read();
+            } catch (IOException e) {
+                next = e;
+            }
+            first = false;
+        }
         return next != null;
     }
 
