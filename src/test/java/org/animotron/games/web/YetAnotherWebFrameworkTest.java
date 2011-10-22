@@ -113,17 +113,17 @@ public class YetAnotherWebFrameworkTest extends ATest {
         assertAnimoResult(s,
             "the rest " +
                 "the root-service " +
-                "(is service) " +
-                "(have uri \"/\") " +
-                "(the html " +
-                    "\\html " +
-                        "(\\head \\title have title \"Welcome to Animo\") " +
-                        "(\\body the theme-concrete-root-layout (is root-layout) " +
-                            "(\\h1 have title \"Welcome to Animo\") " +
-                            "(\\p have content \"It is working!\") " +
-                            "(\\ul " +
-                                "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
-                                "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
+                    "(is service) " +
+                    "(have uri \"/\") " +
+                    "(the html " +
+                        "\\html " +
+                            "(\\head \\title have title \"Welcome to Animo\") " +
+                            "(\\body the theme-concrete-root-layout (is root-layout) " +
+                                "(\\h1 have title \"Welcome to Animo\") " +
+                                "(\\p have content \"It is working!\") " +
+                                "(\\ul " +
+                                    "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
+                                    "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))))");
 
 
         assertXMLResult(s,

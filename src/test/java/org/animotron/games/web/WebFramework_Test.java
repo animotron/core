@@ -144,17 +144,17 @@ public class WebFramework_Test extends ATest {
                 "the root-service " +
                     "(is service) " +
                     "(have uri \"/\") " +
-                        "(the html " +
-                            "the html-composition " +
-                                "(is composition) " +
-                                "(have content " +
-                                    "\\html " +
-                                        "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
-                                        "(\\body the theme-concrete-root-layout " +
-                                            "(is root-layout) " +
-                                            "(have content " +
-                                                "(\\div (@id \"title\") (have title \"Welcome to Animotron\")) " +
-                                                "(\\div (@id \"content\") (have content \"Overview\"))))))");
+                    "(the html " +
+                        "the html-composition " +
+                            "(is composition) " +
+                            "(have content " +
+                                "\\html " +
+                                    "(the html-head \\head \\title have title \"Welcome to Animotron\") " +
+                                    "(\\body the theme-concrete-root-layout " +
+                                        "(is root-layout) " +
+                                        "(have content " +
+                                            "(\\div (@id \"title\") (have title \"Welcome to Animotron\")) " +
+                                            "(\\div (@id \"content\") (have content \"Overview\"))))))");
 
         assertXMLResult(s,
             "<html>" +

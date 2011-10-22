@@ -148,9 +148,10 @@ public class WebFramework__Test extends ATest {
 
         assertAnimoResult(s,
             "the s " +
-                "the root-service " +
-                    "(is service) " +
-                    "(have uri \"/\") " +
+                "the current-service " +
+                    "the root-service " +
+                        "(is service) " +
+                        "(have uri \"/\") " +
                         "(the html " +
                             "the html-composition " +
                                 "(is composition) " +
