@@ -83,7 +83,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, new PFlow(pf), r, level, isOne);
+                result(handler, pf, r, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof Relation) {
 				handler.start(s, r, level++, isOne);

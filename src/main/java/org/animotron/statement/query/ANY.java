@@ -50,9 +50,11 @@ public class ANY extends AbstractQuery implements Reference {
 	private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-			System.out.println("ANY ************************** "+pf.getOP());
-            
 			final Relationship op = pf.getOP();
+
+			System.out.println("ANY ******** "+op+" "+reference(op));
+			System.out.println(pf.getPFlowPath());
+            
 			final Node n = pf.getOP().getEndNode();
 			Node node = Utils.getByREF(n);
 

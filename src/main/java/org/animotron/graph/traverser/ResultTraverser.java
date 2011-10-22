@@ -33,7 +33,6 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -122,15 +121,16 @@ public class ResultTraverser extends AnimoTraverser {
     }
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
-    	Iterator<Relationship> i = AnimoGraph.getResult(pf.getLastContext(), r.getEndNode());
+    	PFlow pflow = new PFlow(pf);
+    	Iterator<Relationship> i = AnimoGraph.getResult(pflow.getLastContext(), r.getEndNode());
     	//Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
-        boolean found = iterate(handler, pf, i, level, isOne);
+        boolean found = iterate(handler, pflow, i, level, isOne);
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
             PipedInput in = null;
-            in = Evaluator._.execute(pf, r);
-            iterate(handler, pf, in, level, isOne);
+            in = Evaluator._.execute(pflow, r);
+            iterate(handler, pflow, in, level, isOne);
         }
 
         return found;
