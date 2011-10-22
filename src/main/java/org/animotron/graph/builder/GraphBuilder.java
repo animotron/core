@@ -150,6 +150,14 @@ public abstract class GraphBuilder {
 
     protected abstract void bind(Relationship r, Object[] o, byte[] hash) throws IOException;
 
+    public final void _(Statement statement) throws AnimoException, IOException {
+        _(statement, null);
+    }
+
+    public final void _(Object value) throws AnimoException, IOException {
+        _(VALUE._, value);
+    }
+
     public final void _(Statement statement, Object reference) throws AnimoException, IOException {
         start(statement, reference);
         end();
