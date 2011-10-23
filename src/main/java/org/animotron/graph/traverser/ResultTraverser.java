@@ -128,8 +128,7 @@ public class ResultTraverser extends AnimoTraverser {
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            PipedInput in = null;
-            in = Evaluator._.execute(pflow, r);
+            Iterator<Relationship>in = Evaluator._.execute(pflow, r);
             iterate(handler, pflow, in, level, isOne);
         }
 

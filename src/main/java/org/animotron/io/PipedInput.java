@@ -18,6 +18,7 @@
  */
 package org.animotron.io;
 
+import org.animotron.expression.Expression;
 import org.animotron.utils.Utils;
 
 import java.io.IOException;
@@ -27,7 +28,7 @@ import java.util.Iterator;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class PipedInput implements Cloneable, Iterable<Object>, Iterator<Object> {
+public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
     
 	protected boolean closedByWriter = false;
 	protected volatile boolean closedByReader = false;
@@ -146,39 +147,40 @@ public class PipedInput implements Cloneable, Iterable<Object>, Iterator<Object>
     }
 
 	@Override
-	public Iterator<Object> iterator() {
+	public Iterator<T> iterator() {
 		return this;
 	}
 
-    private Object next = null;
+    private T current = null;
     private boolean first = true;
 
     @Override
     public boolean hasNext() {
         if (first) {
-            try {
-                next = read();
-            } catch (IOException e) {
-                next = e;
-            }
+            next();
             first = false;
         }
-        return next != null;
+        return current != null;
     }
 
     @Override
-    public Object next() {
-        Object current = next;
-        if (current instanceof Exception) {
-            next = null;
-        } else {
-            try {
-                next = read();
-            } catch (IOException e) {
-                next = e;
-            }
+    public T next() {
+        T next = current;
+        current = step();
+        return next;
+    }
+
+    private T step() {
+        try {
+            T o = (T) read();
+            if (o instanceof Expression)
+                return null;
+            return o;
+        } catch (ClassCastException e) {
+            return step();
+        } catch (IOException e) {
+            return null;
         }
-        return current;
     }
 
     @Override
