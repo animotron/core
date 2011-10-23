@@ -107,6 +107,9 @@ public class PFlow {
 		if (s instanceof Reference || op.isType(RESULT) || op.isType(REF))
 			path.insertElementAt(op, 0);
 		
+		if (path.isEmpty())
+			path.add(op);
+		
 		this.op = op;
 	}
 
@@ -397,15 +400,20 @@ public class PFlow {
 //		return parent.isInStack(r);
 		
 //		for (Relationship rr : getFlowPath().relationships()) {
+		System.out.print("IN STACK CHECK "+r+" in "+path);
 		for (Relationship rr : path) {
 			if (rr.equals(r)) return true;
 			try {
 				long id = (Long)rr.getProperty(RID.name());
-				if (r.getId() == id) return true;
+				if (r.getId() == id) {
+					System.out.println(" FOUND");
+					return true;
+				}
 				
 			} catch (Exception e) {
 			}
 		}
+		System.out.println(" NOT FOUND");
 		return false;
 
 	}

@@ -22,6 +22,7 @@ import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.MLResultTraverser;
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
@@ -55,5 +56,10 @@ public class XMLResultSerializer {
     public static void serialize(Relationship r, OutputStream out) throws IOException {
         XMLStreamWriter writer = getXMLStreamWriter(out);
 		MLResultTraverser._.traverse(new StAXGraphHandler(writer), r);
+    }
+
+    public static void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
+        XMLStreamWriter writer = getXMLStreamWriter(out);
+		MLResultTraverser._.traverse(pf, new StAXGraphHandler(writer), r);
     }
 }

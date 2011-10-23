@@ -50,5 +50,4 @@ public abstract class AbstractExpression extends Expression {
         }
         return relationship;
     }
-
 }
