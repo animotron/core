@@ -180,7 +180,16 @@ public class CurrentWebFrameworkTest extends ATest {
                     "</ul>" +
                 "</body>" +
             "</html>");
-
+        
+        JExpression ss = new JExpression(
+                _(GET._, "content",
+                    _(AN._, "rest",
+                        _(USE._, "root"),
+                        _(HAVE._, "uri", text("/favicon.ico")),
+                        _(HAVE._, "host", text("localhost"))
+                    )
+                )
+            );
+        assertAnimoResult(ss, "");
     }
-
 }

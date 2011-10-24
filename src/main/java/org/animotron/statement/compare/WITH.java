@@ -65,21 +65,21 @@ public class WITH extends Operator implements Predicate {
 		List<Relationship> actual = new FastList<Relationship>();
 		List<Relationship> expected = new FastList<Relationship>();
 
-		PipedInput in;
+		PipedInput<Relationship[]> in;
 		
 		System.out.println("Eval actual");
 		for (Relationship[] have : haveSet) {
 			in = Evaluator._.execute(new PFlow(pf), have[1].getEndNode());
-			for (Object e : in) {
-				actual.add((Relationship) e);
+			for (Relationship[] e : in) {
+				actual.add(e[0]);
 				System.out.println("actual "+e);
 			}
 		}
 
 		System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
-		for (Object e : in) {
-			Relationship r = Utils.relax((Relationship) e);
+		for (Relationship[] e : in) {
+			Relationship r = Utils.relax(e[0]);
 			expected.add(r);
 			System.out.println("expected "+r);
 		}
