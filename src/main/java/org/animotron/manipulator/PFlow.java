@@ -26,6 +26,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
+import org.animotron.utils.MessageDigester;
 import org.animotron.utils.Utils;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
@@ -38,7 +39,10 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -346,6 +350,21 @@ public class PFlow {
 	public void popContextPoint() {
 		//System.out.println("pop "+this+" "+path);
 		path.remove(0);
+	}
+
+	public byte[] getPathHash() {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();  
+		DataOutputStream dos = new DataOutputStream(bos);  
+		
+		for (Relationship p : path) {
+			try {
+				dos.writeLong(p.getId());
+			} catch (IOException e) {
+			}
+		}
+		MessageDigest md = MessageDigester.md();
+		md.update(bos.toByteArray());
+		return md.digest();
 	}
 
 	public Relationship getLastContext() {

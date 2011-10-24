@@ -23,6 +23,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.inmemory.InMemoryRelationship;
+import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -55,7 +56,7 @@ public abstract class AbstractStatement implements Statement {
 		return name;
 	}
 	
-	protected Relationship createResult(final Relationship context, final Node node, final Relationship r, final RelationshipType rType) {
+	protected Relationship createResult(final PFlow pf, final Relationship context, final Node node, final Relationship r, final RelationshipType rType) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
@@ -64,7 +65,7 @@ public abstract class AbstractStatement implements Statement {
 				RID.set(res, r.getId());
 				//for debug
 				CID.set(res, context.getId());
-				AnimoGraph.result(res, context.getId());
+				AnimoGraph.result(res, pf.getPathHash());
 				return res;
 			}
 		});

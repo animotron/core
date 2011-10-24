@@ -177,12 +177,12 @@ public class AnimoGraph {
 		return node;
 	}
 
-	public static void result (Relationship r, long id) {
-		RESULT_INDEX.add(r, RESULT, id);
+	public static void result (Relationship r, byte[] hash) {
+		RESULT_INDEX.add(r, RESULT, hash);
 	}
 
-	public static IndexHits<Relationship> getResult(Relationship ref, Node node) {
-		return RESULT_INDEX.get(RESULT, ref.getId(), node, null);
+	public static IndexHits<Relationship> getResult(byte[] hash, Node node) {
+		return RESULT_INDEX.get(RESULT, hash, node, null);
 		//return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
 	}
 

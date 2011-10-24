@@ -138,7 +138,7 @@ public class GET extends Operator implements Evaluable, Query {
 						final Set<Relationship[]> rSet = get(pf, context[1], name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(context[0], createResult(r[0], node, r[1], HAVE._));
+								pf.sendAnswer(context[0], createResult(pf, r[0], node, r[1], HAVE._));
 							}
 							return;
 						}
@@ -183,7 +183,7 @@ public class GET extends Operator implements Evaluable, Query {
 						Set<Relationship[]> rSet = get(pf, st, name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(r[0], createResult(pf.getLastContext(), node, r[1], HAVE._));
+								pf.sendAnswer(r[0], createResult(pf, r[0], node, r[1], HAVE._));
 							}
 							break;
 						}

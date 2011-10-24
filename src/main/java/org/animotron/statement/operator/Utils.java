@@ -54,7 +54,7 @@ public class Utils {
 		
 		Relationship op = pf.getOP();
 		
-		for (Relationship r : AnimoGraph.getResult(pf.getLastContext(), node)) {
+		for (Relationship r : AnimoGraph.getResult(pf.getPathHash(), node)) {
 			pf.sendAnswer(op, r);
 			
 			haveSome = true;

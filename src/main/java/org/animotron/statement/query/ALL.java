@@ -70,13 +70,13 @@ public class ALL extends AbstractQuery implements Reference {
 			}
 
 			if (underUSE && filtering(pf, node, uses))
-				pf.sendAnswer( op, createResult( op, n, getThe(node), RESULT ) );
+				pf.sendAnswer( op, createResult( pf, op, n, getThe(node), RESULT ) );
 
 	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
 	            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
 	            Node res = tdR.getStartNode();
 	            if (filtering(pf, res, uses)) {
-	                pf.sendAnswer( op, createResult( op, n, getThe(res), RESULT ) );
+	                pf.sendAnswer( op, createResult( pf, op, n, getThe(res), RESULT ) );
 	            }
 	        }
 

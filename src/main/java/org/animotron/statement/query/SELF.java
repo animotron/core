@@ -91,14 +91,14 @@ public class SELF extends AbstractQuery {
                 res = GET._.getBySELF(pf, ref.getEndNode(), (String) reference(pf.getOP()));
 
                 if (res != null)
-                    pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, HAVE._));
+                    pf.sendAnswer(op, createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._));
 
             } else if (searchHave == 2) {
                 //the instance self in have
                 res = GET._.getBySELF(pf, pf.getStartNode(), (String) reference(pf.getOP()));
 
                 if (res != null)
-                    pf.sendAnswer(op, createResult(pf.getLastContext(), pf.getOPNode(), res, HAVE._));
+                    pf.sendAnswer(op, createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._));
                     //TODO Why don't create persistent relationship?
 
             } else
