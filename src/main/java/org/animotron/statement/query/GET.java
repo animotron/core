@@ -169,7 +169,7 @@ public class GET extends Operator implements Evaluable, Query {
 				pf.answer.subscribe(onContext);
 				
 				if (Utils.haveContext(pf)) {
-					pf.addContextPoint(op);
+					//pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
 					System.out.println("P-FLOW is context for GET! '"+reference(op)+"'");
@@ -239,7 +239,7 @@ public class GET extends Operator implements Evaluable, Query {
 			System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				System.out.println("checking "+n);
+				//System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, name);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});
@@ -250,8 +250,8 @@ public class GET extends Operator implements Evaluable, Query {
 			List<Relationship> newREFs = new FastList<Relationship>();
 
 			for (Relationship n : nextREFs) {
-				System.out.println(""+n);
-				System.out.println("getStartNode OUTGOING");
+				//System.out.println(""+n);
+				//System.out.println("getStartNode OUTGOING");
 				if (first || !REFs.contains(n)) {
 					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
 						if (r.equals(n)) continue;
@@ -280,7 +280,7 @@ public class GET extends Operator implements Evaluable, Query {
 				}
 				first = false;
 
-				System.out.println("getEndNode OUTGOING");
+				//System.out.println("getEndNode OUTGOING");
 				getOutgoingReferences(pf, n.getEndNode(), newREFs);
 			}
 
@@ -293,7 +293,7 @@ public class GET extends Operator implements Evaluable, Query {
 	private void getOutgoingReferences(PFlow pf, Node node, List<Relationship> newREFs) {
 
 		for (Relationship r : node.getRelationships(OUTGOING)) {
-			System.out.println(r);
+			//System.out.println(r);
 
 			Statement st = Statements.relationshipType(r);
 			if (st instanceof AN) {
@@ -321,13 +321,13 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		boolean checkStart = true;
 		if (!ref.isType(REF)) {
-			System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
-			try {
-				System.out.print(" "+reference(ref));
-			} catch (Exception e) {
-			} finally {
-				System.out.println();
-			}
+			//System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
+//			try {
+//				System.out.print(" "+reference(ref));
+//			} catch (Exception e) {
+//			} finally {
+//				System.out.println();
+//			}
 			checkStart = false;
 		}
 		
@@ -354,7 +354,7 @@ public class GET extends Operator implements Evaluable, Query {
 		//search 'IC' by 'IS' topology
 		for (Relationship tdR : td_eval_IS.traverse(ref).relationships()) {
 
-			System.out.println("GET IC -> IS "+tdR);
+			//System.out.println("GET IC -> IS "+tdR);
 			
 			Relationship r = getByIC(tdR.getEndNode(), name);
 			if (r != null) {
@@ -440,7 +440,7 @@ public class GET extends Operator implements Evaluable, Query {
 					//as it
 					//return tdR;
 				}
-				System.out.println();
+				//System.out.println();
 			}
 		}
 		

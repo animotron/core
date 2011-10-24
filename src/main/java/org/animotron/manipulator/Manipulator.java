@@ -125,8 +125,8 @@ public abstract class Manipulator {
             				Relationship r = getDb().getRelationshipById(
         						(Long)msg.getProperty(RID.name())
         					);
-            				pf.addContextPoint(r);
-            				addedContexts++;
+            				addedContexts += pf.addContextPoint(r);
+            				
             				if (msg.isType(RESULT)) {
             					msg = r;
 
@@ -137,7 +137,7 @@ public abstract class Manipulator {
             			} catch (Exception e) {}
 
             			if (context[0] != null)
-            				pf.addContextPoint(context[0]);
+            				addedContexts += pf.addContextPoint(context[0]);
             				
             			if (msg.isType(REF)) {
 

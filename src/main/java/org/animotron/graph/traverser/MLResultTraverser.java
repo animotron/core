@@ -56,14 +56,6 @@ public class MLResultTraverser extends ResultTraverser {
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
         int addedContexts = 0;
-        try {
-        	Relationship context = getDb().getRelationshipById(
-                (Long)r.getProperty(CID.name())
-            );
-            pf.addContextPoint(context);
-            addedContexts++;
-        } catch (Exception e) {
-		}
 
         if (r.isType(RESULT)) {
         	r = getDb().getRelationshipById(
@@ -78,11 +70,17 @@ public class MLResultTraverser extends ResultTraverser {
             s = Statements.relationshipType(r);
         }
 
-        if (s instanceof Reference || s instanceof HAVE) {
-	        pf.addContextPoint(r);
-	        addedContexts++;
-        }
+        if (s instanceof Reference || s instanceof HAVE)
+	        addedContexts += pf.addContextPoint(r);
 
+        try {
+        	Relationship context = getDb().getRelationshipById(
+                (Long)r.getProperty(CID.name())
+            );
+            addedContexts += pf.addContextPoint(context);
+        } catch (Exception e) {
+		}
+        
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
                 if (s instanceof Prefix) {

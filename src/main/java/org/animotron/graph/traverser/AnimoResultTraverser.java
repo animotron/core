@@ -67,16 +67,14 @@ public class AnimoResultTraverser extends ResultTraverser {
             s = Statements.relationshipType(r);
         }
         
-        if (s instanceof Reference || s instanceof HAVE) {
-	        pf.addContextPoint(r);
-	        addedContexts++;
-        }
+        if (s instanceof Reference || s instanceof HAVE)
+	        addedContexts += pf.addContextPoint(r);;
+
         try {
 	        Relationship context = getDb().getRelationshipById(
                 (Long)r.getProperty(CID.name())
             );
-	        pf.addContextPoint(context);
-	        addedContexts++;
+	        addedContexts += pf.addContextPoint(context);
         } catch (Exception e) {
 		}
         

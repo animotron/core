@@ -109,7 +109,7 @@ public class PFlow {
 		
 		Statement s = Statements.relationshipType(op);
 		if (s instanceof Reference || op.isType(RESULT) || op.isType(REF))
-			path.insertElementAt(op, 0);
+			addContextPoint(op);
 		
 		if (path.isEmpty())
 			path.add(op);
@@ -341,10 +341,14 @@ public class PFlow {
 	}
 
 
-	public void addContextPoint(Relationship r) {
+	public int addContextPoint(Relationship r) {
 //		System.out.print("adding "+this+" "+r+" "+r.getType());
 //		System.out.println(new IOException().getStackTrace()[1]);
-		path.insertElementAt(r, 0);
+		if (!path.isEmpty() && !path.get(0).equals(r)) {
+			path.insertElementAt(r, 0);
+			return 1;
+		}
+		return 0;
 	}
 
 	public void popContextPoint() {
