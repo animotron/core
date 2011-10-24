@@ -54,7 +54,7 @@ public class OrderIndexTest extends ATest {
 		}
 		
 		System.out.println("reading ...");
-		IndexHits<Relationship> q = OrderIndex.query(getROOT());
+		IndexHits<Relationship> q = OrderIndex.queryDown(getROOT());
 		try {
 			int i = 1;
 			for (Relationship r : q ) {

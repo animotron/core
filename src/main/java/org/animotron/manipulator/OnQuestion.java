@@ -40,7 +40,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 		
         List<PFlow> list = new FastList<PFlow>();
 
-		IndexHits<Relationship> q = OrderIndex.query(pf.getOPNode());
+		IndexHits<Relationship> q = OrderIndex.queryDown(pf.getOPNode());
 		try {
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {

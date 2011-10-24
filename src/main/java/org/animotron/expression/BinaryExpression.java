@@ -35,6 +35,8 @@ import java.util.regex.Pattern;
 
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.AnimoGraph.getStorage;
+import static org.animotron.utils.MessageDigester.byteArrayToHex;
+import static org.animotron.utils.MessageDigester.longToHex;
 
 
 /**
@@ -81,14 +83,16 @@ public class BinaryExpression extends AbstractExpression {
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];
         int len;
+        long size = 0;
         MessageDigest md = MessageDigester.md();
         while((len=stream.read(buf))>0) {
             out.write(buf,0,len);
             md.update(buf,0,len);
+            size += len;
         }
         out.close();
         stream.close();
-        hash = MessageDigester.byteArrayToHex(md.digest());
+        hash = byteArrayToHex(md.digest()) + longToHex(size);
         File dir = getFolder(hash);
         File bin = getFile(dir, hash);
         if (bin.exists()) {

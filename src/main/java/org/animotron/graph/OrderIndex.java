@@ -72,24 +72,28 @@ public class OrderIndex {
         INDEX.remove(r, NAME);
     }
 
-	public static IndexHits<Relationship> query(Node startNode) {
-		return INDEX.query(NAME, sort(NAME), startNode, null);
-	}
+    public static IndexHits<Relationship> queryDown(Node node) {
+        return INDEX.query(NAME, sort(NAME), node, null);
+    }
 
-	public static Relationship position(long position, Node startNode) {
-		IndexHits<Relationship> q = query(startNode);
-		try {
-			if (q.hasNext()) return q.next();
-		} finally {
-			q.close();
-		}
-		return null;
-	}
+    public static IndexHits<Relationship> queryUp(Node node) {
+        return INDEX.query(NAME, sort(NAME), null, node);
+    }
+
+//	public static Relationship position(long position, Node startNode) {
+//		IndexHits<Relationship> q = queryDown(startNode);
+//		try {
+//			if (q.hasNext()) return q.next();
+//		} finally {
+//			q.close();
+//		}
+//		return null;
+//	}
 
 	public static Relationship[] first(int qty, Node startNode) {
-		IndexHits<Relationship> q = query(startNode);
+		IndexHits<Relationship> q = queryDown(startNode);
 		try {
-			Relationship[] res = new Relationship[qty]; 
+			Relationship[] res = new Relationship[qty];
 			for (int i = 0; i < qty; i++) {
 				if (q.hasNext()) res[i] = q.next();
 				else throw new IndexOutOfBoundsException("Required: "+qty+", have: "+(i+1));

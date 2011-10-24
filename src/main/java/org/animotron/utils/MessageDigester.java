@@ -115,6 +115,14 @@ public class MessageDigester {
         return buf.toString();
     }
 
+    public static String longToHex( long b ) {
+        byte[] target = new byte[8];
+        for ( int i = 0; i < 8; i++ ) {
+            target[7-i] = (byte) (b >>> (i * 8));
+        }
+        return byteArrayToHex(target);
+    }
+
 
     /**
      *  The main program for the MD5 class

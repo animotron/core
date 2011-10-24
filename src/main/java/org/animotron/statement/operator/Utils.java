@@ -89,7 +89,7 @@ public class Utils {
 
 	public static boolean haveContext(PFlow pf) {
 		
-		IndexHits<Relationship> q = OrderIndex.query(pf.getOPNode());
+		IndexHits<Relationship> q = OrderIndex.queryDown(pf.getOPNode());
 		try {
 			while (q.hasNext()) {
 				Relationship r = q.next();

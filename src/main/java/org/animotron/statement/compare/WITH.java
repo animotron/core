@@ -111,7 +111,7 @@ public class WITH extends Operator implements Predicate {
 	private List<Relationship> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
 		List<Relationship> list = new FastList<Relationship>();
 		
-		IndexHits<Relationship> q = OrderIndex.query(node);
+		IndexHits<Relationship> q = OrderIndex.queryDown(node);
 		try {
 			for (Relationship i : q) {
 				Statement s = Statements.relationshipType(i);

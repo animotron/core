@@ -183,7 +183,7 @@ public class AnimoGraph {
 
 	public static IndexHits<Relationship> getResult(byte[] hash, Node node) {
 		return RESULT_INDEX.get(RESULT, hash, node, null);
-		//return RESULT_INDEX.query(RESULT, ref.getId(), node, null);
+		//return RESULT_INDEX.queryDown(RESULT, ref.getId(), node, null);
 	}
 
     public static void copyProperties(PropertyContainer src, PropertyContainer dst) {

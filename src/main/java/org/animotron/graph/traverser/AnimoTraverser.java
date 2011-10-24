@@ -114,7 +114,7 @@ public class AnimoTraverser {
 
         public It (Node n) {
             p = n.getPropertyKeys().iterator();
-            q = OrderIndex.query(n);
+            q = OrderIndex.queryDown(n);
             r = q.iterator();
             next();
         }
