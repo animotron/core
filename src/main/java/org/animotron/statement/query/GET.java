@@ -201,7 +201,7 @@ public class GET extends Operator implements Evaluable, Query {
 	};
 
 	public Set<Relationship[]> get(PFlow pf, Relationship ref, final String name) {
-		List<Relationship> refs = new FastList<Relationship>();
+		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
 		
 		return get(pf, refs, name); 
@@ -216,18 +216,20 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		if (!set.isEmpty()) return set;
 
-		List<Relationship> newREFs = new FastList<Relationship>();
-		getOutgoingReferences(pf, ref, newREFs);
+		Set<Relationship> newREFs = new FastSet<Relationship>();
+		getOutgoingReferences(pf, ref, newREFs, null);
 		
 		return get(pf, newREFs, name); 
 	}
 
-	public Set<Relationship[]> get(PFlow pf, List<Relationship> REFs, final String name) {
+	public Set<Relationship[]> get(PFlow pf, Set<Relationship> REFs, final String name) {
 		//System.out.println("GET context = "+ref);
 		
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
-		List<Relationship> nextREFs = new FastList<Relationship>();
+		Set<Relationship> visitedREFs = new FastSet<Relationship>();
+
+		Set<Relationship> nextREFs = new FastSet<Relationship>();
 		nextREFs.addAll(REFs);
 
 		Relationship have = null;
@@ -247,7 +249,9 @@ public class GET extends Operator implements Evaluable, Query {
 			
 			if (set.size() > 0) return set;
 
-			List<Relationship> newREFs = new FastList<Relationship>();
+			visitedREFs.addAll(nextREFs);
+
+			Set<Relationship> newREFs = new FastSet<Relationship>();
 
 			for (Relationship n : nextREFs) {
 				//System.out.println(""+n);
@@ -261,14 +265,16 @@ public class GET extends Operator implements Evaluable, Query {
 						Statement st = Statements.relationshipType(r);
 						if (st instanceof AN) {
 							Relationship t = AN._.getREF(r);
-							newREFs.add(t);
+							if (!visitedREFs.contains(t))
+								newREFs.add(t);
 						} else if (st instanceof Reference) {
 							try {
 								if (!pf.isInStack(r)) {
 									PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
 									
 									for (Relationship[] rr : in) {
-										newREFs.add(rr[0]);
+										if (!visitedREFs.contains(rr[0]))
+											newREFs.add(rr[0]);
 									}
 								}
 							} catch (IOException e) {
@@ -281,7 +287,7 @@ public class GET extends Operator implements Evaluable, Query {
 				first = false;
 
 				//System.out.println("getEndNode OUTGOING");
-				getOutgoingReferences(pf, n.getEndNode(), newREFs);
+				getOutgoingReferences(pf, n.getEndNode(), newREFs, visitedREFs);
 			}
 
 			if (newREFs.size() == 0) return null;
@@ -290,7 +296,7 @@ public class GET extends Operator implements Evaluable, Query {
 		}
 	}
 	
-	private void getOutgoingReferences(PFlow pf, Node node, List<Relationship> newREFs) {
+	private void getOutgoingReferences(PFlow pf, Node node, Set<Relationship> newREFs, Set<Relationship> visitedREFs) {
 
 		for (Relationship r : node.getRelationships(OUTGOING)) {
 			//System.out.println(r);
@@ -298,7 +304,8 @@ public class GET extends Operator implements Evaluable, Query {
 			Statement st = Statements.relationshipType(r);
 			if (st instanceof AN) {
 				Relationship t = AN._.getREF(r);
-				newREFs.add(t);
+				if (visitedREFs != null && !visitedREFs.contains(t))
+					newREFs.add(t);
 
 			} else if (st instanceof Reference) {
 				if (!pf.isInStack(r)) {
@@ -306,7 +313,8 @@ public class GET extends Operator implements Evaluable, Query {
 						PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf, r), r);
 						
 						for (Relationship[] rr : in) {
-							newREFs.add(rr[0]);
+							if (visitedREFs != null && !visitedREFs.contains(rr[0]))
+								newREFs.add(rr[0]);
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
