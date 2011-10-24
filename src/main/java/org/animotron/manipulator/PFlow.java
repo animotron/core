@@ -400,20 +400,20 @@ public class PFlow {
 //		return parent.isInStack(r);
 		
 //		for (Relationship rr : getFlowPath().relationships()) {
-		System.out.print("IN STACK CHECK "+r+" in "+path);
+		System.out.print("IN STACK CHECK "+r+" in "+path+" ");
 		for (Relationship rr : path) {
 			if (rr.equals(r)) return true;
 			try {
 				long id = (Long)rr.getProperty(RID.name());
 				if (r.getId() == id) {
-					System.out.println(" FOUND");
+					System.out.println("FOUND");
 					return true;
 				}
 				
 			} catch (Exception e) {
 			}
 		}
-		System.out.println(" NOT FOUND");
+		System.out.println("NOT FOUND");
 		return false;
 
 	}

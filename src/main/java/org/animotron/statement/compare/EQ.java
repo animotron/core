@@ -57,16 +57,16 @@ public class EQ extends Operator implements Predicate {
 		List<Relationship> expected = new FastList<Relationship>();
 
 		System.out.println("Eval actual");
-		PipedInput in = Evaluator._.execute(pf, have.getEndNode());
-		for (Object e : in) {
-			actual.add((Relationship) e);
+		PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
+		for (Relationship[] e : in) {
+			actual.add(e[0]);
 			System.out.println("actual "+e);
 		}
 
 		System.out.println("Eval expected");
-		in = Evaluator._.execute(pf, op.getEndNode());
-		for (Object e : in) {
-			expected.add((Relationship) e);
+		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
+		for (Relationship[] e : in) {
+			expected.add(e[0]);
 			System.out.println("expected "+e);
 		}
 		
