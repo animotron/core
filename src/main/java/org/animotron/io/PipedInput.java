@@ -44,7 +44,7 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
     
     protected Object buffer[] = new Object[DEFAULT_PIPE_SIZE];
     
-    public synchronized Object read()  throws IOException {
+    private synchronized Object read()  throws IOException {
         if (!connected) {
             throw new IOException("Pipe not connected");
             
