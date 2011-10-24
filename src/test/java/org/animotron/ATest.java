@@ -108,7 +108,7 @@ public abstract class ATest {
     }
 
     protected void assertAnimo(Relationship op, String expected, boolean pretty) throws IOException {
-        Assert.assertNotNull(op);
+        assertNotNull(op);
 
         System.out.println("Animo serializer...");
         String result = AnimoSerializer.serialize(op, pretty);
@@ -123,7 +123,7 @@ public abstract class ATest {
     }
 
     protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
-        Assert.assertNotNull(op);
+        assertNotNull(op);
 
         System.out.println("Animo result serializer...");
         String result = AnimoResultSerializer.serialize(op, pretty);
@@ -134,7 +134,7 @@ public abstract class ATest {
     }
 
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
-        Assert.assertNotNull(op);
+        assertNotNull(op);
 
         System.out.println("XML Result serializer...");
 
@@ -148,7 +148,7 @@ public abstract class ATest {
     }
 
     protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
-        Assert.assertNotNull(op);
+        assertNotNull(op);
 
         System.out.println("VALUE result serializer...");
         String result = StringResultSerializer.serialize(new PFlow(Evaluator._), op);
@@ -159,7 +159,7 @@ public abstract class ATest {
     }
 
     protected void assertBinary(Relationship op, String expected) throws IOException {
-        Assert.assertNotNull(op);
+        assertNotNull(op);
         System.out.println("Binary serializer...");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         BinarySerializer.serialize(op, out);
