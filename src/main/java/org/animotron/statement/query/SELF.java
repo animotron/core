@@ -33,7 +33,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * Query operator 'self'.

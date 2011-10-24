@@ -67,7 +67,6 @@ public class IS extends Relation implements Prepare {
 			Relationship op = pf.getOP();
 			final Node start = op.getStartNode();
 			
-			@SuppressWarnings("deprecation")
 			Traverser t = TD.evaluator(new Evaluator() {
                 @Override
                 public Evaluation evaluate(Path path) {

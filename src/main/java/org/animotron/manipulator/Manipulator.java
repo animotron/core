@@ -35,9 +35,9 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.animotron.Properties.RID;
-import static org.animotron.Properties.CID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -55,21 +55,21 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public final PipedInput execute(Relationship op) throws IOException {
+	public final PipedInput<Relationship[]> execute(Relationship op) throws IOException {
 		return execute(new PFlow(this), op);
 	}
 
-	public final PipedInput execute(final PFlow pflow, Node op) throws IOException {
+	public final PipedInput<Relationship[]> execute(final PFlow pflow, Node op) throws IOException {
 		return execute(pflow, (PropertyContainer)op);
 	}
 
-	public final PipedInput execute(final PFlow pflow, PropertyContainer op) throws IOException {
+	public final PipedInput<Relationship[]> execute(final PFlow pflow, PropertyContainer op) throws IOException {
 		return execute(pflow, op, null);
 	}
 
-	public final PipedInput execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
+	public final PipedInput<Relationship[]> execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
         final PipedOutput out = new PipedOutput();
-        PipedInput in = out.getInputStream();
+        PipedInput<Relationship[]> in = out.getInputStream();
 
         if (sub == null) {
 			if (op instanceof Node) {
@@ -80,7 +80,10 @@ public abstract class Manipulator {
         }
 		
 		if (sub == null) {
-			out.write(op);
+			if (op instanceof Relationship) {
+				out.write( new Relationship[] {(Relationship) op} );
+			} else
+				System.out.println("UNHANDLED op "+op);
 			out.close();
 			return in;
 		}
@@ -143,30 +146,22 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                        	PipedInput in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
+                        	PipedInput<Relationship[]> in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
                             for (Object obj : in) {
-                                if (obj instanceof Relationship) {
-                                    out.write(obj);
-                                } else {
-                                    System.out.println("UNHANDLED "+obj);
-                                }
+                            	out.write(obj);
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
                             if (s instanceof Query || s instanceof Evaluable) {
-                                PipedInput in = Evaluator._.execute(new PFlow(pf), msg);
+                                PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), msg);
                                 for (Object obj : in) {
-                                    if (obj instanceof Relationship) {
-                                        out.write(obj);
-                                    } else {
-                                        System.out.println("UNHANDLED "+obj);
-                                    }
+                                    out.write(obj);
                                 }
                             } else {
-                                out.write(msg);
+                                out.write(constructVector(pf, msg, addedContexts));
                             }
                         } else {
-                            out.write(msg);
+                            out.write(constructVector(pf, msg, addedContexts));
                         }
                         
                         while (addedContexts > 0) {
@@ -203,6 +198,16 @@ public abstract class Manipulator {
         //reset.await(5, TimeUnit.SECONDS);
 		
 		return in;
+	}
+	
+	private Relationship[] constructVector(PFlow pf, Relationship op, int count) {
+    	List<Relationship> path = pf.getPFlowPath();
+    	Relationship[] res = new Relationship[count+1];
+    	for (int i = 0; i < count; i++) {
+    		res[ count - 1 - i ] = path.get(i);                            		
+    	}
+    	res[0] = op;
+        return res;
 	}
 	
 	public Subscribable<PFlow> onQuestion(final Relationship op) {

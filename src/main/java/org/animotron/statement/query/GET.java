@@ -265,15 +265,10 @@ public class GET extends Operator implements Evaluable, Query {
 						} else if (st instanceof Reference) {
 							try {
 								if (!pf.isInStack(r)) {
-									PipedInput in = Evaluator._.execute(new PFlow(pf), r);
+									PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
 									
-									for (Object rr : in) {
-										if (rr instanceof Relationship) {
-											newREFs.add((Relationship) rr);
-											
-										} else
-											System.out.println("UNHANDLED "+rr);
-										
+									for (Relationship[] rr : in) {
+										newREFs.add(rr[0]);
 									}
 								}
 							} catch (IOException e) {
@@ -308,15 +303,10 @@ public class GET extends Operator implements Evaluable, Query {
 			} else if (st instanceof Reference) {
 				if (!pf.isInStack(r)) {
 					try {
-						PipedInput in = Evaluator._.execute(new PFlow(pf, r), r);
+						PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf, r), r);
 						
-						for (Object rr : in) {
-							if (rr instanceof Relationship) {
-								newREFs.add((Relationship) rr);
-								
-							} else
-								System.out.println("UNHANDLED "+rr);
-							
+						for (Relationship[] rr : in) {
+							newREFs.add(rr[0]);
 						}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

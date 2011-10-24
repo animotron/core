@@ -128,23 +128,35 @@ public class ResultTraverser extends AnimoTraverser {
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<Relationship>in = Evaluator._.execute(pflow, r);
+            Iterator<Relationship[]>in = Evaluator._.execute(pflow, r);
             iterate(handler, pflow, in, level, isOne);
         }
 
         return found;
 
     }
+    
+    private Relationship getOp(Object obj) {
+        if (obj.getClass().isArray()) {
+            return ((Relationship[])obj)[0];
+        } else {
+        	return (Relationship)obj;
+        }
+    }
 
-    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship> it, int level, boolean isOne) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator it, int level, boolean isOne) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
+        
+        Relationship i = null;
+        
         while (it.hasNext()) {
-            Relationship i = it.next();
+        	i = getOp(it.next());
             if (isFirst) {
                 if (it.hasNext()) {
                     build(handler, pf, i, level, false);
-                    i = it.next();
+
+                	i = getOp(it.next());
                     build(handler, pf, i, level, false);
                 } else {
                     build(handler, pf, i, level, true);

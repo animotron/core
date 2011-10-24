@@ -27,7 +27,6 @@ import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
-import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -55,7 +54,7 @@ public class ANY extends AbstractQuery implements Reference {
 
 			System.out.println("ANY ******** "+op+" "+reference(op));
 			System.out.println(pf.getPFlowPath());
-			(new IOException()).printStackTrace();
+			//(new IOException()).printStackTrace();
             
 			final Node n = pf.getOP().getEndNode();
 			Node node = Utils.getByREF(n);
