@@ -1,6 +1,0 @@
-the application-vnd.openxmlformats-officedocument.presentationml.slideshow
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.oasis.openxmlformats-officedocument.presentationml.slideshow")
-    (have name      "OOXML Presentation Slideshow")
-    (have extension "ppsx")

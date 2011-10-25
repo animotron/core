@@ -1,6 +1,0 @@
-the application-xml-proc
-    (is   mime-type)
-    (is   application)
-    (have type      "application/xproc+xml")
-    (have name      "XML pipeline (XProc)")
-    (have extension "xpl" "xproc")

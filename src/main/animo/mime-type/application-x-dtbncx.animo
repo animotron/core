@@ -1,6 +1,0 @@
-the application-x-dtbncx
-    (is   mime-type)
-    (is   application)
-    (have type      "application/x-dtbncx+xml")
-    (have name      "Navigation Control file for XML (NCX) Document")
-    (have extension "ncx")

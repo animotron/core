@@ -1,6 +1,0 @@
-the video-mp4
-    (is   mime-type)
-    (is   video)
-    (have type      "video/mp4")
-    (have name      "MP4 Video")
-    (have extension "mp4")

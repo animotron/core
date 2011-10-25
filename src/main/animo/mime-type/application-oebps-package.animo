@@ -1,6 +1,0 @@
-the application-oebps-package
-    (is   mime-type)
-    (is   application)
-    (have type      "application/oebps-package+xml")
-    (have name      "Open Packaging Format (OPF) Document")
-    (have extension "opf")

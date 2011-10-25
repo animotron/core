@@ -1,6 +1,0 @@
-the application-xquery
-    (is   mime-type)
-    (is   application)
-    (have type      "application/xquery")
-    (have name      "XQuery Script")
-    (have extension "xq" "xql" "xqm" "xquery" "xqy" "xqws")

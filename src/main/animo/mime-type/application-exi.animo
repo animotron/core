@@ -1,6 +1,0 @@
-the application-exi
-    (is   mime-type)
-    (is   application)
-    (have type      "application/exi")
-    (have name      "Efficient XML Interchange")
-    (have extension "exi")

@@ -1,6 +1,0 @@
-the image-tiff
-    (is   mime-type)
-    (is   image)
-    (have type      "image/tiff")
-    (have name      "TIF Image")
-    (have extension "tif" "tiff")

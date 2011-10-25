@@ -1,6 +1,0 @@
-the application-vnd.sun.xml.writer.template
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.sun.xml.writer.template")
-    (have name      "OpenOffice.org Document")
-    (have extension "stw")

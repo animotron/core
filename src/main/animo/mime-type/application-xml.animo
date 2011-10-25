@@ -1,6 +1,0 @@
-the application-xml
-    (is   mime-type)
-    (is   application)
-    (have type      "application/xml")
-    (have name      "XML Document")
-    (have extension "xml")

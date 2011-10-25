@@ -1,6 +1,0 @@
-the image-png
-    (is   mime-type)
-    (is   image)
-    (have type      "image/png")
-    (have name      "PNG Image")
-    (have extension "png")

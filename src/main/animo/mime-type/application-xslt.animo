@@ -1,6 +1,0 @@
-the application-xslt
-    (is   mime-type)
-    (is   application)
-    (have type      "application/xslt+xml")
-    (have name      "XSL Document")
-    (have extension "xsl" "xslt")

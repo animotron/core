@@ -1,6 +1,0 @@
-the application-vnd.oasis.opendocument.presentation
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.oasis.opendocument.presentation")
-    (have name      "OpenOffice.org Presentation")
-    (have extension "odp")

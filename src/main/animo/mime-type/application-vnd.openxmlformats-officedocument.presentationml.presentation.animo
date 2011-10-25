@@ -1,6 +1,0 @@
-the application-vnd.openxmlformats-officedocument.presentationml.presentation
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.oasis.openxmlformats-officedocument.presentationml.presentation")
-    (have name      "OOXML Presentation")
-    (have extension "pptx")

@@ -34,7 +34,7 @@ import static org.junit.Assert.assertNotNull;
  */
 public class FSBridgeTest extends ATest {
 	
-	private static final String PATH = "src/main/animo/mime-type/application-animo.animo";
+	private static final String PATH = "src/test/animo/application-animo.animo";
 	
 	private void check(String the) throws IOException {
         Relationship r = THE._.get(the);

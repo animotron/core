@@ -1,6 +1,0 @@
-the application-epub
-    (is   mime-type)
-    (is   application)
-    (have type      "application/epub+zip")
-    (have name      "EPUB Document")
-    (have extension "epub")

@@ -1,6 +1,0 @@
-the text-html
-    (is   mime-type)
-    (is   text)
-    (have type      "text/html")
-    (have name      "HTML Document")
-    (have extension "htm" "html")

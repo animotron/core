@@ -1,6 +1,0 @@
-the image-gif
-    (is   mime-type)
-    (is   image)
-    (have type      "image/gif")
-    (have name      "GIF Image")
-    (have extension "gif")

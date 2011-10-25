@@ -1,6 +1,0 @@
-the application-vnd.oasis.opendocument.image
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.oasis.opendocument.image")
-    (have name      "OpenOffice.org Image")
-    (have extension "odi")

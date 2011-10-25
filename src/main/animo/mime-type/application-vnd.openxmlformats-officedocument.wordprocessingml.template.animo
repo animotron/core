@@ -1,6 +1,0 @@
-the application-vnd.openxmlformats-officedocument.wordprocessingml.template
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.oasis.openxmlformats-officedocument.wordprocessingml.template")
-    (have name      "OOXML Text Template")
-    (have extension "dotx")

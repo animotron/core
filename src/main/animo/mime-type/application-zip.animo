@@ -1,6 +1,0 @@
-the application-zip
-    (is   mime-type)
-    (is   application)
-    (have type      "application/zip")
-    (have name      "ZIP Archive")
-    (have extension "zip")

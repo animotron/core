@@ -1,6 +1,0 @@
-the application-expath-xar
-    (is   mime-type)
-    (is   application)
-    (have type      "application/expath-xar")
-    (have name      "Package XAR Archive")
-    (have extension "xar")

@@ -1,6 +1,0 @@
-the image-svg
-    (is   mime-type)
-    (is   image)
-    (have type      "image/svg+xml")
-    (have name      "SVG Image")
-    (have extension "svg" "svgz")

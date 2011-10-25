@@ -1,6 +1,0 @@
-the image-bmp
-    (is   mime-type)
-    (is   image)
-    (have type      "image/bmp")
-    (have name      "Windows Bitmap Image")
-    (have extension "bmp")

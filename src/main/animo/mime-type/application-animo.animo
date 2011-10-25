@@ -1,6 +1,0 @@
-the application-animo
-    (is   mime-type)
-    (is   application)
-    (have type      "application/animo")
-    (have name      "Animo Document")
-    (have extension "animo")

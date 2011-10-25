@@ -1,6 +1,0 @@
-the text-css
-    (is   mime-type)
-    (is   text)
-    (have type      "text/css")
-    (have name      "CSS stylesheet")
-    (have extension "css")

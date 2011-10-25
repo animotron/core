@@ -1,6 +1,0 @@
-the text-plain
-    (is   mime-type)
-    (is   text)
-    (have type      "text/plain")
-    (have name      "Plain Text")
-    (have extension "txt" "text")

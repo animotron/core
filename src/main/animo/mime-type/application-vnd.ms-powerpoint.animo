@@ -1,6 +1,0 @@
-the application-vnd.ms-powerpoint
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.ms-powerpoint")
-    (have name      "Microsoft Powerpoint Document")
-    (have extension "ppt")

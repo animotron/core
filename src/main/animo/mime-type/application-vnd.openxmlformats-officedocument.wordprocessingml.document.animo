@@ -1,6 +1,0 @@
-the application-vnd.openxmlformats-officedocument.wordprocessingml.document
-    (is   mime-type)
-    (is   application)
-    (have type      "application/vnd.oasis.openxmlformats-officedocument.wordprocessingml.document")
-    (have name      "OOXML Text Document")
-    (have extension "docx")

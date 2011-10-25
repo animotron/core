@@ -1,6 +1,0 @@
-the application-stx
-    (is   mime-type)
-    (is   application)
-    (have type      "application/std+xml")
-    (have name      "STX Document")
-    (have extension "stx")
