@@ -22,6 +22,7 @@ import org.animotron.ATest;
 import org.animotron.expression.CommonExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
@@ -32,6 +33,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.value;
 
 
 /**
@@ -77,10 +79,15 @@ public class StoreBinaryTest extends ATest {
         );
         assertBinary(f, TXT);
 
-        JExpression t = new JExpression(
-          _(ANY._, "test.txt")
+        JExpression n = new JExpression(
+          _(ANY._, "file", _(WITH._, "name", value("test")))
         );
-        assertBinary(t, TXT);
+        assertBinary(n, TXT);
+
+        JExpression e = new JExpression(
+          _(ANY._, "file", _(WITH._, "extension", value("txt")))
+        );
+        assertBinary(e, TXT);
 
         JExpression a = new JExpression(
           _(ANY._, "article")
@@ -94,4 +101,5 @@ public class StoreBinaryTest extends ATest {
 
         System.out.println("done.");
 	}
+
 }

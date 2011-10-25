@@ -127,11 +127,13 @@ public class BinaryExpression extends AbstractExpression {
                                     builder._(jt.next());
                                 builder.end();
                             }
-                            builder.start(HAVE._, EXTENSION);
-                                while (jt.hasNext()) {
-                                        builder._(jt.next());
-                                }
-                            builder.end();
+                            if (jt.hasNext()) {
+                                builder.start(HAVE._, EXTENSION);
+                                    while (jt.hasNext()) {
+                                            builder._(jt.next());
+                                    }
+                                builder.end();
+                            }
                         }
                     }
                 builder.end();
@@ -176,14 +178,21 @@ public class BinaryExpression extends AbstractExpression {
         @Override
         public String next() {
             String next = c;
-            if (i < a.length) {
-                c = a[i]; i++;
-                if (c == null || c.isEmpty())
-                    c = next();
-            } else {
-                c = null;
-            }
+            c = step();
             return next;
+        }
+
+        private String step() {
+            if (i < a.length) {
+                String s = a[i]; i++;
+                if (s == null || s.isEmpty()) {
+                   return step();
+                } else {
+                    return s;
+                }
+            } else {
+                return null;
+            }
         }
 
         @Override
