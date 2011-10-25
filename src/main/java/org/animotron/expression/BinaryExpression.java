@@ -23,6 +23,7 @@ import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.value.STREAM;
 import org.animotron.utils.MessageDigester;
@@ -30,6 +31,7 @@ import org.neo4j.graphdb.Node;
 
 import java.io.*;
 import java.security.MessageDigest;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -48,13 +50,19 @@ public class BinaryExpression extends AbstractExpression {
 	
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
-    private final static Node FILE =
-            execute(new GraphOperation<Node>() {
+    private final static Node EXTENSION = the("extension");
+    private final static Node FILE = the("file");
+    private final static Node NAME = the("name");
+
+    private static Node the(final String name) {
+        return execute(new GraphOperation<Node>() {
                 @Override
                 public Node execute() throws Exception {
-                    return THE._.getOrCreate("file", true).getEndNode();
+                    return THE._.getOrCreate(name, true).getEndNode();
                 }
-            });
+            }
+        );
+    }
 
     private InputStream stream;
     private String path;
@@ -104,17 +112,29 @@ public class BinaryExpression extends AbstractExpression {
                 tmp.delete();
                 throw new IOException("transaction can not be finished");
             } else {
-                    builder.start(THE._);
-                        builder._(IS._, FILE);
-                        builder._(STREAM._, hash);
-                        String[] parts = path.split(Pattern.quote(File.separator));
-                        //Expression prev = null;
-                        for (String part : parts) {
-                            if (!part.isEmpty()) {
-                                builder._(IS._, part);
+                builder.start(THE._);
+                    builder._(IS._, FILE);
+                    builder._(STREAM._, hash);
+                    Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
+                    while (it.hasNext()) {
+                        String i = it.next();
+                        if (it.hasNext()) {
+                            builder._(IS._, i);
+                        } else {
+                            Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
+                            if (jt.hasNext()) {
+                                builder.start(HAVE._, NAME);
+                                    builder._(jt.next());
+                                builder.end();
                             }
+                            builder.start(HAVE._, EXTENSION);
+                                while (jt.hasNext()) {
+                                        builder._(jt.next());
+                                }
+                            builder.end();
                         }
-                    builder.end();
+                    }
+                builder.end();
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
@@ -130,6 +150,46 @@ public class BinaryExpression extends AbstractExpression {
 
     public static File getFile(String hash){
         return new File(getFolder(hash),  hash);
+    }
+
+    private class StringArrayIterator implements Iterable<String>, Iterator<String> {
+
+        private String[] a;
+        private String c = null;
+        int i = 0;
+
+        public StringArrayIterator(String[] a) {
+            this.a = a;
+            next();
+        }
+
+        @Override
+        public Iterator<String> iterator() {
+            return this;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return c != null;
+        }
+
+        @Override
+        public String next() {
+            String next = c;
+            if (i < a.length) {
+                c = a[i]; i++;
+                if (c == null || c.isEmpty())
+                    c = next();
+            } else {
+                c = null;
+            }
+            return next;
+        }
+
+        @Override
+        public void remove() {
+        }
+
     }
 
 }
