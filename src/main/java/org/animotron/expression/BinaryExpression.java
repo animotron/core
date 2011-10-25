@@ -118,9 +118,8 @@ public class BinaryExpression extends AbstractExpression {
                     Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
                     while (it.hasNext()) {
                         String i = it.next();
-                        if (it.hasNext()) {
-                            builder._(IS._, i);
-                        } else {
+                        builder._(IS._, i);
+                        if (!it.hasNext()) {
                             Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
                             if (jt.hasNext()) {
                                 builder.start(HAVE._, NAME);
