@@ -66,7 +66,6 @@ public class BinaryExpression extends AbstractExpression {
 
     private InputStream stream;
     private String path;
-    private String hash;
 
     static {
 		BIN_STORAGE.mkdirs();
@@ -100,7 +99,7 @@ public class BinaryExpression extends AbstractExpression {
         }
         out.close();
         stream.close();
-        hash = byteArrayToHex(md.digest()) + longToHex(size);
+        String hash = byteArrayToHex(md.digest()) + longToHex(size);
         File dir = getFolder(hash);
         File bin = getFile(dir, hash);
         if (bin.exists()) {
