@@ -109,8 +109,8 @@ public class GET extends Operator implements Evaluable, Query {
 			final Node node = op.getEndNode();
 			final String name = (String) reference(op);
 			
-			System.out.println("GET '"+name+"'");
-			System.out.println(pf.getPFlowPath());
+			//System.out.println("GET '"+name+"'");
+			//System.out.println(pf.getPFlowPath());
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
@@ -119,7 +119,7 @@ public class GET extends Operator implements Evaluable, Query {
 				Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 					@Override
 					public void onMessage(Relationship[] context) {
-						System.out.println("GET message ["+name+"] context "+Arrays.toString(context));
+						//System.out.println("GET message ["+name+"] context "+Arrays.toString(context));
 						
 						if (context == null) {
 							pf.countDown();
@@ -172,11 +172,11 @@ public class GET extends Operator implements Evaluable, Query {
 					//pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
-					System.out.println("P-FLOW is context for GET! '"+reference(op)+"'");
+					//System.out.println("P-FLOW is context for GET! '"+reference(op)+"'");
 //					System.out.println("pflow = ");
-					pf.getFlowPath();
+					//pf.getFlowPath();
 //					pf.debug();
-					System.out.println(pf.getPFlowPath());
+					//System.out.println(pf.getPFlowPath());
 					
 					
 					for (Relationship st : pf.getPFlowPath()) {
@@ -238,7 +238,7 @@ public class GET extends Operator implements Evaluable, Query {
 		
 		while (true) {
 			
-			System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
+			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
 				//System.out.println("checking "+n);

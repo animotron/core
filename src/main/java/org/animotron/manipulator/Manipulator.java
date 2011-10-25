@@ -101,7 +101,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<Relationship[]> onAnswer = new Subscribable<Relationship[]>() {
             public void onMessage(Relationship[] context) {
-            	System.out.println("get answer "+Arrays.toString(context));
+            	//System.out.println("get answer "+Arrays.toString(context));
             	try {
             		if (context == null) {
 

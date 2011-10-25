@@ -423,20 +423,22 @@ public class PFlow {
 //		return parent.isInStack(r);
 		
 //		for (Relationship rr : getFlowPath().relationships()) {
-		System.out.print("IN STACK CHECK "+r+" in "+path+" ");
+		
+		boolean debug = false;
+		if (debug) System.out.print("IN STACK CHECK "+r+" in "+path+" ");
 		for (Relationship rr : path) {
 			if (rr.equals(r)) return true;
 			try {
 				long id = (Long)rr.getProperty(RID.name());
 				if (r.getId() == id) {
-					System.out.println("FOUND");
+					if (debug) System.out.println("FOUND");
 					return true;
 				}
 				
 			} catch (Exception e) {
 			}
 		}
-		System.out.println("NOT FOUND");
+		if (debug) System.out.println("NOT FOUND");
 		return false;
 
 	}

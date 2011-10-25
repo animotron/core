@@ -61,6 +61,7 @@ public class MLResultTraverser extends ResultTraverser {
         	r = getDb().getRelationshipById(
                 (Long)r.getProperty(RID.name())
             );
+            addedContexts += pf.addContextPoint(r);
         }
 
         Statement s;
