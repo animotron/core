@@ -111,34 +111,33 @@ public class BinaryExpression extends AbstractExpression {
             if (!tmp.renameTo(bin)) {
                 tmp.delete();
                 throw new IOException("transaction can not be finished");
-            } else {
-                builder.start(THE._);
-                    builder._(IS._, FILE);
-                    builder._(STREAM._, hash);
-                    Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
-                    while (it.hasNext()) {
-                        String i = it.next();
-                        builder._(IS._, i);
-                        if (!it.hasNext()) {
-                            Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
-                            if (jt.hasNext()) {
-                                builder.start(HAVE._, NAME);
-                                    builder._(jt.next());
-                                builder.end();
-                            }
-                            if (jt.hasNext()) {
-                                builder.start(HAVE._, EXTENSION);
-                                    while (jt.hasNext()) {
-                                            builder._(jt.next());
-                                    }
-                                builder.end();
-                            }
-                        }
-                    }
-                builder.end();
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
+        builder.start(THE._);
+            builder._(IS._, FILE);
+            builder._(STREAM._, hash);
+            Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
+            while (it.hasNext()) {
+                String i = it.next();
+                builder._(IS._, i);
+                if (!it.hasNext()) {
+                    Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
+                    if (jt.hasNext()) {
+                        builder.start(HAVE._, NAME);
+                            builder._(jt.next());
+                        builder.end();
+                    }
+                    if (jt.hasNext()) {
+                        builder.start(HAVE._, EXTENSION);
+                            do {
+                                builder._(jt.next());
+                            } while (jt.hasNext());
+                        builder.end();
+                    }
+                }
+            }
+        builder.end();
     }
 
     private static File getFolder(String hash) {
