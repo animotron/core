@@ -95,7 +95,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	Node deepestNode = null;
 
 		for (Path path : td.traverse(start)) {
-			//System.out.println(" path = "+path);
+			System.out.println(" path = "+path);
 			
 			Node lastNode = path.startNode();
 			boolean isDirected = true;
@@ -175,7 +175,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected TraversalDescription getUSEtravers(final Relationship end) {
 
 		return Traversal.description().depthFirst().
-		uniqueness(Uniqueness.RELATIONSHIP_PATH).
+		uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {

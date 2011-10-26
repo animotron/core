@@ -18,7 +18,6 @@
  */
 package org.animotron.statement.query;
 
-import javolution.util.FastList;
 import javolution.util.FastSet;
 import org.animotron.Executor;
 import org.animotron.graph.AnimoGraph;
@@ -44,7 +43,6 @@ import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import static org.animotron.Properties.RID;
@@ -109,8 +107,8 @@ public class GET extends Operator implements Evaluable, Query {
 			final Node node = op.getEndNode();
 			final String name = (String) reference(op);
 			
-			//System.out.println("GET '"+name+"'");
-			//System.out.println(pf.getPFlowPath());
+			System.out.print("GET '"+name+"' ");
+			System.out.println(pf.getPFlowPath());
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {

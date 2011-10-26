@@ -66,6 +66,7 @@ public abstract class AbstractStatement implements Statement {
 				//for debug
 				CID.set(res, context.getId());
 				AnimoGraph.result(res, pf.getPathHash());
+				System.out.println("add to index "+r+" "+pf.getPFlowPath());
 				return res;
 			}
 		});

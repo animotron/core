@@ -57,6 +57,7 @@ public class Utils {
 		for (Relationship r : AnimoGraph.getResult(pf.getPathHash(), node)) {
 			pf.sendAnswer(op, r);
 			
+			System.out.println("CACHED RESULT FOUND");
 			haveSome = true;
 		}
 		
