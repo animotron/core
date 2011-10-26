@@ -37,6 +37,7 @@ import org.neo4j.kernel.Uniqueness;
 
 import java.util.Set;
 
+import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -175,13 +176,17 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected TraversalDescription getUSEtravers(final Relationship end) {
 
 		return Traversal.description().depthFirst().
-		uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
+		//uniqueness(Uniqueness.RELATIONSHIP_PATH).
+		uniqueness(Uniqueness.NODE_PATH).
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
 				//System.out.println(" "+path);
 				if (path.length() > 0) {
-					Relationship r = path.lastRelationship(); 
+					Relationship r = path.lastRelationship();
+					if (r.getEndNode().getId() == 1 || r.isType(RESULT))
+						return EXCLUDE_AND_PRUNE;
+						
 					if (r.getStartNode().equals(path.endNode())) {
 						if (r.equals(end)) {
 							return INCLUDE_AND_PRUNE;
