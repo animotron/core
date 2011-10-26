@@ -106,6 +106,7 @@ public class YetAnotherWebFramework__Test extends ATest {
                 new JExpression(
                         _(THE._, "current-request",
                                 _(IS._, "request"),
+                                _(USE._, "root"),
                                 _(HAVE._, "uri", text("/")),
                                 _(HAVE._, "host", text("localhost"))
                         )
