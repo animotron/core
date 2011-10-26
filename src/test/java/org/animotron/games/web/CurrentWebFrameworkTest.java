@@ -184,7 +184,7 @@ public class CurrentWebFrameworkTest extends ATest {
         JExpression ss = new JExpression(
                 _(GET._, "content",
                     _(AN._, "rest",
-                        _(USE._, "root"),
+                        _(USE._, "favicon.ico"),
                         _(HAVE._, "uri", text("/favicon.ico")),
                         _(HAVE._, "host", text("localhost"))
                     )
