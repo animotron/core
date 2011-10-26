@@ -117,9 +117,9 @@ public class WITH extends Operator implements Predicate {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput in = Evaluator._.execute(pf, i);
-    				for (Object e : in) {
-    					Relationship r = Utils.relax((Relationship) e);
+    				PipedInput<Relationship[]> in = Evaluator._.execute(pf, i);
+    				for (Relationship[] e : in) {
+    					Relationship r = Utils.relax(e[0]);
     					list.add(r);
     					System.out.println("get from Evaluator "+r);
     				}
