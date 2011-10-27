@@ -42,7 +42,6 @@ import java.io.StringReader;
 import static org.animotron.Properties.HASH;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.element;
-import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -53,14 +52,14 @@ public class BindTest extends ATest {
 
     public void test(Expression e, String animo) throws Exception {
         String inA = AnimoSerializer.serialize(e);
-        Object inH = key(HASH.get(e));
-        Assert.assertEquals(inH, key(DigestSerializer.serialize(e)));
+        byte[] inH = (byte[]) HASH.get(e);
+        assertEquals(inH, DigestSerializer.serialize(e));
         cleanDb();
         Expression x = new AnimoExpression(animo);
         String outA = AnimoSerializer.serialize(x);
-        Object outH = key(HASH.get(x));
-        Assert.assertEquals(outH, key(DigestSerializer.serialize(x)));
-        Assert.assertEquals(inH, outH);
+        byte[] outH = (byte[]) HASH.get(x);
+        assertEquals(outH, DigestSerializer.serialize(x));
+        assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
 

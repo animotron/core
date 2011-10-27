@@ -25,7 +25,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.Properties.HASH;
-import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -40,7 +39,7 @@ public class ParserTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
-        Assert.assertEquals(key(HASH.get(expression)), key(DigestSerializer.serialize(expression)));
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer.serialize(expression));
         assertAnimo(expression, out);
     }
 

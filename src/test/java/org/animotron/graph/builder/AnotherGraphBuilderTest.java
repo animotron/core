@@ -32,7 +32,6 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
 
 import static org.animotron.Properties.HASH;
-import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -51,12 +50,12 @@ public class AnotherGraphBuilderTest extends ATest {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
-        String inH = (String) key(HASH.get(e));
+        byte[] inH = (byte[]) HASH.get(e);
         cleanDb();
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
-        String outH = (String) key(HASH.get(e));
-        Assert.assertEquals(inH, outH);
+        byte[] outH = (byte[]) HASH.get(e);
+        assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
 
@@ -64,11 +63,11 @@ public class AnotherGraphBuilderTest extends ATest {
         StAXExpression e;
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
-        String outH = (String) key(HASH.get(e));
+        byte[] outH = (byte[]) HASH.get(e);
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
-        String inH = (String) key(HASH.get(e));
-        Assert.assertEquals(inH, outH);
+        byte[] inH = (byte[]) HASH.get(e);
+        assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
 
@@ -76,11 +75,11 @@ public class AnotherGraphBuilderTest extends ATest {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = AnimoSerializer.serialize(e);
-        String inH = (String) key(HASH.get(e));
+        byte[] inH = (byte[]) HASH.get(e);
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = AnimoSerializer.serialize(e);
-        String outH = (String) key(HASH.get(e));
-        Assert.assertEquals(inH, outH);
+        byte[] outH = (byte[]) HASH.get(e);
+        assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
 

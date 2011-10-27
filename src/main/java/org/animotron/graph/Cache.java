@@ -18,13 +18,13 @@
  */
 package org.animotron.graph;
 
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,13 +40,14 @@ public class Cache {
 	public static void init (IndexManager indexManager) {
         NCACHE = new CacheIndex<Node>(indexManager) {
             public void init(IndexManager indexManager) {
-//                INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-                INDEX = indexManager.forNodes(NAME);
+                INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+//                INDEX = indexManager.forNodes(NAME);
             }
         };
         RCACHE = new CacheIndex<Relationship>(indexManager) {
             public void init(IndexManager indexManager) {
-                INDEX = indexManager.forRelationships(NAME);
+                INDEX = indexManager.forRelationships(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+//                INDEX = indexManager.forRelationships(NAME);
             }
         };
 	}
@@ -83,12 +84,6 @@ public class Cache {
         RCACHE.remove(r);
     }
 
-    public static Object key(Object value) {
-        if (value instanceof byte[])
-            return MessageDigester.byteArrayToHex((byte[]) value);
-        return value;
-    }
-
     private abstract static class CacheIndex<T extends PropertyContainer> {
 
         protected Index<T> INDEX;
@@ -100,7 +95,7 @@ public class Cache {
         public abstract void init(IndexManager indexManager);
 
         public T get(Object value) {
-            IndexHits<T> q = INDEX.get(NAME, key(value));
+            IndexHits<T> q = INDEX.get(NAME, value);
             T c = null;
             try {
                 c = q.next();
@@ -111,11 +106,11 @@ public class Cache {
         }
 
         public void put(T c, Object value) {
-            INDEX.add(c, NAME, key(value));
+            INDEX.add(c, NAME, value);
         }
 
         public void remove(T c, Object value) {
-            INDEX.remove(c, NAME, key(value));
+            INDEX.remove(c, NAME, value);
         }
 
         public void remove(T c) {

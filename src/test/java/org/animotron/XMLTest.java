@@ -31,7 +31,6 @@ import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
 
 import static org.animotron.Properties.HASH;
-import static org.animotron.graph.Cache.key;
 
 
 /**
@@ -44,7 +43,7 @@ public class XMLTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
-        org.junit.Assert.assertEquals(key(HASH.get(r)), key(DigestSerializer.serialize(r)));
+        assertEquals((byte[]) HASH.get(r), DigestSerializer.serialize(r));
         Assert.assertEquals(out, AnimoSerializer.serialize(r));
     }
 

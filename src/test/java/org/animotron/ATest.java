@@ -80,6 +80,12 @@ public abstract class ATest {
 		} 
 	}
 
+    protected void assertEquals(byte[] a, byte[] b) {
+        Assert.assertEquals(a.length, b.length);
+        for (int i = 0; i < a.length; i++)
+            Assert.assertEquals(a[i], b[i]);
+    }
+
 	protected void assertEquals(InputStream stream, String expecteds) throws IOException {
 		if (stream == null) return;
 		
