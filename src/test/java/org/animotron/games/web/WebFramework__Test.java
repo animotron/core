@@ -29,6 +29,7 @@ import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression.*;
@@ -41,6 +42,7 @@ import static org.animotron.expression.JExpression.*;
 public class WebFramework__Test extends ATest {
 
 	@Test
+	@Ignore
 	public void test() throws Exception {
 
         __(

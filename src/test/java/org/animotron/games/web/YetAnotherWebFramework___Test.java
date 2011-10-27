@@ -28,6 +28,7 @@ import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression.*;
@@ -177,6 +178,7 @@ public class YetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
+    @Ignore
     public void test3() throws Exception {
         test(
             _(AN._, "current-service",
@@ -186,6 +188,7 @@ public class YetAnotherWebFramework___Test extends ATest {
     }
 
     @Test
+    @Ignore
     public void test4() throws Exception {
         test(
             _(AN._, "current-service",
