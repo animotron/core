@@ -119,7 +119,7 @@ public class ResultTraverser extends AnimoTraverser {
 
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
     	PFlow pflow = new PFlow(pf);
-		System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
     	Iterator<Relationship> i = AnimoGraph.getResult(pflow.getPathHash(), r.getEndNode());
     	//Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
         boolean found = iterate(handler, pflow, i, level, isOne);

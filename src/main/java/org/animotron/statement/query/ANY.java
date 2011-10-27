@@ -52,7 +52,7 @@ public class ANY extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
 			final Relationship op = pf.getOP();
 
-			System.out.println("ANY "+op+" "+reference(op)+" ");
+			//System.out.println("ANY "+op+" "+reference(op)+" ");
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			//(new IOException()).printStackTrace();
             

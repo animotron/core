@@ -53,6 +53,7 @@ public class Utils {
 	public static boolean results(Node node, PFlow pf) {
 		boolean haveSome = false;
 		
+		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 		for (Relationship r : AnimoGraph.getResult(pf.getPathHash(), node)) {
 			Relationship c = null;
 			try {
@@ -70,8 +71,8 @@ public class Utils {
 			
 			haveSome = true;
 		}
-		if (haveSome)
-			System.out.println("CACHED RESULT FOUND");
+//		if (haveSome)
+//			System.out.println("CACHED RESULT FOUND");
 		
 //		for (Relationship res : node.getRelationships(OUTGOING)) {
 //			

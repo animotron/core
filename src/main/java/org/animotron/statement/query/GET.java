@@ -107,7 +107,7 @@ public class GET extends Operator implements Evaluable, Query {
 			final Node node = op.getEndNode();
 			final String name = (String) reference(op);
 			
-			System.out.println("GET '"+name+"' ");
+			//System.out.println("GET '"+name+"' ");
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			
 			//for (Relationship r : pf.getPFlowPath()) {
