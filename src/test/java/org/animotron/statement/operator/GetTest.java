@@ -52,7 +52,7 @@ public class GetTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\")");
+        assertAnimoResult(d, "the d (have Z \"B\") (have Z \"A\")");
 
 	}
 

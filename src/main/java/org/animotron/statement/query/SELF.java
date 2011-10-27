@@ -99,7 +99,6 @@ public class SELF extends AbstractQuery {
 
                 if (res != null)
                     pf.sendAnswer(createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._), op);
-                    //TODO Why don't create persistent relationship?
 
             } else
                 ;//XXX: error???

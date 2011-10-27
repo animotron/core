@@ -137,10 +137,10 @@ public class GET extends Operator implements Evaluable, Query {
 //						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship[]> rSet = get(pf, context[1], name);
+						final Set<Relationship[]> rSet = get(pf, context[0], name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[0]);
+								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[1]);
 							}
 							return;
 						}
