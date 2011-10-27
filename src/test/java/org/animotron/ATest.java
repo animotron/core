@@ -250,12 +250,10 @@ public abstract class ATest {
     public static void start() {
     	deleteDir(new File(DATA_FOLDER));
         startDB(DATA_FOLDER);
-        
     }
 
     @AfterClass
     public static void stop() {
     	shutdownDB();
     }
-
 }

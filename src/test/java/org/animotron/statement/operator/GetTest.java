@@ -41,18 +41,18 @@ public class GetTest extends ATest {
 	public void getOnManyAN() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(HAVE._, "Z", text("A")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(HAVE._, "Z", text("B")))
-                )
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "Z", text("A")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(HAVE._, "Z", text("B")))
+            )
         );
 
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (have Z \"B\") (have Z \"A\")");
+        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\")");
 
 	}
 
@@ -60,7 +60,7 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_param() throws Exception {
 
     	JExpression.__(new JExpression(
-                _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+            _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
         ));
     	JExpression D = new JExpression(
 			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
@@ -68,7 +68,7 @@ public class GetTest extends ATest {
         assertAnimoResult(D, "the D the A have B have C \".\"");
 
     	JExpression.__(new JExpression(
-                _(THE._, "A1", _(GET._, "B1"))
+            _(THE._, "A1", _(GET._, "B1"))
         ));
 
     	JExpression d = new JExpression(
@@ -82,12 +82,12 @@ public class GetTest extends ATest {
 	public void getFromPFlow_cross_an_with_param() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-                ),
-                new JExpression(
-                        _(THE._, "D", _(HAVE._, "E", _(GET._, "B")))
-                )
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "D", _(HAVE._, "E", _(GET._, "B")))
+            )
         );
     	
     	JExpression X = new JExpression(
@@ -101,12 +101,12 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_an() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-                ),
-                new JExpression(
-                        _(THE._, "D", _(HAVE._, "C", text(".")))
-                )
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "D", _(HAVE._, "C", text(".")))
+            )
         );
 
     	JExpression E = new JExpression(
@@ -120,15 +120,15 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_more_an() throws Exception {
 
     	JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
-                ),
-                new JExpression(
-                        _(THE._, "D", _(HAVE._, "C", text(".")))
-                ),
-                new JExpression(
-                        _(THE._, "E", _(HAVE._, "C", text(":")))
-                )
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "B", _(GET._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "D", _(HAVE._, "C", text(".")))
+            ),
+            new JExpression(
+                _(THE._, "E", _(HAVE._, "C", text(":")))
+            )
         );
 
     	JExpression F = new JExpression(
@@ -143,24 +143,24 @@ public class GetTest extends ATest {
 
         JExpression.__(
 
-                new JExpression(
-                        _(THE._, "A",
-                                _(HAVE._, "A1", text("some.path")),
+            new JExpression(
+                _(THE._, "A",
+                    _(HAVE._, "A1", text("some.path")),
 
-                                _(IC._, "A2",
-                                        _(SELF._, "A1")),
+                    _(IC._, "A2",
+                        _(SELF._, "A1")),
 
-                                _(IC._, "B1",
-                                        _(AfterLast._,
-                                                text("."),
-                                                _(SELF._, "A1")))
-                        )),
+                    _(IC._, "B1",
+                        _(AfterLast._,
+                            text("."),
+                            _(SELF._, "A1")))
+                )),
 
-                new JExpression(
-                        _(THE._, "B",
-                                _(IS._, "A"),
-                                _(HAVE._, "A1", text("test.txt"))
-                        ))
+            new JExpression(
+                _(THE._, "B",
+                    _(IS._, "A"),
+                    _(HAVE._, "A1", text("test.txt"))
+                ))
 
         );
 
@@ -206,54 +206,54 @@ public class GetTest extends ATest {
 
         JExpression.__(
 
-                new JExpression(
-                        _(THE._, "A",
-                                _(HAVE._, "A1", text("some.path")),
+            new JExpression(
+                _(THE._, "A",
+                    _(HAVE._, "A1", text("some.path")),
 
-                                _(HAVE._, "A2",
-                                        _(SELF._, "A1")),
+                    _(HAVE._, "A2",
+                        _(SELF._, "A1")),
 
-                                _(HAVE._, "B1",
-                                        _(AfterLast._,
-                                                text("."),
-                                                _(SELF._, "A1")))
-                        )),
+                    _(HAVE._, "B1",
+                        _(AfterLast._,
+                            text("."),
+                            _(SELF._, "A1")))
+                )),
 
-                new JExpression(
-                        _(THE._, "B",
-                                _(IS._, "A"),
-                                _(HAVE._, "A1", text("test.txt"))
-                        ))
+            new JExpression(
+                _(THE._, "B",
+                    _(IS._, "A"),
+                    _(HAVE._, "A1", text("test.txt"))
+                ))
 
         );
 
-//        JExpression C0 = new JExpression(
-//        _(THE._, "C0",
-//            _(GET._, "A1",
-//                _(AN._, "A")
-//        )));
-//        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
-//
-//        JExpression C1 = new JExpression(
-//        _(THE._, "C1",
-//            _(GET._, "A1",
-//                _(AN._, "B")
-//        )));
-//        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
-//
-//        JExpression C2 = new JExpression(
-//        _(THE._, "C2",
-//            _(GET._, "A2",
-//                _(AN._, "B")
-//        )));
-//        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
-//
-//        JExpression C3 = new JExpression(
-//        _(THE._, "C3",
-//            _(GET._, "E1",
-//                _(AN._, "B")
-//        )));
-//        assertAnimoResult(C3, "the C3");
+        JExpression C0 = new JExpression(
+        _(THE._, "C0",
+            _(GET._, "A1",
+                _(AN._, "A")
+        )));
+        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
+
+        JExpression C1 = new JExpression(
+        _(THE._, "C1",
+            _(GET._, "A1",
+                _(AN._, "B")
+        )));
+        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
+
+        JExpression C2 = new JExpression(
+        _(THE._, "C2",
+            _(GET._, "A2",
+                _(AN._, "B")
+        )));
+        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
+
+        JExpression C3 = new JExpression(
+        _(THE._, "C3",
+            _(GET._, "E1",
+                _(AN._, "B")
+        )));
+        assertAnimoResult(C3, "the C3");
 
         JExpression C4 = new JExpression(
         _(THE._, "C4",
@@ -268,15 +268,15 @@ public class GetTest extends ATest {
     public void getFromPFlow_an_with_stack() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(GET._, "X"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(GET._, "Z"), _(AN._, "B"))
-                )
+            new JExpression(
+                _(THE._, "A", _(GET._, "X"))
+            ),
+            new JExpression(
+                _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"), _(AN._, "B"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -290,15 +290,15 @@ public class GetTest extends ATest {
     public void getFromPFlow_more_an_with_stack() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(GET._, "Z"))
-                )
+            new JExpression(
+                _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -312,15 +312,15 @@ public class GetTest extends ATest {
     public void getFromPFlow_one_more_an_with_stack() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(GET._, "Y"))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(GET._, "Z"))
-                )
+            new JExpression(
+                _(THE._, "A", _(GET._, "X"), _(HAVE._, "Z", text("γ")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(GET._, "Y"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -333,15 +333,15 @@ public class GetTest extends ATest {
     public void getFromPFlow_an_an_an() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(HAVE._, "Y", _(GET._, "X")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(HAVE._, "Z", _(GET._, "Y")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(GET._, "Z"))
-                )
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "Y", _(GET._, "X")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(HAVE._, "Z", _(GET._, "Y")))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"))
+            )
         );
 
         JExpression D = new JExpression(
@@ -350,5 +350,4 @@ public class GetTest extends ATest {
         assertAnimoResult(D, "the D the C have Z have Y have X \".\"");
 
     }
-
 }
