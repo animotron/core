@@ -24,7 +24,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -70,7 +69,7 @@ public class StoreBinaryTest extends ATest {
         AnimoSerializer.serialize(r, System.out);
 
         JExpression s = new JExpression(
-          _(AN._, THE._.reference(r).toString())
+          _(AN._, r)
         );
         assertBinary(s, TXT);
         
