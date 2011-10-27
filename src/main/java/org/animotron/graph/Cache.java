@@ -106,8 +106,8 @@ public class Cache {
                 c = q.next();
             } finally {
                 q.close();
+                return c;
             }
-            return c;
         }
 
         public void put(T c, Object value) {
