@@ -19,12 +19,8 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
+import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.operator.combinator.EACH;
-import org.animotron.statement.query.ALL;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -39,50 +35,80 @@ public class EachTest extends ATest {
 
     @Test
     @Ignore
-    public void eachTest() throws Exception {
+    public void test_00() throws Exception {
 
-        __(
-                new JExpression(
-                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "content", text("α")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(IS._, "S"), _(HAVE._, "content", text("β")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
-                ),
-                new JExpression(
-                        _(THE._, "P", element("p", _(GET._, "content")))
-                )
+        Expression a = new JExpression(
+                _(THE._, "A")
+        );
+        Expression b = new JExpression(
+                _(THE._, "B")
+        );
+        Expression c = new JExpression(
+                _(THE._, "C")
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s", _(EACH._, "P", _(ALL._, "S")))
+            element("ul", each(_(_(a), _(b), _(c)), element("li")))
         );
-        assertAnimoResult(s, "the s (element p have content \"α\") (element p have content \"β\") (element p have content \"γ\")");
+        assertAnimoResult(s, "\\ul (\\li the a) (\\li the b) (\\li the c)");
 
     }
 
     @Test
     @Ignore
-    public void eachTest1() throws Exception {
-
-        __(
-                new JExpression(
-                        _(THE._, "A", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("α")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(IS._, "S"), _(IS._, "P"), _(HAVE._, "content", text("β")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(IS._, "S"), _(HAVE._, "content", text("γ")))
-                )
-        );
+    public void test_01() throws Exception {
 
         JExpression s = new JExpression(
-            _(THE._, "s", element("p", _(EACH._, "P", _(ALL._, "S"))))
+            element("x",
+                each(
+                        _(element("a1"), element("a2"), element("a3")),
+                        _(element("b1"), element("b2"), element("b3")),
+                        _(element("c1"), element("c2"), element("c3"))
+                )
+            )
         );
-        assertAnimoResult(s, "the s (element p the A (is A) (is S) (is P) (have content \"α\")) (element p the B (is S) (is P) (have content \"β\"))");
+
+        assertAnimoResult(s,
+
+                "\\x " +
+
+                        "(\\c1 \\b1 \\a1) " +
+                        "(\\c1 \\b1 \\a2) " +
+                        "(\\c1 \\b1 \\a3) " +
+
+                        "(\\c1 \\b2 \\a1) " +
+                        "(\\c1 \\b2 \\a2) " +
+                        "(\\c1 \\b2 \\a3) " +
+
+                        "(\\c1 \\b3 \\a1) " +
+                        "(\\c1 \\b3 \\a2) " +
+                        "(\\c1 \\b3 \\a3) " +
+
+                        "(\\c2 \\b1 \\a1) " +
+                        "(\\c2 \\b1 \\a2) " +
+                        "(\\c2 \\b1 \\a3) " +
+
+                        "(\\c2 \\b2 \\a1) " +
+                        "(\\c2 \\b2 \\a2) " +
+                        "(\\c2 \\b2 \\a3) " +
+
+                        "(\\c2 \\b3 \\a1) " +
+                        "(\\c2 \\b3 \\a2) " +
+                        "(\\c2 \\b3 \\a3) " +
+
+                        "(\\c3 \\b1 \\a1) " +
+                        "(\\c3 \\b1 \\a2) " +
+                        "(\\c3 \\b1 \\a3) " +
+
+                        "(\\c3 \\b2 \\a1) " +
+                        "(\\c3 \\b2 \\a2) " +
+                        "(\\c3 \\b2 \\a3) " +
+
+                        "(\\c3 \\b3 \\a1) " +
+                        "(\\c3 \\b3 \\a2) " +
+                        "(\\c3 \\b3 \\a3) "
+
+       );
 
     }
 

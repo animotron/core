@@ -24,6 +24,8 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.*;
+import org.animotron.statement.operator.combinator.EACH;
+import org.animotron.statement.operator.combinator.MAP;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
@@ -100,6 +102,16 @@ public class JExpression extends AbstractExpression {
 
     public static Object[] _(Object[]... p) {
         Object[] e = _(LINK._, p);
+        return e;
+    }
+
+    public static Object[] each(Object[]... p) {
+        Object[] e = _(EACH._, p);
+        return e;
+    }
+
+    public static Object[] map(Object[]... p) {
+        Object[] e = _(MAP._, p);
         return e;
     }
 
