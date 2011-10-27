@@ -58,6 +58,11 @@ public class AllTest extends ATest {
         );
         assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\"))");
 
+        D = new JExpression(
+            _(THE._, "D", _(ALL._, "A"))
+        );
+        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\"))");
+
     }
 	
     @Test

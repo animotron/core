@@ -108,7 +108,7 @@ public class GET extends Operator implements Evaluable, Query {
 			final String name = (String) reference(op);
 			
 			System.out.print("GET '"+name+"' ");
-			System.out.println(pf.getPFlowPath());
+			System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {

@@ -27,6 +27,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -178,11 +179,15 @@ public class AnimoGraph {
 	}
 
 	public static void result (Relationship r, byte[] hash) {
-		RESULT_INDEX.add(r, RESULT, hash);
+		//workaround lucene issue
+		String key = Arrays.toString(hash);
+		RESULT_INDEX.add(r, RESULT, key);
 	}
 
 	public static IndexHits<Relationship> getResult(byte[] hash, Node node) {
-		return RESULT_INDEX.get(RESULT, hash, node, null);
+		//workaround lucene issue
+		String key = Arrays.toString(hash);
+		return RESULT_INDEX.get(RESULT, key, node, null);
 		//return RESULT_INDEX.queryDown(RESULT, ref.getId(), node, null);
 	}
 
