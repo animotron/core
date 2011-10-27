@@ -46,11 +46,11 @@ public class AN extends Operator implements Reference, Evaluable {
 
 		@Override
 		public void onMessage(PFlow pf) {
-
-			//System.out.println("AN THREAD "+Thread.currentThread());
-
+			
 			Relationship op = pf.getOP();
 			Node node = op.getEndNode();
+
+			System.out.println("AN "+op+" "+reference(op)+" ");
 
 			Relationship res = node.getSingleRelationship(
 				RelationshipTypes.REF, OUTGOING
@@ -58,7 +58,7 @@ public class AN extends Operator implements Reference, Evaluable {
 			
 			//System.out.println("AN res = "+res);
 			
-			pf.sendAnswer(op, res);
+			pf.sendAnswer(res, op);
 			pf.done();
 		}
 	};

@@ -107,8 +107,12 @@ public class GET extends Operator implements Evaluable, Query {
 			final Node node = op.getEndNode();
 			final String name = (String) reference(op);
 			
-			System.out.print("GET '"+name+"' ");
-			System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
+			System.out.println("GET '"+name+"' ");
+			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
+			
+			//for (Relationship r : pf.getPFlowPath()) {
+			//	System.out.println(""+r+" "+r.getType());
+			//}
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(node, pf)) {
@@ -117,7 +121,7 @@ public class GET extends Operator implements Evaluable, Query {
 				Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 					@Override
 					public void onMessage(Relationship[] context) {
-						//System.out.println("GET message ["+name+"] context "+Arrays.toString(context));
+						System.out.println("GET message ["+name+"] context "+Arrays.toString(context));
 						
 						if (context == null) {
 							pf.countDown();
@@ -136,7 +140,7 @@ public class GET extends Operator implements Evaluable, Query {
 						final Set<Relationship[]> rSet = get(pf, context[1], name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(context[0], createResult(pf, r[0], node, r[1], HAVE._));
+								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[0]);
 							}
 							return;
 						}
@@ -181,7 +185,7 @@ public class GET extends Operator implements Evaluable, Query {
 						Set<Relationship[]> rSet = get(pf, st, name);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(r[0], createResult(pf, r[0], node, r[1], HAVE._));
+								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), r[0]);
 							}
 							break;
 						}

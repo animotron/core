@@ -69,7 +69,7 @@ public class COUNT extends Instruction implements Evaluable {
                             pf.sendException(e);
                             return;
                         }
-                        pf.sendAnswer(null, r);
+                        pf.sendAnswer(r);
 						pf.done();
 						return;
 					}

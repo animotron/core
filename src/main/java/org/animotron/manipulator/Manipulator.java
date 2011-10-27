@@ -101,17 +101,17 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<Relationship[]> onAnswer = new Subscribable<Relationship[]>() {
             public void onMessage(Relationship[] context) {
-            	//System.out.println("get answer "+Arrays.toString(context));
+            	System.out.println("get answer "+Arrays.toString(context));
             	try {
             		if (context == null) {
 
             			pf.countDown(out);
 
-            		} else if (context[1] != null) {
+            		} else if (context[0] != null) {
             			int addedContexts = 0;
                         Statement s = null;
                         
-                        Relationship msg = context[1];
+                        Relationship msg = context[0];
 
 //            			try {
 //            				Relationship c = getDb().getRelationshipById(
@@ -136,8 +136,9 @@ public abstract class Manipulator {
             				}
             			} catch (Exception e) {}
 
-            			if (context[0] != null)
-            				addedContexts += pf.addContextPoint(context[0]);
+            			if (context.length >= 2)
+            				for (int i = 0; i < context.length - 2; i++)
+            					addedContexts += pf.addContextPoint(context[1]);
             				
             			if (msg.isType(REF)) {
 
@@ -154,8 +155,8 @@ public abstract class Manipulator {
                             s = Statements.relationshipType(msg);
                             if (s instanceof Query || s instanceof Evaluable) {
                                 PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), msg);
-                                for (Object obj : in) {
-                                    out.write(obj);
+                                for (Relationship[] obj : in) {
+                                    out.write(constructVector(pf, obj, addedContexts));
                                 }
                             } else {
                                 out.write(constructVector(pf, msg, addedContexts));
@@ -200,6 +201,19 @@ public abstract class Manipulator {
 		return in;
 	}
 	
+	private Relationship[] constructVector(PFlow pf, Relationship[] vector, int count) {
+    	List<Relationship> path = pf.getPFlowPath();
+    	int size = count + vector.length;
+    	Relationship[] res = new Relationship[size];
+    	for (int i = 0; i < count; i++) {
+    		res[ (size - 1) - i ] = path.get(i);                            		
+    	}
+    	for (int i = 0; i < vector.length; i++) {
+    		res[i] = vector[i];
+    	}
+        return res;
+	}
+
 	private Relationship[] constructVector(PFlow pf, Relationship op, int count) {
     	List<Relationship> path = pf.getPFlowPath();
     	Relationship[] res = new Relationship[count+1];

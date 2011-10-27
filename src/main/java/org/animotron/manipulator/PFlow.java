@@ -155,13 +155,18 @@ public class PFlow {
 		this.op = null;
 	}
 
-	public void sendAnswer(Relationship op, Relationship r) {
+	public void sendAnswer(Relationship r, Relationship ... context) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
-			parent.answer.publish(new Relationship[] {op, r});
+
+			Relationship[] answer = new Relationship[1+context.length];
+			answer[0] = r;
+			System.arraycopy(context, 0, answer, 1, context.length);
+
+			parent.answer.publish(answer);
 		}
 	}
 

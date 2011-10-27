@@ -96,7 +96,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	Node deepestNode = null;
 
 		for (Path path : td.traverse(start)) {
-			System.out.println(" path = "+path);
+			//System.out.println(" path = "+path);
 			
 			Node lastNode = path.startNode();
 			boolean isDirected = true;

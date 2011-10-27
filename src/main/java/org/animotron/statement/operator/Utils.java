@@ -30,6 +30,7 @@ import org.neo4j.kernel.Traversal;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.animotron.Properties.CID;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -52,14 +53,25 @@ public class Utils {
 	public static boolean results(Node node, PFlow pf) {
 		boolean haveSome = false;
 		
-		Relationship op = pf.getOP();
-		
 		for (Relationship r : AnimoGraph.getResult(pf.getPathHash(), node)) {
-			pf.sendAnswer(op, r);
+			Relationship c = null;
+			try {
+				long id = (Long)r.getProperty(CID.name());
+				
+				c = AnimoGraph.getDb().getRelationshipById(id);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (c == null)
+				pf.sendAnswer(r);
+			else
+				pf.sendAnswer(r, c);
 			
-			System.out.println("CACHED RESULT FOUND");
 			haveSome = true;
 		}
+		if (haveSome)
+			System.out.println("CACHED RESULT FOUND");
 		
 //		for (Relationship res : node.getRelationships(OUTGOING)) {
 //			
