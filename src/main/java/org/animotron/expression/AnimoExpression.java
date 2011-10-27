@@ -24,7 +24,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.value.LINK;
+import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.NS;

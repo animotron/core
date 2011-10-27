@@ -16,13 +16,15 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
+package org.animotron.statement.operator.combinator;
 
 import org.animotron.Executor;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Reference;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -33,33 +35,32 @@ import java.util.Iterator;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
- * Operation 'EACH'. Run sub-sequence per element.
+ * Operation 'MAP'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EACH extends Operator implements Evaluable {
+public class MAP extends Combinator {
 
-	public static final EACH _ = new EACH();
+	public static final MAP _ = new MAP();
 
-	private EACH() { super("each"); }
+	private MAP() { super("map"); }
 
 	@Override
 	public Subscribable<PFlow> onCalcQuestion() {
 		return question;
 	}
 
-	//XXX: out of date!
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
 		public void onMessage(final PFlow pf) {
-			System.out.println("EACH");
+			System.out.println("MAP");
 			
 			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 				@Override
 				public void onMessage(Relationship[] context) {
-					System.out.println("EACH message context "+Arrays.toString(context));
+					System.out.println("MAP message context "+Arrays.toString(context));
 					if (context == null) {
 						pf.countDown();
 						return;

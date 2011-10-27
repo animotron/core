@@ -19,9 +19,9 @@
 package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
+import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.value.LINK;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 

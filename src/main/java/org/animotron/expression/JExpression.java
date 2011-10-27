@@ -22,8 +22,8 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
+import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.*;
-import org.animotron.statement.value.LINK;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 

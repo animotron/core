@@ -20,6 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
+import org.animotron.statement.operator.combinator.EACH;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
