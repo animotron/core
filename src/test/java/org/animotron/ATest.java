@@ -28,6 +28,7 @@ import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
@@ -216,8 +217,7 @@ public abstract class ATest {
 
     @Before
     public void setup() {
-    	//cleanDb();
-        start();
+    	cleanDb();
     }
 
     @After
@@ -237,7 +237,7 @@ public abstract class ATest {
         return dir.delete();
     }
     
-    //@BeforeClass
+    @BeforeClass
     public static void start() {
     	deleteDir(new File(DATA_FOLDER));
         startDB(DATA_FOLDER);
