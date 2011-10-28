@@ -34,9 +34,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
@@ -176,27 +173,23 @@ public abstract class ATest {
     }
 
 	//database cleaning (thanks to mh)
-    public Map<String, Object> cleanDb() {
-        return cleanDb(Long.MAX_VALUE);
+    public void cleanDb() {
+        cleanDb(Long.MAX_VALUE);
     }
 
-    public Map<String, Object> cleanDb(final long maxNodesToDelete) {
-        Map<String, Object> result = execute(new GraphOperation<Map<String, Object>>() {
+    public void cleanDb(final long maxNodesToDelete) {
+        execute(new GraphOperation<Void>() {
             @Override
-            public Map<String, Object> execute() throws AnimoException {
-                Map<String, Object> result = new HashMap<String, Object>();
-                clearIndex(result);
-                removeNodes(result,maxNodesToDelete);
-                return result;
+            public Void execute() throws AnimoException {
+                removeNodes();
+                return null;
             }
         });
         initDB();
-        return result;
     }
 
-    private void removeNodes(Map<String, Object> result, long maxNodesToDelete) {
+    private void removeNodes() {
         Node refNode = getROOT();
-        long nodes = 0, relationships = 0;
         for (Node node : getDb().getAllNodes()) {
         	boolean delete = true;
             for (Relationship rel : node.getRelationships()) {
@@ -204,29 +197,24 @@ public abstract class ATest {
             		delete = false;
             	else
             		rel.delete();
-                relationships++;
             }
             if (delete && !refNode.equals(node)) {
                 node.delete();
-                nodes++;
             }
-            if (nodes >= maxNodesToDelete) break;
         }
-        result.put("maxNodesToDelete", maxNodesToDelete);
-        result.put("nodes", nodes);
-        result.put("relationships", relationships);
-
     }
 
-    private void clearIndex(Map<String, Object> result) throws AnimoException {
+    private void clearIndex(Node node) throws AnimoException {
         IndexManager indexManager = getDb().index();
-        result.put("node-indexes", Arrays.asList(indexManager.nodeIndexNames()));
-        result.put("relationship-indexes", Arrays.asList(indexManager.relationshipIndexNames()));
         for (String ix : indexManager.nodeIndexNames()) {
-            indexManager.forNodes(ix).delete();
+            indexManager.forNodes(ix).remove(node);
         }
+    }
+
+    private void clearIndex(Relationship relationship) throws AnimoException {
+        IndexManager indexManager = getDb().index();
         for (String ix : indexManager.relationshipIndexNames()) {
-            indexManager.forRelationships(ix).delete();
+            indexManager.forRelationships(ix).remove(relationship);
         }
     }
 
