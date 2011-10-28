@@ -26,6 +26,7 @@ import org.animotron.graph.serializer.*;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -221,7 +222,6 @@ public abstract class ATest {
 
     @After
     public void cleanup() {
-        stop();
     }
 
     public static boolean deleteDir(File dir) {
@@ -243,7 +243,7 @@ public abstract class ATest {
         startDB(DATA_FOLDER);
     }
 
-    //@AfterClass
+    @AfterClass
     public static void stop() {
     	shutdownDB();
     }

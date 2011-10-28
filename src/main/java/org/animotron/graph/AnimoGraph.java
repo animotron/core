@@ -25,9 +25,9 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
+import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +64,7 @@ public class AnimoGraph {
         IndexManager INDEX = graphDb.index();
         Cache.init(INDEX);
         OrderIndex.init(INDEX);
-        RESULT_INDEX = INDEX.forRelationships(RESULT);
+        RESULT_INDEX = INDEX.forRelationships(RESULT, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
         execute(
             new GraphOperation<Void> () {
                 @Override
@@ -179,15 +179,11 @@ public class AnimoGraph {
 	}
 
 	public static void result (Relationship r, byte[] hash) {
-		//workaround lucene issue
-		String key = Arrays.toString(hash);
-		RESULT_INDEX.add(r, RESULT, key);
+		RESULT_INDEX.add(r, RESULT, hash);
 	}
 
 	public static IndexHits<Relationship> getResult(byte[] hash, Node node) {
-		//workaround lucene issue
-		String key = Arrays.toString(hash);
-		return RESULT_INDEX.get(RESULT, key, node, null);
+		return RESULT_INDEX.get(RESULT, hash, node, null);
 		//return RESULT_INDEX.queryDown(RESULT, ref.getId(), node, null);
 	}
 
