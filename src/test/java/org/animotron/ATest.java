@@ -26,9 +26,7 @@ import org.animotron.graph.serializer.*;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
@@ -172,12 +170,7 @@ public abstract class ATest {
         System.out.println();
     }
 
-	//database cleaning (thanks to mh)
     public void cleanDb() {
-        cleanDb(Long.MAX_VALUE);
-    }
-
-    public void cleanDb(final long maxNodesToDelete) {
         execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws AnimoException {
@@ -185,7 +178,6 @@ public abstract class ATest {
                 return null;
             }
         });
-        initDB();
     }
 
     private void removeNodes() {
@@ -193,25 +185,28 @@ public abstract class ATest {
         for (Node node : getDb().getAllNodes()) {
         	boolean delete = true;
             for (Relationship rel : node.getRelationships()) {
-            	if (rel.getStartNode().equals(refNode))
+            	if (rel.getStartNode().equals(refNode)) {
             		delete = false;
-            	else
+                } else {
+                    clearIndex(rel);
             		rel.delete();
+                }
             }
             if (delete && !refNode.equals(node)) {
+                clearIndex(node);
                 node.delete();
             }
         }
     }
 
-    private void clearIndex(Node node) throws AnimoException {
+    private void clearIndex(Node node) {
         IndexManager indexManager = getDb().index();
         for (String ix : indexManager.nodeIndexNames()) {
             indexManager.forNodes(ix).remove(node);
         }
     }
 
-    private void clearIndex(Relationship relationship) throws AnimoException {
+    private void clearIndex(Relationship relationship) {
         IndexManager indexManager = getDb().index();
         for (String ix : indexManager.relationshipIndexNames()) {
             indexManager.forRelationships(ix).remove(relationship);
@@ -220,11 +215,13 @@ public abstract class ATest {
 
     @Before
     public void setup() {
-    	cleanDb();
+    	//cleanDb();
+        start();
     }
 
     @After
     public void cleanup() {
+        stop();
     }
 
     public static boolean deleteDir(File dir) {
@@ -240,13 +237,13 @@ public abstract class ATest {
         return dir.delete();
     }
     
-    @BeforeClass
+    //@BeforeClass
     public static void start() {
     	deleteDir(new File(DATA_FOLDER));
         startDB(DATA_FOLDER);
     }
 
-    @AfterClass
+    //@AfterClass
     public static void stop() {
     	shutdownDB();
     }
