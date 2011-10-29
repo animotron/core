@@ -20,7 +20,6 @@ package org.animotron;
 
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.DigestSerializer;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 
