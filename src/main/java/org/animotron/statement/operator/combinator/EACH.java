@@ -18,21 +18,18 @@
  */
 package org.animotron.statement.operator.combinator;
 
-import org.animotron.Executor;
+import org.animotron.expression.Expression;
+import org.animotron.expression.JExpression;
+import org.animotron.graph.OrderIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
-import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.Reference;
+import org.animotron.statement.link.LINK;
 import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Arrays;
-import java.util.Iterator;
-
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import java.util.LinkedList;
 
 /**
  * Operation 'EACH'.
@@ -51,56 +48,79 @@ public class EACH extends Combinator {
 		return question;
 	}
 
-	//XXX: out of date!
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
 		public void onMessage(final PFlow pf) {
 			System.out.println("EACH");
 			
-			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
-				@Override
-				public void onMessage(Relationship[] context) {
-					System.out.println("EACH message context "+Arrays.toString(context));
-					if (context == null) {
-						pf.countDown();
-						return;
+			LinkedList sets = new LinkedList();
+			
+			IndexHits<Relationship> elements = OrderIndex.queryDown(pf.getOPNode());
+			try {
+				while (elements.hasNext()) {
+					Relationship r = elements.next();
+					if (r.isType(LINK._)) {
+						IndexHits<Relationship> subelements = OrderIndex.queryDown(r.getEndNode());
+						if (subelements.hasNext()) {
+							sets.add(subelements);
+						} else {
+							sets.add(r);
+							subelements.close();
+						}
+					} else {
+						sets.add(r);
 					}
 				}
-
-				@Override
-				public DisposingExecutor getQueue() {
-					return Executor.getFiber();
-				}
-			};
-			
-			pf.answer.subscribe(onContext);
-			
-			int count = 0;
-
-			Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
-			while (it.hasNext()) {
-				Relationship r = it.next();
-				Statement s = Statements.relationshipType(r);
 				
-				if (s instanceof Reference || s instanceof Query) {
-					Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
-
-					PFlow nextPF = new PFlow(pf, r);
-					nextPF.question.subscribe(onQuestion);
+				for (int i = sets.size()-1; i >= 0; i--) {
 					
-					nextPF.question.publish(nextPF);
-					
-					count++;
 				}
+			} finally {
+				elements.close();
 			}
 			
-			if (count == 0)
-				pf.done();
-			else {
-				pf.await();
-				pf.done();
-			}
+			process(pf, sets, 1, null);
+			
+			pf.done();
 		}
 	};
+	
+	private void process(PFlow pf, LinkedList sets, int pos, Relationship[] res) {
+		if (pos > sets.size()) {
+			
+			System.out.println(Arrays.toString(res));
+			
+			//XXX: hack required!
+			
+			Object[] obj = null;
+			for (int i = res.length-1; i >= 0; i--) {
+				if (obj == null)
+					obj = new Object[] {LINK._, null, new Object[] {res[i]}};
+				else {
+					obj = new Object[] {LINK._, null, new Object[] {res[i]}, obj};
+				}
+			}
+			pf.sendAnswer( Expression.__(new JExpression(obj)) );
+			return;
+		}
+		
+		Relationship[] rs = new Relationship[pos];
+		
+		if (pos > 1) {
+			System.arraycopy(res, 0, rs, 0, res.length);
+		}
+		
+		Object obj = sets.get( sets.size()-pos );
+		
+		if (obj instanceof IndexHits) {
+			for (Relationship r : (IndexHits<Relationship>) obj) {
+				rs[pos-1] = r;
+				process(pf, sets, pos+1, rs);
+			}
+		} else {
+			rs[pos-1] = (Relationship) obj;
+			process(pf, sets, pos+1, rs);
+		}
+	}
 }
