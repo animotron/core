@@ -40,7 +40,7 @@ public class MessageDigester {
     private static final Logger LOG = Logger.getLogger(MessageDigester.class);
 
 	private static final String CACHE_ALGORITHM = "SHA-256";
-	
+
     public static MessageDigest md() {
         try {
             return MessageDigest.getInstance(CACHE_ALGORITHM);
@@ -57,9 +57,9 @@ public class MessageDigester {
             md5 = MessageDigest.getInstance( "MD5" );
             md5.update( message.getBytes() );
             byte[] digestData = md5.digest();
-            
+
            digest = byteArrayToHex( digestData );
-               
+
         } catch ( NoSuchAlgorithmException e ) {
             LOG.warn( "MD5 not supported. Using plain string as password!" );
         } catch ( Exception e ) {
@@ -149,7 +149,9 @@ public class MessageDigester {
     }
 
     public static void updateMD(MessageDigest md, Object reference) {
-        if (reference instanceof Object[][]) {
+        if (reference instanceof Iterable) {
+            updateMD(md, (Iterable<Object[]>) reference);
+        } else if (reference instanceof Object[][]) {
             updateMD(md, (Object[][]) reference);
         } else if (reference instanceof Object[]) {
             updateMD(md, (Object[]) reference);
@@ -161,6 +163,12 @@ public class MessageDigester {
                         reference instanceof Number ||
                             reference instanceof Boolean) {
             md.update(reference.toString().getBytes());
+        }
+    }
+
+    private static void updateMD(MessageDigest md, Iterable<Object[]> reference) {
+        for (Object[] o: reference) {
+            updateMD(md, o);
         }
     }
 

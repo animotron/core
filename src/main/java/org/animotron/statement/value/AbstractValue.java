@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.value;
 
+import javolution.util.FastList;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.Statement;
@@ -25,7 +26,7 @@ import org.animotron.statement.Statements;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
@@ -46,7 +47,11 @@ public abstract class AbstractValue extends AbstractStatement {
         if (reference == null)
             return ready ? getEND() : createNode();
         Node child = createNode();
-        if (reference instanceof Object[][]) {
+        if (reference instanceof Iterable) {
+            for (Object[] o : (Iterable<Object[]>) reference) {
+                child.setProperty(((AbstractValue) o[0]).name(), o[1]);
+            }
+        } else if (reference instanceof Object[][]) {
             for (Object[] o : (Object[][]) reference) {
                 child.setProperty(((AbstractValue) o[0]).name(), o[1]);
             }
@@ -67,7 +72,7 @@ public abstract class AbstractValue extends AbstractStatement {
         } else  if (VALUE.has(n)) {
             return VALUE.get(n);
         } else {
-            ArrayList<Object[]> ref = new ArrayList<Object[]>();
+            List<Object[]> ref = new FastList<Object[]>();
             for (String name : n.getPropertyKeys()) {
                 Statement s = Statements.name(name);
                 if (s != null) {
@@ -75,8 +80,7 @@ public abstract class AbstractValue extends AbstractStatement {
                     ref.add(o);
                 }
             }
-            Object[][] t = {};
-            return ref.isEmpty() ? null : ref.toArray(t);
+            return ref.isEmpty() ? null : ref;
         }
     }
 
