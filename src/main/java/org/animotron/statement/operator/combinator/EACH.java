@@ -32,7 +32,6 @@ import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
 /**
@@ -56,8 +55,6 @@ public class EACH extends Combinator {
 
 		@Override
 		public void onMessage(final PFlow pf) {
-			System.out.println("EACH");
-			
 			LinkedList<Relationship> sets = new LinkedList<Relationship>();
 
 			IndexHits<Relationship> elements = OrderIndex.queryDown(pf.getOPNode());
@@ -79,8 +76,6 @@ public class EACH extends Combinator {
 
 	private void process(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
 		if (pos > sets.size()) {
-
-			System.out.println(Arrays.toString(res));
 
             Relationship r = res[res.length-1];
             Relationship the = null;
