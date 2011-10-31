@@ -21,7 +21,6 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression.*;
@@ -34,17 +33,16 @@ import static org.animotron.expression.JExpression.*;
 public class EachTest extends ATest {
 
     @Test
-    @Ignore
     public void test_00() throws Exception {
 
         Expression a = new JExpression(
-                _(THE._, "A")
+                _(AN._, "A")
         );
         Expression b = new JExpression(
-                _(THE._, "B")
+                _(AN._, "B")
         );
         Expression c = new JExpression(
-                _(THE._, "C")
+                _(AN._, "C")
         );
 
         JExpression s = new JExpression(
@@ -55,7 +53,6 @@ public class EachTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_01() throws Exception {
 
         JExpression s = new JExpression(
