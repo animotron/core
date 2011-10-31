@@ -19,7 +19,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.junit.Test;
 
@@ -35,18 +34,8 @@ public class EachTest extends ATest {
     @Test
     public void test_00() throws Exception {
 
-        Expression a = new JExpression(
-                _(AN._, "A")
-        );
-        Expression b = new JExpression(
-                _(AN._, "B")
-        );
-        Expression c = new JExpression(
-                _(AN._, "C")
-        );
-
         JExpression s = new JExpression(
-            element("ul", each(_(_(a), _(b), _(c)), element("li")))
+            element("ul", each(_(_(AN._, "C"), _(AN._, "B"), _(AN._, "C")), element("li")))
         );
         assertAnimoResult(s, "\\ul (\\li the a) (\\li the b) (\\li the c)");
 
