@@ -23,7 +23,6 @@ package org.animotron.utils;
 
 
 import org.animotron.statement.Statement;
-import org.animotron.statement.value.It;
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -150,9 +149,7 @@ public class MessageDigester {
     }
 
     public static void updateMD(MessageDigest md, Object reference) {
-        if (reference instanceof Node) {
-            updateMD(md, (Node) reference);
-        } else if (reference instanceof Object[][]) {
+        if (reference instanceof Object[][]) {
             updateMD(md, (Object[][]) reference);
         } else if (reference instanceof Object[]) {
             updateMD(md, (Object[]) reference);
@@ -164,12 +161,6 @@ public class MessageDigester {
                         reference instanceof Number ||
                             reference instanceof Boolean) {
             md.update(reference.toString().getBytes());
-        }
-    }
-
-    private static void updateMD(MessageDigest md, Node reference) {
-        for (Object[] o: new It(reference)) {
-            updateMD(md, o);
         }
     }
 

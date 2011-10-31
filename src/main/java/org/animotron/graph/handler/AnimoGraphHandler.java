@@ -22,9 +22,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.value.It;
 import org.animotron.statement.value.VALUE;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -70,9 +68,10 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         Object ref = statement.reference(r);
-        if (ref instanceof Node) {
+        if (ref instanceof Object[][]) {
+            Object[][] param = (Object[][]) ref;
             start(statement, (Object) null, level, isOne);
-                for (Object[] o : new It((Node) ref)) {
+                for (Object[] o : param) {
                     start((Statement) o[0], o[1], level+1, true);
                     end((Statement) o[0], o[1], level+1, true);
                 }
