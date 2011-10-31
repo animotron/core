@@ -155,7 +155,5 @@ public class AnimoTraverser {
         public void remove() {
             q.close();
         }
-
     }
-	
 }

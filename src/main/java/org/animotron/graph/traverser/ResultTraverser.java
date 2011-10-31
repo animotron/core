@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import static org.animotron.Properties.RID;
+import static org.animotron.Properties.CID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -67,14 +68,6 @@ public class ResultTraverser extends AnimoTraverser {
     protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 
         int addedContexts = 0;
-//        try {
-//        	Relationship context = getDb().getRelationshipById(
-//                (Long)r.getProperty(CID.name())
-//            );
-//            pf.addContextPoint(context);
-//            addedContexts++;
-//        } catch (Exception e) {
-//		}
 
         if (r.isType(RESULT)) {
         	r = getDb().getRelationshipById(
@@ -82,7 +75,7 @@ public class ResultTraverser extends AnimoTraverser {
             );
             addedContexts += pf.addContextPoint(r);
         }
-        
+
         Statement s;
         if (r.isType(REF) || r.isType(THE._)) {
             s = THE._;
@@ -93,6 +86,24 @@ public class ResultTraverser extends AnimoTraverser {
         if (s instanceof Reference || s instanceof HAVE)
 	        addedContexts += pf.addContextPoint(r);
 
+        try {
+        	Relationship context = getDb().getRelationshipById(
+        		(Long)r.getProperty(CID.name())
+        	);
+        	pf.addContextPoint(context);
+        	addedContexts++;
+        } catch (Exception e) {
+        }
+        
+        process(handler, pf, s, r, level, isOne);
+
+        while (addedContexts > 0) {
+        	pf.popContextPoint();
+        	addedContexts--;
+        }
+    }
+    
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne) throws IOException {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
@@ -109,11 +120,6 @@ public class ResultTraverser extends AnimoTraverser {
                 if (s instanceof Result)
                     handler.end(s, r, --level, isOne);
             }
-        }
-
-        while (addedContexts > 0) {
-        	pf.popContextPoint();
-        	addedContexts--;
         }
     }
 

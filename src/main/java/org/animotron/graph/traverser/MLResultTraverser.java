@@ -22,24 +22,14 @@ import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.Reference;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
-
-import static org.animotron.Properties.CID;
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.REF;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -53,35 +43,8 @@ public class MLResultTraverser extends ResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne) throws IOException {
 
-        int addedContexts = 0;
-
-        if (r.isType(RESULT)) {
-        	r = getDb().getRelationshipById(
-                (Long)r.getProperty(RID.name())
-            );
-            addedContexts += pf.addContextPoint(r);
-        }
-
-        Statement s;
-        if (r.isType(REF) || r.isType(THE._)) {
-            s = THE._;
-        } else {
-            s = Statements.relationshipType(r);
-        }
-
-        if (s instanceof Reference || s instanceof HAVE)
-	        addedContexts += pf.addContextPoint(r);
-
-        try {
-        	Relationship context = getDb().getRelationshipById(
-                (Long)r.getProperty(CID.name())
-            );
-            addedContexts += pf.addContextPoint(context);
-        } catch (Exception e) {
-		}
-        
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
                 if (s instanceof Prefix) {
@@ -135,11 +98,6 @@ public class MLResultTraverser extends ResultTraverser {
                     it.remove();
                 }
             }
-        }
-
-        while (addedContexts > 0) {
-        	pf.popContextPoint();
-        	addedContexts--;
         }
     }
 
