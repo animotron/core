@@ -54,39 +54,26 @@ public class EACH extends Combinator {
 		public void onMessage(final PFlow pf) {
 			System.out.println("EACH");
 			
-			LinkedList sets = new LinkedList();
+			LinkedList<Relationship> sets = new LinkedList<Relationship>();
 			
 			IndexHits<Relationship> elements = OrderIndex.queryDown(pf.getOPNode());
 			try {
 				while (elements.hasNext()) {
-					Relationship r = elements.next();
-					if (r.isType(LINK._)) {
-						IndexHits<Relationship> subelements = OrderIndex.queryDown(r.getEndNode());
-						if (subelements.hasNext()) {
-							sets.add(subelements);
-						} else {
-							sets.add(r);
-							subelements.close();
-						}
-					} else {
-						sets.add(r);
-					}
+					sets.add(elements.next());
 				}
 				
-				for (int i = sets.size()-1; i >= 0; i--) {
-					
-				}
+				process(pf, sets, 1, null);
+				
 			} finally {
 				elements.close();
 			}
 			
-			process(pf, sets, 1, null);
 			
 			pf.done();
 		}
 	};
 	
-	private void process(PFlow pf, LinkedList sets, int pos, Relationship[] res) {
+	private void process(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
 		if (pos > sets.size()) {
 			
 			System.out.println(Arrays.toString(res));
@@ -111,15 +98,20 @@ public class EACH extends Combinator {
 			System.arraycopy(res, 0, rs, 0, res.length);
 		}
 		
-		Object obj = sets.get( sets.size()-pos );
+		Relationship rship = sets.get( sets.size()-pos );
 		
-		if (obj instanceof IndexHits) {
-			for (Relationship r : (IndexHits<Relationship>) obj) {
-				rs[pos-1] = r;
-				process(pf, sets, pos+1, rs);
+		if (rship.isType(LINK._)) {
+			IndexHits<Relationship> subelements = OrderIndex.queryDown(rship.getEndNode());
+			try {
+				for (Relationship r : subelements) {
+					rs[pos-1] = r;
+					process(pf, sets, pos+1, rs);
+				}
+			} finally {
+				subelements.close();
 			}
 		} else {
-			rs[pos-1] = (Relationship) obj;
+			rs[pos-1] = rship;
 			process(pf, sets, pos+1, rs);
 		}
 	}
