@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+//XXX: move to org.animotron.manipulator ?
 public class Executor {
 	
 	private static ExecutorService exec = Executors.newCachedThreadPool();

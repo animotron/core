@@ -25,6 +25,7 @@ import org.neo4j.graphdb.PropertyContainer;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+//XXX: move to org.animotron.graph ?
 public enum Properties  {
 	
 	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT, RID, CID, BIN;

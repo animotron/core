@@ -22,9 +22,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * @author <a href="mailto:gazdovskyd@gmail.com">E</a>
+ * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
+@Deprecated //not in use, delete?
 public class Sources {
 	
 	private static Set<String>SOURCES = new HashSet<String>(5);
