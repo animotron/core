@@ -26,6 +26,7 @@ import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.combinator.EACH;
 import org.animotron.statement.operator.combinator.MAP;
+import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
@@ -58,11 +59,11 @@ public class JExpression extends AbstractExpression {
 
     private void build(Object[]... e) throws AnimoException, IOException {
         if (e != null)
-            for (Object i : e)
+            for (Object[] i : e)
                 if (i instanceof Object[][]) {
                     build((Object[][]) i);
                 } else {
-                    buildStatement((Object[]) i);
+                    buildStatement(i);
                 }
     }
 
@@ -120,8 +121,12 @@ public class JExpression extends AbstractExpression {
         return e;
     }
 
+    private static Object[] $(AbstractValue s, Object[]... ref) {
+        return _(s, ref, null);
+    }
+
 	public static Object[] element(String name) {
-		return _(ELEMENT._, name(name));
+		return $(ELEMENT._, name(name));
 	}
 
 	public static Object[] element(String name, Object[]... p) {
@@ -129,19 +134,19 @@ public class JExpression extends AbstractExpression {
 	}
 	
     public static Object[] attribute(String name) {
-        return _(ATTRIBUTE._, name(name));
+        return $(ATTRIBUTE._, name(name));
     }
 
     public static Object[] attribute(String name, Object value) {
-        return _(ATTRIBUTE._, name(name), value(value));
+        return $(ATTRIBUTE._, name(name), value(value));
     }
 
     public static Object[] entity(String name) {
-        return _(ENTITY._, name(name));
+        return $(ENTITY._, name(name));
     }
 
     public static Object[] comment() {
-        return _(COMMENT._);
+        return $(COMMENT._);
     }
 
     public static Object[] comment(String value) {
@@ -157,11 +162,11 @@ public class JExpression extends AbstractExpression {
     }
 
     public static Object[] pi(String name, String value) {
-        return _(PI._, name(name), value(value));
+        return $(PI._, name(name), value(value));
     }
 
     public static Object[] pi(String value) {
-        return _(PI._, value(value));
+        return $(PI._, value(value));
     }
 
     public static Object[] dtd() {
@@ -173,11 +178,11 @@ public class JExpression extends AbstractExpression {
     }
 
     public static Object[] namespace(String name, String value) {
-        return _(NS._, name(name), value(value));
+        return $(NS._, name(name), value(value));
     }
 
     public static Object[] namespace(String value) {
-        return _(NS._, value(value));
+        return $(NS._, value(value));
     }
 
     public static Object[] name(String value) {
@@ -199,5 +204,5 @@ public class JExpression extends AbstractExpression {
     public static Object[] text(String value, Object[] p) {
         return _(TEXT._, value, p);
     }
-    
+
 }

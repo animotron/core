@@ -91,12 +91,7 @@ public class MLResultTraverser extends ResultTraverser {
 			//workaround IS and USE
 			} else if (!(s instanceof Relation)) {
                 node = r.getEndNode();
-                It it = new It(node);
-                try {
-                    iterate(handler, pf, it, level, 0);
-                } finally {
-                    it.remove();
-                }
+                iterate(handler, pf, new It(node), level, 0);
             }
         }
     }

@@ -18,7 +18,6 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.Properties;
 import org.animotron.graph.OrderIndex;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
@@ -53,17 +52,11 @@ public class AnimoTraverser {
 		handler.endGraph();
 	}
 	
-    protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne) throws IOException {
-        if (o instanceof Relationship) {
-            build(handler, pf, (Relationship) o, level, isOne);
-        } else {
-            String name = (String) o;
-            Statement statement = Statements.name(name);
-            String reference = (String) node.getProperty(name);
-            handler.start(statement, reference, level, isOne);
-            handler.end(statement, reference, level, isOne);
-        }
-    }
+//    protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne) throws IOException {
+//        if (o instanceof Relationship) {
+//            build(handler, pf, (Relationship) o, level, isOne);
+//        }
+//    }
 
 	protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
 		Statement statement = Statements.relationshipType(r);
@@ -72,27 +65,20 @@ public class AnimoTraverser {
 		handler.start(statement, r, level++, isOne);
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
-            It it = new It(node);
-            int size = hasStatement(node, NAME._) ? 1 : 0;
-			try {
-                iterate(handler, pf, it, level, size);
-			} finally {
-				it.remove();
-			}
+            iterate(handler, pf, new It(node), level, hasStatement(node, NAME._) ? 1 : 0);
 		}
 		handler.end(statement, r, --level, isOne);
 	}
 
     protected void iterate(GraphHandler handler, PFlow pf, It it, int level, int count) throws IOException {
-        int n = 0;
-        Object[] o = {null, null, null};
-        while (it.hasNext() && n < 3)
-            o[n++] = it.next();
-        boolean isOne = n - count < 2;
-        for (int i = 0; i < n; i++)
-            build(handler, pf, o[i], level, isOne);
-        while (it.hasNext())
-            build(handler, pf, it.next(), level, isOne);
+        boolean isOne = it.size() - count < 2;
+        try {
+            while (it.hasNext()) {
+                build(handler, pf, it.next(), level, isOne);
+            }
+        } finally {
+            it.remove();
+        }
     }
 
     protected boolean hasStatement(Node node, Statement s) {
@@ -100,60 +86,43 @@ public class AnimoTraverser {
                node.hasRelationship(s, OUTGOING);
     }
 
-    protected class It implements Iterator <Object>, Iterable<Object> {
+    protected class It implements Iterator <Relationship>, Iterable<Relationship> {
 
-        private Iterator<String> p;
         private Iterator<Relationship> r;
         private IndexHits<Relationship> q;
-
-        Object current = null;
 
         public It (Relationship r) {
             this(r.getEndNode());
         }
 
         public It (Node n) {
-            p = n.getPropertyKeys().iterator();
             q = OrderIndex.queryDown(n);
             r = q.iterator();
-            next();
         }
 
         @Override
-        public Iterator<Object> iterator() {
+        public Iterator<Relationship> iterator() {
             return this;
         }
 
         @Override
         public boolean hasNext() {
-            return current != null;
+            return r.hasNext();
         }
 
         @Override
-        public Object next() {
-            Object next = current;
-            current = step();
-            return next;
-        }
-
-        private Object step() {
-            if (p.hasNext()) {
-                String o = p.next();
-                if (Properties.VALUE.name().equals(o) || Properties.NAME.name().equals(o)) {
-                    return step();
-                } else {
-                    return o;
-                }
-            } else if (r.hasNext()) {
-                return r.next();
-            } else {
-                return null;
-            }
+        public Relationship next() {
+            return r.next();
         }
 
         @Override
         public void remove() {
             q.close();
         }
+
+        public int size() {
+            return q.size();
+        }
+
     }
 }

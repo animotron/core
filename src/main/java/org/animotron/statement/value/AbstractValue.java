@@ -20,13 +20,17 @@ package org.animotron.statement.value;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getEND;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -63,7 +67,16 @@ public abstract class AbstractValue extends AbstractStatement {
         } else  if (VALUE.has(n)) {
             return VALUE.get(n);
         } else {
-            return null;
+            ArrayList<Object[]> ref = new ArrayList<Object[]>();
+            for (String name : n.getPropertyKeys()) {
+                Statement s = Statements.name(name);
+                if (s != null) {
+                    Object[] o = {s, n.getProperty(name)};
+                    ref.add(o);
+                }
+            }
+            Object[][] t = {};
+            return ref.isEmpty() ? null : ref.toArray(t);
         }
     }
 
