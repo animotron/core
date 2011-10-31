@@ -37,7 +37,7 @@ public class EachTest extends ATest {
         JExpression s = new JExpression(
             element("ul", each(_(_(AN._, "A"), _(AN._, "B"), _(AN._, "C")), element("li")))
         );
-        assertAnimoResult(s, "\\ul (\\li the a) (\\li the b) (\\li the c)");
+        assertAnimoResult(s, "\\ul (\\li the A) (\\li the B) (\\li the C)");
 
     }
 
