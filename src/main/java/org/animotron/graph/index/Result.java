@@ -32,7 +32,7 @@ import org.neo4j.graphdb.index.RelationshipIndex;
  */
 public class Result {
 	
-	public static final String NAME = "RESULT";
+	public static final String NAME = "result";
 	
 	private static RelationshipIndex INDEX;
 

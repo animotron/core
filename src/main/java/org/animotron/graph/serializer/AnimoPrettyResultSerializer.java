@@ -18,17 +18,16 @@
  */
 package org.animotron.graph.serializer;
 
-import org.animotron.graph.traverser.AnimoTraverser;
+import org.animotron.graph.traverser.AnimoResultTraverser;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoSerializer extends AbstractAnimoSerializer {
+public class AnimoPrettyResultSerializer extends AbstractAnimoSerializer {
 
-    public static AnimoSerializer _ = new AnimoSerializer();
-
-    private AnimoSerializer() {super("animo.src", false, AnimoTraverser._);}
+    public static AnimoPrettyResultSerializer _ = new AnimoPrettyResultSerializer();
+    private AnimoPrettyResultSerializer() {super("animo-pretty.res", false, AnimoResultTraverser._);}
 
 }

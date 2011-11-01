@@ -31,20 +31,20 @@ import static org.animotron.graph.AnimoGraph.getStorage;
  */
 public abstract class Cache {
 
-    private final File CACHE_STORAGE = new File(getStorage(), "cache");
+    private static final File CACHE_STORAGE = new File(getStorage(), "cache");
+    private File storage;
 
-    {
-		CACHE_STORAGE.mkdirs();
-	}
-
-	public File getSorage() {
-        return new File(CACHE_STORAGE, name());
+    static {
+        CACHE_STORAGE.mkdirs();
     }
 
-    protected abstract String name();
+    protected Cache (String name){
+        storage = new File(CACHE_STORAGE, name);
+        storage.mkdirs();
+	}
 
     private File dir(String hash) throws FileNotFoundException {
-        return new File(new File(getSorage(), hash.substring(0, 2)), hash.substring(0, 4));
+        return new File(new File(storage, hash.substring(0, 2)), hash.substring(0, 4));
     }
 
     protected final OutputStream out(byte[] hash) throws FileNotFoundException {

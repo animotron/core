@@ -19,36 +19,15 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.neo4j.graphdb.Relationship;
-
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoResultSerializer {
+public class AnimoResultSerializer extends AbstractAnimoSerializer {
 
     public static AnimoResultSerializer _ = new AnimoResultSerializer();
-    private AnimoResultSerializer() {}
+    private AnimoResultSerializer() {super("animo.res", false, AnimoResultTraverser._);}
 
-    public void serialize(Relationship r, OutputStream out) throws IOException {
-        serialize(r, out, false);
-    }
-
-    public void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
-        AnimoResultTraverser._.traverse(AnimoSerializer._.handler(out, pretty), r);
-    }
-
-    public String serialize(Relationship r) throws IOException {
-        return serialize(r, false);
-    }
-
-    public String serialize(Relationship r, boolean pretty) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(AnimoSerializer._.handler(out, pretty), r);
-        return out.toString();
-    }
 }

@@ -31,10 +31,10 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class StringResultSerializer {
+public class StringResultSerializer extends Cache {
 	
     public static StringResultSerializer _ = new StringResultSerializer();
-    private StringResultSerializer() {}
+    private StringResultSerializer() {super("text");}
 
     public void serialize(Relationship r, OutputStream out) throws IOException {
         AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);

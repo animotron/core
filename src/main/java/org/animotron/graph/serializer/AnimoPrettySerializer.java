@@ -25,10 +25,10 @@ import org.animotron.graph.traverser.AnimoTraverser;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoSerializer extends AbstractAnimoSerializer {
+public class AnimoPrettySerializer extends AbstractAnimoSerializer {
 
-    public static AnimoSerializer _ = new AnimoSerializer();
+    public static AnimoPrettySerializer _ = new AnimoPrettySerializer();
 
-    private AnimoSerializer() {super("animo.src", false, AnimoTraverser._);}
+    private AnimoPrettySerializer() {super("animo-pretty.src", false, AnimoTraverser._);}
 
 }

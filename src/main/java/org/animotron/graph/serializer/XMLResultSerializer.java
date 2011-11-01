@@ -35,10 +35,10 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class XMLResultSerializer {
+public class XMLResultSerializer extends Cache {
 	
     public static XMLResultSerializer _ = new XMLResultSerializer();
-    private XMLResultSerializer() {}
+    private XMLResultSerializer() {super("XML");}
 
     public final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 

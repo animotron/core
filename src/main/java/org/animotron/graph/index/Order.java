@@ -34,7 +34,7 @@ import org.neo4j.index.lucene.QueryContext;
  */
 public class Order {
 	
-	public static final String NAME = "ORDER";
+	public static final String NAME = "order";
 	
 //	private static final QueryContext SORT;
 //	static {

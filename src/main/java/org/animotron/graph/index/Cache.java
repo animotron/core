@@ -33,7 +33,7 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
  */
 public class Cache {
 
-	public static final String NAME = "CACHE";
+	public static final String NAME = "cache";
 
     private static CacheIndex<Node> NCACHE;
     private static CacheIndex<Relationship> RCACHE;

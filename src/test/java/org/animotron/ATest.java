@@ -112,7 +112,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("Animo serializer...");
-        String result = AnimoSerializer._.serialize(op, pretty);
+        String result = pretty ? AnimoPrettySerializer._.serialize(op) : AnimoSerializer._.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -127,7 +127,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
-        String result = AnimoResultSerializer._.serialize(op, pretty);
+        String result = pretty ? AnimoPrettyResultSerializer._.serialize(op) : AnimoResultSerializer._.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
