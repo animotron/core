@@ -29,6 +29,7 @@ import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -121,9 +122,13 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
     	PFlow pflow = new PFlow(pf);
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-    	Iterator<Relationship> i = AnimoGraph.getResult(pflow.getPathHash(), r.getEndNode());
-    	//Iterator<Relationship> i = r.getEndNode().getRelationships(RESULT, OUTGOING).iterator();
-        boolean found = iterate(handler, pflow, i, level, isOne);
+    	IndexHits<Relationship> i = AnimoGraph.getResult(pflow.getPathHash(), r.getEndNode());
+    	boolean found;
+    	try {
+	        found = iterate(handler, pflow, i, level, isOne);
+    	} finally {
+    		i.close();
+    	}
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
