@@ -41,11 +41,11 @@ public class StringResultSerializer extends Cache {
     }
 
     public void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
-        AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), pf, r);
     }
 
     public void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
-        AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), pf, r);
     }
 
     public void serialize(Relationship r, StringBuilder out) throws IOException {
@@ -60,7 +60,7 @@ public class StringResultSerializer extends Cache {
 
 	public String serialize(PFlow pf, Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
+        AnimoResultTraverser._.traverse(new TextGraphHandler(out), pf, r);
         return out.toString();
     }
 

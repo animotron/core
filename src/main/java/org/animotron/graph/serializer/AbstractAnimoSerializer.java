@@ -49,16 +49,16 @@ public class AbstractAnimoSerializer extends Cache {
     }
 
     public final void serialize(Relationship r, OutputStream out) throws IOException {
-        traverser.traverse(handler(out), null, r);
+        traverser.traverse(handler(out), r);
     }
 
     public final void serialize(Relationship r, StringBuilder out) throws IOException {
-        traverser.traverse(handler(out), null, r);
+        traverser.traverse(handler(out), r);
     }
 
     public final String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        traverser.traverse(handler(out), null, r);
+        traverser.traverse(handler(out), r);
         return out.toString();
     }
 

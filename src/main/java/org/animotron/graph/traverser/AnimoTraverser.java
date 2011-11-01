@@ -47,6 +47,12 @@ public class AnimoTraverser {
 
     protected AnimoTraverser() {}
 	
+    public void traverse(GraphHandler handler, Relationship r) throws IOException {
+        handler.startGraph();
+        build(handler, null, r, 0, true);
+        handler.endGraph();
+    }
+
 	public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 		handler.startGraph();
 		build(handler, pf, r, 0, true);

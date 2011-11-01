@@ -63,6 +63,6 @@ public class XMLResultSerializer extends Cache {
 
     public void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
         XMLStreamWriter writer = getXMLStreamWriter(out);
-		MLResultTraverser._.traverse(pf, new StAXGraphHandler(writer), r);
+		MLResultTraverser._.traverse(new StAXGraphHandler(writer), pf, r);
     }
 }

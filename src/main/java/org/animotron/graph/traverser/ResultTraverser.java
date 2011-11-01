@@ -55,13 +55,15 @@ public class ResultTraverser extends AnimoTraverser {
 
     protected ResultTraverser() {}
 
+    @Override
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
         build(handler, new PFlow(Evaluator._, r), r, 0, true);
         handler.endGraph();
     }
 
-    public void traverse(PFlow pf, GraphHandler handler, Relationship r) throws IOException {
+    @Override
+    public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
         handler.startGraph();
         int i = pf.addContextPoint(r);
         build(handler, pf, r, 0, true);

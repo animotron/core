@@ -40,7 +40,6 @@ public abstract class Cache {
 
     protected Cache (String name){
         storage = new File(CACHE_STORAGE, name);
-        storage.mkdirs();
 	}
 
     private File dir(String hash) throws FileNotFoundException {
