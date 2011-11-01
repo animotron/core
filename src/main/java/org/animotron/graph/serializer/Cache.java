@@ -65,8 +65,9 @@ public abstract class Cache extends AbstractSerializer {
         if (file.exists()) {
             out(new FileInputStream(file), out);
         } else {
-            OutputStream cache = out(hash);
-            serialize(r, out);
+            OutputStream cache = new CacheStream(hash, out);
+            serialize(r, cache);
+            cache.close();
         }
     }
 
@@ -76,8 +77,9 @@ public abstract class Cache extends AbstractSerializer {
         if (file.exists()) {
             out(new FileInputStream(file), out);
         } else {
-            OutputStream cache = out(hash);
-            serialize(r, out);
+            OutputStream cache = new CacheBuilder(hash, out);
+            serialize(r, cache);
+            cache.close();
         }
     }
 
@@ -87,8 +89,11 @@ public abstract class Cache extends AbstractSerializer {
         if (file.exists()) {
             return out(new FileInputStream(file));
         } else {
-            OutputStream cache = out(hash);
-            return serialize(r);
+            StringBuilder out = new StringBuilder(1024);
+            OutputStream cache = new CacheBuilder(hash, out);
+            serialize(r, cache);
+            cache.close();
+            return out.toString();
         }
     }
 
@@ -115,6 +120,38 @@ public abstract class Cache extends AbstractSerializer {
         StringBuilder out = new StringBuilder(1024);
         out(in, out);
         return out.toString();
+    }
+
+    private class CacheStream extends OutputStream {
+
+        private String hash;
+        private OutputStream out;
+
+        public CacheStream(String hash, OutputStream out) {
+            this.hash = hash;
+            this.out = out;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+        }
+
+    }
+
+    private class CacheBuilder extends OutputStream {
+
+        private String hash;
+        private StringBuilder out;
+
+        public CacheBuilder(String hash, StringBuilder out) {
+            this.hash = hash;
+            this.out = out;
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+        }
+
     }
 
 }
