@@ -78,7 +78,7 @@ public class StreamGraphBuilder extends GraphBuilder {
     public void endGraph() throws AnimoException {
         relationship = Cache.getRelationship(hash);
         if (relationship == null) {
-            relationship = copy(getSTART(), r);
+            relationship = copy(getROOT(), r);
             Cache.putRelationship(relationship, hash);
             HASH.set(relationship, hash);
         }

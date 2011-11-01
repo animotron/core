@@ -23,7 +23,6 @@ import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.getEND;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,7 +35,7 @@ public abstract class AbstractLink extends AbstractStatement {
 
     @Override
     protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        return ready ? getEND() : createNode();
+        return createNode();
     }
 
 }

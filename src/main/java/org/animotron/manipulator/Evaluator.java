@@ -18,7 +18,7 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.index.State;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
@@ -54,7 +54,7 @@ public class Evaluator extends StatementManipulator {
 	private static class CalcMarker extends AbstractMarker {
 		
 		private static final Marker _ = new CalcMarker(); 
-		private CalcMarker() {super(RelationshipTypes.CALC);}
+		private CalcMarker() {super(State.CALC);}
 
 		@Override
 		public Manipulator manipulator() {

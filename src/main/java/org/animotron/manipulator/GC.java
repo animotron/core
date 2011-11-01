@@ -22,6 +22,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.index.State;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.jetlang.channels.Subscribable;
@@ -84,7 +85,7 @@ public class GC extends Manipulator {
 	private static class GCMarker extends AbstractMarker {
 
 		private static final Marker _ = new GCMarker(); 
-		private GCMarker() {super(RelationshipTypes.GC);}
+		private GCMarker() {super(State.GC);}
 
 		@Override
 		public Manipulator manipulator() {

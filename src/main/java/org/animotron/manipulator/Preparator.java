@@ -18,6 +18,7 @@
  */
 package org.animotron.manipulator;
 
+import org.animotron.graph.index.State;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
@@ -30,7 +31,6 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.graph.RelationshipTypes.PREPARE;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
@@ -70,7 +70,7 @@ public class Preparator extends StatementManipulator {
 	private static class PrepareMarker extends AbstractMarker {
 		
 		private static final Marker _ = new PrepareMarker();
-		private PrepareMarker() {super(PREPARE);}
+		private PrepareMarker() {super(State.PREPARE);}
 
 		@Override
 		public Manipulator manipulator() {

@@ -20,6 +20,7 @@ package org.animotron.statement.relation;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
+import org.animotron.graph.index.State;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Prepare;
@@ -34,8 +35,6 @@ import org.neo4j.graphdb.traversal.Traverser;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import static org.animotron.graph.RelationshipTypes.TOP;
-import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
@@ -85,9 +84,7 @@ public class IS extends Relation implements Prepare {
 					new GraphOperation<Void>() {
 						@Override
 						public Void execute() {
-							for (Relationship r : start.getRelationships(TOP, INCOMING)) {
-								r.delete();
-							}
+                            State.TOP.remove(start);
 							return null;
 						}
 					}

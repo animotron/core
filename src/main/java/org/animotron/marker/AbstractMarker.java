@@ -18,12 +18,8 @@
  */
 package org.animotron.marker;
 
-import org.animotron.graph.GraphOperation;
+import org.animotron.graph.index.State;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
-
-import static org.animotron.graph.AnimoGraph.*;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -32,20 +28,11 @@ import static org.animotron.graph.AnimoGraph.*;
 public abstract class AbstractMarker implements Marker {
 
 	private Node root;
-	private Relationship state;
-	private RelationshipType type;
+	private Node node;
+	private State state;
 	
-	public AbstractMarker(final RelationshipType type) {
-		this.type = type;
-		execute(
-			new GraphOperation<Void> () {
-				@Override
-				public Void execute() {
-					root = getOrCreateNode(getROOT(), type);
-					return null;
-				}
-			}
-		);
+	public AbstractMarker(final State state) {
+		this.state = state;
 	}
 
 	@Override
@@ -54,18 +41,14 @@ public abstract class AbstractMarker implements Marker {
 	}
 	
 	@Override
-	public RelationshipType type() {
-		return type;
-	}
-	
-	@Override
 	public void mark(Node node) {
-		state = root.createRelationshipTo(node, type());
+        this.node = node;
+		state.add(node);
 	}
 
 	@Override
 	public void drop() {
-		state.delete();
+		state.remove(node);
 	}
 
 }

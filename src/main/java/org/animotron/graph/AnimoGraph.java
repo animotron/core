@@ -23,6 +23,7 @@ import org.animotron.Executor;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
+import org.animotron.graph.index.State;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
@@ -43,7 +44,7 @@ public class AnimoGraph {
 
 	private static String STORAGE;
 
-	private static Node ROOT, START, END, TOP;
+	private static Node ROOT;
 
     public static void startDB(String folder, Map<String, String> config) {
     	if (graphDb != null)
@@ -65,18 +66,8 @@ public class AnimoGraph {
         IndexManager INDEX = graphDb.index();
         Cache.init(INDEX);
         Order.init(INDEX);
+        State.init(INDEX);
         Result.init(INDEX);
-        execute(
-            new GraphOperation<Void> () {
-                @Override
-                public Void execute() {
-                    START = getOrCreateNode(ROOT,RelationshipTypes.START);
-                    END = getOrCreateNode(ROOT,RelationshipTypes.END);
-                    TOP = getOrCreateNode(ROOT, RelationshipTypes.TOP);
-                    return null;
-                }
-            }
-        );
     }
 
 	public static GraphDatabaseService getDb() {
@@ -90,18 +81,6 @@ public class AnimoGraph {
 	public static Node getROOT() {
 		return ROOT;
 	}
-
-    public static Node getSTART() {
-        return START;
-    }
-
-    public static Node getEND() {
-        return END;
-    }
-
-    public static Node getTOP() {
-        return TOP;
-    }
 
 	public static void shutdownDB() {
 		System.out.println("shotdown");

@@ -26,10 +26,8 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public enum RelationshipTypes implements RelationshipType {
 	
-	GC, EVAL, PREPARE, FILTER, CALC,
-	
-	START, END, TOP, VALUE,
-	
-	REF, RESULT;
+	VALUE,
+    REF,
+    RESULT
 	
 }

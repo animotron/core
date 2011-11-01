@@ -21,7 +21,7 @@ package org.animotron.statement.operator;
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.index.Cache;
-import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.index.State;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
@@ -31,7 +31,8 @@ import org.neo4j.graphdb.event.ErrorState;
 import org.neo4j.graphdb.event.KernelEventHandler;
 
 import static org.animotron.Properties.NAME;
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
 
 /**
  * Operator 'THE'.
@@ -51,10 +52,10 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r;
-        r = build(getSTART(), name, null, false, true);
+        r = build(getROOT(), name, null, false, true);
         Node node = r.getEndNode();
-        getTOP().createRelationshipTo(node, RelationshipTypes.TOP);
         Cache.putRelationship(r, name);
+        State.TOP.add(node);
         return r;
 	}
 

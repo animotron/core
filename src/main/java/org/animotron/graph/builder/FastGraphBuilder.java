@@ -20,7 +20,7 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
-import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.index.State;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
 import org.animotron.utils.MessageDigester;
@@ -105,9 +105,9 @@ public class FastGraphBuilder extends GraphBuilder {
                 if (statement instanceof THE) {
                     relationship = Cache.getRelationship(reference);
                     if (relationship == null) {
-                        relationship = getSTART().createRelationshipTo(end, r.getType());
+                        relationship = getROOT().createRelationshipTo(end, r.getType());
                         Cache.putRelationship(relationship, reference);
-                        getTOP().createRelationshipTo(end, RelationshipTypes.TOP);
+                        State.TOP.add(end);
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
@@ -121,7 +121,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     }
                     creative(relationship);
                 } else {
-                    relationship = getSTART().createRelationshipTo(end, r.getType());
+                    relationship = getROOT().createRelationshipTo(end, r.getType());
                 }
                 Cache.putRelationship(relationship, hash);
                 HASH.set(relationship, hash);

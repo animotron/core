@@ -22,11 +22,11 @@ import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.Properties;
 import org.animotron.expression.JExpression;
+import org.animotron.graph.index.State;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 
 import static org.animotron.expression.JExpression._;
@@ -39,7 +39,7 @@ import static org.animotron.expression.JExpression._;
 public class IsLoopTest extends ATest {
 	
     private void test(String op) {
-        Node n = AnimoGraph.getTOP().getSingleRelationship(RelationshipTypes.TOP, Direction.OUTGOING).getEndNode();
+        Node n = State.TOP.get().next();
         Assert.assertEquals("", op, Properties.NAME.get(n));
     }
 

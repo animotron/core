@@ -31,7 +31,6 @@ import java.util.StringTokenizer;
 
 import static org.animotron.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.getEND;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,7 +44,7 @@ public abstract class AbstractValue extends AbstractStatement {
     @Override
     protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         if (reference == null)
-            return ready ? getEND() : createNode();
+            return createNode();
         Node child = createNode();
         if (reference instanceof Iterable) {
             for (Object[] o : (Iterable<Object[]>) reference) {
