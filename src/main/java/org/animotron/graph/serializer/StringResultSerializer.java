@@ -20,7 +20,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.handler.TextGraphHandler;
-import org.animotron.graph.traverser.AnimoResultTraverser;
+import org.animotron.graph.traverser.ResultTraverser;
 
 import java.io.OutputStream;
 
@@ -32,7 +32,7 @@ import java.io.OutputStream;
 public class StringResultSerializer extends Cache {
 	
     public static StringResultSerializer _ = new StringResultSerializer();
-    private StringResultSerializer() {super("text", AnimoResultTraverser._);}
+    private StringResultSerializer() {super("text", ResultTraverser._);}
 
     @Override
     protected GraphHandler handler(OutputStream out) {

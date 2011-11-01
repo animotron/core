@@ -20,6 +20,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.traverser.AnimoTraverser;
 import org.animotron.utils.MessageDigester;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
 
@@ -48,18 +49,72 @@ public abstract class Cache extends AbstractSerializer {
         return new File(new File(storage, hash.substring(0, 2)), hash.substring(0, 4));
     }
 
-    protected final OutputStream out(byte[] hash) throws FileNotFoundException {
-        String hex = MessageDigester.byteArrayToHex(hash);
-        File dir = dir(hex);
+    protected final File file(String hash) throws FileNotFoundException {
+        return new File(dir(hash), hash);
+    }
+
+    protected final OutputStream out(String hash) throws FileNotFoundException {
+        File dir = dir(hash);
         dir.mkdirs();
-        return new FileOutputStream(new File(dir, hex));
+        return new FileOutputStream(new File(dir, hash));
     }
 
-    protected final InputStream in(byte[] hash) throws FileNotFoundException {
-        String hex = MessageDigester.byteArrayToHex(hash);
-        return new FileInputStream(new File(dir(hex), hex));
+    public final void cache(Relationship r, OutputStream out) throws IOException {
+        String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
+        File file = file(hash);
+        if (file.exists()) {
+            out(new FileInputStream(file), out);
+        } else {
+            OutputStream cache = out(hash);
+            serialize(r, out);
+        }
     }
 
-//    protected final void cache(Input)
+    public final void cache(Relationship r, StringBuilder out) throws IOException {
+        String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
+        File file = file(hash);
+        if (file.exists()) {
+            out(new FileInputStream(file), out);
+        } else {
+            OutputStream cache = out(hash);
+            serialize(r, out);
+        }
+    }
+
+    public final String cache(Relationship r) throws IOException {
+        String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
+        File file = file(hash);
+        if (file.exists()) {
+            return out(new FileInputStream(file));
+        } else {
+            OutputStream cache = out(hash);
+            return serialize(r);
+        }
+    }
+
+    private void out(InputStream in, OutputStream out) throws IOException {
+        int len;
+        byte buf[] = new byte[1024 * 4];
+        while((len=in.read(buf))>0) {
+            out.write(buf,0,len);
+        }
+        in.close();
+    }
+
+    private void out(InputStream in, StringBuilder out) throws IOException {
+        int len;
+        char[] buf= new char[1024 * 4];
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        while((len=reader.read(buf))>0) {
+            out.append(buf, 0, len);
+        }
+        in.close();
+    }
+
+    private String out(InputStream in) throws IOException {
+        StringBuilder out = new StringBuilder(1024);
+        out(in, out);
+        return out.toString();
+    }
 
 }
