@@ -82,8 +82,7 @@ public class AnimoTraverser {
     }
 
     protected boolean hasStatement(Node node, Statement s) {
-        return node.hasProperty(s.name()) ||
-               node.hasRelationship(s, OUTGOING);
+        return node.hasRelationship(s, OUTGOING);
     }
 
     protected class It implements Iterator <Relationship>, Iterable<Relationship> {
