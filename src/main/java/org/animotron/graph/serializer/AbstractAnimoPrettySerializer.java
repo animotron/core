@@ -18,17 +18,33 @@
  */
 package org.animotron.graph.serializer;
 
+import org.animotron.graph.handler.AnimoPrettyGraphHandler;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
+
+import java.io.OutputStream;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoPrettySerializer extends AbstractAnimoPrettySerializer {
+public class AbstractAnimoPrettySerializer extends AbstractAnimoSerializer {
 
-    public static AnimoPrettySerializer _ = new AnimoPrettySerializer();
+    private AnimoTraverser traverser;
 
-    private AnimoPrettySerializer() {super("animo-pretty.src", AnimoTraverser._);}
+    protected AbstractAnimoPrettySerializer(String name, AnimoTraverser traverser) {
+        super(name, traverser);
+    }
+
+    @Override
+    protected GraphHandler handler(OutputStream out) {
+        return new AnimoPrettyGraphHandler(out);
+    }
+
+    @Override
+    protected GraphHandler handler(StringBuilder out) {
+        return new AnimoPrettyGraphHandler(out);
+    }
 
 }

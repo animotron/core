@@ -25,9 +25,9 @@ import org.animotron.graph.traverser.AnimoResultTraverser;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoPrettyResultSerializer extends AbstractAnimoSerializer {
+public class AnimoPrettyResultSerializer extends AbstractAnimoPrettySerializer {
 
     public static AnimoPrettyResultSerializer _ = new AnimoPrettyResultSerializer();
-    private AnimoPrettyResultSerializer() {super("animo-pretty.res", false, AnimoResultTraverser._);}
+    private AnimoPrettyResultSerializer() {super("animo-pretty.res", AnimoResultTraverser._);}
 
 }
