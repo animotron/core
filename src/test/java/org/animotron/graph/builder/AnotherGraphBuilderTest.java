@@ -49,11 +49,11 @@ public class AnotherGraphBuilderTest extends ATest {
     private void test_0(String xml) throws Exception {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
-        String inA = AnimoSerializer.serialize(e);
+        String inA = AnimoSerializer._.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         cleanDb();
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
-        String outA = AnimoSerializer.serialize(e);
+        String outA = AnimoSerializer._.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
@@ -62,10 +62,10 @@ public class AnotherGraphBuilderTest extends ATest {
     private void test_1(String xml) throws Exception {
         StAXExpression e;
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
-        String outA = AnimoSerializer.serialize(e);
+        String outA = AnimoSerializer._.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
-        String inA = AnimoSerializer.serialize(e);
+        String inA = AnimoSerializer._.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
@@ -74,10 +74,10 @@ public class AnotherGraphBuilderTest extends ATest {
     private void test_2(String xml) throws Exception {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
-        String inA = AnimoSerializer.serialize(e);
+        String inA = AnimoSerializer._.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
-        String outA = AnimoSerializer.serialize(e);
+        String outA = AnimoSerializer._.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);

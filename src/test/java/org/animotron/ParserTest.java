@@ -38,7 +38,7 @@ public class ParserTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer.serialize(expression));
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out);
     }
 

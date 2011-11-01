@@ -32,7 +32,10 @@ import java.io.OutputStream;
  */
 public class BinarySerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws IOException {
+    public static BinarySerializer _ = new BinarySerializer();
+    private BinarySerializer() {}
+
+    public void serialize(Relationship r, OutputStream out) throws IOException {
         AnimoResultTraverser._.traverse(new BinaryGraphHandler(out), r);
     }
 

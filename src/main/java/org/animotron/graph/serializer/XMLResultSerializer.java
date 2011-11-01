@@ -37,15 +37,18 @@ import java.io.OutputStream;
  */
 public class XMLResultSerializer {
 	
-    public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+    public static XMLResultSerializer _ = new XMLResultSerializer();
+    private XMLResultSerializer() {}
 
-    static {
+    public final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+
+    {
         WriterConfig conf = OUTPUT_FACTORY.getConfig();
         conf.doSupportNamespaces(true);
         conf.enableAutomaticNamespaces(false);
     }
 
-    private static XMLStreamWriter getXMLStreamWriter(OutputStream out) throws IOException {
+    private XMLStreamWriter getXMLStreamWriter(OutputStream out) throws IOException {
         try {
             return OUTPUT_FACTORY.createXMLStreamWriter(out);
         } catch (XMLStreamException e) {
@@ -53,12 +56,12 @@ public class XMLResultSerializer {
         }
     }
 
-    public static void serialize(Relationship r, OutputStream out) throws IOException {
+    public void serialize(Relationship r, OutputStream out) throws IOException {
         XMLStreamWriter writer = getXMLStreamWriter(out);
 		MLResultTraverser._.traverse(new StAXGraphHandler(writer), r);
     }
 
-    public static void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
+    public void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
         XMLStreamWriter writer = getXMLStreamWriter(out);
 		MLResultTraverser._.traverse(pf, new StAXGraphHandler(writer), r);
     }

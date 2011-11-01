@@ -39,7 +39,7 @@ public class FSBridgeTest extends ATest {
 	private void check(String the) throws IOException {
         Relationship r = THE._.get(the);
         assertNotNull(r);
-        AnimoSerializer.serialize(r, System.out);
+        AnimoSerializer._.serialize(r, System.out);
         System.out.println();
 	}
 	

@@ -36,7 +36,7 @@ public enum State {
     PREPARE (2),
     CALC    (3);
 	
-	public static final String NAME = "STATE";
+	private static final String NAME = "STATE";
 	
 	private static Index<Node> INDEX;
     private int id;

@@ -37,7 +37,7 @@ public class AnimoMLSerializerTest extends ATest {
 
     private void test(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer.serialize(expression));
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimoResult(expression, out);
     }
 

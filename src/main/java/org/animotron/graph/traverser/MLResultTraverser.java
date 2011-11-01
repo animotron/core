@@ -82,7 +82,7 @@ public class MLResultTraverser extends ResultTraverser {
                         it.remove();
                     }
                 } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
-                    String param = StringResultSerializer.serialize(pf, r);
+                    String param = StringResultSerializer._.serialize(pf, r);
                     handler.start(s, param, level++, isOne);
                     handler.end(s, param, --level, isOne);
                 }
@@ -106,7 +106,7 @@ public class MLResultTraverser extends ResultTraverser {
     private String param(PFlow pf, Object o) throws IOException {
         return
             o instanceof Relationship
-                ? StringResultSerializer.serialize(pf, (Relationship) o)
+                ? StringResultSerializer._.serialize(pf, (Relationship) o)
                 : (String) node.getProperty((String) o);
     }
 

@@ -28,7 +28,7 @@ import org.neo4j.graphdb.PropertyContainer;
 //XXX: move to org.animotron.graph ?
 public enum Properties  {
 	
-	NAME, SOURCE, NAMESPACE, VALUE, HASH, PREFIX, CONTENT, RID, CID, BIN;
+	NAME, VALUE, HASH, RID, CID;
 	
 	public Object get(PropertyContainer container) {
 		return container.getProperty(name());

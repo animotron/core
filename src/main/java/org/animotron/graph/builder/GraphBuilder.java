@@ -133,7 +133,7 @@ public abstract class GraphBuilder {
 
     public final void bind(Relationship e) throws IOException, AnimoException {
         Object[] o;
-        byte[] hash = HASH.has(e) ? (byte[]) HASH.get(e) : DigestSerializer.serialize(e);
+        byte[] hash = HASH.has(e) ? (byte[]) HASH.get(e) : DigestSerializer._.serialize(e);
         if (s != null) {
             o = start(s, r, true);
             stack.push(o);

@@ -33,7 +33,10 @@ import static org.animotron.Properties.HASH;
  */
 public class DigestSerializer {
 
-    public static byte[] serialize(Relationship r) throws IOException {
+    public static DigestSerializer _ = new DigestSerializer();
+    private DigestSerializer() {}
+
+    public byte[] serialize(Relationship r) throws IOException {
         if (HASH.has(r)) {
             return (byte[]) HASH.get(r);
         }

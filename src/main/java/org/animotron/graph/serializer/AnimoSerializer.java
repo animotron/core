@@ -34,37 +34,40 @@ import java.io.OutputStream;
  */
 public class AnimoSerializer {
 
-    public static void serialize(Relationship r, OutputStream out) throws IOException {
+    public static AnimoSerializer _ = new AnimoSerializer();
+    private AnimoSerializer() {}
+
+    public void serialize(Relationship r, OutputStream out) throws IOException {
         serialize(r, out, false);
     }
 
-    public static void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
+    public void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
         AnimoTraverser._.traverse(handler(out, pretty), null, r);
     }
 
-    public static void serialize(Relationship r, StringBuilder out) throws IOException {
+    public void serialize(Relationship r, StringBuilder out) throws IOException {
         serialize(r, out, false);
     }
 
-    public static void serialize(Relationship r, StringBuilder out, boolean pretty) throws IOException {
+    public void serialize(Relationship r, StringBuilder out, boolean pretty) throws IOException {
         AnimoTraverser._.traverse(handler(out, pretty), null, r);
     }
 
-    public static String serialize(Relationship r) throws IOException {
+    public String serialize(Relationship r) throws IOException {
         return serialize(r, false);
     }
 
-    public static String serialize(Relationship r, boolean pretty) throws IOException {
+    public String serialize(Relationship r, boolean pretty) throws IOException {
         StringBuilder out = new StringBuilder(1024);
         AnimoTraverser._.traverse(handler(out, pretty), null, r);
         return out.toString();
     }
 
-    public static GraphHandler handler(OutputStream out, boolean pretty) {
+    public GraphHandler handler(OutputStream out, boolean pretty) {
         return pretty ? new AnimoPrettyGraphHandler(out) : new AnimoGraphHandler(out);
     }
 
-    public static GraphHandler handler(StringBuilder out, boolean pretty) {
+    public GraphHandler handler(StringBuilder out, boolean pretty) {
         return pretty ? new AnimoPrettyGraphHandler(out) : new AnimoGraphHandler(out);
     }
 

@@ -18,37 +18,47 @@
  */
 package org.animotron.graph.serializer;
 
-import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.neo4j.graphdb.Relationship;
+import org.animotron.utils.MessageDigester;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+
+import static org.animotron.graph.AnimoGraph.getStorage;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AnimoResultSerializer {
+public abstract class Cache {
 
-    public static AnimoResultSerializer _ = new AnimoResultSerializer();
-    private AnimoResultSerializer() {}
+    private final File CACHE_STORAGE = new File(getStorage(), "cache");
 
-    public void serialize(Relationship r, OutputStream out) throws IOException {
-        serialize(r, out, false);
+    {
+		CACHE_STORAGE.mkdirs();
+	}
+
+	public File getSorage() {
+        return new File(CACHE_STORAGE, name());
     }
 
-    public void serialize(Relationship r, OutputStream out, boolean pretty) throws IOException {
-        AnimoResultTraverser._.traverse(AnimoSerializer._.handler(out, pretty), r);
+    protected abstract String name();
+
+    private File dir(String hash) throws FileNotFoundException {
+        return new File(new File(getSorage(), hash.substring(0, 2)), hash.substring(0, 4));
     }
 
-    public String serialize(Relationship r) throws IOException {
-        return serialize(r, false);
+    protected final OutputStream out(byte[] hash) throws FileNotFoundException {
+        String hex = MessageDigester.byteArrayToHex(hash);
+        File dir = dir(hex);
+        dir.mkdirs();
+        return new FileOutputStream(new File(dir, hex));
     }
 
-    public String serialize(Relationship r, boolean pretty) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(AnimoSerializer._.handler(out, pretty), r);
-        return out.toString();
+    protected final InputStream in(byte[] hash) throws FileNotFoundException {
+        String hex = MessageDigester.byteArrayToHex(hash);
+        return new FileInputStream(new File(dir(hex), hex));
     }
+
+//    protected final void cache(Input)
+
 }

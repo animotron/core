@@ -66,7 +66,7 @@ public class StoreBinaryTest extends ATest {
         System.out.println("Test binary stream ...");
         
     	Relationship r = new CommonExpression(new ByteArrayInputStream(TXT.getBytes()), PATH);
-        AnimoSerializer.serialize(r, System.out);
+        AnimoSerializer._.serialize(r, System.out);
 
         JExpression s = new JExpression(
           _(AN._, r)

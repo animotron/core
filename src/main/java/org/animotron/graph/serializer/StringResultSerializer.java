@@ -33,29 +33,32 @@ import java.io.OutputStream;
  */
 public class StringResultSerializer {
 	
-    public static void serialize(Relationship r, OutputStream out) throws IOException {
+    public static StringResultSerializer _ = new StringResultSerializer();
+    private StringResultSerializer() {}
+
+    public void serialize(Relationship r, OutputStream out) throws IOException {
         AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
     }
 
-    public static void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
+    public void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
         AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
     }
 
-    public static void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
+    public void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
         AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
     }
 
-    public static void serialize(Relationship r, StringBuilder out) throws IOException {
+    public void serialize(Relationship r, StringBuilder out) throws IOException {
         AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
     }
 
-    public static String serialize(Relationship r) throws IOException {
+    public String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
         AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
         return out.toString();
     }
 
-	public static String serialize(PFlow pf, Relationship r) throws IOException {
+	public String serialize(PFlow pf, Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
         AnimoResultTraverser._.traverse(pf, new TextGraphHandler(out), r);
         return out.toString();

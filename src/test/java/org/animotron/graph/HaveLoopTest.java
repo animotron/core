@@ -44,13 +44,13 @@ public class HaveLoopTest extends ATest {
 
 		System.out.println("Prepare");
 		System.out.print("The a: ");
-		AnimoSerializer.serialize(A, System.out);
+		AnimoSerializer._.serialize(A, System.out);
 		System.out.println();
 		System.out.print("The b: ");
-		AnimoSerializer.serialize(B, System.out);
+		AnimoSerializer._.serialize(B, System.out);
 		System.out.println();
 		System.out.print("The c: ");
-		AnimoSerializer.serialize(C, System.out);
+		AnimoSerializer._.serialize(C, System.out);
 		System.out.println();
 		System.out.println();
 

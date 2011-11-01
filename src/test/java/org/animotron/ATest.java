@@ -112,7 +112,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("Animo serializer...");
-        String result = AnimoSerializer.serialize(op, pretty);
+        String result = AnimoSerializer._.serialize(op, pretty);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -127,7 +127,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
-        String result = AnimoResultSerializer.serialize(op, pretty);
+        String result = AnimoResultSerializer._.serialize(op, pretty);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -142,7 +142,7 @@ public abstract class ATest {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream(in);
 
-        XMLResultSerializer.serialize(op, out);
+        XMLResultSerializer._.serialize(op, out);
         out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();
@@ -152,7 +152,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("VALUE result serializer...");
-        String result = StringResultSerializer.serialize(new PFlow(Evaluator._), op);
+        String result = StringResultSerializer._.serialize(new PFlow(Evaluator._), op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -163,7 +163,7 @@ public abstract class ATest {
         assertNotNull(op);
         System.out.println("Binary serializer...");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        BinarySerializer.serialize(op, out);
+        BinarySerializer._.serialize(op, out);
         String bin = out.toString();
         Assert.assertEquals("", expected, bin);
         System.out.println(bin);

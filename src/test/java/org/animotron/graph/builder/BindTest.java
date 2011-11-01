@@ -51,14 +51,14 @@ import static org.animotron.expression.JExpression.element;
 public class BindTest extends ATest {
 
     public void test(Expression e, String animo) throws Exception {
-        String inA = AnimoSerializer.serialize(e);
+        String inA = AnimoSerializer._.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
-        assertEquals(inH, DigestSerializer.serialize(e));
+        assertEquals(inH, DigestSerializer._.serialize(e));
         cleanDb();
         Expression x = new AnimoExpression(animo);
-        String outA = AnimoSerializer.serialize(x);
+        String outA = AnimoSerializer._.serialize(x);
         byte[] outH = (byte[]) HASH.get(x);
-        assertEquals(outH, DigestSerializer.serialize(x));
+        assertEquals(outH, DigestSerializer._.serialize(x));
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
     }
