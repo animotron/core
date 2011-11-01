@@ -19,8 +19,8 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.BinaryGraphHandler;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -30,13 +30,19 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class BinarySerializer {
+public class BinarySerializer extends AbstractSerializer {
 	
     public static BinarySerializer _ = new BinarySerializer();
-    private BinarySerializer() {}
+    private BinarySerializer() {super(AnimoResultTraverser._);}
 
-    public void serialize(Relationship r, OutputStream out) throws IOException {
-        AnimoResultTraverser._.traverse(new BinaryGraphHandler(out), r);
+    @Override
+    protected GraphHandler handler(OutputStream out) throws IOException {
+        return new BinaryGraphHandler(out);
+    }
+
+    @Override
+    protected GraphHandler handler(StringBuilder out) {
+        throw new UnsupportedOperationException();
     }
 
 }

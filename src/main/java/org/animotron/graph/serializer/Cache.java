@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.serializer;
 
+import org.animotron.graph.traverser.AnimoTraverser;
 import org.animotron.utils.MessageDigester;
 
 import java.io.*;
@@ -29,7 +30,7 @@ import static org.animotron.graph.AnimoGraph.getStorage;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Cache {
+public abstract class Cache extends AbstractSerializer {
 
     private static final File CACHE_STORAGE = new File(getStorage(), "cache");
     private File storage;
@@ -38,7 +39,8 @@ public abstract class Cache {
         CACHE_STORAGE.mkdirs();
     }
 
-    protected Cache (String name){
+    protected Cache (String name, AnimoTraverser traverser){
+        super(traverser);
         storage = new File(CACHE_STORAGE, name);
 	}
 

@@ -41,7 +41,7 @@ public class DigestSerializer {
             return (byte[]) HASH.get(r);
         }
         DigestGraphHandler handler = new DigestGraphHandler();
-        AnimoTraverser._.traverse(handler, null, r);
+        AnimoTraverser._.traverse(handler, r);
         return handler.digest();
     }
 

@@ -20,13 +20,11 @@ package org.animotron.graph.serializer;
 
 import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.handler.StAXGraphHandler;
 import org.animotron.graph.traverser.MLResultTraverser;
-import org.animotron.manipulator.PFlow;
-import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -37,32 +35,28 @@ import java.io.OutputStream;
  */
 public class XMLResultSerializer extends Cache {
 	
+    public final static WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
+
     public static XMLResultSerializer _ = new XMLResultSerializer();
-    private XMLResultSerializer() {super("XML");}
-
-    public final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
-    {
+    private XMLResultSerializer() {
+        super("XML", MLResultTraverser._);
         WriterConfig conf = OUTPUT_FACTORY.getConfig();
         conf.doSupportNamespaces(true);
         conf.enableAutomaticNamespaces(false);
     }
 
-    private XMLStreamWriter getXMLStreamWriter(OutputStream out) throws IOException {
+    @Override
+    protected GraphHandler handler(OutputStream out) throws IOException {
         try {
-            return OUTPUT_FACTORY.createXMLStreamWriter(out);
+            return new StAXGraphHandler(OUTPUT_FACTORY.createXMLStreamWriter(out));
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
     }
 
-    public void serialize(Relationship r, OutputStream out) throws IOException {
-        XMLStreamWriter writer = getXMLStreamWriter(out);
-		MLResultTraverser._.traverse(new StAXGraphHandler(writer), r);
+    @Override
+    protected GraphHandler handler(StringBuilder out) {
+        throw new UnsupportedOperationException();
     }
 
-    public void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
-        XMLStreamWriter writer = getXMLStreamWriter(out);
-		MLResultTraverser._.traverse(new StAXGraphHandler(writer), pf, r);
-    }
 }

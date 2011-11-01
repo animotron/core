@@ -18,12 +18,10 @@
  */
 package org.animotron.graph.serializer;
 
+import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.handler.TextGraphHandler;
 import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.animotron.manipulator.PFlow;
-import org.neo4j.graphdb.Relationship;
 
-import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -34,34 +32,16 @@ import java.io.OutputStream;
 public class StringResultSerializer extends Cache {
 	
     public static StringResultSerializer _ = new StringResultSerializer();
-    private StringResultSerializer() {super("text");}
+    private StringResultSerializer() {super("text", AnimoResultTraverser._);}
 
-    public void serialize(Relationship r, OutputStream out) throws IOException {
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
+    @Override
+    protected GraphHandler handler(OutputStream out) {
+        return new TextGraphHandler(out);
     }
 
-    public void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), pf, r);
-    }
-
-    public void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), pf, r);
-    }
-
-    public void serialize(Relationship r, StringBuilder out) throws IOException {
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
-    }
-
-    public String serialize(Relationship r) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), r);
-        return out.toString();
-    }
-
-	public String serialize(PFlow pf, Relationship r) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        AnimoResultTraverser._.traverse(new TextGraphHandler(out), pf, r);
-        return out.toString();
+    @Override
+    protected GraphHandler handler(StringBuilder out) {
+        return new TextGraphHandler(out);
     }
 
 }

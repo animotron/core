@@ -29,7 +29,7 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AbstractAnimoPrettySerializer extends AbstractAnimoSerializer {
+public abstract class AbstractAnimoPrettySerializer extends AbstractAnimoSerializer {
 
     private AnimoTraverser traverser;
 
