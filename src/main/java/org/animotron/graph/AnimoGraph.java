@@ -39,14 +39,17 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class AnimoGraph {
 
-	private static GraphDatabaseService graphDb;
+	private static GraphDatabaseService graphDb = null;
 
 	private static String STORAGE;
 
 	private static Node ROOT, START, END, TOP;
 
     public static void startDB(String folder, Map<String, String> config) {
-        STORAGE = folder;
+    	if (graphDb != null)
+    		return; //log?
+    	
+    	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
     }
