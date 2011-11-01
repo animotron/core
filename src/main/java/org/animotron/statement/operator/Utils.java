@@ -19,7 +19,8 @@
 package org.animotron.statement.operator;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
+import org.animotron.graph.index.Result;
 import org.animotron.manipulator.PFlow;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
@@ -28,9 +29,9 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
+import static org.animotron.Properties.CID;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.animotron.Properties.CID;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -54,7 +55,7 @@ public class Utils {
 		boolean haveSome = false;
 		
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-		for (Relationship r : AnimoGraph.getResult(pf.getPathHash(), node)) {
+		for (Relationship r : Result.get(pf.getPathHash(), node)) {
 			Relationship c = null;
 			try {
 				long id = (Long)r.getProperty(CID.name());
@@ -103,7 +104,7 @@ public class Utils {
 
 	public static boolean haveContext(PFlow pf) {
 		
-		IndexHits<Relationship> q = OrderIndex.queryDown(pf.getOPNode());
+		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
 		try {
 			while (q.hasNext()) {
 				Relationship r = q.next();

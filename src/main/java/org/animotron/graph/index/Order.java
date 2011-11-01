@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph;
+package org.animotron.graph.index;
 
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
@@ -31,7 +31,7 @@ import org.neo4j.index.lucene.QueryContext;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class OrderIndex {
+public class Order {
 	
 	public static final String NAME = "ORDER";
 	

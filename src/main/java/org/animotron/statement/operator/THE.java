@@ -20,7 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
-import org.animotron.graph.Cache;
+import org.animotron.graph.index.Cache;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;

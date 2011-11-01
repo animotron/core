@@ -20,7 +20,7 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
@@ -83,7 +83,7 @@ public abstract class GraphBuilder {
 
     protected final void order(Relationship r, int order){
         if (order > 0) {
-            OrderIndex.order(r, order);
+            Order.order(r, order);
         }
     }
 

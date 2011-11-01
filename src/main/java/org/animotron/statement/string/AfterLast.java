@@ -22,7 +22,7 @@ import org.animotron.Properties;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -65,7 +65,7 @@ public class AfterLast extends Instruction implements Evaluable {
             //UNDERSTAND: if we have more that 2 params, what to do?
 
         	System.out.println(pf.getOP());
-            Relationship[] params = OrderIndex.first(2, pf.getOP().getStartNode());
+            Relationship[] params = Order.first(2, pf.getOP().getStartNode());
 
             //pattern
             String pattern;

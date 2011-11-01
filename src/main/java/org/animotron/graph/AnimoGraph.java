@@ -20,12 +20,12 @@ package org.animotron.graph;
 
 import javolution.util.FastList;
 import org.animotron.Executor;
+import org.animotron.graph.index.Cache;
+import org.animotron.graph.index.Order;
+import org.animotron.graph.index.Result;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
-import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
-import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.util.List;
@@ -44,8 +44,6 @@ public class AnimoGraph {
 	private static String STORAGE;
 
 	private static Node ROOT, START, END, TOP;
-	public static RelationshipIndex RESULT_INDEX;
-	private static String RESULT = "RESULT";
 
     public static void startDB(String folder, Map<String, String> config) {
         STORAGE = folder;
@@ -63,8 +61,8 @@ public class AnimoGraph {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
         Cache.init(INDEX);
-        OrderIndex.init(INDEX);
-        RESULT_INDEX = INDEX.forRelationships(RESULT, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+        Order.init(INDEX);
+        Result.init(INDEX);
         execute(
             new GraphOperation<Void> () {
                 @Override
@@ -176,16 +174,6 @@ public class AnimoGraph {
 			return r.getEndNode();
 		Node node = createNode(parent, type);
 		return node;
-	}
-
-	public static void result (Relationship r, byte[] hash) {
-		RESULT_INDEX.add(r, RESULT, hash);
-	}
-
-	public static IndexHits<Relationship> getResult(byte[] hash, Node node) {
-		return RESULT_INDEX.get(RESULT, hash);
-		//return RESULT_INDEX.get(RESULT, hash, node, null);
-		//return RESULT_INDEX.queryDown(RESULT, ref.getId(), node, null);
 	}
 
     public static void copyProperties(PropertyContainer src, PropertyContainer dst) {

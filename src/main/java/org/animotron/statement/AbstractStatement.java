@@ -20,8 +20,9 @@ package org.animotron.statement;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.Cache;
+import org.animotron.graph.index.Cache;
 import org.animotron.graph.GraphOperation;
+import org.animotron.graph.index.Result;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.THE;
@@ -29,9 +30,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
-import static org.animotron.Properties.CID;
-import static org.animotron.Properties.NAME;
-import static org.animotron.Properties.RID;
+import static org.animotron.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
@@ -65,7 +64,7 @@ public abstract class AbstractStatement implements Statement {
 				RID.set(res, r.getId());
 				//for debug
 				CID.set(res, context.getId());
-				AnimoGraph.result(res, pf.getPathHash());
+				Result.add(res, pf.getPathHash());
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;
 			}

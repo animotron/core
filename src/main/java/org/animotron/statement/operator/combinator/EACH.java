@@ -19,7 +19,7 @@
 package org.animotron.statement.operator.combinator;
 
 import org.animotron.expression.JExpression;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -57,7 +57,7 @@ public class EACH extends Combinator {
 		public void onMessage(final PFlow pf) {
 			LinkedList<Relationship> sets = new LinkedList<Relationship>();
 
-			IndexHits<Relationship> elements = OrderIndex.queryDown(pf.getOPNode());
+			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
 				while (elements.hasNext()) {
 					sets.add(elements.next());
@@ -83,7 +83,7 @@ public class EACH extends Combinator {
                 Statement s = Statements.relationshipType(res[i]);
                 if (s instanceof AbstractValue) {
                     // TODO analyze more complex expressions
-                    IndexHits<Relationship> subelements = OrderIndex.queryDown(res[i].getEndNode());
+                    IndexHits<Relationship> subelements = Order.queryDown(res[i].getEndNode());
                     Object[][] bind = new Object[subelements.size() + 1][];
                     try {
                         int n = 0;
@@ -115,7 +115,7 @@ public class EACH extends Combinator {
 		Relationship rship = sets.get( sets.size()-pos );
 
 		if (rship.isType(LINK._)) {
-			IndexHits<Relationship> subelements = OrderIndex.queryDown(rship.getEndNode());
+			IndexHits<Relationship> subelements = Order.queryDown(rship.getEndNode());
 			try {
 				for (Relationship r : subelements) {
 					rs[pos-1] = r;

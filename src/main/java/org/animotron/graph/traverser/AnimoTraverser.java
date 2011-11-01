@@ -19,7 +19,7 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.Properties;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -113,7 +113,7 @@ public class AnimoTraverser {
 
         public It (Node n) {
             p = n.getPropertyKeys().iterator();
-            q = OrderIndex.queryDown(n);
+            q = Order.queryDown(n);
             r = q.iterator();
             next();
         }

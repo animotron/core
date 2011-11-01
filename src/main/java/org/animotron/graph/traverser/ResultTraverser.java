@@ -18,24 +18,28 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.index.Result;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.operator.*;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
+import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
 
-import static org.animotron.Properties.RID;
 import static org.animotron.Properties.CID;
+import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -109,11 +113,11 @@ public class ResultTraverser extends AnimoTraverser {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			} else if (!(s instanceof Relation)) {
-                if (s instanceof Result)
+                if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
                 iterate(handler, pf, new It(node), level, 0);
-                if (s instanceof Result)
+                if (s instanceof AbstractValue)
                     handler.end(s, r, --level, isOne);
             }
         }
@@ -122,7 +126,7 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
     	PFlow pflow = new PFlow(pf);
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-    	IndexHits<Relationship> i = AnimoGraph.getResult(pflow.getPathHash(), r.getEndNode());
+    	IndexHits<Relationship> i = Result.get(pflow.getPathHash(), r.getEndNode());
     	boolean found;
     	try {
 	        found = iterate(handler, pflow, i, level, isOne);

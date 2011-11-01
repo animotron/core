@@ -18,7 +18,7 @@
  */
 package org.animotron;
 
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.junit.Assert;
@@ -54,7 +54,7 @@ public class OrderIndexTest extends ATest {
 		}
 		
 		System.out.println("reading ...");
-		IndexHits<Relationship> q = OrderIndex.queryDown(getROOT());
+		IndexHits<Relationship> q = Order.queryDown(getROOT());
 		try {
 			int i = 1;
 			for (Relationship r : q ) {
@@ -77,7 +77,7 @@ public class OrderIndexTest extends ATest {
 			Node child = createNode();
 			child.setProperty("NAME-P", i);
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
-			OrderIndex.order(r, i);
+			Order.order(r, i);
 		}
 
 		return null;

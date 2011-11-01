@@ -19,7 +19,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.Cache;
+import org.animotron.graph.index.Cache;
 import org.animotron.statement.Statement;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;

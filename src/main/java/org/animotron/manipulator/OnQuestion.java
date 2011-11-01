@@ -20,7 +20,7 @@ package org.animotron.manipulator;
 
 import javolution.util.FastList;
 import org.animotron.Executor;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -40,7 +40,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 		
         List<PFlow> list = new FastList<PFlow>();
 
-		IndexHits<Relationship> q = OrderIndex.queryDown(pf.getOPNode());
+		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
 		try {
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {

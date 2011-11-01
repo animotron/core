@@ -19,7 +19,7 @@
 package org.animotron.statement.compare;
 
 import javolution.util.FastList;
-import org.animotron.graph.OrderIndex;
+import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
@@ -111,7 +111,7 @@ public class WITH extends Operator implements Predicate {
 	private List<Relationship> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
 		List<Relationship> list = new FastList<Relationship>();
 		
-		IndexHits<Relationship> q = OrderIndex.queryDown(node);
+		IndexHits<Relationship> q = Order.queryDown(node);
 		try {
 			for (Relationship i : q) {
 				Statement s = Statements.relationshipType(i);
