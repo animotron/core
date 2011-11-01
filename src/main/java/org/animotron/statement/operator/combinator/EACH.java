@@ -25,9 +25,9 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.value.AbstractValue;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -81,7 +81,7 @@ public class EACH extends Combinator {
             Relationship the = null;
 			for (int i = res.length-2; i >= 0; i--) {
                 Statement s = Statements.relationshipType(res[i]);
-                if (s instanceof MLOperator) {
+                if (s instanceof AbstractValue) {
                     // TODO analyze more complex expressions
                     IndexHits<Relationship> subelements = OrderIndex.queryDown(res[i].getEndNode());
                     Object[][] bind = new Object[subelements.size() + 1][];
@@ -92,7 +92,7 @@ public class EACH extends Combinator {
                             n++;
                         }
                         bind[n] = JExpression._(r);
-                        r = new JExpression(JExpression._(s, s.reference(res[i]), bind));
+                        r = new JExpression(JExpression._(s, ((AbstractValue) s).reference(res[i].getEndNode()), bind));
                     } finally {
                         subelements.close();
                     }

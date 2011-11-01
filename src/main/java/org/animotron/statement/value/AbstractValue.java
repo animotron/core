@@ -72,16 +72,20 @@ public abstract class AbstractValue extends AbstractStatement {
         } else  if (VALUE.has(n)) {
             return VALUE.get(n);
         } else {
-            List<Object[]> ref = new FastList<Object[]>();
-            for (String name : n.getPropertyKeys()) {
-                Statement s = Statements.name(name);
-                if (s != null) {
-                    Object[] o = {s, n.getProperty(name)};
-                    ref.add(o);
-                }
-            }
-            return ref.isEmpty() ? null : ref;
+            return null;
         }
+    }
+
+    public Object reference(Node n) {
+        List<Object[]> ref = new FastList<Object[]>();
+        for (String name : n.getPropertyKeys()) {
+            Statement s = Statements.name(name);
+            if (s != null) {
+                Object[] o = {s, n.getProperty(name)};
+                ref.add(o);
+            }
+        }
+        return ref.isEmpty() ? null : ref;
     }
 
     public static Object value(Object o) {

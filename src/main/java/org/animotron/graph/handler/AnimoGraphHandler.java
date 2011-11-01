@@ -67,16 +67,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     private Statement ps = null;
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        Object ref = statement.reference(r);
-        if (ref instanceof Iterable) {
-            start(statement, (Object) null, level, isOne);
-            for (Object[] o : (Iterable<Object[]>) ref) {
-                start((Statement) o[0], o[1], level+1, true);
-                end((Statement) o[0], o[1], level+1, true);
-            }
-        } else {
-            start(statement, ref, level, isOne);
-        }
+        start(statement, statement.reference(r), level, isOne);
     }
 
     @Override
