@@ -53,7 +53,7 @@ public class FileCache implements Cache {
     @Override
     public void get(String key, OutputStream out) throws IOException {
         int len;
-        InputStream in = new FileInputStream(file(key));
+        InputStream in = new BufferedInputStream(new FileInputStream(file(key)));
         byte buf[] = new byte[1024 * 4];
         while((len=in.read(buf))>0) {
             out.write(buf,0,len);
@@ -64,7 +64,7 @@ public class FileCache implements Cache {
     @Override
     public void get(String key, StringBuilder out) throws IOException {
         int len;
-        InputStream in = new FileInputStream(file(key));
+        InputStream in = new BufferedInputStream(new FileInputStream(file(key)));
         char[] buf= new char[1024 * 4];
         BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
         while((len=reader.read(buf))>0) {
@@ -103,7 +103,7 @@ public class FileCache implements Cache {
         public AbstractCache(String hash) throws FileNotFoundException {
             File dir = dir(hash);
             dir.mkdirs();
-            cache = new FileOutputStream(new File(dir, hash));
+            cache = new BufferedOutputStream(new FileOutputStream(new File(dir, hash)));
         }
 
         @Override
