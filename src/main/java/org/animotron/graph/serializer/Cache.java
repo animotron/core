@@ -53,12 +53,6 @@ public abstract class Cache extends AbstractSerializer {
         return new File(dir(hash), hash);
     }
 
-    protected final OutputStream out(String hash) throws FileNotFoundException {
-        File dir = dir(hash);
-        dir.mkdirs();
-        return new FileOutputStream(new File(dir, hash));
-    }
-
     public final void cache(Relationship r, OutputStream out) throws IOException {
         String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
         File file = file(hash);
@@ -122,29 +116,46 @@ public abstract class Cache extends AbstractSerializer {
         return out.toString();
     }
 
-    private class CacheStream extends OutputStream {
+    private abstract class AbstractCache extends OutputStream {
 
-        private String hash;
+        protected OutputStream cache;
+
+        public AbstractCache(String hash) throws FileNotFoundException {
+            File dir = dir(hash);
+            dir.mkdirs();
+            cache = new FileOutputStream(new File(dir, hash));
+        }
+
+        @Override
+        public void close() throws IOException {
+            cache.close();
+        }
+
+    }
+
+    private class CacheStream extends AbstractCache {
+
         private OutputStream out;
 
-        public CacheStream(String hash, OutputStream out) {
-            this.hash = hash;
+        public CacheStream(String hash, OutputStream out) throws FileNotFoundException {
+            super(hash);
             this.out = out;
         }
 
         @Override
         public void write(int b) throws IOException {
+            out.write(b);
+            cache.write(b);
         }
 
     }
 
-    private class CacheBuilder extends OutputStream {
+    private class CacheBuilder extends AbstractCache {
 
-        private String hash;
         private StringBuilder out;
 
-        public CacheBuilder(String hash, StringBuilder out) {
-            this.hash = hash;
+        public CacheBuilder(String hash, StringBuilder out) throws FileNotFoundException {
+            super(hash);
             this.out = out;
         }
 

@@ -20,7 +20,7 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.BinaryGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.traverser.AnimoResultTraverser;
+import org.animotron.graph.traverser.ResultTraverser;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -33,7 +33,7 @@ import java.io.OutputStream;
 public class BinarySerializer extends AbstractSerializer {
 	
     public static BinarySerializer _ = new BinarySerializer();
-    private BinarySerializer() {super(AnimoResultTraverser._);}
+    private BinarySerializer() {super(ResultTraverser._);}
 
     @Override
     protected GraphHandler handler(OutputStream out) throws IOException {
