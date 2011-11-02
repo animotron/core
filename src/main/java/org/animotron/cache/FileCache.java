@@ -31,11 +31,11 @@ public class FileCache implements Cache {
 
     public static FileCache _ = new FileCache();
 
-    private FileCache() {
-        CACHE_STORAGE.mkdirs();
-    }
+    private FileCache() {}
 
     private static final File CACHE_STORAGE = new File(getStorage(), "cache");
+
+    static { CACHE_STORAGE.mkdirs(); }
 
     private File dir(String hash) throws FileNotFoundException {
         return new File(new File(CACHE_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));
