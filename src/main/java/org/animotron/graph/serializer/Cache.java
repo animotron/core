@@ -148,6 +148,12 @@ public abstract class Cache extends AbstractSerializer {
             cache.write(b);
         }
 
+        @Override
+        public void write(byte b[], int off, int len) throws IOException {
+            out.write(b, off, len);
+            cache.write(b, off, len);
+        }
+
     }
 
     private class CacheBuilder extends AbstractCache {
@@ -163,6 +169,12 @@ public abstract class Cache extends AbstractSerializer {
         public void write(int b) throws IOException {
             out.append((char)b);
             cache.write(b);
+        }
+
+        @Override
+        public void write(byte b[], int off, int len) throws IOException {
+            out.append(new String(b, off, len));
+            cache.write(b, off, len);
         }
 
     }
