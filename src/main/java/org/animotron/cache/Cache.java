@@ -40,4 +40,6 @@ public interface Cache {
 
     public OutputStream stream(String key, StringBuilder out) throws IOException;
 
+    public void drop(String key) throws IOException;
+
 }

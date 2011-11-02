@@ -115,6 +115,12 @@ public class FileCache implements Cache {
         return new CacheBuilder(key, out);
     }
 
+    @Override
+    public void drop(String key) throws IOException {
+        File file = file(key);
+        if (file.exists()) file.delete();
+    }
+
     private abstract class AbstractCache extends OutputStream {
 
         protected OutputStream cache;
