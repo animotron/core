@@ -45,31 +45,6 @@ public class FileCache implements Cache {
         return new File(dir(hash), hash);
     }
 
-    private void out(InputStream in, OutputStream out) throws IOException {
-        int len;
-        byte buf[] = new byte[1024 * 4];
-        while((len=in.read(buf))>0) {
-            out.write(buf,0,len);
-        }
-        in.close();
-    }
-
-    private void out(InputStream in, StringBuilder out) throws IOException {
-        int len;
-        char[] buf= new char[1024 * 4];
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-        while((len=reader.read(buf))>0) {
-            out.append(buf, 0, len);
-        }
-        in.close();
-    }
-
-    private String out(InputStream in) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        out(in, out);
-        return out.toString();
-    }
-
     @Override
     public boolean available(String key) throws IOException {
         return file(key).exists();
