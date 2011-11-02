@@ -47,22 +47,22 @@ public abstract class AbstractSerializer {
         traverser.traverse(handler(out), r);
     }
 
+    public final void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
+        traverser.traverse(handler(out), pf, r);
+    }
+
     public final void serialize(Relationship r, StringBuilder out) throws IOException {
         traverser.traverse(handler(out), r);
+    }
+
+    public final void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
+        traverser.traverse(handler(out), pf, r);
     }
 
     public final String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
         traverser.traverse(handler(out), r);
         return out.toString();
-    }
-
-    public final void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
-        traverser.traverse(handler(out), pf, r);
-    }
-
-    public final void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
-        traverser.traverse(handler(out), pf, r);
     }
 
 	public final String serialize(PFlow pf, Relationship r) throws IOException {
