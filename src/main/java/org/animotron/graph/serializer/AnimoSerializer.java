@@ -29,6 +29,6 @@ public class AnimoSerializer extends AbstractAnimoSerializer {
 
     public static AnimoSerializer _ = new AnimoSerializer();
 
-    private AnimoSerializer() {super("animo.src", AnimoTraverser._);}
+    private AnimoSerializer() {super(AnimoTraverser._, "-src.animo");}
 
 }

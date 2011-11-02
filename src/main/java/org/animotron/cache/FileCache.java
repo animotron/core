@@ -16,11 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.serializer;
-
-import org.animotron.graph.traverser.AnimoTraverser;
-import org.animotron.utils.MessageDigester;
-import org.neo4j.graphdb.Relationship;
+package org.animotron.cache;
 
 import java.io.*;
 
@@ -31,64 +27,22 @@ import static org.animotron.graph.AnimoGraph.getStorage;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Cache extends AbstractSerializer {
+public class FileCache implements Cache {
 
-    private static final File CACHE_STORAGE = new File(getStorage(), "cache");
-    private File storage;
+    public static FileCache _ = new FileCache();
 
-    static {
+    private FileCache() {
         CACHE_STORAGE.mkdirs();
     }
 
-    protected Cache (String name, AnimoTraverser traverser){
-        super(traverser);
-        storage = new File(CACHE_STORAGE, name);
-	}
+    private static final File CACHE_STORAGE = new File(getStorage(), "stream");
 
     private File dir(String hash) throws FileNotFoundException {
-        return new File(new File(storage, hash.substring(0, 2)), hash.substring(0, 4));
+        return new File(new File(CACHE_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));
     }
 
     protected final File file(String hash) throws FileNotFoundException {
         return new File(dir(hash), hash);
-    }
-
-    public final void cache(Relationship r, OutputStream out) throws IOException {
-        String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
-        File file = file(hash);
-        if (file.exists()) {
-            out(new FileInputStream(file), out);
-        } else {
-            OutputStream cache = new CacheStream(hash, out);
-            serialize(r, cache);
-            cache.close();
-        }
-    }
-
-    public final void cache(Relationship r, StringBuilder out) throws IOException {
-        String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
-        File file = file(hash);
-        if (file.exists()) {
-            out(new FileInputStream(file), out);
-        } else {
-            OutputStream cache = new CacheBuilder(hash, out);
-            serialize(r, cache);
-            cache.close();
-        }
-    }
-
-    public final String cache(Relationship r) throws IOException {
-        String hash = MessageDigester.byteArrayToHex(DigestSerializer._.serialize(r));
-        File file = file(hash);
-        if (file.exists()) {
-            return out(new FileInputStream(file));
-        } else {
-            StringBuilder out = new StringBuilder(1024);
-            OutputStream cache = new CacheBuilder(hash, out);
-            serialize(r, cache);
-            cache.close();
-            return out.toString();
-        }
     }
 
     private void out(InputStream in, OutputStream out) throws IOException {
@@ -114,6 +68,51 @@ public abstract class Cache extends AbstractSerializer {
         StringBuilder out = new StringBuilder(1024);
         out(in, out);
         return out.toString();
+    }
+
+    @Override
+    public boolean available(String key) throws IOException {
+        return file(key).exists();
+    }
+
+    @Override
+    public void get(String key, OutputStream out) throws IOException {
+        int len;
+        InputStream in = new FileInputStream(file(key));
+        byte buf[] = new byte[1024 * 4];
+        while((len=in.read(buf))>0) {
+            out.write(buf,0,len);
+        }
+        in.close();
+    }
+
+    @Override
+    public void get(String key, StringBuilder out) throws IOException {
+        int len;
+        InputStream in = new FileInputStream(file(key));
+        char[] buf= new char[1024 * 4];
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+        while((len=reader.read(buf))>0) {
+            out.append(buf, 0, len);
+        }
+        in.close();
+    }
+
+    @Override
+    public String get(String key) throws IOException {
+        StringBuilder out = new StringBuilder(1024);
+        get(key, out);
+        return out.toString();
+    }
+
+    @Override
+    public OutputStream stream(String key, OutputStream out) throws IOException {
+        return new CacheStream(key, out);
+    }
+
+    @Override
+    public OutputStream stream(String key, StringBuilder out) throws IOException {
+        return new CacheBuilder(key, out);
     }
 
     private abstract class AbstractCache extends OutputStream {

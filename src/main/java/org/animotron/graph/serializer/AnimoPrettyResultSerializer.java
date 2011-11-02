@@ -28,6 +28,6 @@ import org.animotron.graph.traverser.AnimoResultTraverser;
 public class AnimoPrettyResultSerializer extends AbstractAnimoPrettySerializer {
 
     public static AnimoPrettyResultSerializer _ = new AnimoPrettyResultSerializer();
-    private AnimoPrettyResultSerializer() {super("animo-pretty.res", AnimoResultTraverser._);}
+    private AnimoPrettyResultSerializer() {super(AnimoResultTraverser._, "-res-pretty.animo");}
 
 }

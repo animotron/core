@@ -31,10 +31,8 @@ import java.io.OutputStream;
  */
 public abstract class AbstractAnimoPrettySerializer extends AbstractAnimoSerializer {
 
-    private AnimoTraverser traverser;
-
-    protected AbstractAnimoPrettySerializer(String name, AnimoTraverser traverser) {
-        super(name, traverser);
+    protected AbstractAnimoPrettySerializer(AnimoTraverser traverser, String ext) {
+        super(traverser, ext);
     }
 
     @Override

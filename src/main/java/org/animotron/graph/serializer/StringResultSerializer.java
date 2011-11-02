@@ -29,10 +29,10 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class StringResultSerializer extends Cache {
+public class StringResultSerializer extends CachedSerializer {
 	
     public static StringResultSerializer _ = new StringResultSerializer();
-    private StringResultSerializer() {super("text", ResultTraverser._);}
+    private StringResultSerializer() {super(ResultTraverser._, ".txt");}
 
     @Override
     protected GraphHandler handler(OutputStream out) {

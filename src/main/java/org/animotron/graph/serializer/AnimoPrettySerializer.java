@@ -29,6 +29,6 @@ public class AnimoPrettySerializer extends AbstractAnimoPrettySerializer {
 
     public static AnimoPrettySerializer _ = new AnimoPrettySerializer();
 
-    private AnimoPrettySerializer() {super("animo-pretty.src", AnimoTraverser._);}
+    private AnimoPrettySerializer() {super(AnimoTraverser._, "-src-pretty.animo");}
 
 }

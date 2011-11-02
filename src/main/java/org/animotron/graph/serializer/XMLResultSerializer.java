@@ -33,13 +33,13 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class XMLResultSerializer extends Cache {
+public class XMLResultSerializer extends CachedSerializer {
 	
     public final static WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
     public static XMLResultSerializer _ = new XMLResultSerializer();
     private XMLResultSerializer() {
-        super("XML", MLResultTraverser._);
+        super(MLResultTraverser._, ".xml");
         WriterConfig conf = OUTPUT_FACTORY.getConfig();
         conf.doSupportNamespaces(true);
         conf.enableAutomaticNamespaces(false);

@@ -16,12 +16,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.graph.serializer;
+package org.animotron.cache;
 
-import org.animotron.graph.handler.AnimoGraphHandler;
-import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.traverser.AnimoTraverser;
-
+import java.io.IOException;
 import java.io.OutputStream;
 
 /**
@@ -29,18 +26,18 @@ import java.io.OutputStream;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractAnimoSerializer extends CachedSerializer {
+public interface Cache {
 
-    protected AbstractAnimoSerializer(AnimoTraverser traverser, String ext) {
-        super(traverser, ext);
-    }
+    public boolean available(String key) throws IOException;
 
-    protected GraphHandler handler(OutputStream out) {
-        return new AnimoGraphHandler(out);
-    }
+    public void get(String key, OutputStream out) throws IOException;
 
-    protected GraphHandler handler(StringBuilder out) {
-        return new AnimoGraphHandler(out);
-    }
+    public void get(String key, StringBuilder out) throws IOException;
+
+    public String get(String key) throws IOException;
+
+    public OutputStream stream(String key, OutputStream out) throws IOException;
+
+    public OutputStream stream(String key, StringBuilder out) throws IOException;
 
 }
