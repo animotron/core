@@ -128,6 +128,4 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-
-
 }
