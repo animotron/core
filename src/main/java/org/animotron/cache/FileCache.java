@@ -35,7 +35,7 @@ public class FileCache implements Cache {
         CACHE_STORAGE.mkdirs();
     }
 
-    private static final File CACHE_STORAGE = new File(getStorage(), "stream");
+    private static final File CACHE_STORAGE = new File(getStorage(), "cache");
 
     private File dir(String hash) throws FileNotFoundException {
         return new File(new File(CACHE_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));
