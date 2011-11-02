@@ -161,6 +161,8 @@ public abstract class Cache extends AbstractSerializer {
 
         @Override
         public void write(int b) throws IOException {
+            out.append(b);
+            cache.write(b);
         }
 
     }
