@@ -29,6 +29,7 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -46,19 +47,19 @@ public class AnimoGraph {
 
 	private static Node ROOT;
 
-    public static void startDB(String folder, Map<String, String> config) {
+    public static boolean startDB(String folder, Map<String, String> config) {
     	if (graphDb != null)
-    		return; //log?
+    		return false;
     	
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
+        
+        return true;
     }
 
-    public static void startDB(String folder) {
-        STORAGE = folder;
-        graphDb = new EmbeddedGraphDatabase(STORAGE);
-        initDB();
+    public static boolean startDB(String folder) {
+    	return startDB(folder, new HashMap<String, String>());
     }
 
     public static void initDB() {
