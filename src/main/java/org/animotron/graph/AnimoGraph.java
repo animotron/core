@@ -98,6 +98,8 @@ public class AnimoGraph {
 		graphDb.shutdown();
 
 		THE._.beforeShutdown();
+
+        graphDb = null;
 	}
 
 	private static List<Transaction> activeTx = new FastList<Transaction>();
