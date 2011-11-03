@@ -44,6 +44,14 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 
 	public static final THE _ = new THE();
 
+    public static Node _(String name) {
+        try {
+            return THE._.getOrCreate(name, true).getEndNode();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 	private THE() { super("the"); }
 
 	public Relationship get(String name) {
@@ -70,7 +78,7 @@ public class THE extends Operator implements Prepare, KernelEventHandler {
 		}
 		return r;
 	}
-
+	
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
