@@ -24,6 +24,7 @@ import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.State;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.AbstractStatement;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -40,7 +41,7 @@ import static org.animotron.graph.AnimoGraph.getROOT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends Operator implements Prepare, KernelEventHandler {
+public class THE extends AbstractStatement implements Prepare, KernelEventHandler {
 
 	public static final THE _ = new THE();
 

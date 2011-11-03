@@ -32,6 +32,7 @@ import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
 
 import java.io.*;
@@ -168,7 +169,7 @@ public class AnimoExpression extends AbstractExpression {
                 builder._(NAME._, token);
                 op = null;
                 prefix = false;
-            } else if (op instanceof Operator || op instanceof Relation) {
+            } else if (op instanceof THE || op instanceof Relation) {
                 builder.start(op, token);
                 op = null;
                 level++;
