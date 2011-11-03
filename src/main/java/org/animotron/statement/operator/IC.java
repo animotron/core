@@ -20,6 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.link.AbstractLink;
 
 
 /**
@@ -28,7 +29,7 @@ import org.animotron.manipulator.PFlow;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends Operator implements Evaluable {
+public class IC extends AbstractLink implements Evaluable {
 	
 	public static final IC _ = new IC();
 	

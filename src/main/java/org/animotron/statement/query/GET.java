@@ -57,7 +57,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends Operator implements Evaluable, Query {
+public class GET extends AbstractQuery implements Evaluable, Query {
 
 	public static final GET _ = new GET();
 	

@@ -25,8 +25,8 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.query.GET;
@@ -45,7 +45,7 @@ import java.util.Set;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class WITH extends Operator implements Predicate {
+public class WITH extends AbstractLink implements Predicate {
 	
 	public static final WITH _ = new WITH();
 	

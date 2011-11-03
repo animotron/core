@@ -24,6 +24,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.instruction.Instruction;
+import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.NAME;
@@ -173,7 +174,7 @@ public class AnimoExpression extends AbstractExpression {
                 level++;
             } else {
                 op = Statements.name(token);
-                if (op instanceof MLOperator || op instanceof LINK) {
+                if (op instanceof MLOperator || op instanceof AbstractLink) {
                     builder.start(op);
                     level++;
                 } else if (op == null || op instanceof Instruction) {

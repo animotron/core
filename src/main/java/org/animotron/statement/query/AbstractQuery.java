@@ -23,6 +23,7 @@ import org.animotron.Properties;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
@@ -48,7 +49,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class AbstractQuery extends Operator implements Evaluable, Query {
+public abstract class AbstractQuery extends AbstractLink implements Evaluable, Query {
 
     public AbstractQuery(String name) {
         super(name);
