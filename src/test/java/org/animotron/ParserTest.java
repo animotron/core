@@ -488,4 +488,8 @@ public class ParserTest extends ATest {
         test("\\a ($a \"a\") (@a \"a\") (\"a\")");
     }
 
+    @Test
+    public void test_89() throws Exception {
+        test("get (get a) (an b)");
+    }
 }
