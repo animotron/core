@@ -21,6 +21,7 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.exception.AnimoException;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.*;
 import org.animotron.manipulator.Evaluator;
@@ -33,6 +34,7 @@ import org.neo4j.graphdb.index.IndexManager;
 
 import java.io.*;
 
+import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
 
@@ -47,15 +49,28 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-	protected void toConsole(PFlow ch) throws IOException {
-		//XXX: code
-//		if (instream == null) return;
-//		
-//		Object n; 
-//		while ((n = instream.read()) != null) {
-//			System.out.print(n.toString());
-//		} 
-	}
+	protected void testAnimo(String exp) throws Exception {
+        testAnimo(exp, exp);
+    }
+
+	protected void testAnimo(String in, String out) throws Exception {
+        AnimoExpression expression = new AnimoExpression(in);
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
+        assertAnimo(expression, out);
+    }
+
+	protected void testAnimoResult(String exp, String res) throws Exception {
+		testAnimoResult(exp, exp, res);
+    }
+
+	protected void testAnimoResult(String in, String out, String res) throws Exception {
+        AnimoExpression expression = new AnimoExpression(in);
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
+        assertAnimo(expression, out);
+
+        assertAnimoResult(expression, res);
+    }
+
 
 	protected void toConsole(InputStream stream) throws IOException {
 		if (stream == null) return;

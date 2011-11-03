@@ -79,4 +79,12 @@ public class GetDynamicTest extends ATest {
         );
         assertAnimoResult(F, "the F (have B \"π\")");
     }
+
+    @Test
+    public void test_01() throws Exception {
+    	testAnimo("the z have a z1");
+    	testAnimo("the b have z1 \"z1\"");
+
+    	testAnimoResult("get (get a an z) (an b)", "have z1 \"z1\"");
+    }
 }
