@@ -53,7 +53,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             write("\"");
             write(reference.toString().replaceAll("\"", "\\\\\""));
             write("\"");
-        } else if (statement instanceof AN) {
+        } else if (statement instanceof AN && reference != null) {
                 write(reference.toString());
         } else if (!(statement instanceof LINK || statement instanceof VALUE)) {
             write(statement.name());

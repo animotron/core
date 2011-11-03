@@ -20,7 +20,9 @@ package org.animotron.statement.link;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.graph.AnimoGraph.createNode;
 
@@ -35,7 +37,7 @@ public abstract class AbstractLink extends AbstractStatement {
 
     @Override
     protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        return createNode();
+        return reference == null ? createNode() : reference(reference, ignoreNotFound);
     }
 
 }

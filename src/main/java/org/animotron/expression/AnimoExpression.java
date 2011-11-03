@@ -31,7 +31,6 @@ import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
 
