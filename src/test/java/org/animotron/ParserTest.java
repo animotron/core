@@ -42,6 +42,18 @@ public class ParserTest extends ATest {
         assertAnimo(expression, out);
     }
 
+    private void testResult(String exp, String res) throws Exception {
+        testResult(exp, exp, res);
+    }
+
+    private void testResult(String in, String out, String res) throws Exception {
+        AnimoExpression expression = new AnimoExpression(in);
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
+        assertAnimo(expression, out);
+
+        assertAnimoResult(expression, res);
+    }
+
     @Test
 	public void test_00() throws Exception {
         test("the a");
@@ -488,4 +500,16 @@ public class ParserTest extends ATest {
         test("\\a ($a \"a\") (@a \"a\") (\"a\")");
     }
 
+    @Test
+    public void test_89() throws Exception {
+        test("get (get a) (an b)");
+    }
+
+    @Test
+    public void test_90() throws Exception {
+        test("the z have a z1");
+        test("the b have z1 \"z1\"");
+
+        testResult("get (get a an z) (an b)", "have z1 \"z1\"");
+    }
 }
