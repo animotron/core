@@ -42,15 +42,15 @@ public class AllTest extends ATest {
     public void testALL() throws Exception {
 
         JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(HAVE._, "value"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
-                )
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "value"))
+            ),
+            new JExpression(
+                _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+            ),
+            new JExpression(
+                _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+            )
         );
 
         JExpression D = new JExpression(
@@ -65,6 +65,33 @@ public class AllTest extends ATest {
 
     }
 	
+    @Test
+    public void testALLwithoutTHE() throws Exception {
+
+        JExpression.__(
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "value"))
+            ),
+            new JExpression(
+                _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+            ),
+            new JExpression(
+                _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+            )
+        );
+
+        JExpression D = new JExpression(
+            _(ALL._, "A")
+        );
+        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")");
+
+        D = new JExpression(
+            _(ALL._, "A")
+        );
+        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")");
+
+    }
+
     @Test
     public void testALLwithWITH() throws Exception {
 
