@@ -18,6 +18,10 @@
  */
 package org.animotron.statement.link;
 
+import org.animotron.exception.AnimoException;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -28,5 +32,12 @@ public class LINK extends AbstractLink {
     public static final LINK _ = new LINK();
 
 	private LINK() { super("-->"); }
+
+    @Override
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+		return reference != null
+                ? parent.createRelationshipTo(reference(reference, ignoreNotFound), this)
+                : super.build(parent, reference, hash, ready, ignoreNotFound);
+	}
 
 }

@@ -177,9 +177,11 @@ public class AnimoExpression extends AbstractExpression {
                 if (op instanceof MLOperator || op instanceof AbstractLink) {
                     builder.start(op);
                     level++;
-                } else if (op == null || op instanceof Instruction) {
+                } else if (op instanceof Instruction) {
                     builder.start(AN._, token);
                     level++;
+                } else if (op == null) {
+                    builder._(LINK._, token);
                 }
             }
         }

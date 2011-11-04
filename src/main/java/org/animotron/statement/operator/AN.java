@@ -18,14 +18,12 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.link.AbstractLink;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -41,24 +39,6 @@ public class AN extends AbstractLink implements Reference, Evaluable {
 	
 	private AN() { super("an"); }
 	
-    @Override
-    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        Node node = createNode();
-        if (reference != null) {
-            node.createRelationshipTo(reference(reference, ignoreNotFound), REF);
-        }
-        return node;
-    }
-
-    @Override
-    public Object reference(Relationship r) {
-        Node node = r.getEndNode();
-        if (node.hasRelationship(REF, OUTGOING)) {
-            return THE._.reference(node.getSingleRelationship(REF, OUTGOING));
-        }
-        return super.reference(r);
-    }
-
     @Override
 	public OnQuestion onCalcQuestion() {
 		return question;
