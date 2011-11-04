@@ -19,15 +19,13 @@
 package org.animotron.statement.operator;
 
 
-import org.animotron.statement.link.AbstractLink;
-
 /**
  * Operator 'ptrn'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class PTRN extends AbstractLink implements Property {
+public class PTRN extends Operator implements Property {
 	
 	public static final PTRN _ = new PTRN();
 	

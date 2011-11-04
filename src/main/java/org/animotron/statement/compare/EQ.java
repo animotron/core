@@ -22,7 +22,7 @@ import javolution.util.FastList;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.link.AbstractLink;
+import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.query.GET;
 import org.neo4j.graphdb.Node;
@@ -37,7 +37,7 @@ import java.util.List;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class EQ extends AbstractLink implements Predicate {
+public class EQ extends Operator implements Predicate {
 	
 	public static final EQ _ = new EQ();
 	

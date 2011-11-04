@@ -27,15 +27,13 @@ package org.animotron.statement.operator;
 //import org.neo4j.graphdb.Node;
 //import org.neo4j.graphdb.Relationship;
 
-import org.animotron.statement.link.AbstractLink;
-
 /**
  * Operation 'Q'. Computable reference to 'quantity' instance.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class Q extends AbstractLink implements Reference {
+public class Q extends Operator implements Reference {
 	
 	public static final Q _ = new Q();
 	

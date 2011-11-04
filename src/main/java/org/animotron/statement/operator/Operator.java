@@ -16,30 +16,24 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.compare;
+package org.animotron.statement.operator;
 
-import org.animotron.manipulator.PFlow;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.Predicate;
-import org.neo4j.graphdb.Node;
+import org.animotron.graph.index.Order;
+import org.animotron.statement.link.AbstractLink;
 import org.neo4j.graphdb.Relationship;
 
 /**
- * Compare operator 'LE'.
- * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class LE extends Operator implements Predicate {
-	
-	public static final LE _ = new LE();
-	
-	private LE() { super("le"); }
+public abstract class Operator extends AbstractLink {
 
-	@Override
-	public boolean filter(PFlow pf, Relationship op, Node ref) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
+	protected Operator(String name) { super(name); }
+
+    @Override
+    public Object reference(Relationship r) {
+        return Order.first(1, r.getEndNode());
+    }
+
 }
