@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.link.AbstractLink;
@@ -54,9 +55,9 @@ public class AN extends AbstractLink implements Reference, Evaluable {
 
 			System.out.println("AN "+op+" "+reference(op)+" ");
 
-			Relationship res = node.getSingleRelationship(REF, OUTGOING);
+			Relationship res = Order.first(1, node)[0];
 			
-			//System.out.println("AN res = "+res);
+			System.out.println("AN res = "+res);
 			
 			pf.sendAnswer(res, op);
 			pf.done();

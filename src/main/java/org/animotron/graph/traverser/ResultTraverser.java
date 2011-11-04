@@ -27,6 +27,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
@@ -41,7 +42,6 @@ import java.util.Iterator;
 import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
@@ -84,7 +84,7 @@ public class ResultTraverser extends AnimoTraverser {
         }
 
         Statement s;
-        if (r.isType(REF) || r.isType(THE._)) {
+        if (r.isType(REF._) || r.isType(THE._)) {
             s = THE._;
         } else {
             s = Statements.relationshipType(r);
