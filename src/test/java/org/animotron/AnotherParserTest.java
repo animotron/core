@@ -28,24 +28,32 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        testAnimo("the a get an b c");
+        testAnimo("the a get b c");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        testAnimo("the a get (b) (c)");
+        testAnimo("the a get an b an c");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        testAnimo("the a an (all b) (all c)");
+        testAnimo("the a get an b an c");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        testAnimo("the a an b");
+        testAnimo("the a get (b) (c)");
 	}
 
+    @Test
+	public void test_04() throws Exception {
+        testAnimo("the a an (all b) (all c)");
+	}
 
+    @Test
+	public void test_05() throws Exception {
+        testAnimo("the a an b");
+	}
 
 }

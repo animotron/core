@@ -21,6 +21,7 @@ package org.animotron.graph.handler;
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.NAME;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
@@ -52,7 +53,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             write("\"");
             write(reference.toString().replaceAll("\"", "\\\\\""));
             write("\"");
-        } else if (statement instanceof LINK && reference != null) {
+        } else if (statement instanceof REF) {
             write(reference.toString());
         } else if (!(statement instanceof LINK || statement instanceof VALUE)) {
             write(statement.name());

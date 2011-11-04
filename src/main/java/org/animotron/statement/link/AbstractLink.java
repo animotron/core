@@ -42,13 +42,4 @@ public abstract class AbstractLink extends AbstractStatement {
         return createNode();
     }
 
-    @Override
-    public Object reference(Relationship r) {
-        Node node = r.getEndNode();
-        if (node.hasRelationship(LINK._, OUTGOING)) {
-            return THE._.reference(node.getRelationships(LINK._, OUTGOING).iterator().next());
-        }
-        return super.reference(r);
-    }
-
 }

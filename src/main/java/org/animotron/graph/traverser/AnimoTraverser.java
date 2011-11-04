@@ -19,12 +19,13 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.Properties;
-import org.animotron.graph.index.Order;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.NAME;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -79,7 +80,7 @@ public class AnimoTraverser {
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
             It it = new It(node);
-            iterate(handler, pf, it, level, hasStatement(node, NAME._) ? 1 : 0);
+            iterate(handler, pf, it, level, ignoreStatements(node, NAME._, REF._));
 		}
 		handler.end(statement, r, --level, isOne);
 	}
@@ -100,9 +101,13 @@ public class AnimoTraverser {
         }
     }
 
-    protected boolean hasStatement(Node node, Statement s) {
-        return node.hasProperty(s.name()) ||
-               node.hasRelationship(s, OUTGOING);
+    protected int ignoreStatements(Node node, Statement... s) {
+        int n = 0;
+        for (Statement i : s) {
+            if (node.hasProperty(i.name()) ||
+               node.hasRelationship(i, OUTGOING)) n++;
+        }
+        return n;
     }
 
     protected class It implements Iterator <Object>, Iterable<Object> {

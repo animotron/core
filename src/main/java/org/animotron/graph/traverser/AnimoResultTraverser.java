@@ -24,6 +24,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 
@@ -53,7 +54,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             } else {
                 handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
-                iterate(handler, pf, new It(node), level, hasStatement(node, NAME._) ? 1 : 0);
+                iterate(handler, pf, new It(node), level, ignoreStatements(node, NAME._, REF._));
                 handler.end(s, r, --level, isOne);
             }
         }
