@@ -21,7 +21,7 @@ package org.animotron.statement.operator;
 import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.link.AbstractLink;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -35,7 +35,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends AbstractStatement implements Reference, Evaluable {
+public class AN extends AbstractLink implements Reference, Evaluable {
 	
 	public static final AN _ = new AN();
 	

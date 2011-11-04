@@ -34,7 +34,7 @@ public abstract class AbstractLink extends AbstractStatement {
 	protected AbstractLink(String name) { super(name); }
 
     @Override
-    protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
+    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         return createNode();
     }
 
