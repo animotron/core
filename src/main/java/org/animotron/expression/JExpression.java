@@ -73,9 +73,8 @@ public class JExpression extends AbstractExpression {
         if (e.length == 1) {
             builder.bind((Relationship) e[0]);
         } else {
-            boolean f = e[0] instanceof AbstractLink && e[1] instanceof String;
-            builder.start((Statement) e[0], f ? null : e[1]);
-            if (f) {
+            builder.start((Statement) e[0], e[1]);
+            if (e[0] instanceof AbstractLink && e[1] instanceof String) {
                 builder._(REF._, e[1]);
             }
             if (e[2] instanceof Object[][]) {
