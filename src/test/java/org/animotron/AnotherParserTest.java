@@ -29,7 +29,7 @@ public class AnotherParserTest extends ATest {
     @Test
 	public void test_00() throws Exception {
         testAnimo("the a get b c");
-        testAnimo("an b", "b");
+        testAnimo("an b");
 	}
 
     @Test
@@ -44,7 +44,7 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_03() throws Exception {
-        testAnimo("the a an b", "the a b");
+        testAnimo("the a an b");
 	}
 
 

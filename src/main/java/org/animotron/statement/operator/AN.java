@@ -42,7 +42,7 @@ public class AN extends AbstractLink implements Reference, Evaluable {
 	private AN() { super("an"); }
 	
     @Override
-    protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
+    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
         if (reference != null) {
             node.createRelationshipTo(reference(reference, ignoreNotFound), REF);

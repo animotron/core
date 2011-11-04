@@ -20,9 +20,13 @@ package org.animotron.statement.link;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.RelationshipTypes.REF;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
