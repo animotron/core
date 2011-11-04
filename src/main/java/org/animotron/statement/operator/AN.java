@@ -18,13 +18,15 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.graph.RelationshipTypes;
+import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.link.AbstractLink;
+import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -33,15 +35,28 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends AbstractLink implements Reference, Evaluable {
+public class AN extends AbstractStatement implements Reference, Evaluable {
 	
 	public static final AN _ = new AN();
 	
 	private AN() { super("an"); }
 	
     @Override
+    protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        Node node = createNode();
+        if (reference != null) {
+            node.createRelationshipTo(reference(reference, ignoreNotFound), REF);
+        }
+        return node;
+    }
+
+    @Override
     public Object reference(Relationship r) {
-        return THE._.reference(r);
+        Node node = r.getEndNode();
+        if (node.hasRelationship(REF, OUTGOING)) {
+            return THE._.reference(node.getSingleRelationship(REF, OUTGOING));
+        }
+        return super.reference(r);
     }
 
     @Override
@@ -59,9 +74,7 @@ public class AN extends AbstractLink implements Reference, Evaluable {
 
 			System.out.println("AN "+op+" "+reference(op)+" ");
 
-			Relationship res = node.getSingleRelationship(
-				RelationshipTypes.REF, OUTGOING
-			);
+			Relationship res = node.getSingleRelationship(REF, OUTGOING);
 			
 			//System.out.println("AN res = "+res);
 			
@@ -71,9 +84,7 @@ public class AN extends AbstractLink implements Reference, Evaluable {
 	};
 	
 	public Relationship getREF(Relationship op) {
-		return op.getEndNode().getSingleRelationship(
-			RelationshipTypes.REF, OUTGOING
-		);
+		return op.getEndNode().getSingleRelationship(REF, OUTGOING);
 	}
 	
 }

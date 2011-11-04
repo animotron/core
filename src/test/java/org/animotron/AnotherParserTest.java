@@ -16,26 +16,25 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.link;
+package org.animotron;
 
-import org.animotron.exception.AnimoException;
-import org.animotron.statement.AbstractStatement;
-import org.neo4j.graphdb.Node;
-
-import static org.animotron.graph.AnimoGraph.createNode;
+import org.junit.Test;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractLink extends AbstractStatement {
+public class AnotherParserTest extends ATest {
 
-	protected AbstractLink(String name) { super(name); }
+    @Test
+	public void test_00() throws Exception {
+        testAnimo("the a get b c");
+        testAnimo("an b", "b");
+	}
 
-    @Override
-    protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        return createNode();
-    }
+    @Test
+	public void test_01() throws Exception {
+        testAnimo("the a get (b) (c)");
+	}
 
 }
