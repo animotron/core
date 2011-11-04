@@ -22,10 +22,12 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
+import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.combinator.EACH;
 import org.animotron.statement.combinator.MAP;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
@@ -71,7 +73,11 @@ public class JExpression extends AbstractExpression {
         if (e.length == 1) {
             builder.bind((Relationship) e[0]);
         } else {
-            builder.start((Statement) e[0], e[1]);
+            boolean f = e[0] instanceof AbstractLink && e[1] instanceof String;
+            builder.start((Statement) e[0], f ? null : e[1]);
+            if (f) {
+                builder._(REF._, e[1]);
+            }
             if (e[2] instanceof Object[][]) {
                 build((Object[][]) e[2]);
             } else if (e[2] != null){

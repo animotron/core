@@ -56,4 +56,14 @@ public class AnotherParserTest extends ATest {
         testAnimo("the a an b");
 	}
 
+    @Test
+	public void test_06() throws Exception {
+        testAnimo("an a b c");
+	}
+
+    @Test
+	public void test_07() throws Exception {
+        testAnimo("a b c");
+	}
+
 }
