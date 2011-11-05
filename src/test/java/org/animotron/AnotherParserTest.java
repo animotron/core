@@ -33,17 +33,17 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-        testAnimo("the a get an b an c");
+        testAnimo("the a get an b an c", "the a get b c");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        testAnimo("the a get an b an c");
+        testAnimo("the a get an b c", "the a get b c");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        testAnimo("the a get (b) (c)");
+        testAnimo("the a get (b) (c)", "the a get b c");
 	}
 
     @Test
@@ -58,7 +58,7 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_06() throws Exception {
-        testAnimo("an a b c");
+        testAnimo("an a b c", "a b c");
 	}
 
     @Test
@@ -68,7 +68,7 @@ public class AnotherParserTest extends ATest {
 
     @Test
     public void test_08() throws Exception {
-    	testAnimo("get (get a) (an b)");
+    	testAnimo("get (get a) (an b)", "get (get a) (b)");
     }
 
     @Test

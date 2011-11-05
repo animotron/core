@@ -70,8 +70,14 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         if (statement instanceof AN) {
-            if (level == 0 || !r.getEndNode().hasRelationship(REF._, Direction.OUTGOING)){
-                write(statement.name());
+            if (level != 0){
+                write(" ");
+                if (!isOne) {
+                    write("(");
+                }
+                if (!r.getEndNode().hasRelationship(REF._, Direction.OUTGOING)) {
+                    write(statement.name());
+                }
             }
             ps = statement;
         } else {
@@ -96,10 +102,12 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
         if (level != 0 && !(statement instanceof NAME)) {
             if (!(ps instanceof LINK)) {
-                if (ps instanceof REF) {
+                if (statement instanceof REF && ps instanceof REF) {
                     write(",");
                 }
-                write(" ");
+                if (!(level == 1 && statement instanceof REF && ps instanceof AN)) {
+                    write(" ");
+                }
             }
             if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
                 write("(");
