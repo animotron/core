@@ -21,8 +21,10 @@ package org.animotron.graph.handler;
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.NAME;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -33,6 +35,8 @@ import java.io.OutputStream;
  *
  */
 public class AnimoGraphHandler extends AbstractTextGraphHandler {
+
+    private boolean hasREF = false;
 
     public AnimoGraphHandler(OutputStream stream) {
         super (stream);
@@ -53,6 +57,8 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             write("\"");
             write(reference.toString().replaceAll("\"", "\\\\\""));
             write("\"");
+        } else if (statement instanceof AN && !hasREF) {
+            write(statement.name());
         } else if (statement instanceof REF) {
             write(reference.toString());
         } else if (!(statement instanceof LINK || statement instanceof VALUE)) {
@@ -67,7 +73,9 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     private Statement ps = null;
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+        hasREF = r.getEndNode().hasRelationship(REF._, Direction.OUTGOING);
         start(statement, statement.reference(r), level, isOne);
+        hasREF = false;
     }
 
     @Override
@@ -86,11 +94,17 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
         if (level != 0 && !(statement instanceof NAME)) {
-            if (!(ps instanceof LINK)) {
-                write(" ");
-            }
-            if (!isOne || statement instanceof LINK) {
-                write("(");
+            if (statement instanceof REF) {
+                if (ps instanceof REF) {
+                    write((", "));
+                }
+            } else {
+                if (!(ps instanceof LINK)) {
+                    write(" ");
+                }
+                if (!isOne || statement instanceof LINK) {
+                    write("(");
+                }
             }
         }
         write(statement, param);
@@ -103,7 +117,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     private void end(Statement statement, int level, boolean isOne) throws IOException {
-        if (level != 0 && !(statement instanceof NAME) && !isOne || statement instanceof LINK) {
+        if (level != 0 && !(statement instanceof NAME) && !isOne && (statement instanceof REF) || statement instanceof LINK) {
             write(")");
         }
     }
