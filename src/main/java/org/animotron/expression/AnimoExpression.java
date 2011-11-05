@@ -114,9 +114,8 @@ public class AnimoExpression extends AbstractExpression {
                             case '\t' :
                             case '\n' : newToken(s, text);
                                         break;
-                            case  ',' : comma = true;
-                                        newToken(s, text);
-                                        comma = false;
+                            case ','  : newToken(s, text);
+                                        comma = true;
                                         break;
                             case '('  : newToken(s, text);
                                         startList();
@@ -179,20 +178,23 @@ public class AnimoExpression extends AbstractExpression {
                 op = null;
                 level++;
             } else {
-                op = Statements.name(token);
-                if (op instanceof MLOperator || op instanceof AbstractLink) {
-                    builder.start(op);
+                Statement s = Statements.name(token);
+                if (s instanceof MLOperator || s instanceof AbstractLink) {
+                    builder.start(s);
                     level++;
-                } else if (op instanceof Instruction) {
+                } else if (s instanceof Instruction) {
                     builder.start(AN._, token);
                     level++;
-                } else if (op == null) {
-                    if (!comma) {
+                } else if (s == null) {
+                    if (op instanceof REF && !comma) {
                         builder.start(AN._);
                         level++;
                     }
-                    builder._(REF._, token);
+                    s =  REF._;
+                    builder._(s, token);
+                    comma = false;
                 }
+                op = s;
             }
         }
         link = false;
