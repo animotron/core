@@ -46,6 +46,7 @@ import java.util.Stack;
 public class AnimoExpression extends AbstractExpression {
 
     private Reader reader;
+    private boolean comma = false;
 
     public AnimoExpression(InputStream stream) {
         this(new InputStreamReader(stream));
@@ -112,6 +113,10 @@ public class AnimoExpression extends AbstractExpression {
                             case ' '  :
                             case '\t' :
                             case '\n' : newToken(s, text);
+                                        break;
+                            case  ',' : comma = true;
+                                        newToken(s, text);
+                                        comma = false;
                                         break;
                             case '('  : newToken(s, text);
                                         startList();
@@ -182,6 +187,10 @@ public class AnimoExpression extends AbstractExpression {
                     builder.start(AN._, token);
                     level++;
                 } else if (op == null) {
+                    if (!comma) {
+                        builder.start(AN._);
+                        level++;
+                    }
                     builder._(REF._, token);
                 }
             }
