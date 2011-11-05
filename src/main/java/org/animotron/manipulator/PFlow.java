@@ -376,6 +376,20 @@ public class PFlow {
 		return md.digest();
 	}
 
+	public byte[] getOpHash() {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();  
+		DataOutputStream dos = new DataOutputStream(bos);  
+		
+		try {
+			dos.writeLong(getOP().getId());
+		} catch (IOException e) {
+		}
+
+		MessageDigest md = MessageDigester.md();
+		md.update(bos.toByteArray());
+		return md.digest();
+	}
+
 	public Relationship getLastContext() {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");

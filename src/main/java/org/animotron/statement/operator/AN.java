@@ -18,12 +18,17 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
+import org.animotron.graph.index.Result;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import static org.animotron.Properties.CID;
+import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -47,18 +52,30 @@ public class AN extends Operator implements Reference, Evaluable {
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(PFlow pf) {
+		public void onMessage(final PFlow pf) {
 			
 			Relationship op = pf.getOP();
-			Node node = op.getEndNode();
+			final Node node = op.getEndNode();
 
 			System.out.println("AN "+op+" "+reference(op)+" ");
 
-			Relationship res = Order.first(1, node)[0];
+			final Relationship res = Order.first(1, node)[0];
 			
-			System.out.println("AN res = "+res);
+			Relationship ref = AnimoGraph.execute(new GraphOperation<Relationship>() {
+				@Override
+				public Relationship execute() {
+					Relationship r = node.createRelationshipTo(res.getEndNode(), REF);
+					//store to relationship arrow
+					//RID.set(res, r.getId());
+					Result.add(r, pf.getOpHash());
+					//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+					return r;
+				}
+			});
+
+			System.out.println("AN res = "+ref);
 			
-			pf.sendAnswer(res, op);
+			pf.sendAnswer(ref, op);
 			pf.done();
 		}
 	};
