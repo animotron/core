@@ -19,6 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.manipulator.PFlow;
@@ -47,8 +48,12 @@ public class Utils {
 			//.evaluator(Evaluators.excludeStartPosition());
 
 
-	public static Node getByREF(Node node) {
-		return node.getSingleRelationship(REF, OUTGOING).getEndNode();
+	public static Node getByREF(final Node node) {
+		final Relationship res = Order.first(1, node)[0];
+		
+		return res.getEndNode();
+
+		//return node.getSingleRelationship(REF, OUTGOING).getEndNode();
 	}
 	
 	public static boolean results(Node node, PFlow pf) {
