@@ -66,4 +66,29 @@ public class AnotherParserTest extends ATest {
         testAnimo("a b c");
 	}
 
+    @Test
+    public void test_08() throws Exception {
+    	testAnimo("get (get a) (an b)");
+    }
+
+    @Test
+    public void test_09() throws Exception {
+    	testAnimo("all a,b ((c,d) (e))");
+    }
+
+    @Test
+    public void test_10() throws Exception {
+		testAnimo("all a,b an c,d e");
+    }
+
+    @Test
+    public void test_11() throws Exception {
+		testAnimo("all a,b c,d e");
+    }
+
+    @Test
+    public void test_12() throws Exception {
+		testAnimo("all a,b c,d (e) (f)");
+    }
+
 }

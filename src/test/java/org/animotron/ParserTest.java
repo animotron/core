@@ -473,28 +473,4 @@ public class ParserTest extends ATest {
     	testAnimo("\\a ($a \"a\") (@a \"a\") (\"a\")");
     }
 
-    @Test
-    public void test_89() throws Exception {
-    	testAnimo("get (get a) (an b)");
-    }
-
-    @Test
-    public void test_90() throws Exception {
-    	testAnimo("all a,b ((c,d) (e))");
-    }
-
-    @Test
-    public void test_91() throws Exception {
-		testAnimo("all a,b an c,d e");
-    }
-
-    @Test
-    public void test_92() throws Exception {
-		testAnimo("all a,b c,d e");
-    }
-
-    @Test
-    public void test_93() throws Exception {
-		testAnimo("all a,b c,d (e) (f)");
-    }
 }
