@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import javolution.util.FastList;
 import org.animotron.Properties;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Order;
@@ -33,6 +34,7 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -80,22 +82,40 @@ public class AnimoTraverser {
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
             It it = new It(node);
-            iterate(handler, pf, it, level, ignoreStatements(node, NAME._, REF._));
+            iterate(handler, pf, it, level);
 		}
 		handler.end(statement, r, --level, isOne);
 	}
 
-    protected void iterate(GraphHandler handler, PFlow pf, It it, int level, int count) throws IOException {
-        int n = 0;
-        Object[] o = {null, null, null};
+    protected void iterate(GraphHandler handler, PFlow pf, It it, int level) throws IOException {
+        List<Object> o = new FastList<Object>();
         try {
-            while (it.hasNext() && n < 3)
-                o[n++] = it.next();
-            boolean isOne = n - count < 2;
-            for (int i = 0; i < n; i++)
-                build(handler, pf, o[i], level, isOne);
-            while (it.hasNext())
+            int count = 0;
+            while (it.hasNext()) {
+                Object i = it.next();
+                o.add(i);
+                if (i instanceof Relationship) {
+                    Relationship r = (Relationship) i;
+                    if (!(r.isType(REF._) || r.isType(NAME._))) {
+                        break;
+                    }
+                } else if (!i.equals("NAME._.name()")) {
+                    break;
+                }
+                count++;
+            }
+            int n = 0;
+            while (it.hasNext() && n < 2) {
+                o.add(it.next());
+                n++;
+            }
+            boolean isOne = o.size() - count < 2;
+            for (Object i : o) {
+                build(handler, pf, i, level, isOne);
+            }
+            while (it.hasNext()) {
                 build(handler, pf, it.next(), level, isOne);
+            }
         } finally {
             it.remove();
         }

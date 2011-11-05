@@ -73,17 +73,17 @@ public class AnotherParserTest extends ATest {
 
     @Test
     public void test_09() throws Exception {
-    	testAnimo("all a,b ((c,d) (e))");
+    	testAnimo("all a,b ((c,d) (e))", "all a,b ((c,d) (e))");
     }
 
     @Test
     public void test_10() throws Exception {
-		testAnimo("all a,b an c,d e");
+		testAnimo("all a,b an c,d e", "all a,b c,d e");
     }
 
     @Test
     public void test_11() throws Exception {
-		testAnimo("all a, b c, d e");
+		testAnimo("all a,b c,d e");
     }
 
     @Test

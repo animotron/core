@@ -21,10 +21,8 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.NAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 
@@ -54,7 +52,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             } else {
                 handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
-                iterate(handler, pf, new It(node), level, ignoreStatements(node, NAME._, REF._));
+                iterate(handler, pf, new It(node), level);
                 handler.end(s, r, --level, isOne);
             }
         }

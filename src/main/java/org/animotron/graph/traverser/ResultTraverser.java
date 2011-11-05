@@ -19,8 +19,8 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.graph.index.Result;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.Result;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
@@ -28,7 +28,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
@@ -118,7 +117,7 @@ public class ResultTraverser extends AnimoTraverser {
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne);
                 node = r.getEndNode();
-                iterate(handler, pf, new It(node), level, 0);
+                iterate(handler, pf, new It(node), level);
                 if (s instanceof AbstractValue)
                     handler.end(s, r, --level, isOne);
             }

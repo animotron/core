@@ -53,12 +53,9 @@ public class MLResultTraverser extends ResultTraverser {
                     String[] param = {null, null};
                     try {
                         if (it.hasNext()) {
-                            int size;
                             Object p = it.next();
                             param[0] = param(pf, p);
-                            if (s instanceof ELEMENT) {
-                                size = 1;
-                            } else {
+                            if (!(s instanceof ELEMENT)) {
                                 param[1] = param(pf, it);
                                 if (param[1] == null) {
                                     if (s instanceof NS) {
@@ -69,13 +66,10 @@ public class MLResultTraverser extends ResultTraverser {
                                             param[0] = "";
                                         }
                                     }
-                                    size = 1;
-                                } else {
-                                    size = 2;
                                 }
                             }
                             handler.start(s, param, level++, isOne);
-                            iterate(handler, pf, it, level, size);
+                            iterate(handler, pf, it, level);
                             handler.end(s, param, --level, isOne);
                         }
                     } finally {
@@ -91,7 +85,7 @@ public class MLResultTraverser extends ResultTraverser {
 			//workaround IS and USE
 			} else if (!(s instanceof Relation)) {
                 node = r.getEndNode();
-                iterate(handler, pf, new It(node), level, 0);
+                iterate(handler, pf, new It(node), level);
             }
         }
     }
