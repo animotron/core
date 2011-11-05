@@ -32,7 +32,7 @@ public abstract class Operator extends AbstractLink {
 
     @Override
     public Object reference(Relationship r) {
-        return null;//Order.first(1, r.getEndNode());
+        return super.reference(r);//Order.first(1, r.getEndNode());
     }
 
 }
