@@ -111,6 +111,7 @@ public class AnimoExpression extends AbstractExpression {
                     } else {
                         switch (ch) {
                             case ' '  :
+                            case '.'  : //workaround
                             case '\t' :
                             case '\n' : newToken(s, text);
                                         break;
