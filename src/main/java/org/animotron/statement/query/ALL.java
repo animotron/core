@@ -21,14 +21,13 @@ package org.animotron.statement.query;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.Set;
 
-import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'ALL'.
@@ -53,9 +52,7 @@ public class ALL extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
         	final Relationship op = pf.getOP();
             final Node n = op.getEndNode();
-            Relationship ref = n.getSingleRelationship( REF, OUTGOING );
-
-            Node node = ref.getEndNode();
+            Node node = Utils.getByREF(n);
 
 			//System.out.println("ALL **************************");
 
