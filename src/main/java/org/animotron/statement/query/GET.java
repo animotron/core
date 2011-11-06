@@ -168,7 +168,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		Relationship have = searchForHAVE(pf, ref, theNode);
 		if (have != null && !pf.isInStack(have)) 
-			set.add(new Relationship[] {null, have}); //XXX: is NULL correct here?
+			set.add(new Relationship[] {have, null}); //XXX: is NULL correct here?
 		
 		if (!set.isEmpty()) return set;
 
@@ -197,7 +197,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				//System.out.println("checking "+n);
+				System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});
@@ -261,6 +261,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			if (st instanceof AN) {
 				System.out.println(r);
 				Relationship t = AN._.getREF(r);
+				System.out.println(t);
 				if (visitedREFs != null && !visitedREFs.contains(t))
 					newREFs.add(t);
 
@@ -285,7 +286,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	private Relationship searchForHAVE(final PFlow pf, final Relationship ref, final Node theNode) {
 		
 		boolean checkStart = true;
-		if (!ref.isType(REF)) {
+		if (!(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
 			//System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
 //			try {
 //				System.out.print(" "+reference(ref));
@@ -688,7 +689,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Node target, RelationshipType type) {
-			System.out.println(path);
+			//System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
