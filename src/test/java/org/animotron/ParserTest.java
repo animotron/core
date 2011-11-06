@@ -75,7 +75,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_09() throws Exception {
-    	testAnimo("the a \\ an b.");
+    	testAnimo("the a \\ an b.", "the a \\ b.");
     }
 
     @Test
