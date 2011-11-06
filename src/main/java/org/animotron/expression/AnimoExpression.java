@@ -184,7 +184,8 @@ public class AnimoExpression extends AbstractExpression {
                     builder.start(s);
                     level++;
                 } else if (s instanceof Instruction) {
-                    builder.start(AN._, token);
+                    builder.start(AN._);
+                    builder._(s, token);
                     level++;
                 } else if (s == null) {
                     if (op instanceof REF && !comma || op == null) {
