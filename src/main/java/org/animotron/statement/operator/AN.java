@@ -81,7 +81,7 @@ public class AN extends Operator implements Reference, Evaluable {
 	};
 	
 	public Relationship getREF(Relationship op) {
-		return op.getEndNode().getSingleRelationship(REF, OUTGOING);
+		return Utils.getByREF(op);
 	}
 	
 }

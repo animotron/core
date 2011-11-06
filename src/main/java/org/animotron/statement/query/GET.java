@@ -259,6 +259,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 			Statement st = Statements.relationshipType(r);
 			if (st instanceof AN) {
+				System.out.println(r);
 				Relationship t = AN._.getREF(r);
 				if (visitedREFs != null && !visitedREFs.contains(t))
 					newREFs.add(t);

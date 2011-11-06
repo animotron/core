@@ -52,10 +52,14 @@ public class Utils {
 		final Relationship res = Order.first(1, node)[0];
 		
 		return res.getEndNode();
-
-		//return node.getSingleRelationship(REF, OUTGOING).getEndNode();
 	}
 	
+	public static Relationship getByREF(final Relationship r) {
+		final Relationship res = Order.first(1, r.getEndNode())[0];
+		
+		return res;
+	}
+
 	public static boolean results(Node node, PFlow pf) {
 		boolean haveSome = false;
 		
