@@ -59,7 +59,7 @@ public class MLResultTraverser extends ResultTraverser {
                                 param[1] = param(pf, it);
                                 if (param[1] == null) {
                                     if (s instanceof NS) {
-                                        if (NAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
+                                        if (QNAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
                                             param[1] = "";
                                         } else {
                                             param[1] = param[0];

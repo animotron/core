@@ -27,7 +27,7 @@ import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
-import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.AN;
@@ -164,14 +164,14 @@ public class AnimoExpression extends AbstractExpression {
     private void token(String token, boolean text) throws AnimoException, IOException {
         if (text) {
             if (op instanceof Prefix && !(op instanceof NS) && !link) {
-                builder._(NAME._, token);
+                builder._(QNAME._, token);
             } else {
                 builder.start(token);
                 level++;
             }
         } else {
             if (prefix) {
-                builder._(NAME._, token);
+                builder._(QNAME._, token);
                 op = null;
                 prefix = false;
             } else if (op instanceof THE || op instanceof Relation) {

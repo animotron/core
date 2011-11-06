@@ -25,7 +25,7 @@ import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
@@ -96,7 +96,7 @@ public class AnimoTraverser {
                 o.add(i);
                 if (i instanceof Relationship) {
                     Relationship r = (Relationship) i;
-                    if (!(r.isType(REF._) || r.isType(NAME._))) {
+                    if (!(r.isType(REF._) || r.isType(QNAME._))) {
                         break;
                     }
                 } else if (!i.equals("NAME._.name()")) {

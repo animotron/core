@@ -25,10 +25,10 @@ import org.animotron.statement.value.AbstractValue;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class NAME extends AbstractValue implements MLOperator {
+public class QNAME extends AbstractValue implements MLOperator {
 
-	public static final NAME _ = new NAME();
+	public static final QNAME _ = new QNAME();
 
-	private NAME() { super("name"); }
+	private QNAME() { super("qname"); }
 
 }

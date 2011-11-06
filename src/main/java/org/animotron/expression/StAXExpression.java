@@ -123,7 +123,7 @@ public class StAXExpression extends AbstractExpression {
     }
 
     private Object[] name(String name) {
-        return _(NAME._, name);
+        return _(QNAME._, name);
     }
 
     private Object[] value(Object value) {

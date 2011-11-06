@@ -20,7 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.NAME;
+import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
@@ -49,7 +49,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     protected void write(Statement statement, Object reference) throws IOException {
-        if (statement instanceof NAME  && reference != null) {
+        if (statement instanceof QNAME && reference != null) {
             write(reference.toString());
         } else if (statement instanceof VALUE && reference != null) {
             write("\"");
@@ -111,7 +111,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             if (dot) {
                 write(" ");
             }
-        } else if (!(statement instanceof NAME)) {
+        } else if (!(statement instanceof QNAME)) {
             if (!(ps instanceof LINK)) {
                 if (statement instanceof REF && ps instanceof REF) {
                     write(",");
