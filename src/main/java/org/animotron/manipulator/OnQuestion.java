@@ -21,6 +21,7 @@ package org.animotron.manipulator;
 import javolution.util.FastList;
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
+import org.animotron.statement.operator.REF;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Relationship;
@@ -45,6 +46,8 @@ public class OnQuestion implements Subscribable<PFlow> {
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {
 				Relationship r = it.next();
+				if (r.isType(REF._)) continue;
+				
 				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
 				if (onQuestion != null) {

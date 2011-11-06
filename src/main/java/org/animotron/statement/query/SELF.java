@@ -85,17 +85,19 @@ public class SELF extends AbstractQuery {
                 if (step == lastContext)
                     break;
             }
+            
+            Node theNode = Utils.getByREF(op.getEndNode());
 
             if (ref != null) {
                 //reference in processing flow
-                res = GET._.getBySELF(pf, ref.getEndNode(), (String) reference(pf.getOP()));
+                res = GET._.getBySELF(pf, ref.getEndNode(), theNode);
 
                 if (res != null)
                     pf.sendAnswer(createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._), op);
 
             } else if (searchHave == 2) {
                 //the instance self in have
-                res = GET._.getBySELF(pf, pf.getStartNode(), (String) reference(pf.getOP()));
+                res = GET._.getBySELF(pf, pf.getStartNode(), theNode);
 
                 if (res != null)
                     pf.sendAnswer(createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._), op);

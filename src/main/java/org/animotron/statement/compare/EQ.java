@@ -48,9 +48,9 @@ public class EQ extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
-		String name = (String) reference(op);
+		Node theNode = org.animotron.statement.operator.Utils.getByREF(op.getEndNode());
 
-		Relationship have = GET._.getBySELF(pf, ref, name);
+		Relationship have = GET._.getBySELF(pf, ref, theNode);
 		if (have == null) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();

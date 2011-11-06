@@ -57,9 +57,9 @@ public class WITH extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
-		String name = (String) reference(op);
+		Node theNode = org.animotron.statement.operator.Utils.getByREF(op.getEndNode());
 
-		Set<Relationship[]> haveSet = GET._.get(pf, ref, name);//GET._.getByTraversal(GET.getHaveAtPFlow(pf, name), op, ref, name);
+		Set<Relationship[]> haveSet = GET._.get(pf, ref, theNode);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();

@@ -82,22 +82,6 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		return question;
 	}
 	
-	//in-use by WITH
-//	public static Relationship getHaveAtPFlow(PFlow pf, VALUE name) {
-//		final Path pflow = pf.getFlowPath();
-//		
-//		//XXX: remove when getFlowPath fixed
-//		if (pflow == null)
-//			return null;
-//		
-//		for (Relationship p : pflow.relationships()) {
-//			if (p.getType().name().equals(HAVE._.rType) && _.reference(p).equals(name)) {
-//				return p;
-//			}
-//		}
-//		return null;
-//	}
-
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
@@ -105,7 +89,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
-			final String name = (String) reference(op);
+			final Node theNode = Utils.getByREF(node);
 			
 			//System.out.println("GET '"+name+"' ");
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
@@ -121,46 +105,21 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
 					@Override
 					public void onMessage(Relationship[] context) {
-						System.out.println("GET message ["+name+"] context "+Arrays.toString(context));
+						System.out.println("GET message ["+theNode+"] context "+Arrays.toString(context));
 						
 						if (context == null) {
 							pf.countDown();
 							return;
 						}
 
-//						Set<Relationship> res = getByTraversal(underHAVE, op, context, reference);
-//						if (!res.isEmpty()) {
-//							for (Relationship r : res)
-//								pf.sendAnswer(r);
-//
-//							return;
-//						}
-
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship[]> rSet = get(pf, context[0], name);
+						final Set<Relationship[]> rSet = get(pf, context[0], theNode);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[1]);
 							}
 							return;
 						}
-
-//						PipedInput in;
-//						try {
-//							in = Evaluator._.execute(pf, context.getEndNode());
-//						
-//							for (Object n : in) {
-//								//r = searchForHAVE((Relationship)n, name);
-//								r = get(((Relationship)n).getEndNode(), reference);
-//								
-//								if (r != null) {
-//									pf.sendAnswer(createResult(pf, node, r, HAVE._.relationshipType));
-//								}
-//							}
-//						} catch (Exception e) {
-//							//XXX: what to do?
-//							e.printStackTrace();
-//						}
 					}
 
 					@Override
@@ -182,7 +141,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					
 					
 					for (Relationship st : pf.getPFlowPath()) {
-						Set<Relationship[]> rSet = get(pf, st, name);
+						Set<Relationship[]> rSet = get(pf, st, theNode);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), r[0]);
@@ -190,11 +149,6 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 							break;
 						}
 					}
-					
-//					Set<Relationship> res = getByTraversal(underHAVE, op, pf.getStartOP(), reference); //get(context.getEndNode(), reference);
-//					if (!res.isEmpty())
-//						for (Relationship r : res)
-//							pf.sendAnswer(r);
 				}
 			}
 			pf.await();
@@ -202,17 +156,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		}
 	};
 
-	public Set<Relationship[]> get(PFlow pf, Relationship ref, final String name) {
+	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode) {
 		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
 		
-		return get(pf, refs, name); 
+		return get(pf, refs, theNode); 
 	}
 
-	public Set<Relationship[]> get(final PFlow pf, Node ref, final String name) {
+	public Set<Relationship[]> get(final PFlow pf, Node ref, final Node theNode) {
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
-		Relationship have = searchForHAVE(pf, ref, name);
+		Relationship have = searchForHAVE(pf, ref, theNode);
 		if (have != null && !pf.isInStack(have)) 
 			set.add(new Relationship[] {null, have}); //XXX: is NULL correct here?
 		
@@ -221,10 +175,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Set<Relationship> newREFs = new FastSet<Relationship>();
 		getOutgoingReferences(pf, ref, newREFs, null);
 		
-		return get(pf, newREFs, name); 
+		return get(pf, newREFs, theNode); 
 	}
 
-	public Set<Relationship[]> get(PFlow pf, Set<Relationship> REFs, final String name) {
+	public Set<Relationship[]> get(PFlow pf, Set<Relationship> REFs, final Node theNode) {
 		//System.out.println("GET context = "+ref);
 		
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
@@ -244,7 +198,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 			for (Relationship n : nextREFs) {
 				//System.out.println("checking "+n);
-				have = searchForHAVE(pf, n, name);
+				have = searchForHAVE(pf, n, theNode);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});
 			}
@@ -327,7 +281,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		}
 	}
 	
-	private Relationship searchForHAVE(final PFlow pf, final Relationship ref, final String name) {
+	private Relationship searchForHAVE(final PFlow pf, final Relationship ref, final Node theNode) {
 		
 		boolean checkStart = true;
 		if (!ref.isType(REF)) {
@@ -345,20 +299,20 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		//search for local 'HAVE'
 		if (checkStart) {
-			have = getByHave(pf, ref.getStartNode(), name);
+			have = getByHave(pf, ref.getStartNode(), theNode);
 			if (have != null) return have;
 		}
 
 		//search for inside 'HAVE'
-		return searchForHAVE(pf, ref.getEndNode(), name);
+		return searchForHAVE(pf, ref.getEndNode(), theNode);
 	}
 
-	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final String name) {
+	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final Node theNode) {
 		
 		Relationship have = null;
 
 		//search for inside 'HAVE'
-		have = getByHave(pflow, ref, name);
+		have = getByHave(pflow, ref, theNode);
 		if (have != null) return have;
 
 		//search 'IC' by 'IS' topology
@@ -366,7 +320,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 			//System.out.println("GET IC -> IS "+tdR);
 			
-			Relationship r = getByIC(tdR.getEndNode(), name);
+			Relationship r = getByIC(tdR.getEndNode(), theNode);
 			if (r != null) {
 				final Node sNode = ref;
 				final Node eNode = r.getEndNode();
@@ -382,7 +336,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			}
 			
 			//search for have
-			have = getByHave(pflow, tdR.getEndNode(), name);
+			have = getByHave(pflow, tdR.getEndNode(), theNode);
 			if (have != null) return have;
 		}
 		
@@ -390,12 +344,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	}
 
 	//XXX: in-use by SELF
-	public Relationship getBySELF(final PFlow pf, Node context, final String name) {
+	public Relationship getBySELF(final PFlow pf, Node context, final Node theNode) {
 		
 		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
-		Relationship have = getByHave(pf, context, name);
+		Relationship have = getByHave(pf, context, theNode);
 		if (have != null) return have;
 
 		Relationship instance = context.getSingleRelationship(REF, OUTGOING);
@@ -404,7 +358,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			context = instance.getEndNode();
 			
 			//search for have
-			have = getByHave(pf, context, name);
+			have = getByHave(pf, context, theNode);
 			if (have != null) return have;
 		}
 		
@@ -418,7 +372,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
-					have = getByHave(pf, prevTHE.getEndNode(), name);
+					have = getByHave(pf, prevTHE.getEndNode(), theNode);
 					if (have != null) return have;
 				}
 				prevTHE = tdR;
@@ -426,7 +380,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			} else if (st instanceof IC) {
 				//System.out.print("GET IC -> "+tdR);
 				
-				if (name.equals(reference(tdR))) {
+				if (theNode.equals(Utils.getByREF(tdR.getEndNode()))) {
 					//System.out.println(" MATCH");
 					
 					//store
@@ -456,21 +410,19 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		if (prevTHE != null) {
 			//search for have
-			have = getByHave(pf, prevTHE.getEndNode(), name);
+			have = getByHave(pf, prevTHE.getEndNode(), theNode);
 			if (have != null) return have;
 		}
 
 		return null;
 	}
 	
-	private Relationship getByHave(final PFlow pflow, final Node context, final String name) {
-		final Node target = THE._.get(name).getEndNode();
-		
+	private Relationship getByHave(final PFlow pflow, final Node context, final Node theNode) {
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, target, HAVE._);
+				return _evaluate_(path, theNode, HAVE._);
 			}
 		});
 
@@ -500,14 +452,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		return res;
 	}
 	
-	private Relationship getByIC(final Node context, final String name) {
-		final Node target = THE._.get(name).getEndNode();
-		
+	private Relationship getByIC(final Node context, final Node theNode) {
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, target, IC._);
+				return _evaluate_(path, theNode, IC._);
 			}
 		});
 
@@ -737,7 +687,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Node target, RelationshipType type) {
-			//System.out.println(path);
+			System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
@@ -751,7 +701,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				return EXCLUDE_AND_PRUNE;
 				
 			} else if (path.length() >= 2) {
-				if (r.isType(REF)) {
+				if (r.isType(org.animotron.statement.operator.REF._)) {
 					Node node = r.getEndNode();
 					if (target.equals(node)) 
 						return INCLUDE_AND_PRUNE;
