@@ -113,6 +113,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                 }
             }
         }
+        //Why?
         if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
             write("(");
         }
@@ -130,6 +131,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     private void end(Statement statement, int level, boolean isOne) throws IOException {
         if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
             write(")");
+            //Why?
             if (level == 0)
             	write(" ");
         }
