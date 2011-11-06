@@ -113,6 +113,8 @@ public class Utils {
 		try {
 			while (q.hasNext()) {
 				Relationship r = q.next();
+				if (r.isType(org.animotron.statement.operator.REF._)) continue;
+				
 				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
 				if (onQuestion != null) {

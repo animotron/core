@@ -18,7 +18,10 @@
  */
 package org.animotron.statement.operator;
 
+import static org.animotron.Properties.NAME;
+
 import org.animotron.statement.link.AbstractLink;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -34,5 +37,8 @@ public abstract class Operator extends AbstractLink {
     public Object reference(Relationship r) {
         return super.reference(r);//Order.first(1, r.getEndNode());
     }
-
+    
+    protected String name(Node theNode) {
+    	return (String)NAME.get(theNode);
+    }
 }
