@@ -33,12 +33,12 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-        testAnimo("the a get an b an c", "the a get b c.");
+        testAnimo("the a get an b an c", "the a get an b c.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        testAnimo("the a get an b c", "the a get b c.");
+        testAnimo("the a get an b c", "the a get an b c.");
 	}
 
     @Test
