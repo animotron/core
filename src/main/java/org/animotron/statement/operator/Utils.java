@@ -19,7 +19,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.manipulator.PFlow;

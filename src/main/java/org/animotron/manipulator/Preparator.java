@@ -46,7 +46,7 @@ public class Preparator extends StatementManipulator {
 	
 	public void execute(Node op) throws IOException {
         for (Relationship r : op.getRelationships(INCOMING)) {
-            if (r.isType(IS._) || r.isType(USE._) || r.isType(REF)) {
+            if (r.isType(IS._) || r.isType(USE._) || r.isType(REF) || r.isType(org.animotron.statement.operator.REF._)) {
 			    super.execute(r);
             }
 		}
