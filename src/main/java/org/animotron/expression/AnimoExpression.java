@@ -31,6 +31,7 @@ import org.animotron.statement.ml.NAME;
 import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
@@ -179,7 +180,7 @@ public class AnimoExpression extends AbstractExpression {
                 op = null;
                 level++;
             } else {
-                Statement s = Statements.name(token);
+                Statement s = op instanceof Operator ? null : Statements.name(token);
                 if (s instanceof MLOperator || s instanceof AbstractLink) {
                     builder.start(s);
                     level++;

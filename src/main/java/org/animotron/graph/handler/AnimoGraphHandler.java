@@ -70,7 +70,11 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
         if (statement instanceof AN) {
-            if (level != 0){
+            if (level == 0) {
+                if (dot) {
+                    write(" ");
+                }
+            } else {
                 if (!(ps instanceof LINK)) {
                     write(" ");
                 }
