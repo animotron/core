@@ -75,7 +75,7 @@ public class SELF extends AbstractQuery {
 
             Relationship ref = null;
             for (Relationship step : path.relationships()) {
-                if (step.isType(REF)) {
+                if (step.isType(REF) || step.isType(org.animotron.statement.operator.REF._)) {
                     ref = step;
                     searchHave = 0;
                 } else if (searchHave == 1 && step.isType(HAVE._)) {
