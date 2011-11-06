@@ -55,7 +55,7 @@ public class ICUseTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(USE._, "X"))))
         );
-        assertAnimoResult(D, "the D have X \"χ\"");
+        assertAnimoResult(D, "the D have X \"χ\".");
 
 	}
 
@@ -80,7 +80,7 @@ public class ICUseTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C")))
         );
-        assertAnimoResult(D, "the D have X \"χ\"");
+        assertAnimoResult(D, "the D have X \"χ\".");
 
     }
 
@@ -107,7 +107,7 @@ public class ICUseTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
         );
-        assertAnimoResult(D, "the D have X \"χ\"");
+        assertAnimoResult(D, "the D have X \"χ\".");
 
     }
 

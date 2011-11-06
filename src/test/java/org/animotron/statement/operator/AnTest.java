@@ -39,11 +39,11 @@ public class AnTest extends ATest {
         JExpression A = new JExpression(
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
         );
-        assertAnimoResult(A, "the A the B");
+        assertAnimoResult(A, "the A the B.");
 
         JExpression.__(new JExpression(
                 _(THE._, "B", _(HAVE._, "C", text("y")))
         ));
-        assertAnimoResult(A, "the A the B have C \"y\"");
+        assertAnimoResult(A, "the A the B have C \"y\".");
     }
 }

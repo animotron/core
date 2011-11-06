@@ -52,7 +52,7 @@ public class GetTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\")");
+        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\").");
 
 	}
 
@@ -65,7 +65,7 @@ public class GetTest extends ATest {
     	JExpression D = new JExpression(
 			_(THE._, "D", _(AN._, "A", _(HAVE._, "C", text("."))))
 		);
-        assertAnimoResult(D, "the D the A have B have C \".\"");
+        assertAnimoResult(D, "the D the A have B have C \".\".");
 
     	JExpression.__(new JExpression(
             _(THE._, "A1", _(GET._, "B1"))
@@ -74,7 +74,7 @@ public class GetTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(AN._, "A1", _(HAVE._, "B1", text("."))))
 		);
-        assertAnimoResult(d, "the d the A1 have B1 \".\"");
+        assertAnimoResult(d, "the d the A1 have B1 \".\".");
 
 	}
 	
@@ -93,7 +93,7 @@ public class GetTest extends ATest {
     	JExpression X = new JExpression(
 			_(THE._, "X", _(AN._, "D", _(AN._, "A", _(HAVE._, "C", text(":")))))
 		);
-        assertAnimoResult(X, "the X the D have E have B have C \":\"");
+        assertAnimoResult(X, "the X the D have E have B have C \":\".");
 
 	}
 
@@ -112,7 +112,7 @@ public class GetTest extends ATest {
     	JExpression E = new JExpression(
 			_(THE._, "E", _(AN._, "A", _(AN._, "D")))
 		);
-    	assertAnimoResult(E, "the E the A have B have C \".\"");
+    	assertAnimoResult(E, "the E the A have B have C \".\".");
 
 	}
 	
@@ -134,7 +134,7 @@ public class GetTest extends ATest {
     	JExpression F = new JExpression(
 			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(HAVE._, "C", text("_")))))
 		);
-    	assertAnimoResult(F, "the F the A have B (have C \".\") (have C \"_\")");
+    	assertAnimoResult(F, "the F the A have B (have C \".\") (have C \"_\").");
 
 	}
 	
@@ -169,35 +169,35 @@ public class GetTest extends ATest {
             _(GET._, "A1",
                 _(AN._, "A")
         )));
-        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
+        assertAnimoResult(C0, "the C0 have A1 \"some.path\".");
 
         JExpression C1 = new JExpression(
         _(THE._, "C1",
             _(GET._, "A1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
+        assertAnimoResult(C1, "the C1 have A1 \"test.txt\".");
 
         JExpression C2 = new JExpression(
         _(THE._, "C2",
             _(GET._, "A2",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
+        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\".");
 
         JExpression C3 = new JExpression(
         _(THE._, "C3",
             _(GET._, "E1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C3, "the C3");
+        assertAnimoResult(C3, "the C3.");
 
         JExpression C4 = new JExpression(
         _(THE._, "C4",
             _(GET._, "B1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C4, "the C4 have B1 \"txt\"");
+        assertAnimoResult(C4, "the C4 have B1 \"txt\".");
 
     }
 
@@ -232,35 +232,35 @@ public class GetTest extends ATest {
             _(GET._, "A1",
                 _(AN._, "A")
         )));
-        assertAnimoResult(C0, "the C0 have A1 \"some.path\"");
+        assertAnimoResult(C0, "the C0 have A1 \"some.path\".");
 
         JExpression C1 = new JExpression(
         _(THE._, "C1",
             _(GET._, "A1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C1, "the C1 have A1 \"test.txt\"");
+        assertAnimoResult(C1, "the C1 have A1 \"test.txt\".");
 
         JExpression C2 = new JExpression(
         _(THE._, "C2",
             _(GET._, "A2",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\"");
+        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\".");
 
         JExpression C3 = new JExpression(
         _(THE._, "C3",
             _(GET._, "E1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C3, "the C3");
+        assertAnimoResult(C3, "the C3.");
 
         JExpression C4 = new JExpression(
         _(THE._, "C4",
             _(GET._, "B1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C4, "the C4 have B1 \"txt\"");
+        assertAnimoResult(C4, "the C4 have B1 \"txt\".");
 
     }
 
@@ -282,7 +282,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(THE._, "E", _(AN._, "C", _(HAVE._, "X", text("α")), _(HAVE._, "Y", text("β")), _(HAVE._, "Z", text("γ"))))
         );
-        assertAnimoResult(E, "the E the C (have Z \"γ\") (the B (have Y \"β\") (the A have X \"α\"))");
+        assertAnimoResult(E, "the E the C (have Z \"γ\") (the B (have Y \"β\") (the A have X \"α\")).");
 
     }
 
@@ -304,7 +304,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(HAVE._, "B", text("β")))))
         );
-        assertAnimoResult(E, "the E the C have Z \"γ\"");
+        assertAnimoResult(E, "the E the C have Z \"γ\".");
 
     }
 
@@ -326,7 +326,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
         );
-        assertAnimoResult(E, "the E the C have Z \"γ\"");
+        assertAnimoResult(E, "the E the C have Z \"γ\".");
     }
 
     @Test
@@ -347,7 +347,7 @@ public class GetTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(HAVE._, "X", text("."))))))
         );
-        assertAnimoResult(D, "the D the C have Z have Y have X \".\"");
+        assertAnimoResult(D, "the D the C have Z have Y have X \".\".");
 
     }
 }

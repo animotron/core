@@ -78,7 +78,7 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s have content the root-layout (is layout) (have content \"It is working!\")");
+        assertAnimoResult(s, "the s have content the root-layout (is layout) (have content \"It is working!\").");
 
    }
 
@@ -124,6 +124,6 @@ public class YetAnotherHaveLoopTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s have content the root-layout (is layout) (have content \"It is working!\")");
+        assertAnimoResult(s, "the s have content the root-layout (is layout) (have content \"It is working!\").");
    }
 }

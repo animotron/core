@@ -44,7 +44,7 @@ public class AnimoSerializerTest extends ATest {
                 _(USE._, "Y")
             )
         );
-        assertAnimo(A, "the A (is X) (use Y)");
+        assertAnimo(A, "the A (is X) (use Y).");
     }
 
     @Test
@@ -55,7 +55,7 @@ public class AnimoSerializerTest extends ATest {
                 _(HAVE._, "Y")
             )
         );
-        assertAnimo(A, "the A (have X) (have Y)");
+        assertAnimo(A, "the A (have X) (have Y).");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A have X have Y");
+        assertAnimo(A, "the A have X have Y.");
     }
 
     @Test
@@ -78,7 +78,7 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "Y")
             )
         );
-        assertAnimo(A, "the A (X) (Y)");
+        assertAnimo(A, "the A (X) (Y).");
     }
 
     @Test
@@ -90,7 +90,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A X Y");
+        assertAnimo(A, "the A X Y.");
     }
 
     @Test
@@ -134,7 +134,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A have B C (have D \".\") (have E \"_\")");
+        assertAnimo(A, "the A have B C (have D \".\") (have E \"_\").");
     }
 
     @Test
@@ -150,7 +150,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B C (have D \".\") (have E \"_\"))");
+        assertAnimo(A, "the A (is X) (have B C (have D \".\") (have E \"_\")).");
     }
 
     @Test
@@ -170,7 +170,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (C (have D \".\") (have E \"_\")) (F (have G \":\") (have H \";\")))");
+        assertAnimo(A, "the A (is X) (have B (C (have D \".\") (have E \"_\")) (F (have G \":\") (have H \";\"))).");
     }
 
     @Test
@@ -200,7 +200,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (C (have D \"1\") (have E \"2\")) (F (have G \"3\") (have H \"4\"))) (have I (J (have K \"5\") (have L \"6\")) (M (have N \"7\") (have O \"8\")))");
+        assertAnimo(A, "the A (is X) (have B (C (have D \"1\") (have E \"2\")) (F (have G \"3\") (have H \"4\"))) (have I (J (have K \"5\") (have L \"6\")) (M (have N \"7\") (have O \"8\"))).");
 	}
 
     @Test
@@ -210,7 +210,7 @@ public class AnimoSerializerTest extends ATest {
                 text("bla"), text("bla")
             )
         );
-        assertAnimo(A, "the A (\"bla\") (\"bla\")");
+        assertAnimo(A, "the A (\"bla\") (\"bla\").");
     }
 	
     @Test
@@ -221,7 +221,7 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "C")
             )
         );
-        assertAnimoResult(A, "the A (the B) (the C)");
+        assertAnimoResult(A, "the A (the B) (the C).");
     }
 
     @Test
@@ -231,7 +231,7 @@ public class AnimoSerializerTest extends ATest {
                 text("B", text("C"))
             )
         );
-        assertAnimo(A, "the A \"B\" \"C\"");
+        assertAnimo(A, "the A \"B\" \"C\".");
     }
 
     @Test
@@ -241,7 +241,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(AN._, "B"), _(AN._, "C"))
             )
         );
-        assertAnimo(A, "the A ((B) (C))");
+        assertAnimo(A, "the A ((B) (C)).");
     }
 
     @Test
@@ -251,7 +251,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(AN._, "B", _(AN._, "C")))
             )
         );
-        assertAnimo(A, "the A (B C)");
+        assertAnimo(A, "the A (B C).");
     }
 
     @Test
@@ -262,7 +262,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(AN._, "D"), _(AN._, "E"))
             )
         );
-        assertAnimo(A, "the A ((B) (C)) ((D) (E))");
+        assertAnimo(A, "the A ((B) (C)) ((D) (E)).");
     }
 
     @Test
@@ -272,7 +272,7 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "B")
             )
         );
-        assertAnimo(A, "the A B");
+        assertAnimo(A, "the A B.");
     }
 
     @Test
@@ -282,7 +282,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(AN._, "B"))
             )
         );
-        assertAnimo(A, "the A (B)");
+        assertAnimo(A, "the A (B).");
     }
 
     @Test
@@ -292,7 +292,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(_(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B))");
+        assertAnimo(A, "the A ((B)).");
     }
 
     @Test
@@ -302,7 +302,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(_(_(AN._, "B"))))
             )
         );
-        assertAnimo(A, "the A (((B)))");
+        assertAnimo(A, "the A (((B))).");
     }
 
     @Test
@@ -312,7 +312,7 @@ public class AnimoSerializerTest extends ATest {
                 _(LINK._, _(AN._, "B"))
             )
         );
-        assertAnimo(A, "the A (B)");
+        assertAnimo(A, "the A (B).");
     }
 
     @Test
@@ -322,7 +322,7 @@ public class AnimoSerializerTest extends ATest {
                 _(LINK._, _(LINK._, _(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B))");
+        assertAnimo(A, "the A ((B)).");
     }
 
     @Test
@@ -332,7 +332,7 @@ public class AnimoSerializerTest extends ATest {
                 _(LINK._, _(LINK._, _(LINK._, _(AN._, "B"))))
             )
         );
-        assertAnimo(A, "the A (((B)))");
+        assertAnimo(A, "the A (((B))).");
     }
 
     @Test
@@ -342,7 +342,7 @@ public class AnimoSerializerTest extends ATest {
                 _(_(LINK._, _(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B))");
+        assertAnimo(A, "the A ((B)).");
     }
 
     @Test
@@ -352,7 +352,7 @@ public class AnimoSerializerTest extends ATest {
                 _(LINK._, _(_(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B))");
+        assertAnimo(A, "the A ((B)).");
     }
 
 }

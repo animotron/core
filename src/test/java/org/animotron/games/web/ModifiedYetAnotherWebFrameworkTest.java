@@ -142,7 +142,7 @@ public class ModifiedYetAnotherWebFrameworkTest extends ATest {
                         "(\\p have content \"It is working!\") " +
                         "(\\ul " +
                             "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
-                            "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\"))))");
+                            "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\")))).");
 
 
         assertXMLResult(s,

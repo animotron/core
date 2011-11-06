@@ -55,12 +55,12 @@ public class AnyTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "A"))
         );
-        assertAnimoResult(a, "the a the B (is A) (have value \"B\")");
+        assertAnimoResult(a, "the a the B (is A) (have value \"B\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "B"))
         );
-        assertAnimoResult(b, "the b the C (is B) (have value \"C\")");
+        assertAnimoResult(b, "the b the C (is B) (have value \"C\").");
 
     }
 	
@@ -88,12 +88,12 @@ public class AnyTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimoResult(D, "the D the B (is A) (have value \"B\")");
+        assertAnimoResult(D, "the D the B (is A) (have value \"B\").");
 
         JExpression E = new JExpression(
             _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimoResult(E, "the E the C (is B) (have value \"C\")");
+        assertAnimoResult(E, "the E the C (is B) (have value \"C\").");
 
     }
 
@@ -126,7 +126,7 @@ public class AnyTest extends ATest {
 				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 			)
 		);
-        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have reference \"Plain text\") (have extension \"txt\")");
+        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have reference \"Plain text\") (have extension \"txt\").");
 
 	}
 

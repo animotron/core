@@ -57,16 +57,16 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
+        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\").");
 
         //check cache
-        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
-        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\").");
+        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\").");
 
     }
 
@@ -97,12 +97,12 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
+        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\").");
 
     }
 
@@ -133,12 +133,12 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
+        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\").");
 
     }
 
@@ -175,12 +175,12 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\")");
+        assertAnimoResult(b, "the b the s the B (is A) (have Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\")");
+        assertAnimoResult(c, "the c the s the C (is B) (have Z \"γ\") (have X \"αα\").");
 
     }
 

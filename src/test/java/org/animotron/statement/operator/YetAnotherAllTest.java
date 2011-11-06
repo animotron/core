@@ -54,17 +54,17 @@ public class YetAnotherAllTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "the a (the A (is S) (have X \"α\")) (the B (is A) (have Y \"β\"))");
+        assertAnimoResult(a, "the a (the A (is S) (have X \"α\")) (the B (is A) (have Y \"β\")).");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimoResult(b, "the b (the B (is A) (have Y \"β\")) (the C (is B) (have Z \"γ\") (have X \"αα\"))");
+        assertAnimoResult(b, "the b (the B (is A) (have Y \"β\")) (the C (is B) (have Z \"γ\") (have X \"αα\")).");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimoResult(c, "the c the C (is B) (have Z \"γ\") (have X \"αα\")");
+        assertAnimoResult(c, "the c the C (is B) (have Z \"γ\") (have X \"αα\").");
 
     }
 
@@ -86,17 +86,17 @@ public class YetAnotherAllTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "the a the A (is S) (have X \"α\")");
+        assertAnimoResult(a, "the a the A (is S) (have X \"α\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimoResult(b, "the b the B (is A) (have X \"β\")");
+        assertAnimoResult(b, "the b the B (is A) (have X \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimoResult(c, "the c the C (is B) (have X \"γ\")");
+        assertAnimoResult(c, "the c the C (is B) (have X \"γ\").");
 
     }
 

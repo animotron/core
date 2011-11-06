@@ -47,7 +47,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(THE._, "x", _(ANY._, "X", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x the A is X");
+        assertAnimoResult(x, "the x the A is X.");
 
     }
 
@@ -66,7 +66,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x the q the A is X");
+        assertAnimoResult(x, "the x the q the A is X.");
 
     }
 
@@ -85,7 +85,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(THE._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x (the A is X) (the B is X)");
+        assertAnimoResult(x, "the x (the A is X) (the B is X).");
 
     }
 
@@ -107,7 +107,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x the q (the A is X) (the B is X)");
+        assertAnimoResult(x, "the x the q (the A is X) (the B is X).");
 
     }
 }

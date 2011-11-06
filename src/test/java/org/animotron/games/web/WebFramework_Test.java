@@ -154,7 +154,7 @@ public class WebFramework_Test extends ATest {
                                         "(is root-layout) " +
                                         "(have content " +
                                             "(\\div (@id \"title\") (have title \"Welcome to Animotron\")) " +
-                                            "(\\div (@id \"content\") (have content \"Overview\"))))))");
+                                            "(\\div (@id \"content\") (have content \"Overview\")))))).");
 
         assertXMLResult(s,
             "<html>" +

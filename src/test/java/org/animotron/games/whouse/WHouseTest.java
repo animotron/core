@@ -183,7 +183,7 @@ public class WHouseTest extends ATest {
 				_(ALL._, "whouse-receive",
 					_(WITH._, "party", _(AN._, "I"))))
 		);
-        assertAnimoResult(a, "the a");
+        assertAnimoResult(a, "the a.");
 
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?

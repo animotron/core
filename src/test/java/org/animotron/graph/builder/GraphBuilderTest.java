@@ -80,27 +80,27 @@ public class GraphBuilderTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        test("\\a");
+        test("\\a.");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        test("\\x:a $x \"x-namespace\"");
+        test("\\x:a $x \"x-namespace\".");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        test("\\a $ \"x-namespace\"");
+        test("\\a $ \"x-namespace\".");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        test("\\a @b \"c\"");
+        test("\\a @b \"c\".");
 	}
 
     @Test
 	public void test_04() throws Exception {
-        test("(??stylesheet \"path\") (\\a)");
+        test("(??stylesheet \"path\") (\\a).");
 	}
 
 }

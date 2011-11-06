@@ -49,48 +49,48 @@ public class XMLTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        test("<a/>", "\\a");
+        test("<a/>", "\\a.");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        test("<x:a xmlns:x=\"x-namespace\"/>", "\\x:a $x \"x-namespace\"");
+        test("<x:a xmlns:x=\"x-namespace\"/>", "\\x:a $x \"x-namespace\".");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        test("<a xmlns=\"x-namespace\"/>", "\\a $ \"x-namespace\"");
+        test("<a xmlns=\"x-namespace\"/>", "\\a $ \"x-namespace\".");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        test("<a b=\"c\"/>", "\\a @b \"c\"");
+        test("<a b=\"c\"/>", "\\a @b \"c\".");
 	}
 
     @Test
     @Ignore
 	public void test_04() throws Exception {
-        test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a");
+        test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a.");
 	}
 
     @Test
 	public void test_05() throws Exception {
-        test("<a><b><x/></b><c><x/></c></a>", "\\a (\\b \\x) (\\c \\x)");
+        test("<a><b><x/></b><c><x/></c></a>", "\\a (\\b \\x) (\\c \\x).");
 	}
 
     @Test
 	public void test_06() throws Exception {
-        test("<a><b><x/></b><c><x/><y/></c><x><z/></x></a>", "\\a (\\b \\x) (\\c (\\x) (\\y)) (\\x \\z)");
+        test("<a><b><x/></b><c><x/><y/></c><x><z/></x></a>", "\\a (\\b \\x) (\\c (\\x) (\\y)) (\\x \\z).");
 	}
 
     @Test
 	public void test_07() throws Exception {
-        test("<a a=\"a\">a</a>", "\\a (@a \"a\") (\"a\")");
+        test("<a a=\"a\">a</a>", "\\a (@a \"a\") (\"a\").");
 	}
 
     @Test
 	public void test_08() throws Exception {
-        test("<a xmlns:a=\"a\" a=\"a\">a</a>", "\\a ($a \"a\") (@a \"a\") (\"a\")");
+        test("<a xmlns:a=\"a\" a=\"a\">a</a>", "\\a ($a \"a\") (@a \"a\") (\"a\").");
 	}
 
 }

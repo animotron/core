@@ -56,12 +56,12 @@ public class SelfUseTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(AN._, "D", _(USE._, "A")))
         );
-        assertAnimoResult(a, "the a the D (is C) (have A \".\")");
+        assertAnimoResult(a, "the a the D (is C) (have A \".\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "D", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
+        assertAnimoResult(b, "the b the D (is C) (have B \"..\").");
 
     }
 	
@@ -92,12 +92,12 @@ public class SelfUseTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(AN._, "D", _(AN._, "ua")))
         );
-        assertAnimoResult(a, "the a the D (is C) (have A \".\")");
+        assertAnimoResult(a, "the a the D (is C) (have A \".\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "D", _(AN._, "ub")))
         );
-        assertAnimoResult(b, "the b the D (is C) (have B \"..\")");
+        assertAnimoResult(b, "the b the D (is C) (have B \"..\").");
 
     }
 

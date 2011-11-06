@@ -49,7 +49,7 @@ public class SimpleTest extends ATest {
     	JExpression C = new JExpression(
 			_(THE._, "CC", _(AN._, "BB"))
 		);
-        assertAnimoResult(C, "the CC the BB have AA \"a@b\"");
+        assertAnimoResult(C, "the CC the BB have AA \"a@b\".");
 
 	}
 
@@ -68,7 +68,7 @@ public class SimpleTest extends ATest {
     	JExpression C = new JExpression(
 			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
 		);
-        assertAnimoResult(C, "the C have A \"a@b\"");
+        assertAnimoResult(C, "the C have A \"a@b\".");
 
 	}
 

@@ -83,7 +83,7 @@ public class CurrentSiteTest extends ATest {
                 "the test-service " +
                 "(is service) " +
                     "(have server-name \"localhost\") " +
-                    "(have host \"localhost\")");
+                    "(have host \"localhost\").");
 
     }
 

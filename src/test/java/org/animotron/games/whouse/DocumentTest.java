@@ -30,22 +30,22 @@ public class DocumentTest extends ATest {
 	@Test
 	public void test() throws Exception {
 		
-		testAnimo("the user1 have name \"user1\"");
-		testAnimo("the user2 have name \"user1\"");
+		testAnimo("the user1 have name \"user1\".");
+		testAnimo("the user2 have name \"user1\".");
 
-		testAnimo("the number have name \"number\"");
-		testAnimo("the date have name \"date\"");
-		testAnimo("the owner have name \"owner\"");
+		testAnimo("the number have name \"number\".");
+		testAnimo("the date have name \"date\".");
+		testAnimo("the owner have name \"owner\".");
 
-		testAnimo("the document (have date) (have number) (have owner)");
+		testAnimo("the document (have date) (have number) (have owner).");
 		
-		testAnimo("the doc3 (is document) (have date D \"2011-11-01\") (have number N D 3) (have owner an user1)");
-		testAnimo("the doc5 (is document) (have date D \"2011-11-02\") (have number N D 5) (have owner an user1)");
-		testAnimo("the doc7 (is document) (have date D \"2011-11-03\") (have number N D 7) (have owner an user2)");
+		testAnimo("the doc3 (is document) (have date D \"2011-11-01\") (have number N D 3) (have owner an user1).");
+		testAnimo("the doc5 (is document) (have date D \"2011-11-02\") (have number N D 5) (have owner an user1).");
+		testAnimo("the doc7 (is document) (have date D \"2011-11-03\") (have number N D 7) (have owner an user2).");
 		
-		testAnimo("the table (have column) (have row) (ic html \table (\tr each (get colum) (\th get name)) (each (get row) (\tr each (get colum) (\td get name) ))");
+		testAnimo("the table (have column) (have row) (ic html \table (\tr each (get colum) (\th get name)) (each (get row) (\tr each (get colum) (\td get name) )).");
 		
-		testAnimo("the journal (is table) (have column (an date) (an number)) (have row all document)");
+		testAnimo("the journal (is table) (have column (an date) (an number)) (have row all document).");
 		
 		testAnimoResult("get html an journal", 
 			"<table>" +

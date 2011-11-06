@@ -51,8 +51,8 @@ public class TheTest extends ATest {
 			_(THE._, "E", _(AN._, "C"))
 		);
         	
-        assertAnimoResult(A, "the A have B the C have D \".\"");
-        assertAnimoResult(E, "the E the C have D \".\"");
+        assertAnimoResult(A, "the A have B the C have D \".\".");
+        assertAnimoResult(E, "the E the C have D \".\".");
         
 	}
 	

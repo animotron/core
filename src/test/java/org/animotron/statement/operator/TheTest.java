@@ -39,7 +39,7 @@ public class TheTest extends ATest {
         JExpression A = new JExpression(
             _(THE._, "A", _(THE._, "B", _(THE._, "C")))
         );
-        assertAnimoResult(A, "the A the B the C");
-        assertAnimo(A, "the A B");
+        assertAnimoResult(A, "the A the B the C.");
+        assertAnimo(A, "the A B.");
     }
 }

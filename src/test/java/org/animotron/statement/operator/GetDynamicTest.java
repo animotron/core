@@ -51,7 +51,7 @@ public class GetDynamicTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\")");
+        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\").");
 	}
 
     @Test
@@ -72,19 +72,19 @@ public class GetDynamicTest extends ATest {
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(ALL._, "Z")))
         );
-        assertAnimoResult(E, "the E (have B \"π\") (have A \"Aπ\")");
+        assertAnimoResult(E, "the E (have B \"π\") (have A \"Aπ\").");
 
         JExpression F = new JExpression(
             _(THE._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
         );
-        assertAnimoResult(F, "the F (have B \"π\")");
+        assertAnimoResult(F, "the F (have B \"π\").");
     }
 
     @Test
     public void test_01() throws Exception {
-    	testAnimo("the z have a z1");
-    	testAnimo("the b have z1 \"z1\"");
+    	testAnimo("the z have a z1.");
+    	testAnimo("the b have z1 \"z1\".");
 
-    	testAnimoResult("get (get a an z) (an b)", "have z1 \"z1\"");
+    	testAnimoResult("get (get a an z) (an b)", "have z1 \"z1\".");
     }
 }

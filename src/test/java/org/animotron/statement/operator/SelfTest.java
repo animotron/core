@@ -69,11 +69,11 @@ public class SelfTest extends ATest {
             _(THE._, "F", _(GET._, "B", _(AN._, "D")))
         );
     	
-        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\")");
-        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\")");
-        assertAnimoResult(D, "the D (is C) (have A \":\")");
-        assertAnimoResult(E, "the E have B have A \".\"");
-        assertAnimoResult(F, "the F have B have A \":\"");
+        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\").");
+        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\").");
+        assertAnimoResult(D, "the D (is C) (have A \":\").");
+        assertAnimoResult(E, "the E have B have A \".\".");
+        assertAnimoResult(F, "the F have B have A \":\".");
 
     }
 	
@@ -93,34 +93,34 @@ public class SelfTest extends ATest {
         JExpression C = new JExpression(
             _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "X")))
         );
-        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\")");
+        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\").");
 
         JExpression CC = new JExpression(
             _(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "X")))
         );
-        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\")");
+        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\").");
 
         JExpression D = new JExpression(
             _(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
         );
-        assertAnimoResult(D, "the D (is C) (have A \":\")");
+        assertAnimoResult(D, "the D (is C) (have A \":\").");
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "B", _(AN._, "C")))
         );
-        assertAnimoResult(E, "the E have B have A \".\"");
+        assertAnimoResult(E, "the E have B have A \".\".");
 
         JExpression F = new JExpression(
             _(THE._, "F", _(GET._, "B", _(AN._, "D")))
         );
-        assertAnimoResult(F, "the F have B have A \":\"");
+        assertAnimoResult(F, "the F have B have A \":\".");
 
         //second try to be sure
-        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\")");
-        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\")");
-        assertAnimoResult(D, "the D (is C) (have A \":\")");
-        assertAnimoResult(E, "the E have B have A \".\"");
-        assertAnimoResult(F, "the F have B have A \":\"");
+        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\").");
+        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\").");
+        assertAnimoResult(D, "the D (is C) (have A \":\").");
+        assertAnimoResult(E, "the E have B have A \".\".");
+        assertAnimoResult(F, "the F have B have A \":\".");
 
     }
 

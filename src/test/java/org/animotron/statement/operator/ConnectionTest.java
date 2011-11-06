@@ -84,28 +84,28 @@ public class ConnectionTest extends ATest {
             _(GET._, "reference",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(A, "the A have reference \"file\"");
+        assertAnimoResult(A, "the A have reference \"file\".");
 
         JExpression B = new JExpression(
         _(THE._, "B",
             _(GET._, "path",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(B, "the B have path \"/home/test.txt\"");
+        assertAnimoResult(B, "the B have path \"/home/test.txt\".");
 
         JExpression C = new JExpression(
         _(THE._, "C",
             _(GET._, "extension",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(C, "the C have extension \"txt\"");
+        assertAnimoResult(C, "the C have extension \"txt\".");
 
         JExpression D = new JExpression(
         _(THE._, "D",
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
+        assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\")).");
 
         JExpression E = new JExpression(
         _(THE._, "E",
@@ -113,7 +113,7 @@ public class ConnectionTest extends ATest {
                 _(GET._, "mime-type",
                     _(AN._, "fileA")
         ))));
-        assertAnimoResult(E, "the E have type \"text/plain\"");
+        assertAnimoResult(E, "the E have type \"text/plain\".");
 
     }
 	
@@ -166,28 +166,28 @@ public class ConnectionTest extends ATest {
             _(GET._, "path1",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(B1, "the B1 have path1 \"some.path.text\"");
+        assertAnimoResult(B1, "the B1 have path1 \"some.path.text\".");
 
         JExpression B2 = new JExpression(
         _(THE._, "B2",
             _(GET._, "path2",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(B2, "the B2 have path2 have path1 \"some.path.text\"");
+        assertAnimoResult(B2, "the B2 have path2 have path1 \"some.path.text\".");
 
         JExpression C1 = new JExpression(
         _(THE._, "C1",
             _(GET._, "extension1",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(C1, "the C1 have extension1 \"text\"");
+        assertAnimoResult(C1, "the C1 have extension1 \"text\".");
 
         JExpression D = new JExpression(
         _(THE._, "D",
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\"))");
+        assertAnimoResult(D, "the D have mime-type the text-plain (is mime-type) (have type \"text/plain\") (have extension (\"txt\") (\"text\")).");
 
         JExpression E = new JExpression(
         _(THE._, "E",
@@ -195,7 +195,7 @@ public class ConnectionTest extends ATest {
                 _(GET._, "mime-type",
                     _(AN._, "fileA")
         ))));
-        assertAnimoResult(E, "the E have type \"text/plain\"");
+        assertAnimoResult(E, "the E have type \"text/plain\".");
 
     }
 

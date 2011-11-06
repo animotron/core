@@ -57,7 +57,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\"");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
 
     }
 
@@ -80,7 +80,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\"");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
 
     }
 
@@ -106,7 +106,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\"");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
 
     }
 
@@ -137,7 +137,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\"");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
     }
 
     @Test
@@ -163,7 +163,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(ANY._, "d"))
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\"");
+        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
 
     }
 
@@ -189,7 +189,7 @@ public class HaveLoopTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s have B \"test\"");
+        assertAnimoResult(s, "the s have B \"test\".");
 
     }
 
@@ -218,7 +218,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\"");
+        assertAnimoResult(s, "the s have B the C have B \"test\".");
 
     }
 
@@ -252,7 +252,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\"");
+        assertAnimoResult(s, "the s have B the C have B \"test\".");
 
     }
 
@@ -282,7 +282,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\"");
+        assertAnimoResult(s, "the s have B the C have B \"test\".");
 
     }
 

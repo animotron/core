@@ -63,7 +63,7 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimoResult(a, "the a (the B (is A) (have X \"B\")) (the C (is A) (have X \"C\"))");
+    	assertAnimoResult(a, "the a (the B (is A) (have X \"B\")) (the C (is A) (have X \"C\")).");
 
 	}
 	
@@ -83,7 +83,7 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimoResult(a, "the a (\"bla\") (have X \"B\") (\"bla\") (have X \"C\")");
+    	assertAnimoResult(a, "the a (\"bla\") (have X \"B\") (\"bla\") (have X \"C\").");
 
 	}
 

@@ -28,67 +28,67 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        testAnimo("the a get b c");
+        testAnimo("the a get b c.");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        testAnimo("the a get an b an c", "the a get b c");
+        testAnimo("the a get an b an c", "the a get b c.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        testAnimo("the a get an b c", "the a get b c");
+        testAnimo("the a get an b c", "the a get b c.");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        testAnimo("the a get (b) (c)", "the a get b c");
+        testAnimo("the a get (b) (c)", "the a get b c.");
 	}
 
     @Test
 	public void test_04() throws Exception {
-        testAnimo("the a an (all b) (all c)");
+        testAnimo("the a an (all b) (all c).");
 	}
 
     @Test
 	public void test_05() throws Exception {
-        testAnimo("the a b");
+        testAnimo("the a b.");
 	}
 
     @Test
 	public void test_06() throws Exception {
-        testAnimo("an a b c", "a b c");
+        testAnimo("an a b c", "a b c.");
 	}
 
     @Test
 	public void test_07() throws Exception {
-        testAnimo("a b c");
+        testAnimo("a b c.");
 	}
 
     @Test
     public void test_08() throws Exception {
-    	testAnimo("get (get a) (an b)", "get (get a) (b)");
+    	testAnimo("get (get a) (an b)", "get (get a) (b).");
     }
 
     @Test
     public void test_09() throws Exception {
-    	testAnimo("all a,b ((c,d) (e))", "all a,b ((c,d) (e))");
+    	testAnimo("all a,b ((c,d) (e))", "all a,b ((c,d) (e)).");
     }
 
     @Test
     public void test_10() throws Exception {
-		testAnimo("all a,b an c,d e", "all a,b c,d e");
+		testAnimo("all a,b an c,d e", "all a,b c,d e.");
     }
 
     @Test
     public void test_11() throws Exception {
-		testAnimo("all a,b c,d e");
+		testAnimo("all a,b c,d e.");
     }
 
     @Test
     public void test_12() throws Exception {
-		testAnimo("all a,b c,d (e) (f)");
+		testAnimo("all a,b c,d (e) (f).");
     }
 
 }

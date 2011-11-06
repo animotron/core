@@ -43,53 +43,53 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        test("the a");
+        test("the a.");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        test("the a\n    have b");
+        test("the a\n    have b.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        test("the a\n    have b \"test\"");
+        test("the a\n    have b \"test\".");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        test("the a (have b) (have c)", "the a\n    (have b)\n    (have c)");
+        test("the a (have b) (have c)", "the a\n    (have b)\n    (have c).");
 	}
 
     @Test
 	public void test_04() throws Exception {
-        test("the a\n    (have b\n        (any x)\n        (all y))\n    (have c)");
+        test("the a\n    (have b\n        (any x)\n        (all y))\n    (have c).");
 	}
 
     @Test
 	public void test_05() throws Exception {
-        test("the a\n    have b\n        (any x)\n        (all y)");
+        test("the a\n    have b\n        (any x)\n        (all y).");
 	}
 
 
     @Test
 	public void test_06() throws Exception {
-        test("the a\n    have b\n        (any x α)\n        (all y β)");
+        test("the a\n    have b\n        (any x α)\n        (all y β).");
 	}
 
     @Test
     public void test_07() throws Exception {
-        test("the a @b (get c)", "the a\n    @b get c");
+        test("the a @b (get c)", "the a\n    @b get c.");
     }
 
     @Test
     public void test_08() throws Exception {
-        test("the a\n    \\b \\c @d e");
+        test("the a\n    \\b \\c @d e.");
     }
 
     @Test
     public void test_09() throws Exception {
-        test("the a\n    \\b \\c\n        @d\n            (e)\n            (f)");
+        test("the a\n    \\b \\c\n        @d\n            (e)\n            (f).");
     }
 
     @Test

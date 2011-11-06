@@ -56,12 +56,12 @@ public class AllTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(ALL._, "A"))
         );
-        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\"))");
+        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")).");
 
         D = new JExpression(
             _(THE._, "D", _(ALL._, "A"))
         );
-        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\"))");
+        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")).");
 
     }
 	
@@ -84,13 +84,13 @@ public class AllTest extends ATest {
             _(ALL._, "A")
         );
         //XXX: avoid last space
-        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")) ");
+        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")) .");
 
         D = new JExpression(
             _(ALL._, "A")
         );
         //XXX: avoid last space
-        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")) ");
+        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")) .");
 
     }
 
@@ -118,12 +118,12 @@ public class AllTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(ALL._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the B1 (is B) (have value \"B\"))");
+        assertAnimoResult(D, "the D (the B (is A) (have value \"B\")) (the B1 (is B) (have value \"B\")).");
 
         JExpression E = new JExpression(
             _(THE._, "E", _(ALL._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimoResult(E, "the E (the C (is B) (have value \"C\")) (the C1 (is C) (have value \"C\"))");
+        assertAnimoResult(E, "the E (the C (is B) (have value \"C\")) (the C1 (is C) (have value \"C\")).");
 
     }
 
@@ -156,7 +156,7 @@ public class AllTest extends ATest {
 				_(ALL._, "mime-type", _(EQ._, "extension", text("txt")))
 			)
 		);
-        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have reference \"Plain text\") (have extension \"txt\")");
+        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have reference \"Plain text\") (have extension \"txt\").");
 
 	}
 }

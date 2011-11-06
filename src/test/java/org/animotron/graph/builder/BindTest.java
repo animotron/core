@@ -71,7 +71,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(new StreamGraphBuilder(),
             _(THE._, "b", _(a))
         );
-        test(b, "the b a");
+        test(b, "the b a.");
 	}
 
     @Test
@@ -82,7 +82,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(THE._, "b", _(a))
         );
-        test(b, "the b a");
+        test(b, "the b a.");
 	}
 
     @Test
@@ -93,7 +93,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(new StreamGraphBuilder(),
             _(THE._, "b", _(IS._, "x"), _(a))
         );
-        test(b, "the b (is x) (a)");
+        test(b, "the b (is x) (a).");
 	}
 
     @Test
@@ -104,7 +104,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(THE._, "b", _(IS._, "x"), _(a))
         );
-        test(b, "the b (is x) (a)");
+        test(b, "the b (is x) (a).");
 	}
 
     @Test
@@ -118,7 +118,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(THE._, "b", _(IS._, x), _(HAVE._, y))
         );
-        test(b, "the b (is x) (have y)");
+        test(b, "the b (is x) (have y).");
 	}
 
     @Test
@@ -129,7 +129,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(THE._, "b", _(HAVE._, "y", _(a)))
         );
-        test(b, "the b have y any a");
+        test(b, "the b have y any a.");
 	}
 
     @Test
@@ -146,7 +146,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(THE._, "b", _(IS._, x), _(HAVE._, y, _(a)))
         );
-        test(b, "the b (is x) (have y any a)");
+        test(b, "the b (is x) (have y any a).");
 	}
 
     @Test
@@ -158,16 +158,16 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(THE._, "y", _(x))
         );
-        test(b, "the x y");
+        test(b, "the x y.");
 	}
 
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
 
     @Test
 	public void test_08() throws Exception {
-        Expression a = new AnimoExpression("any a");
-        Expression b = new AnimoExpression("all b");
-        Expression c = new AnimoExpression("the c bla bla bla");
+        Expression a = new AnimoExpression("any a.");
+        Expression b = new AnimoExpression("all b.");
+        Expression c = new AnimoExpression("the c bla bla bla.");
         Expression x = new JExpression(
             _(HAVE._, c, _(a), _(b))
         );
@@ -175,7 +175,7 @@ public class BindTest extends ATest {
         Expression z = new JExpression(
             element("z", _(GET._, "e", _(x)), _(y))
         );
-        test(z, "\\z (get e have c (any a) (all b)) (\\y (@z \"test\") \"content\")");
+        test(z, "\\z (get e have c (any a) (all b)) (\\y (@z \"test\") \"content\").");
 	}
 
 }
