@@ -83,14 +83,12 @@ public class AllTest extends ATest {
         JExpression D = new JExpression(
             _(ALL._, "A")
         );
-        //XXX: avoid last space
-        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")) .");
+        assertAnimoResult(D, "the B (is A) (have value \"B\"). the C (is B) (have value \"C\").");
 
         D = new JExpression(
             _(ALL._, "A")
         );
-        //XXX: avoid last space
-        assertAnimoResult(D, "(the B (is A) (have value \"B\")) (the C (is B) (have value \"C\")) .");
+        assertAnimoResult(D, "the B (is A) (have value \"B\"). the C (is B) (have value \"C\").");
 
     }
 

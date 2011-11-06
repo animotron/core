@@ -100,9 +100,14 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
     }
 
+    private boolean dot = false;
     @Override
     public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
-        if (level != 0 && !(statement instanceof NAME)) {
+        if (level == 0) {
+            if (dot) {
+                write(" ");
+            }
+        } else if (!(statement instanceof NAME)) {
             if (!(ps instanceof LINK)) {
                 if (statement instanceof REF && ps instanceof REF) {
                     write(",");
@@ -128,6 +133,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     private void end(Statement statement, int level, boolean isOne) throws IOException {
         if (level==0) {
             write(".");
+            dot = true;
         } else if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
             write(")");
         }

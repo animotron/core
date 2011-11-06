@@ -101,7 +101,9 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         for (Object[] i : (List<Object[]>) o[4]) {
             write(i, indent);
         }
-        if (level != 0 && !(statement instanceof NAME) && !isOne || statement instanceof LINK) {
+        if (level == 0) {
+            write(".");
+        } else if (!(statement instanceof NAME) && !isOne || statement instanceof LINK) {
             write(")");
         }
         ps = statement;
