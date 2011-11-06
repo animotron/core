@@ -40,20 +40,20 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof Relation) {
-				handler.start(s, r, level++, isOne);
-				handler.end(s, r, --level, isOne);
+				handler.start(s, r, level++, isOne, pos, isLast);
+				handler.end(s, r, --level, isOne, pos, isLast);
             } else {
-                handler.start(s, r, level++, isOne);
+                handler.start(s, r, level++, isOne, pos, isLast);
                 node = r.getEndNode();
                 iterate(handler, pf, new It(node), level);
-                handler.end(s, r, --level, isOne);
+                handler.end(s, r, --level, isOne, pos, isLast);
             }
         }
     }

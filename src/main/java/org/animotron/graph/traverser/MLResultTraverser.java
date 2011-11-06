@@ -43,7 +43,7 @@ public class MLResultTraverser extends ResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
@@ -68,17 +68,17 @@ public class MLResultTraverser extends ResultTraverser {
                                     }
                                 }
                             }
-                            handler.start(s, param, level++, isOne);
+                            handler.start(s, param, level++, isOne, pos, isLast);
                             iterate(handler, pf, it, level);
-                            handler.end(s, param, --level, isOne);
+                            handler.end(s, param, --level, isOne, pos, isLast);
                         }
                     } finally {
                         it.remove();
                     }
                 } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
                     String param = StringResultSerializer._.serialize(pf, r);
-                    handler.start(s, param, level++, isOne);
-                    handler.end(s, param, --level, isOne);
+                    handler.start(s, param, level++, isOne, pos, isLast);
+                    handler.end(s, param, --level, isOne, pos, isLast);
                 }
             } else if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);

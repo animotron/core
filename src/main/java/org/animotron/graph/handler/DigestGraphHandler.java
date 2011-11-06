@@ -38,34 +38,34 @@ public class DigestGraphHandler implements GraphHandler {
     private Stack<MessageDigest> stack;
 
     @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        start(statement, statement.reference(r), level, isOne);
+    public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        start(statement, statement.reference(r), level, isOne, 0, false);
     }
 
     @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
-        end(statement, statement.reference(r), level, isOne);
+    public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        end(statement, statement.reference(r), level, isOne, 0, false);
     }
 
     @Override
-    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
-        start(statement, (Object) param, level, isOne);
+    public void start(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        start(statement, (Object) param, level, isOne, 0, false);
     }
 
     @Override
-    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
-        end(statement, (Object) param, level, isOne);
+    public void end(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        end(statement, (Object) param, level, isOne, 0, false);
     }
 
     @Override
-    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         MessageDigest md = MessageDigester.md();
         updateMD(md, param);
         stack.push(md);
     }
 
     @Override
-    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         md = stack.pop();
         updateMD(md, statement);
         if (!stack.empty()) {

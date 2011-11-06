@@ -53,7 +53,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         Object[] item = {statement, r, level, isOne, new LinkedList<Object[]>(), !isOne};
         if (!stack.empty()) {
             Object[]p = stack.peek();
@@ -65,7 +65,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     private Object[] root;
 
     @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         root = stack.pop();
         int size = ((List<Object[]>)root[4]).size();
         if (statement instanceof Prefix) size--;

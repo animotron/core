@@ -58,7 +58,7 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, new PFlow(Evaluator._, r), r, 0, true);
+        build(handler, new PFlow(Evaluator._, r), r, 0, true, 0, true);
         handler.endGraph();
     }
 
@@ -66,13 +66,13 @@ public class ResultTraverser extends AnimoTraverser {
     public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
         handler.startGraph();
         int i = pf.addContextPoint(r);
-        build(handler, pf, r, 0, true);
+        build(handler, pf, r, 0, true, 0, true);
         if (i == 1) pf.popContextPoint();
         handler.endGraph();
     }
 
     @Override
-    protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
         int addedContexts = 0;
 
@@ -101,7 +101,7 @@ public class ResultTraverser extends AnimoTraverser {
         } catch (Exception e) {
         }
         
-        process(handler, pf, s, r, level, isOne);
+        process(handler, pf, s, r, level, isOne, 0, false);
 
         while (addedContexts > 0) {
         	pf.popContextPoint();
@@ -109,17 +109,17 @@ public class ResultTraverser extends AnimoTraverser {
         }
     }
     
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			} else if (!(s instanceof Relation)) {
                 if (s instanceof AbstractValue)
-                    handler.start(s, r, level++, isOne);
+                    handler.start(s, r, level++, isOne, pos, isLast);
                 node = r.getEndNode();
                 iterate(handler, pf, new It(node), level);
                 if (s instanceof AbstractValue)
-                    handler.end(s, r, --level, isOne);
+                    handler.end(s, r, --level, isOne, pos, isLast);
             }
         }
     }
@@ -156,22 +156,20 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean iterate(GraphHandler handler, PFlow pf, Iterator it, int level, boolean isOne) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
-        
         Relationship i = null;
-        
+        int pos = 0;
         while (it.hasNext()) {
         	i = getOp(it.next());
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, pf, i, level, false);
-
+                    build(handler, pf, i, level, false, pos++, true);
                 	i = getOp(it.next());
-                    build(handler, pf, i, level, false);
+                    build(handler, pf, i, level, false, pos++, !it.hasNext());
                 } else {
-                    build(handler, pf, i, level, true);
+                    build(handler, pf, i, level, true, pos++, !it.hasNext());
                 }
             } else {
-                build(handler, pf, i, level, false);
+                build(handler, pf, i, level, false, pos++, !it.hasNext());
             }
             isFirst = false;
             found = true;
@@ -182,18 +180,19 @@ public class ResultTraverser extends AnimoTraverser {
     private void iterate(GraphHandler handler, PFlow pf, PipedInput in, int level, boolean isOne) throws IOException {
         Iterator<Object> it = in.iterator();
         boolean isFirst = isOne;
+        int pos = 0;
         while (it.hasNext()) {
             Relationship i = (Relationship) it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, pf, i, level, false);
+                    build(handler, pf, i, level, false, pos++, true);
                     i = (Relationship) it.next();
-                    build(handler, pf, i, level, false);
+                    build(handler, pf, i, level, false, pos++, !it.hasNext());
                 } else {
-                    build(handler, pf, i, level, true);
+                    build(handler, pf, i, level, true, pos++, !it.hasNext());
                 }
             } else {
-                build(handler, pf, i, level, false);
+                build(handler, pf, i, level, false, pos++, !it.hasNext());
             }
             isFirst = false;
         }

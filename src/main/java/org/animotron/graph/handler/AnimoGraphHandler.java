@@ -22,13 +22,16 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
-import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.io.OutputStream;
+
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -68,7 +71,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     private Statement ps = null;
     @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof AN) {
             if (level == 0) {
                 if (dot) {
@@ -81,32 +84,37 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                 if (!isOne) {
                     write("(");
                 }
-                if (!r.getEndNode().hasRelationship(REF._, Direction.OUTGOING)) {
+                Node n= r.getEndNode();
+                if (!n.hasRelationship(REF._, OUTGOING) ||
+                        (pos == 0 && ps instanceof Operator)) {
                     write(statement.name());
+                    if (n.hasRelationship(OUTGOING)) {
+                        write(" ");
+                    }
                 }
             }
             ps = statement;
         } else {
-            start(statement, statement.reference(r), level, isOne);
+            start(statement, statement.reference(r), level, isOne, 0, false);
         }
     }
 
     @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         end(statement, level, isOne);
     }
 
     @Override
-    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     private boolean dot = false;
     @Override
-    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (level == 0) {
             if (dot) {
                 write(" ");
@@ -130,7 +138,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         end(statement, level, isOne);
     }
 

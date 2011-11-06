@@ -40,15 +40,15 @@ public class StAXGraphHandler implements GraphHandler {
 	}
 	
 	@Override
-	public void start(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+	public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 	}
 
 	@Override
-	public void end(Statement statement, Relationship r, int level, boolean isOne) throws IOException {
+	public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 	}
 
     @Override
-    public void start(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         try {
             if (statement instanceof ATTRIBUTE) {
                 writer.writeAttribute(param[0].toString(), param[1].toString());
@@ -71,7 +71,7 @@ public class StAXGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Object[] param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         try {
             if (statement instanceof ELEMENT) {
                 writer.writeEndElement();
@@ -82,7 +82,7 @@ public class StAXGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    public void start(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         try {
             if (statement instanceof COMMENT){
                 writer.writeComment(param.toString());
@@ -100,7 +100,7 @@ public class StAXGraphHandler implements GraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    public void end(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override

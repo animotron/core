@@ -52,39 +52,39 @@ public class AnimoTraverser {
 	
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, null, r, 0, true);
+        build(handler, null, r, 0, true, 0, true);
         handler.endGraph();
     }
 
 	public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, pf, r, 0, true);
+		build(handler, pf, r, 0, true, 0, true);
 		handler.endGraph();
 	}
 	
-    protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (o instanceof Relationship) {
-            build(handler, pf, (Relationship) o, level, isOne);
+            build(handler, pf, (Relationship) o, level, isOne, pos, isLast);
         } else {
             String name = (String) o;
             Statement statement = Statements.name(name);
             String reference = (String) node.getProperty(name);
-            handler.start(statement, reference, level, isOne);
-            handler.end(statement, reference, level, isOne);
+            handler.start(statement, reference, level, isOne, pos, isLast);
+            handler.end(statement, reference, level, isOne, pos, isLast);
         }
     }
 
-	protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
+	protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 		Statement statement = Statements.relationshipType(r);
 		if (statement == null)
 			return;
-		handler.start(statement, r, level++, isOne);
+		handler.start(statement, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof Relation)) {
             node = r.getEndNode();
             It it = new It(node);
             iterate(handler, pf, it, level);
 		}
-		handler.end(statement, r, --level, isOne);
+		handler.end(statement, r, --level, isOne, pos, isLast);
 	}
 
     protected void iterate(GraphHandler handler, PFlow pf, It it, int level) throws IOException {
@@ -109,12 +109,15 @@ public class AnimoTraverser {
                 o.add(it.next());
                 n++;
             }
+            int pos = 0;
             boolean isOne = o.size() - count < 2;
             for (Object i : o) {
-                build(handler, pf, i, level, isOne);
+                boolean isLast = pos < o.size() ? false : !it.hasNext();
+                build(handler, pf, i, level, isOne, pos, isLast);
+                pos++;
             }
             while (it.hasNext()) {
-                build(handler, pf, it.next(), level, isOne);
+                build(handler, pf, it.next(), level, isOne, pos++, !it.hasNext());
             }
         } finally {
             it.remove();
