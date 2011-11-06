@@ -43,7 +43,7 @@ public class DocumentTest extends ATest {
 		testAnimo("the doc5 (is document) (have date D \"2011-11-02\") (have number N D 5) (have owner an user1).");
 		testAnimo("the doc7 (is document) (have date D \"2011-11-03\") (have number N D 7) (have owner an user2).");
 		
-		testAnimo("the table (have column) (have row) (ic html \table (\tr each (get colum) (\th get name)) (each (get row) (\tr each (get colum) (\td get name) )).");
+		testAnimo("the table (have column) (have row) (ic html \\table (\\tr each (get colum) (\\th get name)) (each (get row) (\\tr each (get colum) (\\td get name) )).");
 		
 		testAnimo("the journal (is table) (have column (an date) (an number)) (have row all document).");
 		
