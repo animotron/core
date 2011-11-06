@@ -112,9 +112,9 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                     }
                 }
             }
-            if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
-                write("(");
-            }
+        }
+        if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
+            write("(");
         }
         write(statement, param);
         ps = statement;
@@ -122,12 +122,16 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void end(Statement statement, Object param, int level, boolean isOne) throws IOException {
+    	if (level == 0)
+    		System.out.println(" ");
         end(statement, level, isOne);
     }
 
     private void end(Statement statement, int level, boolean isOne) throws IOException {
-        if (level != 0 && !(statement instanceof NAME) && !isOne && !(statement instanceof REF) || statement instanceof LINK) {
+        if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
             write(")");
+            if (level == 0)
+            	write(" ");
         }
     }
 
