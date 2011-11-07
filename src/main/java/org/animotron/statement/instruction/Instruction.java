@@ -18,7 +18,11 @@
  */
 package org.animotron.statement.instruction;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.AN;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -31,9 +35,9 @@ public abstract class Instruction extends AbstractStatement {
         super(name);
     }
 
-//    @Override
-//	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-//        return AN._.build(parent, name(), hash, ready, ignoreNotFound);
-//	}
+    @Override
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        return AN._.build(parent, name(), hash, ready, ignoreNotFound);
+	}
 
 }
