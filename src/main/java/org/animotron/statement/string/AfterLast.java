@@ -65,19 +65,19 @@ public class AfterLast extends Instruction implements Evaluable {
             //UNDERSTAND: if we have more that 2 params, what to do?
 
         	System.out.println(pf.getOP());
-            Relationship[] params = Order.first(2, pf.getOP().getStartNode());
+            Relationship[] params = Order.first(3, pf.getOP().getStartNode());
 
             //pattern
             String pattern;
 			try {
-				pattern = StringResultSerializer._.serialize(pf, params[0]);
+				pattern = StringResultSerializer._.serialize(pf, params[1]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;
 			}
             String source;
 			try {
-				source = StringResultSerializer._.serialize(pf, params[1]);
+				source = StringResultSerializer._.serialize(pf, params[2]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;

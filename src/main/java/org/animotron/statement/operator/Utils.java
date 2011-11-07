@@ -48,11 +48,16 @@ public class Utils {
 
 
 	public static Node getByREF(final Node node) {
-		final Relationship res = Order.first(1, node)[0];
-		
-		return res.getEndNode();
+		try {
+			final Relationship res = Order.first(1, node)[0];
+			
+			return res.getEndNode();
+		} catch (IndexOutOfBoundsException e) {
+			return THE._((String)THE._.reference(node));
+		}
 	}
 	
+	@Deprecated //???
 	public static Relationship getByREF(final Relationship r) {
 		final Relationship res = Order.first(1, r.getEndNode())[0];
 		

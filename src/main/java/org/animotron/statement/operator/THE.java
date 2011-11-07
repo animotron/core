@@ -93,7 +93,11 @@ public class THE extends AbstractStatement implements Prepare, KernelEventHandle
 		return NAME.get(r.getEndNode());
 	}
 
-    private Subscribable<PFlow> prepare = new OnQuestion();
+	public Object reference(Node r) {
+		return NAME.get(r);
+	}
+
+	private Subscribable<PFlow> prepare = new OnQuestion();
 
 	@Override
 	public Subscribable<PFlow> onPrepareQuestion() {

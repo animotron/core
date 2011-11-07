@@ -61,7 +61,7 @@ public class SELF extends AbstractQuery {
             Path path = pf.getFlowPath();
             System.out.println("path = "+path);
 
-            Relationship res = selfByTraversal(pf, op, op.getStartNode(), (String) reference(op));
+            Relationship res = selfByTraversal(pf, op, op.getStartNode(), Utils.getByREF(op.getEndNode()));
 			if (res != null) {
 				System.out.println("FOUND by traversal");
 				pf.sendAnswer(res, op);
@@ -109,7 +109,7 @@ public class SELF extends AbstractQuery {
         }
     };
 
-	private Relationship selfByTraversal(PFlow pf, final Relationship start_op, final Node eNode, final String name) {
+	private Relationship selfByTraversal(PFlow pf, final Relationship start_op, final Node eNode, final Node theNode) {
 		
 		Node node = Utils.getByREF(start_op.getEndNode());
 
@@ -148,15 +148,17 @@ public class SELF extends AbstractQuery {
 					thisDeep++;
 					continue;
 				}
+				
+				Node currentThe = Utils.getByREF(r.getEndNode());
 
-				if (r.isType(IS._) && name.equals(IS._.reference(r))) {
+				if (r.isType(IS._) && theNode.equals(currentThe)) {
 					foundIS = true;
 					
-				} else if (r.isType(HAVE._) && (name.equals(HAVE._.reference(r)) || foundIS)) {
+				} else if (r.isType(HAVE._) && (theNode.equals(currentThe) || foundIS)) {
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (r.isType(IC._) && (name.equals(IC._.reference(r)) || foundIS)) {
+				} else if (r.isType(IC._) && (theNode.equals(currentThe) || foundIS)) {
 					if (foundIS) {
 						//store
 						final Node sN = eNode;
