@@ -81,8 +81,6 @@ public class JExpression extends AbstractExpression {
             } else if (e[0] instanceof Operator && e[1] instanceof String) {
                 builder.start((Operator) e[0]);
                 builder._(REF._, e[1]);
-            } else if (e[0] instanceof Instruction && e[1] == null) {
-                builder._(REF._, ((Instruction)e[0]).name());
             }
             if (e[2] instanceof Object[][]) {
                 build((Object[][]) e[2]);
