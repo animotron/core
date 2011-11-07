@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Result;
 import org.animotron.io.PipedInput;
@@ -80,7 +81,7 @@ public class ResultTraverser extends AnimoTraverser {
         }
 
         Statement s;
-        if (r.isType(REF._) || r.isType(THE._)) {
+        if (r.isType(RelationshipTypes.REF) || r.isType(THE._)) {
             s = THE._;
         } else {
             s = Statements.relationshipType(r);
