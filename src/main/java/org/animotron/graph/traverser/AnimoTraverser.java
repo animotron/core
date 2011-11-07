@@ -79,7 +79,7 @@ public class AnimoTraverser {
 		if (statement == null)
 			return;
 		handler.start(statement, r, level++, isOne, pos, isLast);
-		if (!(statement instanceof Relation)) {
+		if (!(statement instanceof Relation || statement instanceof REF)) {
             node = r.getEndNode();
             It it = new It(node);
             iterate(handler, pf, it, level);
