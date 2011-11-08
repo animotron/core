@@ -130,7 +130,7 @@ public class AnimoExpression extends AbstractExpression {
                                         if (st instanceof Prefix) {
                                             builder.start(st);
                                             level++;
-                                            op = st;
+                                            //op = st;
                                             link = false;
                                             prefix = true;
                                             s = new StringBuilder();
@@ -184,7 +184,7 @@ public class AnimoExpression extends AbstractExpression {
                 if (s instanceof Operator) {
                     builder.start(s);
                     level++;
-                 }else if (s instanceof MLOperator || s instanceof AbstractLink) {
+                } else if (s instanceof MLOperator || s instanceof AbstractLink) {
                     builder.start(s);
                     s = null;
                     level++;
