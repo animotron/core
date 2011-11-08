@@ -24,6 +24,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
+import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -48,7 +49,7 @@ public class EQ extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
-		Node theNode = org.animotron.statement.operator.Utils.getByREF(op.getEndNode());
+		Node theNode = Utils.getSingleREF(op.getEndNode());
 
 		Relationship have = GET._.getBySELF(pf, ref, theNode);
 		if (have == null) return false;

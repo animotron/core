@@ -41,6 +41,7 @@ import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.animotron.Properties.RID;
@@ -87,7 +88,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
-			final Node theNode = Utils.getByREF(node);
+			final List<Node> theNodes = Utils.getByREF(pf, node);
+			
+			for (Node theNode : theNodes) {
+				evalGet(pf, node, theNode);
+			}
+			
+			pf.await();
+			pf.done();
+		}
+
+		private void evalGet(final PFlow pf, final Node node, final Node theNode) {
 			
 			System.out.println("GET '"+name(theNode)+"' ["+theNode+"]");
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
@@ -128,15 +139,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				pf.answer.subscribe(onContext);
 				
 				if (Utils.haveContext(pf)) {
-					//pf.addContextPoint(op);
 					super.onMessage(pf);
 				} else {
-					//System.out.println("P-FLOW is context for GET! '"+reference(op)+"'");
-//					System.out.println("pflow = ");
-					//pf.getFlowPath();
-//					pf.debug();
-					//System.out.println(pf.getPFlowPath());
-					
 					
 					for (Relationship st : pf.getPFlowPath()) {
 						Set<Relationship[]> rSet = get(pf, st, theNode);
@@ -149,11 +153,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					}
 				}
 			}
-			pf.await();
-			pf.done();
-		}
-	};
+		};
 
+	};
+	
 	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode) {
 		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
@@ -352,7 +355,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Relationship have = getByHave(pf, context, theNode);
 		if (have != null) return have;
 
-		Node instance = Utils.getByREF(context);
+		Node instance = Utils.getSingleREF(context);
 		if (instance != null) {
 			//change context to the-instance by REF
 			context = instance;
@@ -380,7 +383,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			} else if (st instanceof IC) {
 				//System.out.print("GET IC -> "+tdR);
 				
-				if (theNode.equals(Utils.getByREF(tdR.getEndNode()))) {
+				if (theNode.equals(Utils.getSingleREF(tdR.getEndNode()))) {
 					//System.out.println(" MATCH");
 					
 					//store

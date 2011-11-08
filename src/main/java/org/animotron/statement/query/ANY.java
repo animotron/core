@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -57,34 +58,36 @@ public class ANY extends AbstractQuery implements Reference {
 			//(new IOException()).printStackTrace();
             
 			final Node n = pf.getOP().getEndNode();
-			Node node = Utils.getByREF(n);
+			List<Node> theNodes = Utils.getByREF(pf, n);
 
-			if (!Utils.results(node, pf)) {
-			
-				Set<Node>[] lists = getUSEs(node, pf.getStartOP());
-				Set<Node> uses = lists[1];
-				Set<Node> directed = lists[2];
+			for (Node node : theNodes) {
+				if (!Utils.results(node, pf)) {
 				
-				boolean underUSE = false;
-				if (directed != null && directed.size() == 1) { 
-					underUSE = true;
-					node = directed.iterator().next();
-				}
-	
-				//System.out.println(" node = "+node);
-	
-				if (underUSE && filtering(pf, node, uses)) {
-					pf.sendAnswer( createResult( pf, pf.getLastContext(), n, getThe(node), RESULT ), op );
-				} else {
-		            for (Relationship tdR : td_IS.traverse(node).relationships()) {
-	                    //System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
-	                    Node res = tdR.getStartNode();
-	                    if (filtering(pf, res, uses)) {
-	
-	                        pf.sendAnswer( createResult( pf, pf.getLastContext(), n, getThe(res), RESULT ), op );
-	                        break;
-	                    }
-	                }
+					Set<Node>[] lists = getUSEs(node, pf.getStartOP());
+					Set<Node> uses = lists[1];
+					Set<Node> directed = lists[2];
+					
+					boolean underUSE = false;
+					if (directed != null && directed.size() == 1) { 
+						underUSE = true;
+						node = directed.iterator().next();
+					}
+		
+					//System.out.println(" node = "+node);
+		
+					if (underUSE && filtering(pf, node, uses)) {
+						pf.sendAnswer( createResult( pf, pf.getLastContext(), n, getThe(node), RESULT ), op );
+					} else {
+			            for (Relationship tdR : td_IS.traverse(node).relationships()) {
+		                    //System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
+		                    Node res = tdR.getStartNode();
+		                    if (filtering(pf, res, uses)) {
+		
+		                        pf.sendAnswer( createResult( pf, pf.getLastContext(), n, getThe(res), RESULT ), op );
+		                        break;
+		                    }
+		                }
+					}
 				}
 			}
             pf.done();

@@ -30,14 +30,13 @@ import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
-import org.animotron.utils.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +58,7 @@ public class WITH extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
-		Node theNode = org.animotron.statement.operator.Utils.getByREF(op.getEndNode());
+		Node theNode = Utils.getSingleREF(op.getEndNode());
 
 		Set<Relationship[]> haveSet = GET._.get(pf, ref, theNode);
 		if (haveSet == null || haveSet.isEmpty()) return false;

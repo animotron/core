@@ -61,7 +61,7 @@ public class SELF extends AbstractQuery {
             Path path = pf.getFlowPath();
             System.out.println("path = "+path);
 
-            Relationship res = selfByTraversal(pf, op, op.getStartNode(), Utils.getByREF(op.getEndNode()));
+            Relationship res = selfByTraversal(pf, op, op.getStartNode(), Utils.getSingleREF(op.getEndNode()));
 			if (res != null) {
 				System.out.println("FOUND by traversal");
 				pf.sendAnswer(res, op);
@@ -86,7 +86,7 @@ public class SELF extends AbstractQuery {
                     break;
             }
             
-            Node theNode = Utils.getByREF(op.getEndNode());
+            Node theNode = Utils.getSingleREF(op.getEndNode());
 
             if (ref != null) {
                 //reference in processing flow
@@ -111,7 +111,7 @@ public class SELF extends AbstractQuery {
 
 	private Relationship selfByTraversal(PFlow pf, final Relationship start_op, final Node eNode, final Node theNode) {
 		
-		Node node = Utils.getByREF(start_op.getEndNode());
+		Node node = Utils.getSingleREF(start_op.getEndNode());
 
 		//System.out.println("start_op = "+start_op+" eNode = "+eNode+" sNode = "+node);
 
@@ -149,7 +149,7 @@ public class SELF extends AbstractQuery {
 					continue;
 				}
 				
-				Node currentThe = Utils.getByREF(r.getEndNode());
+				Node currentThe = Utils.getSingleREF(r.getEndNode());
 
 				if (r.isType(IS._) && theNode.equals(currentThe)) {
 					foundIS = true;

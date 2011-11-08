@@ -27,7 +27,6 @@ import org.animotron.statement.operator.Reference;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.animotron.utils.MessageDigester;
-import org.animotron.utils.Utils;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
@@ -465,7 +464,7 @@ public class PFlow {
 	public void debug() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DEBUG PFlow ");
-		sb.append(Utils.shortID(this));
+		//sb.append(Utils.shortID(this));
 		sb.append("\nPath = ");
 		sb.append(Arrays.toString(path.toArray()));
 		sb.append("\n");

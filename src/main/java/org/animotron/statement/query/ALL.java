@@ -25,6 +25,7 @@ import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -52,30 +53,33 @@ public class ALL extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
         	final Relationship op = pf.getOP();
             final Node n = op.getEndNode();
-            Node node = Utils.getByREF(n);
+            List<Node> theNodes = Utils.getByREF(pf, n);
 
 			//System.out.println("ALL **************************");
+            
+            for (Node node : theNodes) {
 
-			Set<Node>[] lists = getUSEs(node, pf.getStartOP());
-			Set<Node> uses = lists[1];
-			Set<Node> directed = lists[2];
-			
-			boolean underUSE = false;
-			if (directed != null && directed.size() == 1) { 
-				underUSE = true;
-				node = directed.iterator().next();
-			}
-
-			if (underUSE && filtering(pf, node, uses))
-				pf.sendAnswer( createResult( pf, op, n, getThe(node), RESULT ), op );
-
-	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
-	            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
-	            Node res = tdR.getStartNode();
-	            if (filtering(pf, res, uses)) {
-	                pf.sendAnswer( createResult( pf, op, n, getThe(res), RESULT ), op );
-	            }
-	        }
+				Set<Node>[] lists = getUSEs(node, pf.getStartOP());
+				Set<Node> uses = lists[1];
+				Set<Node> directed = lists[2];
+				
+				boolean underUSE = false;
+				if (directed != null && directed.size() == 1) { 
+					underUSE = true;
+					node = directed.iterator().next();
+				}
+	
+				if (underUSE && filtering(pf, node, uses))
+					pf.sendAnswer( createResult( pf, op, n, getThe(node), RESULT ), op );
+	
+		        for (Relationship tdR : td_IS.traverse(node).relationships()) {
+		            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+		            Node res = tdR.getStartNode();
+		            if (filtering(pf, res, uses)) {
+		                pf.sendAnswer( createResult( pf, op, n, getThe(res), RESULT ), op );
+		            }
+		        }
+            }
 
             pf.done();
         }

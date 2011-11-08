@@ -18,10 +18,19 @@
  */
 package org.animotron.statement.operator;
 
+import java.io.IOException;
+import java.util.List;
+
+import javolution.util.FastList;
+
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
+import org.animotron.io.PipedInput;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -30,6 +39,8 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
 import static org.animotron.Properties.CID;
+import static org.animotron.Properties.RID;
+import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -47,16 +58,73 @@ public class Utils {
 			//.evaluator(Evaluators.excludeStartPosition());
 
 
-	public static Node getByREF(final Node node) {
+	public static List<Node> getByREF(PFlow pf, final Node node) {
 		try {
+			try {
+				Node theNode = THE._((String)THE._.reference(node));
+
+				if (theNode != null) {
+					List<Node> res = new FastList<Node>();
+					res.add(theNode);
+					
+					return res;
+				}
+			} catch (Exception e) {
+			}
+
+			final Relationship res = Order.first(1, node)[0];
+			
+			return evaluable(pf, res);
+
+		} catch (IndexOutOfBoundsException e) {
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private static List<Node> evaluable(PFlow pf, Relationship r) throws InterruptedException, IOException {
+		List<Node> list = new FastList<Node>();
+		
+		Statement s = Statements.relationshipType(r);
+		if (s instanceof Query || s instanceof Evaluable) {
+			System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+			PipedInput<Relationship[]> in = Evaluator._.execute(pf, r);
+			for (Relationship[] e : in) {
+				list.add(Utils.relax(e[0]).getEndNode());
+				System.out.println("get from Evaluator "+r);
+			}
+		} else {
+			list.add(r.getEndNode());
+		}
+		
+		return list;
+	}
+	
+	public static Node getSingleREF(final Node node) {
+		try {
+			try {
+				Node theNode = THE._((String)THE._.reference(node));
+
+				if (theNode != null)
+					return theNode;
+
+			} catch (Exception e) {
+			}
+
 			final Relationship res = Order.first(1, node)[0];
 			
 			return res.getEndNode();
+
 		} catch (IndexOutOfBoundsException e) {
-			return THE._((String)THE._.reference(node));
 		}
+		return null;
 	}
-	
+
 	@Deprecated //???
 	public static Relationship getByREF(final Relationship r) {
 		final Relationship res = Order.first(1, r.getEndNode())[0];
@@ -139,5 +207,19 @@ public class Utils {
 		} finally {
 			q.close();
 		}
+	}
+
+	public static Relationship relax(Relationship relation) {
+		Relationship r = relation;
+		while (true) {
+			try {
+	        	r = getDb().getRelationshipById(
+	                (Long)r.getProperty(RID.name())
+	            );
+			} catch (Exception ex) {
+				break;
+			}
+		}
+		return r;
 	}
 }
