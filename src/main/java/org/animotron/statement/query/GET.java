@@ -195,7 +195,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				System.out.println("checking "+n);
+				//System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});

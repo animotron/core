@@ -99,7 +99,7 @@ public class AnimoTraverser {
                     if (!(r.isType(REF._) || r.isType(QNAME._))) {
                         break;
                     }
-                } else if (!i.equals("NAME._.name()")) {
+                } else if (!i.equals("NAME._.name()") && !i.equals("qname")) {
                     break;
                 }
                 count++;
