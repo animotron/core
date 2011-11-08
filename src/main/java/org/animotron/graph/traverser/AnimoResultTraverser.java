@@ -23,6 +23,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Relationship;
 
@@ -51,8 +52,10 @@ public class AnimoResultTraverser extends ResultTraverser {
 				handler.end(s, r, --level, isOne, pos, isLast);
             } else {
                 handler.start(s, r, level++, isOne, pos, isLast);
-                node = r.getEndNode();
-                iterate(handler, pf, new It(node), level);
+                if (!r.isType(REF._)) {
+	                node = r.getEndNode();
+	                iterate(handler, pf, new It(node), level);
+                }
                 handler.end(s, r, --level, isOne, pos, isLast);
             }
         }

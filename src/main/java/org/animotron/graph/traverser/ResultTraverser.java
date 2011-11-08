@@ -28,6 +28,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
@@ -116,8 +117,12 @@ public class ResultTraverser extends AnimoTraverser {
 			} else if (!(s instanceof Relation)) {
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne, pos, isLast);
-                node = r.getEndNode();
-                iterate(handler, pf, new It(node), level);
+                
+                if (!r.isType(REF._)) {
+	                node = r.getEndNode();
+	                iterate(handler, pf, new It(node), level);
+                }
+                
                 if (s instanceof AbstractValue)
                     handler.end(s, r, --level, isOne, pos, isLast);
             }
@@ -176,26 +181,4 @@ public class ResultTraverser extends AnimoTraverser {
         }
         return found;
     }
-
-    private void iterate(GraphHandler handler, PFlow pf, PipedInput in, int level, boolean isOne) throws IOException {
-        Iterator<Object> it = in.iterator();
-        boolean isFirst = isOne;
-        int pos = 0;
-        while (it.hasNext()) {
-            Relationship i = (Relationship) it.next();
-            if (isFirst) {
-                if (it.hasNext()) {
-                    build(handler, pf, i, level, false, pos++, true);
-                    i = (Relationship) it.next();
-                    build(handler, pf, i, level, false, pos++, !it.hasNext());
-                } else {
-                    build(handler, pf, i, level, true, pos++, !it.hasNext());
-                }
-            } else {
-                build(handler, pf, i, level, false, pos++, !it.hasNext());
-            }
-            isFirst = false;
-        }
-    }
-
 }

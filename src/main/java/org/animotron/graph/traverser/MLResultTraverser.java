@@ -25,6 +25,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
@@ -83,7 +84,7 @@ public class MLResultTraverser extends ResultTraverser {
             } else if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			//workaround IS and USE
-			} else if (!(s instanceof Relation)) {
+			} else if (!(s instanceof Relation) && !(r.isType(REF._))) {
                 node = r.getEndNode();
                 iterate(handler, pf, new It(node), level);
             }
