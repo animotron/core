@@ -26,11 +26,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Reference;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.AbstractValue;
@@ -114,11 +110,11 @@ public class ResultTraverser extends AnimoTraverser {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
-			} else if (!(s instanceof Relation)) {
+			} else if (!(s instanceof Relation || s instanceof REF)) {
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne, pos, isLast);
                 
-                if (!r.isType(REF._)) {
+                if (!(s instanceof REF)) {
 	                node = r.getEndNode();
 	                iterate(handler, pf, new It(node), level);
                 }

@@ -84,7 +84,7 @@ public class MLResultTraverser extends ResultTraverser {
             } else if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			//workaround IS and USE
-			} else if (!(s instanceof Relation) && !(r.isType(REF._))) {
+			} else if (!(s instanceof Relation || s instanceof REF)) {
                 node = r.getEndNode();
                 iterate(handler, pf, new It(node), level);
             }
