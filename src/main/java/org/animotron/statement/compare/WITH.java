@@ -29,6 +29,7 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.query.GET;
 import org.animotron.utils.Utils;
 import org.neo4j.graphdb.Node;
@@ -36,6 +37,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -91,8 +93,13 @@ public class WITH extends Operator implements Predicate {
 			List<Relationship> l = evaluable(pf, g.getEndNode());
 			if (l.size() == 1)
 				g = l.get(0);
-			else if (l.size() > 1) 
+			else if (l.size() > 1) {
+				
 				System.out.println("DON'T KNOW WHAT TO DO, get alot of results @WITH");
+				for (Relationship r : l) {
+					System.out.println(""+r+" "+r.getType());
+				}
+			}
 
 			System.out.println("***** expected = "+g.getEndNode());
 			
@@ -114,6 +121,8 @@ public class WITH extends Operator implements Predicate {
 		IndexHits<Relationship> q = Order.queryDown(node);
 		try {
 			for (Relationship i : q) {
+				if (i.isType(REF._)) continue;
+				
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
