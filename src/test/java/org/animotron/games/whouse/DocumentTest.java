@@ -39,9 +39,9 @@ public class DocumentTest extends ATest {
 
 		testAnimo("the document (have date) (have number) (have owner).");
 		
-		testAnimo("the doc3 (is document) (have date D \"2011-11-01\") (have number N D 3) (have owner an user1).");
-		testAnimo("the doc5 (is document) (have date D \"2011-11-02\") (have number N D 5) (have owner an user1).");
-		testAnimo("the doc7 (is document) (have date D \"2011-11-03\") (have number N D 7) (have owner an user2).");
+		testAnimo("the doc3 (is document) (have date \"2011-11-01\") (have number \"3\") (have owner user1).");
+		testAnimo("the doc5 (is document) (have date \"2011-11-02\") (have number \"5\") (have owner user1).");
+		testAnimo("the doc7 (is document) (have date \"2011-11-03\") (have number \"7\") (have owner user2).");
 		
 		testAnimo("the table (have column) (have row) (ic html \\table (\\tr each (get column) (\\th get name)) (each (get row) (\\tr each (get column) (\\td get name) )).");
 		
