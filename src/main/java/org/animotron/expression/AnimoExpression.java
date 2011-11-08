@@ -130,7 +130,7 @@ public class AnimoExpression extends AbstractExpression {
                                         if (st instanceof Prefix) {
                                             builder.start(st);
                                             level++;
-                                            //op = st;
+                                            op = st;
                                             link = false;
                                             prefix = true;
                                             s = new StringBuilder();
@@ -193,7 +193,7 @@ public class AnimoExpression extends AbstractExpression {
                     builder._(s, token);
                     level++;
                 } else if (s == null) {
-                    if (op instanceof REF && !comma || op == null) {
+                    if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF)) {
                         builder.start(AN._);
                         level++;
                     }
