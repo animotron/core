@@ -93,7 +93,7 @@ public class Utils {
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			PipedInput<Relationship[]> in = Evaluator._.execute(pf, r);
+			PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
 			for (Relationship[] e : in) {
 				list.add(Utils.relax(e[0]).getEndNode());
 				System.out.println("get from Evaluator "+r);
