@@ -100,7 +100,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 		private void evalGet(final PFlow pf, final Node node, final Node theNode) {
 			
-			System.out.println("GET '"+name(theNode)+"' ["+theNode+"]");
+			System.out.print("GET '");
+			try {
+				System.out.print(name(theNode));
+			} catch (Exception e) {}
+			System.out.println("' ["+theNode+"]");
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			
 			//for (Relationship r : pf.getPFlowPath()) {

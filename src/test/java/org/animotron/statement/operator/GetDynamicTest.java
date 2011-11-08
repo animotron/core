@@ -77,14 +77,14 @@ public class GetDynamicTest extends ATest {
         JExpression F = new JExpression(
             _(THE._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
         );
-        assertAnimoResult(F, "the F (have B \"π\").");
+        assertAnimoResult(F, "the F have B \"π\".");
     }
 
     @Test
     public void test_01() throws Exception {
-    	testAnimo("the z have a z1.");
-    	testAnimo("the b have z1 \"z1\".");
+    	testAnimo("the z (is k) (have a z1).");
+    	testAnimo("the b (is k) (have z1 \"z1\").");
 
-    	testAnimoResult("get (get a an z) (an b)", "have z1 \"z1\".");
+    	testAnimoResult("get (get an a,z) (all k).", "have z1 \"z1\".");
     }
 }
