@@ -81,10 +81,18 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
+    public void test_00() throws Exception {
+    	testAnimo("the z have a z1.");
+    	testAnimo("the b have z1 \"z1\".");
+
+    	testAnimoResult("get (get a z) (b).", "have z1 \"z1\".");
+    }
+
+    @Test
     public void test_01() throws Exception {
     	testAnimo("the z (is k) (have a z1).");
     	testAnimo("the b (is k) (have z1 \"z1\").");
 
-    	testAnimoResult("get (get an a,z) (all k).", "have z1 \"z1\".");
+    	testAnimoResult("get (get a,z) (all k).", "have z1 \"z1\".");
     }
 }
