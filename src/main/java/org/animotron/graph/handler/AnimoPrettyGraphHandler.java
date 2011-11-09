@@ -78,7 +78,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         if (!stack.empty()) {
             if (stack.peek()[0] instanceof Prefix) size--;
         }
-        root[5] = !(statement instanceof REF) && ((Boolean)root[5] || size > 1 || level == 1);
+        root[5] = !(statement instanceof REF || statement instanceof AN && pos == 0) && ((Boolean)root[5] || size > 1 || level == 1);
     }
 
     @Override
