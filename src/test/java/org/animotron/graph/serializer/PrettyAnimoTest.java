@@ -48,7 +48,7 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-        test("the a\n    have b.");
+        test("the a have b.");
 	}
 
     @Test
