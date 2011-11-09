@@ -74,8 +74,11 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         root = stack.pop();
         int size = ((List<Object[]>)root[4]).size();
-        if (statement instanceof Prefix) size--;
-        root[5] = (Boolean)root[5] || size > 1 || level == 1;
+        //if (statement instanceof Prefix) size--;
+        if (!stack.empty()) {
+            if (stack.peek()[0] instanceof Prefix) size--;
+        }
+        root[5] = !(statement instanceof REF) && ((Boolean)root[5] || size > 1 || level == 1);
     }
 
     @Override
@@ -90,7 +93,13 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         boolean isOne = (Boolean) o[3];
         if (statement instanceof AN) {
             if (level != 0) {
-                if (!(ps instanceof LINK)) {
+                if ((Boolean) o[5]) {
+                    indent++;
+                    write("\n");
+                    for (int i = 0; i < indent; i++) {
+                        write(INDENT);
+                    }
+                } else if (!(ps instanceof LINK)) {
                     write(" ");
                 }
                 if (!isOne) {
@@ -106,12 +115,9 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                     }
                 }
             }
-            for (Object[] i : (List<Object[]>) o[4]) {
-                write(i, indent, statement);
-            }
         } else {
             if (level != 0 && !(statement instanceof QNAME)) {
-                if ((Boolean) o[5] && !(statement instanceof REF)) {
+                if ((Boolean) o[5]) {
                     indent++;
                     write("\n");
                     for (int i = 0; i < indent; i++) {
@@ -131,14 +137,14 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                 }
             }
             write(statement, (Relationship) o[1]);
-            for (Object[] i : (List<Object[]>) o[4]) {
-                write(i, indent, statement);
-            }
-            if (level == 0) {
-                write(".");
-            } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
-                write(")");
-            }
+        }
+        for (Object[] i : (List<Object[]>) o[4]) {
+            write(i, indent, statement);
+        }
+        if (level == 0) {
+            write(".");
+        } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
+            write(")");
         }
     }
 
