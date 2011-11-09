@@ -112,7 +112,7 @@ public class AnimoTraverser {
             int pos = 0;
             boolean isOne = o.size() - count < 2;
             for (Object i : o) {
-                boolean isLast = pos < o.size() ? false : !it.hasNext();
+                boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
                 build(handler, pf, i, level, isOne, pos, isLast);
                 pos++;
             }

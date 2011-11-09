@@ -25,6 +25,7 @@ import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -78,16 +79,17 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         if (!stack.empty()) {
             if (stack.peek()[0] instanceof Prefix) size--;
         }
-        root[5] = !(statement instanceof REF || statement instanceof AN && pos == 0) && ((Boolean)root[5] || size > 1 || level == 1);
+        root[5] = !(statement instanceof REF || statement instanceof AN && pos == 0) && ((Boolean)root[5] || size > 1) || (level == 1 && statement instanceof THE);
     }
 
     @Override
     public void endGraph() throws IOException {
-        write(root, 0, null);
+        write(root, 0);
         write("\n");
     }
 
-    private void write(Object[] o, int indent, Statement ps) throws IOException {
+    Statement ps = null;
+    private void write(Object[] o, int indent) throws IOException {
         Statement statement = (Statement) o[0];
         int level = (Integer) o[2];
         boolean isOne = (Boolean) o[3];
@@ -138,8 +140,9 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
             }
             write(statement, (Relationship) o[1]);
         }
+        ps = statement;
         for (Object[] i : (List<Object[]>) o[4]) {
-            write(i, indent, statement);
+            write(i, indent);
         }
         if (level == 0) {
             write(".");

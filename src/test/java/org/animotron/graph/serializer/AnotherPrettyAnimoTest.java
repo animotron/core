@@ -63,7 +63,7 @@ public class AnotherPrettyAnimoTest extends ATest {
 
     @Test
 	public void test_04() throws Exception {
-        test("the a an (all b) (all c).");
+        test("the a\n    an\n        (all b)\n        (all c).");
 	}
 
     @Test
@@ -93,17 +93,17 @@ public class AnotherPrettyAnimoTest extends ATest {
 
     @Test
     public void test_10() throws Exception {
-		test("all a,b an c,d e", "all a,b c,d e.");
+		test("all a,b an c,d e", "all a,b\n    c,d e.");
     }
 
     @Test
     public void test_11() throws Exception {
-		test("all a,b c,d e.");
+		test("all a,b\n    c,d e.");
     }
 
     @Test
     public void test_12() throws Exception {
-		test("all a,b c,d (e) (f).");
+		test("all a,b\n    c,d\n        (e)\n        (f).");
     }
 
 }
