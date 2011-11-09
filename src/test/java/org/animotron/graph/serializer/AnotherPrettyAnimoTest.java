@@ -43,17 +43,17 @@ public class AnotherPrettyAnimoTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        test("the a get b c.", "the a\n    get b c.");
+        test("the a get b c.", "the a get b c.");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        test("the a get an b an c", "the a\n    get an b c.");
+        test("the a get an b an c", "the a get an b c.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        test("the a get an b c", "the a\n    get an b c.");
+        test("the a get an b c", "the a get an b c.");
 	}
 
     @Test
