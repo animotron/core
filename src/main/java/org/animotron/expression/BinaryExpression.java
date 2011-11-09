@@ -22,6 +22,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
@@ -123,12 +124,14 @@ public class BinaryExpression extends AbstractExpression {
                 if (!it.hasNext()) {
                     Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
                     if (jt.hasNext()) {
-                        builder.start(HAVE._, NAME);
+                        builder.start(HAVE._);
+                            builder._(REF._, NAME);
                             builder._(jt.next());
                         builder.end();
                     }
                     if (jt.hasNext()) {
-                        builder.start(HAVE._, EXTENSION);
+                        builder.start(HAVE._);
+                            builder._(REF._, EXTENSION);
                             do {
                                 builder._(jt.next());
                             } while (jt.hasNext());
