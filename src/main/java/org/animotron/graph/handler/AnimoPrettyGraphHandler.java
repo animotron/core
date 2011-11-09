@@ -22,7 +22,10 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -30,6 +33,8 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
+
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -55,7 +60,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
 
     @Override
     public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        Object[] item = {statement, r, level, isOne, new LinkedList<Object[]>(), !isOne};
+        Object[] item = {statement, r, level, isOne, new LinkedList<Object[]>(), !isOne, pos};
         if (!stack.empty()) {
             Object[]p = stack.peek();
             ((List<Object[]>) p[4]).add(item);
@@ -75,39 +80,66 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
 
     @Override
     public void endGraph() throws IOException {
-        write(root, 0);
+        write(root, 0, null);
         write("\n");
     }
 
-    private Statement ps = null;
-    private void write(Object[] o, int indent) throws IOException {
+    private void write(Object[] o, int indent, Statement ps) throws IOException {
         Statement statement = (Statement) o[0];
         int level = (Integer) o[2];
         boolean isOne = (Boolean) o[3];
-        if (level != 0 && !(statement instanceof QNAME)) {
-            if ((Boolean) o[5] && !(statement instanceof REF)) {
-                indent++;
-                write("\n");
-                for (int i = 0; i < indent; i++) {
-                    write(INDENT);
+        if (statement instanceof AN) {
+            if (level != 0) {
+                if (!(ps instanceof LINK)) {
+                    write(" ");
                 }
-            } else if (!(ps instanceof LINK)) {
-                write(" ");
+                if (!isOne) {
+                    write("(");
+                }
+                Node n= ((Relationship) o[1]).getEndNode();
+                if (!n.hasRelationship(REF._, OUTGOING)) {
+                    write(statement.name());
+                } else if (((Integer) o[6]) == 0 && ps instanceof Operator) {
+                    write(statement.name());
+                    if (n.hasRelationship(OUTGOING)) {
+                        write(" ");
+                    }
+                }
             }
-            if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
-                write("(");
+            for (Object[] i : (List<Object[]>) o[4]) {
+                write(i, indent, statement);
+            }
+        } else {
+            if (level != 0 && !(statement instanceof QNAME)) {
+                if ((Boolean) o[5] && !(statement instanceof REF)) {
+                    indent++;
+                    write("\n");
+                    for (int i = 0; i < indent; i++) {
+                        write(INDENT);
+                    }
+                } else if (!(ps instanceof LINK)) {
+                    if (statement instanceof REF && ps instanceof REF) {
+                        write(",");
+                    } else {
+                        if (!(statement instanceof REF && ps instanceof AN)) {
+                            write(" ");
+                        }
+                    }
+                }
+                if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
+                    write("(");
+                }
+            }
+            write(statement, (Relationship) o[1]);
+            for (Object[] i : (List<Object[]>) o[4]) {
+                write(i, indent, statement);
+            }
+            if (level == 0) {
+                write(".");
+            } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
+                write(")");
             }
         }
-        write(statement, (Relationship) o[1]);
-        for (Object[] i : (List<Object[]>) o[4]) {
-            write(i, indent);
-        }
-        if (level == 0) {
-            write(".");
-        } else if (!(statement instanceof REF) && !(statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
-            write(")");
-        }
-        ps = statement;
     }
 
 }
