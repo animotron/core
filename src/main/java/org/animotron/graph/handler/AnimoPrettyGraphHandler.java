@@ -20,8 +20,9 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.ml.Prefix;
+import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.operator.REF;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -84,7 +85,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         int level = (Integer) o[2];
         boolean isOne = (Boolean) o[3];
         if (level != 0 && !(statement instanceof QNAME)) {
-            if ((Boolean) o[5]) {
+            if ((Boolean) o[5] && !(statement instanceof REF)) {
                 indent++;
                 write("\n");
                 for (int i = 0; i < indent; i++) {
@@ -93,7 +94,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
             } else if (!(ps instanceof LINK)) {
                 write(" ");
             }
-            if (!isOne || statement instanceof LINK) {
+            if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
                 write("(");
             }
         }
@@ -103,7 +104,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         }
         if (level == 0) {
             write(".");
-        } else if (!(statement instanceof QNAME) && !isOne || statement instanceof LINK) {
+        } else if (!(statement instanceof REF) && !(statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
         ps = statement;
