@@ -193,7 +193,7 @@ public class AnimoExpression extends AbstractExpression {
                     builder._(s, token);
                     level++;
                 } else if (s == null) {
-                    Object o = AbstractValue.value(s);
+                    Object o = AbstractValue.value(token);
                     if (o instanceof String) {
                         if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF)) {
                             builder.start(AN._);
