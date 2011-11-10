@@ -150,7 +150,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_24() throws Exception {
-    	testAnimo("the a @ (\"b\" (c) (d)).");
+    	testAnimo("the a @ \"b\" (c) (d).");
     }
 
     @Test
