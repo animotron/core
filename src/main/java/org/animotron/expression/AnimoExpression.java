@@ -167,8 +167,7 @@ public class AnimoExpression extends AbstractExpression {
             if (op instanceof Prefix && !(op instanceof NS) && !link) {
                 builder._(QNAME._, token);
             } else {
-                builder.start(token);
-                level++;
+                builder._(token);
             }
         } else {
             if (prefix) {
