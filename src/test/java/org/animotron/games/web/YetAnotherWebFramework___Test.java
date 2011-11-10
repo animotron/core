@@ -136,8 +136,8 @@ public class YetAnotherWebFramework___Test extends ATest {
                                 "(\\h1 have title \"Welcome to Animo\") " +
                                 "(\\p have content \"It is working!\") " +
                                 "(\\ul " +
-                                    "(\\li (\"host: \\\"\") (\\strong have host \"localhost\") (\"\\\"\")) " +
-                                    "(\\li (\"uri: \\\"\") (\\strong have uri \"/\") (\"\\\"\"))))).");
+                                    "(\\li \"host: \\\"\" (\\strong have host \"localhost\") \"\\\"\") " +
+                                    "(\\li \"uri: \\\"\" (\\strong have uri \"/\") \"\\\"\")))).");
 
 
         assertXMLResult(s,

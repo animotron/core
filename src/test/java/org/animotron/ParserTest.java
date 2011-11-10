@@ -460,7 +460,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_86() throws Exception {
-    	testAnimo("the a (is b) (have c \"x\") (have c \"x\") (\"c\").");
+    	testAnimo("the a (is b) (have c \"x\") (have c \"x\") \"c\".");
     }
 
     @Test
@@ -470,7 +470,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_88() throws Exception {
-    	testAnimo("\\a ($a \"a\") (@a \"a\") (\"a\").");
+    	testAnimo("\\a ($a \"a\") (@a \"a\") \"a\".");
     }
 
 }

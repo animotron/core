@@ -73,7 +73,7 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_06() throws Exception {
-    	test("the a \\b (@c \"d\") (\"e\")", "the a \\b (@c \"d\") (\"e\").");
+    	test("the a \\b (@c \"d\") (\"e\")", "the a \\b (@c \"d\") \"e\".");
     }
 
     @Test

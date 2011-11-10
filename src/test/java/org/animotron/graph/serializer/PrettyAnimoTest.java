@@ -106,10 +106,10 @@ public class PrettyAnimoTest extends ATest {
             "                    (\\p have content \"It is working\")\n" +
             "                    (\\ul\n" +
             "                        (\\li\n" +
-            "                            (\"host:\")\n" +
+            "                            \"host:\"\n" +
             "                            (\\strong have host \"localhost\"))\n" +
             "                        (\\li\n" +
-            "                            (\"uri:\")\n" +
+            "                            \"uri:\"\n" +
             "                            (\\strong have uri \"/\"))))."
         );
     }

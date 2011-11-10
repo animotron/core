@@ -119,7 +119,7 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A have B C (have D) (\".\").");
+        assertAnimo(A, "the A have B C (have D) \".\".");
     }
 
     @Test
@@ -210,7 +210,7 @@ public class AnimoSerializerTest extends ATest {
                 text("bla"), text("bla")
             )
         );
-        assertAnimo(A, "the A (\"bla\") (\"bla\").");
+        assertAnimo(A, "the A \"bla\" \"bla\".");
     }
 	
     @Test
