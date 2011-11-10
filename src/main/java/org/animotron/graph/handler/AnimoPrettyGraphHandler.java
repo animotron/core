@@ -20,6 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
+import org.animotron.statement.value.VALUE;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
@@ -134,7 +135,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                         }
                     }
                 }
-                if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
+                if (!(statement instanceof REF) && (!isOne && !(statement instanceof VALUE) || statement instanceof LINK)) {
                     write("(");
                 }
             }
@@ -146,7 +147,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         }
         if (level == 0) {
             write(".");
-        } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne && !(statement instanceof VALUE) || statement instanceof LINK)) {
             write(")");
         }
     }

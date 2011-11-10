@@ -130,7 +130,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                     }
                 }
             }
-            if (!(statement instanceof REF) && (!isOne || statement instanceof LINK)) {
+            if (!(statement instanceof REF) && (!isOne && !(statement instanceof VALUE) || statement instanceof LINK)) {
                 write("(");
             }
         }
@@ -147,7 +147,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         if (level==0) {
             write(".");
             dot = true;
-        } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF || statement instanceof QNAME) && (!isOne && !(statement instanceof VALUE) || statement instanceof LINK)) {
             write(")");
         }
     }
