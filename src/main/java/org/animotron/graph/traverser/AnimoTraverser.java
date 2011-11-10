@@ -27,7 +27,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.value.VALUE;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -97,10 +96,10 @@ public class AnimoTraverser {
                 o.add(i);
                 if (i instanceof Relationship) {
                     Relationship r = (Relationship) i;
-                    if (!(r.isType(REF._) || r.isType(VALUE._) || r.isType(QNAME._))) {
+                    if (!(r.isType(REF._) || r.isType(QNAME._))) {
                         break;
                     }
-                } else if (!(i.equals("NAME._.name()") || i.equals("VALUE._.name()") || i.equals(VALUE._.name()) || i.equals(QNAME._.name()))) {
+                } else if (!(i.equals(Properties.NAME.name()) || i.equals(QNAME._.name()))) {
                     break;
                 }
                 count++;
