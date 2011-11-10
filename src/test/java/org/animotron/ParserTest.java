@@ -140,17 +140,17 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_22() throws Exception {
-    	testAnimo("the a @(\"b\" c)", "the a @ \"b\" c.");
+    	testAnimo("the a @(\"b\" c)", "the a @ \"b\" (c).");
     }
 
     @Test
     public void test_23() throws Exception {
-    	testAnimo("the a @((\"b\") (c))", "the a @ ((\"b\") (c)).");
+    	testAnimo("the a @((\"b\") (c))", "the a @ (\"b\" (c)).");
     }
 
     @Test
     public void test_24() throws Exception {
-    	testAnimo("the a @ ((\"b\") (c) (d)).");
+    	testAnimo("the a @ (\"b\" (c) (d)).");
     }
 
     @Test
@@ -215,12 +215,12 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_37() throws Exception {
-    	testAnimo("the a \"b\" c.");
+    	testAnimo("the a \"b\" (c).");
     }
 
     @Test
     public void test_38() throws Exception {
-    	testAnimo("the a (\"b\" c)", "the a \"b\" c.");
+    	testAnimo("the a (\"b\" c)", "the a \"b\" (c).");
     }
 
     @Test
