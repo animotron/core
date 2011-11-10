@@ -35,6 +35,7 @@ import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.relation.Relation;
+import org.animotron.statement.value.AbstractValue;
 
 import java.io.*;
 import java.util.Stack;
@@ -192,13 +193,18 @@ public class AnimoExpression extends AbstractExpression {
                     builder._(s, token);
                     level++;
                 } else if (s == null) {
-                    if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF)) {
-                        builder.start(AN._);
-                        level++;
+                    Object o = AbstractValue.value(s);
+                    if (o instanceof String) {
+                        if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF)) {
+                            builder.start(AN._);
+                            level++;
+                        }
+                        s =  REF._;
+                        builder._(s, token);
+                        comma = false;
+                    } else {
+                        builder._(o);
                     }
-                    s =  REF._;
-                    builder._(s, token);
-                    comma = false;
                 }
                 op = s;
             }
