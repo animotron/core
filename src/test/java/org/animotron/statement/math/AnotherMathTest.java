@@ -23,6 +23,8 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.junit.Test;
 
+import static org.animotron.expression.Expression.__;
+
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
@@ -76,5 +78,38 @@ public class AnotherMathTest extends ATest {
         Expression e = new AnimoExpression("- 1 2 3.0 4");
     	assertStringResult(e, "-8.0");
 	}
+
+    @Test
+	public void test_08() throws Exception {
+        __(
+            new AnimoExpression("the a (have x 1) (have y 2) (have z 3)")
+        );
+        Expression e = new AnimoExpression("+ (get x a) (get y b) (get z a)");
+    	assertStringResult(e, "6");
+	}
+
+    @Test
+	public void test_09() throws Exception {
+        __(
+            new AnimoExpression("the a (have x 1) (have y 2) (have z 3)"),
+            new AnimoExpression("the b + (get x) (get y) (get z)")
+        );
+        Expression e = new AnimoExpression("b a");
+    	assertStringResult(e, "6");
+	}
+
+    @Test
+	public void test_10() throws Exception {
+        Expression e = new AnimoExpression("+ \"1\" \"2\" \"3\" \"4\"");
+    	assertStringResult(e, "10");
+	}
+
+    @Test
+	public void test_11() throws Exception {
+        Expression e = new AnimoExpression("+ 1 \"2\" \"3.0\" 4");
+    	assertStringResult(e, "10.0");
+	}
+
+
 
 }

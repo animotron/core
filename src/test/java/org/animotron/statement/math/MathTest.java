@@ -109,4 +109,12 @@ public class MathTest extends ATest {
     	assertStringResult(e, "-8.0");
 	}
 
+    @Test
+	public void test_08() throws Exception {
+        Expression e = new JExpression(
+            _(SUM._, value("1"), value("2"), value("3.0"), value("4"))
+        );
+    	assertStringResult(e, "10.0");
+	}
+
 }
