@@ -57,25 +57,28 @@ public class AN extends Operator implements Reference, Evaluable {
 			Relationship op = pf.getOP();
 			final Node node = op.getEndNode();
 
-			System.out.println("AN "+op+" "+reference(op)+" ");
-
-			final Relationship res = Order.first(1, node)[0];
+			//System.out.println("AN "+op+" "+reference(op)+" ");
 			
-			Relationship ref = AnimoGraph.execute(new GraphOperation<Relationship>() {
-				@Override
-				public Relationship execute() {
-					Relationship r = node.createRelationshipTo(res.getEndNode(), REF);
-					//store to relationship arrow
-					//RID.set(res, r.getId());
-					Result.add(r, pf.getOpHash());
-					//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-					return r;
-				}
-			});
+			if (!Utils.results(node, pf, false)) {
 
-			System.out.println("AN res = "+ref);
+				final Relationship res = Order.first(1, node)[0];
+				
+				Relationship ref = AnimoGraph.execute(new GraphOperation<Relationship>() {
+					@Override
+					public Relationship execute() {
+						Relationship r = node.createRelationshipTo(res.getEndNode(), REF);
+						//store to relationship arrow
+						//RID.set(res, r.getId());
+						Result.add(r, pf.getOpHash());
+						//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+						return r;
+					}
+				});
+
+				//System.out.println("AN res = "+ref);
 			
-			pf.sendAnswer(ref, op);
+				pf.sendAnswer(ref, op);
+			}
 			pf.done();
 		}
 	};

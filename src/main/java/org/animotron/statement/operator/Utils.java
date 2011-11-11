@@ -133,10 +133,20 @@ public class Utils {
 	}
 
 	public static boolean results(Node node, PFlow pf) {
+		return results(node, pf, true);
+	}
+
+	public static boolean results(Node node, PFlow pf, boolean fullPath) {
 		boolean haveSome = false;
+
+		byte[] hash;
+		if (fullPath)
+			hash = pf.getPathHash();
+		else
+			hash = pf.getOpHash();
 		
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-		for (Relationship r : Result.get(pf.getPathHash(), node)) {
+		for (Relationship r : Result.get(hash, node)) {
 			Relationship c = null;
 			try {
 				long id = (Long)r.getProperty(CID.name());
