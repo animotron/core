@@ -23,7 +23,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class DIV extends BibaryMathOperator {
+public class DIV extends BinaryMathOperator {
 
 	public static final DIV _ = new DIV();
 
@@ -31,9 +31,11 @@ public class DIV extends BibaryMathOperator {
 
     @Override
     protected Number execute(Number a, Number b) {
-        return (a instanceof Long && b instanceof Long)
-                ? a.longValue() / b.longValue()
-                : a.doubleValue() / b.doubleValue();
+        if (a instanceof Long && b instanceof Long) {
+            return a.longValue() / b.longValue();
+        } else {
+            return a.doubleValue() / b.doubleValue();
+        }
     }
 
 }

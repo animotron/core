@@ -40,9 +40,9 @@ import static org.neo4j.graphdb.Direction.INCOMING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class BibaryMathOperator extends AbstractMathOperator implements Evaluable{
+public abstract class BinaryMathOperator extends AbstractMathOperator implements Evaluable{
 
-	protected BibaryMathOperator(String name) { super(name); }
+	protected BinaryMathOperator(String name) { super(name); }
 
     @Override
     public Subscribable<PFlow> onCalcQuestion() {

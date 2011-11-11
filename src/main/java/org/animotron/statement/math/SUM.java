@@ -23,7 +23,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUM extends BibaryMathOperator {
+public class SUM extends BinaryMathOperator {
 	
 	public static final SUM _ = new SUM();
 	
@@ -31,9 +31,11 @@ public class SUM extends BibaryMathOperator {
 
     @Override
     protected Number execute(Number a, Number b) {
-        return (a instanceof Long && b instanceof Long)
-                ? a.longValue() + b.longValue()
-                : a.doubleValue() + b.doubleValue();
+        if (a instanceof Long && b instanceof Long) {
+            return a.longValue() + b.longValue();
+        } else {
+            return a.doubleValue() + b.doubleValue();
+        }
     }
 
 }
