@@ -22,6 +22,7 @@ import javolution.util.FastSet;
 import org.animotron.Executor;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
+import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
@@ -34,10 +35,13 @@ import org.animotron.statement.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
+
+import scala.util.control.Exception.Finally;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -218,31 +222,36 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				//System.out.println(""+n);
 				//System.out.println("getStartNode OUTGOING");
 				if (first || !REFs.contains(n)) {
-					for (Relationship r : n.getStartNode().getRelationships(OUTGOING)) {
-						if (r.equals(n)) continue;
-						
-						//System.out.println(r);
-						
-						Statement st = Statements.relationshipType(r);
-						if (st instanceof AN) {
-							Relationship t = AN._.getREF(r);
-							if (!visitedREFs.contains(t))
-								newREFs.add(t);
-						} else if (st instanceof Reference) {
-							try {
-								if (!pf.isInStack(r)) {
-									PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
-									
-									for (Relationship[] rr : in) {
-										if (!visitedREFs.contains(rr[0]))
-											newREFs.add(rr[0]);
+					IndexHits<Relationship> it = Order.queryDown(n.getStartNode());
+					try {
+						for (Relationship r : it) {
+							if (r.equals(n)) continue;
+							
+							//System.out.println(r);
+							
+							Statement st = Statements.relationshipType(r);
+							if (st instanceof AN) {
+								Relationship t = AN._.getREF(r);
+								if (!visitedREFs.contains(t))
+									newREFs.add(t);
+							} else if (st instanceof Reference) {
+								try {
+									if (!pf.isInStack(r)) {
+										PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
+										
+										for (Relationship[] rr : in) {
+											if (!visitedREFs.contains(rr[0]))
+												newREFs.add(rr[0]);
+										}
 									}
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
 								}
-							} catch (IOException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
 							}
 						}
+					} finally {
+						it.close();
 					}
 				}
 				first = false;
@@ -259,32 +268,37 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	
 	private void getOutgoingReferences(PFlow pf, Node node, Set<Relationship> newREFs, Set<Relationship> visitedREFs) {
 
-		for (Relationship r : node.getRelationships(OUTGOING)) {
-			//System.out.println(r);
-
-			Statement st = Statements.relationshipType(r);
-			if (st instanceof AN) {
-				System.out.println(r);
-				Relationship t = AN._.getREF(r);
-				System.out.println(t);
-				if (visitedREFs != null && !visitedREFs.contains(t))
-					newREFs.add(t);
-
-			} else if (st instanceof Reference) {
-				if (!pf.isInStack(r)) {
-					try {
-						PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf, r), r);
-						
-						for (Relationship[] rr : in) {
-							if (visitedREFs != null && !visitedREFs.contains(rr[0]))
-								newREFs.add(rr[0]);
+		IndexHits<Relationship> it = Order.queryDown(node);
+		try {
+			for (Relationship r : it) {
+				//System.out.println(r);
+	
+				Statement st = Statements.relationshipType(r);
+				if (st instanceof AN) {
+					System.out.println(r);
+					Relationship t = AN._.getREF(r);
+					System.out.println(t);
+					if (visitedREFs != null && !visitedREFs.contains(t))
+						newREFs.add(t);
+	
+				} else if (st instanceof Reference) {
+					if (!pf.isInStack(r)) {
+						try {
+							PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf, r), r);
+							
+							for (Relationship[] rr : in) {
+								if (visitedREFs != null && !visitedREFs.contains(rr[0]))
+									newREFs.add(rr[0]);
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
 						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
 					}
 				}
 			}
+		} finally {
+			it.close();
 		}
 	}
 	
