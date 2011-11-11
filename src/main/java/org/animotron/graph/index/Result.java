@@ -42,7 +42,7 @@ public class Result {
 	}
 
     public static void add(Relationship r, byte[] value) {
-        INDEX.add(r, NAME, value);
+        INDEX.add(r, NAME, MessageDigester.byteArrayToHex(value));
     }
 	
     public static IndexHits<Relationship> get(byte[] value) {

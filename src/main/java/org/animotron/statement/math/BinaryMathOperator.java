@@ -24,6 +24,7 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Utils;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -55,29 +56,32 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 
         @Override
         public void onMessage(final PFlow pf) {
-            IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
-            try {
-                Number x;
-                params.next();
-                if (params.hasNext()) {
-                    x = param(pf, params.next());
-                    while (params.hasNext()) {
-                        x = execute(x, param(pf, params.next()));
-                    }
-
-                    Relationship r = new JExpression(value(x));
-                    
-                    Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
-                    
-                    //XXX: fix context
-                    pf.sendAnswer(createResult(pf, pf.getLastContext(), sNode, r, RESULT));
-                }
-            } catch (IOException e) {
-                pf.sendException(e);
-                return;
-            } finally {
-                params.close();
-            }
+        	
+        	if (!Utils.results(pf)) {
+	            IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
+	            try {
+	                Number x;
+	                params.next();
+	                if (params.hasNext()) {
+	                    x = param(pf, params.next());
+	                    while (params.hasNext()) {
+	                        x = execute(x, param(pf, params.next()));
+	                    }
+	
+	                    Relationship r = new JExpression(value(x));
+	                    
+	                	Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
+	                	
+	                    //XXX: fix context
+	                    pf.sendAnswer(createResult(pf, pf.getOP(), sNode, r, RESULT));
+	                }
+	            } catch (IOException e) {
+	                pf.sendException(e);
+	                return;
+	            } finally {
+	                params.close();
+	            }
+        	}
             pf.done();
         }
 

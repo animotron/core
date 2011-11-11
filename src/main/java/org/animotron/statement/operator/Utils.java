@@ -132,6 +132,10 @@ public class Utils {
 		return res;
 	}
 
+	public static boolean results(PFlow pf) {
+		return results(pf.getOPNode(), pf, true);
+	}
+
 	public static boolean results(Node node, PFlow pf) {
 		return results(node, pf, true);
 	}
@@ -154,7 +158,6 @@ public class Utils {
 				c = AnimoGraph.getDb().getRelationshipById(id);
 				
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 			if (c == null)
 				pf.sendAnswer(r);

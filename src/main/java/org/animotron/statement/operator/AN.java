@@ -57,7 +57,7 @@ public class AN extends Operator implements Reference, Evaluable {
 			Relationship op = pf.getOP();
 			final Node node = op.getEndNode();
 
-			//System.out.println("AN "+op+" "+reference(op)+" ");
+			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
 			if (!Utils.results(node, pf, false)) {
 
