@@ -141,9 +141,7 @@ public abstract class Manipulator {
             					addedContexts += pf.addContextPoint(context[1]);
             				
             			if (msg.isType(REF)) {
-            				System.out.println(msg);
                             s = Statements.name((String) THE._.reference(msg));
-
                         }
 
                         if (s instanceof Evaluable) {
