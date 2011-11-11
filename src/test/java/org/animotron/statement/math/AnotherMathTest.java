@@ -84,7 +84,7 @@ public class AnotherMathTest extends ATest {
         __(
             new AnimoExpression("the a (have x 1) (have y 2) (have z 3)")
         );
-        Expression e = new AnimoExpression("+ (get x a) (get y b) (get z a)");
+        Expression e = new AnimoExpression("+ (get x a) (get y a) (get z a)");
     	assertStringResult(e, "6");
 	}
 
