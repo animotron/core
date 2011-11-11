@@ -62,7 +62,7 @@ public abstract class UnaryMathOperator extends AbstractMathOperator implements 
                     Number x = execute(param(pf, params.next()));
                     Relationship r = new JExpression(value(x));
                     
-                    Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
+                    Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getEndNode();
                     
                     pf.sendAnswer(createResult(pf, pf.getLastContext(), sNode, r, RESULT)); //XXX: fix context
                 }

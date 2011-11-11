@@ -75,7 +75,7 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 
 	                    Relationship r = new JExpression(value(x));
 	                    
-	                	Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
+	                	Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getEndNode();
 	                	
 	                    //XXX: fix context
 	                    pf.sendAnswer(createResult(pf, pf.getOP(), sNode, r, RESULT));
