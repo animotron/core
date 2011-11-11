@@ -18,17 +18,20 @@
  */
 package org.animotron.statement.math;
 
-import org.animotron.statement.instruction.Instruction;
-
 /**
- * Math instruction 'SUM'. (aka summation)
+ * Math instruction 'MULT'. (aka multiplication)
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class Sum extends Instruction {
+public class MUL extends BibaryMathOperator {
 	
-	public static final Sum _ = new Sum();
+	public static final MUL _ = new MUL();
 	
-	private Sum() { super("sum"); }
-	
+	private MUL() { super("*"); }
+
+    @Override
+    protected double execute(double a, double b) {
+        return a * b;
+    }
+
 }

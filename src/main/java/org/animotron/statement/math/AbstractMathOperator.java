@@ -16,24 +16,27 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
+package org.animotron.statement.math;
 
-import org.junit.Test;
+import org.animotron.graph.serializer.StringResultSerializer;
+import org.animotron.manipulator.PFlow;
+import org.animotron.statement.instruction.Instruction;
+import org.animotron.statement.operator.Evaluable;
+import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class YetAnotherParserTest extends ATest {
+public abstract class AbstractMathOperator extends Instruction implements Evaluable{
 
-    @Test
-	public void test_00() throws Exception {
-        testAnimo("the a + 1 2.");
-	}
+	protected AbstractMathOperator(String name) { super(name); }
 
-    @Test
-	public void test_01() throws Exception {
-        testAnimo("the a + \"1\" 2.");
-	}
+    protected double param (PFlow pf, Relationship r) throws IOException {
+        return Double.valueOf(StringResultSerializer._.serialize(pf, r));
+    };
 
 }

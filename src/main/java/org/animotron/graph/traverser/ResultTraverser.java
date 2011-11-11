@@ -21,7 +21,6 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Result;
-import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;

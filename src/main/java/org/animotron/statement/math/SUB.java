@@ -18,17 +18,20 @@
  */
 package org.animotron.statement.math;
 
-import org.animotron.statement.instruction.Instruction;
-
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class Mult extends Instruction {
-	
-	public static final Mult _ = new Mult();
-	
-	private Mult() { super("mult"); }
-	
+public class SUB extends BibaryMathOperator {
+
+	public static final SUB _ = new SUB();
+
+	private SUB() { super("-"); }
+
+    @Override
+    protected double execute(double a, double b) {
+        return a - b;
+    }
+
 }

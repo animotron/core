@@ -20,8 +20,8 @@ package org.animotron.games;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.math.Mult;
-import org.animotron.statement.math.Sum;
+import org.animotron.statement.math.MUL;
+import org.animotron.statement.math.SUM;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.PTRN;
 import org.animotron.statement.operator.Q;
@@ -47,9 +47,9 @@ public class Factorial extends ATest {
 					_(PTRN._, "number", 
 						_(Q._, "N0", text("Q:N1")),
 						_(Q._, "N0>", 
-							_(Mult._, 
+							_(MUL._,
 								_(GET._, "number"),
-								_(AN._, "factorial", _(Sum._, _(GET._, "number"), _(Q._, "N-1")))
+								_(AN._, "factorial", _(SUM._, _(GET._, "number"), _(Q._, "N-1")))
 							)
 						) 
 					)

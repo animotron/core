@@ -19,9 +19,7 @@
 package org.animotron.graph.traverser;
 
 import javolution.util.FastList;
-import org.animotron.Properties;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -30,10 +28,8 @@ import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -131,64 +127,6 @@ public class AnimoTraverser {
                node.hasRelationship(i, OUTGOING)) n++;
         }
         return n;
-    }
-
-    protected class It implements Iterator <Object>, Iterable<Object> {
-
-        private Iterator<String> p;
-        private Iterator<Relationship> r;
-        private IndexHits<Relationship> q;
-
-        Object current = null;
-
-        public It (Relationship r) {
-            this(r.getEndNode());
-        }
-
-        public It (Node n) {
-            p = n.getPropertyKeys().iterator();
-            q = Order.queryDown(n);
-            r = q.iterator();
-            next();
-        }
-
-        @Override
-        public Iterator<Object> iterator() {
-            return this;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return current != null;
-        }
-
-        @Override
-        public Object next() {
-            Object next = current;
-            current = step();
-            return next;
-        }
-
-        private Object step() {
-            if (p.hasNext()) {
-                String o = p.next();
-                if (Properties.VALUE.name().equals(o) || Properties.NAME.name().equals(o)) {
-                    return step();
-                } else {
-                    return o;
-                }
-            } else if (r.hasNext()) {
-                return r.next();
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public void remove() {
-            q.close();
-        }
-
     }
 
 }

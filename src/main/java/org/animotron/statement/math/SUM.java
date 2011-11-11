@@ -16,24 +16,22 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
-
-import org.junit.Test;
+package org.animotron.statement.math;
 
 /**
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- *
+ * Math instruction 'SUM'. (aka summation)
+ * 
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class YetAnotherParserTest extends ATest {
+public class SUM extends BibaryMathOperator {
+	
+	public static final SUM _ = new SUM();
+	
+	private SUM() { super("+"); }
 
-    @Test
-	public void test_00() throws Exception {
-        testAnimo("the a + 1 2.");
-	}
-
-    @Test
-	public void test_01() throws Exception {
-        testAnimo("the a + \"1\" 2.");
-	}
+    @Override
+    protected double execute(double a, double b) {
+        return a + b;
+    }
 
 }
