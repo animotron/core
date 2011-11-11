@@ -49,7 +49,7 @@ public abstract class UnaryMathOperator extends AbstractMathOperator implements 
         return question;
     }
 
-    protected abstract double execute (double x);
+    protected abstract Number execute (Number x);
 
     private OnQuestion question = new OnQuestion() {
 
@@ -57,8 +57,9 @@ public abstract class UnaryMathOperator extends AbstractMathOperator implements 
         public void onMessage(final PFlow pf) {
             IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
             try {
+                params.next();
                 while (params.hasNext()) {
-                    double x = execute(param(pf, params.next()));
+                    Number x = execute(param(pf, params.next()));
                     Relationship r = new JExpression(value(x));
                     
                     Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();

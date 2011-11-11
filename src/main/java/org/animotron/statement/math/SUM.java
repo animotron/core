@@ -30,8 +30,10 @@ public class SUM extends BibaryMathOperator {
 	private SUM() { super("+"); }
 
     @Override
-    protected double execute(double a, double b) {
-        return a + b;
+    protected Number execute(Number a, Number b) {
+        return (a instanceof Long && b instanceof Long)
+                ? a.longValue() + b.longValue()
+                : a.doubleValue() + b.doubleValue();
     }
 
 }

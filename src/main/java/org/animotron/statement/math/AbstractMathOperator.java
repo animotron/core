@@ -22,6 +22,7 @@ import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -35,8 +36,8 @@ public abstract class AbstractMathOperator extends Instruction implements Evalua
 
 	protected AbstractMathOperator(String name) { super(name); }
 
-    protected double param (PFlow pf, Relationship r) throws IOException {
-        return Double.valueOf(StringResultSerializer._.serialize(pf, r));
+    protected Number param (PFlow pf, Relationship r) throws IOException {
+        return (Number) AbstractValue.value(StringResultSerializer._.serialize(pf, r));
     };
 
 }

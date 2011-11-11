@@ -49,7 +49,7 @@ public abstract class BibaryMathOperator extends AbstractMathOperator implements
         return question;
     }
 
-    protected abstract double execute (double a, double b);
+    protected abstract Number execute (Number a, Number b);
 
     private OnQuestion question = new OnQuestion() {
 
@@ -57,7 +57,8 @@ public abstract class BibaryMathOperator extends AbstractMathOperator implements
         public void onMessage(final PFlow pf) {
             IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
             try {
-                double x;
+                Number x;
+                params.next();
                 if (params.hasNext()) {
                     x = param(pf, params.next());
                     while (params.hasNext()) {
