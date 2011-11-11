@@ -164,14 +164,18 @@ public abstract class ATest {
     }
 
     protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
+    	assertStringResult(op, expected, true);
+    }
+
+    protected void assertStringResult(Relationship op, String expected, boolean messagers) throws IOException, InterruptedException {
         assertNotNull(op);
 
-        System.out.println("VALUE result serializer...");
+        if (messagers) System.out.println("VALUE result serializer...");
         String result = StringResultSerializer._.serialize(new PFlow(Evaluator._), op);
-        System.out.println(result);
+        if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
 
-        System.out.println();
+        if (messagers) System.out.println();
     }
 
     protected void assertBinary(Relationship op, String expected) throws IOException {
