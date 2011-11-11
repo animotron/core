@@ -98,6 +98,18 @@ public class AnotherMathTest extends ATest {
     	assertStringResult(e, "6");
 	}
 
+    @Test
+	public void test_10() throws Exception {
+        Expression e = new AnimoExpression("+ \"1\" \"2\" \"3\" \"4\"");
+    	assertStringResult(e, "10");
+	}
+
+    @Test
+	public void test_11() throws Exception {
+        Expression e = new AnimoExpression("+ 1 \"2\" \"3.0\" 4");
+    	assertStringResult(e, "10.0");
+	}
+
 
 
 }
