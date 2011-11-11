@@ -41,8 +41,6 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import scala.util.control.Exception.Finally;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -130,7 +128,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship[]> rSet = get(pf, context[0], theNode);
+						final Set<Relationship[]> rSet = get(pf, context[0], theNode, null);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[1]);
@@ -150,8 +148,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					super.onMessage(pf);
 				} else {
 					
+					Set<Relationship> visitedREFs = new FastSet<Relationship>();
+
 					for (Relationship st : pf.getPFlowPath()) {
-						Set<Relationship[]> rSet = get(pf, st, theNode);
+						Set<Relationship[]> rSet = get(pf, st, theNode, visitedREFs);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), r[0]);
@@ -165,14 +165,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	};
 	
-	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode) {
+	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode, Set<Relationship> visitedREFs) {
 		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
 		
-		return get(pf, refs, theNode); 
+		return get(pf, refs, theNode, visitedREFs); 
 	}
 
-	public Set<Relationship[]> get(final PFlow pf, Node ref, final Node theNode) {
+	public Set<Relationship[]> get(final PFlow pf, Node ref, final Node theNode, Set<Relationship> visitedREFs) {
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
 		Relationship have = searchForHAVE(pf, ref, theNode);
@@ -184,16 +184,16 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Set<Relationship> newREFs = new FastSet<Relationship>();
 		getOutgoingReferences(pf, ref, newREFs, null);
 		
-		return get(pf, newREFs, theNode); 
+		return get(pf, newREFs, theNode, visitedREFs); 
 	}
 
-	public Set<Relationship[]> get(PFlow pf, Set<Relationship> REFs, final Node theNode) {
+	public Set<Relationship[]> get(PFlow pf, Set<Relationship> REFs, final Node theNode, Set<Relationship> visitedREFs) {
 		//System.out.println("GET context = "+ref);
+		
+		if (visitedREFs == null) visitedREFs = new FastSet<Relationship>();
 		
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
-		Set<Relationship> visitedREFs = new FastSet<Relationship>();
-
 		Set<Relationship> nextREFs = new FastSet<Relationship>();
 		nextREFs.addAll(REFs);
 
@@ -206,7 +206,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				//System.out.println("checking "+n);
+				System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});

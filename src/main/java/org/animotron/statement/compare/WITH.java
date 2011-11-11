@@ -60,7 +60,7 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
 
-		Set<Relationship[]> haveSet = GET._.get(pf, ref, theNode);
+		Set<Relationship[]> haveSet = GET._.get(pf, ref, theNode, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<Relationship> actual = new FastList<Relationship>();
