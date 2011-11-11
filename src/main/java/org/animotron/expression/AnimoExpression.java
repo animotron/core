@@ -190,7 +190,7 @@ public class AnimoExpression extends AbstractExpression {
                     level++;
                 } else if (s instanceof Instruction) {
                     builder.start(AN._);
-                    builder._(s, token);
+                    builder._(REF._, token);
                     level++;
                 } else if (s == null) {
                     Object o = AbstractValue.value(token);
