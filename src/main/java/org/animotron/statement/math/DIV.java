@@ -31,11 +31,12 @@ public class DIV extends BinaryMathOperator {
 
     @Override
     protected Number execute(Number a, Number b) {
-        if (a instanceof Long && b instanceof Long) {
-            return a.longValue() / b.longValue();
-        } else {
-            return a.doubleValue() / b.doubleValue();
-        }
+        return a.doubleValue() / b.doubleValue();
+    }
+
+    @Override
+    protected Number execute(Number a) {
+        return execute((long) 1, a);
     }
 
 }

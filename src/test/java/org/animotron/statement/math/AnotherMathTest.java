@@ -70,7 +70,7 @@ public class AnotherMathTest extends ATest {
     @Test
 	public void test_06() throws Exception {
         Expression e = new AnimoExpression("/ 4 2");
-    	assertStringResult(e, "2");
+    	assertStringResult(e, "2.0");
 	}
 
     @Test
@@ -110,6 +110,28 @@ public class AnotherMathTest extends ATest {
     	assertStringResult(e, "10.0");
 	}
 
+    @Test
+	public void test_12() throws Exception {
+        Expression e = new AnimoExpression("+ -1");
+    	assertStringResult(e, "-1");
+	}
 
+    @Test
+	public void test_13() throws Exception {
+        Expression e = new AnimoExpression("- -1");
+    	assertStringResult(e, "1");
+	}
+
+    @Test
+	public void test_14() throws Exception {
+        Expression e = new AnimoExpression("/ 2");
+    	assertStringResult(e, "0.5");
+	}
+
+    @Test
+	public void test_15() throws Exception {
+        Expression e = new AnimoExpression("/  5 2");
+    	assertStringResult(e, "2.5");
+	}
 
 }

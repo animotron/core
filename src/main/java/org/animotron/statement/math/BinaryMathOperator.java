@@ -51,6 +51,7 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
     }
 
     protected abstract Number execute (Number a, Number b);
+    protected abstract Number execute (Number a);
 
     private OnQuestion question = new OnQuestion() {
 
@@ -64,10 +65,14 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 	                params.next();
 	                if (params.hasNext()) {
 	                    x = param(pf, params.next());
-	                    while (params.hasNext()) {
-	                        x = execute(x, param(pf, params.next()));
-	                    }
-	
+                        if (params.hasNext()) {
+                            do {
+                                x = execute(x, param(pf, params.next()));
+                            } while (params.hasNext());
+                        } else {
+                          x = execute(x);
+                        }
+
 	                    Relationship r = new JExpression(value(x));
 	                    
 	                	Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
