@@ -40,7 +40,60 @@ public class MathTest extends ATest {
     	assertStringResult(e, "10");
 	}
 
+    @Test
+	public void test_01() throws Exception {
+        Expression e = new JExpression(
+            _(MUL._, value(2), value(2))
+        );
+    	assertStringResult(e, "4");
+	}
 
+    @Test
+	public void test_02() throws Exception {
+        Expression e = new JExpression(
+            _(MUL._, value(2), value(2.0))
+        );
+    	assertStringResult(e, "4.0");
+	}
 
+    @Test
+	public void test_03() throws Exception {
+        Expression e = new JExpression(
+            _(MUL._, value(2.0), value(2))
+        );
+    	assertStringResult(e, "4.0");
+	}
+
+    @Test
+	public void test_04() throws Exception {
+        Expression e = new JExpression(
+            _(MUL._, value(2.0), value(2.0))
+        );
+    	assertStringResult(e, "4.0");
+	}
+
+    @Test
+	public void test_05() throws Exception {
+        Expression e = new JExpression(
+            _(DIV._, value(4.0), value(2.0))
+        );
+    	assertStringResult(e, "2.0");
+	}
+
+    @Test
+	public void test_06() throws Exception {
+        Expression e = new JExpression(
+            _(DIV._, value(4), value(2))
+        );
+    	assertStringResult(e, "2");
+	}
+
+    @Test
+	public void test_07() throws Exception {
+        Expression e = new JExpression(
+            _(SUB._, value(1), value(2), value(3.0), value(4))
+        );
+    	assertStringResult(e, "-8.0");
+	}
 
 }
