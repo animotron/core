@@ -68,7 +68,8 @@ public abstract class BibaryMathOperator extends AbstractMathOperator implements
                     
                     Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
                     
-                    pf.sendAnswer(createResult(pf, pf.getLastContext(), sNode, r, RESULT)); //XXX: fix context
+                    //XXX: fix context
+                    pf.sendAnswer(createResult(pf, pf.getLastContext(), sNode, r, RESULT));
                 }
             } catch (IOException e) {
                 pf.sendException(e);
