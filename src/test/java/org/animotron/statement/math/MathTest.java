@@ -98,7 +98,7 @@ public class MathTest extends ATest {
         Expression e = new JExpression(
             _(DIV._, value(4), value(2))
         );
-    	assertStringResult(e, "2");
+    	assertStringResult(e, "2.0");
 	}
 
     @Test

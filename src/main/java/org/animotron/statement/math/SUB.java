@@ -38,4 +38,9 @@ public class SUB extends BinaryMathOperator {
         }
     }
 
+    @Override
+    protected Number execute(Number a) {
+        return MUL._.execute((long) -1, a);
+    }
+
 }

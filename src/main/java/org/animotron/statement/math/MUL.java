@@ -38,4 +38,9 @@ public class MUL extends BinaryMathOperator {
         }
     }
 
+    @Override
+    protected Number execute(Number a) {
+        return a;
+    }
+
 }
