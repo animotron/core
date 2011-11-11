@@ -18,10 +18,7 @@
  */
 package org.animotron.statement.math;
 
-import org.animotron.Properties;
 import org.animotron.expression.JExpression;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -63,19 +60,10 @@ public abstract class UnaryMathOperator extends AbstractMathOperator implements 
                 while (params.hasNext()) {
                     double x = execute(param(pf, params.next()));
                     Relationship r = new JExpression(value(x));
-                    final Node rNode = r.getEndNode();
-                    final long rID = r.getId();
-                    r = AnimoGraph.execute(new GraphOperation<Relationship>() {
-                        @Override
-                        public Relationship execute() {
-                            Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
-                            Relationship res = sNode.createRelationshipTo(rNode, RESULT);
-                            Properties.RID.set(res, rID);
-                            Properties.CID.set(res, pf.getLastContext().getId());
-                            return res;
-                        }
-                    });
-                    pf.sendAnswer(r);
+                    
+                    Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
+                    
+                    pf.sendAnswer(createResult(pf, pf.getLastContext(), sNode, r, RESULT)); //XXX: fix context
                 }
             } catch (IOException e) {
                 pf.sendException(e);
