@@ -44,6 +44,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
 
+    private Object[] root;
+    private List<Object[]> list;
     private Stack<Object[]> stack;
     private final static String INDENT = "    ";
 
@@ -58,6 +60,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     @Override
     public void startGraph() {
         stack = new Stack<Object[]>();
+        list = new LinkedList<Object[]>();
     }
 
     @Override
@@ -70,8 +73,6 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         stack.push(item);
     }
 
-    private Object[] root;
-
     @Override
     public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         root = stack.pop();
@@ -79,14 +80,18 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         //if (statement instanceof Prefix) size--;
         if (!stack.empty()) {
             if (stack.peek()[0] instanceof Prefix) size--;
+        } else {
+            list.add(root);
         }
         root[5] = !(statement instanceof REF || statement instanceof AN && pos == 0) && ((Boolean)root[5] || size > 1) || (level == 1 && statement instanceof THE);
     }
 
     @Override
     public void endGraph() throws IOException {
-        write(root, 0);
-        write("\n");
+        for (Object[] o : list) {
+            write(o, 0);
+            write("\n");
+        }
     }
 
     Statement ps = null;
