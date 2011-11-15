@@ -151,6 +151,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					Set<Relationship> visitedREFs = new FastSet<Relationship>();
 
 					for (Relationship st : pf.getPFlowPath()) {
+						System.out.println("CHECK PFLOW "+st);
 						Set<Relationship[]> rSet = get(pf, st, theNode, visitedREFs);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
@@ -219,15 +220,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			Set<Relationship> newREFs = new FastSet<Relationship>();
 
 			for (Relationship n : nextREFs) {
-				//System.out.println(""+n);
-				//System.out.println("getStartNode OUTGOING");
+				System.out.println(""+n);
+				System.out.println("getStartNode OUTGOING");
 				if (first || !REFs.contains(n)) {
 					IndexHits<Relationship> it = Order.queryDown(n.getStartNode());
 					try {
 						for (Relationship r : it) {
 							if (r.equals(n)) continue;
-							
-							//System.out.println(r);
+							System.out.println(r);
 							
 							Statement st = Statements.relationshipType(r);
 							if (st instanceof AN) {
@@ -256,7 +256,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				}
 				first = false;
 
-				//System.out.println("getEndNode OUTGOING");
+				System.out.println("getEndNode OUTGOING");
 				getOutgoingReferences(pf, n.getEndNode(), newREFs, visitedREFs);
 			}
 
@@ -271,7 +271,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		IndexHits<Relationship> it = Order.queryDown(node);
 		try {
 			for (Relationship r : it) {
-				//System.out.println(r);
+				System.out.println(r);
 	
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {

@@ -95,9 +95,30 @@ public class Utils {
 			System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
 			PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
 			for (Relationship[] e : in) {
-				list.add(Utils.relax(e[0]).getEndNode());
-				System.out.println("get from Evaluator "+r);
+				PFlow _pf_ = new PFlow(pf);
+				for (int i = 1; i < e.length; i++)
+					if (e[i] != null) _pf_.addContextPoint(e[i]);
+				
+				Relationship have = Utils.relax(e[0]);
+				
+				IndexHits<Relationship> hits = Order.queryDown(have.getEndNode());
+				for (Relationship rr : hits) {
+					if (rr.isType(REF) || rr.isType(org.animotron.statement.operator.REF._)) continue;
+					
+					Statement _s = Statements.relationshipType(r);
+					if (_s instanceof Query || _s instanceof Evaluable) {
+						PipedInput<Relationship[]> _in = Evaluator._.execute(new PFlow(_pf_), rr);
+						for (Relationship[] ee : _in) {
+							list.add(Utils.relax(ee[0]).getEndNode());
+						}
+						
+					} else {
+						list.add(rr.getEndNode());
+					}
+					
+				}
 			}
+			System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
 			list.add(r.getEndNode());
 		}

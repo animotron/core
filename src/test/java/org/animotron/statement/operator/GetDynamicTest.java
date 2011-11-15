@@ -54,7 +54,28 @@ public class GetDynamicTest extends ATest {
         assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\").");
 	}
 
-    @Test
+	@Test
+	public void getOnManyANbyIS() throws Exception {
+
+        JExpression.__(
+            new JExpression(
+                _(THE._, "ZZ", _(IS._, "Z"))
+            ),
+            new JExpression(
+                _(THE._, "A", _(HAVE._, "Z", text("A")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(HAVE._, "ZZ", text("B")))
+            )
+        );
+
+    	JExpression d = new JExpression(
+			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
+		);
+        assertAnimoResult(d, "the d (have Z \"A\") (have ZZ \"B\").");
+	}
+
+	@Test
     public void get_via_is() throws Exception {
 
         JExpression.__(
