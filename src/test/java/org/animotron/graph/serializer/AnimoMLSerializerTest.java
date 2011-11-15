@@ -63,7 +63,7 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
 	public void test_04() throws Exception {
-    	test("the a \\ \"b\"", "the a \\b.");
+    	test("the a \\ \"b\"", "the a \\ \"b\".");
 	}
 
     @Test

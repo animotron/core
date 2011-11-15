@@ -80,7 +80,7 @@ public class ParserTest extends ATest {
 
     @Test
 	public void test_10() throws Exception {
-    	testAnimo("the a \\ \"b\"", "the a \\b.");
+    	testAnimo("the a \\ \"b\"", "the a \\ \"b\".");
 	}
 
     @Test

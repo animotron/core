@@ -164,11 +164,7 @@ public class AnimoExpression extends AbstractExpression {
 
     private void token(String token, boolean text) throws AnimoException, IOException {
         if (text) {
-//            if (op instanceof Prefix && !(op instanceof NS) && !link) {
-//                builder._(QNAME._, token);
-//            } else {
-                builder._(token);
-//            }
+            builder._(token);
         } else {
             if (prefix) {
                 builder._(QNAME._, token);
