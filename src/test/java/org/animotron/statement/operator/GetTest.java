@@ -375,4 +375,15 @@ public class GetTest extends ATest {
     	assertAnimoResult(e, "have x 1. have x 2. have x 3.");
 	}
 
+    @Test
+	public void test_03() throws Exception {
+        __(
+            new AnimoExpression("the a have x 1"),
+            new AnimoExpression("the b have x 2"),
+            new AnimoExpression("the c have x 3")
+        );
+        Expression e = new AnimoExpression("get x a,b,c");
+    	assertAnimoResult(e, "have x 1. have x 2. have x 3.");
+	}
+
 }
