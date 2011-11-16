@@ -19,6 +19,7 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
 import org.junit.Test;
 
 /**
@@ -38,7 +39,7 @@ public class DocumentTest extends ATest {
 		testAnimo("the owner have name \"owner\".");
 
 		testAnimo("the document (have date) (have number) (have owner).");
-		
+
 		testAnimo("the doc3 (is document) (have date \"2011-11-01\") (have number \"3\") (have owner user1).");
 		testAnimo("the doc5 (is document) (have date \"2011-11-02\") (have number \"5\") (have owner user1).");
 		testAnimo("the doc7 (is document) (have date \"2011-11-03\") (have number \"7\") (have owner user2).");
@@ -48,13 +49,14 @@ public class DocumentTest extends ATest {
 					"(have row) " +
 					"(ic html " +
 						"\\table " +
-							"(\\tr each (get column) (\\th get name) ) " +
-							"(each (get row) (\\tr each (get column) (\\td get name) )" +
+							"(\\tr each (get column) (\\th get name)) " +
+							"(each (get row) (\\tr each (get column) (\\td get name)))" +
 					").");
 		
-		testAnimo("the journal (is table) (have column (an date) (an number)) (have row all document).");
-		
-		testAnimoResult("get html an journal", 
+		testAnimo("the journal (is table) (have column (date) (number)) (have row all document).");
+
+		assertXMLResult(
+            new AnimoExpression("get html journal"),
 			"<table>" +
 				"<tr>" +
 					"<th>date</th>" +
@@ -73,5 +75,6 @@ public class DocumentTest extends ATest {
 					"<td>7</td>" +
 				"</tr>" +
 			"</table>");
+
 	}
 }
