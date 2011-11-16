@@ -24,25 +24,25 @@ import java.io.IOException;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * 
  */
-public class PipedOutput implements Cloneable {
+public class PipedOutput<T> implements Cloneable {
 
-	private PipedInput connection;
+	private PipedInput<T> connection;
 
 	public PipedOutput() {
 		try {
-			connect(new PipedInput());
+			connect(new PipedInput<T>());
 		} catch (IOException e) {}
 	}
 
-	public PipedOutput(PipedInput inStream) throws IOException {
+	public PipedOutput(PipedInput<T> inStream) throws IOException {
 		connect(inStream);
 	}
 	
-	public PipedInput getInputStream() {
+	public PipedInput<T> getInputStream() {
 		return connection;
 	}
 
-	protected synchronized void connect(PipedInput inStream) throws IOException {
+	protected synchronized void connect(PipedInput<T> inStream) throws IOException {
 		if (inStream == null) {
 			throw new NullPointerException();
 		
@@ -58,7 +58,7 @@ public class PipedOutput implements Cloneable {
 		inStream.connected = true;
 	}
 	
-    public void write(Object obj) throws IOException {
+    public void write(T obj) throws IOException {
     	//System.out.println("Write to pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
         
     	if (connection == null) throw new IOException("Pipe not connected");

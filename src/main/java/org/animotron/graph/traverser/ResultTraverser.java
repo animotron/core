@@ -127,7 +127,7 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
     	PFlow pflow = new PFlow(pf);
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-    	IndexHits<Relationship> i = Result.get(pflow.getPathHash(), r.getEndNode());
+    	IndexHits<Relationship[]> i = Result.get(pflow.getPathHash(), r.getEndNode());
     	boolean found;
     	try {
 	        found = iterate(handler, pflow, i, level, isOne);

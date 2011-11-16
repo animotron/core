@@ -154,6 +154,16 @@ public class PFlow {
 		this.op = null;
 	}
 
+	public void sendAnswer(Relationship[] r) {
+		if (parent == null) {
+			System.out.println("WORNG - no parent");
+			throw new IllegalArgumentException("NULL parent @pflow"); 
+		} else {
+			parent.answer.publish(r);
+		}
+		
+	}
+
 	public void sendAnswer(Relationship r, Relationship ... context) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");

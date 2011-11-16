@@ -23,10 +23,10 @@ import java.util.List;
 
 import javolution.util.FastList;
 
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -38,7 +38,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
-import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -59,7 +58,7 @@ public class Utils {
 
 
 	public static List<Node> getByREF(PFlow pf, final Node node) {
-		System.out.println(node);
+		//System.out.println(node);
 		try {
 			try {
 				Node theNode = THE._((String)THE._.reference(node));
@@ -93,7 +92,7 @@ public class Utils {
 		
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
-			System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
 			PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
 			for (Relationship[] e : in) {
 				PFlow _pf_ = new PFlow(pf);
@@ -108,25 +107,12 @@ public class Utils {
 					) {
 					list.add(result.getEndNode());
 				} else {
-					IndexHits<Relationship> hits = Order.queryDown(result.getEndNode());
-					for (Relationship rr : hits) {
-						if (rr.isType(REF) || rr.isType(org.animotron.statement.operator.REF._)) continue;
-						
-						Statement _s = Statements.relationshipType(r);
-						if (_s instanceof Query || _s instanceof Evaluable) {
-							PipedInput<Relationship[]> _in = Evaluator._.execute(new PFlow(_pf_), rr);
-							for (Relationship[] ee : _in) {
-								list.add(Utils.relax(ee[0]).getEndNode());
-							}
-							
-						} else {
-							list.add(rr.getEndNode());
-						}
-						
+					for (Relationship[] rr : eval(_pf_, result)) {
+						list.add(rr[0].getEndNode());
 					}
 				}
 			}
-			System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
+			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
 			list.add(r.getEndNode());
 		}
@@ -134,6 +120,69 @@ public class Utils {
 		return list;
 	}
 	
+	public static List<Relationship> getTheRelationships(PFlow pf, Relationship r) {
+		List<Relationship> list = new FastList<Relationship>();
+		
+		try {
+		
+			Statement s = Statements.relationshipType(r);
+			if (s instanceof Query || s instanceof Evaluable) {
+				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+				PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
+				for (Relationship[] e : in) {
+					PFlow _pf_ = new PFlow(pf);
+					for (int i = 1; i < e.length; i++)
+						if (e[i] != null) _pf_.addContextPoint(e[i]);
+					
+					Relationship result = Utils.relax(e[0]);
+					
+					if (result.isType(REF) 
+							|| result.isType(org.animotron.statement.operator.REF._)
+							|| result.isType(THE._)
+						) {
+						list.add(result);
+					} else {
+						for (Relationship[] rr : eval(_pf_, result)) {
+							list.add(rr[0]);
+						}
+					}
+				}
+				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
+			} else {
+				list.add(r);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return list;
+	}
+	
+	public static PipedInput<Relationship[]> eval(PFlow pf, Relationship op) throws IOException {
+        final PipedOutput<Relationship[]> out = new PipedOutput<Relationship[]>();
+        PipedInput<Relationship[]> in = out.getInputStream();
+
+		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
+		for (Relationship rr : hits) {
+			if (rr.isType(REF) || rr.isType(org.animotron.statement.operator.REF._)) continue;
+			
+			Statement _s = Statements.relationshipType(rr);
+			if (_s instanceof Query || _s instanceof Evaluable) {
+				PipedInput<Relationship[]> _in = Evaluator._.execute(new PFlow(pf), rr);
+				for (Relationship[] ee : _in) {
+					ee[0] = Utils.relax(ee[0]);
+					out.write(ee);
+				}
+				
+			} else {
+				out.write(new Relationship[] {rr});
+			}
+		}
+		out.close();
+		
+		return in;
+	}
+
 	public static Node getSingleREF(final Node node) {
 		try {
 			try {
@@ -179,19 +228,11 @@ public class Utils {
 			hash = pf.getOpHash();
 		
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-		for (Relationship r : Result.get(hash, node)) {
-			Relationship c = null;
-			try {
-				long id = (Long)r.getProperty(CID.name());
-				
-				c = AnimoGraph.getDb().getRelationshipById(id);
-				
-			} catch (Exception e) {
-			}
-			if (c == null)
-				pf.sendAnswer(r, pf.getOP());
+		for (Relationship[] r : Result.get(hash, node)) {
+			if (r.length == 1)
+				pf.sendAnswer(r[0], pf.getOP());
 			else
-				pf.sendAnswer(r, c);
+				pf.sendAnswer(r);
 			
 			haveSome = true;
 		}

@@ -27,12 +27,16 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.AbstractValue;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.LinkedList;
+import java.util.Set;
+
+import javolution.util.FastSet;
 
 /**
  * Operation 'EACH'.
@@ -55,16 +59,27 @@ public class EACH extends Combinator {
 
 		@Override
 		public void onMessage(final PFlow pf) {
-			LinkedList<Relationship> sets = new LinkedList<Relationship>();
-
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
+				Set<Relationship> set = new FastSet<Relationship>();
 				while (elements.hasNext()) {
-					sets.add(elements.next());
+					Relationship element = elements.next();
+					if (elements.hasNext())
+						for (Relationship r : Utils.getTheRelationships(pf, element)) {
+							set.add(r);
+						}
+					else {
+						for (Relationship r : set) {
+							Relationship[] rr = new Relationship[] {element, r};
+							pf.sendAnswer(rr);
+						}
+					}
 				}
 
-				process(pf, sets, 1, null);
+				//process(pf, sets, 1, null);
 
+			} catch (Exception e) {
+				e.printStackTrace();
 			} finally {
 				elements.close();
 			}
@@ -74,7 +89,7 @@ public class EACH extends Combinator {
 		}
 	};
 
-	private void process(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
+	private void processByBuildSubgraph(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
 		if (pos > sets.size()) {
 
             Relationship r = res[res.length-1];
@@ -119,14 +134,14 @@ public class EACH extends Combinator {
 			try {
 				for (Relationship r : subelements) {
 					rs[pos-1] = r;
-					process(pf, sets, pos+1, rs);
+					processByBuildSubgraph(pf, sets, pos+1, rs);
 				}
 			} finally {
 				subelements.close();
 			}
 		} else {
 			rs[pos-1] = rship;
-			process(pf, sets, pos+1, rs);
+			processByBuildSubgraph(pf, sets, pos+1, rs);
 		}
 	}
 }
