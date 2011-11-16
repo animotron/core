@@ -70,10 +70,10 @@ public class YetAnotherMathTest extends ATest {
     @Test
 	public void test_03() throws Exception {
         __(
-            new AnimoExpression("the a is z have x 1"),
-            new AnimoExpression("the b is z have x 2"),
-            new AnimoExpression("the c is z have x 3"),
-            new AnimoExpression("the d is z have x 4")
+            new AnimoExpression("the a (is z) (have x 1)"),
+            new AnimoExpression("the b (is z) (have x 2)"),
+            new AnimoExpression("the c (is z) (have x 3)"),
+            new AnimoExpression("the d (is z) (have x 4)")
         );
         Expression e = new AnimoExpression("+ get x all z");
     	assertStringResult(e, "10");
