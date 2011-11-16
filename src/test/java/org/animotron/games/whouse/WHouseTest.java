@@ -19,6 +19,8 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -30,6 +32,7 @@ import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
 
@@ -41,7 +44,7 @@ public class WHouseTest extends ATest {
 
 	@Test
     @Ignore
-	public void test() throws Exception {
+	public void test_00() throws Exception {
 		
 		//party: person & organization
 		// + receipt or issue
@@ -210,5 +213,20 @@ public class WHouseTest extends ATest {
                 "<row>" +
                 "</table>" +
                 "</form>");
+	}
+
+	@Test
+	@Ignore
+	public void test_01() throws Exception {
+        __(
+            new AnimoExpression("the kilo have number 1000."), //* 1000
+            new AnimoExpression("the UoM."),
+            new AnimoExpression("the gram."),
+            new AnimoExpression("the kg (is kilo, gram)."), //the base unit of mass in the International System of Units
+
+            new AnimoExpression("the measument1 have qty (have number 1000) (have UoM gram).")
+        );
+        Expression e = new AnimoExpression("get qty (measument1) (have UoM kg)."); //???
+    	assertStringResult(e, "have qty (have number 1) (have UoM kg)");
 	}
 }
