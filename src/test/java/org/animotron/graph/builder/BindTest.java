@@ -26,6 +26,7 @@ import org.animotron.expression.JExpression;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
+import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
@@ -35,6 +36,7 @@ import org.animotron.statement.relation.IS;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.neo4j.graphdb.Direction;
 
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
@@ -173,7 +175,7 @@ public class BindTest extends ATest {
         );
         Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
         Expression z = new JExpression(
-            element("z", _(GET._, "e", _(x)), _(y))
+            element("z", _(GET._, "e", _(x)), _(y.getEndNode().getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
         );
         test(z, "\\z (get e have c (any a) (all b)) (\\y (@z \"test\") \"content\").");
 	}
