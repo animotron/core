@@ -52,15 +52,9 @@ public class StAXExpression extends AbstractExpression {
 
     @Override
     public void build() throws Exception {
+        builder.start(THE._);
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
-//and start/end document?
-//            	case XMLStreamConstants.START_DOCUMENT :
-//                    builder.start(THE._);
-//            		break;
-//            	case XMLStreamConstants.END_DOCUMENT :
-//                    builder.end();
-//            		break;
                 case XMLStreamConstants.START_ELEMENT :
                     startElement();
                     break;
@@ -99,6 +93,7 @@ public class StAXExpression extends AbstractExpression {
             }
             reader.next();
         }
+        builder.end();
     }
 
     private void build(Statement s, Object reference) throws AnimoException, IOException {

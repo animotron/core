@@ -23,12 +23,13 @@ import junit.framework.Assert;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.AnimoSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
+import java.util.Iterator;
 
 import static org.animotron.Properties.HASH;
 
@@ -41,10 +42,26 @@ public class XMLTest extends ATest {
 
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
 
+    private String truncate(String s){
+        return s.substring(0, s.length() - 1);
+    }
+
     private void test(String in, String out) throws Exception {
         Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
         assertEquals((byte[]) HASH.get(r), DigestSerializer._.serialize(r));
-        Assert.assertEquals(out, AnimoSerializer._.serialize(r));
+        StringBuilder s = new StringBuilder();
+        Iterator<Relationship> it = r.getEndNode().getRelationships(Direction.OUTGOING).iterator();
+        if (it.hasNext()) {
+            Relationship i = it.next();
+            s.append(truncate(AnimoSerializer._.serialize(i)));
+            while (it.hasNext()) {
+                i = it.next();
+                s.append(" ");
+                s.append(truncate(AnimoSerializer._.serialize(i)));
+            }
+            s.append(".");
+        }
+        Assert.assertEquals(out, s.toString());
     }
 
     @Test
@@ -68,7 +85,6 @@ public class XMLTest extends ATest {
 	}
 
     @Test
-    @Ignore //XXX two roots. combine via "-->" ?
 	public void test_04() throws Exception {
         test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a.");
 	}
