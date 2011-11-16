@@ -346,12 +346,20 @@ public class PFlow {
 
 
 	public int addContextPoint(Relationship r) {
-//		System.out.print("adding "+this+" "+r+" "+r.getType());
+		boolean debug = false;
+		if (debug) System.out.print("adding "+this+" "+r+" "+r.getType());
 //		System.out.println(new IOException().getStackTrace()[1]);
-		if (!path.isEmpty() && !path.get(0).equals(r)) {
+		if (path.isEmpty()) {
+			if (debug) System.out.println(" (added)");
 			path.insertElementAt(r, 0);
 			return 1;
+			
+		} else if (!path.isEmpty() && !path.get(0).equals(r)) {
+			path.insertElementAt(r, 0);
+			if (debug) System.out.println(" (added)");
+			return 1;
 		}
+		if (debug) System.out.println(" (ignored)");
 		return 0;
 	}
 

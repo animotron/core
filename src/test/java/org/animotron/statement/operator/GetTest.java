@@ -361,7 +361,7 @@ public class GetTest extends ATest {
             new AnimoExpression("the b (get x) (get y) (get z)")
         );
         Expression e = new AnimoExpression("b a");
-    	assertStringResult(e, "the b (have x 1) (have y 2) (have z 3).");
+    	assertStringResult(e, "123");
 	}
 
 }

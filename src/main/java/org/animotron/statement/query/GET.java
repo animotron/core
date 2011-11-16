@@ -151,7 +151,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					Set<Relationship> visitedREFs = new FastSet<Relationship>();
 
 					for (Relationship st : pf.getPFlowPath()) {
-						System.out.println("CHECK PFLOW "+st);
+						//System.out.println("CHECK PFLOW "+st);
 						Set<Relationship[]> rSet = get(pf, st, theNode, visitedREFs);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
@@ -207,7 +207,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				System.out.println("checking "+n);
+				//System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode);
 				if (have != null && !pf.isInStack(have)) 
 					set.add(new Relationship[] {n, have});
@@ -220,8 +220,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			Set<Relationship> newREFs = new FastSet<Relationship>();
 
 			for (Relationship n : nextREFs) {
-				System.out.println(""+n);
-				System.out.println("getStartNode OUTGOING");
+				//System.out.println(""+n);
+				//System.out.println("getStartNode OUTGOING");
 				if (first || !REFs.contains(n)) {
 					IndexHits<Relationship> it = Order.queryDown(n.getStartNode());
 					try {
@@ -256,7 +256,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				}
 				first = false;
 
-				System.out.println("getEndNode OUTGOING");
+				//System.out.println("getEndNode OUTGOING");
 				getOutgoingReferences(pf, n.getEndNode(), newREFs, visitedREFs);
 			}
 
@@ -271,13 +271,13 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		IndexHits<Relationship> it = Order.queryDown(node);
 		try {
 			for (Relationship r : it) {
-				System.out.println(r);
+				//System.out.println(r);
 	
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
-					System.out.println(r);
+					//System.out.println(r);
 					Relationship t = AN._.getREF(r);
-					System.out.println(t);
+					//System.out.println(t);
 					if (visitedREFs != null && !visitedREFs.contains(t))
 						newREFs.add(t);
 	
