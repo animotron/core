@@ -21,6 +21,7 @@ package org.animotron.graph.index;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
@@ -53,4 +54,16 @@ public class Result {
         return INDEX.get(NAME, MessageDigester.byteArrayToHex(value), node, null);
     }
 
+    public static Relationship getIfExist(Node sNode, Node eNode, RelationshipType type) {
+        IndexHits<Relationship> hits = INDEX.get(NAME, null, sNode, eNode);
+        try {
+        	for (Relationship r : hits) {
+        		if (r.isType(type))
+        			return r;
+        	}
+        } finally {
+        	hits.close();
+        }
+        return null;
+    }
 }

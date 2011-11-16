@@ -26,6 +26,7 @@ import org.animotron.graph.index.Result;
 import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.THE;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -59,7 +60,21 @@ public abstract class AbstractStatement implements Statement {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
-				Relationship res = node.createRelationshipTo(r.getEndNode(), rType);
+				//check if it exist
+				Relationship res = Result.getIfExist(node, r.getEndNode(), rType);
+				if (res != null) {
+					Result.add(res, pf.getPathHash());
+					
+					//store to relationship arrow
+					//RID.set(res, r.getId());
+					//for debug
+					//CID.set(res, context.getId());
+					
+					return res;
+				}
+				
+				//adding if not
+				res = node.createRelationshipTo(r.getEndNode(), rType);
 				//store to relationship arrow
 				RID.set(res, r.getId());
 				//for debug
