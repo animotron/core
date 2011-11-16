@@ -24,6 +24,7 @@ import org.animotron.statement.value.VALUE;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
@@ -101,14 +102,20 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         boolean isOne = (Boolean) o[3];
         if (statement instanceof AN) {
             if (level != 0) {
-                if ((Boolean) o[5]) {
-                    indent++;
-                    write("\n");
-                    for (int i = 0; i < indent; i++) {
-                        write(INDENT);
-                    }
-                } else if (!(ps instanceof LINK)) {
-                    write(" ");
+                if (!(ps instanceof LINK)) {
+                	//if (ps instanceof REF)
+                    //    write(" ");
+                	//else {
+                		if ((Boolean) o[5] || ps instanceof THE) {
+                			indent++;
+                    		write("\n");
+                			for (int i = 0; i < indent; i++) {
+                				write(INDENT);
+                			}
+            			} else {
+            			    write(" ");
+            			}
+                	//}
                 }
                 if (!isOne) {
                     write("(");
@@ -136,7 +143,14 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                         write(",");
                     } else {
                         if (!(statement instanceof REF && ps instanceof AN)) {
-                            write(" ");
+                        	if (statement instanceof Evaluable) {
+	                            indent++;
+	                            write("\n");
+	                            for (int i = 0; i < indent; i++) {
+	                                write(INDENT);
+	                            }
+                        	} else
+                        		write(" ");
                         }
                     }
                 }

@@ -68,27 +68,27 @@ public class AnotherPrettyAnimoTest extends ATest {
 
     @Test
 	public void test_05() throws Exception {
-        test("the a b.");
+        test("the a\n    b.");
 	}
 
     @Test
 	public void test_06() throws Exception {
-        test("an a b c", "a b c.");
+        test("an a b c", "a\n    b c.");
 	}
 
     @Test
 	public void test_07() throws Exception {
-        test("a b c.");
+        test("a b c.", "a\n    b c.");
 	}
 
     @Test
     public void test_08() throws Exception {
-    	test("get (get a) (an b)", "get (get a) (b).");
+    	test("get (get a) (an b)", "get\n    (get a)\n    (b).");
     }
 
     @Test
     public void test_09() throws Exception {
-    	test("all a,b ((c,d) (e))", "all a,b ((c,d) (e)).");
+    	test("all a,b ((c,d) (e))", "all a,b\n    ((c,d)\n        (e)).");
     }
 
     @Test
