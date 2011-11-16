@@ -54,12 +54,14 @@ public class Result {
         return INDEX.get(NAME, MessageDigester.byteArrayToHex(value), node, null);
     }
 
-    public static Relationship getIfExist(Node sNode, Node eNode, RelationshipType type) {
-        IndexHits<Relationship> hits = INDEX.get(NAME, null, sNode, eNode);
+    public static Relationship getIfExist(Node sNode, Relationship result, RelationshipType type) {
+        IndexHits<Relationship> hits = INDEX.get(NAME, null, sNode, result.getEndNode());
         try {
         	for (Relationship r : hits) {
-        		if (r.isType(type))
-        			return r;
+        		if (r.isType(type)) {
+        			if (r.getProperty("RID").equals(r.getId()))
+        				return r;
+        		}
         	}
         } finally {
         	hits.close();
