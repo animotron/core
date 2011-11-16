@@ -46,24 +46,32 @@ public class AnotherMathTest extends ATest {
     @Test
 	public void test_02() throws Exception {
         Expression e = new AnimoExpression("* 2 2.0");
+        
+    	assertAnimo(e, "* 2 2.0");
     	assertStringResult(e, "4.0");
 	}
 
     @Test
 	public void test_03() throws Exception {
         Expression e = new AnimoExpression("* 2.0 2");
-    	assertStringResult(e, "4.0");
+
+    	assertAnimo(e, "* 2.0 2");
+        assertStringResult(e, "4.0");
 	}
 
     @Test
 	public void test_04() throws Exception {
         Expression e = new AnimoExpression("* 2.0 2.0");
+
+        assertAnimo(e, "* 2.0 2.0");
     	assertStringResult(e, "4.0");
 	}
 
     @Test
 	public void test_05() throws Exception {
         Expression e = new AnimoExpression("/ 4.0 2.0");
+
+        assertAnimo(e, "/ 4.0 2.0");
     	assertStringResult(e, "2.0");
 	}
 
@@ -76,7 +84,9 @@ public class AnotherMathTest extends ATest {
     @Test
 	public void test_07() throws Exception {
         Expression e = new AnimoExpression("- 1 2 3.0 4");
-    	assertStringResult(e, "-8.0");
+
+        assertAnimo(e, "- 1 2 3.0 4");
+        assertStringResult(e, "-8.0");
 	}
 
     @Test
