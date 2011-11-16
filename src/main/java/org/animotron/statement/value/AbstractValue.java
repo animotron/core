@@ -26,6 +26,7 @@ import org.animotron.statement.Statements;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -105,6 +106,28 @@ public abstract class AbstractValue extends AbstractStatement {
             }
         }
         return o;
+    }
+
+    public static Number number(Object o) {
+        if (o instanceof String) {
+            String s = (String) o;
+            try {
+                return Long.valueOf(s);
+            } catch (NumberFormatException el) {
+                try {
+                    return Double.valueOf(s);
+                } catch (NumberFormatException ed) {
+                    if (Boolean.FALSE.toString().equals(s))
+                        return BigDecimal.ZERO;
+                    else if (Boolean.TRUE.toString().equals(s))
+                        return BigDecimal.ONE;
+                    else if (s.isEmpty())
+                        return BigDecimal.ZERO;
+                    	
+                }
+            }
+        }
+        throw new IllegalArgumentException("This is not a number '"+o+"'.");
     }
 
     public static String removeWS(String value) {

@@ -32,7 +32,6 @@ import static org.animotron.expression.JExpression.value;
  */
 public class MathTest extends ATest {
 
-    @Test
 	public void test_performace() throws Exception {
         Expression e = new JExpression(
             _(SUM._, value(1), value(2), value(3), value(4))

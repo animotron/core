@@ -19,6 +19,8 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
@@ -27,6 +29,7 @@ import org.animotron.statement.relation.IS;
 import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
 
@@ -350,4 +353,15 @@ public class GetTest extends ATest {
         assertAnimoResult(D, "the D the C have Z have Y have X \".\".");
 
     }
+    
+    @Test
+	public void test_01() throws Exception {
+        __(
+            new AnimoExpression("the a (have x 1) (have y 2) (have z 3)"),
+            new AnimoExpression("the b (get x) (get y) (get z)")
+        );
+        Expression e = new AnimoExpression("b a");
+    	assertStringResult(e, "the b (have x 1) (have y 2) (have z 3).");
+	}
+
 }

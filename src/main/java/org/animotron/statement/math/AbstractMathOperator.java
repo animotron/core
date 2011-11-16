@@ -37,7 +37,7 @@ public abstract class AbstractMathOperator extends Instruction implements Evalua
 	protected AbstractMathOperator(String name) { super(name); }
 
     protected Number param (PFlow pf, Relationship r) throws IOException {
-        return (Number) AbstractValue.value(StringResultSerializer._.serialize(pf, r));
+		return AbstractValue.number(StringResultSerializer._.serialize(pf, r));
     };
 
 }
