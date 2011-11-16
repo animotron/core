@@ -33,7 +33,6 @@ import static org.animotron.expression.JExpression._;
 public class TheTest extends ATest {
 	
     @Test
-    @Ignore
     public void testTHE() throws Exception {
 
         JExpression A = new JExpression(
