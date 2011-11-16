@@ -21,10 +21,9 @@ package org.animotron.graph.builder;
 import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.AbstractExpression;
-import org.animotron.expression.StAXExpression;
+import org.animotron.expression.*;
 import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.statement.operator.THE;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -34,6 +33,7 @@ import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
 
 import static org.animotron.Properties.HASH;
+import static org.animotron.expression.JExpression._;
 
 
 /**
@@ -48,9 +48,16 @@ public class YetAnotherGraphBuilderTest extends ATest {
         return FACTORY.createXMLStreamReader(new StringReader(xml));
     }
 
+    private Expression the (Expression e) {
+        return new JExpression(
+            _(THE._, _(e))
+        );
+    }
+
+
     private void test_0(String animo, String xml) throws Exception {
-        AbstractExpression e;
-        e = new AnimoExpression(new FastGraphBuilder(), animo);
+        Expression e;
+        e = the(new AnimoExpression(new FastGraphBuilder(), animo));
         String inA = AnimoSerializer._.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         cleanDb();
@@ -62,8 +69,8 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
     private void test_1(String animo, String xml) throws Exception {
-        AbstractExpression e;
-        e = new AnimoExpression(new FastGraphBuilder(), animo);
+        Expression e;
+        e = the(new AnimoExpression(new FastGraphBuilder(), animo));
         String inA = AnimoSerializer._.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
@@ -74,8 +81,8 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
     private void test_2(String animo, String xml) throws Exception {
-        AbstractExpression e;
-        e = new AnimoExpression(new StreamGraphBuilder(), animo);
+        Expression e;
+        e = the(new AnimoExpression(new StreamGraphBuilder(), animo));
         String outA = AnimoSerializer._.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
