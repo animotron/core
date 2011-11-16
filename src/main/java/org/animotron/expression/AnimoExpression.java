@@ -87,6 +87,8 @@ public class AnimoExpression extends AbstractExpression {
         char[] buff = new char[4 * 1024];
 
         boolean text = false;
+        boolean number = true;
+
         char prev = '\0';
 
         startList();
@@ -96,12 +98,12 @@ public class AnimoExpression extends AbstractExpression {
                 char ch = buff[i];
                 if (ch == '\"') {
                     if (!text) {
-                        newToken(s, text);
+                        newToken(s, text); number = true;
                         text = true;
                     } else if (prev == '\\') {
                         s.append(ch);
                     } else {
-                        newToken(s, text);
+                        newToken(s, text); number = true;
                         text = false;
                     }
                 } else {
@@ -110,37 +112,43 @@ public class AnimoExpression extends AbstractExpression {
                             s.append(ch);
                         }
                     } else {
-                        switch (ch) {
-                            case ' '  :
-                            case '.'  : //workaround
-                            case '\t' :
-                            case '\n' : newToken(s, text);
-                                        break;
-                            case ','  : newToken(s, text);
-                                        comma = true;
-                                        break;
-                            case '('  : newToken(s, text);
-                                        startList();
-                                        break;
-                            case ')'  : newToken(s, text);
-                                        endList();
-                                        break;
-                            default   : s.append(ch);
-                                        Statement st = Statements.name(s.toString());
-                                        if (st instanceof Prefix) {
-                                            builder.start(st);
-                                            level++;
-                                            op = st;
-                                            link = false;
-                                            prefix = true;
-                                            s = new StringBuilder();
-                                        }
-                        }
+                    	if ((ch >= '0' && ch <= '9') || (ch == '.' && number)) {
+                    		s.append(ch);
+                    	} else {
+                    		number = false;
+                    		
+	                        switch (ch) {
+	                            case ' '  :
+	                            case '.'  : //workaround
+	                            case '\t' :
+	                            case '\n' : newToken(s, text); number = true;
+	                                        break;
+	                            case ','  : newToken(s, text); number = true;
+	                                        comma = true;
+	                                        break;
+	                            case '('  : newToken(s, text); number = true;
+	                                        startList();
+	                                        break;
+	                            case ')'  : newToken(s, text); number = true;
+	                                        endList();
+	                                        break;
+	                            default   : s.append(ch);
+	                                        Statement st = Statements.name(s.toString());
+	                                        if (st instanceof Prefix) {
+	                                            builder.start(st);
+	                                            level++;
+	                                            op = st;
+	                                            link = false;
+	                                            prefix = true;
+	                                            s = new StringBuilder();  number = true;
+	                                        }
+	                        }
+                    	}
                     }
                 }
                 prev = prev == '\\' ? '\0' : ch;
             }
-            lastToken(s, text);
+            lastToken(s, text); number = true;
         }
         endList();
     }
@@ -163,7 +171,10 @@ public class AnimoExpression extends AbstractExpression {
     }
 
     private void token(String token, boolean text) throws AnimoException, IOException {
-        if (text) {
+
+    	if (token.length() == 1 && ".".equals(token)) return; //XXX:start new graph
+
+    	if (text) {
             builder._(token);
         } else {
             if (prefix) {
