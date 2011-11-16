@@ -79,7 +79,7 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
     public void test_07() throws Exception {
-        test("the a @b (get c)", "the a\n    @b get c.");
+        test("the a @b (get c)", "the a\n    @b\n        get c.");
     }
 
     @Test

@@ -103,19 +103,15 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         if (statement instanceof AN) {
             if (level != 0) {
                 if (!(ps instanceof LINK)) {
-                	//if (ps instanceof REF)
-                    //    write(" ");
-                	//else {
-                		if ((Boolean) o[5] || ps instanceof THE) {
-                			indent++;
-                    		write("\n");
-                			for (int i = 0; i < indent; i++) {
-                				write(INDENT);
-                			}
-            			} else {
-            			    write(" ");
+            		if ((Boolean) o[5] || ps instanceof THE) {
+            			indent++;
+                		write("\n");
+            			for (int i = 0; i < indent; i++) {
+            				write(INDENT);
             			}
-                	//}
+        			} else {
+        			    write(" ");
+        			}
                 }
                 if (!isOne) {
                     write("(");
