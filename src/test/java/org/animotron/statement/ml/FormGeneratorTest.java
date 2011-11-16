@@ -19,9 +19,8 @@
 package org.animotron.statement.ml;
 
 import org.animotron.ATest;
-import org.animotron.expression.CommonExpression;
+import org.animotron.bridge.FSBridge;
 import org.animotron.statement.operator.THE;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -33,13 +32,12 @@ import static org.junit.Assert.assertNotNull;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AttributeTest extends ATest {
+public class FormGeneratorTest extends ATest {
 
 	@Test
-    @Ignore
 	public void check() throws Exception {
 
-		new CommonExpression(new File("src/main/animo/form-generator.animo"));
+		FSBridge.load(new File("src/main/animo/form-generator.animo"));
         
         Relationship r = THE._.get("form-generator");
         
@@ -47,6 +45,8 @@ public class AttributeTest extends ATest {
         
         System.out.println("outputing ....");
 
-        //assertAnimoResult(r, "<the:C>z</the:C>");
+        assertAnimoResult(r, "the form-generator the THE.");
+        
+        //XXX: complete
 	}
 }
