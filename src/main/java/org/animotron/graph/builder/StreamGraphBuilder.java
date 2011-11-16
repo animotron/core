@@ -21,6 +21,7 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.statement.Statement;
+import org.animotron.statement.operator.THE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -29,7 +30,9 @@ import java.io.IOException;
 import java.security.MessageDigest;
 
 import static org.animotron.Properties.HASH;
+import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
 
@@ -81,6 +84,12 @@ public class StreamGraphBuilder extends GraphBuilder {
             relationship = copy(getROOT(), r);
             Cache.putRelationship(relationship, hash);
             HASH.set(relationship, hash);
+            if (relationship.isType(THE._)) {
+                Node node = relationship.getEndNode();
+                if (!NAME.has(node)) {
+                    NAME.set(node, byteArrayToHex(hash));
+                }
+            }
         }
         destructive(root);
 	}
