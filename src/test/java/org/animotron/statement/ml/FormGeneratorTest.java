@@ -43,8 +43,6 @@ public class FormGeneratorTest extends ATest {
         
         assertNotNull(r);
         
-        System.out.println("outputing ....");
-
         assertAnimoResult(r, "the form-generator the THE.");
         
         //XXX: complete

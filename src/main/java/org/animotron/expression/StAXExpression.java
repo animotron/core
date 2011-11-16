@@ -23,6 +23,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.graph.builder.StreamGraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
 
@@ -53,6 +54,13 @@ public class StAXExpression extends AbstractExpression {
     public void build() throws Exception {
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
+//and start/end document?
+//            	case XMLStreamConstants.START_DOCUMENT :
+//                    builder.start(THE._);
+//            		break;
+//            	case XMLStreamConstants.END_DOCUMENT :
+//                    builder.end();
+//            		break;
                 case XMLStreamConstants.START_ELEMENT :
                     startElement();
                     break;
@@ -62,6 +70,11 @@ public class StAXExpression extends AbstractExpression {
                 case XMLStreamConstants.PROCESSING_INSTRUCTION :
                     String target = reader.getPITarget();
                     String data = reader.getPIData();
+
+                    //builder.start(PI._, _(name(target), value(data)));
+                    //builder.end();
+                    
+                    //XXX: target can't be null/empty ?
                     build(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
                     break;
                 case XMLStreamConstants.DTD :

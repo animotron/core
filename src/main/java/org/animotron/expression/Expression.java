@@ -79,8 +79,8 @@ public abstract class Expression implements Relationship {
 		return relationship().getPropertyKeys();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
+	@Deprecated
 	public Iterable<Object> getPropertyValues() {
 		return relationship().getPropertyValues();
 	}

@@ -68,7 +68,6 @@ public class XMLTest extends ATest {
 	}
 
     @Test
-    @Ignore
 	public void test_04() throws Exception {
         test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a.");
 	}

@@ -27,6 +27,8 @@ import org.animotron.statement.instruction.Instruction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
+//XXX: replaced by org.animotron.operator.THE?
+@Deprecated
 public class THE extends Instruction {
 	
 	public static final THE _ = new THE();
