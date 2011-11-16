@@ -46,10 +46,10 @@ public class YetAnotherMathTest extends ATest {
     @Test
 	public void test_01() throws Exception {
         __(
-            new AnimoExpression("the a is z 1"),
-            new AnimoExpression("the b is z 2"),
-            new AnimoExpression("the c is z 3"),
-            new AnimoExpression("the d is z 4")
+            new AnimoExpression("the a (is z) (1)"),
+            new AnimoExpression("the b (is z) (2)"),
+            new AnimoExpression("the c (is z) (3)"),
+            new AnimoExpression("the d (is z) (4)")
         );
         Expression e = new AnimoExpression("+ all z");
     	assertStringResult(e, "10");
