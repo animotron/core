@@ -113,7 +113,12 @@ public class AnimoExpression extends AbstractExpression {
                         }
                     } else {
                     	if ((ch >= '0' && ch <= '9') || (ch == '.' && number)) {
-                    		s.append(ch);
+                            if (ch != '.') {
+                                if (prev == '.') {
+                                    s.append('.');
+                                }
+                    		    s.append(ch);
+                            }
                     	} else {
                     		number = false;
                     		
