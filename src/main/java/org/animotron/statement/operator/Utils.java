@@ -59,6 +59,7 @@ public class Utils {
 
 
 	public static List<Node> getByREF(PFlow pf, final Node node) {
+		System.out.println(node);
 		try {
 			try {
 				Node theNode = THE._((String)THE._.reference(node));
@@ -101,7 +102,10 @@ public class Utils {
 				
 				Relationship result = Utils.relax(e[0]);
 				
-				if (result.isType(REF) || result.isType(org.animotron.statement.operator.REF._)) {
+				if (result.isType(REF) 
+						|| result.isType(org.animotron.statement.operator.REF._)
+						|| result.isType(THE._)
+					) {
 					list.add(result.getEndNode());
 				} else {
 					IndexHits<Relationship> hits = Order.queryDown(result.getEndNode());

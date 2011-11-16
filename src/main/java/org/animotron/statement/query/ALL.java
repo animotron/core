@@ -59,26 +59,30 @@ public class ALL extends AbstractQuery implements Reference {
             
             for (Node node : theNodes) {
 
-				Set<Node>[] lists = getUSEs(node, pf.getStartOP());
-				Set<Node> uses = lists[1];
-				Set<Node> directed = lists[2];
-				
-				boolean underUSE = false;
-				if (directed != null && directed.size() == 1) { 
-					underUSE = true;
-					node = directed.iterator().next();
-				}
-	
-				if (underUSE && filtering(pf, node, uses))
-					pf.sendAnswer( createResult( pf, op, n, getThe(node), RESULT ), op );
-	
-		        for (Relationship tdR : td_IS.traverse(node).relationships()) {
-		            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
-		            Node res = tdR.getStartNode();
-		            if (filtering(pf, res, uses)) {
-		                pf.sendAnswer( createResult( pf, op, n, getThe(res), RESULT ), op );
-		            }
-		        }
+    			//check, maybe, result was already calculated
+    			if (!Utils.results(node, pf)) {
+
+	            	Set<Node>[] lists = getUSEs(node, pf.getStartOP());
+					Set<Node> uses = lists[1];
+					Set<Node> directed = lists[2];
+					
+					boolean underUSE = false;
+					if (directed != null && directed.size() == 1) { 
+						underUSE = true;
+						node = directed.iterator().next();
+					}
+		
+					if (underUSE && filtering(pf, node, uses))
+						pf.sendAnswer( createResult( pf, op, n, getThe(node), RESULT ), op );
+		
+			        for (Relationship tdR : td_IS.traverse(node).relationships()) {
+			            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+			            Node res = tdR.getStartNode();
+			            if (filtering(pf, res, uses)) {
+			                pf.sendAnswer( createResult( pf, op, n, getThe(res), RESULT ), op );
+			            }
+			        }
+    			}
             }
 
             pf.done();

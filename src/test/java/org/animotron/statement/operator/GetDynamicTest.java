@@ -90,15 +90,15 @@ public class GetDynamicTest extends ATest {
             )
         );
 
-        JExpression E = new JExpression(
-            _(THE._, "E", _(GET._, "A", _(ALL._, "Z")))
-        );
-        assertAnimoResult(E, "the E (have B \"π\") (have A \"Aπ\").");
-
-        JExpression E1 = new JExpression(
-            _(THE._, "E1", _(GET._, "B", _(ALL._, "Z")))
-        );
-        assertAnimoResult(E1, "the E1 have B \"π\".");
+//        JExpression E = new JExpression(
+//            _(THE._, "E", _(GET._, "A", _(ALL._, "Z")))
+//        );
+//        assertAnimoResult(E, "the E (have B \"π\") (have A \"Aπ\").");
+//
+//        JExpression E1 = new JExpression(
+//            _(THE._, "E1", _(GET._, "B", _(ALL._, "Z")))
+//        );
+//        assertAnimoResult(E1, "the E1 have B \"π\".");
 
         JExpression F = new JExpression(
             _(THE._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
