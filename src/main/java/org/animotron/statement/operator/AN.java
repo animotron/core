@@ -60,8 +60,8 @@ public class AN extends Operator implements Reference, Evaluable {
 
 				for (Relationship r : getREF(pf, op)) {
 
-					Relationship res = createResult(pf, null, node, r, REF, hash);
-					pf.sendAnswer(res);
+					Relationship res = createResult(pf, op, node, r, REF, hash);
+					pf.sendAnswer(res, op);
 				}
 			}
 			pf.done();
