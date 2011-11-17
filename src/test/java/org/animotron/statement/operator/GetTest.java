@@ -385,5 +385,28 @@ public class GetTest extends ATest {
         Expression e = new AnimoExpression("get x a,b,c");
     	assertAnimoResult(e, "have x 1. have x 2. have x 3.");
 	}
+    
+	@Test
+	public void test_04() throws Exception {
+		testAnimo("the user1 (is user) (have name \"user1\").");
+
+		testAnimo("the item1 (is item) (have name \"item1\").");
+		
+		assertAnimoResult(
+            new AnimoExpression("get name (user1) (item1)."),
+            "have name \"user1\". have name \"item1\"."
+        );
+
+		assertAnimoResult(
+            new AnimoExpression("get name (user1, item1)."),
+            "have name \"user1\". have name \"item1\"."
+        );
+
+		assertAnimoResult(
+            new AnimoExpression("get name user1,item1."),
+            "have name \"user1\". have name \"item1\"."
+        );
+	}
+
 
 }

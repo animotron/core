@@ -72,9 +72,18 @@ public class Utils {
 			} catch (Exception e) {
 			}
 
-			final Relationship res = Order.first(1, node)[0];
-			
-			return evaluable(pf, res);
+			List<Node> list = new FastList<Node>();
+			IndexHits<Relationship> hits = Order.queryDown(node);
+			try {
+				for (Relationship res : hits) {
+					if (res.isType(org.animotron.statement.operator.REF._))
+						evaluable(pf, res, list);
+				}
+				
+			} finally {
+				hits.close();
+			}
+			return list;
 
 		} catch (IndexOutOfBoundsException e) {
 		} catch (InterruptedException e) {
@@ -87,8 +96,7 @@ public class Utils {
 		return null;
 	}
 
-	private static List<Node> evaluable(PFlow pf, Relationship r) throws InterruptedException, IOException {
-		List<Node> list = new FastList<Node>();
+	private static List<Node> evaluable(PFlow pf, Relationship r, List<Node> list) throws InterruptedException, IOException {
 		
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {

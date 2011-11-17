@@ -34,11 +34,11 @@ public class PossessiveCaseTest extends ATest {
 
 		testAnimo("the item1 (is item) (have name \"item1\").");
 		
-		testAnimo("get user's name an user1, item1.");
+		testAnimo("get user's name (user1, item1).");
 
 		assertAnimoResult(
             new AnimoExpression("get user's name an user1, item1."),
-            "have name \"user1\""
+            "have name \"user1\"."
         );
 	}
 
@@ -48,7 +48,7 @@ public class PossessiveCaseTest extends ATest {
 
 		testAnimo("the item1 (is item) (have name \"item1\").");
 		
-		testAnimo("the f_con user1, item1.");
+		testAnimo("the f_con user1,item1.");
 		testAnimo("the f_get get user's name.");
 		
 		assertAnimoResult(
