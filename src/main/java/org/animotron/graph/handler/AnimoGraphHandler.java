@@ -23,6 +23,7 @@ import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.POSSESSIVE;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
@@ -64,6 +65,9 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             }
         } else if (statement instanceof REF) {
             write(reference.toString());
+        } else if (statement instanceof POSSESSIVE) {
+            write(reference.toString());
+            write(statement.name());
         } else if (!(statement instanceof LINK || statement instanceof VALUE)) {
             write(statement.name());
             if (reference != null) {
