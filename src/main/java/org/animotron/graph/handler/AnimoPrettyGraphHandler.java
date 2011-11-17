@@ -18,10 +18,10 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.value.VALUE;
-import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;

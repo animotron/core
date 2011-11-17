@@ -21,13 +21,13 @@ package org.animotron.expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
-import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.Relation;
@@ -208,12 +208,17 @@ public class AnimoExpression extends AbstractExpression {
                 } else if (s == null) {
                     Object o = AbstractValue.value(token);
                     if (o instanceof String) {
-                        if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF)) {
-                            builder.start(AN._);
-                            level++;
+                        if (possessive) {
+                            s =  POSSESSIVE._;
+                            builder._(s, token);
+                        } else {
+                            if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF) && !(op instanceof POSSESSIVE)) {
+                                builder.start(AN._);
+                                level++;
+                            }
+                            s =  REF._;
+                            builder._(s, token);
                         }
-                        s =  possessive ? POSSESSIVE._ : REF._;
-                        builder._(s, token);
                         comma = false;
                     } else {
                         builder._(o);
