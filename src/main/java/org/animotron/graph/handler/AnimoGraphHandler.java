@@ -21,10 +21,7 @@ package org.animotron.graph.handler;
 import org.animotron.statement.Statement;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.POSSESSIVE;
-import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.*;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -138,7 +135,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                     }
                 }
             }
-            if (!(statement instanceof REF || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+            if (!(statement instanceof AbstractReference || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
                 write("(");
             }
         }
@@ -155,7 +152,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         if (level==0) {
             write(".");
             dot = true;
-        } else if (!(statement instanceof REF || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof AbstractReference || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
     }
