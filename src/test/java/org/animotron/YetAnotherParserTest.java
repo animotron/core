@@ -36,4 +36,8 @@ public class YetAnotherParserTest extends ATest {
         testAnimo("the a + \"1\" 2.");
 	}
 
+    @Test
+	public void test_02() throws Exception {
+        testAnimo("get user's name.");
+	}
 }
