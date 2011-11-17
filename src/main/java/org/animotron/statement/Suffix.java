@@ -23,4 +23,4 @@ package org.animotron.statement;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Sufix {}
+public interface Suffix {}
