@@ -51,14 +51,17 @@ public class AN extends Operator implements Reference, Evaluable {
 			
 			Relationship op = pf.getOP();
 			final Node node = op.getEndNode();
+			
+			byte[] hash = pf.getOpHash();
 
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
-			if (!Utils.results(node, pf, false)) {
+			if (!Utils.results(node, pf, hash)) {
 
 				for (Relationship r : getREF(pf, op)) {
 
-					pf.sendAnswer(createResult(pf, op, node, r, REF, pf.getOpHash()), op);
+					Relationship res = createResult(pf, null, node, r, REF, hash);
+					pf.sendAnswer(res);
 				}
 			}
 			pf.done();

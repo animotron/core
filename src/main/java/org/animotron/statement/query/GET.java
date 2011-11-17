@@ -139,7 +139,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						final Set<Relationship[]> rSet = get(pf, context[0], theNode, suffixes, null);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
-								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[1]);
+								
+								Relationship[] cc = new Relationship[context.length-1 + r.length-1];
+								if (r.length-1 > 0)
+									System.arraycopy(r, 1, cc, 0, r.length-1);
+								if (context.length-1 > 0)
+									System.arraycopy(context, 1, cc, r.length, context.length-1);
+								
+								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), cc);
 							}
 							return;
 						}

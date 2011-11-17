@@ -173,7 +173,8 @@ public class PFlow {
 
 			Relationship[] answer = new Relationship[1+context.length];
 			answer[0] = r;
-			System.arraycopy(context, 0, answer, 1, context.length);
+			if (context.length > 0)
+				System.arraycopy(context, 0, answer, 1, context.length);
 
 			parent.answer.publish(answer);
 		}

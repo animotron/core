@@ -278,22 +278,16 @@ public class Utils {
 	}
 
 	public static boolean results(PFlow pf) {
-		return results(pf.getOPNode(), pf, true);
+		return results(pf.getOPNode(), pf, pf.getPathHash());
 	}
 
 	public static boolean results(Node node, PFlow pf) {
-		return results(node, pf, true);
+		return results(node, pf, pf.getPathHash());
 	}
 
-	public static boolean results(Node node, PFlow pf, boolean fullPath) {
+	public static boolean results(Node node, PFlow pf, byte[] hash) {
 		boolean haveSome = false;
 
-		byte[] hash;
-		if (fullPath)
-			hash = pf.getPathHash();
-		else
-			hash = pf.getOpHash();
-		
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 		for (Relationship[] r : Result.get(hash, node)) {
 			if (r.length == 1)

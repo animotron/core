@@ -79,7 +79,8 @@ public abstract class AbstractStatement implements Statement {
 				//store to relationship arrow
 				RID.set(res, r.getId());
 				//for debug
-				CID.set(res, context.getId());
+				if (context != null)
+					CID.set(res, context.getId());
 				Result.add(res, hash);
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;
