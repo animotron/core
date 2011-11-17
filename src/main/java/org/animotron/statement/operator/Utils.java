@@ -99,13 +99,15 @@ public class Utils {
 	}
 
 	public static List<Relationship> getSuffixes(final Node node) {
-		List<Relationship> list = new FastList<Relationship>();
+		List<Relationship> list = null;
 		IndexHits<Relationship> hits = Order.queryDown(node);
 		try {
 			for (Relationship res : hits) {
 				Statement s = Statements.relationshipType(res);
-				if (s instanceof Suffix)
+				if (s instanceof Suffix) {
+					if (list == null) list = new FastList<Relationship>();
 					list.add(res);
+				}
 			}
 		} finally {
 			hits.close();
