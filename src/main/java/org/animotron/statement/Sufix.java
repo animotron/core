@@ -18,11 +18,9 @@
  */
 package org.animotron.statement;
 
-import org.animotron.statement.ml.MLOperator;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public interface Sufix extends MLOperator {}
+public interface Sufix {}
