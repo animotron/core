@@ -70,6 +70,7 @@ public class EACH extends Combinator {
 						}
 					else {
 						for (Relationship r : set) {
+							System.out.println("!!!! "+r);
 							Relationship[] rr = new Relationship[] {element, r};
 							pf.sendAnswer(rr);
 						}

@@ -180,6 +180,8 @@ public class PFlow {
 	}
 
 	public void sendException(Throwable t) {
+		t.printStackTrace();
+		
 		AnimoException ae;
 		if (t instanceof AnimoException) {
 			ae = (AnimoException) t;

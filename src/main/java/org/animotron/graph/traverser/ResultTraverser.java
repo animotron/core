@@ -68,10 +68,17 @@ public class ResultTraverser extends AnimoTraverser {
     }
 
     @Override
-    protected void build(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Relationship[] rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
+    	Relationship r = rr[0];
+    	
         int addedContexts = 0;
 
+    	for (int i = 1; i < rr.length; i++)
+    		if (rr[i] != null)
+    			addedContexts += pf.addContextPoint(rr[i]);
+    		
+    	
         if (r.isType(RESULT)) {
         	r = getDb().getRelationshipById(
                 (Long) r.getProperty(RID.name())
@@ -145,25 +152,25 @@ public class ResultTraverser extends AnimoTraverser {
 
     }
     
-    private Relationship getOp(Object obj) {
-        if (obj.getClass().isArray()) {
-            return ((Relationship[])obj)[0];
-        } else {
-        	return (Relationship)obj;
-        }
-    }
+//    private Relationship getOp(Object obj) {
+//        if (obj.getClass().isArray()) {
+//            return ((Relationship[])obj)[0];
+//        } else {
+//        	return (Relationship)obj;
+//        }
+//    }
 
-    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator it, int level, boolean isOne) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<Relationship[]> it, int level, boolean isOne) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
-        Relationship i = null;
+        Relationship[] i = null;
         int pos = 0;
         while (it.hasNext()) {
-        	i = getOp(it.next());
+        	i = it.next();
             if (isFirst) {
                 if (it.hasNext()) {
                     build(handler, pf, i, level, false, pos++, true);
-                	i = getOp(it.next());
+                	i = it.next();
                     build(handler, pf, i, level, false, pos++, !it.hasNext());
                 } else {
                     build(handler, pf, i, level, true, pos++, !it.hasNext());

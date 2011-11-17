@@ -68,7 +68,7 @@ public abstract class Manipulator {
 	}
 
 	public final PipedInput<Relationship[]> execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
-        final PipedOutput out = new PipedOutput();
+        final PipedOutput<Relationship[]> out = new PipedOutput<Relationship[]>();
         PipedInput<Relationship[]> in = out.getInputStream();
 
         if (sub == null) {
@@ -101,7 +101,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<Relationship[]> onAnswer = new Subscribable<Relationship[]>() {
             public void onMessage(Relationship[] context) {
-            	//System.out.println("get answer "+Arrays.toString(context));
+            	System.out.println("get answer "+Arrays.toString(context));
             	try {
             		if (context == null) {
 
@@ -137,8 +137,8 @@ public abstract class Manipulator {
             			} catch (Exception e) {}
 
             			if (context.length >= 2)
-            				for (int i = 0; i < context.length - 2; i++)
-            					addedContexts += pf.addContextPoint(context[1]);
+            				for (int i = 0; i < context.length - 1; i++)
+            					addedContexts += pf.addContextPoint(context[i+1]);
             				
             			if (msg.isType(REF)) {
                             s = Statements.name((String) THE._.reference(msg));
@@ -146,7 +146,7 @@ public abstract class Manipulator {
 
                         if (s instanceof Evaluable) {
                         	PipedInput<Relationship[]> in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
-                            for (Object obj : in) {
+                            for (Relationship[] obj : in) {
                             	out.write(obj);
                             }
                         } else if (s == null){
@@ -216,7 +216,7 @@ public abstract class Manipulator {
     	List<Relationship> path = pf.getPFlowPath();
     	Relationship[] res = new Relationship[count+1];
     	for (int i = 0; i < count; i++) {
-    		res[ count - 1 - i ] = path.get(i);                            		
+    		res[ count - i ] = path.get(i);                            		
     	}
     	res[0] = op;
         return res;
