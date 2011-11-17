@@ -41,9 +41,10 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
     
     private static final int DEFAULT_PIPE_SIZE = 1024;
     
-    protected Object buffer[] = new Object[DEFAULT_PIPE_SIZE];
+    @SuppressWarnings("unchecked")
+	protected T buffer[] = (T[]) new Object[DEFAULT_PIPE_SIZE];
     
-    private synchronized Object read()  throws IOException {
+    private synchronized T read()  throws IOException {
         if (!connected) {
             throw new IOException("Pipe not connected");
             
@@ -73,7 +74,7 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
         		throw new java.io.InterruptedIOException();
         	}
         }
-        Object ret = buffer[out++];
+        T ret = buffer[out++];
         if (out >= buffer.length) {
         	out = 0;
         }
@@ -92,7 +93,7 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
         }
     }
     
-	public void receive(Object obj) throws IOException {
+	public void receive(T obj) throws IOException {
         checkStateForReceive();
         
         writeSide = Thread.currentThread();
