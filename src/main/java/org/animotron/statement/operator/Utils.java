@@ -335,15 +335,18 @@ public class Utils {
 		try {
 			while (q.hasNext()) {
 				Relationship r = q.next();
-				if (r.isType(org.animotron.statement.operator.REF._)) continue;
+				Statement s = Statements.relationshipType(r);
+				if (r.isType(org.animotron.statement.operator.REF._)
+					|| r.isType(REF)
+					|| s instanceof Suffix) 
+					
+					continue;
 				
 				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
 				if (onQuestion != null) {
 					return true;
 					
-				} else if (r.isType(REF)) {
-					//ignore REF
 				} else {
 					return true;
 				}

@@ -59,6 +59,7 @@ public class EACH extends Combinator {
 
 		@Override
 		public void onMessage(final PFlow pf) {
+			System.out.println("EACH EACH EACH EACH");
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
 				Set<Relationship> set = new FastSet<Relationship>();

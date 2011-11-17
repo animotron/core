@@ -199,7 +199,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		Relationship have = searchForHAVE(pf, ref, theNode, suffixes);
 		if (have != null && !pf.isInStack(have)) 
-			set.add(new Relationship[] {have, null}); //XXX: is NULL correct here?
+			set.add(new Relationship[] {have});
 		
 		if (!set.isEmpty()) return set;
 
