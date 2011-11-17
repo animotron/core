@@ -62,7 +62,7 @@ public class Result {
         try {
         	for (Relationship r : hits) {
         		if (r.isType(type)) {
-        			if (r.getProperty("RID").equals(r.getId()))
+        			if (r.getProperty("RID").equals(result.getId()))
         				return r;
         		}
         	}

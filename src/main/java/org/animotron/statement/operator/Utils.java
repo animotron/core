@@ -31,6 +31,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.Suffix;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -72,13 +73,19 @@ public class Utils {
 			} catch (Exception e) {
 			}
 
+			Relationship first = null;
 			List<Relationship> list = new FastList<Relationship>();
 			IndexHits<Relationship> hits = Order.queryDown(node);
 			try {
 				for (Relationship res : hits) {
+					if (first == null) first = res;
+					
 					if (res.isType(org.animotron.statement.operator.REF._))
 						list = getTheRelationships(pf, res, list);
 				}
+
+				if (first != null && list.isEmpty())
+					getTheRelationships(pf, first, list);
 				
 			} finally {
 				hits.close();
@@ -91,6 +98,21 @@ public class Utils {
 		return null;
 	}
 
+	public static List<Relationship> getSuffixes(final Node node) {
+		List<Relationship> list = new FastList<Relationship>();
+		IndexHits<Relationship> hits = Order.queryDown(node);
+		try {
+			for (Relationship res : hits) {
+				Statement s = Statements.relationshipType(res);
+				if (s instanceof Suffix)
+					list.add(res);
+			}
+		} finally {
+			hits.close();
+		}
+		return list;
+	}
+	
 	public static List<Node> getByREF(PFlow pf, final Node node) {
 		//System.out.println(node);
 		try {
@@ -106,13 +128,19 @@ public class Utils {
 			} catch (Exception e) {
 			}
 
+			Relationship first = null;
 			List<Node> list = new FastList<Node>();
 			IndexHits<Relationship> hits = Order.queryDown(node);
 			try {
 				for (Relationship res : hits) {
+					if (first == null) first = res;
+					
 					if (res.isType(org.animotron.statement.operator.REF._))
 						evaluable(pf, res, list);
 				}
+				
+				if (first != null && list.isEmpty())
+					evaluable(pf, first, list);
 				
 			} finally {
 				hits.close();

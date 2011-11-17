@@ -49,7 +49,7 @@ import java.util.Set;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
@@ -73,6 +73,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			relationships(IS._, OUTGOING);
 			//relationships(IC._.relationshipType(), OUTGOING);
 	
+	private static TraversalDescription upIS = 
+			Traversal.description().
+				breadthFirst().
+				relationships(IS._, INCOMING);
+				//relationships(IC._.relationshipType(), OUTGOING);
+
 	private static TraversalDescription td_eval_ic = 
 			Traversal.description().
 				breadthFirst().
@@ -92,15 +98,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			final Node node = op.getEndNode();
 			final List<Node> theNodes = Utils.getByREF(pf, node);
 			
+			final List<Relationship> suffixes = Utils.getSuffixes(node);
+			
 			for (Node theNode : theNodes) {
-				evalGet(pf, node, theNode);
+				evalGet(pf, node, theNode, suffixes);
 			}
 			
 			pf.await();
 			pf.done();
 		}
 
-		private void evalGet(final PFlow pf, final Node node, final Node theNode) {
+		private void evalGet(final PFlow pf, final Node node, final Node theNode, final List<Relationship> suffixes) {
 			
 			System.out.print("GET '");
 			try {
@@ -128,7 +136,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship[]> rSet = get(pf, context[0], theNode, null);
+						final Set<Relationship[]> rSet = get(pf, context[0], theNode, suffixes, null);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), context[1]);
@@ -152,7 +160,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 					for (Relationship st : pf.getPFlowPath()) {
 						//System.out.println("CHECK PFLOW "+st);
-						Set<Relationship[]> rSet = get(pf, st, theNode, visitedREFs);
+						Set<Relationship[]> rSet = get(pf, st, theNode, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), r[0]);
@@ -166,17 +174,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	};
 	
-	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode, Set<Relationship> visitedREFs) {
+	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
 		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
 		
-		return get(pf, refs, theNode, visitedREFs); 
+		return get(pf, refs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<Relationship[]> get(final PFlow pf, Node ref, final Node theNode, Set<Relationship> visitedREFs) {
+	public Set<Relationship[]> get(final PFlow pf, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
 		Set<Relationship[]> set = new FastSet<Relationship[]>();
 		
-		Relationship have = searchForHAVE(pf, ref, theNode);
+		Relationship have = searchForHAVE(pf, ref, theNode, suffixes);
 		if (have != null && !pf.isInStack(have)) 
 			set.add(new Relationship[] {have, null}); //XXX: is NULL correct here?
 		
@@ -185,10 +193,16 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Set<Relationship> newREFs = new FastSet<Relationship>();
 		getOutgoingReferences(pf, ref, newREFs, null);
 		
-		return get(pf, newREFs, theNode, visitedREFs); 
+		return get(pf, newREFs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<Relationship[]> get(PFlow pf, Set<Relationship> REFs, final Node theNode, Set<Relationship> visitedREFs) {
+	public Set<Relationship[]> get(
+			final PFlow pf, 
+			final Set<Relationship> REFs, 
+			final Node theNode, 
+			final List<Relationship> suffixes, 
+			Set<Relationship> visitedREFs) {
+		
 		//System.out.println("GET context = "+ref);
 		
 		if (visitedREFs == null) visitedREFs = new FastSet<Relationship>();
@@ -207,10 +221,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				//System.out.println("checking "+n);
-				have = searchForHAVE(pf, n, theNode);
-				if (have != null && !pf.isInStack(have)) 
+				System.out.println("checking "+n);
+				have = searchForHAVE(pf, n, theNode, suffixes);
+				if (have != null && !pf.isInStack(have)) { 
 					set.add(new Relationship[] {n, have});
+					System.out.println("FOUND");
+				}
 			}
 			
 			if (set.size() > 0) return set;
@@ -304,7 +320,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		}
 	}
 	
-	private Relationship searchForHAVE(final PFlow pf, final Relationship ref, final Node theNode) {
+	private Relationship searchForHAVE(
+			final PFlow pf, 
+			final Relationship ref, 
+			final Node theNode, 
+			final List<Relationship> suffixes) {
 		
 		boolean checkStart = true;
 		if (!(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
@@ -322,28 +342,31 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		//search for local 'HAVE'
 		if (checkStart) {
-			have = getByHave(pf, ref.getStartNode(), theNode);
+			have = getByHave(pf, ref.getStartNode(), theNode, suffixes);
 			if (have != null) return have;
 		}
 
 		//search for inside 'HAVE'
-		return searchForHAVE(pf, ref.getEndNode(), theNode);
+		return searchForHAVE(pf, ref.getEndNode(), theNode, suffixes);
 	}
 
-	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final Node theNode) {
+	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final Node theNode, final List<Relationship> suffixes) {
 		
 		Relationship have = null;
 
 		//search for inside 'HAVE'
-		have = getByHave(pflow, ref, theNode);
-		if (have != null) return have;
+		have = getByHave(pflow, ref, theNode, suffixes);
+		if (have != null) {
+			have = checkSuffixes(suffixes, have);
+			if (have != null) return have;
+		}
 
 		//search 'IC' by 'IS' topology
 		for (Relationship tdR : td_eval_IS.traverse(ref).relationships()) {
 
 			//System.out.println("GET IC -> IS "+tdR);
 			
-			Relationship r = getByIC(tdR.getEndNode(), theNode);
+			Relationship r = getByIC(tdR.getEndNode(), theNode, suffixes);
 			if (r != null) {
 				final Node sNode = ref;
 				final Node eNode = r.getEndNode();
@@ -359,10 +382,28 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			}
 			
 			//search for have
-			have = getByHave(pflow, tdR.getEndNode(), theNode);
+			have = getByHave(pflow, tdR.getEndNode(), theNode, suffixes);
 			if (have != null) return have;
 		}
 		
+		return null;
+	}
+	
+	private Relationship checkSuffixes(final List<Relationship> suffixes, final Relationship res) {
+
+		if (suffixes == null || res == null) return res;
+		
+		//System.out.println("checkSuffixes checkSuffixes checkSuffixes "+res);
+		
+		Node node = res.getStartNode();
+		
+		for (Relationship r : td_eval_IS.traverse(node).relationships()) {
+			//System.out.println(r);
+			for (Relationship rr : suffixes) {
+				if (r.getEndNode().equals(rr.getEndNode()))
+					return res;
+			}
+		}
 		return null;
 	}
 
@@ -372,7 +413,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
-		Relationship have = getByHave(pf, context, theNode);
+		Relationship have = getByHave(pf, context, theNode, null);
 		if (have != null) return have;
 
 		Node instance = Utils.getSingleREF(context);
@@ -381,7 +422,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			context = instance;
 			
 			//search for have
-			have = getByHave(pf, context, theNode);
+			have = getByHave(pf, context, theNode, null);
 			if (have != null) return have;
 		}
 		
@@ -395,7 +436,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
-					have = getByHave(pf, prevTHE.getEndNode(), theNode);
+					have = getByHave(pf, prevTHE.getEndNode(), theNode, null);
 					if (have != null) return have;
 				}
 				prevTHE = tdR;
@@ -433,14 +474,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		if (prevTHE != null) {
 			//search for have
-			have = getByHave(pf, prevTHE.getEndNode(), theNode);
+			have = getByHave(pf, prevTHE.getEndNode(), theNode, null);
 			if (have != null) return have;
 		}
 
 		return null;
 	}
 	
-	private Relationship getByHave(final PFlow pflow, final Node context, final Node theNode) {
+	private Relationship getByHave(final PFlow pflow, final Node context, final Node theNode, final List<Relationship> suffixes) {
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
@@ -472,10 +513,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				break;
 			}
 		}
-		return res;
+		
+		return checkSuffixes(suffixes, res);
 	}
 	
-	private Relationship getByIC(final Node context, final Node theNode) {
+	private Relationship getByIC(final Node context, final Node theNode, final List<Relationship> suffixes) {
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
@@ -493,7 +535,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				break;
 			}
 		}
-		return res;
+		
+		return checkSuffixes(suffixes, res);
 	}
 
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
