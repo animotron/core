@@ -23,10 +23,13 @@ import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.*;
+import org.animotron.statement.ml.ELEMENT;
+import org.animotron.statement.ml.MLOperator;
+import org.animotron.statement.ml.NS;
+import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.operator.AbstractReference;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
@@ -85,7 +88,7 @@ public class MLResultTraverser extends ResultTraverser {
             } else if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
 			//workaround IS and USE
-			} else if (!(s instanceof Relation || s instanceof REF)) {
+			} else if (!(s instanceof Relation || s instanceof AbstractReference)) {
                 node = r.getEndNode();
                 iterate(handler, pf, new It(node), level);
             }

@@ -87,7 +87,7 @@ public class ResultTraverser extends AnimoTraverser {
         }
 
         Statement s;
-        if (r.isType(RelationshipTypes.REF) || r.isType(THE._)) {
+        if (r.isType(RelationshipTypes.REF) || r.isType(POSSESSIVE._) || r.isType(THE._)) {
             s = THE._;
         } else {
             s = Statements.relationshipType(r);
@@ -116,11 +116,11 @@ public class ResultTraverser extends AnimoTraverser {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
-			} else if (!(s instanceof Relation || s instanceof REF)) {
+			} else if (!(s instanceof Relation || s instanceof AbstractReference)) {
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne, pos, isLast);
                 
-                if (!(s instanceof REF)) {
+                if (!(s instanceof AbstractReference)) {
 	                node = r.getEndNode();
 	                iterate(handler, pf, new It(node), level);
                 }

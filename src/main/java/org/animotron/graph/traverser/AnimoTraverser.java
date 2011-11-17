@@ -24,6 +24,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.operator.AbstractReference;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.Relation;
 import org.neo4j.graphdb.Node;
@@ -76,7 +77,7 @@ public class AnimoTraverser {
 		if (statement == null)
 			return;
 		handler.start(statement, r, level++, isOne, pos, isLast);
-		if (!(statement instanceof Relation || statement instanceof REF)) {
+		if (!(statement instanceof Relation || statement instanceof AbstractReference)) {
             node = r.getEndNode();
             It it = new It(node);
             iterate(handler, pf, it, level);
