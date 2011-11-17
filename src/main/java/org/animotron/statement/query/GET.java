@@ -100,15 +100,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			
 			final List<Relationship> suffixes = Utils.getSuffixes(node);
 			
+			final Set<Relationship> visitedREFs = new FastSet<Relationship>();
+
 			for (Node theNode : theNodes) {
-				evalGet(pf, node, theNode, suffixes);
+				evalGet(pf, node, theNode, suffixes, visitedREFs);
 			}
 			
 			pf.await();
 			pf.done();
 		}
 
-		private void evalGet(final PFlow pf, final Node node, final Node theNode, final List<Relationship> suffixes) {
+		private void evalGet(final PFlow pf, final Node node, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
 			
 			System.out.print("GET '");
 			try {
@@ -136,15 +138,21 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship[]> rSet = get(pf, context[0], theNode, suffixes, null);
+						final Set<Relationship[]> rSet = get(pf, context[0], theNode, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (Relationship[] r : rSet) {
 								
-								Relationship[] cc = new Relationship[context.length-1 + r.length-1];
-								if (r.length-1 > 0)
-									System.arraycopy(r, 1, cc, 0, r.length-1);
-								if (context.length-1 > 0)
-									System.arraycopy(context, 1, cc, r.length, context.length-1);
+								int cL = context.length-1;
+								if (cL < 0) cL = 0;
+								
+								int rL = r.length-1;
+								if (rL < 0) rL = 0;
+
+								Relationship[] cc = new Relationship[cL + rL];
+								if (rL > 0)
+									System.arraycopy(r, 1, cc, 0, rL);
+								if (cL > 0)
+									System.arraycopy(context, 1, cc, rL, cL);
 								
 								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), cc);
 							}
@@ -163,8 +171,6 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					super.onMessage(pf);
 				} else {
 					
-					Set<Relationship> visitedREFs = new FastSet<Relationship>();
-
 					for (Relationship st : pf.getPFlowPath()) {
 						//System.out.println("CHECK PFLOW "+st);
 						Set<Relationship[]> rSet = get(pf, st, theNode, suffixes, visitedREFs);
