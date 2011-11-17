@@ -29,10 +29,7 @@ import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.Prefix;
 import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.AbstractValue;
 
@@ -179,6 +176,11 @@ public class AnimoExpression extends AbstractExpression {
 
     	if (token.length() == 1 && ".".equals(token)) return; //XXX:start new graph
 
+        boolean possessive = token.endsWith(POSSESSIVE._.name());
+        if (possessive) {
+            token = token.substring(0, token.length()-POSSESSIVE._.name().length());
+        }
+
     	if (text) {
             builder._(token);
         } else {
@@ -210,7 +212,7 @@ public class AnimoExpression extends AbstractExpression {
                             builder.start(AN._);
                             level++;
                         }
-                        s =  REF._;
+                        s =  possessive ? POSSESSIVE._ : REF._;
                         builder._(s, token);
                         comma = false;
                     } else {

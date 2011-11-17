@@ -16,16 +16,13 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
+package org.animotron.statement;
+
+import org.animotron.statement.ml.MLOperator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class REF extends AbstractReference implements Reference {
-
-	public static final REF _ = new REF();
-
-	private REF() { super("->"); }
-	
-}
+public interface Sufix extends MLOperator {}

@@ -18,14 +18,16 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.statement.Sufix;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class REF extends AbstractReference implements Reference {
+public class POSSESSIVE extends AbstractReference implements Sufix {
 
-	public static final REF _ = new REF();
+	public static final POSSESSIVE _ = new POSSESSIVE();
 
-	private REF() { super("->"); }
+	private POSSESSIVE() { super("'s"); }
 	
 }
