@@ -21,6 +21,7 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.Evaluable;

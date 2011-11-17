@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.ml;
 
+import org.animotron.statement.Prefix;
 import org.animotron.statement.value.AbstractValue;
 
 /**
@@ -25,7 +26,7 @@ import org.animotron.statement.value.AbstractValue;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class ATTRIBUTE extends AbstractValue implements Prefix {
+public class ATTRIBUTE extends AbstractValue implements MLOperator, Prefix {
 	
 	public static final ATTRIBUTE _ = new ATTRIBUTE();
 	
