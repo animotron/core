@@ -50,7 +50,7 @@ public class DocumentTest extends ATest {
 					"(ic html " +
 						"\\table " +
 							"(\\tr each (get column) (\\th get name)) " +
-							"(each (get row) (\\tr each (get column) (\\td get name)))" +
+							"(each (get row) (\\tr each (get column) (\\td get row's name)))" +
 					").");
 		
 		testAnimo("the journal (is table) (have column (date) (number)) (have row all document).");
