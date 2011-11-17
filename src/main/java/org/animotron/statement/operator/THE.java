@@ -53,7 +53,15 @@ public class THE extends AbstractStatement implements Prepare, KernelEventHandle
         }
     }
 
-	private THE() { super("the"); }
+    public static Relationship __(String name) {
+        try {
+            return THE._.getOrCreate(name, true);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private THE() { super("the"); }
 
 	public Relationship get(String name) {
         return Cache.getRelationship(name);

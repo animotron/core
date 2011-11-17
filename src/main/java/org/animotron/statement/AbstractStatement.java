@@ -56,13 +56,17 @@ public abstract class AbstractStatement implements Statement {
 	}
 	
 	protected Relationship createResult(final PFlow pf, final Relationship context, final Node node, final Relationship r, final RelationshipType rType) {
+		return createResult(pf, context, node, r, rType, pf.getPathHash());
+	}
+
+	protected Relationship createResult(final PFlow pf, final Relationship context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
 				//check if it exist
 				Relationship res = Result.getIfExist(node, r, rType);
 				if (res != null) {
-					Result.add(res, pf.getPathHash());
+					Result.add(res, hash);
 					
 					//for debug
 					//CID.set(res, context.getId());
@@ -76,7 +80,7 @@ public abstract class AbstractStatement implements Statement {
 				RID.set(res, r.getId());
 				//for debug
 				CID.set(res, context.getId());
-				Result.add(res, pf.getPathHash());
+				Result.add(res, hash);
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;
 			}

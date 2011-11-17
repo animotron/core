@@ -18,19 +18,14 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.index.Order;
-import org.animotron.graph.index.Result;
+import java.util.List;
+
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.Properties.CID;
-import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.REF;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -61,30 +56,16 @@ public class AN extends Operator implements Reference, Evaluable {
 			
 			if (!Utils.results(node, pf, false)) {
 
-				final Relationship res = Order.first(1, node)[0];
-				
-				Relationship ref = AnimoGraph.execute(new GraphOperation<Relationship>() {
-					@Override
-					public Relationship execute() {
-						Relationship r = node.createRelationshipTo(res.getEndNode(), REF);
-						//store to relationship arrow
-						//RID.set(res, r.getId());
-						Result.add(r, pf.getOpHash());
-						//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-						return r;
-					}
-				});
+				for (Relationship r : getREF(pf, op)) {
 
-				//System.out.println("AN res = "+ref);
-			
-				pf.sendAnswer(ref, op);
+					pf.sendAnswer(createResult(pf, op, node, r, REF, pf.getOpHash()), op);
+				}
 			}
 			pf.done();
 		}
 	};
 	
-	public Relationship getREF(Relationship op) {
-		return Utils.getByREF(op);
+	public List<Relationship> getREF(PFlow pf, Relationship op) {
+		return Utils.getREFs(pf, op.getEndNode());
 	}
-	
 }

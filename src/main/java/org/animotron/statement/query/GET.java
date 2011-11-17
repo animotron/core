@@ -231,9 +231,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 							
 							Statement st = Statements.relationshipType(r);
 							if (st instanceof AN) {
-								Relationship t = AN._.getREF(r);
-								if (!visitedREFs.contains(t))
-									newREFs.add(t);
+								for (Relationship t : AN._.getREF(pf, r)) {
+									if (!visitedREFs.contains(t))
+										newREFs.add(t);
+								}
 							} else if (st instanceof Reference) {
 								try {
 									if (!pf.isInStack(r)) {
@@ -276,10 +277,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					Relationship t = AN._.getREF(r);
-					//System.out.println(t);
-					if (visitedREFs != null && !visitedREFs.contains(t))
-						newREFs.add(t);
+					for (Relationship t : AN._.getREF(pf, r)) {
+						//System.out.println(t);
+						if (visitedREFs != null && !visitedREFs.contains(t))
+							newREFs.add(t);
+					}
 	
 				} else if (st instanceof Reference) {
 					if (!pf.isInStack(r)) {

@@ -57,6 +57,40 @@ public class Utils {
 			//.evaluator(Evaluators.excludeStartPosition());
 
 
+	public static List<Relationship> getREFs(PFlow pf, final Node node) {
+		//System.out.println(node);
+		try {
+			try {
+				Relationship theNode = THE.__((String)THE._.reference(node));
+
+				if (theNode != null) {
+					List<Relationship> res = new FastList<Relationship>();
+					res.add(theNode);
+					
+					return res;
+				}
+			} catch (Exception e) {
+			}
+
+			List<Relationship> list = new FastList<Relationship>();
+			IndexHits<Relationship> hits = Order.queryDown(node);
+			try {
+				for (Relationship res : hits) {
+					if (res.isType(org.animotron.statement.operator.REF._))
+						list = getTheRelationships(pf, res, list);
+				}
+				
+			} finally {
+				hits.close();
+			}
+			return list;
+
+		} catch (Exception e) {
+			pf.sendException(e);
+		}
+		return null;
+	}
+
 	public static List<Node> getByREF(PFlow pf, final Node node) {
 		//System.out.println(node);
 		try {
@@ -85,13 +119,8 @@ public class Utils {
 			}
 			return list;
 
-		} catch (IndexOutOfBoundsException e) {
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			pf.sendException(e);
 		}
 		return null;
 	}
@@ -129,8 +158,10 @@ public class Utils {
 	}
 	
 	public static List<Relationship> getTheRelationships(PFlow pf, Relationship r) {
-		List<Relationship> list = new FastList<Relationship>();
-		
+		return getTheRelationships(pf, r, new FastList<Relationship>());
+	}
+
+	public static List<Relationship> getTheRelationships(PFlow pf, Relationship r, List<Relationship> list) {
 		try {
 		
 			Statement s = Statements.relationshipType(r);
