@@ -32,6 +32,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.Suffix;
+import org.animotron.statement.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -43,6 +44,7 @@ import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -56,6 +58,18 @@ public class Utils {
 			breadthFirst().
 			relationships(RESULT, OUTGOING );
 			//.evaluator(Evaluators.excludeStartPosition());
+
+	public static TraversalDescription td_eval_IS = 
+			Traversal.description().
+				breadthFirst().
+				relationships(IS._, OUTGOING);
+				//relationships(IC._.relationshipType(), OUTGOING);
+		
+	public static TraversalDescription upIS = 
+			Traversal.description().
+				breadthFirst().
+				relationships(IS._, INCOMING);
+				//relationships(IC._.relationshipType(), OUTGOING);
 
 
 	public static List<Relationship> getREFs(PFlow pf, final Node node) {

@@ -67,18 +67,6 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	TraversalDescription td = Traversal.description().
 			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
 
-	private static TraversalDescription td_eval_IS = 
-		Traversal.description().
-			breadthFirst().
-			relationships(IS._, OUTGOING);
-			//relationships(IC._.relationshipType(), OUTGOING);
-	
-	private static TraversalDescription upIS = 
-			Traversal.description().
-				breadthFirst().
-				relationships(IS._, INCOMING);
-				//relationships(IC._.relationshipType(), OUTGOING);
-
 	private static TraversalDescription td_eval_ic = 
 			Traversal.description().
 				breadthFirst().
@@ -375,7 +363,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		}
 
 		//search 'IC' by 'IS' topology
-		for (Relationship tdR : td_eval_IS.traverse(ref).relationships()) {
+		for (Relationship tdR : Utils.td_eval_IS.traverse(ref).relationships()) {
 
 			//System.out.println("GET IC -> IS "+tdR);
 			
@@ -410,7 +398,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		Node node = res.getStartNode();
 		
-		for (Relationship r : td_eval_IS.traverse(node).relationships()) {
+		for (Relationship r : Utils.td_eval_IS.traverse(node).relationships()) {
 			//System.out.println(r);
 			for (Relationship rr : suffixes) {
 				if (r.getEndNode().equals(rr.getEndNode()))

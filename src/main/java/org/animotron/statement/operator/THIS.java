@@ -23,6 +23,7 @@ import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -51,14 +52,28 @@ public class THIS extends Operator implements Reference, Evaluable {
 			
 			Relationship op = pf.getOP();
 			final Node node = op.getEndNode();
+			
+			System.out.println("THIS "+op+" ");
+			List<Node> thes = Utils.getByREF(pf, node);
+			System.out.println(Arrays.toString(thes.toArray()));
 
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
-			if (!Utils.results(node, pf, false)) {
-
-				for (Relationship r : getREF(pf, op)) {
-
-					pf.sendAnswer(createResult(pf, op, node, r, REF, pf.getOpHash()), op);
+			if (!Utils.results(node, pf)) {
+				
+				for (Relationship r : pf.getPFlowPath()) {
+					System.out.print(""+r+" ");
+					System.out.print(""+r.getStartNode()+" -> ");
+					System.out.print(""+r.getEndNode()+" ");
+					
+					for (Relationship rr : Utils.td_eval_IS.traverse(r.getEndNode()).relationships()) {
+						System.out.print("["+rr+" ");
+						System.out.print(""+rr.getStartNode()+" -> ");
+						System.out.print(""+rr.getEndNode()+"] ");
+					}
+					System.out.println("");
+					
+					//pf.sendAnswer(createResult(pf, op, node, r, REF, pf.getOpHash()), op);
 				}
 			}
 			pf.done();
