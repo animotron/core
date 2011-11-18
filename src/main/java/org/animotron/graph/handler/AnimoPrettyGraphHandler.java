@@ -20,6 +20,7 @@ package org.animotron.graph.handler;
 
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
+import org.animotron.statement.Suffix;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.value.VALUE;
@@ -130,7 +131,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                     for (int i = 0; i < indent; i++) {
                         write(INDENT);
                     }
-                } else if (!(ps instanceof LINK)) {
+                } else if (!(ps instanceof LINK || statement instanceof Suffix)) {
                     if (statement instanceof REF && ps instanceof REF) {
                         write(",");
                     } else {
@@ -146,7 +147,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                         }
                     }
                 }
-                if (!(statement instanceof AbstractReference || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+                if (!(statement instanceof REF || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
                     write("(");
                 }
             }
@@ -158,7 +159,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         }
         if (level == 0) {
             write(".");
-        } else if (!(statement instanceof AbstractReference || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
     }

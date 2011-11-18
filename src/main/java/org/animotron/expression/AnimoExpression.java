@@ -176,11 +176,6 @@ public class AnimoExpression extends AbstractExpression {
 
     	if (token.length() == 1 && ".".equals(token)) return; //XXX:start new graph
 
-        boolean possessive = token.endsWith(POSSESSIVE._.name());
-        if (possessive) {
-            token = token.substring(0, token.length()-POSSESSIVE._.name().length());
-        }
-
     	if (text) {
             builder._(token);
         } else {
@@ -190,6 +185,12 @@ public class AnimoExpression extends AbstractExpression {
                 prefix = false;
             } else if (op instanceof THE || op instanceof Relation) {
                 builder.start(op, token);
+                op = null;
+                level++;
+            } else if (token.endsWith(POSSESSIVE._.name())) {
+                token = token.substring(0, token.length()-POSSESSIVE._.name().length());
+                builder.start(POSSESSIVE._);
+                builder._(REF._, token);
                 op = null;
                 level++;
             } else {
@@ -208,17 +209,12 @@ public class AnimoExpression extends AbstractExpression {
                 } else if (s == null) {
                     Object o = AbstractValue.value(token);
                     if (o instanceof String) {
-                        if (possessive) {
-                            s =  POSSESSIVE._;
-                            builder._(s, token);
-                        } else {
-                            if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF) && !(op instanceof POSSESSIVE)) {
-                                builder.start(AN._);
-                                level++;
-                            }
-                            s =  REF._;
-                            builder._(s, token);
+                        if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF) && !(op instanceof POSSESSIVE)) {
+                            builder.start(AN._);
+                            level++;
                         }
+                        s =  REF._;
+                        builder._(s, token);
                         comma = false;
                     } else {
                         builder._(o);

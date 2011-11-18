@@ -18,14 +18,29 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.exception.AnimoException;
+import org.animotron.statement.AbstractStatement;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class REF extends AbstractReference implements Reference {
+public class REF extends AbstractStatement implements Reference {
 
 	public static final REF _ = new REF();
 
 	private REF() { super("->"); }
 	
+    @Override
+	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+		return parent.createRelationshipTo(reference(reference, ignoreNotFound), this);
+	}
+
+    @Override
+    public Object reference(Relationship r) {
+        return THE._.reference(r);
+    }
+
 }

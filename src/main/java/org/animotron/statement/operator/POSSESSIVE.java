@@ -24,7 +24,7 @@ import org.animotron.statement.Suffix;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class POSSESSIVE extends AbstractReference implements Suffix {
+public class POSSESSIVE extends Operator implements Suffix {
 
 	public static final POSSESSIVE _ = new POSSESSIVE();
 

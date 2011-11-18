@@ -116,11 +116,11 @@ public class ResultTraverser extends AnimoTraverser {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, r, level, isOne);
-			} else if (!(s instanceof Relation || s instanceof AbstractReference)) {
+			} else if (!(s instanceof Relation || s instanceof REF)) {
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne, pos, isLast);
                 
-                if (!(s instanceof AbstractReference)) {
+                if (!(s instanceof REF)) {
 	                node = r.getEndNode();
 	                iterate(handler, pf, new It(node), level);
                 }
