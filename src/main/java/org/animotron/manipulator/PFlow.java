@@ -78,13 +78,13 @@ public class PFlow {
 
 	}
 
-//	public PFlow(Manipulator m, Relationship op) {
-//		parent = null;
-//		this.m = m;
-//
-//		this.op = op; 
-//		path.add(op);
-//	}
+	public PFlow(Manipulator m, Relationship op) {
+		parent = null;
+		this.m = m;
+
+		this.op = op; 
+		path.add(op);
+	}
 
 	public PFlow(PFlow parent) {
 		this.parent = parent;
