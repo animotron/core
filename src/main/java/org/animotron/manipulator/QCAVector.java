@@ -18,11 +18,13 @@
  */
 package org.animotron.manipulator;
 
+import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Relationship;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import org.animotron.statement.operator.Utils;
-import org.neo4j.graphdb.Relationship;
+import static org.animotron.utils.MessageDigester.longToByteArray;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -87,7 +89,6 @@ public class QCAVector {
 
 	public byte[] mashup() {
 		//XXX: what is this?
-		//XXX: optimize!!!
-		return String.valueOf(answer.getId()).getBytes();
+        return longToByteArray(answer.getId());
 	}
 }

@@ -115,12 +115,17 @@ public class MessageDigester {
         return buf.toString();
     }
 
-    public static String longToHex( long b ) {
+    public static byte[] longToByteArray( long b ) {
         byte[] target = new byte[8];
         for ( int i = 0; i < 8; i++ ) {
             target[7-i] = (byte) (b >>> (i * 8));
         }
-        return byteArrayToHex(target);
+        return target;
+    }
+
+
+    public static String longToHex( long b ) {
+        return byteArrayToHex(longToByteArray(b));
     }
 
 
