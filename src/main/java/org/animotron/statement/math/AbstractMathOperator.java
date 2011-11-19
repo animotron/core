@@ -19,6 +19,7 @@
 package org.animotron.statement.math;
 
 import org.animotron.graph.serializer.StringResultSerializer;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
@@ -35,6 +36,10 @@ import java.io.IOException;
 public abstract class AbstractMathOperator extends Instruction implements Evaluable{
 
 	protected AbstractMathOperator(String name) { super(name); }
+
+    protected Number param (PFlow pf, ACQVector r) throws IOException {
+		return AbstractValue.number(StringResultSerializer._.serialize(pf, r.getAnswer()));
+    };
 
     protected Number param (PFlow pf, Relationship r) throws IOException {
 		return AbstractValue.number(StringResultSerializer._.serialize(pf, r));

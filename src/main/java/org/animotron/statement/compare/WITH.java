@@ -21,6 +21,7 @@ package org.animotron.statement.compare;
 import javolution.util.FastList;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -60,52 +61,51 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
 
-		Set<Relationship[]> haveSet = GET._.get(pf, ref, theNode, null, null);
+		Set<ACQVector> haveSet = GET._.get(pf, ref, theNode, null, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
-		List<Relationship> actual = new FastList<Relationship>();
-		List<Relationship> expected = new FastList<Relationship>();
+		List<ACQVector> actual = new FastList<ACQVector>();
+		List<ACQVector> expected = new FastList<ACQVector>();
 
-		PipedInput<Relationship[]> in;
+		PipedInput<ACQVector> in;
 		
-		System.out.println("Eval actual");
-		for (Relationship[] have : haveSet) {
-			in = Evaluator._.execute(new PFlow(pf), have[0].getEndNode());
-			for (Relationship[] e : in) {
-				actual.add(e[0]);
-				System.out.println("actual "+e);
+		//System.out.println("Eval actual");
+		for (ACQVector have : haveSet) {
+			in = Evaluator._.execute(new PFlow(pf), have.getAnswer().getEndNode());
+			for (ACQVector e : in) {
+				actual.add(e);
+				//System.out.println("actual "+e);
 			}
 		}
 
-		System.out.println("Eval expected");
+		//System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
-		for (Relationship[] e : in) {
-			Relationship r = Utils.relax(e[0]);
-			expected.add(r);
-			System.out.println("expected "+r);
+		for (ACQVector e : in) {
+			expected.add(e);
+			//System.out.println("expected "+r);
 		}
 		
 		if (actual.size() >= 1 && expected.size() == 1) {
-			Relationship g = expected.get(0);
+			ACQVector g = expected.get(0);
 			
 			//XXX: finish
-			List<Relationship> l = evaluable(pf, g.getEndNode());
+			List<ACQVector> l = evaluable(pf, g.getAnswer().getEndNode());
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) {
 				
 				System.out.println("DON'T KNOW WHAT TO DO, get alot of results @WITH");
-				for (Relationship r : l) {
-					System.out.println(""+r+" "+r.getType());
-				}
+//				for (ACQVector r : l) {
+//					System.out.println(""+r+" "+r.getType());
+//				}
 			}
 
-			System.out.println("***** expected = "+g.getEndNode());
+			//System.out.println("***** expected = "+g.getEndNode());
 			
-			for (Relationship e : actual) {
-				System.out.println("***** actual = "+e.getEndNode());
-				if (e.isType(g.getType())
-					&& e.getEndNode().equals(g.getEndNode()))
+			for (ACQVector e : actual) {
+				//System.out.println("***** actual = "+e.getEndNode());
+				if (e.getAnswer().isType(g.getAnswer().getType())
+					&& e.getAnswer().getEndNode().equals(g.getAnswer().getEndNode()))
 					
 					return true;
 			}
@@ -114,8 +114,8 @@ public class WITH extends Operator implements Predicate {
 		return false;
 	}
 	
-	private List<Relationship> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
-		List<Relationship> list = new FastList<Relationship>();
+	private List<ACQVector> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
+		List<ACQVector> list = new FastList<ACQVector>();
 		
 		IndexHits<Relationship> q = Order.queryDown(node);
 		try {
@@ -124,15 +124,14 @@ public class WITH extends Operator implements Predicate {
 				
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
-    				System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput<Relationship[]> in = Evaluator._.execute(pf, i);
-    				for (Relationship[] e : in) {
-    					Relationship r = Utils.relax(e[0]);
-    					list.add(r);
-    					System.out.println("get from Evaluator "+r);
+    				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+    				PipedInput<ACQVector> in = Evaluator._.execute(pf, i);
+    				for (ACQVector e : in) {
+    					list.add(e);
+    					//System.out.println("get from Evaluator "+r);
     				}
     			} else {
-    				list.add(i);
+    				list.add(new ACQVector(null, i));
     			}
 			}
 		} finally {

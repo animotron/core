@@ -24,6 +24,8 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.Utils;
+import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.animotron.utils.MessageDigester;
@@ -32,6 +34,7 @@ import org.jetlang.channels.MemoryChannel;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -62,7 +65,7 @@ public class PFlow {
 	
 	private final Manipulator m;
 
-	public final Channel<Relationship[]> answer = new MemoryChannel<Relationship[]>();
+	public final Channel<ACQVector> answer = new MemoryChannel<ACQVector>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Throwable> stop = new MemoryChannel<Throwable>();
 	
@@ -70,7 +73,7 @@ public class PFlow {
 	private Relationship op = null;
 	private Node opNode = null;
 	
-	private Vector<Relationship> path = new Vector<Relationship>();
+	private Vector<ACQVector> path = new Vector<ACQVector>();
 	
 	public PFlow(Manipulator m) {
 		parent = null;
@@ -83,7 +86,7 @@ public class PFlow {
 		this.m = m;
 
 		this.op = op; 
-		path.add(op);
+		path.add(new ACQVector(op));
 	}
 
 	public PFlow(PFlow parent) {
@@ -106,12 +109,13 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 		
+		//XXX: remove?
 		Statement s = Statements.relationshipType(op);
 		if (s instanceof Reference || op.isType(RESULT) || op.isType(REF))
 			addContextPoint(op);
 		
 		if (path.isEmpty())
-			path.add(op);
+			path.add(new ACQVector(op));
 		
 		this.op = op;
 	}
@@ -134,12 +138,14 @@ public class PFlow {
 		return op;
 	}
 
+	//XXX: still required?
 	public Relationship getStartOP() {
-		return path.lastElement();
+		return path.lastElement().getQuestion();
 	}
 	
+	//XXX: still required?
 	public Node getStartNode() {
-		return path.lastElement().getEndNode();
+		return path.lastElement().getQuestion().getEndNode();
 	}
 
 	public Node getOPNode() {
@@ -154,29 +160,60 @@ public class PFlow {
 		this.op = null;
 	}
 
-	public void sendAnswer(Relationship[] r) {
+	public void sendAnswer(ACQVector r) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
 			parent.answer.publish(r);
 		}
-		
 	}
 
-	public void sendAnswer(Relationship r, Relationship ... context) {
+	public void sendAnswer(Relationship answer) {
+		sendAnswer(answer, RESULT, getPathHash());
+	}
+
+	public void sendAnswer(Relationship answer, RelationshipType rType, byte[] hash) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 
-			Relationship[] answer = new Relationship[1+context.length];
-			answer[0] = r;
-			if (context.length > 0)
-				System.arraycopy(context, 0, answer, 1, context.length);
+			Relationship createdAnswer = Utils.createResult( this, op.getEndNode(), answer, rType, hash );
+			
+			parent.answer.publish(new ACQVector(op, createdAnswer));
+		}
+	}
 
-			parent.answer.publish(answer);
+	public void sendAnswer(ACQVector answerVector, RelationshipType rType) {
+		if (parent == null) {
+			System.out.println("WORNG - no parent");
+			throw new IllegalArgumentException("NULL parent @pflow"); 
+		} else {
+			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
+
+			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), HAVE._);
+			
+			parent.answer.publish(new ACQVector(op, answerVector.getContext(), answer));
+		}
+	}
+
+	public void sendAnswer(Relationship question, Relationship answer) {
+		Relationship createdAnswer = Utils.createResult(this, op.getEndNode(), answer, RESULT);
+
+		sendAnswer(question, null, createdAnswer);
+	}
+
+
+	public void sendAnswer(Relationship question, ACQVector context, Relationship answer) {
+		if (parent == null) {
+			System.out.println("WORNG - no parent");
+			throw new IllegalArgumentException("NULL parent @pflow"); 
+		} else {
+			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
+
+			parent.answer.publish(new ACQVector(question, context, answer));
 		}
 	}
 
@@ -251,13 +288,7 @@ public class PFlow {
 		return m;
 	}
 	
-	public List<Relationship> getPFlowPath() {
-//		List<Relationship> list = new FastList<Relationship>();
-//		for (Relationship r : getFlowPath().relationships()) {
-//			if (REF.name().equals(r.getType().name()))
-//				list.put(r);
-//		}
-//		return list;
+	public List<ACQVector> getPFlowPath() {
 		return path;
 	}
 	
@@ -358,22 +389,26 @@ public class PFlow {
 	}
 
 
-	public int addContextPoint(Relationship r) {
+	public int addContextPoint(ACQVector vector) {
 		boolean debug = false;
-		if (debug) System.out.print("adding "+this+" "+r+" "+r.getType());
+		if (debug) System.out.print("adding "+this+" "+vector);
 //		System.out.println(new IOException().getStackTrace()[1]);
 		if (path.isEmpty()) {
 			if (debug) System.out.println(" (added)");
-			path.insertElementAt(r, 0);
+			path.insertElementAt(vector, 0);
 			return 1;
 			
-		} else if (!path.isEmpty() && !path.get(0).equals(r)) {
-			path.insertElementAt(r, 0);
+		} else if (!path.isEmpty() && !path.get(0).questionEquals(vector)) {
+			path.insertElementAt(vector, 0);
 			if (debug) System.out.println(" (added)");
 			return 1;
 		}
 		if (debug) System.out.println(" (ignored)");
 		return 0;
+	}
+
+	public int addContextPoint(Relationship r) {
+		return addContextPoint(new ACQVector(r));
 	}
 
 	public void popContextPoint() {
@@ -385,9 +420,9 @@ public class PFlow {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();  
 		DataOutputStream dos = new DataOutputStream(bos);  
 		
-		for (Relationship p : path) {
+		for (ACQVector p : path) {
 			try {
-				dos.writeLong(p.getId());
+				p.collectHash(dos);
 			} catch (IOException e) {
 			}
 		}
@@ -413,7 +448,8 @@ public class PFlow {
 	public Relationship getLastContext() {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");
-		for (Relationship r : path) {
+		for (ACQVector v : path) {
+			Relationship r = v.getQuestion();
 			if (r.isType(AN._)) {
 				if (debug) System.out.println(r);
 				return r;
@@ -426,7 +462,7 @@ public class PFlow {
 			}
 		}
 		if (debug) System.out.println(path.lastElement());
-		return path.lastElement();
+		return path.lastElement().getQuestion();
 	}
 
 	private TraversalDescription td_flow =
@@ -465,7 +501,8 @@ public class PFlow {
 		
 		boolean debug = false;
 		if (debug) System.out.print("IN STACK CHECK "+r+" in "+path+" ");
-		for (Relationship rr : path) {
+		for (ACQVector v : path) {
+			Relationship rr = v.getQuestion();
 			if (rr.equals(r)) return true;
 			try {
 				long id = (Long)rr.getProperty(RID.name());

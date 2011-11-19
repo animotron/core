@@ -20,6 +20,7 @@ package org.animotron.statement.compare;
 
 import javolution.util.FastList;
 import org.animotron.io.PipedInput;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
@@ -54,29 +55,29 @@ public class EQ extends Operator implements Predicate {
 		Relationship have = GET._.getBySELF(pf, ref, theNode);
 		if (have == null) return false;
 		
-		List<Relationship> actual = new FastList<Relationship>();
-		List<Relationship> expected = new FastList<Relationship>();
+		List<ACQVector> actual = new FastList<ACQVector>();
+		List<ACQVector> expected = new FastList<ACQVector>();
 
-		System.out.println("Eval actual");
-		PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
-		for (Relationship[] e : in) {
-			actual.add(e[0]);
-			System.out.println("actual "+e);
+		//System.out.println("Eval actual");
+		PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
+		for (ACQVector e : in) {
+			actual.add(e);
+			//System.out.println("actual "+e);
 		}
 
-		System.out.println("Eval expected");
+		//System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
-		for (Relationship[] e : in) {
-			expected.add(e[0]);
-			System.out.println("expected "+e);
+		for (ACQVector e : in) {
+			expected.add(e);
+			//System.out.println("expected "+e);
 		}
 		
 		if (actual.size() == 1 && expected.size() == 1) {
-			Relationship e = actual.get(0);
-			Relationship g = expected.get(0);
+			ACQVector e = actual.get(0);
+			ACQVector g = expected.get(0);
 			
-			if (e.isType(g.getType())
-				&& e.getEndNode().equals(g.getEndNode()))
+			if (e.getAnswer().isType(g.getAnswer().getType())
+				&& e.getAnswer().getEndNode().equals(g.getAnswer().getEndNode()))
 				
 				return true;
 		}

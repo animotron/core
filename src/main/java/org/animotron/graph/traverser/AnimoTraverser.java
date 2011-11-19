@@ -20,6 +20,7 @@ package org.animotron.graph.traverser;
 
 import javolution.util.FastList;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -60,7 +61,11 @@ public class AnimoTraverser {
 	
     protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (o instanceof Relationship) {
-            build(handler, pf, new Relationship[] {(Relationship)o}, level, isOne, pos, isLast);
+            build(handler, pf, new ACQVector((Relationship)o), level, isOne, pos, isLast);
+
+        } else if (o instanceof ACQVector) {
+            build(handler, pf, (ACQVector)o, level, isOne, pos, isLast);
+            
         } else {
             String name = (String) o;
             Statement statement = Statements.name(name);
@@ -70,8 +75,8 @@ public class AnimoTraverser {
         }
     }
 
-	protected void build(GraphHandler handler, PFlow pf, Relationship[] rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-		Relationship r = rr[0];
+	protected void build(GraphHandler handler, PFlow pf, ACQVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+		Relationship r = rr.getAnswer();
 		Statement statement = Statements.relationshipType(r);
 		if (statement == null)
 			return;

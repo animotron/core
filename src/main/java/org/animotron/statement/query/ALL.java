@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.query;
 
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Reference;
@@ -25,10 +26,7 @@ import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.util.List;
 import java.util.Set;
-
-import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * Query operator 'ALL'.
@@ -52,15 +50,16 @@ public class ALL extends AbstractQuery implements Reference {
         @Override
         public void onMessage(final PFlow pf) {
         	final Relationship op = pf.getOP();
-            final Node n = op.getEndNode();
-            List<Node> theNodes = Utils.getByREF(pf, n);
-
 			//System.out.println("ALL **************************");
             
-            for (Node node : theNodes) {
+            for (ACQVector theVector : Utils.getByREF(pf, op)) {
+            	
+            	Relationship the = theVector.getAnswer();
 
     			//check, maybe, result was already calculated
-    			if (!Utils.results(node, pf)) {
+    			if (!Utils.results(the, pf)) {
+    				
+    				Node node = the.getEndNode();
 
 	            	Set<Node>[] lists = getUSEs(node, pf.getStartOP());
 					Set<Node> uses = lists[1];
@@ -73,13 +72,13 @@ public class ALL extends AbstractQuery implements Reference {
 					}
 		
 					if (underUSE && filtering(pf, node, uses))
-						pf.sendAnswer( createResult( pf, op, n, getThe(node), RESULT ), op );
+						pf.sendAnswer( getThe(node) );
 		
 			        for (Relationship tdR : td_IS.traverse(node).relationships()) {
 			            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
 			            Node res = tdR.getStartNode();
 			            if (filtering(pf, res, uses)) {
-			                pf.sendAnswer( createResult( pf, op, n, getThe(res), RESULT ), op );
+			                pf.sendAnswer( getThe(res) );
 			            }
 			        }
     			}

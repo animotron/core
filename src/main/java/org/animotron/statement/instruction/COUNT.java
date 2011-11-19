@@ -20,6 +20,7 @@ package org.animotron.statement.instruction;
 
 import org.animotron.Executor;
 import org.animotron.expression.JExpression;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Evaluable;
@@ -53,12 +54,12 @@ public class COUNT extends Instruction implements Evaluable {
 		public void onMessage(final PFlow pf) {
 			//System.out.println("COUNT");
 			
-			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
+			Subscribable<ACQVector> onContext = new Subscribable<ACQVector>() {
 				
 				AtomicInteger value = new AtomicInteger(0);
 				
 				@Override
-				public void onMessage(Relationship[] context) {
+				public void onMessage(ACQVector context) {
 					if (context == null) {
 						//XXX: optimize
 						JExpression r;
@@ -68,7 +69,7 @@ public class COUNT extends Instruction implements Evaluable {
                             pf.sendException(e);
                             return;
                         }
-                        pf.sendAnswer(r);
+                        //pf.sendAnswer(r);
 						pf.done();
 						return;
 					}

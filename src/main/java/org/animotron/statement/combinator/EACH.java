@@ -20,6 +20,7 @@ package org.animotron.statement.combinator;
 
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -62,17 +63,17 @@ public class EACH extends Combinator {
 			System.out.println("EACH EACH EACH EACH");
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
-				Set<Relationship> set = new FastSet<Relationship>();
+				Set<ACQVector> set = new FastSet<ACQVector>();
 				while (elements.hasNext()) {
 					Relationship element = elements.next();
 					if (elements.hasNext())
-						for (Relationship r : Utils.getTheRelationships(pf, element)) {
+						for (ACQVector r : Utils.getTheRelationships(pf, element)) {
 							set.add(r);
 						}
 					else {
-						for (Relationship r : set) {
+						for (ACQVector r : set) {
 							System.out.println("!!!! "+r);
-							Relationship[] rr = new Relationship[] {element, r};
+							ACQVector rr = new ACQVector(pf.getOP(), r, element);
 							pf.sendAnswer(rr);
 						}
 					}
@@ -91,6 +92,7 @@ public class EACH extends Combinator {
 		}
 	};
 
+	@SuppressWarnings("unused")
 	private void processByBuildSubgraph(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
 		if (pos > sets.size()) {
 

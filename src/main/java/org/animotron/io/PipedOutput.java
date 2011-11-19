@@ -27,6 +27,8 @@ import java.io.IOException;
 public class PipedOutput<T> implements Cloneable {
 
 	private PipedInput<T> connection;
+	
+	private boolean isEmpty = true;
 
 	public PipedOutput() {
 		try {
@@ -64,6 +66,7 @@ public class PipedOutput<T> implements Cloneable {
     	if (connection == null) throw new IOException("Pipe not connected");
 
         connection.receive(obj);
+        isEmpty = false;
     }
     
     public void close()  throws IOException {
@@ -72,4 +75,8 @@ public class PipedOutput<T> implements Cloneable {
     		connection.receivedLast();
     	}
     }
+
+	public boolean isEmpty() {
+		return isEmpty;
+	}
 }

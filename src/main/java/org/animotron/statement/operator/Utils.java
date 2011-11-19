@@ -23,10 +23,13 @@ import java.util.List;
 
 import javolution.util.FastList;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -36,10 +39,12 @@ import org.animotron.statement.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
+import static org.animotron.Properties.CID;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -72,45 +77,48 @@ public class Utils {
 				//relationships(IC._.relationshipType(), OUTGOING);
 
 
-	public static List<Relationship> getREFs(PFlow pf, final Node node) {
-		//System.out.println(node);
-		try {
-			try {
-				Relationship theNode = THE.__((String)THE._.reference(node));
-
-				if (theNode != null) {
-					List<Relationship> res = new FastList<Relationship>();
-					res.add(theNode);
-					
-					return res;
-				}
-			} catch (Exception e) {
-			}
-
-			Relationship first = null;
-			List<Relationship> list = new FastList<Relationship>();
-			IndexHits<Relationship> hits = Order.queryDown(node);
-			try {
-				for (Relationship res : hits) {
-					if (first == null) first = res;
-					
-					if (res.isType(org.animotron.statement.operator.REF._))
-						list = getTheRelationships(pf, res, list);
-				}
-
-				if (first != null && list.isEmpty())
-					getTheRelationships(pf, first, list);
-				
-			} finally {
-				hits.close();
-			}
-			return list;
-
-		} catch (Exception e) {
-			pf.sendException(e);
-		}
-		return null;
-	}
+//	public static PipedInput<ACQVector> getREFs(PFlow pf, final Node node) {
+//		PipedOutput<ACQVector> out = new PipedOutput<ACQVector>(); 
+//		PipedInput<ACQVector> in = out.getInputStream();
+//
+//		//System.out.println(node);
+//		try {
+//			try {
+//				Relationship theNode = THE.__((String)THE._.reference(node));
+//
+//				if (theNode != null) {
+//					List<Relationship> res = new FastList<Relationship>();
+//					res.add(theNode);
+//					
+//					return res;
+//				}
+//			} catch (Exception e) {
+//			}
+//
+//			Relationship first = null;
+//			List<Relationship> list = new FastList<Relationship>();
+//			IndexHits<Relationship> hits = Order.queryDown(node);
+//			try {
+//				for (Relationship res : hits) {
+//					if (first == null) first = res;
+//					
+//					if (res.isType(org.animotron.statement.operator.REF._))
+//						list = getTheRelationships(pf, res, list);
+//				}
+//
+//				if (first != null && list.isEmpty())
+//					getTheRelationships(pf, first, list);
+//				
+//			} finally {
+//				hits.close();
+//			}
+//			return list;
+//
+//		} catch (Exception e) {
+//			pf.sendException(e);
+//		}
+//		return null;
+//	}
 
 	public static List<Relationship> getSuffixes(final Node node) {
 		List<Relationship> list = null;
@@ -129,39 +137,48 @@ public class Utils {
 		return list;
 	}
 	
-	public static List<Node> getByREF(PFlow pf, final Node node) {
+	public static PipedInput<ACQVector> getByREF(PFlow pf) {
+		return getByREF(pf, pf.getOP());
+	}
+
+	public static PipedInput<ACQVector> getByREF(PFlow pf, final Relationship op) {
+		PipedOutput<ACQVector> out = new PipedOutput<ACQVector>(); 
+		PipedInput<ACQVector> in = out.getInputStream();
+		
+		Node node = op.getEndNode();
+		
 		//System.out.println(node);
 		try {
 			try {
-				Node theNode = THE._((String)THE._.reference(node));
+				Relationship theNode = THE.__((String)THE._.reference(node));
 
 				if (theNode != null) {
-					List<Node> res = new FastList<Node>();
-					res.add(theNode);
-					
-					return res;
+					out.write(new ACQVector(null, theNode));
+					out.close();
+					return in;
 				}
 			} catch (Exception e) {
 			}
 
 			Relationship first = null;
-			List<Node> list = new FastList<Node>();
 			IndexHits<Relationship> hits = Order.queryDown(node);
 			try {
 				for (Relationship res : hits) {
 					if (first == null) first = res;
 					
 					if (res.isType(org.animotron.statement.operator.REF._))
-						evaluable(pf, res, list);
+						evaluable(pf, res, out);
 				}
 				
-				if (first != null && list.isEmpty())
-					evaluable(pf, first, list);
+				if (first != null && out.isEmpty())
+					evaluable(pf, first, out);
 				
 			} finally {
 				hits.close();
 			}
-			return list;
+
+			out.close();
+			return in;
 
 		} catch (Exception e) {
 			pf.sendException(e);
@@ -169,81 +186,83 @@ public class Utils {
 		return null;
 	}
 
-	private static List<Node> evaluable(PFlow pf, Relationship r, List<Node> list) throws InterruptedException, IOException {
+	private static PipedOutput<ACQVector> evaluable(PFlow pf, Relationship r, PipedOutput<ACQVector> out) throws InterruptedException, IOException {
 		
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
-			for (Relationship[] e : in) {
+			PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), r);
+			for (ACQVector e : in) {
 				PFlow _pf_ = new PFlow(pf);
-				for (int i = 1; i < e.length; i++)
-					if (e[i] != null) _pf_.addContextPoint(e[i]);
+				_pf_.addContextPoint(e);
 				
-				Relationship result = Utils.relax(e[0]);
+				Relationship result = e.getAnswer();
 				
 				if (result.isType(REF) 
 						|| result.isType(org.animotron.statement.operator.REF._)
 						|| result.isType(THE._)
 					) {
-					list.add(result.getEndNode());
+					out.write(e);
 				} else {
-					for (Relationship[] rr : eval(_pf_, result)) {
-						list.add(rr[0].getEndNode());
+					for (ACQVector rr : eval(_pf_, result)) {
+						out.write(rr);
 					}
 				}
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			list.add(r.getEndNode());
+			out.write(new ACQVector(null, r));
 		}
 		
-		return list;
+		return out;
 	}
 	
-	public static List<Relationship> getTheRelationships(PFlow pf, Relationship r) {
-		return getTheRelationships(pf, r, new FastList<Relationship>());
+	public static PipedInput<ACQVector> getTheRelationships(PFlow pf, Relationship r) throws IOException {
+		PipedOutput<ACQVector> out = new PipedOutput<ACQVector>(); 
+		PipedInput<ACQVector> in = out.getInputStream();
+
+		getTheRelationships(pf, r, out);
+		out.close();
+		
+		return in;
 	}
 
-	public static List<Relationship> getTheRelationships(PFlow pf, Relationship r, List<Relationship> list) {
+	public static void getTheRelationships(PFlow pf, Relationship r, PipedOutput<ACQVector> out) {
 		try {
 		
 			Statement s = Statements.relationshipType(r);
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-				PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
-				for (Relationship[] e : in) {
+				PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), r);
+				for (ACQVector e : in) {
 					PFlow _pf_ = new PFlow(pf);
-					for (int i = 1; i < e.length; i++)
-						if (e[i] != null) _pf_.addContextPoint(e[i]);
+					_pf_.addContextPoint(e);
 					
-					Relationship result = Utils.relax(e[0]);
+					Relationship result = e.getAnswer();
 					
 					if (result.isType(REF) 
 							|| result.isType(org.animotron.statement.operator.REF._)
 							|| result.isType(THE._)
 						) {
-						list.add(result);
+						out.write(e);
 					} else {
-						for (Relationship[] rr : eval(_pf_, result)) {
-							list.add(rr[0]);
+						for (ACQVector rr : eval(_pf_, result)) {
+							out.write(rr);
 						}
 					}
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 			} else {
-				list.add(r);
+				out.write(new ACQVector(null, r));
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			pf.sendException(e);
 		}
-		
-		return list;
 	}
 	
-	public static PipedInput<Relationship[]> eval(PFlow pf, Relationship op) throws IOException {
-        final PipedOutput<Relationship[]> out = new PipedOutput<Relationship[]>();
-        PipedInput<Relationship[]> in = out.getInputStream();
+	public static PipedInput<ACQVector> eval(PFlow pf, Relationship op) throws IOException {
+        final PipedOutput<ACQVector> out = new PipedOutput<ACQVector>();
+        PipedInput<ACQVector> in = out.getInputStream();
 
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
 		for (Relationship rr : hits) {
@@ -251,14 +270,13 @@ public class Utils {
 			
 			Statement _s = Statements.relationshipType(rr);
 			if (_s instanceof Query || _s instanceof Evaluable) {
-				PipedInput<Relationship[]> _in = Evaluator._.execute(new PFlow(pf), rr);
-				for (Relationship[] ee : _in) {
-					ee[0] = Utils.relax(ee[0]);
+				PipedInput<ACQVector> _in = Evaluator._.execute(new PFlow(pf), rr);
+				for (ACQVector ee : _in) {
 					out.write(ee);
 				}
 				
 			} else {
-				out.write(new Relationship[] {rr});
+				out.write(new ACQVector(op, rr));
 			}
 		}
 		out.close();
@@ -294,22 +312,23 @@ public class Utils {
 	}
 
 	public static boolean results(PFlow pf) {
-		return results(pf.getOPNode(), pf, pf.getPathHash());
+		return results(pf.getOP(), pf, pf.getPathHash());
 	}
 
-	public static boolean results(Node node, PFlow pf) {
-		return results(node, pf, pf.getPathHash());
+	public static boolean results(PFlow pf, byte[] hash) {
+		return results(pf.getOP(), pf, hash);
 	}
 
-	public static boolean results(Node node, PFlow pf, byte[] hash) {
+	public static boolean results(Relationship op, PFlow pf) {
+		return results(op, pf, pf.getPathHash());
+	}
+
+	public static boolean results(Relationship op, PFlow pf, byte[] hash) {
 		boolean haveSome = false;
 
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-		for (Relationship[] r : Result.get(hash, node)) {
-			if (r.length == 1)
-				pf.sendAnswer(r[0], pf.getOP());
-			else
-				pf.sendAnswer(r);
+		for (ACQVector v : Result.get(hash, op)) {
+			pf.sendAnswer(v);
 			
 			haveSome = true;
 		}
@@ -384,5 +403,46 @@ public class Utils {
 			}
 		}
 		return r;
+	}
+
+	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType) {
+		return createResult(pf, null, node, r, rType, pf.getPathHash());
+	}
+
+	public static Relationship createResult(final PFlow pf, final ACQVector context, final Node node, final Relationship r, final RelationshipType rType) {
+		return createResult(pf, context, node, r, rType, pf.getPathHash());
+	}
+
+	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+		return createResult(pf, null, node, r, rType, hash);
+	}
+
+	public static Relationship createResult(final PFlow pf, final ACQVector context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+		return AnimoGraph.execute(new GraphOperation<Relationship>() {
+			@Override
+			public Relationship execute() {
+				//check if it exist
+				Relationship res = Result.getIfExist(node, r, rType);
+				if (res != null) {
+					Result.add(res, hash);
+					
+					//for debug
+					//CID.set(res, context.getId());
+					
+					return res;
+				}
+				
+				//adding if not
+				res = node.createRelationshipTo(r.getEndNode(), rType);
+				//store to relationship arrow
+				RID.set(res, r.getId());
+				//for debug
+				if (context != null)
+					CID.set(res, context.mashup());
+				Result.add(res, hash);
+				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+				return res;
+			}
+		});
 	}
 }

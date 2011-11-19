@@ -19,6 +19,7 @@
 package org.animotron.statement.combinator;
 
 import org.animotron.Executor;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -57,10 +58,10 @@ public class MAP extends Combinator {
 		public void onMessage(final PFlow pf) {
 			System.out.println("MAP");
 			
-			Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
+			Subscribable<ACQVector> onContext = new Subscribable<ACQVector>() {
 				@Override
-				public void onMessage(Relationship[] context) {
-					System.out.println("MAP message context "+Arrays.toString(context));
+				public void onMessage(ACQVector context) {
+					System.out.println("MAP vector "+context);
 					if (context == null) {
 						pf.countDown();
 						return;

@@ -20,6 +20,7 @@ package org.animotron.statement.math;
 
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
@@ -27,15 +28,12 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.jetlang.channels.Subscribable;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
-import java.util.List;
 
 import static org.animotron.expression.JExpression.value;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -67,8 +65,7 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 	                for (Relationship param : params) {
 	                	if (param.isType(REF._)) continue;
 	                	
-	                	List<Relationship> thes = Utils.getTheRelationships(pf, param);
-	                	for (Relationship r : thes) {
+	                	for (ACQVector r : Utils.getTheRelationships(pf, param)) {
 		                	if (x == null)
 		                		x = param(pf, r);
 		                	else
@@ -79,10 +76,10 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 
                     Relationship r = new JExpression(value(x));
                     
-                	Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getEndNode();
+                	Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
                 	
                     //XXX: fix context
-                    pf.sendAnswer(createResult(pf, pf.getOP(), sNode, r, RESULT));
+                    pf.sendAnswer(op, r);
 	            } catch (IOException e) {
 	                pf.sendException(e);
 	                return;

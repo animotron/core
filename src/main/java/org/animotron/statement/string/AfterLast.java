@@ -64,7 +64,8 @@ public class AfterLast extends Instruction implements Evaluable {
 
             //UNDERSTAND: if we have more that 2 params, what to do?
 
-        	System.out.println(pf.getOP());
+        	final Relationship op = pf.getOP();
+        	
             Relationship[] params = Order.first(3, pf.getOP().getStartNode());
 
             //pattern
@@ -110,7 +111,7 @@ public class AfterLast extends Instruction implements Evaluable {
 					}
 				});
 
-				pf.sendAnswer(r);
+				pf.sendAnswer(op, r);
             }
 
             pf.done();

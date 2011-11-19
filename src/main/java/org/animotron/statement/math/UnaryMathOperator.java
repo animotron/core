@@ -25,14 +25,12 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
 import static org.animotron.expression.JExpression.value;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -62,9 +60,9 @@ public abstract class UnaryMathOperator extends AbstractMathOperator implements 
                     Number x = execute(param(pf, params.next()));
                     Relationship r = new JExpression(value(x));
                     
-                    Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getEndNode();
+                    Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
                     
-                    pf.sendAnswer(createResult(pf, pf.getLastContext(), sNode, r, RESULT)); //XXX: fix context
+                    pf.sendAnswer(op, r); //XXX: fix context
                 }
             } catch (IOException e) {
                 pf.sendException(e);

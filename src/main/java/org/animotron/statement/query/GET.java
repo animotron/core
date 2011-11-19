@@ -24,6 +24,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -84,21 +85,26 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
-			final List<Node> theNodes = Utils.getByREF(pf, node);
 			
 			final List<Relationship> suffixes = Utils.getSuffixes(node);
 			
 			final Set<Relationship> visitedREFs = new FastSet<Relationship>();
 
-			for (Node theNode : theNodes) {
-				evalGet(pf, node, theNode, suffixes, visitedREFs);
+			for (ACQVector theNode : AN.getREFs(pf, op)) {
+				evalGet(pf, op, node, theNode.getAnswer().getEndNode(), suffixes, visitedREFs);
 			}
 			
 			pf.await();
 			pf.done();
 		}
 
-		private void evalGet(final PFlow pf, final Node node, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
+		private void evalGet(
+				final PFlow pf, 
+				final Relationship op, 
+				final Node node, 
+				final Node theNode, 
+				final List<Relationship> suffixes, 
+				final Set<Relationship> visitedREFs) {
 			
 			System.out.print("GET '");
 			try {
@@ -112,13 +118,13 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//}
 
 			//check, maybe, result was already calculated
-			if (!Utils.results(node, pf)) {
+			if (!Utils.results(pf)) {
 				//no pre-calculated result, calculate it
 				
-				Subscribable<Relationship[]> onContext = new Subscribable<Relationship[]>() {
+				Subscribable<ACQVector> onContext = new Subscribable<ACQVector>() {
 					@Override
-					public void onMessage(Relationship[] context) {
-						System.out.println("GET message ["+theNode+"] context "+Arrays.toString(context));
+					public void onMessage(ACQVector context) {
+						System.out.println("GET ["+theNode+"] vector "+context);
 						
 						if (context == null) {
 							pf.countDown();
@@ -126,23 +132,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<Relationship[]> rSet = get(pf, context[0], theNode, suffixes, visitedREFs);
+						final Set<ACQVector> rSet = get(pf, context.getAnswer(), theNode, suffixes, visitedREFs);
 						if (rSet != null) {
-							for (Relationship[] r : rSet) {
-								
-								int cL = context.length-1;
-								if (cL < 0) cL = 0;
-								
-								int rL = r.length-1;
-								if (rL < 0) rL = 0;
-
-								Relationship[] cc = new Relationship[cL + rL];
-								if (rL > 0)
-									System.arraycopy(r, 1, cc, 0, rL);
-								if (cL > 0)
-									System.arraycopy(context, 1, cc, rL, cL);
-								
-								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), cc);
+							for (ACQVector v : rSet) {
+								pf.sendAnswer(v, HAVE._);
 							}
 							return;
 						}
@@ -159,12 +152,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					super.onMessage(pf);
 				} else {
 					
-					for (Relationship st : pf.getPFlowPath()) {
+					for (ACQVector vector : pf.getPFlowPath()) {
 						//System.out.println("CHECK PFLOW "+st);
-						Set<Relationship[]> rSet = get(pf, st, theNode, suffixes, visitedREFs);
+						Set<ACQVector> rSet = get(pf, vector.getQuestion(), theNode, suffixes, visitedREFs);
 						if (rSet != null) {
-							for (Relationship[] r : rSet) {
-								pf.sendAnswer(createResult(pf, r[0], node, r[1], HAVE._), r[0]);
+							for (ACQVector v : rSet) {
+								pf.sendAnswer(v, HAVE._);
 							}
 							break;
 						}
@@ -175,19 +168,19 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	};
 	
-	public Set<Relationship[]> get(PFlow pf, Relationship ref, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
+	public Set<ACQVector> get(PFlow pf, Relationship ref, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
 		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
 		
 		return get(pf, refs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<Relationship[]> get(final PFlow pf, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
-		Set<Relationship[]> set = new FastSet<Relationship[]>();
+	public Set<ACQVector> get(final PFlow pf, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
+		Set<ACQVector> set = new FastSet<ACQVector>();
 		
 		Relationship have = searchForHAVE(pf, ref, theNode, suffixes);
 		if (have != null && !pf.isInStack(have)) 
-			set.add(new Relationship[] {have});
+			set.add(new ACQVector(pf.getOP(), have));
 		
 		if (!set.isEmpty()) return set;
 
@@ -197,7 +190,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		return get(pf, newREFs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<Relationship[]> get(
+	public Set<ACQVector> get(
 			final PFlow pf, 
 			final Set<Relationship> REFs, 
 			final Node theNode, 
@@ -208,7 +201,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		if (visitedREFs == null) visitedREFs = new FastSet<Relationship>();
 		
-		Set<Relationship[]> set = new FastSet<Relationship[]>();
+		Set<ACQVector> set = new FastSet<ACQVector>();
 		
 		Set<Relationship> nextREFs = new FastSet<Relationship>();
 		nextREFs.addAll(REFs);
@@ -225,7 +218,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode, suffixes);
 				if (have != null && !pf.isInStack(have)) { 
-					set.add(new Relationship[] {n, have});
+					set.add(new ACQVector(null, n, have));
 					System.out.println("FOUND");
 				}
 			}
@@ -248,18 +241,19 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 							
 							Statement st = Statements.relationshipType(r);
 							if (st instanceof AN) {
-								for (Relationship t : AN._.getREF(pf, r)) {
+								for (ACQVector v : AN.getREFs(pf, r)) {
+									Relationship t = v.getAnswer();
 									if (!visitedREFs.contains(t))
 										newREFs.add(t);
 								}
 							} else if (st instanceof Reference) {
 								try {
 									if (!pf.isInStack(r)) {
-										PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf), r);
+										PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), r);
 										
-										for (Relationship[] rr : in) {
-											if (!visitedREFs.contains(rr[0]))
-												newREFs.add(rr[0]);
+										for (ACQVector rr : in) {
+											if (!visitedREFs.contains(rr.getAnswer()))
+												newREFs.add(rr.getAnswer());
 										}
 									}
 								} catch (IOException e) {
@@ -294,7 +288,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					for (Relationship t : AN._.getREF(pf, r)) {
+					for (ACQVector v : AN.getREFs(pf, r)) {
+						Relationship t = v.getAnswer();
 						//System.out.println(t);
 						if (visitedREFs != null && !visitedREFs.contains(t))
 							newREFs.add(t);
@@ -303,11 +298,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				} else if (st instanceof Reference) {
 					if (!pf.isInStack(r)) {
 						try {
-							PipedInput<Relationship[]> in = Evaluator._.execute(new PFlow(pf, r), r);
+							PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf, r), r);
 							
-							for (Relationship[] rr : in) {
-								if (visitedREFs != null && !visitedREFs.contains(rr[0]))
-									newREFs.add(rr[0]);
+							for (ACQVector rr : in) {
+								if (visitedREFs != null && !visitedREFs.contains(rr.getAnswer()))
+									newREFs.add(rr.getAnswer());
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

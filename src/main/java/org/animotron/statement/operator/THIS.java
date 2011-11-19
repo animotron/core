@@ -18,15 +18,14 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.io.PipedInput;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.util.Arrays;
 import java.util.List;
-
-import static org.animotron.graph.RelationshipTypes.REF;
 
 /**
  * Operation 'THIS'. Reference to the closest instance in PFlow.
@@ -51,26 +50,25 @@ public class THIS extends Operator implements Reference, Evaluable {
 		public void onMessage(final PFlow pf) {
 			
 			Relationship op = pf.getOP();
-			final Node node = op.getEndNode();
 			
 			System.out.println("THIS "+op+" ");
-			List<Node> thes = Utils.getByREF(pf, node);
-			System.out.println(Arrays.toString(thes.toArray()));
+			PipedInput<ACQVector> thes = AN.getREFs(pf, op);
+			//System.out.println(Arrays.toString(thes.toArray()));
 
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
-			if (!Utils.results(node, pf)) {
+			if (!Utils.results(pf)) {
 				
-				for (Relationship r : pf.getPFlowPath()) {
+				for (ACQVector r : pf.getPFlowPath()) {
 					System.out.print(""+r+" ");
-					System.out.print(""+r.getStartNode()+" -> ");
-					System.out.print(""+r.getEndNode()+" ");
+					System.out.print(""+r.getQuestion().getStartNode()+" -> ");
+					System.out.print(""+r.getQuestion()+" ");
 					
-					for (Relationship rr : Utils.td_eval_IS.traverse(r.getEndNode()).relationships()) {
-						System.out.print("["+rr+" ");
-						System.out.print(""+rr.getStartNode()+" -> ");
-						System.out.print(""+rr.getEndNode()+"] ");
-					}
+//					for (Relationship rr : Utils.td_eval_IS.traverse(r.getEndNode()).relationships()) {
+//						System.out.print("["+rr+" ");
+//						System.out.print(""+rr.getStartNode()+" -> ");
+//						System.out.print(""+rr.getEndNode()+"] ");
+//					}
 					System.out.println("");
 					
 					//pf.sendAnswer(createResult(pf, op, node, r, REF, pf.getOpHash()), op);
@@ -79,8 +77,4 @@ public class THIS extends Operator implements Reference, Evaluable {
 			pf.done();
 		}
 	};
-	
-	public List<Relationship> getREF(PFlow pf, Relationship op) {
-		return Utils.getREFs(pf, op.getEndNode());
-	}
 }

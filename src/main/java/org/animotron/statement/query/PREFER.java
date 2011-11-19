@@ -18,17 +18,16 @@
  */
 package org.animotron.statement.query;
 
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.Set;
-
-import static org.animotron.graph.RelationshipTypes.REF;
-import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'PREFER'.
@@ -51,38 +50,41 @@ public class PREFER extends AbstractQuery implements Reference {
     private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-        	final Relationship op = pf.getOP();
-            final Node n = op.getEndNode();
-            Relationship ref = n.getSingleRelationship( REF, OUTGOING );
-
-            Node node = ref.getEndNode();
-
 			//System.out.println("ALL **************************");
-
-			Set<Node>[] lists = getUSEs(node, pf.getStartOP());
-			Set<Node> uses = lists[1];
-			Set<Node> directed = lists[2];
+        	
+        	final Relationship op = pf.getOP();
+            
+			if (!Utils.results(pf)) {
+	            for (ACQVector v : AN.getREFs(pf, op)) {
+	            	
+	            	Relationship ref = v.getAnswer(); 
+	            	Node node = ref.getEndNode();
+	
+					Set<Node>[] lists = getUSEs(node, pf.getStartOP());
+					Set<Node> uses = lists[1];
+					Set<Node> directed = lists[2];
+					
+					if (uses.size() > 0) {
+						boolean underUSE = false;
+						if (directed != null && directed.size() == 1) { 
+							underUSE = true;
+							node = directed.iterator().next();
+						}
 			
-			boolean underUSE = false;
-			if (directed != null && directed.size() == 1) { 
-				underUSE = true;
-				node = directed.iterator().next();
-			}
-
-			if (underUSE && filtering(pf, node, uses))
-				pf.sendAnswer( op, createResult( pf, op, n, getThe(node), RESULT ) );
-
-	        for (Relationship tdR : td_IS.traverse(node).relationships()) {
-	            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
-	            Node res = tdR.getStartNode();
-	            if (filtering(pf, res, uses)) {
-	                pf.sendAnswer( op, createResult( pf, op, n, getThe(res), RESULT ) );
+						if (underUSE && filtering(pf, node, uses))
+							pf.sendAnswer( getThe(node) );
+			
+				        for (Relationship tdR : td_IS.traverse(node).relationships()) {
+				            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+				            Node res = tdR.getStartNode();
+				            if (filtering(pf, res, uses)) {
+				                pf.sendAnswer( getThe(res) );
+				            }
+				        }
+					}
 	            }
-	        }
-
+			}
             pf.done();
         }
-
     };
-
 }

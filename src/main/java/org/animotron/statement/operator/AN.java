@@ -18,11 +18,10 @@
  */
 package org.animotron.statement.operator;
 
-import java.util.List;
-
+import org.animotron.io.PipedInput;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -50,25 +49,23 @@ public class AN extends Operator implements Reference, Evaluable {
 		public void onMessage(final PFlow pf) {
 			
 			Relationship op = pf.getOP();
-			final Node node = op.getEndNode();
 			
 			byte[] hash = pf.getOpHash();
 
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
-			if (!Utils.results(node, pf, hash)) {
+			if (!Utils.results(pf, hash)) {
 
-				for (Relationship r : getREF(pf, op)) {
+				for (ACQVector r : getREFs(pf, op)) {
 
-					Relationship res = createResult(pf, op, node, r, REF, hash);
-					pf.sendAnswer(res, op);
+					pf.sendAnswer(r.getAnswer(), REF, hash);
 				}
 			}
 			pf.done();
 		}
 	};
 	
-	public List<Relationship> getREF(PFlow pf, Relationship op) {
-		return Utils.getREFs(pf, op.getEndNode());
+	public static PipedInput<ACQVector> getREFs(PFlow pf, Relationship op) {
+		return Utils.getByREF(pf, op);
 	}
 }

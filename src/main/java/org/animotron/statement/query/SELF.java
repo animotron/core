@@ -20,6 +20,7 @@ package org.animotron.statement.query;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.IC;
@@ -64,7 +65,7 @@ public class SELF extends AbstractQuery {
             Relationship res = selfByTraversal(pf, op, op.getStartNode(), Utils.getSingleREF(op.getEndNode()));
 			if (res != null) {
 				System.out.println("FOUND by traversal");
-				pf.sendAnswer(res, op);
+				pf.sendAnswer(new ACQVector(op, res));
 				pf.done();
 				return;
 			}
@@ -93,14 +94,14 @@ public class SELF extends AbstractQuery {
                 res = GET._.getBySELF(pf, ref.getEndNode(), theNode);
 
                 if (res != null)
-                    pf.sendAnswer(createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._), op);
+                    pf.sendAnswer(res, HAVE._, pf.getOpHash());
 
             } else if (searchHave == 2) {
                 //the instance self in have
                 res = GET._.getBySELF(pf, pf.getStartNode(), theNode);
 
                 if (res != null)
-                    pf.sendAnswer(createResult(pf, pf.getLastContext(), pf.getOPNode(), res, HAVE._), op);
+                    pf.sendAnswer(res, HAVE._, pf.getOpHash());
 
             } else
                 ;//XXX: error???

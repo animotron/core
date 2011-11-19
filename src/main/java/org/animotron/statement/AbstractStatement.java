@@ -24,6 +24,7 @@ import org.animotron.graph.index.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Result;
 import org.animotron.inmemory.InMemoryRelationship;
+import org.animotron.manipulator.ACQVector;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
@@ -53,39 +54,6 @@ public abstract class AbstractStatement implements Statement {
 	@Override
 	public String name() {
 		return name;
-	}
-	
-	protected Relationship createResult(final PFlow pf, final Relationship context, final Node node, final Relationship r, final RelationshipType rType) {
-		return createResult(pf, context, node, r, rType, pf.getPathHash());
-	}
-
-	protected Relationship createResult(final PFlow pf, final Relationship context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
-		return AnimoGraph.execute(new GraphOperation<Relationship>() {
-			@Override
-			public Relationship execute() {
-				//check if it exist
-				Relationship res = Result.getIfExist(node, r, rType);
-				if (res != null) {
-					Result.add(res, hash);
-					
-					//for debug
-					//CID.set(res, context.getId());
-					
-					return res;
-				}
-				
-				//adding if not
-				res = node.createRelationshipTo(r.getEndNode(), rType);
-				//store to relationship arrow
-				RID.set(res, r.getId());
-				//for debug
-				if (context != null)
-					CID.set(res, context.getId());
-				Result.add(res, hash);
-				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-				return res;
-			}
-		});
 	}
 	
 	protected Relationship createResultInMemory(Node node, Relationship r) {

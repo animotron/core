@@ -46,14 +46,15 @@ public class Result {
         INDEX.add(r, NAME, MessageDigester.byteArrayToHex(value));
     }
 	
-    public static ResultHits get(byte[] value) {
-    	IndexHits<Relationship> hits = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
-        return new ResultHits( hits );
-    }
+//    public static ResultHits get(byte[] value) {
+//    	IndexHits<Relationship> hits = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
+//        return new ResultHits( hits );
+//    }
 
-    public static ResultHits get(byte[] value, Node node) {
+    public static ResultHits get(byte[] value, Relationship op) {
         return new ResultHits(
-    		INDEX.get(NAME, MessageDigester.byteArrayToHex(value), node, null)
+    		op,
+    		INDEX.get(NAME, MessageDigester.byteArrayToHex(value), op.getEndNode(), null)
 		);
     }
 
