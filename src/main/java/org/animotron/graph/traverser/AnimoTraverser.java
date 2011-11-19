@@ -76,7 +76,7 @@ public class AnimoTraverser {
     }
 
 	protected void build(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-		Relationship r = rr.getAnswer();
+		Relationship r = rr.getClosest();
 		Statement statement = Statements.relationshipType(r);
 		if (statement == null)
 			return;

@@ -58,6 +58,12 @@ public class QCAVector {
 		this.answer = answer;
 	}
 
+	public Relationship getClosest() {
+		if (answer != null)	return getAnswer(); 
+		
+		return question;
+	}
+
 	public Relationship getQuestion() {
 		return question;
 	}
