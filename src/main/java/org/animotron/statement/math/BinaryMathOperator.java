@@ -20,7 +20,7 @@ package org.animotron.statement.math;
 
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
@@ -65,7 +65,7 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 	                for (Relationship param : params) {
 	                	if (param.isType(REF._)) continue;
 	                	
-	                	for (ACQVector r : Utils.getTheRelationships(pf, param)) {
+	                	for (QCAVector r : Utils.getTheRelationships(pf, param)) {
 		                	if (x == null)
 		                		x = param(pf, r);
 		                	else

@@ -20,7 +20,7 @@ package org.animotron.statement.query;
 
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.IC;
@@ -65,7 +65,7 @@ public class SELF extends AbstractQuery {
             Relationship res = selfByTraversal(pf, op, op.getStartNode(), Utils.getSingleREF(op.getEndNode()));
 			if (res != null) {
 				System.out.println("FOUND by traversal");
-				pf.sendAnswer(new ACQVector(op, res));
+				pf.sendAnswer(new QCAVector(op, res));
 				pf.done();
 				return;
 			}

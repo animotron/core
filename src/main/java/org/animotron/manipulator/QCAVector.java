@@ -28,31 +28,31 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ACQVector {
+public class QCAVector {
 	
 	private Relationship question = null;
 	private Relationship answer = null;
 	
-	private ACQVector context = null;
+	private QCAVector context = null;
 
-	public ACQVector(Relationship question) {
+	public QCAVector(Relationship question) {
 		this.question = question;
 	}
 
-	public ACQVector(Relationship question, Relationship answer) {
+	public QCAVector(Relationship question, Relationship answer) {
 		this.question = question;
 		this.answer = answer;
 	}
 
-	public ACQVector(Relationship question, ACQVector context, Relationship answer) {
+	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
 		this.question = question;
 		this.context = context;
 		this.answer = answer;
 	}
 	
-	public ACQVector(Relationship question, Relationship context, Relationship answer) {
+	public QCAVector(Relationship question, Relationship context, Relationship answer) {
 		this.question = question;
-		this.context = new ACQVector(null, answer);
+		this.context = new QCAVector(null, answer);
 		this.answer = answer;
 	}
 
@@ -69,11 +69,11 @@ public class ACQVector {
 	}
 	
 
-	public ACQVector getContext() {
+	public QCAVector getContext() {
 		return context;
 	}
 
-	public boolean questionEquals(ACQVector vector) {
+	public boolean questionEquals(QCAVector vector) {
 		return question.equals(vector.question);
 	}
 

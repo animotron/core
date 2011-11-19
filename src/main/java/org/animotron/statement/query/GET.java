@@ -24,7 +24,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -90,7 +90,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			
 			final Set<Relationship> visitedREFs = new FastSet<Relationship>();
 
-			for (ACQVector theNode : AN.getREFs(pf, op)) {
+			for (QCAVector theNode : AN.getREFs(pf, op)) {
 				evalGet(pf, op, node, theNode.getAnswer().getEndNode(), suffixes, visitedREFs);
 			}
 			
@@ -121,9 +121,9 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			if (!Utils.results(pf)) {
 				//no pre-calculated result, calculate it
 				
-				Subscribable<ACQVector> onContext = new Subscribable<ACQVector>() {
+				Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
 					@Override
-					public void onMessage(ACQVector context) {
+					public void onMessage(QCAVector context) {
 						System.out.println("GET ["+theNode+"] vector "+context);
 						
 						if (context == null) {
@@ -132,9 +132,9 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<ACQVector> rSet = get(pf, context.getAnswer(), theNode, suffixes, visitedREFs);
+						final Set<QCAVector> rSet = get(pf, context.getAnswer(), theNode, suffixes, visitedREFs);
 						if (rSet != null) {
-							for (ACQVector v : rSet) {
+							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
 							}
 							return;
@@ -152,11 +152,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					super.onMessage(pf);
 				} else {
 					
-					for (ACQVector vector : pf.getPFlowPath()) {
+					for (QCAVector vector : pf.getPFlowPath()) {
 						//System.out.println("CHECK PFLOW "+st);
-						Set<ACQVector> rSet = get(pf, vector.getQuestion(), theNode, suffixes, visitedREFs);
+						Set<QCAVector> rSet = get(pf, vector.getQuestion(), theNode, suffixes, visitedREFs);
 						if (rSet != null) {
-							for (ACQVector v : rSet) {
+							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
 							}
 							break;
@@ -168,19 +168,19 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	};
 	
-	public Set<ACQVector> get(PFlow pf, Relationship ref, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
+	public Set<QCAVector> get(PFlow pf, Relationship ref, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
 		Set<Relationship> refs = new FastSet<Relationship>();
 		refs.add(ref);
 		
 		return get(pf, refs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<ACQVector> get(final PFlow pf, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
-		Set<ACQVector> set = new FastSet<ACQVector>();
+	public Set<QCAVector> get(final PFlow pf, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
+		Set<QCAVector> set = new FastSet<QCAVector>();
 		
 		Relationship have = searchForHAVE(pf, ref, theNode, suffixes);
 		if (have != null && !pf.isInStack(have)) 
-			set.add(new ACQVector(pf.getOP(), have));
+			set.add(new QCAVector(pf.getOP(), have));
 		
 		if (!set.isEmpty()) return set;
 
@@ -190,7 +190,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		return get(pf, newREFs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<ACQVector> get(
+	public Set<QCAVector> get(
 			final PFlow pf, 
 			final Set<Relationship> REFs, 
 			final Node theNode, 
@@ -201,7 +201,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		if (visitedREFs == null) visitedREFs = new FastSet<Relationship>();
 		
-		Set<ACQVector> set = new FastSet<ACQVector>();
+		Set<QCAVector> set = new FastSet<QCAVector>();
 		
 		Set<Relationship> nextREFs = new FastSet<Relationship>();
 		nextREFs.addAll(REFs);
@@ -218,7 +218,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode, suffixes);
 				if (have != null && !pf.isInStack(have)) { 
-					set.add(new ACQVector(null, n, have));
+					set.add(new QCAVector(null, n, have));
 					System.out.println("FOUND");
 				}
 			}
@@ -241,7 +241,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 							
 							Statement st = Statements.relationshipType(r);
 							if (st instanceof AN) {
-								for (ACQVector v : AN.getREFs(pf, r)) {
+								for (QCAVector v : AN.getREFs(pf, r)) {
 									Relationship t = v.getAnswer();
 									if (!visitedREFs.contains(t))
 										newREFs.add(t);
@@ -249,9 +249,9 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 							} else if (st instanceof Reference) {
 								try {
 									if (!pf.isInStack(r)) {
-										PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), r);
+										PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
 										
-										for (ACQVector rr : in) {
+										for (QCAVector rr : in) {
 											if (!visitedREFs.contains(rr.getAnswer()))
 												newREFs.add(rr.getAnswer());
 										}
@@ -288,7 +288,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					for (ACQVector v : AN.getREFs(pf, r)) {
+					for (QCAVector v : AN.getREFs(pf, r)) {
 						Relationship t = v.getAnswer();
 						//System.out.println(t);
 						if (visitedREFs != null && !visitedREFs.contains(t))
@@ -298,9 +298,9 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				} else if (st instanceof Reference) {
 					if (!pf.isInStack(r)) {
 						try {
-							PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf, r), r);
+							PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, r), r);
 							
-							for (ACQVector rr : in) {
+							for (QCAVector rr : in) {
 								if (visitedREFs != null && !visitedREFs.contains(rr.getAnswer()))
 									newREFs.add(rr.getAnswer());
 							}

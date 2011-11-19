@@ -21,7 +21,7 @@ package org.animotron.statement.compare;
 import javolution.util.FastList;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -61,18 +61,18 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
 
-		Set<ACQVector> haveSet = GET._.get(pf, ref, theNode, null, null);
+		Set<QCAVector> haveSet = GET._.get(pf, ref, theNode, null, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
-		List<ACQVector> actual = new FastList<ACQVector>();
-		List<ACQVector> expected = new FastList<ACQVector>();
+		List<QCAVector> actual = new FastList<QCAVector>();
+		List<QCAVector> expected = new FastList<QCAVector>();
 
-		PipedInput<ACQVector> in;
+		PipedInput<QCAVector> in;
 		
 		//System.out.println("Eval actual");
-		for (ACQVector have : haveSet) {
+		for (QCAVector have : haveSet) {
 			in = Evaluator._.execute(new PFlow(pf), have.getAnswer().getEndNode());
-			for (ACQVector e : in) {
+			for (QCAVector e : in) {
 				actual.add(e);
 				//System.out.println("actual "+e);
 			}
@@ -80,16 +80,16 @@ public class WITH extends Operator implements Predicate {
 
 		//System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
-		for (ACQVector e : in) {
+		for (QCAVector e : in) {
 			expected.add(e);
 			//System.out.println("expected "+r);
 		}
 		
 		if (actual.size() >= 1 && expected.size() == 1) {
-			ACQVector g = expected.get(0);
+			QCAVector g = expected.get(0);
 			
 			//XXX: finish
-			List<ACQVector> l = evaluable(pf, g.getAnswer().getEndNode());
+			List<QCAVector> l = evaluable(pf, g.getAnswer().getEndNode());
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) {
@@ -102,7 +102,7 @@ public class WITH extends Operator implements Predicate {
 
 			//System.out.println("***** expected = "+g.getEndNode());
 			
-			for (ACQVector e : actual) {
+			for (QCAVector e : actual) {
 				//System.out.println("***** actual = "+e.getEndNode());
 				if (e.getAnswer().isType(g.getAnswer().getType())
 					&& e.getAnswer().getEndNode().equals(g.getAnswer().getEndNode()))
@@ -114,8 +114,8 @@ public class WITH extends Operator implements Predicate {
 		return false;
 	}
 	
-	private List<ACQVector> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
-		List<ACQVector> list = new FastList<ACQVector>();
+	private List<QCAVector> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
+		List<QCAVector> list = new FastList<QCAVector>();
 		
 		IndexHits<Relationship> q = Order.queryDown(node);
 		try {
@@ -125,13 +125,13 @@ public class WITH extends Operator implements Predicate {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput<ACQVector> in = Evaluator._.execute(pf, i);
-    				for (ACQVector e : in) {
+    				PipedInput<QCAVector> in = Evaluator._.execute(pf, i);
+    				for (QCAVector e : in) {
     					list.add(e);
     					//System.out.println("get from Evaluator "+r);
     				}
     			} else {
-    				list.add(new ACQVector(null, i));
+    				list.add(new QCAVector(null, i));
     			}
 			}
 		} finally {

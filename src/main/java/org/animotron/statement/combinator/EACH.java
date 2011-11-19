@@ -20,7 +20,7 @@ package org.animotron.statement.combinator;
 
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -63,17 +63,17 @@ public class EACH extends Combinator {
 			System.out.println("EACH EACH EACH EACH");
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
-				Set<ACQVector> set = new FastSet<ACQVector>();
+				Set<QCAVector> set = new FastSet<QCAVector>();
 				while (elements.hasNext()) {
 					Relationship element = elements.next();
 					if (elements.hasNext())
-						for (ACQVector r : Utils.getTheRelationships(pf, element)) {
+						for (QCAVector r : Utils.getTheRelationships(pf, element)) {
 							set.add(r);
 						}
 					else {
-						for (ACQVector r : set) {
+						for (QCAVector r : set) {
 							System.out.println("!!!! "+r);
-							ACQVector rr = new ACQVector(pf.getOP(), r, element);
+							QCAVector rr = new QCAVector(pf.getOP(), r, element);
 							pf.sendAnswer(rr);
 						}
 					}

@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.query;
 
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Reference;
@@ -54,7 +54,7 @@ public class ANY extends AbstractQuery implements Reference {
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			//(new IOException()).printStackTrace();
             
-			for (ACQVector vector : Utils.getByREF(pf)) {
+			for (QCAVector vector : Utils.getByREF(pf)) {
 				Relationship the = vector.getAnswer();
 				
 				if (!Utils.results(the, pf)) {

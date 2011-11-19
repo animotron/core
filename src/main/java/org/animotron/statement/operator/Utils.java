@@ -29,7 +29,7 @@ import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -137,13 +137,13 @@ public class Utils {
 		return list;
 	}
 	
-	public static PipedInput<ACQVector> getByREF(PFlow pf) {
+	public static PipedInput<QCAVector> getByREF(PFlow pf) {
 		return getByREF(pf, pf.getOP());
 	}
 
-	public static PipedInput<ACQVector> getByREF(PFlow pf, final Relationship op) {
-		PipedOutput<ACQVector> out = new PipedOutput<ACQVector>(); 
-		PipedInput<ACQVector> in = out.getInputStream();
+	public static PipedInput<QCAVector> getByREF(PFlow pf, final Relationship op) {
+		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
+		PipedInput<QCAVector> in = out.getInputStream();
 		
 		Node node = op.getEndNode();
 		
@@ -153,7 +153,7 @@ public class Utils {
 				Relationship theNode = THE.__((String)THE._.reference(node));
 
 				if (theNode != null) {
-					out.write(new ACQVector(null, theNode));
+					out.write(new QCAVector(null, theNode));
 					out.close();
 					return in;
 				}
@@ -186,13 +186,13 @@ public class Utils {
 		return null;
 	}
 
-	private static PipedOutput<ACQVector> evaluable(PFlow pf, Relationship r, PipedOutput<ACQVector> out) throws InterruptedException, IOException {
+	private static PipedOutput<QCAVector> evaluable(PFlow pf, Relationship r, PipedOutput<QCAVector> out) throws InterruptedException, IOException {
 		
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), r);
-			for (ACQVector e : in) {
+			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
+			for (QCAVector e : in) {
 				PFlow _pf_ = new PFlow(pf);
 				_pf_.addContextPoint(e);
 				
@@ -204,22 +204,22 @@ public class Utils {
 					) {
 					out.write(e);
 				} else {
-					for (ACQVector rr : eval(_pf_, result)) {
+					for (QCAVector rr : eval(_pf_, result)) {
 						out.write(rr);
 					}
 				}
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			out.write(new ACQVector(null, r));
+			out.write(new QCAVector(null, r));
 		}
 		
 		return out;
 	}
 	
-	public static PipedInput<ACQVector> getTheRelationships(PFlow pf, Relationship r) throws IOException {
-		PipedOutput<ACQVector> out = new PipedOutput<ACQVector>(); 
-		PipedInput<ACQVector> in = out.getInputStream();
+	public static PipedInput<QCAVector> getTheRelationships(PFlow pf, Relationship r) throws IOException {
+		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
+		PipedInput<QCAVector> in = out.getInputStream();
 
 		getTheRelationships(pf, r, out);
 		out.close();
@@ -227,14 +227,14 @@ public class Utils {
 		return in;
 	}
 
-	public static void getTheRelationships(PFlow pf, Relationship r, PipedOutput<ACQVector> out) {
+	public static void getTheRelationships(PFlow pf, Relationship r, PipedOutput<QCAVector> out) {
 		try {
 		
 			Statement s = Statements.relationshipType(r);
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-				PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), r);
-				for (ACQVector e : in) {
+				PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
+				for (QCAVector e : in) {
 					PFlow _pf_ = new PFlow(pf);
 					_pf_.addContextPoint(e);
 					
@@ -246,23 +246,23 @@ public class Utils {
 						) {
 						out.write(e);
 					} else {
-						for (ACQVector rr : eval(_pf_, result)) {
+						for (QCAVector rr : eval(_pf_, result)) {
 							out.write(rr);
 						}
 					}
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 			} else {
-				out.write(new ACQVector(null, r));
+				out.write(new QCAVector(null, r));
 			}
 		} catch (Exception e) {
 			pf.sendException(e);
 		}
 	}
 	
-	public static PipedInput<ACQVector> eval(PFlow pf, Relationship op) throws IOException {
-        final PipedOutput<ACQVector> out = new PipedOutput<ACQVector>();
-        PipedInput<ACQVector> in = out.getInputStream();
+	public static PipedInput<QCAVector> eval(PFlow pf, Relationship op) throws IOException {
+        final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
+        PipedInput<QCAVector> in = out.getInputStream();
 
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
 		for (Relationship rr : hits) {
@@ -270,13 +270,13 @@ public class Utils {
 			
 			Statement _s = Statements.relationshipType(rr);
 			if (_s instanceof Query || _s instanceof Evaluable) {
-				PipedInput<ACQVector> _in = Evaluator._.execute(new PFlow(pf), rr);
-				for (ACQVector ee : _in) {
+				PipedInput<QCAVector> _in = Evaluator._.execute(new PFlow(pf), rr);
+				for (QCAVector ee : _in) {
 					out.write(ee);
 				}
 				
 			} else {
-				out.write(new ACQVector(op, rr));
+				out.write(new QCAVector(op, rr));
 			}
 		}
 		out.close();
@@ -327,7 +327,7 @@ public class Utils {
 		boolean haveSome = false;
 
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-		for (ACQVector v : Result.get(hash, op)) {
+		for (QCAVector v : Result.get(hash, op)) {
 			pf.sendAnswer(v);
 			
 			haveSome = true;
@@ -409,7 +409,7 @@ public class Utils {
 		return createResult(pf, null, node, r, rType, pf.getPathHash());
 	}
 
-	public static Relationship createResult(final PFlow pf, final ACQVector context, final Node node, final Relationship r, final RelationshipType rType) {
+	public static Relationship createResult(final PFlow pf, final QCAVector context, final Node node, final Relationship r, final RelationshipType rType) {
 		return createResult(pf, context, node, r, rType, pf.getPathHash());
 	}
 
@@ -417,7 +417,7 @@ public class Utils {
 		return createResult(pf, null, node, r, rType, hash);
 	}
 
-	public static Relationship createResult(final PFlow pf, final ACQVector context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+	public static Relationship createResult(final PFlow pf, final QCAVector context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {

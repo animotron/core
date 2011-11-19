@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
@@ -52,14 +52,14 @@ public class THIS extends Operator implements Reference, Evaluable {
 			Relationship op = pf.getOP();
 			
 			System.out.println("THIS "+op+" ");
-			PipedInput<ACQVector> thes = AN.getREFs(pf, op);
+			PipedInput<QCAVector> thes = AN.getREFs(pf, op);
 			//System.out.println(Arrays.toString(thes.toArray()));
 
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
 			if (!Utils.results(pf)) {
 				
-				for (ACQVector r : pf.getPFlowPath()) {
+				for (QCAVector r : pf.getPFlowPath()) {
 					System.out.print(""+r+" ");
 					System.out.print(""+r.getQuestion().getStartNode()+" -> ");
 					System.out.print(""+r.getQuestion()+" ");

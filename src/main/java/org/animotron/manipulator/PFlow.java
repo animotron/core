@@ -65,7 +65,7 @@ public class PFlow {
 	
 	private final Manipulator m;
 
-	public final Channel<ACQVector> answer = new MemoryChannel<ACQVector>();
+	public final Channel<QCAVector> answer = new MemoryChannel<QCAVector>();
 	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
 	public final Channel<Throwable> stop = new MemoryChannel<Throwable>();
 	
@@ -73,7 +73,7 @@ public class PFlow {
 	private Relationship op = null;
 	private Node opNode = null;
 	
-	private Vector<ACQVector> path = new Vector<ACQVector>();
+	private Vector<QCAVector> path = new Vector<QCAVector>();
 	
 	public PFlow(Manipulator m) {
 		parent = null;
@@ -86,7 +86,7 @@ public class PFlow {
 		this.m = m;
 
 		this.op = op; 
-		path.add(new ACQVector(op));
+		path.add(new QCAVector(op));
 	}
 
 	public PFlow(PFlow parent) {
@@ -115,7 +115,7 @@ public class PFlow {
 			addContextPoint(op);
 		
 		if (path.isEmpty())
-			path.add(new ACQVector(op));
+			path.add(new QCAVector(op));
 		
 		this.op = op;
 	}
@@ -160,7 +160,7 @@ public class PFlow {
 		this.op = null;
 	}
 
-	public void sendAnswer(ACQVector r) {
+	public void sendAnswer(QCAVector r) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
@@ -182,11 +182,11 @@ public class PFlow {
 
 			Relationship createdAnswer = Utils.createResult( this, op.getEndNode(), answer, rType, hash );
 			
-			parent.answer.publish(new ACQVector(op, createdAnswer));
+			parent.answer.publish(new QCAVector(op, createdAnswer));
 		}
 	}
 
-	public void sendAnswer(ACQVector answerVector, RelationshipType rType) {
+	public void sendAnswer(QCAVector answerVector, RelationshipType rType) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
@@ -195,7 +195,7 @@ public class PFlow {
 
 			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), HAVE._);
 			
-			parent.answer.publish(new ACQVector(op, answerVector.getContext(), answer));
+			parent.answer.publish(new QCAVector(op, answerVector.getContext(), answer));
 		}
 	}
 
@@ -206,14 +206,14 @@ public class PFlow {
 	}
 
 
-	public void sendAnswer(Relationship question, ACQVector context, Relationship answer) {
+	public void sendAnswer(Relationship question, QCAVector context, Relationship answer) {
 		if (parent == null) {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 
-			parent.answer.publish(new ACQVector(question, context, answer));
+			parent.answer.publish(new QCAVector(question, context, answer));
 		}
 	}
 
@@ -288,7 +288,7 @@ public class PFlow {
 		return m;
 	}
 	
-	public List<ACQVector> getPFlowPath() {
+	public List<QCAVector> getPFlowPath() {
 		return path;
 	}
 	
@@ -389,7 +389,7 @@ public class PFlow {
 	}
 
 
-	public int addContextPoint(ACQVector vector) {
+	public int addContextPoint(QCAVector vector) {
 		boolean debug = false;
 		if (debug) System.out.print("adding "+this+" "+vector);
 //		System.out.println(new IOException().getStackTrace()[1]);
@@ -408,7 +408,7 @@ public class PFlow {
 	}
 
 	public int addContextPoint(Relationship r) {
-		return addContextPoint(new ACQVector(r));
+		return addContextPoint(new QCAVector(r));
 	}
 
 	public void popContextPoint() {
@@ -420,7 +420,7 @@ public class PFlow {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();  
 		DataOutputStream dos = new DataOutputStream(bos);  
 		
-		for (ACQVector p : path) {
+		for (QCAVector p : path) {
 			try {
 				p.collectHash(dos);
 			} catch (IOException e) {
@@ -448,7 +448,7 @@ public class PFlow {
 	public Relationship getLastContext() {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");
-		for (ACQVector v : path) {
+		for (QCAVector v : path) {
 			Relationship r = v.getQuestion();
 			if (r.isType(AN._)) {
 				if (debug) System.out.println(r);
@@ -501,7 +501,7 @@ public class PFlow {
 		
 		boolean debug = false;
 		if (debug) System.out.print("IN STACK CHECK "+r+" in "+path+" ");
-		for (ACQVector v : path) {
+		for (QCAVector v : path) {
 			Relationship rr = v.getQuestion();
 			if (rr.equals(r)) return true;
 			try {

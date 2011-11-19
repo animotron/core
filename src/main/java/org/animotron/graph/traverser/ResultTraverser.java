@@ -21,7 +21,7 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Result;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
@@ -69,7 +69,7 @@ public class ResultTraverser extends AnimoTraverser {
     }
 
     @Override
-    protected void build(GraphHandler handler, PFlow pf, ACQVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
     	Relationship r = rr.getAnswer();
     	if (r == null) r = rr.getQuestion();
@@ -133,7 +133,7 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
     	PFlow pflow = new PFlow(pf);
 		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-    	IndexHits<ACQVector> i = Result.get(pflow.getPathHash(), r);
+    	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
     	boolean found;
     	try {
 	        found = iterate(handler, pflow, i, level, isOne);
@@ -143,7 +143,7 @@ public class ResultTraverser extends AnimoTraverser {
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<ACQVector>in = Evaluator._.execute(pflow, r);
+            Iterator<QCAVector>in = Evaluator._.execute(pflow, r);
             iterate(handler, pflow, in, level, isOne);
         }
 
@@ -159,10 +159,10 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
 //    }
 
-    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<ACQVector> it, int level, boolean isOne) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<QCAVector> it, int level, boolean isOne) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
-        ACQVector i = null;
+        QCAVector i = null;
         int pos = 0;
         while (it.hasNext()) {
         	i = it.next();

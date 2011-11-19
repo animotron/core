@@ -21,7 +21,7 @@ package org.animotron.graph.index;
 import static org.animotron.Properties.CID;
 
 import org.animotron.graph.AnimoGraph;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.index.impl.lucene.AbstractIndexHits;
@@ -30,7 +30,7 @@ import org.neo4j.index.impl.lucene.AbstractIndexHits;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ResultHits extends AbstractIndexHits<ACQVector> implements IndexHits<ACQVector> {
+public class ResultHits extends AbstractIndexHits<QCAVector> implements IndexHits<QCAVector> {
 	
 	IndexHits<Relationship> it;
 	Relationship op;
@@ -56,7 +56,7 @@ public class ResultHits extends AbstractIndexHits<ACQVector> implements IndexHit
 	}
 
 	@Override
-	protected ACQVector fetchNextOrNull() {
+	protected QCAVector fetchNextOrNull() {
 		if (!it.hasNext()) return null;
 		
 		Relationship r = it.next();
@@ -69,8 +69,8 @@ public class ResultHits extends AbstractIndexHits<ACQVector> implements IndexHit
 		} catch (Exception e) {
 		}
 		if (c == null)
-			return new ACQVector(op, r);
+			return new QCAVector(op, r);
 		else
-			return new ACQVector(op, c, r);
+			return new QCAVector(op, c, r);
 	}
 }

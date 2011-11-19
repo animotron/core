@@ -19,7 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
@@ -56,7 +56,7 @@ public class AN extends Operator implements Reference, Evaluable {
 			
 			if (!Utils.results(pf, hash)) {
 
-				for (ACQVector r : getREFs(pf, op)) {
+				for (QCAVector r : getREFs(pf, op)) {
 
 					pf.sendAnswer(r.getAnswer(), REF, hash);
 				}
@@ -65,7 +65,7 @@ public class AN extends Operator implements Reference, Evaluable {
 		}
 	};
 	
-	public static PipedInput<ACQVector> getREFs(PFlow pf, Relationship op) {
+	public static PipedInput<QCAVector> getREFs(PFlow pf, Relationship op) {
 		return Utils.getByREF(pf, op);
 	}
 }

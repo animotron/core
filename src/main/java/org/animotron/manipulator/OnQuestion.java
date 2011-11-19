@@ -63,7 +63,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 //				} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
 //					//ignore REF
 				} else {
-					pf.sendAnswer(new ACQVector(pf.getOP(), r));
+					pf.sendAnswer(new QCAVector(pf.getOP(), r));
 				}
 			}
 		} finally {

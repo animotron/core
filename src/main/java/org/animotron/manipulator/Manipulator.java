@@ -53,21 +53,21 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public final PipedInput<ACQVector> execute(Relationship op) throws IOException {
+	public final PipedInput<QCAVector> execute(Relationship op) throws IOException {
 		return execute(new PFlow(this), op);
 	}
 
-	public final PipedInput<ACQVector> execute(final PFlow pflow, Node op) throws IOException {
+	public final PipedInput<QCAVector> execute(final PFlow pflow, Node op) throws IOException {
 		return execute(pflow, (PropertyContainer)op);
 	}
 
-	public final PipedInput<ACQVector> execute(final PFlow pflow, PropertyContainer op) throws IOException {
+	public final PipedInput<QCAVector> execute(final PFlow pflow, PropertyContainer op) throws IOException {
 		return execute(pflow, op, null);
 	}
 
-	public final PipedInput<ACQVector> execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
-        final PipedOutput<ACQVector> out = new PipedOutput<ACQVector>();
-        PipedInput<ACQVector> in = out.getInputStream();
+	public final PipedInput<QCAVector> execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
+        final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
+        PipedInput<QCAVector> in = out.getInputStream();
 
         if (sub == null) {
 			if (op instanceof Node) {
@@ -79,7 +79,7 @@ public abstract class Manipulator {
 		
 		if (sub == null) {
 			if (op instanceof Relationship) {
-				out.write( new ACQVector((Relationship)op, (Relationship)op) );
+				out.write( new QCAVector((Relationship)op, (Relationship)op) );
 			} else
 				System.out.println("UNHANDLED op "+op);
 			out.close();
@@ -97,8 +97,8 @@ public abstract class Manipulator {
 
 		
         //answers transfer to output
-        Subscribable<ACQVector> onAnswer = new Subscribable<ACQVector>() {
-            public void onMessage(ACQVector context) {
+        Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
+            public void onMessage(QCAVector context) {
             	//System.out.println("get answer "+Arrays.toString(context));
             	try {
             		if (context == null) {
@@ -141,15 +141,15 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                        	PipedInput<ACQVector> in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
-                            for (ACQVector v : in) {
+                        	PipedInput<QCAVector> in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
+                            for (QCAVector v : in) {
                             	out.write(v);
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
                             if (s instanceof Query || s instanceof Evaluable) {
-                                PipedInput<ACQVector> in = Evaluator._.execute(new PFlow(pf), msg);
-                                for (ACQVector v : in) {
+                                PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), msg);
+                                for (QCAVector v : in) {
                                     out.write(v);
                                 }
                             } else {

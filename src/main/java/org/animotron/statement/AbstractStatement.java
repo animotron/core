@@ -24,7 +24,7 @@ import org.animotron.graph.index.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Result;
 import org.animotron.inmemory.InMemoryRelationship;
-import org.animotron.manipulator.ACQVector;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
