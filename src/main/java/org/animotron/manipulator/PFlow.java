@@ -279,7 +279,7 @@ public class PFlow {
 		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 	
-	public void countDown(PipedOutput out) {
+	public void countDown(PipedOutput<?> out) {
 		if (waitBeforeClosePipe == null) {
 			try {
 				out.close();
@@ -333,7 +333,7 @@ public class PFlow {
 		//System.out.println("OPNode = "+getOPNode());
 
 		Path first = null;
-		for (Path path : td_flow.traverse(getOPNode())) {
+		for (Path path : get_td_flow().traverse(getOPNode())) {
 			if (first == null) {
 				first = path;
 			}
@@ -416,7 +416,7 @@ public class PFlow {
 
 
 	public int addContextPoint(QCAVector vector) {
-		boolean debug = true;
+		boolean debug = false;
 		if (debug) System.out.print("adding "+this+" "+vector);
 //		System.out.println(new IOException().getStackTrace()[1]);
 		if (path.isEmpty()) {
@@ -496,8 +496,8 @@ public class PFlow {
 		return path.lastElement().getQuestion();
 	}
 
-	private TraversalDescription td_flow =
-			Traversal.description().depthFirst().
+	private TraversalDescription get_td_flow() {
+		return Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			evaluator(new Evaluator(){
 				@Override
@@ -521,16 +521,10 @@ public class PFlow {
 					return EXCLUDE_AND_CONTINUE;
 				}
 			});
+	}
 
 	public boolean isInStack(Relationship r) {
-//		if (op != null && op.equals(r)) return true;
-//		
-//		if (parent == null) return false;
-//		return parent.isInStack(r);
-		
-//		for (Relationship rr : getFlowPath().relationships()) {
-		
-		boolean debug = true;
+		boolean debug = false;
 		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
 		for (QCAVector v : path) {
 			if (v.haveRelationship(r)) {
