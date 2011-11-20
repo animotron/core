@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.Executor;
+import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
@@ -90,8 +91,11 @@ public abstract class Manipulator {
 		if (op instanceof Node) {
 			pf = new PFlow(pflow, (Node)op);
 		} else {
-			pf = new PFlow(pflow, (Relationship)op);
-				
+			try {
+				pf = new PFlow(pflow, (Relationship)op);
+			} catch (AnimoException e) {
+				throw new IOException(e);
+			}
 		}
 		pf.question.subscribe(sub);
 

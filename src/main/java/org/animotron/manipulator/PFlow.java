@@ -51,7 +51,6 @@ import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
-import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -97,7 +96,7 @@ public class PFlow {
 		path.addAll(parent.path);
 	}
 
-	public PFlow(PFlow parent, Relationship op) {
+	public PFlow(PFlow parent, Relationship op) throws AnimoException {
 //		System.out.print("new PFlow ");
 //		System.out.println("this = "+Utils.shortID(this)+" parent = "+Utils.shortID(parent));
 //		System.out.print(" "+(new IOException()).getStackTrace()[1]);
@@ -109,11 +108,16 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 		
+		cyclingDetection(op);
+
 		//XXX: remove?
 		Statement s = Statements.relationshipType(op);
-		if (s instanceof Reference || op.isType(RESULT) || op.isType(REF))
+		if (s instanceof Reference || op.isType(REF))
 			addContextPoint(op);
 		
+		else if (op.isType(RESULT))
+			addContextPoint(new QCAVector(null,Utils.relax(op)));
+			
 		if (path.isEmpty())
 			path.add(new QCAVector(op));
 		
@@ -139,6 +143,16 @@ public class PFlow {
 		path.add(vector);
 
 		this.op = vector.getUnrelaxedClosest();
+	}
+
+	private void cyclingDetection(Relationship op) throws AnimoException {
+		int deep = 0;
+		for (QCAVector v : path) {
+			if (deep > 0 && v.haveRelationship(op)) {
+				throw new AnimoException(op, "cycling detected "+path);
+			}
+			deep++;
+		}
 	}
 
 	public PFlow getParent() {
@@ -510,19 +524,12 @@ public class PFlow {
 		
 //		for (Relationship rr : getFlowPath().relationships()) {
 		
-		boolean debug = false;
-		if (debug) System.out.print("IN STACK CHECK "+r+" in "+path+" ");
+		boolean debug = true;
+		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
 		for (QCAVector v : path) {
-			Relationship rr = v.getQuestion();
-			if (rr.equals(r)) return true;
-			try {
-				long id = (Long)rr.getProperty(RID.name());
-				if (r.getId() == id) {
-					if (debug) System.out.println("FOUND");
-					return true;
-				}
-				
-			} catch (Exception e) {
+			if (v.haveRelationship(r)) {
+				if (debug) System.out.println("FOUND!!!");
+				return true;
 			}
 		}
 		if (debug) System.out.println("NOT FOUND");

@@ -405,6 +405,14 @@ public class Utils {
 		return r;
 	}
 
+	public static long relaxedId(Relationship relation) {
+		try {
+            return (Long)relation.getProperty(RID.name());
+		} catch (Exception ex) {
+		}
+		return -1;
+	}
+
 	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType) {
 		return createResult(pf, null, node, r, rType, pf.getPathHash());
 	}

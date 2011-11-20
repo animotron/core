@@ -19,6 +19,7 @@
 package org.animotron.statement.combinator;
 
 import org.animotron.Executor;
+import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -86,7 +87,12 @@ public class MAP extends Combinator {
 				if (s instanceof Reference || s instanceof Query) {
 					Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 
-					PFlow nextPF = new PFlow(pf, r);
+					PFlow nextPF;
+					try {
+						nextPF = new PFlow(pf, r);
+					} catch (AnimoException e) {
+						continue;
+					}
 					nextPF.question.subscribe(onQuestion);
 					
 					nextPF.question.publish(nextPF);

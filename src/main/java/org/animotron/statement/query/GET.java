@@ -311,6 +311,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					}
 				}
 			}
+		} catch (Exception e) {
+			pf.sendException(e);
 		} finally {
 			it.close();
 		}

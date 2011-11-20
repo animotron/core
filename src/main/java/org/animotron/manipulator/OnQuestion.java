@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import javolution.util.FastList;
 import org.animotron.Executor;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -55,7 +56,12 @@ public class OnQuestion implements Subscribable<PFlow> {
 				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
 				if (onQuestion != null) {
-					PFlow nextPF = new PFlow(pf, r);
+					PFlow nextPF;
+					try {
+						nextPF = new PFlow(pf, r);
+					} catch (AnimoException e) {
+						continue;
+					}
 					nextPF.question.subscribe(onQuestion);
 					
 					list.add(nextPF);

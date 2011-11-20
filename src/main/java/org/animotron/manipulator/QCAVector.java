@@ -104,7 +104,45 @@ public class QCAVector {
         return longToByteArray(answer.getId());
 	}
 	
+	public void debug(StringBuilder b) {
+		b.append("QCA(");
+		b.append(question);
+		b.append(" {");
+		if (context != null)
+			context.debug(b);
+		b.append("}");
+		if (answer != null) {
+			b.append(" ");
+			b.append(answer);
+		}
+		b.append(")");
+	}
+
 	public String toString() {
-		return ""+question+" ["+context+"] "+answer;
+		StringBuilder b = new StringBuilder();
+		debug(b);
+		return b.toString();
+	}
+
+	public boolean haveRelationship(Relationship r) {
+
+		long id = r.getId();
+		
+		System.out.print("haveRelationship "+question+" ("+question.getType()+") ");
+		if (question != null && question.getId() == id) return true;
+
+		if (answer != null) {
+			System.out.print("answers "+answer+" ("+answer.getType()+") ");
+			Relationship a = getAnswer();
+			System.out.print(a+" ("+a.getType()+") ");
+		}
+		System.out.println();
+		
+		if (answer != null && (answer.getId() == id || getAnswer().getId() == id)) return true;
+		
+		if (context != null)
+			return context.haveRelationship(r);
+		
+		return false;
 	}
 }
