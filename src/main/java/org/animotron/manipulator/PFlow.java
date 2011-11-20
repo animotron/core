@@ -130,6 +130,17 @@ public class PFlow {
 		this.opNode = opNode;
 	}
 	
+	public PFlow(PFlow parent, QCAVector vector) {
+		this.parent = parent;
+		this.m = parent.m;
+		
+		//XXX: maybe, clone faster?
+		path.addAll(parent.path);
+		path.add(vector);
+
+		this.op = vector.getUnrelaxedClosest();
+	}
+
 	public PFlow getParent() {
 		return parent;
 	}

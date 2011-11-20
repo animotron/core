@@ -71,8 +71,7 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     protected void build(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
-    	Relationship r = rr.getAnswer();
-    	if (r == null) r = rr.getQuestion();
+    	Relationship r = rr.getUnrelaxedClosest();
     	
         int addedContexts = 0;
 
@@ -92,8 +91,8 @@ public class ResultTraverser extends AnimoTraverser {
             s = Statements.relationshipType(r);
         }
         
-        if (s instanceof Reference || s instanceof HAVE)
-	        addedContexts += pf.addContextPoint(r);
+        //if (s instanceof Reference || s instanceof HAVE)
+	    //    addedContexts += pf.addContextPoint(rr);
 
         try {
         	Relationship context = getDb().getRelationshipById(

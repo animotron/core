@@ -153,7 +153,7 @@ public class Utils {
 				Relationship theNode = THE.__((String)THE._.reference(node));
 
 				if (theNode != null) {
-					out.write(new QCAVector(null, theNode));
+					out.write(new QCAVector(op, theNode));
 					out.close();
 					return in;
 				}
@@ -167,11 +167,11 @@ public class Utils {
 					if (first == null) first = res;
 					
 					if (res.isType(org.animotron.statement.operator.REF._))
-						evaluable(pf, res, out);
+						evaluable(pf, res, out, op);
 				}
 				
 				if (first != null && out.isEmpty())
-					evaluable(pf, first, out);
+					evaluable(pf, first, out, op);
 				
 			} finally {
 				hits.close();
@@ -186,7 +186,7 @@ public class Utils {
 		return null;
 	}
 
-	private static PipedOutput<QCAVector> evaluable(PFlow pf, Relationship r, PipedOutput<QCAVector> out) throws InterruptedException, IOException {
+	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final Relationship r, final PipedOutput<QCAVector> out, final Relationship op) throws InterruptedException, IOException {
 		
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {

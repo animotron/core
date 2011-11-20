@@ -64,6 +64,12 @@ public class QCAVector {
 		return question;
 	}
 
+	public Relationship getUnrelaxedClosest() {
+		if (answer != null)	return answer; 
+		
+		return question;
+	}
+
 	public Relationship getQuestion() {
 		return question;
 	}
@@ -96,5 +102,9 @@ public class QCAVector {
 	public byte[] mashup() {
 		//XXX: what is this?
         return longToByteArray(answer.getId());
+	}
+	
+	public String toString() {
+		return ""+question+" ["+context+"] "+answer;
 	}
 }

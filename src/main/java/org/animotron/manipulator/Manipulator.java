@@ -65,7 +65,7 @@ public abstract class Manipulator {
 		return execute(pflow, op, null);
 	}
 
-	public final PipedInput<QCAVector> execute(final PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
+	public final PipedInput<QCAVector> execute(PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
 
@@ -99,17 +99,17 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
             public void onMessage(QCAVector context) {
-            	//System.out.println("get answer "+Arrays.toString(context));
+            	System.out.println("get answer "+context);
             	try {
             		if (context == null) {
 
             			pf.countDown(out);
 
             		} else if (context.getAnswer() != null) {
-            			int addedContexts = 0;
+//            			int addedContexts = 0;
                         Statement s = null;
                         
-                        Relationship msg = context.getAnswer();
+                        Relationship msg = context.getUnrelaxedAnswer();
 
 //            			try {
 //            				Relationship c = getDb().getRelationshipById(
@@ -119,13 +119,15 @@ public abstract class Manipulator {
 //            				addedContexts++;
 //            			} catch (Exception e) {
 //						}
+                        
+                        //PFlow _pf_ = new PFlow(pf);
             			try {
             				Relationship r = getDb().getRelationshipById(
         						(Long)msg.getProperty(RID.name())
         					);
-            				addedContexts += pf.addContextPoint(r);
+            				//addedContexts += _pf_.addContextPoint(r);
             				
-            				if (msg.isType(RESULT)) {
+            				if (context.getUnrelaxedAnswer().isType(RESULT)) {
             					msg = r;
 
 	                            try {
@@ -134,21 +136,21 @@ public abstract class Manipulator {
             				}
             			} catch (Exception e) {}
 
-    					addedContexts += pf.addContextPoint(context);
+    					//addedContexts += _pf_.addContextPoint(context);
             				
             			if (msg.isType(REF)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
 
                         if (s instanceof Evaluable) {
-                        	PipedInput<QCAVector> in = execute(new PFlow(pf), msg, ((Evaluable) s).onCalcQuestion());
+                        	PipedInput<QCAVector> in = execute(new PFlow(pf, context), msg, ((Evaluable) s).onCalcQuestion());
                             for (QCAVector v : in) {
                             	out.write(v);
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
                             if (s instanceof Query || s instanceof Evaluable) {
-                                PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), msg);
+                                PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, context), msg);
                                 for (QCAVector v : in) {
                                     out.write(v);
                                 }
@@ -159,10 +161,10 @@ public abstract class Manipulator {
                             out.write(context);
                         }
                         
-                        while (addedContexts > 0) {
-                        	pf.popContextPoint();
-                        	addedContexts--;
-                        }
+//                        while (addedContexts > 0) {
+//                        	pf.popContextPoint();
+//                        	addedContexts--;
+//                        }
                     } else {
                         //XXX: what to do if msg is null?
                         // out.close();
