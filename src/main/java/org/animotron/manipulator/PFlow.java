@@ -140,7 +140,8 @@ public class PFlow {
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
-		path.add(vector);
+		
+		addContextPoint(vector);
 
 		this.op = vector.getUnrelaxedClosest();
 	}
@@ -415,7 +416,7 @@ public class PFlow {
 
 
 	public int addContextPoint(QCAVector vector) {
-		boolean debug = false;
+		boolean debug = true;
 		if (debug) System.out.print("adding "+this+" "+vector);
 //		System.out.println(new IOException().getStackTrace()[1]);
 		if (path.isEmpty()) {
@@ -423,10 +424,15 @@ public class PFlow {
 			path.insertElementAt(vector, 0);
 			return 1;
 			
-		} else if (!path.isEmpty() && !path.get(0).questionEquals(vector)) {
-			path.insertElementAt(vector, 0);
-			if (debug) System.out.println(" (added)");
-			return 1;
+		} else if (!path.isEmpty()) {
+			QCAVector v = path.get(0);
+			if (v.canBeMerged(vector)) {
+				path.set(0, vector);
+			} else {
+				path.insertElementAt(vector, 0);
+				if (debug) System.out.println(" (added)");
+				return 1;
+			}
 		}
 		if (debug) System.out.println(" (ignored)");
 		return 0;

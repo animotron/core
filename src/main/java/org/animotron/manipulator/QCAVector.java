@@ -126,17 +126,19 @@ public class QCAVector {
 
 	public boolean haveRelationship(Relationship r) {
 
+		boolean debug = false;
+		
 		long id = r.getId();
 		
-		System.out.print("haveRelationship "+question+" ("+question.getType()+") ");
+		if (debug) System.out.print("haveRelationship "+question+" ("+question.getType()+") ");
 		if (question != null && question.getId() == id) return true;
 
-		if (answer != null) {
+		if (debug && answer != null) {
 			System.out.print("answers "+answer+" ("+answer.getType()+") ");
 			Relationship a = getAnswer();
 			System.out.print(a+" ("+a.getType()+") ");
 		}
-		System.out.println();
+		if (debug) System.out.println();
 		
 		if (answer != null && (answer.getId() == id || getAnswer().getId() == id)) return true;
 		
@@ -144,5 +146,13 @@ public class QCAVector {
 			return context.haveRelationship(r);
 		
 		return false;
+	}
+
+	public boolean canBeMerged(QCAVector vector) {
+		if (question == null || answer != null || context != null) return false;
+		
+		if (question.getId() != vector.question.getId()) return false;
+		
+		return true;
 	}
 }

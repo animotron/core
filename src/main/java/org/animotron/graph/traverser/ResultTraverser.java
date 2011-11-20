@@ -71,18 +71,19 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     protected void build(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
-    	Relationship r = rr.getUnrelaxedClosest();
+    	Relationship r = rr.getClosest();
     	
-        int addedContexts = 0;
+//        int addedContexts = 0;
 
-		addedContexts += pf.addContextPoint(rr);
+//		addedContexts += 
+		pf.addContextPoint(rr);
     	
-        if (r.isType(RESULT)) {
-        	r = getDb().getRelationshipById(
-                (Long) r.getProperty(RID.name())
-            );
-            addedContexts += pf.addContextPoint(r);
-        }
+//        if (r.isType(RESULT)) {
+//        	r = getDb().getRelationshipById(
+//                (Long) r.getProperty(RID.name())
+//            );
+//            addedContexts += pf.addContextPoint(r);
+//        }
 
         Statement s;
         if (r.isType(RelationshipTypes.REF) || r.isType(POSSESSIVE._) || r.isType(THE._)) {
@@ -94,20 +95,20 @@ public class ResultTraverser extends AnimoTraverser {
         //if (s instanceof Reference || s instanceof HAVE)
 	    //    addedContexts += pf.addContextPoint(rr);
 
-        try {
-        	Relationship context = getDb().getRelationshipById(
-        		(Long)r.getProperty(CID.name())
-        	);
-        	addedContexts += pf.addContextPoint(context);
-        } catch (Exception e) {
-        }
+//        try {
+//        	Relationship context = getDb().getRelationshipById(
+//        		(Long)r.getProperty(CID.name())
+//        	);
+//        	addedContexts += pf.addContextPoint(context);
+//        } catch (Exception e) {
+//        }
         
         process(handler, pf, s, r, level, isOne, 0, false);
 
-        while (addedContexts > 0) {
-        	pf.popContextPoint();
-        	addedContexts--;
-        }
+//        while (addedContexts > 0) {
+//        	pf.popContextPoint();
+//        	addedContexts--;
+//        }
     }
     
     protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
