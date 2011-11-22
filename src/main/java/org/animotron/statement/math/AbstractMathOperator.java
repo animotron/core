@@ -24,7 +24,6 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.value.AbstractValue;
-import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
@@ -37,12 +36,8 @@ public abstract class AbstractMathOperator extends Instruction implements Evalua
 
 	protected AbstractMathOperator(String name) { super(name); }
 
-    protected Number param (PFlow pf, QCAVector r) throws IOException {
-		return AbstractValue.number(StringResultSerializer._.serialize(pf, r.getAnswer()));
+    protected Number param (PFlow pf, QCAVector vector) throws IOException {
+    	String number = StringResultSerializer._.serialize(pf, vector);
+		return AbstractValue.number(number);
     };
-
-    protected Number param (PFlow pf, Relationship r) throws IOException {
-		return AbstractValue.number(StringResultSerializer._.serialize(pf, r));
-    };
-
 }

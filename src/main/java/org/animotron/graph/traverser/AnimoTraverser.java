@@ -59,7 +59,13 @@ public class AnimoTraverser {
 		handler.endGraph();
 	}
 	
-    protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+	public void traverse(GraphHandler handler, PFlow pf, QCAVector vector) throws IOException {
+		handler.startGraph();
+		build(handler, pf, vector, 0, true, 0, true);
+		handler.endGraph();
+	}
+
+	protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (o instanceof Relationship) {
             build(handler, pf, new QCAVector((Relationship)o), level, isOne, pos, isLast);
 

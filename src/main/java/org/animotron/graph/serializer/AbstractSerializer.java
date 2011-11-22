@@ -21,6 +21,7 @@ package org.animotron.graph.serializer;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -71,4 +72,9 @@ public abstract class AbstractSerializer {
         return out.toString();
     }
 
+	public final String serialize(PFlow pf, QCAVector vector) throws IOException {
+        StringBuilder out = new StringBuilder(1024);
+        traverser.traverse(handler(out), pf, vector);
+        return out.toString();
+    }
 }

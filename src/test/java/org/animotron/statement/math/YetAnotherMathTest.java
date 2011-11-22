@@ -39,7 +39,10 @@ public class YetAnotherMathTest extends ATest {
             new AnimoExpression("the c 3"),
             new AnimoExpression("the d 4")
         );
-        Expression e = new AnimoExpression("+ (a) (b) (c) (d)");
+        Expression e = new AnimoExpression("a");
+    	assertStringResult(e, "1");
+
+        e = new AnimoExpression("+ (a) (b) (c) (d)");
     	assertStringResult(e, "10");
 	}
 

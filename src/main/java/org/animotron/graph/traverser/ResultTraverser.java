@@ -18,7 +18,6 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Result;
 import org.animotron.manipulator.QCAVector;
