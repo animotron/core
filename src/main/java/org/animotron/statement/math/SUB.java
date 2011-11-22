@@ -23,7 +23,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUB extends BinaryMathOperator {
+public class SUB extends MathOperator {
 
 	public static final SUB _ = new SUB();
 

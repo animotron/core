@@ -23,7 +23,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class DIV extends BinaryMathOperator {
+public class DIV extends MathOperator {
 
 	public static final DIV _ = new DIV();
 

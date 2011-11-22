@@ -23,7 +23,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUM extends BinaryMathOperator {
+public class SUM extends MathOperator {
 	
 	public static final SUM _ = new SUM();
 	
