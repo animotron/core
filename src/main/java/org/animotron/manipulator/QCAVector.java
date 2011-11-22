@@ -92,11 +92,10 @@ public class QCAVector {
 	}
 
 	protected void collectHash(DataOutputStream dos) throws IOException {
-		dos.writeLong(question.getId());
-		if (answer != null)
-			dos.writeLong(answer.getId());
-		if (context != null)
-			context.collectHash(dos);
+		if (question	!= null) dos.writeLong(question.getId());
+		if (answer		!= null) dos.writeLong(answer.getId());
+		
+		if (context		!= null) context.collectHash(dos);
 	}
 
 	public byte[] mashup() {
