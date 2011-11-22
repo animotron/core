@@ -107,7 +107,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
             public void onMessage(QCAVector context) {
-            	//System.out.println("get answer "+context);
+            	System.out.println("get answer "+context);
             	try {
             		if (context == null) {
 
@@ -167,7 +167,7 @@ public abstract class Manipulator {
 //        System.out.println("pf.answer.subscribe(onAnswer) "+pf.parent.answer);
 		
         pf.parent.answer.subscribe(onAnswer);
-		if (op instanceof Node)
+		if (vector.getClosest().isType(FAKE))
 	        pf.answer.subscribe(onAnswer);
 
         //send question to evaluation

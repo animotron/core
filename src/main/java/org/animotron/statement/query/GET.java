@@ -153,7 +153,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				} else {
 					
 					for (QCAVector vector : pf.getPFlowPath()) {
-						//System.out.println("CHECK PFLOW "+st);
+						System.out.println("CHECK PFLOW "+vector);
 						Set<QCAVector> rSet = get(pf, op, vector, theNode, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
@@ -230,6 +230,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			Set<QCAVector> newREFs = new FastSet<QCAVector>();
 
 			for (QCAVector vector : nextREFs) {
+				QCAVector c = vector.getContext();
+				if (c != null) {
+					Relationship t = c.getUnrelaxedClosest();
+					if (!visitedREFs.contains(t))
+						newREFs.add(c);
+				}
+				
+				
 				Relationship n = vector.getClosest();
 				//System.out.println(""+n);
 				//System.out.println("getStartNode OUTGOING");
