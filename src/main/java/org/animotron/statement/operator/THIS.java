@@ -53,16 +53,14 @@ public class THIS extends Operator implements Reference, Evaluable {
 			
 			System.out.println("THIS "+op+" ");
 			PipedInput<QCAVector> thes = AN.getREFs(pf, op);
-			//System.out.println(Arrays.toString(thes.toArray()));
 
-			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
-			
 			if (!Utils.results(pf)) {
 				
 				for (QCAVector r : pf.getPFlowPath()) {
+					
 					System.out.print(""+r+" ");
-					System.out.print(""+r.getQuestion().getStartNode()+" -> ");
-					System.out.print(""+r.getQuestion()+" ");
+//					System.out.print(""+r.getQuestion().getStartNode()+" -> ");
+//					System.out.print(""+r.getQuestion()+" ");
 					
 //					for (Relationship rr : Utils.td_eval_IS.traverse(r.getEndNode()).relationships()) {
 //						System.out.print("["+rr+" ");

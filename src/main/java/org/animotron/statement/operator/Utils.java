@@ -204,7 +204,7 @@ public class Utils {
 					) {
 					out.write(e);
 				} else {
-					for (QCAVector rr : eval(_pf_, result)) {
+					for (QCAVector rr : eval(_pf_, e)) {
 						out.write(rr);
 					}
 				}
@@ -238,7 +238,7 @@ public class Utils {
 					PFlow _pf_ = new PFlow(pf);
 					_pf_.addContextPoint(e);
 					
-					Relationship result = e.getAnswer();
+					Relationship result = e.getUnrelaxedAnswer();
 					
 					if (result.isType(REF) 
 							|| result.isType(org.animotron.statement.operator.REF._)
@@ -246,7 +246,7 @@ public class Utils {
 						) {
 						out.write(e);
 					} else {
-						for (QCAVector rr : eval(_pf_, result)) {
+						for (QCAVector rr : eval(_pf_, e)) {
 							out.write(rr);
 						}
 					}
@@ -260,9 +260,11 @@ public class Utils {
 		}
 	}
 	
-	public static PipedInput<QCAVector> eval(PFlow pf, Relationship op) throws IOException {
+	public static PipedInput<QCAVector> eval(PFlow pf, QCAVector vector) throws IOException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
+        
+        Relationship op = vector.getClosest();
 
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
 		for (Relationship rr : hits) {
@@ -276,7 +278,7 @@ public class Utils {
 				}
 				
 			} else {
-				out.write(new QCAVector(op, rr));
+				out.write(new QCAVector(op, vector, rr));
 			}
 		}
 		out.close();

@@ -147,10 +147,13 @@ public class PFlow {
 	}
 
 	private void cyclingDetection(Relationship op) throws AnimoException {
-		int deep = 0;
+		int deep = 0; int count = 0;
 		for (QCAVector v : path) {
 			if (deep > 0 && v.haveRelationship(op)) {
-				throw new AnimoException(op, "cycling detected "+path);
+				if (count > 2)
+					throw new AnimoException(op, "cycling detected "+path);
+				else
+					count++;
 			}
 			deep++;
 		}

@@ -20,6 +20,7 @@ package org.animotron.manipulator;
 
 import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
+import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
@@ -31,15 +32,13 @@ import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.REF;
-import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.animotron.graph.RelationshipTypes.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -58,29 +57,35 @@ public abstract class Manipulator {
 		return execute(new PFlow(this), op);
 	}
 
-	public final PipedInput<QCAVector> execute(final PFlow pflow, Node op) throws IOException {
-		return execute(pflow, (PropertyContainer)op);
+	public final PipedInput<QCAVector> execute(final PFlow pf, Node op) throws IOException {
+		Relationship r = new InMemoryRelationship(null, op, FAKE);
+		return execute(pf, r);
 	}
 
-	public final PipedInput<QCAVector> execute(final PFlow pflow, PropertyContainer op) throws IOException {
-		return execute(pflow, op, null);
+	public final PipedInput<QCAVector> execute(PFlow pf, Relationship op) throws IOException {
+		return execute(pf, new QCAVector(op), null);
+	}
+	
+	public final PipedInput<QCAVector> execute(PFlow pf, QCAVector vector) throws IOException {
+		return execute(pf, vector, null);
 	}
 
-	public final PipedInput<QCAVector> execute(PFlow pflow, PropertyContainer op, Subscribable<PFlow> sub) throws IOException {
+	public final PipedInput<QCAVector> execute(PFlow pflow, QCAVector vector, Subscribable<PFlow> sub) throws IOException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
 
+        Relationship op = vector.getClosest();
         if (sub == null) {
-			if (op instanceof Node) {
+			if (vector.getClosest().isType(FAKE)) {
 				sub = onQuestion(null);
 			} else {
-				sub = onQuestion((Relationship)op);
+				sub = onQuestion(op);
 			}
         }
 		
 		if (sub == null) {
 			if (op instanceof Relationship) {
-				out.write( new QCAVector((Relationship)op, (Relationship)op) );
+				out.write( new QCAVector((Relationship)op, (Relationship)op) ); //XXX: is it correct???
 			} else
 				System.out.println("UNHANDLED op "+op);
 			out.close();
@@ -94,6 +99,7 @@ public abstract class Manipulator {
 			try {
 				pf = new PFlow(pflow, (Relationship)op);
 			} catch (AnimoException e) {
+				e.printStackTrace();
 				throw new IOException(e);
 			}
 		}
@@ -147,14 +153,14 @@ public abstract class Manipulator {
                         }
 
                         if (s instanceof Evaluable) {
-                        	PipedInput<QCAVector> in = execute(new PFlow(pf, context), msg, ((Evaluable) s).onCalcQuestion());
+                        	PipedInput<QCAVector> in = execute(new PFlow(pf, context), context, ((Evaluable) s).onCalcQuestion());
                             for (QCAVector v : in) {
                             	out.write(v);
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
                             if (s instanceof Query || s instanceof Evaluable) {
-                                PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, context), msg);
+                                PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, context), context);
                                 for (QCAVector v : in) {
                                     out.write(v);
                                 }
