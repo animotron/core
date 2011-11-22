@@ -67,7 +67,7 @@ public abstract class BinaryMathOperator extends AbstractMathOperator implements
 	                	
 	                	for (QCAVector r : Utils.getTheRelationships(pf, param)) {
 		                	if (x == null)
-		                		x = param(pf, r);
+		                		x = execute(param(pf, r));
 		                	else
 		                		x = execute(x, param(pf, r));
 	                		
