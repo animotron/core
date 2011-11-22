@@ -44,7 +44,6 @@ import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -216,11 +215,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
 			for (Relationship n : nextREFs) {
-				System.out.println("checking "+n);
+				//System.out.println("checking "+n);
 				have = searchForHAVE(pf, n, theNode, suffixes);
 				if (have != null && !pf.isInStack(have)) { 
 					set.add(new QCAVector(null, n, have));
-					System.out.println("FOUND");
+					//System.out.println("FOUND");
 				}
 			}
 			
@@ -238,7 +237,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					try {
 						for (Relationship r : it) {
 							if (r.equals(n)) continue;
-							System.out.println(r);
+							//System.out.println(r);
 							
 							Statement st = Statements.relationshipType(r);
 							if (st instanceof AN) {

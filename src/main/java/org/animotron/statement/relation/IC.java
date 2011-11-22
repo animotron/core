@@ -29,8 +29,4 @@ public class IC extends HAVE { //Operator implements Evaluable {
 	public static final IC _ = new IC();
 	
 	private IC() { super("ic"); }
-	
-	public String name() {
-		return "have";
-	}
 }
