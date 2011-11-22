@@ -38,8 +38,8 @@ public class InMemoryRelationship implements Relationship {
 	private final RelationshipType type;
 	
 	public InMemoryRelationship(final Node sNode, final Node eNode, final RelationshipType type) {
-		if (sNode == null) throw new IllegalArgumentException( " start node can't be NULL");
-		if (eNode == null) throw new IllegalArgumentException( " end node can't be NULL");
+		if (sNode == null && eNode == null) throw new IllegalArgumentException( " start node can't be NULL");
+		if (eNode == null && sNode == null) throw new IllegalArgumentException( " end node can't be NULL");
 		if (type == null) throw new IllegalArgumentException( " type can't be NULL");
 
 		this.sNode = sNode;
