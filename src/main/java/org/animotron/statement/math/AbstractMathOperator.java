@@ -38,6 +38,9 @@ public abstract class AbstractMathOperator extends Instruction implements Evalua
 
     protected Number param (PFlow pf, QCAVector vector) throws IOException {
     	String number = StringResultSerializer._.serialize(pf, vector);
+    	
+    	if (number.isEmpty()) return null;
+    	
 		return AbstractValue.number(number);
     };
 }

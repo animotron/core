@@ -151,6 +151,7 @@ public class Statements {
 	}
 	
 	public static Statement relationshipType(Relationship r) {
+		if (r == null) return null;
 		return relationshipType(r.getType());
 	}
 

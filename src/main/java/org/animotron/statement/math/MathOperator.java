@@ -53,6 +53,21 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     protected abstract Number execute (Number a, Number b);
     protected abstract Number execute (Number a);
 
+    private final Number execute (PFlow pf, QCAVector vector) throws IOException {
+    	Number a = param(pf, vector);
+    	
+    	if (a == null) return null;
+    	
+    	return execute(a);
+    }
+
+    private final Number execute (Number a, PFlow pf, QCAVector vector) throws IOException {
+    	Number b = param(pf, vector);
+    	if (b == null) return a;
+    	
+    	return execute(a, b);
+    }
+
     private OnQuestion question = new OnQuestion() {
 
         @Override
@@ -70,10 +85,10 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 		                		if (params.hasNext())
 		                			x = param(pf, r);
 		                		else
-		                			x = execute(param(pf, r));
+		                			x = execute(pf, r);
 		                			
 		                	} else
-		                		x = execute(x, param(pf, r));
+		                		x = execute(x, pf, r);
 	                		
 	                	}
 	                }

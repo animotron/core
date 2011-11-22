@@ -158,7 +158,12 @@ public class QCAVector {
 	}
 
 	public boolean canBeMerged(QCAVector vector) {
-		if (question == null || answer != null || context != null) return false;
+		if (question == null 
+			|| vector.question == null 
+			|| answer != null 
+			|| context != null 
+			) 
+			return false;
 		
 		if (question.getId() != vector.question.getId()) return false;
 		
