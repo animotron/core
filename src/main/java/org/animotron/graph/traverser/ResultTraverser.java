@@ -27,7 +27,6 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.Relation;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
@@ -35,11 +34,6 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
-
-import static org.animotron.Properties.CID;
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -86,7 +80,7 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
 
         Statement s;
-        if (r.isType(RelationshipTypes.REF) || r.isType(POSSESSIVE._) || r.isType(THE._)) {
+        if (r.isType(RelationshipTypes.REF) || r.isType(REF._) || r.isType(POSSESSIVE._) || r.isType(THE._)) {
             s = THE._;
         } else {
             s = Statements.relationshipType(r);

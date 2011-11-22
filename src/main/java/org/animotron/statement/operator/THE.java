@@ -28,8 +28,6 @@ import org.animotron.statement.AbstractStatement;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.event.ErrorState;
-import org.neo4j.graphdb.event.KernelEventHandler;
 
 import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.createNode;
@@ -41,7 +39,7 @@ import static org.animotron.graph.AnimoGraph.getROOT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstractStatement implements Prepare, KernelEventHandler {
+public class THE extends AbstractStatement implements Prepare {
 
 	public static final THE _ = new THE();
 
@@ -110,28 +108,6 @@ public class THE extends AbstractStatement implements Prepare, KernelEventHandle
 	@Override
 	public Subscribable<PFlow> onPrepareQuestion() {
         return prepare;
-	}
-
-    @Override
-    public void beforeShutdown() {
-        //ignore
-    }
-
-    @Override
-	public void kernelPanic(ErrorState error) {
-		//ignore
-	}
-
-	@Override
-	public Object getResource() {
-		//ignore
-		return null;
-	}
-
-	@Override
-	public ExecutionOrder orderComparedTo(KernelEventHandler other) {
-		//ignore
-		return null;
 	}
 
 }

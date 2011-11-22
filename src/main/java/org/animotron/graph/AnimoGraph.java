@@ -24,7 +24,6 @@ import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.graph.index.State;
-import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
@@ -96,9 +95,6 @@ public class AnimoGraph {
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
 		graphDb.shutdown();
-
-		THE._.beforeShutdown();
-
         graphDb = null;
 	}
 
