@@ -61,7 +61,7 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
 
-		Set<QCAVector> haveSet = GET._.get(pf, ref, theNode, null, null);
+		Set<QCAVector> haveSet = GET._.get(pf, op, ref, theNode, null, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();

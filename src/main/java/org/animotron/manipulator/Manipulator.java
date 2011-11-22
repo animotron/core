@@ -36,8 +36,6 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.*;
 
 /**
@@ -109,7 +107,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
             public void onMessage(QCAVector context) {
-            	System.out.println("get answer "+context);
+            	//System.out.println("get answer "+context);
             	try {
             		if (context == null) {
 
@@ -119,35 +117,14 @@ public abstract class Manipulator {
 //            			int addedContexts = 0;
                         Statement s = null;
                         
-                        Relationship msg = context.getUnrelaxedAnswer();
+                        Relationship msg = context.getAnswer();
 
-//            			try {
-//            				Relationship c = getDb().getRelationshipById(
-//        						(Long)msg.getProperty(CID.name())
-//        					);
-//            				pf.addContextPoint(c);
-//            				addedContexts++;
-//            			} catch (Exception e) {
-//						}
-                        
-                        //PFlow _pf_ = new PFlow(pf);
-            			try {
-            				Relationship r = getDb().getRelationshipById(
-        						(Long)msg.getProperty(RID.name())
-        					);
-            				//addedContexts += _pf_.addContextPoint(r);
-            				
-            				if (context.getUnrelaxedAnswer().isType(RESULT)) {
-            					msg = r;
+        				if (context.getUnrelaxedAnswer().isType(RESULT)) {
+                            try {
+                                s = Statements.name((String) THE._.reference(msg));
+                            } catch (Exception e){}
+        				}
 
-	                            try {
-	                                s = Statements.name((String) THE._.reference(msg));
-	                            } catch (Exception e){}
-            				}
-            			} catch (Exception e) {}
-
-    					//addedContexts += _pf_.addContextPoint(context);
-            				
             			if (msg.isType(REF)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
@@ -171,17 +148,12 @@ public abstract class Manipulator {
                             out.write(context);
                         }
                         
-//                        while (addedContexts > 0) {
-//                        	pf.popContextPoint();
-//                        	addedContexts--;
-//                        }
                     } else {
-                        //XXX: what to do if msg is null?
-                        // out.close();
+                        //what to do if msg is null?
+                    	//ignore -- XXX: log warning
                     }
 				} catch (IOException e) {
-					//XXX: what to do?
-					e.printStackTrace();
+					pf.sendException(e);
 				}
             }
 

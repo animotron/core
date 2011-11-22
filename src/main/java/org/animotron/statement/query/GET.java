@@ -49,7 +49,7 @@ import java.util.Set;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.*;
 import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
@@ -123,16 +123,16 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				
 				Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
 					@Override
-					public void onMessage(QCAVector context) {
-						System.out.println("GET ["+theNode+"] vector "+context);
+					public void onMessage(QCAVector vector) {
+						System.out.println("GET ["+theNode+"] vector "+vector);
 						
-						if (context == null) {
+						if (vector == null) {
 							pf.countDown();
 							return;
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, context.getAnswer(), theNode, suffixes, visitedREFs);
+						final Set<QCAVector> rSet = get(pf, op, vector, theNode, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
@@ -154,7 +154,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					
 					for (QCAVector vector : pf.getPFlowPath()) {
 						//System.out.println("CHECK PFLOW "+st);
-						Set<QCAVector> rSet = get(pf, vector.getQuestion(), theNode, suffixes, visitedREFs);
+						Set<QCAVector> rSet = get(pf, op, vector, theNode, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
@@ -168,14 +168,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	};
 	
-	public Set<QCAVector> get(PFlow pf, Relationship ref, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
-		Set<Relationship> refs = new FastSet<Relationship>();
-		refs.add(ref);
+	public Set<QCAVector> get(PFlow pf, Relationship op, QCAVector vector, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
+		Set<QCAVector> refs = new FastSet<QCAVector>();
+		refs.add(vector);
 		
-		return get(pf, refs, theNode, suffixes, visitedREFs); 
+		return get(pf, op, refs, theNode, suffixes, visitedREFs); 
 	}
 
-	public Set<QCAVector> get(final PFlow pf, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
+	public Set<QCAVector> get(final PFlow pf, Relationship op, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
 		Set<QCAVector> set = new FastSet<QCAVector>();
 		
 		Relationship have = searchForHAVE(pf, ref, theNode, suffixes);
@@ -184,15 +184,16 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		if (!set.isEmpty()) return set;
 
-		Set<Relationship> newREFs = new FastSet<Relationship>();
+		Set<QCAVector> newREFs = new FastSet<QCAVector>();
 		getOutgoingReferences(pf, ref, newREFs, null);
 		
-		return get(pf, newREFs, theNode, suffixes, visitedREFs); 
+		return get(pf, op, newREFs, theNode, suffixes, visitedREFs); 
 	}
 
 	public Set<QCAVector> get(
-			final PFlow pf, 
-			final Set<Relationship> REFs, 
+			final PFlow pf,
+			final Relationship op,
+			final Set<QCAVector> REFs, 
 			final Node theNode, 
 			final List<Relationship> suffixes, 
 			Set<Relationship> visitedREFs) {
@@ -203,7 +204,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		Set<QCAVector> set = new FastSet<QCAVector>();
 		
-		Set<Relationship> nextREFs = new FastSet<Relationship>();
+		Set<QCAVector> nextREFs = new FastSet<QCAVector>();
 		nextREFs.addAll(REFs);
 
 		Relationship have = null;
@@ -214,22 +215,22 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			
 			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
 
-			for (Relationship n : nextREFs) {
+			for (QCAVector v : nextREFs) {
 				//System.out.println("checking "+n);
-				have = searchForHAVE(pf, n, theNode, suffixes);
+				have = searchForHAVE(pf, v.getUnrelaxedClosest(), theNode, suffixes);
 				if (have != null && !pf.isInStack(have)) { 
-					set.add(new QCAVector(null, n, have));
+					set.add(new QCAVector(op, v, have));
 					//System.out.println("FOUND");
 				}
+				visitedREFs.add(v.getUnrelaxedClosest());
 			}
 			
 			if (set.size() > 0) return set;
 
-			visitedREFs.addAll(nextREFs);
+			Set<QCAVector> newREFs = new FastSet<QCAVector>();
 
-			Set<Relationship> newREFs = new FastSet<Relationship>();
-
-			for (Relationship n : nextREFs) {
+			for (QCAVector vector : nextREFs) {
+				Relationship n = vector.getClosest();
 				//System.out.println(""+n);
 				//System.out.println("getStartNode OUTGOING");
 				if (first || !REFs.contains(n)) {
@@ -244,7 +245,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 								for (QCAVector v : AN.getREFs(pf, r)) {
 									Relationship t = v.getAnswer();
 									if (!visitedREFs.contains(t))
-										newREFs.add(t);
+										newREFs.add(v);
 								}
 							} else if (st instanceof Reference) {
 								try {
@@ -253,7 +254,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 										
 										for (QCAVector rr : in) {
 											if (!visitedREFs.contains(rr.getAnswer()))
-												newREFs.add(rr.getAnswer());
+												newREFs.add(rr);
 										}
 									}
 								} catch (IOException e) {
@@ -278,7 +279,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		}
 	}
 	
-	private void getOutgoingReferences(PFlow pf, Node node, Set<Relationship> newREFs, Set<Relationship> visitedREFs) {
+	private void getOutgoingReferences(PFlow pf, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
 		IndexHits<Relationship> it = Order.queryDown(node);
 		try {
@@ -292,7 +293,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						Relationship t = v.getAnswer();
 						//System.out.println(t);
 						if (visitedREFs != null && !visitedREFs.contains(t))
-							newREFs.add(t);
+							newREFs.add(v);
 					}
 	
 				} else if (st instanceof Reference) {
@@ -302,7 +303,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 							
 							for (QCAVector rr : in) {
 								if (visitedREFs != null && !visitedREFs.contains(rr.getAnswer()))
-									newREFs.add(rr.getAnswer());
+									newREFs.add(rr);
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -325,7 +326,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			final List<Relationship> suffixes) {
 		
 		boolean checkStart = true;
-		if (!(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
+		if (ref.isType(RESULT) || !(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
 			//System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
 //			try {
 //				System.out.print(" "+reference(ref));
