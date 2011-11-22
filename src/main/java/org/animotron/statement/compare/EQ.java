@@ -59,14 +59,14 @@ public class EQ extends Operator implements Predicate {
 		List<QCAVector> expected = new FastList<QCAVector>();
 
 		//System.out.println("Eval actual");
-		PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), have);//.getEndNode());
+		PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
 		for (QCAVector e : in) {
 			actual.add(e);
 			//System.out.println("actual "+e);
 		}
 
 		//System.out.println("Eval expected");
-		in = Evaluator._.execute(new PFlow(pf), op);//.getEndNode());
+		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
 			//System.out.println("expected "+e);
