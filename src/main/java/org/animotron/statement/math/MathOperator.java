@@ -66,9 +66,13 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	                	if (param.isType(REF._)) continue;
 	                	
 	                	for (QCAVector r : Utils.getTheRelationships(pf, param)) {
-		                	if (x == null)
-		                		x = execute(param(pf, r));
-		                	else
+		                	if (x == null) {
+		                		if (params.hasNext())
+		                			x = param(pf, r);
+		                		else
+		                			x = execute(param(pf, r));
+		                			
+		                	} else
 		                		x = execute(x, param(pf, r));
 	                		
 	                	}
