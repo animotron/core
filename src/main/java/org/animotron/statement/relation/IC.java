@@ -16,11 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
-
-import org.animotron.manipulator.OnQuestion;
-import org.animotron.manipulator.PFlow;
-
+package org.animotron.statement.relation;
 
 /**
  * Operator 'IC'.
@@ -28,29 +24,13 @@ import org.animotron.manipulator.PFlow;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends Operator implements Evaluable {
+public class IC extends HAVE { //Operator implements Evaluable {
 	
 	public static final IC _ = new IC();
 	
 	private IC() { super("ic"); }
-
-	@Override
-	public OnQuestion onCalcQuestion() {
-		return question;
+	
+	public String name() {
+		return "have";
 	}
-	
-	private OnQuestion question = new OnQuestion(){
-		@Override
-		public void onMessage(PFlow pf) {
-            //TODO !!!
-//			if (pf.peekParent().getOP().equals(GET._)) {
-//				// Evaluate IC here
-//			} else {
-				pf.done();
-//			}
-		}
-	};
-	
-	
-	
 }

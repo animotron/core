@@ -32,6 +32,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IC;
 import org.animotron.statement.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;

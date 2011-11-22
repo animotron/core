@@ -105,14 +105,24 @@ public class QCAVector {
 	
 	public void debug(StringBuilder b) {
 		b.append("QCA(");
-		b.append(question);
+		if (question == null)
+			b.append("NULL");
+		else {
+			b.append(question.getId());
+			b.append(" '");
+			b.append(question.getType());
+			b.append("'");
+		}
 		b.append(" {");
 		if (context != null)
 			context.debug(b);
 		b.append("}");
 		if (answer != null) {
 			b.append(" ");
-			b.append(answer);
+			b.append(answer.getId());
+			b.append(" '");
+			b.append(answer.getType());
+			b.append("'");
 		}
 		b.append(")");
 	}

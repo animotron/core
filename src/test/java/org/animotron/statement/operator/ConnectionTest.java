@@ -25,6 +25,7 @@ import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.HAVE;
+import org.animotron.statement.relation.IC;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.string.AfterLast;
 import org.junit.Test;

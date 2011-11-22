@@ -33,4 +33,6 @@ public class HAVE extends Operator implements Property, Definition {
 	public static final HAVE _ = new HAVE();
 
 	private HAVE() { super("have"); }
+
+	protected HAVE(String name) { super(name); }
 }
