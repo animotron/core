@@ -24,7 +24,7 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.graph.RelationshipTypes.REF;
+import static org.animotron.graph.RelationshipTypes.*;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -58,7 +58,7 @@ public class AN extends Operator implements Reference, Evaluable {
 
 				for (QCAVector r : getREFs(pf, op)) {
 
-					pf.sendAnswer(r.getAnswer(), REF, hash);
+					pf.sendAnswer(r.getAnswer(), RESULT, hash);
 				}
 			}
 			pf.done();

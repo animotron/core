@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.relation;
 
+import org.animotron.statement.operator.Definition;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Property;
 
@@ -27,7 +28,7 @@ import org.animotron.statement.operator.Property;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAVE extends Operator implements Property {
+public class HAVE extends Operator implements Property, Definition {
 	
 	public static final HAVE _ = new HAVE();
 

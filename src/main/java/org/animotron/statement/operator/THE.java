@@ -39,7 +39,7 @@ import static org.animotron.graph.AnimoGraph.getROOT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstractStatement implements Prepare {
+public class THE extends AbstractStatement implements Prepare, Definition {
 
 	public static final THE _ = new THE();
 
@@ -96,7 +96,11 @@ public class THE extends AbstractStatement implements Prepare {
 
 	@Override
 	public Object reference(Relationship r) {
-		return NAME.get(r.getEndNode());
+		try {
+			return NAME.get(r.getEndNode());
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	public Object reference(Node r) {

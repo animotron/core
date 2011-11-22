@@ -53,16 +53,19 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     protected void write(Statement statement, Object reference) throws IOException {
-        if (statement instanceof QNAME && reference != null) {
-            write(reference.toString());
-        } else if (statement instanceof VALUE && reference != null) {
-            if (reference instanceof String) {
-                write("\"");
-                write(reference.toString().replaceAll("\"", "\\\\\""));
-                write("\"");
-            } else {
-                write(reference.toString());
-            }
+        if (statement instanceof QNAME) {
+        	if (reference != null)
+        		write(reference.toString());
+        	
+        } else if (statement instanceof VALUE) {
+        	if (reference != null)
+	            if (reference instanceof String) {
+	                write("\"");
+	                write(reference.toString().replaceAll("\"", "\\\\\""));
+	                write("\"");
+	            } else {
+	                write(reference.toString());
+	            }
         } else if (statement instanceof REF) {
             write(reference.toString());
             if (ps instanceof Suffix) {

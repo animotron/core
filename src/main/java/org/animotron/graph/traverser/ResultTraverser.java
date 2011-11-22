@@ -80,8 +80,13 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
 
         Statement s;
-        if (r.isType(RelationshipTypes.REF) || r.isType(REF._) || r.isType(POSSESSIVE._) || r.isType(THE._)) {
+        Statement q = Statements.relationshipType(rr.getQuestion());
+        if (r.isType(REF._) && !(q instanceof Definition) && !(q instanceof REF)) {
             s = THE._;
+            
+        } else if (r.isType(POSSESSIVE._) || r.isType(THE._)) {
+            s = THE._;
+            
         } else {
             s = Statements.relationshipType(r);
         }
