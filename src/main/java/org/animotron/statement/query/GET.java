@@ -339,7 +339,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			final List<Relationship> suffixes) {
 		
 		boolean checkStart = true;
-		if (ref.isType(RESULT) || !(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
+//		if (!ref.isType(RESULT) || !(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
 			//System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
 //			try {
 //				System.out.print(" "+reference(ref));
@@ -347,8 +347,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 //			} finally {
 //				System.out.println();
 //			}
-			checkStart = false;
-		}
+//			checkStart = false;
+//		}
 		
 		Relationship have = null;
 		
