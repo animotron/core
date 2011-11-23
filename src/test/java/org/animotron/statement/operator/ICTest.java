@@ -54,6 +54,7 @@ public class ICTest extends ATest {
 		);
 
         assertStringResult(D, ".");
-        assertAnimoResult(D, "the D have A \".\".");
+        //XXX: assertAnimoResult(D, "the D have A \".\".");
+        assertAnimoResult(D, "the D ic A \".\".");
 	}
 }

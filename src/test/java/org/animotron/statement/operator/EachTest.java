@@ -20,6 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression.*;
@@ -32,6 +33,7 @@ import static org.animotron.expression.JExpression.*;
 public class EachTest extends ATest {
 
     @Test
+    @Ignore
     public void test_00() throws Exception {
 
         JExpression s = new JExpression(
@@ -42,6 +44,7 @@ public class EachTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_01() throws Exception {
 
         JExpression s = new JExpression(
@@ -95,7 +98,5 @@ public class EachTest extends ATest {
                         "(\\c3 \\b3 \\a3)."
 
        );
-
     }
-
 }
