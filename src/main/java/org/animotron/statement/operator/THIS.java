@@ -22,10 +22,14 @@ import org.animotron.io.PipedInput;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.relation.HAVE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.List;
+import java.util.Set;
+
+import javolution.util.FastSet;
 
 /**
  * Operation 'THIS'. Reference to the closest instance in PFlow.
@@ -52,24 +56,28 @@ public class THIS extends Operator implements Reference, Evaluable {
 			Relationship op = pf.getOP();
 			
 			System.out.println("THIS "+op+" ");
-			PipedInput<QCAVector> thes = AN.getREFs(pf, op);
+			
+			final Set<Node> thes = new FastSet<Node>(); 
+			
+			for (QCAVector theNode : AN.getREFs(pf, op)) {
+				thes.add(theNode.getAnswer().getEndNode());
+			}
 
 			if (!Utils.results(pf)) {
 				
 				for (QCAVector r : pf.getPFlowPath()) {
-					
-					System.out.print(""+r+" ");
-//					System.out.print(""+r.getQuestion().getStartNode()+" -> ");
-//					System.out.print(""+r.getQuestion()+" ");
-					
-//					for (Relationship rr : Utils.td_eval_IS.traverse(r.getEndNode()).relationships()) {
-//						System.out.print("["+rr+" ");
-//						System.out.print(""+rr.getStartNode()+" -> ");
-//						System.out.print(""+rr.getEndNode()+"] ");
-//					}
-					System.out.println("");
-					
-					//pf.sendAnswer(createResult(pf, op, node, r, REF, pf.getOpHash()), op);
+				
+					QCAVector[] cs = r.getContext();
+					if (cs != null)
+						for (QCAVector c : cs) {
+							Relationship toCheck = c.getQuestion();
+							if (toCheck.isType(HAVE._)) {
+								if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
+									pf.sendAnswer(new QCAVector(op, c.getUnrelaxedAnswer(), c.getContext()));
+									break;
+								}
+							}
+						}
 				}
 			}
 			pf.done();

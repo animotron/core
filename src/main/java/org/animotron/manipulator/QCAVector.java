@@ -18,6 +18,9 @@
  */
 package org.animotron.manipulator;
 
+import org.animotron.io.PipedInput;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Relationship;
 
@@ -35,7 +38,7 @@ public class QCAVector {
 	private Relationship question = null;
 	private Relationship answer = null;
 	
-	private QCAVector context = null;
+	private QCAVector[] context = null;
 
 	public QCAVector(Relationship question) {
 		this.question = question;
@@ -48,13 +51,19 @@ public class QCAVector {
 
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
 		this.question = question;
-		this.context = context;
+		this.context = new QCAVector[] {context};
 		this.answer = answer;
 	}
 	
+	public QCAVector(Relationship question, Relationship answer, QCAVector ... context) {
+		this.question = question;
+		this.context = context;
+		this.answer = answer;
+	}
+
 	public QCAVector(Relationship question, Relationship context, Relationship answer) {
 		this.question = question;
-		this.context = new QCAVector(null, answer);
+		this.context = new QCAVector[] {new QCAVector(null, answer)};
 		this.answer = answer;
 	}
 
@@ -83,7 +92,7 @@ public class QCAVector {
 	}
 	
 
-	public QCAVector getContext() {
+	public QCAVector[] getContext() {
 		return context;
 	}
 
@@ -95,7 +104,11 @@ public class QCAVector {
 		if (question	!= null) dos.writeLong(question.getId());
 		if (answer		!= null) dos.writeLong(answer.getId());
 		
-		if (context		!= null) context.collectHash(dos);
+		if (context		!= null) {
+			for (QCAVector c : context) {
+				c.collectHash(dos);
+			}
+		}
 	}
 
 	public byte[] mashup() {
@@ -112,10 +125,29 @@ public class QCAVector {
 			b.append(" '");
 			b.append(question.getType());
 			b.append("'");
+			
+			try {
+				PipedInput<QCAVector> thes = AN.getREFs(null, question);
+				for (QCAVector v : thes) {
+					Object name = THE._.reference(v.getClosest());
+					if (name != null) {
+						b.append(" ");
+						b.append(name);
+					}
+				}
+			} catch (Exception e) {
+			}
 		}
 		b.append(" {");
-		if (context != null)
-			context.debug(b);
+		if (context != null) {
+			int i = 0;
+			for (QCAVector c : context) {
+				b.append(i); i++;
+				b.append("=");
+				
+				c.debug(b);
+			}
+		}
 		b.append("}");
 		if (answer != null) {
 			b.append(" ");
@@ -151,8 +183,12 @@ public class QCAVector {
 		
 		if (answer != null && (answer.getId() == id || getAnswer().getId() == id)) return true;
 		
-		if (context != null)
-			return context.haveRelationship(r);
+		if (context != null) {
+			for (QCAVector c : context) {
+				if (c.haveRelationship(r))
+					return true;
+			}
+		}
 		
 		return false;
 	}

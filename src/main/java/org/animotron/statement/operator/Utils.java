@@ -274,7 +274,8 @@ public class Utils {
 			if (_s instanceof Query || _s instanceof Evaluable) {
 				PipedInput<QCAVector> _in = Evaluator._.execute(new PFlow(pf), rr);
 				for (QCAVector ee : _in) {
-					out.write(ee);
+					//XXX: ee should be context too???
+					out.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
 				}
 				
 			} else {
@@ -419,7 +420,7 @@ public class Utils {
 		return createResult(pf, null, node, r, rType, pf.getPathHash());
 	}
 
-	public static Relationship createResult(final PFlow pf, final QCAVector context, final Node node, final Relationship r, final RelationshipType rType) {
+	public static Relationship createResult(final PFlow pf, final QCAVector[] context, final Node node, final Relationship r, final RelationshipType rType) {
 		return createResult(pf, context, node, r, rType, pf.getPathHash());
 	}
 
@@ -427,7 +428,7 @@ public class Utils {
 		return createResult(pf, null, node, r, rType, hash);
 	}
 
-	public static Relationship createResult(final PFlow pf, final QCAVector context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+	public static Relationship createResult(final PFlow pf, final QCAVector[] context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
@@ -447,8 +448,12 @@ public class Utils {
 				//store to relationship arrow
 				RID.set(res, r.getId());
 				//for debug
-				if (context != null)
-					CID.set(res, context.mashup());
+				if (context != null) {
+					if (context.length > 1) System.out.println("WARNING ... more then one context for CID"); 
+					for (QCAVector c : context) {
+						CID.set(res, c.mashup());
+					}
+				}
 				Result.add(res, hash);
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;

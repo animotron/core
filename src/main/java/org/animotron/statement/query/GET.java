@@ -49,7 +49,6 @@ import java.util.Set;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.*;
 import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
@@ -235,11 +234,13 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			Set<QCAVector> newREFs = new FastSet<QCAVector>();
 
 			for (QCAVector vector : nextREFs) {
-				QCAVector c = vector.getContext();
-				if (c != null) {
-					Relationship t = c.getUnrelaxedClosest();
-					if (!visitedREFs.contains(t))
-						newREFs.add(c);
+				QCAVector[] cs = vector.getContext();
+				if (cs != null) {
+					for (QCAVector c : cs) {
+						Relationship t = c.getUnrelaxedClosest();
+						if (!visitedREFs.contains(t))
+							newREFs.add(c);
+					}
 				}
 				
 				
@@ -368,10 +369,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 		//search for inside 'HAVE'
 		have = getByHave(pflow, ref, thes, suffixes);
-		if (have != null) {
-			have = checkSuffixes(suffixes, have);
-			if (have != null) return have;
-		}
+		if (have != null) return have;
 
 		//search 'IC' by 'IS' topology
 		for (Relationship tdR : Utils.td_eval_IS.traverse(ref).relationships()) {
