@@ -74,8 +74,8 @@ public class YetAnotherGetTest extends ATest{
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
-        assertAnimoResult(E, "the E have B \"π\".");
-
+        //XXX: assertAnimoResult(E, "the E have B \"π\".");
+        assertAnimoResult(E, "the E ic B \"π\".");
     }
 
     @Test
