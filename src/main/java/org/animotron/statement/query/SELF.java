@@ -18,6 +18,10 @@
  */
 package org.animotron.statement.query;
 
+import java.util.Set;
+
+import javolution.util.FastSet;
+
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.QCAVector;
@@ -88,17 +92,20 @@ public class SELF extends AbstractQuery {
             }
             
             Node theNode = Utils.getSingleREF(op.getEndNode());
+            
+    		Set<Node> thes = new FastSet<Node>();
+    		thes.add(theNode);
 
             if (ref != null) {
                 //reference in processing flow
-                res = GET._.getBySELF(pf, ref.getEndNode(), theNode);
+                res = GET._.getBySELF(pf, ref.getEndNode(), thes);
 
                 if (res != null)
                     pf.sendAnswer(res, HAVE._, pf.getOpHash());
 
             } else if (searchHave == 2) {
                 //the instance self in have
-                res = GET._.getBySELF(pf, pf.getStartNode(), theNode);
+                res = GET._.getBySELF(pf, pf.getStartNode(), thes);
 
                 if (res != null)
                     pf.sendAnswer(res, HAVE._, pf.getOpHash());

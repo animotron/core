@@ -19,6 +19,8 @@
 package org.animotron.statement.compare;
 
 import javolution.util.FastList;
+import javolution.util.FastSet;
+
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.QCAVector;
@@ -60,8 +62,11 @@ public class WITH extends Operator implements Predicate {
 		System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
+		
+		Set<Node> thes = new FastSet<Node>();
+		thes.add(theNode);
 
-		Set<QCAVector> haveSet = GET._.get(pf, op, ref, theNode, null, null);
+		Set<QCAVector> haveSet = GET._.get(pf, op, ref, thes, null, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();

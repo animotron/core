@@ -19,6 +19,8 @@
 package org.animotron.statement.compare;
 
 import javolution.util.FastList;
+import javolution.util.FastSet;
+
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
@@ -32,6 +34,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Compare operator 'EQ'.
@@ -52,7 +55,10 @@ public class EQ extends Operator implements Predicate {
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
 
-		Relationship have = GET._.getBySELF(pf, ref, theNode);
+		Set<Node> thes = new FastSet<Node>();
+		thes.add(theNode);
+		
+		Relationship have = GET._.getBySELF(pf, ref, thes);
 		if (have == null) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();

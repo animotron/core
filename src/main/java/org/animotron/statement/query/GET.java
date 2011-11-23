@@ -90,9 +90,13 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			
 			final Set<Relationship> visitedREFs = new FastSet<Relationship>();
 
+			final Set<Node> thes = new FastSet<Node>(); 
+			
 			for (QCAVector theNode : AN.getREFs(pf, op)) {
-				evalGet(pf, op, node, theNode.getAnswer().getEndNode(), suffixes, visitedREFs);
+				thes.add(theNode.getAnswer().getEndNode());
 			}
+
+			evalGet(pf, op, node, thes, suffixes, visitedREFs);
 			
 			pf.await();
 			pf.done();
@@ -102,15 +106,16 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				final PFlow pf, 
 				final Relationship op, 
 				final Node node, 
-				final Node theNode, 
+				final Set<Node> thes, 
 				final List<Relationship> suffixes, 
 				final Set<Relationship> visitedREFs) {
 			
-			System.out.print("GET '");
+			System.out.print("GET "+op+" '");
 			try {
-				System.out.print(name(theNode));
+				for (Node theNode : thes) {
+					System.out.print(name(theNode)+"["+theNode+"], ");
+				}
 			} catch (Exception e) {}
-			System.out.println("' ["+theNode+"]");
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			
 			//for (Relationship r : pf.getPFlowPath()) {
@@ -124,7 +129,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
 					@Override
 					public void onMessage(QCAVector vector) {
-						System.out.println("GET ["+theNode+"] vector "+vector);
+						System.out.println("GET ["+op+"] vector "+vector);
 						
 						if (vector == null) {
 							pf.countDown();
@@ -132,7 +137,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, op, vector, theNode, suffixes, visitedREFs);
+						final Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
@@ -154,7 +159,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					
 					for (QCAVector vector : pf.getPFlowPath()) {
 						//System.out.println("CHECK PFLOW "+vector);
-						Set<QCAVector> rSet = get(pf, op, vector, theNode, suffixes, visitedREFs);
+						Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
@@ -168,17 +173,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	};
 	
-	public Set<QCAVector> get(PFlow pf, Relationship op, QCAVector vector, final Node theNode, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
+	public Set<QCAVector> get(PFlow pf, Relationship op, QCAVector vector, final Set<Node> thes, final List<Relationship> suffixes, Set<Relationship> visitedREFs) {
 		Set<QCAVector> refs = new FastSet<QCAVector>();
 		refs.add(vector);
 		
-		return get(pf, op, refs, theNode, suffixes, visitedREFs); 
+		return get(pf, op, refs, thes, suffixes, visitedREFs); 
 	}
 
-	public Set<QCAVector> get(final PFlow pf, Relationship op, Node ref, final Node theNode, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
+	public Set<QCAVector> get(final PFlow pf, Relationship op, Node ref, final Set<Node> thes, final List<Relationship> suffixes, final Set<Relationship> visitedREFs) {
 		Set<QCAVector> set = new FastSet<QCAVector>();
 		
-		Relationship have = searchForHAVE(pf, ref, theNode, suffixes);
+		Relationship have = searchForHAVE(pf, ref, thes, suffixes);
 		if (have != null && !pf.isInStack(have)) 
 			set.add(new QCAVector(pf.getOP(), have));
 		
@@ -187,14 +192,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Set<QCAVector> newREFs = new FastSet<QCAVector>();
 		getOutgoingReferences(pf, ref, newREFs, null);
 		
-		return get(pf, op, newREFs, theNode, suffixes, visitedREFs); 
+		return get(pf, op, newREFs, thes, suffixes, visitedREFs); 
 	}
 
 	public Set<QCAVector> get(
 			final PFlow pf,
 			final Relationship op,
 			final Set<QCAVector> REFs, 
-			final Node theNode, 
+			final Set<Node> thes, 
 			final List<Relationship> suffixes, 
 			Set<Relationship> visitedREFs) {
 		
@@ -217,7 +222,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 			for (QCAVector v : nextREFs) {
 				//System.out.println("checking "+n);
-				have = searchForHAVE(pf, v.getUnrelaxedClosest(), theNode, suffixes);
+				have = searchForHAVE(pf, v.getUnrelaxedClosest(), thes, suffixes);
 				if (have != null && !pf.isInStack(have)) { 
 					set.add(new QCAVector(op, v, have));
 					//System.out.println("FOUND");
@@ -330,7 +335,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	private Relationship searchForHAVE(
 			final PFlow pf, 
 			final Relationship ref, 
-			final Node theNode, 
+			final Set<Node> thes, 
 			final List<Relationship> suffixes) {
 		
 		boolean checkStart = true;
@@ -349,20 +354,20 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		//search for local 'HAVE'
 		if (checkStart) {
-			have = getByHave(pf, ref.getStartNode(), theNode, suffixes);
+			have = getByHave(pf, ref.getStartNode(), thes, suffixes);
 			if (have != null) return have;
 		}
 
 		//search for inside 'HAVE'
-		return searchForHAVE(pf, ref.getEndNode(), theNode, suffixes);
+		return searchForHAVE(pf, ref.getEndNode(), thes, suffixes);
 	}
 
-	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final Node theNode, final List<Relationship> suffixes) {
+	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final Set<Node> thes, final List<Relationship> suffixes) {
 		
 		Relationship have = null;
 
 		//search for inside 'HAVE'
-		have = getByHave(pflow, ref, theNode, suffixes);
+		have = getByHave(pflow, ref, thes, suffixes);
 		if (have != null) {
 			have = checkSuffixes(suffixes, have);
 			if (have != null) return have;
@@ -373,7 +378,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 			//System.out.println("GET IC -> IS "+tdR);
 			
-			Relationship r = getByIC(tdR.getEndNode(), theNode, suffixes);
+			Relationship r = getByIC(tdR.getEndNode(), thes, suffixes);
 			if (r != null) {
 				final Node sNode = ref;
 				final Node eNode = r.getEndNode();
@@ -389,7 +394,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			}
 			
 			//search for have
-			have = getByHave(pflow, tdR.getEndNode(), theNode, suffixes);
+			have = getByHave(pflow, tdR.getEndNode(), thes, suffixes);
 			if (have != null) return have;
 		}
 		
@@ -415,12 +420,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	}
 
 	//XXX: in-use by SELF
-	public Relationship getBySELF(final PFlow pf, Node context, final Node theNode) {
+	public Relationship getBySELF(final PFlow pf, Node context, final Set<Node> thes) {
 		
 		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
-		Relationship have = getByHave(pf, context, theNode, null);
+		Relationship have = getByHave(pf, context, thes, null);
 		if (have != null) return have;
 
 		Node instance = Utils.getSingleREF(context);
@@ -429,7 +434,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			context = instance;
 			
 			//search for have
-			have = getByHave(pf, context, theNode, null);
+			have = getByHave(pf, context, thes, null);
 			if (have != null) return have;
 		}
 		
@@ -443,7 +448,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
-					have = getByHave(pf, prevTHE.getEndNode(), theNode, null);
+					have = getByHave(pf, prevTHE.getEndNode(), thes, null);
 					if (have != null) return have;
 				}
 				prevTHE = tdR;
@@ -451,7 +456,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			} else if (st instanceof IC) {
 				//System.out.print("GET IC -> "+tdR);
 				
-				if (theNode.equals(Utils.getSingleREF(tdR.getEndNode()))) {
+				if (thes.contains(Utils.getSingleREF(tdR.getEndNode()))) {
 					//System.out.println(" MATCH");
 					
 					//store
@@ -481,19 +486,19 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		if (prevTHE != null) {
 			//search for have
-			have = getByHave(pf, prevTHE.getEndNode(), theNode, null);
+			have = getByHave(pf, prevTHE.getEndNode(), thes, null);
 			if (have != null) return have;
 		}
 
 		return null;
 	}
 	
-	private Relationship getByHave(final PFlow pflow, final Node context, final Node theNode, final List<Relationship> suffixes) {
+	private Relationship getByHave(final PFlow pflow, final Node context, final Set<Node> thes, final List<Relationship> suffixes) {
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, theNode, HAVE._);
+				return _evaluate_(path, thes, HAVE._);
 			}
 		});
 
@@ -524,12 +529,12 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		return checkSuffixes(suffixes, res);
 	}
 	
-	private Relationship getByIC(final Node context, final Node theNode, final List<Relationship> suffixes) {
+	private Relationship getByIC(final Node context, final Set<Node> thes, final List<Relationship> suffixes) {
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, theNode, IC._);
+				return _evaluate_(path, thes, IC._);
 			}
 		});
 
@@ -548,7 +553,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
-		public Evaluation _evaluate_(Path path, Node target, RelationshipType type) {
+		public Evaluation _evaluate_(Path path, Set<Node> targets, RelationshipType type) {
 			//System.out.println(path);
 			
 			if (path.length() == 0)
@@ -565,7 +570,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			} else if (path.length() >= 2) {
 				if (r.isType(org.animotron.statement.operator.REF._)) {
 					Node node = r.getEndNode();
-					if (target.equals(node)) 
+					if (targets.contains(node)) 
 						return INCLUDE_AND_PRUNE;
 
 					return EXCLUDE_AND_CONTINUE;
