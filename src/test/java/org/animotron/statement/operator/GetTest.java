@@ -187,7 +187,8 @@ public class GetTest extends ATest {
             _(GET._, "A2",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\".");
+        //XXX: assertAnimoResult(C2, "the C2 have A2 have A1 \"test.txt\".");
+        assertAnimoResult(C2, "the C2 ic A2 have A1 \"test.txt\".");
 
         JExpression C3 = new JExpression(
         _(THE._, "C3",
@@ -201,7 +202,8 @@ public class GetTest extends ATest {
             _(GET._, "B1",
                 _(AN._, "B")
         )));
-        assertAnimoResult(C4, "the C4 have B1 \"txt\".");
+        //XXX: assertAnimoResult(C4, "the C4 have B1 \"txt\".");
+        assertAnimoResult(C4, "the C4 ic B1 \"txt\".");
 
     }
 
