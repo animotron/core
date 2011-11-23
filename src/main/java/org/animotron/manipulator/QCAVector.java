@@ -51,7 +51,8 @@ public class QCAVector {
 
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
 		this.question = question;
-		this.context = new QCAVector[] {context};
+		if (context != null)
+			this.context = new QCAVector[] {context};
 		this.answer = answer;
 	}
 	
