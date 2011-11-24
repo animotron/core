@@ -18,7 +18,20 @@
  */
 package org.animotron.statement.operator;
 
+import java.util.Set;
+
+import javolution.util.FastSet;
+
+import org.animotron.Executor;
+import org.animotron.manipulator.OnQuestion;
+import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Suffix;
+import org.animotron.statement.relation.HAVE;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -30,4 +43,68 @@ public class POSSESSIVE extends Operator implements Suffix {
 
 	private POSSESSIVE() { super("'s"); }
 	
+	public OnQuestion onCalcQuestion() {
+		return question;
+	}
+	
+	private OnQuestion question = new OnQuestion() {
+
+		@Override
+		public void onMessage(final PFlow pf) {
+			final Relationship op = pf.getOP();
+			
+			final Set<Node> thes = new FastSet<Node>(); 
+			
+			for (QCAVector theNode : AN.getREFs(pf, op)) {
+				thes.add(theNode.getAnswer().getEndNode());
+			}
+			Utils.debug(POSSESSIVE._, op, thes);
+
+			Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
+				@Override
+				public void onMessage(QCAVector vector) {
+					System.out.println("GET ["+op+"] vector "+vector);
+					
+					if (vector == null) {
+						pf.countDown();
+						return;
+					}
+
+					//System.out.println("checkSuffixes checkSuffixes checkSuffixes "+res);
+					
+					Node node = vector.getAnswer().getEndNode();
+					
+					for (Relationship r : Utils.td_eval_IS.traverse(node).relationships()) {
+						//System.out.println(r);
+						if (thes.contains(r.getEndNode())) {
+							pf.sendAnswer(r);
+							break;
+						}
+					}
+				}
+
+				@Override
+				public DisposingExecutor getQueue() {
+					return Executor.getFiber();
+				}
+			};
+			pf.answer.subscribe(onContext);
+
+			if (Utils.haveContext(pf)) {
+				super.onMessage(pf);
+			} else {
+				
+//				for (QCAVector vector : pf.getPFlowPath()) {
+//					//System.out.println("CHECK PFLOW "+vector);
+//					Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
+//					if (rSet != null) {
+//						for (QCAVector v : rSet) {
+//							pf.sendAnswer(v, HAVE._);
+//						}
+//						break;
+//					}
+//				}
+			}
+		}
+	};
 }

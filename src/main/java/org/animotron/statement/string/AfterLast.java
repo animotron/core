@@ -111,7 +111,8 @@ public class AfterLast extends Instruction implements Evaluable {
 					}
 				});
 
-				pf.sendAnswer(op, r);
+				//XXX: fix context
+				pf.sendAnswer(r);
             }
 
             pf.done();

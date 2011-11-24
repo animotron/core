@@ -66,7 +66,7 @@ public class WITH extends Operator implements Predicate {
 		Set<Node> thes = new FastSet<Node>();
 		thes.add(theNode);
 
-		Set<QCAVector> haveSet = GET._.get(pf, op, ref, thes, null, null);
+		Set<QCAVector> haveSet = GET._.get(pf, op, ref, thes, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();

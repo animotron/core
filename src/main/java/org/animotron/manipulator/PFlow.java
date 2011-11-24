@@ -228,10 +228,10 @@ public class PFlow {
 		}
 	}
 
-	public void sendAnswer(Relationship question, Relationship answer) {
+	public void sendAnswer(Relationship answer, QCAVector context) {
 		Relationship createdAnswer = Utils.createResult(this, op.getEndNode(), answer, RESULT);
 
-		sendAnswer(question, null, createdAnswer);
+		sendAnswer(op, context, createdAnswer);
 	}
 
 

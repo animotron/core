@@ -98,7 +98,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
                 	Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
                 	
                     //XXX: fix context
-                    pf.sendAnswer(op, r);
+                    pf.sendAnswer(r);
 	            } catch (IOException e) {
 	                pf.sendException(e);
 	                return;

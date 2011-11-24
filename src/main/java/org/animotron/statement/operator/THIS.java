@@ -60,7 +60,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 				thes.add(theNode.getAnswer().getEndNode());
 			}
 
-			Utils.debug("THIS", op, thes);
+			Utils.debug(THIS._, op, thes);
 			
 			if (!Utils.results(pf)) {
 				

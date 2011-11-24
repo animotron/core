@@ -122,6 +122,7 @@ public class Utils {
 //		return null;
 //	}
 
+	@Deprecated
 	public static List<Relationship> getSuffixes(final Node node) {
 		List<Relationship> list = null;
 		IndexHits<Relationship> hits = Order.queryDown(node);
@@ -162,18 +163,21 @@ public class Utils {
 			} catch (Exception e) {
 			}
 
-			Relationship first = null;
+			boolean first = true;
 			IndexHits<Relationship> hits = Order.queryDown(node);
 			try {
 				for (Relationship res : hits) {
-					if (first == null) first = res;
+					//if (first == null) first = res;
 					
-					if (res.isType(org.animotron.statement.operator.REF._))
+					if (res.isType(org.animotron.statement.operator.REF._) || first) {
 						evaluable(pf, res, out, op);
+						first = true;
+					} else
+						break;
 				}
 				
-				if (first != null && out.isEmpty())
-					evaluable(pf, first, out, op);
+//				if (first != null && out.isEmpty())
+//					evaluable(pf, first, out, op);
 				
 			} finally {
 				hits.close();
@@ -371,14 +375,9 @@ public class Utils {
 		
 		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
 		try {
-			boolean first = true;
 			while (q.hasNext()) {
 				Relationship r = q.next();
 				
-				if (first) {
-					first = false;
-					continue;
-				}
 				Statement s = Statements.relationshipType(r);
 				if (r.isType(org.animotron.statement.operator.REF._)
 					|| r.isType(REF)
@@ -469,8 +468,8 @@ public class Utils {
 		});
 	}
 
-	public static void debug(String name, Relationship op, Set<Node> thes) {
-		System.out.print(name+" "+op.getId()+" ");
+	public static void debug(Statement st, Relationship op, Set<Node> thes) {
+		System.out.print(st.name()+" "+op.getId()+" ");
 		for (Node theNode : thes) {
 			try {
 				System.out.print("'"+name(theNode)+"'");
