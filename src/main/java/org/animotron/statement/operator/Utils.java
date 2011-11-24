@@ -163,15 +163,14 @@ public class Utils {
 			} catch (Exception e) {
 			}
 
-			boolean first = true;
+			Relationship first = null;
 			IndexHits<Relationship> hits = Order.queryDown(node);
 			try {
 				for (Relationship res : hits) {
-					//if (first == null) first = res;
-					
-					if (res.isType(org.animotron.statement.operator.REF._) || first) {
+					if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
 						evaluable(pf, res, out, op);
-						first = true;
+						if (first == null)
+							first = res;
 					} else
 						break;
 				}
