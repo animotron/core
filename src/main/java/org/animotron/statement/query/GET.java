@@ -122,13 +122,17 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);
-						if (rSet != null) {
-							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, HAVE._);
-							}
-							return;
+//						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);
+//						if (rSet != null) {
+//							for (QCAVector v : rSet) {
+//								pf.sendAnswer(v, HAVE._);
+//							}
+//						}
+						Relationship have = searchForHAVE(pf, vector.getUnrelaxedAnswer(), thes);
+						if (have != null && !pf.isInStack(have)) { 
+							pf.sendAnswer(new QCAVector(op, vector, have));
 						}
+						
 					}
 
 					@Override
