@@ -492,19 +492,19 @@ public class PFlow {
 	public Relationship getLastContext() {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");
-		for (QCAVector v : path) {
-			Relationship r = v.getQuestion();
-			if (r.isType(AN._)) {
-				if (debug) System.out.println(r);
-				return r;
-			} else if (r.isType(REF)) {
-				if (debug) System.out.println(r);
-				return r;
-			} else if (r.isType(RESULT)) {
-				if (debug) System.out.println(r);
-				return r;
-			}
-		}
+//		for (QCAVector v : path) {
+//			Relationship r = v.getQuestion();
+//			if (r.isType(AN._)) {
+//				if (debug) System.out.println(r);
+//				return r;
+//			} else if (r.isType(REF)) {
+//				if (debug) System.out.println(r);
+//				return r;
+//			} else if (r.isType(RESULT)) {
+//				if (debug) System.out.println(r);
+//				return r;
+//			}
+//		}
 		if (debug) System.out.println(path.lastElement());
 		return path.lastElement().getQuestion();
 	}
