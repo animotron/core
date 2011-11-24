@@ -24,8 +24,6 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.graph.RelationshipTypes.*;
-
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
  * 

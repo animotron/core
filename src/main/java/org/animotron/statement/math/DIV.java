@@ -31,7 +31,9 @@ public class DIV extends MathOperator {
 
     @Override
     protected Number execute(Number a, Number b) {
-        return a.doubleValue() / b.doubleValue();
+    	Number res = a.doubleValue() / b.doubleValue();
+    	//return res.longValue();
+    	return res;
     }
 
     @Override

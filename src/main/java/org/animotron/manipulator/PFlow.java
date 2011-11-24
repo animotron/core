@@ -418,36 +418,46 @@ public class PFlow {
 	}
 
 
-	public int addContextPoint(QCAVector vector) {
-		boolean debug = false;
+	public QCAVector addContextPoint(QCAVector vector) {
+		boolean debug = true;
 		if (debug) System.out.print("adding "+this+" "+vector);
 //		System.out.println(new IOException().getStackTrace()[1]);
 		if (path.isEmpty()) {
 			if (debug) System.out.println(" (added)");
 			path.insertElementAt(vector, 0);
-			return 1;
+			return vector;
 			
 		} else if (!path.isEmpty()) {
 			QCAVector v = path.get(0);
 			if (v.canBeMerged(vector)) {
 				path.set(0, vector);
+				if (debug) System.out.println(" (merge)");
+				return vector;
 			} else {
 				path.insertElementAt(vector, 0);
 				if (debug) System.out.println(" (added)");
-				return 1;
+				return vector;
 			}
 		}
 		if (debug) System.out.println(" (ignored)");
-		return 0;
+		return null;
 	}
 
-	public int addContextPoint(Relationship r) {
+	public QCAVector addContextPoint(Relationship r) {
 		return addContextPoint(new QCAVector(r));
 	}
 
-	public void popContextPoint() {
+	public void popContextPoint(QCAVector vector) {
 		//System.out.println("pop "+this+" "+path);
-		path.remove(0);
+		if (vector == null) return;
+		
+		if (path.size() == 0) {
+			System.out.println("WARNING - path is empty");
+			return;
+		}
+		
+		if (path.get(0) == vector)
+			path.remove(0);
 	}
 
 	public byte[] getPathHash() {

@@ -143,7 +143,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				} else {
 					
 					for (QCAVector vector : pf.getPFlowPath()) {
-						//System.out.println("CHECK PFLOW "+vector);
+						System.out.println("CHECK PFLOW "+vector);
 						Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
@@ -209,7 +209,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Set<QCAVector> nextREFs = new FastSet<QCAVector>();
 		nextREFs.addAll(REFs);
 
-		boolean first = true;
+		//boolean first = true;
 		
 		Relationship t = null;
 		
@@ -285,8 +285,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 //
 //				//System.out.println("getEndNode OUTGOING");
 				t = vector.getUnrelaxedAnswer();
-				if (t != null)
+				if (t != null) {
+					getOutgoingReferences(pf, t.getStartNode(), newREFs, visitedREFs);
 					getOutgoingReferences(pf, t.getEndNode(), newREFs, visitedREFs);
+				}
 			}
 
 			if (newREFs.size() == 0) return null;
@@ -317,9 +319,9 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						try {
 							PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, r), r);
 							
-							for (QCAVector rr : in) {
-								if (visitedREFs != null && !visitedREFs.contains(rr.getAnswer()))
-									newREFs.add(rr);
+							for (QCAVector v : in) {
+								if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
+									newREFs.add(v);
 							}
 						} catch (IOException e) {
 							// TODO Auto-generated catch block

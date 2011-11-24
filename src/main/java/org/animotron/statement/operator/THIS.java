@@ -18,7 +18,6 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.io.PipedInput;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -26,7 +25,6 @@ import org.animotron.statement.relation.HAVE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.util.List;
 import java.util.Set;
 
 import javolution.util.FastSet;

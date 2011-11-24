@@ -55,9 +55,9 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
         handler.startGraph();
-        int i = pf.addContextPoint(r);
+        QCAVector v = pf.addContextPoint(r);
         build(handler, pf, r, 0, true, 0, true);
-        if (i == 1) pf.popContextPoint();
+        pf.popContextPoint(v);
         handler.endGraph();
     }
 
@@ -69,7 +69,7 @@ public class ResultTraverser extends AnimoTraverser {
 //        int addedContexts = 0;
 
 //		addedContexts += 
-		pf.addContextPoint(rr);
+		QCAVector v = pf.addContextPoint(rr);
     	
 //        if (r.isType(RESULT)) {
 //        	r = getDb().getRelationshipById(
@@ -102,6 +102,8 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
         
         process(handler, pf, s, rr, level, isOne, 0, false);
+        
+        pf.popContextPoint(v);
 
 //        while (addedContexts > 0) {
 //        	pf.popContextPoint();
