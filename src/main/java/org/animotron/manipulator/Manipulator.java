@@ -125,7 +125,7 @@ public abstract class Manipulator {
                             } catch (Exception e){}
         				}
 
-            			if (msg.isType(REF)) {
+            			if (msg.isType(org.animotron.statement.operator.REF._) || msg.isType(REF)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
 
