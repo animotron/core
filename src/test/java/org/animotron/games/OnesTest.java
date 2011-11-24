@@ -19,6 +19,7 @@
 package org.animotron.games;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -28,6 +29,7 @@ import org.junit.Test;
 public class OnesTest extends ATest {
 
 	@Test
+	@Ignore
 	public void test_01() throws Exception {
 		testAnimoResult("* 1 1.", "1.");
 
@@ -35,6 +37,7 @@ public class OnesTest extends ATest {
 	}
 	
 	@Test
+	@Ignore
 	public void test_02() throws Exception {
 		//x=1+ 1/(1+1/x)
 

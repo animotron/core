@@ -20,6 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -29,6 +30,7 @@ import org.junit.Test;
 public class PossessiveCaseTest extends ATest {
 
 	@Test
+	@Ignore
 	public void inContext() throws Exception {
 		testAnimo("the user1 (is user) (have name \"user1\").");
 
@@ -45,6 +47,7 @@ public class PossessiveCaseTest extends ATest {
 	}
 
 	@Test
+	@Ignore
 	public void inPFlow() throws Exception {
 		testAnimo("the user1 (is user) (have name \"user1\").");
 
