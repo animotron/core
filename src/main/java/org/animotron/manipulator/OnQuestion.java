@@ -47,9 +47,17 @@ public class OnQuestion implements Subscribable<PFlow> {
 
 		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
 		try {
+			boolean first = true;
+			
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {
 				Relationship r = it.next();
+				
+				if (first) {
+					first = false;
+					continue;
+				}
+				
 				Statement s = Statements.relationshipType(r);
 				if (r.isType(REF._) || s instanceof Suffix) continue;
 				

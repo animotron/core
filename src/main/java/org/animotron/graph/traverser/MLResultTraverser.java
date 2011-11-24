@@ -21,6 +21,7 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.serializer.StringResultSerializer;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.ELEMENT;
@@ -48,12 +49,12 @@ public class MLResultTraverser extends ResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
                 if (s instanceof Prefix) {
-                    node = r.getEndNode();
+                    node = rr.getClosest().getEndNode();
                     It it = new It(node);
                     String[] param = {null, null};
                     try {
@@ -81,15 +82,15 @@ public class MLResultTraverser extends ResultTraverser {
                         it.remove();
                     }
                 } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
-                    String param = StringResultSerializer._.serialize(pf, r);
+                    String param = StringResultSerializer._.serialize(pf, rr);
                     handler.start(s, param, level++, isOne, pos, isLast);
                     handler.end(s, param, --level, isOne, pos, isLast);
                 }
             } else if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, pf, rr, level, isOne);
 			//workaround IS and USE
 			} else if (!(s instanceof Relation || s instanceof REF)) {
-                node = r.getEndNode();
+                node = rr.getClosest().getEndNode();
                 iterate(handler, pf, new It(node), level);
             }
         }

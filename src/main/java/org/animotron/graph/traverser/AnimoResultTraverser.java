@@ -20,6 +20,7 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
@@ -41,16 +42,20 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, pf, rr, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof Relation) {
+				Relationship r = rr.getClosest();
+				
 				handler.start(s, r, level++, isOne, pos, isLast);
 				handler.end(s, r, --level, isOne, pos, isLast);
             } else {
-                handler.start(s, r, level++, isOne, pos, isLast);
+				Relationship r = rr.getClosest();
+
+				handler.start(s, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF)) {
                     node = r.getEndNode();
                     iterate(handler, pf, new It(node), level);

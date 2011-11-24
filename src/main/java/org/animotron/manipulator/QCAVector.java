@@ -56,6 +56,11 @@ public class QCAVector {
 		this.answer = answer;
 	}
 	
+	public QCAVector(Relationship question, QCAVector ... context) {
+		this.question = question;
+		this.context = context;
+	}
+
 	public QCAVector(Relationship question, Relationship answer, QCAVector ... context) {
 		this.question = question;
 		this.context = context;
@@ -91,7 +96,6 @@ public class QCAVector {
 	public Relationship getUnrelaxedAnswer() {
 		return answer;
 	}
-	
 
 	public QCAVector[] getContext() {
 		return context;

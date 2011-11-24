@@ -101,7 +101,7 @@ public class ResultTraverser extends AnimoTraverser {
 //        } catch (Exception e) {
 //        }
         
-        process(handler, pf, s, r, level, isOne, 0, false);
+        process(handler, pf, s, rr, level, isOne, 0, false);
 
 //        while (addedContexts > 0) {
 //        	pf.popContextPoint();
@@ -109,11 +109,13 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
     }
     
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, r, level, isOne);
+                result(handler, pf, rr, level, isOne);
 			} else if (!(s instanceof Relation || s instanceof REF)) {
+				Relationship r = rr.getClosest();
+				
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne, pos, isLast);
                 
@@ -128,9 +130,12 @@ public class ResultTraverser extends AnimoTraverser {
         }
     }
 
-    protected boolean result(GraphHandler handler, PFlow pf, Relationship r, int level, boolean isOne) throws IOException {
+    protected boolean result(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne) throws IOException {
+    	Relationship r = rr.getClosest();
+    	
     	PFlow pflow = new PFlow(pf);
-		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+
+    	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
     	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
     	boolean found;
     	try {
@@ -141,7 +146,7 @@ public class ResultTraverser extends AnimoTraverser {
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<QCAVector>in = Evaluator._.execute(pflow, r);
+            Iterator<QCAVector>in = Evaluator._.execute(pflow, new QCAVector(r, rr));
             iterate(handler, pflow, in, level, isOne);
         }
 

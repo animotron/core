@@ -55,18 +55,17 @@ public class THIS extends Operator implements Reference, Evaluable {
 			
 			Relationship op = pf.getOP();
 			
-			System.out.println("THIS "+op+" ");
-			
 			final Set<Node> thes = new FastSet<Node>(); 
-			
 			for (QCAVector theNode : AN.getREFs(pf, op)) {
 				thes.add(theNode.getAnswer().getEndNode());
 			}
 
+			Utils.debug("THIS", op, thes);
+			
 			if (!Utils.results(pf)) {
 				
 				for (QCAVector r : pf.getPFlowPath()) {
-				
+					//System.out.println(r);
 					QCAVector[] cs = r.getContext();
 					if (cs != null)
 						for (QCAVector c : cs) {
@@ -74,7 +73,8 @@ public class THIS extends Operator implements Reference, Evaluable {
 							if (toCheck.isType(HAVE._)) {
 								if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
 									pf.sendAnswer(new QCAVector(op, c.getUnrelaxedAnswer(), c.getContext()));
-									break;
+									pf.done();
+									return;
 								}
 							}
 						}

@@ -20,6 +20,7 @@ package org.animotron.statement.operator;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
 
 import javolution.util.FastList;
 
@@ -45,6 +46,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
 import static org.animotron.Properties.CID;
+import static org.animotron.Properties.NAME;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -369,8 +371,14 @@ public class Utils {
 		
 		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
 		try {
+			boolean first = true;
 			while (q.hasNext()) {
 				Relationship r = q.next();
+				
+				if (first) {
+					first = false;
+					continue;
+				}
 				Statement s = Statements.relationshipType(r);
 				if (r.isType(org.animotron.statement.operator.REF._)
 					|| r.isType(REF)
@@ -460,4 +468,21 @@ public class Utils {
 			}
 		});
 	}
+
+	public static void debug(String name, Relationship op, Set<Node> thes) {
+		System.out.print(name+" "+op.getId()+" ");
+		for (Node theNode : thes) {
+			try {
+				System.out.print("'"+name(theNode)+"'");
+			} catch (Exception e) {
+				System.out.print("???");
+			}
+			System.out.print(" ["+theNode+"], ");
+		}
+		System.out.println();
+	}
+	
+    public static String name(Node theNode) {
+    	return (String)NAME.get(theNode);
+    }
 }

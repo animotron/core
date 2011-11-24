@@ -31,6 +31,14 @@ public class DocumentTest extends ATest {
 	@Test
 	public void test() throws Exception {
 		
+		testAnimo("the D2011-11-01 have name \"1 November 2011\".");
+		testAnimo("the D2011-11-02 have name \"2 November 2011\".");
+		testAnimo("the D2011-11-03 have name \"3 November 2011\".");
+
+		testAnimo("the N3 have name \"3\".");
+		testAnimo("the N5 have name \"5\".");
+		testAnimo("the N7 have name \"7\".");
+
 		testAnimo("the user1 have name \"user1\".");
 		testAnimo("the user2 have name \"user1\".");
 
@@ -40,9 +48,9 @@ public class DocumentTest extends ATest {
 
 		testAnimo("the document (have date) (have number) (have owner).");
 
-		testAnimo("the doc3 (is document) (have date \"2011-11-01\") (have number \"3\") (have owner user1).");
-		testAnimo("the doc5 (is document) (have date \"2011-11-02\") (have number \"5\") (have owner user1).");
-		testAnimo("the doc7 (is document) (have date \"2011-11-03\") (have number \"7\") (have owner user2).");
+		testAnimo("the doc3 (is document) (have date D2011-11-01) (have number N3) (have owner user1).");
+		testAnimo("the doc5 (is document) (have date D2011-11-02) (have number N5) (have owner user1).");
+		testAnimo("the doc7 (is document) (have date D2011-11-03) (have number N7) (have owner user2).");
 		
 		testAnimo("the table " +
 					"(have column) " +

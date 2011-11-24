@@ -38,6 +38,7 @@ public abstract class Operator extends AbstractLink {
         return super.reference(r);//Order.first(1, r.getEndNode());
     }
     
+    @Deprecated //??? (replace by Utils.name)
     protected String name(Node theNode) {
     	return (String)NAME.get(theNode);
     }
