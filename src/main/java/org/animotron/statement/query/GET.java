@@ -481,6 +481,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	}
 	
 	private Relationship getByHave(final PFlow pflow, final Node context, final Set<Node> thes) {
+		if (context == null) return null;
+		
 		TraversalDescription trav = td.
 		evaluator(new Searcher(){
 			@Override
