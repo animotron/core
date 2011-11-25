@@ -20,6 +20,7 @@ package org.animotron.statement.animo.update;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
 /**
@@ -30,17 +31,23 @@ public class UpdateTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        testAnimo("the a have x 1.");
+        Expression e = new AnimoExpression("the a have x 1.");
         eval(new AnimoExpression("add a have y 2."));
-        testAnimo("a", "the a (have x 1) (have y 2).");
+        assertAnimo(e, "the a (have x 1) (have y 2).");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        testAnimo("the a have x 1.");
+        Expression e = new AnimoExpression("the a have x 1.");
         eval(new AnimoExpression("replace (get x a) (have y 2)."));
-        testAnimo("a", "the a have y 2.");
+        assertAnimo(e, "the a have y 2.");
 	}
 
+    @Test
+	public void test_02() throws Exception {
+        Expression e = new AnimoExpression("the a have x 1.");
+        eval(new AnimoExpression("set (get x a) (2)."));
+        assertAnimo(e, "the a have x 2.");
+	}
 
 }
