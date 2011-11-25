@@ -70,6 +70,7 @@ public class PFlow {
 	
 	protected final PFlow parent;
 	private Relationship op = null;
+	private Relationship startOP = null;
 	private Node opNode = null;
 	
 	private Vector<QCAVector> path = new Vector<QCAVector>();
@@ -85,12 +86,15 @@ public class PFlow {
 		this.m = m;
 
 		this.op = op; 
+		this.startOP = op;
+
 		path.add(new QCAVector(op));
 	}
 
 	public PFlow(PFlow parent) {
 		this.parent = parent;
 		this.m = parent.m;
+		this.startOP = parent.startOP;
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
@@ -104,6 +108,7 @@ public class PFlow {
 		
 		this.parent = parent;
 		this.m = parent.m;
+		this.startOP = parent.startOP;
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
@@ -127,6 +132,7 @@ public class PFlow {
 	public PFlow(PFlow parent, Node opNode) {
 		this.parent = parent;
 		this.m = parent.m;
+		this.startOP = parent.startOP;
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
@@ -137,6 +143,7 @@ public class PFlow {
 	public PFlow(PFlow parent, QCAVector vector) {
 		this.parent = parent;
 		this.m = parent.m;
+		this.startOP = parent.startOP;
 		
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
@@ -169,12 +176,13 @@ public class PFlow {
 
 	//XXX: still required?
 	public Relationship getStartOP() {
-		return path.lastElement().getQuestion();
+		return startOP;
 	}
 	
 	//XXX: still required?
 	public Node getStartNode() {
-		return path.lastElement().getQuestion().getEndNode();
+		return getStartOP().getEndNode();
+		//return path.lastElement().getQuestion().getEndNode();
 	}
 
 	public Node getOPNode() {
@@ -444,6 +452,7 @@ public class PFlow {
 	}
 
 	public QCAVector addContextPoint(Relationship r) {
+		if (startOP == null) startOP = r;
 		return addContextPoint(new QCAVector(r));
 	}
 
@@ -565,5 +574,31 @@ public class PFlow {
 	private void ops(StringBuilder sb) {
 		if (op != null) { sb.append(op); sb.append(" ");}
 		if (parent != null) parent.ops(sb);
+	}
+
+	public PFlow nextStep(Relationship op) {
+		System.out.println("nextStep "+path);
+		PFlow pf = new PFlow(this);
+		
+		if (pf.path.isEmpty()) {
+			pf.path.add(new QCAVector(op));
+		} else {
+			QCAVector vector = pf.path.firstElement();
+			if (!vector.getUnrelaxedClosest().equals(op)) {
+				pf.path.set(0, new QCAVector(op, pf.path.toArray(new QCAVector[pf.path.size()])));
+			}
+		}
+		pf.op = op;
+		
+		return pf;
+	}
+
+	public QCAVector currentVector() {
+		return path.firstElement();
+	}
+	
+	public PFlow getTop() {
+		if (parent == null) return this;
+		return parent;
 	}
 }
