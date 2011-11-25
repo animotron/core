@@ -38,6 +38,9 @@ public class FSBridge {
     }
 
     public static void load (File path) throws IOException {
+        if (!path.exists()) {
+            return;
+        }
         if (path.isDirectory()) {
             loadDir(path.getPath(), path);
         } else {
