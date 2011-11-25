@@ -30,7 +30,6 @@ import org.junit.Test;
 public class DocumentTest extends ATest {
 
 	@Test
-    @Ignore
 	public void test() throws Exception {
 		
 		testAnimo("the D2011-11-01 have name \"1 November 2011\".");
@@ -73,15 +72,15 @@ public class DocumentTest extends ATest {
 					"<th>number</th>" +
 				"</tr>" +
 				"<tr>" +
-					"<td>2011-11-01</td>" +
+					"<td>1 November 2011</td>" +
 					"<td>3</td>" +
 				"</tr>" +
 				"<tr>" +
-					"<td>2011-11-02</td>" +
+					"<td>2 November 2011</td>" +
 					"<td>5</td>" +
 				"</tr>" +
 				"<tr>" +
-					"<td>2011-11-03</td>" +
+					"<td>3 November 2011</td>" +
 					"<td>7</td>" +
 				"</tr>" +
 			"</table>");

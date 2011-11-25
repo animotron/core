@@ -195,7 +195,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		if (!set.isEmpty()) return set;
 
 		Set<QCAVector> newREFs = new FastSet<QCAVector>();
-		getOutgoingReferences(pf, ref, newREFs, null);
+		getOutgoingReferences(pf, null, ref, newREFs, null);
 		
 		return get(pf, op, newREFs, thes, visitedREFs); 
 	}
@@ -235,10 +235,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		while (true) {
 			
-			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
+			System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
 
 			for (QCAVector v : nextREFs) {
-				//System.out.println("checking "+n);
+				System.out.println("checking "+v);
 				if (!check(set, pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
 					check(set, pf, op, v, v.getQuestion(), thes, visitedREFs);
 				}
@@ -306,8 +306,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 //				//System.out.println("getEndNode OUTGOING");
 				t = vector.getUnrelaxedAnswer();
 				if (t != null) {
-					getOutgoingReferences(pf, t.getStartNode(), newREFs, visitedREFs);
-					getOutgoingReferences(pf, t.getEndNode(), newREFs, visitedREFs);
+					if (!t.isType(HAVE._))
+						getOutgoingReferences(pf, t, t.getStartNode(), newREFs, visitedREFs);
+					
+					getOutgoingReferences(pf, t, t.getEndNode(), newREFs, visitedREFs);
 				}
 			}
 
@@ -317,12 +319,19 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		}
 	}
 	
-	private void getOutgoingReferences(PFlow pf, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
+	private void getOutgoingReferences(PFlow pf, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
 		IndexHits<Relationship> it = Order.queryDown(node);
 		try {
+			boolean first = rr == null || !rr.isType(REF._);
 			for (Relationship r : it) {
 				//System.out.println(r);
+				
+				if (first) {
+					first = false;
+					continue;
+				}
+				if (r.isType(REF._)) continue;
 	
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
