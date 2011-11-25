@@ -146,9 +146,25 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					super.onMessage(pf);
 				} else {
 					
+					boolean first = true;
+					Set<QCAVector> rSet = null;
 					for (QCAVector vector : pf.getPFlowPath()) {
 						System.out.println("CHECK PFLOW "+vector);
-						Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);
+						if (first) {
+							first = false;
+
+							if (vector.getContext() == null) continue;
+							
+							Set<QCAVector> refs = new FastSet<QCAVector>();
+							for (QCAVector v : vector.getContext()) {
+								refs.add(v);
+								
+							}
+							rSet = get(pf, op, refs, thes, visitedREFs); 
+							
+						} else {
+							rSet = get(pf, op, vector, thes, visitedREFs);
+						}
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, HAVE._);
