@@ -235,10 +235,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		while (true) {
 			
-			//System.out.println("nextREFs "+Arrays.toString(nextREFs.toArray()));
+			System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
 
 			for (QCAVector v : nextREFs) {
-				//System.out.println("checking "+n);
+				System.out.println("checking "+v);
 				if (!check(set, pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
 					check(set, pf, op, v, v.getQuestion(), thes, visitedREFs);
 				}
@@ -306,7 +306,9 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 //				//System.out.println("getEndNode OUTGOING");
 				t = vector.getUnrelaxedAnswer();
 				if (t != null) {
-					getOutgoingReferences(pf, t.getStartNode(), newREFs, visitedREFs);
+					if (!t.isType(HAVE._))
+						getOutgoingReferences(pf, t.getStartNode(), newREFs, visitedREFs);
+					
 					getOutgoingReferences(pf, t.getEndNode(), newREFs, visitedREFs);
 				}
 			}
@@ -321,8 +323,15 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 		IndexHits<Relationship> it = Order.queryDown(node);
 		try {
+			boolean first = true;
 			for (Relationship r : it) {
 				//System.out.println(r);
+				
+				if (first) {
+					first = false;
+					continue;
+				}
+				if (r.isType(REF._)) continue;
 	
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
