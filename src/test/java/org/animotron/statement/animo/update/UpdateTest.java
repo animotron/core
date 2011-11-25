@@ -57,8 +57,8 @@ public class UpdateTest extends ATest {
         Expression c = new AnimoExpression("the c have x 1.");
         eval(new AnimoExpression("set (get x a) (2)."));
         assertAnimo(a, "the a have x 2.");
-        assertAnimo(b, "the a have x 1.");
-        assertAnimo(c, "the a have x 1.");
+        assertAnimo(b, "the b have x 1.");
+        assertAnimo(c, "the c have x 1.");
 	}
 
     @Test
@@ -68,8 +68,8 @@ public class UpdateTest extends ATest {
         Expression c = new AnimoExpression("the c have x 1.");
         eval(new AnimoExpression("replace (get x a) (have y 2)."));
         assertAnimo(a, "the a have y 2.");
-        assertAnimo(b, "the a have x 1.");
-        assertAnimo(c, "the a have x 1.");
+        assertAnimo(b, "the b have x 1.");
+        assertAnimo(c, "the c have x 1.");
 	}
 
 }
