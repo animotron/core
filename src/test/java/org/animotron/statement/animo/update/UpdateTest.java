@@ -50,4 +50,26 @@ public class UpdateTest extends ATest {
         assertAnimo(e, "the a have x 2.");
 	}
 
+    @Test
+	public void test_03() throws Exception {
+        Expression a = new AnimoExpression("the a have x 1.");
+        Expression b = new AnimoExpression("the b have x 1.");
+        Expression c = new AnimoExpression("the c have x 1.");
+        eval(new AnimoExpression("set (get x a) (2)."));
+        assertAnimo(a, "the a have x 2.");
+        assertAnimo(b, "the a have x 1.");
+        assertAnimo(c, "the a have x 1.");
+	}
+
+    @Test
+	public void test_04() throws Exception {
+        Expression a = new AnimoExpression("the a have x 1.");
+        Expression b = new AnimoExpression("the b have x 1.");
+        Expression c = new AnimoExpression("the c have x 1.");
+        eval(new AnimoExpression("replace (get x a) (have y 2)."));
+        assertAnimo(a, "the a have y 2.");
+        assertAnimo(b, "the a have x 1.");
+        assertAnimo(c, "the a have x 1.");
+	}
+
 }
