@@ -20,6 +20,7 @@ package org.animotron.games.whouse;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -29,6 +30,7 @@ import org.junit.Test;
 public class DocumentTest extends ATest {
 
 	@Test
+    @Ignore
 	public void test() throws Exception {
 		
 		testAnimo("the D2011-11-01 have name \"1 November 2011\".");

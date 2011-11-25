@@ -28,6 +28,7 @@ import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression.*;
@@ -144,6 +145,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test1() throws Exception {
         test(
             _(AN._, "root-service",
@@ -153,6 +155,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test2() throws Exception {
         test(
             _(AN._, "root-service",
@@ -164,6 +167,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test3() throws Exception {
         test(
             _(ANY._, "service",
@@ -174,6 +178,7 @@ public class YetAnotherWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test4() throws Exception {
         test(
             _(ANY._, "service",
@@ -184,5 +189,4 @@ public class YetAnotherWebFrameworkTest extends ATest {
             )
         );
     }
-
 }
