@@ -306,7 +306,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 //				//System.out.println("getEndNode OUTGOING");
 				t = vector.getUnrelaxedAnswer();
 				if (t != null) {
-					if (!t.isType(HAVE._))
+					if (! t.isType(HAVE._))
 						getOutgoingReferences(pf, t, t.getStartNode(), newREFs, visitedREFs);
 					
 					getOutgoingReferences(pf, t, t.getEndNode(), newREFs, visitedREFs);
