@@ -61,6 +61,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 
 	public static final GET _ = new GET();
 	
+	private static boolean debug = false;
+	
 	private GET() { super("get"); }
 
 	TraversalDescription td = Traversal.description().
@@ -114,7 +116,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
 					@Override
 					public void onMessage(QCAVector vector) {
-						System.out.println("GET ["+op+"] vector "+vector);
+						if (debug) System.out.println("GET ["+op+"] vector "+vector);
 						
 						if (vector == null) {
 							pf.countDown();
@@ -235,10 +237,10 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		
 		while (true) {
 			
-			System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
+			if (debug) System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
 
 			for (QCAVector v : nextREFs) {
-				System.out.println("checking "+v);
+				if (debug) System.out.println("checking "+v);
 				if (!check(set, pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
 					check(set, pf, op, v, v.getQuestion(), thes, visitedREFs);
 				}
@@ -253,7 +255,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				if (cs != null) {
 					for (QCAVector c : cs) {
 						t = c.getUnrelaxedAnswer();
-						if (!visitedREFs.contains(t))
+						if (t != null && !visitedREFs.contains(t))
 							newREFs.add(c);
 						else {
 							t = c.getQuestion();
