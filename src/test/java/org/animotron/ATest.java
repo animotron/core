@@ -138,6 +138,10 @@ public abstract class ATest {
         assertAnimoResult(op, expected, false);
     }
 
+    protected void eval(Relationship op) throws IOException {
+        AnimoResultSerializer._.serialize(op);
+    }
+
     protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
 
