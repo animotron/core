@@ -210,4 +210,28 @@ public class QCAVector {
 		
 		return true;
 	}
+	
+	public int hashCode() {
+		int hash = 0;
+		if (question != null) hash += question.getId();
+		if (answer != null) hash += answer.getId();
+		
+		return hash;
+	}
+	
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof QCAVector)) {
+			return false;
+		}
+		QCAVector oV = (QCAVector) o;
+		
+		//XXX:check context too?
+		if ((question == null && oV.question == null) 
+				|| (question != null && oV.question != null && question.equals(oV.question)))
+				if ((answer == null && oV.answer == null) 
+						|| (answer != null && oV.answer != null && answer.equals(oV.answer)))
+					return true;
+		
+		return false;
+	}
 }
