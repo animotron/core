@@ -48,21 +48,43 @@ public abstract class AbstractSerializer {
         traverser.traverse(handler(out), r);
     }
 
+    public final void serialize(QCAVector v, OutputStream out) throws IOException {
+        traverser.traverse(handler(out), v);
+    }
+
     public final void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
         traverser.traverse(handler(out), pf, r);
+    }
+
+    public final void serialize(PFlow pf, QCAVector v, OutputStream out) throws IOException {
+        traverser.traverse(handler(out), pf, v);
     }
 
     public final void serialize(Relationship r, StringBuilder out) throws IOException {
         traverser.traverse(handler(out), r);
     }
 
+    public final void serialize(QCAVector v, StringBuilder out) throws IOException {
+        traverser.traverse(handler(out), v);
+    }
+
     public final void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
         traverser.traverse(handler(out), pf, r);
+    }
+
+    public final void serialize(PFlow pf, QCAVector v, StringBuilder out) throws IOException {
+        traverser.traverse(handler(out), pf, v);
     }
 
     public final String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(1024);
         traverser.traverse(handler(out), r);
+        return out.toString();
+    }
+
+    public final String serialize(QCAVector v) throws IOException {
+        StringBuilder out = new StringBuilder(1024);
+        traverser.traverse(handler(out), v);
         return out.toString();
     }
 
@@ -72,9 +94,9 @@ public abstract class AbstractSerializer {
         return out.toString();
     }
 
-	public final String serialize(PFlow pf, QCAVector vector) throws IOException {
+	public final String serialize(PFlow pf, QCAVector v) throws IOException {
         StringBuilder out = new StringBuilder(1024);
-        traverser.traverse(handler(out), pf, vector);
+        traverser.traverse(handler(out), pf, v);
         return out.toString();
     }
 }

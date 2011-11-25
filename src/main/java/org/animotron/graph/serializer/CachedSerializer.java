@@ -21,6 +21,7 @@ package org.animotron.graph.serializer;
 import org.animotron.cache.Cache;
 import org.animotron.graph.traverser.AnimoTraverser;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -49,6 +50,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
         return s.toString();
     }
 
+    private String key (QCAVector v) throws IOException {
+        return key(v.getClosest());
+    }
+
     private String key (PFlow pf, Relationship r) throws IOException {
         StringBuilder s = new StringBuilder(4);
         s.append(byteArrayToHex(DigestSerializer._.serialize(r)));
@@ -58,6 +63,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
         return s.toString();
     }
 
+    private String key (PFlow pf, QCAVector v) throws IOException {
+        return key(pf, v.getClosest());
+    }
+
     public final void serialize(Relationship r, OutputStream out, Cache cache) throws IOException {
         String key = key(r);
         if (cache.available(key)) {
@@ -65,6 +74,17 @@ public abstract class CachedSerializer extends AbstractSerializer {
         } else {
             OutputStream os = cache.stream(key, out);
             serialize(r, os);
+            os.close();
+        }
+    }
+
+    public final void serialize(QCAVector v, OutputStream out, Cache cache) throws IOException {
+        String key = key(v);
+        if (cache.available(key)) {
+            cache.get(key, out);
+        } else {
+            OutputStream os = cache.stream(key, out);
+            serialize(v, os);
             os.close();
         }
     }
@@ -80,6 +100,17 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
+    public final void serialize(PFlow pf, QCAVector v, OutputStream out, Cache cache) throws IOException {
+        String key = key(pf, v);
+        if (cache.available(key)) {
+            cache.get(key, out);
+        } else {
+            OutputStream os = cache.stream(key, out);
+            serialize(pf, v, os);
+            os.close();
+        }
+    }
+
     public final void serialize(Relationship r, StringBuilder out, Cache cache) throws IOException {
         String key = key(r);
         if (cache.available(key)) {
@@ -91,6 +122,17 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
+    public final void serialize(QCAVector v, StringBuilder out, Cache cache) throws IOException {
+        String key = key(v);
+        if (cache.available(key)) {
+            cache.get(key, out);
+        } else {
+            OutputStream os = cache.stream(key, out);
+            serialize(v, os);
+            os.close();
+        }
+    }
+
     public final void serialize(PFlow pf, Relationship r, StringBuilder out, Cache cache) throws IOException {
         String key = key(pf, r);
         if (cache.available(key)) {
@@ -98,6 +140,17 @@ public abstract class CachedSerializer extends AbstractSerializer {
         } else {
             OutputStream os = cache.stream(key, out);
             serialize(pf, r, os);
+            os.close();
+        }
+    }
+
+    public final void serialize(PFlow pf, QCAVector v, StringBuilder out, Cache cache) throws IOException {
+        String key = key(pf, v);
+        if (cache.available(key)) {
+            cache.get(key, out);
+        } else {
+            OutputStream os = cache.stream(key, out);
+            serialize(pf, v, os);
             os.close();
         }
     }
@@ -115,7 +168,20 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-	public final String serialize(PFlow pf, Relationship r, Cache cache) throws IOException {
+    public final String serialize(QCAVector v, Cache cache) throws IOException {
+        String key = key(v);
+        if (cache.available(key)) {
+            return cache.get(key);
+        } else {
+            StringBuilder out = new StringBuilder(1024);
+            OutputStream os = cache.stream(key, out);
+            serialize(v, os);
+            os.close();
+            return out.toString();
+        }
+    }
+
+    public final String serialize(PFlow pf, Relationship r, Cache cache) throws IOException {
         String key = key(pf, r);
         if (cache.available(key)) {
             return cache.get(key);
@@ -123,6 +189,19 @@ public abstract class CachedSerializer extends AbstractSerializer {
             StringBuilder out = new StringBuilder(1024);
             OutputStream os = cache.stream(key, out);
             serialize(pf, r, os);
+            os.close();
+            return out.toString();
+        }
+    }
+
+    public final String serialize(PFlow pf, QCAVector v, Cache cache) throws IOException {
+        String key = key(pf, v);
+        if (cache.available(key)) {
+            return cache.get(key);
+        } else {
+            StringBuilder out = new StringBuilder(1024);
+            OutputStream os = cache.stream(key, out);
+            serialize(pf, v, os);
             os.close();
             return out.toString();
         }
