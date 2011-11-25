@@ -576,8 +576,15 @@ public class PFlow {
 		if (parent != null) parent.ops(sb);
 	}
 
-	public PFlow nextStep(Relationship op) {
+	public PFlow nextStep(Relationship op) throws IOException {
 		System.out.println("nextStep "+path);
+		
+		try {
+			cyclingDetection(op);
+		} catch (Exception e) {
+			throw new IOException(e);
+		}
+		
 		PFlow pf = new PFlow(this);
 		
 		if (pf.path.isEmpty()) {
