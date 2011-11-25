@@ -22,10 +22,10 @@ package org.animotron.statement.animo.update;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class delete extends AbstractUpdate {
+public class SET extends AbstractUpdate {
 
-    public static final delete _ = new delete();
+    public static final SET _ = new SET();
 
-	private delete() {super("delete");}
+	private SET() {super("set");}
 
 }

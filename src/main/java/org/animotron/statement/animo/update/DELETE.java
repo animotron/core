@@ -18,29 +18,14 @@
  */
 package org.animotron.statement.animo.update;
 
-import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.junit.Test;
-
 /**
+ * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- *
  */
-public class UpdateTest extends ATest {
+public class DELETE extends AbstractUpdate {
 
-    @Test
-	public void test_00() throws Exception {
-        testAnimo("the a have x 1.");
-        eval(new AnimoExpression("add a have y 2."));
-        testAnimo("a", "the a (have x 1) (have y 2).");
-	}
+    public static final DELETE _ = new DELETE();
 
-    @Test
-	public void test_01() throws Exception {
-        testAnimo("the a have x 1.");
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
-        testAnimo("a", "the a have y 2.");
-	}
-
+	private DELETE() {super("delete");}
 
 }

@@ -22,10 +22,10 @@ package org.animotron.statement.animo.update;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class replace extends AbstractUpdate {
+public class REPLACE extends AbstractUpdate {
 
-    public static final replace _ = new replace();
+    public static final REPLACE _ = new REPLACE();
 
-	private replace() {super("replace");}
+	private REPLACE() {super("replace");}
 
 }
