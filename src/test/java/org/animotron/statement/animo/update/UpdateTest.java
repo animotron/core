@@ -72,7 +72,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have x 1."),
             new AnimoExpression("the c have x 1.")
         );
-        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
+        eval(new AnimoExpression("replace (get x a) (have y 2)."));
         assertAnimo(e[0], "the a have y 2.");
         assertAnimo(e[1], "the b have x 1.");
         assertAnimo(e[2], "the c have x 1.");
