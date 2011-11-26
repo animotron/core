@@ -72,7 +72,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have x 1."),
             new AnimoExpression("the c have x 1.")
         );
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
+        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
         assertAnimo(e[0], "the a have y 2.");
         assertAnimo(e[1], "the b have x 1.");
         assertAnimo(e[2], "the c have x 1.");
@@ -85,7 +85,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have x 1."),
             new AnimoExpression("the c have x 1.")
         );
-        eval(new AnimoExpression("set (get x a) (2)."));
+        eval(new AnimoExpression("set (get z get y get x a) (2)."));
         assertAnimo(e[0], "the a have z have y have x 2.");
         assertAnimo(e[1], "the b have x 1.");
         assertAnimo(e[2], "the c have x 1.");
@@ -98,7 +98,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have x 1."),
             new AnimoExpression("the c have x 1.")
         );
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
+        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
         assertAnimo(e[0], "the a have z have y have y 2.");
         assertAnimo(e[1], "the b have x 1.");
         assertAnimo(e[2], "the c have x 1.");
@@ -111,7 +111,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have z have y have x 1."),
             new AnimoExpression("the c have z have y have x 1.")
         );
-        eval(new AnimoExpression("set (get x a) (2)."));
+        eval(new AnimoExpression("set (get z get y get x a) (2)."));
         assertAnimo(e[0], "the a have z have y have x 2.");
         assertAnimo(e[1], "the b have z have y have x 1.");
         assertAnimo(e[2], "the c have z have y have x 1.");
@@ -124,7 +124,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have z have y have x 1."),
             new AnimoExpression("the c have z have y have x 1.")
         );
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
+        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
         assertAnimo(e[0], "the a have z have y have y 2.");
         assertAnimo(e[1], "the b have z have y have x 1.");
         assertAnimo(e[2], "the c have z have y have x 1.");
@@ -137,7 +137,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have z (have y have x 1) (have α 3)."),
             new AnimoExpression("the c have z have y have x 1.")
         );
-        eval(new AnimoExpression("set (get x a) (2)."));
+        eval(new AnimoExpression("set (get z get y get x a) (2)."));
         assertAnimo(e[0], "the a have z (have y have x 2) (have α 3).");
         assertAnimo(e[1], "the b have z (have y have x 1) (have α 3).");
         assertAnimo(e[2], "the c have z have y have x 1.");
@@ -150,7 +150,7 @@ public class UpdateTest extends ATest {
             new AnimoExpression("the b have z (have y have x 1) (have α 3)."),
             new AnimoExpression("the c have z have y have x 1.")
         );
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
+        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
         assertAnimo(e[0], "the a have z (have y have y 2) (have α 3).");
         assertAnimo(e[1], "the b have z (have y have x 1) (have α 3).");
         assertAnimo(e[2], "the c have z have y have x 1.");
