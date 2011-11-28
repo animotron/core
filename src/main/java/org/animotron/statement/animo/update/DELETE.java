@@ -56,7 +56,7 @@ public class DELETE extends AbstractUpdate {
                 IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
                 try {
                     for (Relationship r : params) {
-                        for (QCAVector i : Evaluator._.execute(r)) {
+                        for (QCAVector i : Evaluator._.execute(pf, r)) {
                             execute(i, null);
                         }
                     }

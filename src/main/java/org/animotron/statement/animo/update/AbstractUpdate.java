@@ -53,7 +53,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
                 try {
                     if (params.hasNext()) {
-                        for (QCAVector i : Evaluator._.execute(params.next())) {
+                        for (QCAVector i : Evaluator._.execute(pf, params.next())) {
                             execute(i, params);
                         }
                     }
