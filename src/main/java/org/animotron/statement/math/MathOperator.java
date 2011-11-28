@@ -20,10 +20,9 @@ package org.animotron.statement.math;
 
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.operator.AN;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
@@ -34,7 +33,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 
 import static org.animotron.expression.JExpression.value;
-import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  *
@@ -72,14 +70,12 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 
         @Override
         public void onMessage(final PFlow pf) {
-        	
         	if (!Utils.results(pf)) {
 	            IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
 	            try {
 	                Number x = null;
 	                for (Relationship param : params) {
 	                	if (param.isType(REF._)) continue;
-	                	
 	                	for (QCAVector r : Utils.getTheRelationships(pf, param)) {
 		                	if (x == null) {
 		                		if (params.hasNext())
@@ -89,14 +85,11 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 		                			
 		                	} else
 		                		x = execute(x, pf, r);
-	                		
+
 	                	}
 	                }
-
                     Relationship r = new JExpression(value(x));
-                    
-                	Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
-                	
+                	//Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
                     //XXX: fix context
                     pf.sendAnswer(r);
 	            } catch (IOException e) {
