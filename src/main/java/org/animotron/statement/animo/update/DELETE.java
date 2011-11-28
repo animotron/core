@@ -18,6 +18,17 @@
  */
 package org.animotron.statement.animo.update;
 
+import org.animotron.graph.index.Order;
+import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.OnQuestion;
+import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -27,5 +38,37 @@ public class DELETE extends AbstractUpdate {
     public static final DELETE _ = new DELETE();
 
 	private DELETE() {super("delete");}
+
+    @Override
+    protected void execute(QCAVector destination, IndexHits<Relationship> target) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+	public OnQuestion onCalcQuestion() {
+		return question;
+	}
+
+	private OnQuestion question = new OnQuestion() {
+		@Override
+		public void onMessage(final PFlow pf) {
+            if (!Utils.results(pf)) {
+                IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
+                try {
+                    for (Relationship r : params) {
+                        for (QCAVector i : Evaluator._.execute(r)) {
+                            execute(i, null);
+                        }
+                    }
+                } catch (IOException e) {
+                    pf.sendException(e);
+                    return;
+                } finally {
+                    params.close();
+                }
+            }
+            pf.done();
+		}
+	};
 
 }

@@ -18,10 +18,18 @@
  */
 package org.animotron.statement.animo.update;
 
+import org.animotron.graph.index.Order;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -30,16 +38,33 @@ import org.animotron.statement.operator.Operator;
 public abstract class AbstractUpdate extends Operator implements Evaluable {
 
 	protected AbstractUpdate(String name) { super(name); }
+
+    protected abstract void execute(QCAVector destination, IndexHits<Relationship> target);
 	
     @Override
 	public OnQuestion onCalcQuestion() {
 		return question;
 	}
-	
+
 	private OnQuestion question = new OnQuestion() {
 		@Override
 		public void onMessage(final PFlow pf) {
-			pf.done();
+            if (!Utils.results(pf)) {
+                IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
+                try {
+                    if (params.hasNext()) {
+                        for (QCAVector i : Evaluator._.execute(params.next())) {
+                            execute(i, params);
+                        }
+                    }
+                } catch (IOException e) {
+                    pf.sendException(e);
+                    return;
+                } finally {
+                    params.close();
+                }
+            }
+            pf.done();
 		}
 	};
 	

@@ -18,6 +18,10 @@
  */
 package org.animotron.statement.animo.update;
 
+import org.animotron.manipulator.QCAVector;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -28,4 +32,8 @@ public class REPLACE extends AbstractUpdate {
 
 	private REPLACE() {super("replace");}
 
+    @Override
+    protected void execute(QCAVector destination, IndexHits<Relationship> target) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
