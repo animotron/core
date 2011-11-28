@@ -46,17 +46,21 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 		return question;
 	}
 
+    protected void execute(PFlow pf, IndexHits<Relationship> params) throws IOException {
+        if (params.hasNext()) {
+            for (QCAVector i : Evaluator._.execute(pf, params.next())) {
+                execute(i, params);
+            }
+        }
+    }
+
 	private OnQuestion question = new OnQuestion() {
 		@Override
 		public void onMessage(final PFlow pf) {
             if (!Utils.results(pf)) {
                 IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
                 try {
-                    if (params.hasNext()) {
-                        for (QCAVector i : Evaluator._.execute(pf, params.next())) {
-                            execute(i, params);
-                        }
-                    }
+                    execute(pf, params);
                 } catch (IOException e) {
                     pf.sendException(e);
                     return;

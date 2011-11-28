@@ -18,12 +18,9 @@
  */
 package org.animotron.statement.animo.update;
 
-import org.animotron.graph.index.Order;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -45,30 +42,12 @@ public class DELETE extends AbstractUpdate {
     }
 
     @Override
-	public OnQuestion onCalcQuestion() {
-		return question;
-	}
-
-	private OnQuestion question = new OnQuestion() {
-		@Override
-		public void onMessage(final PFlow pf) {
-            if (!Utils.results(pf)) {
-                IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
-                try {
-                    for (Relationship r : params) {
-                        for (QCAVector i : Evaluator._.execute(pf, r)) {
-                            execute(i, null);
-                        }
-                    }
-                } catch (IOException e) {
-                    pf.sendException(e);
-                    return;
-                } finally {
-                    params.close();
-                }
+    protected void execute(PFlow pf, IndexHits<Relationship> params) throws IOException {
+        for (Relationship r : params) {
+            for (QCAVector i : Evaluator._.execute(pf, r)) {
+                execute(i, null);
             }
-            pf.done();
-		}
-	};
+        }
+    }
 
 }
