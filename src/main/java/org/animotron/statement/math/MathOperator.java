@@ -53,16 +53,13 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 
     private final Number execute (PFlow pf, QCAVector vector) throws IOException {
     	Number a = param(pf, vector);
-    	
     	if (a == null) return null;
-    	
     	return execute(a);
     }
 
     private final Number execute (Number a, PFlow pf, QCAVector vector) throws IOException {
     	Number b = param(pf, vector);
     	if (b == null) return a;
-    	
     	return execute(a, b);
     }
 
@@ -85,7 +82,6 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 		                			
 		                	} else
 		                		x = execute(x, pf, r);
-
 	                	}
 	                }
                     Relationship r = new JExpression(value(x));
