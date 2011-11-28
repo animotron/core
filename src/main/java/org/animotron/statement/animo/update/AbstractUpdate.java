@@ -39,7 +39,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
 	protected AbstractUpdate(String name) { super(name); }
 
-    protected abstract void execute(QCAVector destination, IndexHits<Relationship> target);
+    protected abstract void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> target);
 	
     @Override
 	public OnQuestion onCalcQuestion() {
@@ -48,8 +48,10 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
     protected void execute(PFlow pf, IndexHits<Relationship> params) throws IOException {
         if (params.hasNext()) {
-            for (QCAVector i : Evaluator._.execute(pf, params.next())) {
-                execute(i, params);
+            Relationship point = params.next();
+            Relationship pattern = params.size() > 2 ? params.next() : null;
+            for (QCAVector i : Evaluator._.execute(pf, point)) {
+                execute(i, pattern, params);
             }
         }
     }

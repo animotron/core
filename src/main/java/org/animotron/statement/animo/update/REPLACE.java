@@ -33,7 +33,7 @@ public class REPLACE extends AbstractUpdate {
 	private REPLACE() {super("replace");}
 
     @Override
-    protected void execute(QCAVector destination, IndexHits<Relationship> target) {
+    protected void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> target) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }

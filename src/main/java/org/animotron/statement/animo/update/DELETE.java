@@ -37,15 +37,21 @@ public class DELETE extends AbstractUpdate {
 	private DELETE() {super("delete");}
 
     @Override
-    protected void execute(QCAVector destination, IndexHits<Relationship> target) {
+    protected void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> patterns) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
     protected void execute(PFlow pf, IndexHits<Relationship> params) throws IOException {
-        for (Relationship r : params) {
-            for (QCAVector i : Evaluator._.execute(pf, r)) {
-                execute(i, null);
+        if (params.size() > 2) {
+            for (Relationship r : params) {
+                for (QCAVector i : Evaluator._.execute(pf, r)) {
+                    execute(i, null, null);
+                }
+            }
+        } else if (params.hasNext()) {
+            for (QCAVector i : Evaluator._.execute(pf, params.next())) {
+                execute(i, null, params);
             }
         }
     }
