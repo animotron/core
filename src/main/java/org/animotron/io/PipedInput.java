@@ -74,7 +74,7 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
         		throw new java.io.InterruptedIOException();
         	}
         }
-        T ret = buffer[out++];
+        T ret = buffer[out]; out++;
         if (out >= buffer.length) {
         	out = 0;
         }
@@ -173,8 +173,8 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
     private T step() {
         try {
             T o = (T) read();
-            if (o instanceof Expression)
-                return null;
+            //if (o instanceof Expression)
+            //    return null;
             return o;
         } catch (ClassCastException e) {
             return step();
