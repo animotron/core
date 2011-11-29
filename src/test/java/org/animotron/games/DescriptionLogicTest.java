@@ -133,4 +133,18 @@ public class DescriptionLogicTest extends ATest {
 		assertAnimoResult(a, "the a the yes.");
 		
 	}
+
+	public void famaly_02() throws Exception {
+		testAnimo("the joe (is father john) (have child john) (have son john) (is parent john).");
+		testAnimo("the john (have father joe) (is child joe) (is son joe) (have parent joe).");
+	}
+
+	public void famaly_03() throws Exception {
+		testAnimo("the parent have child.");
+		testAnimo("the child have parent.");
+
+		testAnimo("the john (have child joe).");
+
+		assertAnimoResult("john", "the joe have parent john.");
+	}
 }

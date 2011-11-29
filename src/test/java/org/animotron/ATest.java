@@ -134,6 +134,10 @@ public abstract class ATest {
         System.out.println();
     }
 
+    protected void assertAnimoResult(String op, String expected) throws IOException {
+        assertAnimoResult(new AnimoExpression(op), expected, false);
+    }
+
     protected void assertAnimoResult(Relationship op, String expected) throws IOException {
         assertAnimoResult(op, expected, false);
     }
