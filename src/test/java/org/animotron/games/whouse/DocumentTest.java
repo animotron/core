@@ -20,7 +20,6 @@ package org.animotron.games.whouse;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -32,37 +31,37 @@ public class DocumentTest extends ATest {
 	@Test
 	public void test() throws Exception {
 		
-		testAnimo("the D2011-11-01 have name \"1 November 2011\".");
-		testAnimo("the D2011-11-02 have name \"2 November 2011\".");
-		testAnimo("the D2011-11-03 have name \"3 November 2011\".");
+		testAnimo("the D2011-11-01 name \"1 November 2011\".");
+		testAnimo("the D2011-11-02 name \"2 November 2011\".");
+		testAnimo("the D2011-11-03 name \"3 November 2011\".");
 
-		testAnimo("the N3 have name \"3\".");
-		testAnimo("the N5 have name \"5\".");
-		testAnimo("the N7 have name \"7\".");
+		testAnimo("the N3 name \"3\".");
+		testAnimo("the N5 name \"5\".");
+		testAnimo("the N7 name \"7\".");
 
-		testAnimo("the user1 have name \"user1\".");
-		testAnimo("the user2 have name \"user1\".");
+		testAnimo("the user1 name \"user1\".");
+		testAnimo("the user2 name \"user1\".");
 
-		testAnimo("the number have name \"number\".");
-		testAnimo("the date have name \"date\".");
-		testAnimo("the owner have name \"owner\".");
+		testAnimo("the number name \"number\".");
+		testAnimo("the date name \"date\".");
+		testAnimo("the owner name \"owner\".");
 
-		testAnimo("the document (have date) (have number) (have owner).");
+		testAnimo("the document (date) (number) (owner).");
 
-		testAnimo("the doc3 (is document) (have date D2011-11-01) (have number N3) (have owner user1).");
-		testAnimo("the doc5 (is document) (have date D2011-11-02) (have number N5) (have owner user1).");
-		testAnimo("the doc7 (is document) (have date D2011-11-03) (have number N7) (have owner user2).");
+		testAnimo("the doc3 (document) (date D2011-11-01) (number N3) (owner user1).");
+		testAnimo("the doc5 (document) (date D2011-11-02) (number N5) (owner user1).");
+		testAnimo("the doc7 (document) (date D2011-11-03) (number N7) (owner user2).");
 		
 		testAnimo("the table " +
-					"(have column) " +
-					"(have row) " +
+					"(column) " +
+					"(row) " +
 					"(ic html " +
 						"\\table " +
 							"(\\tr each (get column) (\\th get name)) " +
 							"(each (get row) (\\tr each (get column) (\\td get name get (this column) (this row))))" +
 					").");
 		
-		testAnimo("the journal (is table) (have column (date) (number)) (have row all document).");
+		testAnimo("the journal (table) (column (date) (number)) (row all document).");
 
 		assertXMLResult(
             new AnimoExpression("get html journal"),

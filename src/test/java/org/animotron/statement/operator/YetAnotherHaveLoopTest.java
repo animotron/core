@@ -22,8 +22,6 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -42,14 +40,14 @@ public class YetAnotherHaveLoopTest extends ATest {
         JExpression.__(
                 new JExpression(
                         _(THE._, "html",
-                                _(HAVE._, "content",
+                                _(AN._, "content",
                                         _(AN._, "root-layout")
                                 )
                         )
                 ),
                 new JExpression(
                         _(THE._, "it-working",
-                                _(HAVE._, "content", text("It is working!"))
+                                _(AN._, "content", text("It is working!"))
                         )
                 ),
                 new JExpression(
@@ -61,7 +59,7 @@ public class YetAnotherHaveLoopTest extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "root-layout",
-                                _(IS._, "layout"),
+                                _(AN._, "layout"),
                                 _(GET._, "content")
                         )
                 )
@@ -71,14 +69,14 @@ public class YetAnotherHaveLoopTest extends ATest {
             _(THE._, "s",
                 _(GET._, "content",
                     _(AN._, "service",
-                        _(HAVE._, "uri", text("/")),
-                        _(HAVE._, "host", text("localhost"))
+                        _(AN._, "uri", text("/")),
+                        _(AN._, "host", text("localhost"))
                     )
                 )
             )
         );
 
-        assertAnimoResult(s, "the s have content the root-layout (is layout) (have content \"It is working!\").");
+        assertAnimoResult(s, "the s content the root-layout (layout) (content \"It is working!\").");
 
    }
 
@@ -88,14 +86,14 @@ public class YetAnotherHaveLoopTest extends ATest {
         JExpression.__(
                 new JExpression(
                         _(THE._, "html",
-                                _(HAVE._, "content",
+                                _(AN._, "content",
                                         _(ANY._, "layout")
                                 )
                         )
                 ),
                 new JExpression(
                         _(THE._, "it-working",
-                                _(HAVE._, "content", text("It is working!"))
+                                _(AN._, "content", text("It is working!"))
                         )
                 ),
                 new JExpression(
@@ -107,7 +105,7 @@ public class YetAnotherHaveLoopTest extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "root-layout",
-                                _(IS._, "layout"),
+                                _(AN._, "layout"),
                                 _(GET._, "content")
                         )
                 )
@@ -117,13 +115,13 @@ public class YetAnotherHaveLoopTest extends ATest {
             _(THE._, "s",
                 _(GET._, "content",
                     _(AN._, "service",
-                        _(HAVE._, "uri", text("/")),
-                        _(HAVE._, "host", text("localhost"))
+                        _(AN._, "uri", text("/")),
+                        _(AN._, "host", text("localhost"))
                     )
                 )
             )
         );
 
-        assertAnimoResult(s, "the s have content the root-layout (is layout) (have content \"It is working!\").");
+        assertAnimoResult(s, "the s content the root-layout (layout) (content \"It is working!\").");
    }
 }

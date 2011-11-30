@@ -48,33 +48,33 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-        test("the a have b.");
+        test("the a b.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        test("the a\n    have b \"test\".");
+        test("the a\n    b \"test\".");
 	}
 
     @Test
 	public void test_03() throws Exception {
-        test("the a (have b) (have c)", "the a\n    (have b)\n    (have c).");
+        test("the a (b) (c)", "the a\n    (b)\n    (c).");
 	}
 
     @Test
 	public void test_04() throws Exception {
-        test("the a\n    (have b\n        (any x)\n        (all y))\n    (have c).");
+        test("the a\n    (b\n        (any x)\n        (all y))\n    (c).");
 	}
 
     @Test
 	public void test_05() throws Exception {
-        test("the a\n    have b\n        (any x)\n        (all y).");
+        test("the a\n    b\n        (any x)\n        (all y).");
 	}
 
 
     @Test
 	public void test_06() throws Exception {
-        test("the a\n    have b\n        (any x α)\n        (all y β).");
+        test("the a\n    b\n        (any x α)\n        (all y β).");
 	}
 
     @Test
@@ -96,21 +96,21 @@ public class PrettyAnimoTest extends ATest {
     public void test_0A() throws Exception {
         test(
             "the rest\n" +
-            "    have content\n" +
+            "    content\n" +
             "        \\html\n" +
-            "            (\\head \\title have title \"Welcome to Animo\")\n" +
+            "            (\\head \\title title \"Welcome to Animo\")\n" +
             "            (\\body\n" +
             "                theme-concrete-root-layout\n" +
-            "                    (is root-layout)\n" +
-            "                    (\\h1 have title \"Welcome to Animo\")\n" +
-            "                    (\\p have content \"It is working\")\n" +
+            "                    (root-layout)\n" +
+            "                    (\\h1 title \"Welcome to Animo\")\n" +
+            "                    (\\p content \"It is working\")\n" +
             "                    (\\ul\n" +
             "                        (\\li\n" +
             "                            \"host:\"\n" +
-            "                            (\\strong have host \"localhost\"))\n" +
+            "                            (\\strong host \"localhost\"))\n" +
             "                        (\\li\n" +
             "                            \"uri:\"\n" +
-            "                            (\\strong have uri \"/\"))))."
+            "                            (\\strong uri \"/\"))))."
         );
     }
 

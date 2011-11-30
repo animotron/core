@@ -22,8 +22,6 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ALL;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -41,30 +39,30 @@ public class YetAnotherAllTest extends ATest {
 
     	JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "Z", text("γ")), _(HAVE._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
                 )
         );
 
         JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "the a (the A (is S) (have X \"α\")) (the B (is A) (have Y \"β\")).");
+        assertAnimoResult(a, "the a (the A (S) (X \"α\")) (the B (A) (Y \"β\")).");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimoResult(b, "the b (the B (is A) (have Y \"β\")) (the C (is B) (have Z \"γ\") (have X \"αα\")).");
+        assertAnimoResult(b, "the b (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimoResult(c, "the c the C (is B) (have Z \"γ\") (have X \"αα\").");
+        assertAnimoResult(c, "the c the C (B) (Z \"γ\") (X \"αα\").");
 
     }
 
@@ -73,30 +71,30 @@ public class YetAnotherAllTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(IS._, "S"), _(HAVE._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "X", text("β")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "X", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "X", text("γ")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "X", text("γ")))
                 )
         );
 
         JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "the a the A (is S) (have X \"α\").");
+        assertAnimoResult(a, "the a the A (S) (X \"α\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimoResult(b, "the b the B (is A) (have X \"β\").");
+        assertAnimoResult(b, "the b the B (A) (X \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimoResult(c, "the c the C (is B) (have X \"γ\").");
+        assertAnimoResult(c, "the c the C (B) (X \"γ\").");
 
     }
 

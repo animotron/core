@@ -1,6 +1,8 @@
 package org.animotron.games.words;
 
-import static org.junit.Assert.*;
+import javolution.util.FastMap;
+import javolution.util.FastSet;
+import org.junit.Test;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,10 +13,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 
-import javolution.util.FastMap;
-import javolution.util.FastSet;
-
-import org.junit.Test;
+import static org.junit.Assert.fail;
 
 public class SensorsTest {
 

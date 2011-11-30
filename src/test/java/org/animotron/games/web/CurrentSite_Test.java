@@ -25,8 +25,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -53,13 +51,13 @@ public class CurrentSite_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "test-service",
-                                _(IS._, "service")
+                                _(AN._, "service")
                         )
                 ),
                 new JExpression(
                         _(THE._, "localhost-site",
-                                _(IS._, "site"),
-                                _(HAVE._, "server-name", text("localhost"))
+                                _(AN._, "site"),
+                                _(AN._, "server-name", text("localhost"))
                         )
                 ),
                 new JExpression(
@@ -71,8 +69,8 @@ public class CurrentSite_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "current-request",
-                                _(IS._, "request"),
-                                _(HAVE._, "host", text("localhost"))
+                                _(AN._, "request"),
+                                _(AN._, "host", text("localhost"))
                         )
                 )
         );
@@ -83,6 +81,6 @@ public class CurrentSite_Test extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the rest the test-service is service.");
+        assertAnimoResult(s, "the rest the test-service service.");
     }
 }

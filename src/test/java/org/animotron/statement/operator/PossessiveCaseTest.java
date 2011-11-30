@@ -32,9 +32,9 @@ public class PossessiveCaseTest extends ATest {
 	@Test
 	@Ignore
 	public void inContext() throws Exception {
-		testAnimo("the user1 (is user) (have name \"user1\").");
+		testAnimo("the user1 (user) (name \"user1\").");
 
-		testAnimo("the item1 (is item) (have name \"item1\").");
+		testAnimo("the item1 (item) (name \"item1\").");
 		
 		//XXX: fix!
 		//testAnimo("get (user's name) (user1, item1).", "get( user's name) (user1, item1).");
@@ -49,9 +49,9 @@ public class PossessiveCaseTest extends ATest {
 	@Test
 	@Ignore
 	public void inPFlow() throws Exception {
-		testAnimo("the user1 (is user) (have name \"user1\").");
+		testAnimo("the user1 (user) (name \"user1\").");
 
-		testAnimo("the item1 (is item) (have name \"item1\").");
+		testAnimo("the item1 (item) (name \"item1\").");
 		
 		testAnimo("the f_con user1,item1.");
 		testAnimo("the f_get get user's name.");

@@ -19,11 +19,10 @@
 package org.animotron;
 
 import org.animotron.expression.JExpression;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -40,13 +39,13 @@ public class DownUpTest extends ATest {
 		JExpression.__(
                 new JExpression(
                         _(THE._, "B",
-                                _(IS._, "A"),
-                                _(HAVE._, "X", text("B")))
+                                _(AN._, "A"),
+                                _(AN._, "X", text("B")))
                 ),
                 new JExpression(
                         _(THE._, "C",
-                                _(IS._, "A"),
-                                _(HAVE._, "X", text("C")))
+                                _(AN._, "A"),
+                                _(AN._, "X", text("C")))
                 )
         );
 	}
@@ -63,7 +62,7 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimoResult(a, "the a (the B (is A) (have X \"B\")) (the C (is A) (have X \"C\")).");
+    	assertAnimoResult(a, "the a (the B (A) (X \"B\")) (the C (A) (X \"C\")).");
 
 	}
 	
@@ -83,7 +82,7 @@ public class DownUpTest extends ATest {
 			) 
 		);
     	
-    	assertAnimoResult(a, "the a \"bla\" (have X \"B\") \"bla\" (have X \"C\").");
+    	assertAnimoResult(a, "the a \"bla\" (X \"B\") \"bla\" (X \"C\").");
 
 	}
 

@@ -22,8 +22,6 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -50,15 +48,15 @@ public class SelfTest extends ATest {
         );
     	
         JExpression C = new JExpression(
-            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "A")))
+            _(THE._, "C", _(AN._, "A", text(".")), _(AN._, "B", _(SELF._, "A")))
         );
 
         JExpression CC = new JExpression(
-            _(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "A")))
+            _(THE._, "CC", _(AN._, "A", text("CC")), _(AN._, "B", _(SELF._, "A")))
         );
 
         JExpression D = new JExpression(
-            _(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
+            _(THE._, "D", _(AN._, "C"), _(AN._, "A", text(":")))
         );
 
         JExpression E = new JExpression(
@@ -69,11 +67,11 @@ public class SelfTest extends ATest {
             _(THE._, "F", _(GET._, "B", _(AN._, "D")))
         );
     	
-        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\").");
-        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\").");
-        assertAnimoResult(D, "the D (is C) (have A \":\").");
-        assertAnimoResult(E, "the E have B have A \".\".");
-        assertAnimoResult(F, "the F have B have A \":\".");
+        assertAnimoResult(C, "the C (A \".\") (B A \".\").");
+        assertAnimoResult(CC, "the CC (A \"CC\") (B A \"CC\").");
+        assertAnimoResult(D, "the D (C) (A \":\").");
+        assertAnimoResult(E, "the E B A \".\".");
+        assertAnimoResult(F, "the F B A \":\".");
 
     }
 	
@@ -83,7 +81,7 @@ public class SelfTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(IS._, "X"))
+                        _(THE._, "A", _(AN._, "X"))
                 ),
                 new JExpression(
                         _(THE._, "B")
@@ -91,36 +89,36 @@ public class SelfTest extends ATest {
         );
 
         JExpression C = new JExpression(
-            _(THE._, "C", _(HAVE._, "A", text(".")), _(HAVE._, "B", _(SELF._, "X")))
+            _(THE._, "C", _(AN._, "A", text(".")), _(AN._, "B", _(SELF._, "X")))
         );
-        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\").");
+        assertAnimoResult(C, "the C (A \".\") (B A \".\").");
 
         JExpression CC = new JExpression(
-            _(THE._, "CC", _(HAVE._, "A", text("CC")), _(HAVE._, "B", _(SELF._, "X")))
+            _(THE._, "CC", _(AN._, "A", text("CC")), _(AN._, "B", _(SELF._, "X")))
         );
-        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\").");
+        assertAnimoResult(CC, "the CC (A \"CC\") (B A \"CC\").");
 
         JExpression D = new JExpression(
-            _(THE._, "D", _(IS._, "C"), _(HAVE._, "A", text(":")))
+            _(THE._, "D", _(AN._, "C"), _(AN._, "A", text(":")))
         );
-        assertAnimoResult(D, "the D (is C) (have A \":\").");
+        assertAnimoResult(D, "the D (C) (A \":\").");
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "B", _(AN._, "C")))
         );
-        assertAnimoResult(E, "the E have B have A \".\".");
+        assertAnimoResult(E, "the E B A \".\".");
 
         JExpression F = new JExpression(
             _(THE._, "F", _(GET._, "B", _(AN._, "D")))
         );
-        assertAnimoResult(F, "the F have B have A \":\".");
+        assertAnimoResult(F, "the F B A \":\".");
 
         //second try to be sure
-        assertAnimoResult(C, "the C (have A \".\") (have B have A \".\").");
-        assertAnimoResult(CC, "the CC (have A \"CC\") (have B have A \"CC\").");
-        assertAnimoResult(D, "the D (is C) (have A \":\").");
-        assertAnimoResult(E, "the E have B have A \".\".");
-        assertAnimoResult(F, "the F have B have A \":\".");
+        assertAnimoResult(C, "the C (A \".\") (B A \".\").");
+        assertAnimoResult(CC, "the CC (A \"CC\") (B A \"CC\").");
+        assertAnimoResult(D, "the D (C) (A \":\").");
+        assertAnimoResult(E, "the E B A \".\".");
+        assertAnimoResult(F, "the F B A \":\".");
 
     }
 

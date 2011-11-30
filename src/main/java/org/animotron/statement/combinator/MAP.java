@@ -20,9 +20,9 @@ package org.animotron.statement.combinator;
 
 import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Query;

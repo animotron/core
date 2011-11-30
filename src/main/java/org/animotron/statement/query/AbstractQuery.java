@@ -24,7 +24,6 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -57,7 +56,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     protected TraversalDescription td_IS =
         Traversal.description().
             breadthFirst().
-            relationships(IS._, INCOMING ).
+            relationships(AN._, INCOMING ).
             evaluator(Evaluators.excludeStartPosition());
 
     protected boolean filtering(PFlow pf, Node node, Set<Node> uses) {
@@ -119,7 +118,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					}
 					break;
 				
-				} else if (!(p.isType(IS._))) {
+				} else if (!(p.isType(AN._))) {
 					break;
 				}
 				
@@ -156,7 +155,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					//System.out.println(" "+path);
 					
 					Relationship r = path.lastRelationship();
-					if (!r.isType(IS._))
+					if (!r.isType(AN._))
 						return EXCLUDE_AND_PRUNE;
 						
 					Node sNode = r.getEndNode();
@@ -192,13 +191,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							return INCLUDE_AND_PRUNE;
 						} 
 
-						if (path.length() == 1 && !(r.isType(USE._) || r.isType(IS._))) {
+						if (path.length() == 1 && !(r.isType(USE._) || r.isType(AN._))) {
 							return EXCLUDE_AND_PRUNE;
 						}
 						return EXCLUDE_AND_CONTINUE;
 					
 					//Allow IS<-USE<-IS->... and IS<-IS->...<-USE 
-					} if (path.length() > 1 && r.isType(IS._)) {
+					} if (path.length() > 1 && r.isType(AN._)) {
 						return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;

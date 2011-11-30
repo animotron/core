@@ -20,14 +20,13 @@ package org.animotron.statement.instruction;
 
 import org.animotron.Executor;
 import org.animotron.expression.JExpression;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Q;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.Relationship;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

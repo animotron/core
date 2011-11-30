@@ -51,8 +51,8 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_01() throws Exception {
-        test("\\ get element-name have element-name \"b\"", "<b/>");
-        test("the a \\ get element-name have element-name \"b\"", "<b/>");
+        test("\\ get element-name element-name \"b\"", "<b/>");
+        test("the a \\ get element-name element-name \"b\"", "<b/>");
     }
 
     @Test

@@ -34,22 +34,22 @@ public class ParserTest extends ATest {
 
     @Test
 	public void test_01() throws Exception {
-    	testAnimo("the a have b.");
+    	testAnimo("the a b.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-    	testAnimo("the a have b \"test\".");
+    	testAnimo("the a b \"test\".");
 	}
 
     @Test
 	public void test_03() throws Exception {
-    	testAnimo("the a (have b) (have c).");
+    	testAnimo("the a (b) (c).");
 	}
 
     @Test
 	public void test_04() throws Exception {
-    	testAnimo("the a (have b (any x) (all y)) (have c).");
+    	testAnimo("the a (b (any x) (all y)) (c).");
 	}
 
     @Test
@@ -195,7 +195,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_33() throws Exception {
-    	testAnimo("the a is b.");
+    	testAnimo("the a b.");
     }
 
     @Test
@@ -460,7 +460,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_86() throws Exception {
-    	testAnimo("the a (is b) (have c \"x\") (have c \"x\") \"c\".");
+    	testAnimo("the a (b) (c \"x\") (c \"x\") \"c\".");
     }
 
     @Test

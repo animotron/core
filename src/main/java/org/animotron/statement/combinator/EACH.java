@@ -18,11 +18,12 @@
  */
 package org.animotron.statement.combinator;
 
+import javolution.util.FastSet;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
@@ -36,8 +37,6 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.LinkedList;
 import java.util.Set;
-
-import javolution.util.FastSet;
 
 /**
  * Operation 'EACH'.

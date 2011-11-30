@@ -27,8 +27,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -54,39 +52,39 @@ public class WHouseTest extends ATest {
 
 		new JExpression(
     		_(THE._, "receipt-party", 
-				_(IS._, "party"),
-				_(IS._, "receipt")
+				_(AN._, "party"),
+				_(AN._, "receipt")
 		)	);
 
 		new JExpression(
     		_(THE._, "issue-party", 
-				_(IS._, "party"),
-				_(IS._, "issue")
+				_(AN._, "party"),
+				_(AN._, "issue")
 		)	);
 
 		new JExpression(
     		_(THE._, "person", 
-				_(IS._, "party")
+				_(AN._, "party")
 		)	);
 
 		new JExpression(
     		_(THE._, "organization", 
-				_(IS._, "party")
+				_(AN._, "party")
 		)	);
 
 		new JExpression(
     		_(THE._, "ORG-01", 
-				_(IS._, "organization")
+				_(AN._, "organization")
 		)	);
 
 		new JExpression(
     		_(THE._, "ORG-02", 
-				_(IS._, "organization")
+				_(AN._, "organization")
 		)	);
 
 		new JExpression(
     		_(THE._, "I", 
-				_(IS._, "person")
+				_(AN._, "person")
 		)	);
 		
 		//unit of measure
@@ -94,89 +92,89 @@ public class WHouseTest extends ATest {
 		
 		new JExpression(
     		_(THE._, "kilo", 
-				_(HAVE._, "number", _(Q._, "N1000"))
+				_(AN._, "number", _(Q._, "N1000"))
 		)	);
 
 		//kg -> kilo + gramm
 		new JExpression(
     		_(THE._, "gram", 
-				_(IS._, "UoM")
+				_(AN._, "UoM")
 		)	);
 
 		new JExpression(
     		_(THE._, "kilogram", 
-				_(IS._, "kilo"),
-				_(IS._, "gram")
+				_(AN._, "kilo"),
+				_(AN._, "gram")
 		)	);
 
 		//currency
 		new JExpression(
     		_(THE._, "USD", 
-				_(IS._, "currency")
+				_(AN._, "currency")
 		)	);
 		
 		//Stock Keeping Unit
 		new JExpression(
     		_(THE._, "SKU",
-				_(HAVE._, "reference"),
-				_(HAVE._, "qty"),
-				_(HAVE._, "price"),
-				_(HAVE._, "cost")
+				_(AN._, "reference"),
+				_(AN._, "qty"),
+				_(AN._, "price"),
+				_(AN._, "cost")
 		)	);
 
 		//documents structure
 		new JExpression(
-    		_(THE._, "document", _(HAVE._, "date"))
+    		_(THE._, "document", _(AN._, "date"))
         );
 
         new JExpression(
     		_(THE._, "whouse-document", 
-				_(IS._, "document"),
-				_(HAVE._, "issue-party"),
-				_(HAVE._, "receipt-party"),
-				_(HAVE._, "SKU") 
+				_(AN._, "document"),
+				_(AN._, "issue-party"),
+				_(AN._, "receipt-party"),
+				_(AN._, "SKU")
 		)	);
 
         new JExpression(
     		_(THE._, "whouse-receipt", 
-				_(IS._, "whouse-document"),
+				_(AN._, "whouse-document"),
 				//I do receipt
-				_(IS._, "receipt")
+				_(AN._, "receipt")
 		)	);
 
         new JExpression(
     		_(THE._, "whouse-issue", 
-				_(IS._, "whouse-document"),
+				_(AN._, "whouse-document"),
 				//I do issue
-				_(IS._, "issue")
+				_(AN._, "issue")
 		)	);
 
         new JExpression(
     		_(THE._, "whouse-transfer", 
-				_(IS._, "whouse-document"),
+				_(AN._, "whouse-document"),
 				//I do receipt & issue
-				_(IS._, "receipt"),
-				_(IS._, "issue")
+				_(AN._, "receipt"),
+				_(AN._, "issue")
 		)	);
         
         //documents
         new JExpression(
     		_(THE._, "R01", 
-				_(IS._, "whouse-document"),
-				_(HAVE._, "date", text("T2011-08-07")), //TODO: date instruction
-				_(HAVE._, "issue-party", _(AN._, "ORG-01")),
-				_(HAVE._, "receipt-party", _(AN._, "I")),
-				_(HAVE._, "SKU", 
+				_(AN._, "whouse-document"),
+				_(AN._, "date", text("T2011-08-07")), //TODO: date instruction
+				_(AN._, "issue-party", _(AN._, "ORG-01")),
+				_(AN._, "receipt-party", _(AN._, "I")),
+				_(AN._, "SKU",
 					_(THE._, "item01", 
-						_(HAVE._, "reference", text("item01")),
-						_(HAVE._, "qty", 
-							_(HAVE._, "number", _(Q._, "N2")),
-							_(HAVE._, "UoM", _(AN._, "KG")) //TODO: _(HAVE._, "UoM", KG)) 
+						_(AN._, "reference", text("item01")),
+						_(AN._, "qty",
+							_(AN._, "number", _(Q._, "N2")),
+							_(AN._, "UoM", _(AN._, "KG")) //TODO: _(AN._, "UoM", KG))
 						),
-						_(HAVE._, "price", //
-							_(HAVE._, "number", _(Q._, "N5")),
-							_(HAVE._, "UoM", _(AN._, "G")),
-							_(HAVE._, "currency", _(AN._, "USD")) 
+						_(AN._, "price", //
+							_(AN._, "number", _(Q._, "N5")),
+							_(AN._, "UoM", _(AN._, "G")),
+							_(AN._, "currency", _(AN._, "USD"))
 						)
 				)	)
 		)	);
@@ -219,14 +217,14 @@ public class WHouseTest extends ATest {
 	@Ignore
 	public void test_01() throws Exception {
         __(
-            new AnimoExpression("the kilo have number 1000."), //* 1000
+            new AnimoExpression("the kilo number 1000."), //* 1000
             new AnimoExpression("the UoM."),
             new AnimoExpression("the gram."),
-            new AnimoExpression("the kg (is kilo, gram)."), //the base unit of mass in the International System of Units
+            new AnimoExpression("the kg (kilo, gram)."), //the base unit of mass in the International System of Units
 
-            new AnimoExpression("the measument1 have qty (have number 1000) (have UoM gram).")
+            new AnimoExpression("the measument1 qty (number 1000) (UoM gram).")
         );
-        Expression e = new AnimoExpression("get qty (measument1) (have UoM kg)."); //???
-    	assertStringResult(e, "have qty (have number 1) (have UoM kg)");
+        Expression e = new AnimoExpression("get qty (measument1) (UoM kg)."); //???
+    	assertStringResult(e, "have qty (number 1) (UoM kg)");
 	}
 }

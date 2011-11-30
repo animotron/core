@@ -25,8 +25,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -45,14 +43,14 @@ public class CurrentWebFramework_Test extends ATest {
         __(
                 new JExpression(
                         _(THE._, "service",
-                                _(IS._, "resource")
+                                _(AN._, "resource")
                         )
 
                 ),
                 new JExpression(
                         _(THE._, "html",
-                                _(HAVE._, "mime-type", text("text/html")),
-                                _(HAVE._, "content",
+                                _(AN._, "mime-type", text("text/html")),
+                                _(AN._, "content",
                                         element("html",
                                                 element("head",
                                                         element("title", _(GET._, "title", _(ANY._, "service")))
@@ -66,16 +64,16 @@ public class CurrentWebFramework_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "resource-not-found",
-                                _(IS._, "not-found-content"),
-                                _(HAVE._, "title", text("Not found")),
-                                _(HAVE._, "content", text("Can't find resource \""), _(GET._, "uri", _(ANY._, "request")), text("\""))
+                                _(AN._, "not-found-content"),
+                                _(AN._, "title", text("Not found")),
+                                _(AN._, "content", text("Can't find resource \""), _(GET._, "uri", _(ANY._, "request")), text("\""))
                         )
                 ),
                 new JExpression(
                         _(THE._, "it-working",
-                                _(IS._, "root-content"),
-                                _(HAVE._, "title", text("Welcome to Animo")),
-                                _(HAVE._, "content", text("It is working!"))
+                                _(AN._, "root-content"),
+                                _(AN._, "title", text("Welcome to Animo")),
+                                _(AN._, "content", text("It is working!"))
                         )
                 ),
                 new JExpression(
@@ -87,16 +85,16 @@ public class CurrentWebFramework_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "localhost-site",
-                                _(IS._, "site"),
-                                _(HAVE._, "server-name", text("localhost")),
+                                _(AN._, "site"),
+                                _(AN._, "server-name", text("localhost")),
                                 _(USE._, "theme-concrete-root-layout"),
                                 _(USE._, "it-working")
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
-                                _(IS._, "service"),
-                                _(IS._, "not-found"),
+                                _(AN._, "service"),
+                                _(AN._, "not-found"),
                                 _(AN._, "html",
                                         _(ANY._, "not-found-content"),
                                         _(USE._, "not-found-layout")
@@ -105,8 +103,8 @@ public class CurrentWebFramework_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "root-service",
-                                _(IS._, "service"),
-                                _(IS._, "root"),
+                                _(AN._, "service"),
+                                _(AN._, "root"),
                                 _(AN._, "html",
                                         _(ANY._, "root-content"),
                                         _(USE._, "root-layout")
@@ -115,19 +113,19 @@ public class CurrentWebFramework_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "not-found-layout",
-                                _(IS._, "layout"),
+                                _(AN._, "layout"),
                                 element("p", _(GET._, "content", _(ANY._, "service")))
                         )
                 ),
                 new JExpression(
                         _(THE._, "root-layout",
-                                _(IS._, "layout"),
+                                _(AN._, "layout"),
                                 element("p", text("The default root layout!"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "theme-concrete-root-layout",
-                                _(IS._, "root-layout"),
+                                _(AN._, "root-layout"),
                                 element("h1", _(GET._, "title", _(ANY._, "service"))),
                                 element("p", _(GET._, "content", _(ANY._, "service"))),
                                 element("ul",
@@ -145,10 +143,10 @@ public class CurrentWebFramework_Test extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "current-request",
-                        		_(IS._, "request"),
+                        		_(AN._, "request"),
                                 _(USE._, "root"),
-                                _(HAVE._, "uri", text("/")),
-                                _(HAVE._, "host", text("localhost"))
+                                _(AN._, "uri", text("/")),
+                                _(AN._, "host", text("localhost"))
                         )
                 )
         );
@@ -164,13 +162,13 @@ public class CurrentWebFramework_Test extends ATest {
         assertAnimoResult(s,
             "have content " +
                 "\\html " +
-                    "(\\head \\title have title \"Welcome to Animo\") " +
-                    "(\\body the theme-concrete-root-layout (is root-layout) " +
-                        "(\\h1 have title \"Welcome to Animo\") " +
-                        "(\\p have content \"It is working!\") " +
+                    "(\\head \\title title \"Welcome to Animo\") " +
+                    "(\\body the theme-concrete-root-layout (root-layout) " +
+                        "(\\h1 title \"Welcome to Animo\") " +
+                        "(\\p content \"It is working!\") " +
                         "(\\ul " +
-                            "(\\li \"host: \\\"\" (\\strong have host \"localhost\") \"\\\"\") " +
-                            "(\\li \"uri: \\\"\" (\\strong have uri \"/\") \"\\\"\"))).");
+                            "(\\li \"host: \\\"\" (\\strong host \"localhost\") \"\\\"\") " +
+                            "(\\li \"uri: \\\"\" (\\strong uri \"/\") \"\\\"\"))).");
 
 
         assertXMLResult(s,

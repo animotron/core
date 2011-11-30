@@ -20,11 +20,10 @@ package org.animotron.statement.compare;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Utils;

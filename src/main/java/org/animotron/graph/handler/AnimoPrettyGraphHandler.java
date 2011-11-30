@@ -22,9 +22,9 @@ import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Suffix;
 import org.animotron.statement.link.LINK;
+import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.value.VALUE;
-import org.animotron.statement.ml.QNAME;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 

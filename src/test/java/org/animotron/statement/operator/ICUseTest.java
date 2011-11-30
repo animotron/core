@@ -22,7 +22,6 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.IC;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -40,23 +39,23 @@ public class ICUseTest extends ATest {
         
         JExpression.__(
                 new JExpression(
-                        _(THE._, "X", _(IS._, "A"))
+                        _(THE._, "X", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "Y", _(IS._, "A"))
+                        _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
                         _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"))
+                        _(THE._, "C", _(AN._, "B"))
                 )
         );
 
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(USE._, "X"))))
         );
-        //XXX: assertAnimoResult(D, "the D have X \"χ\".");
+        //XXX: assertAnimoResult(D, "the D X \"χ\".");
         assertAnimoResult(D, "the D ic X \"χ\".");
 	}
 
@@ -65,23 +64,23 @@ public class ICUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "X", _(IS._, "A"))
+                        _(THE._, "X", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "Y", _(IS._, "A"))
+                        _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
                         _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"), _(USE._, "X"))
+                        _(THE._, "C", _(AN._, "B"), _(USE._, "X"))
                 )
         );
 
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C")))
         );
-        //XXX: assertAnimoResult(D, "the D have X \"χ\".");
+        //XXX: assertAnimoResult(D, "the D X \"χ\".");
         assertAnimoResult(D, "the D ic X \"χ\".");
     }
 
@@ -90,16 +89,16 @@ public class ICUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "X", _(IS._, "A"))
+                        _(THE._, "X", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "Y", _(IS._, "A"))
+                        _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
                         _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"))
+                        _(THE._, "C", _(AN._, "B"))
                 ),
                 new JExpression(
                         _(THE._, "U", _(USE._, "X"))
@@ -108,7 +107,7 @@ public class ICUseTest extends ATest {
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
         );
-        //XXX: assertAnimoResult(D, "the D have X \"χ\".");
+        //XXX: assertAnimoResult(D, "the D X \"χ\".");
         assertAnimoResult(D, "the D ic X \"χ\".");
     }
 }

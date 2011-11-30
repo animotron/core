@@ -20,7 +20,6 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.relation.HAVE;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -50,18 +49,18 @@ public class TheTest extends ATest {
         System.out.println("Test the 'THE' ...");
         
     	JExpression A = new JExpression(
-			_(THE._, "A", _(HAVE._, "B", _(THE._, "C", _(HAVE._, "D", text(".")))))
+			_(THE._, "A", _(AN._, "B", _(THE._, "C", _(AN._, "D", text(".")))))
 		);
     	
     	new JExpression(
-			_(THE._, "C", _(HAVE._, "D", text(".")))
+			_(THE._, "C", _(AN._, "D", text(".")))
 		);
         
     	JExpression E = new JExpression(
 			_(THE._, "E", _(AN._, "C"))
 		);
         	
-        assertAnimoResult(A, "the A have B the C have D \".\".");
-        assertAnimoResult(E, "the E the C have D \".\".");
+        assertAnimoResult(A, "the A B the C D \".\".");
+        assertAnimoResult(E, "the E the C D \".\".");
 	}
 }

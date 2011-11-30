@@ -18,24 +18,22 @@
  */
 package org.animotron.statement.query;
 
-import java.util.Set;
-
 import javolution.util.FastSet;
-
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IC;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.traversal.TraversalDescription;
+
+import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.REF;
 
@@ -83,7 +81,7 @@ public class SELF extends AbstractQuery {
                 if (step.isType(REF) || step.isType(org.animotron.statement.operator.REF._)) {
                     ref = step;
                     searchHave = 0;
-                } else if (searchHave == 1 && step.isType(HAVE._)) {
+                } else if (searchHave == 1 && step.isType(AN._)) {
                     searchHave = 2;
                 }
 
@@ -101,14 +99,14 @@ public class SELF extends AbstractQuery {
                 res = GET._.getBySELF(pf, ref.getEndNode(), thes);
 
                 if (res != null)
-                    pf.sendAnswer(res, HAVE._, pf.getOpHash());
+                    pf.sendAnswer(res, AN._, pf.getOpHash());
 
             } else if (searchHave == 2) {
                 //the instance self in have
                 res = GET._.getBySELF(pf, pf.getStartNode(), thes);
 
                 if (res != null)
-                    pf.sendAnswer(res, HAVE._, pf.getOpHash());
+                    pf.sendAnswer(res, AN._, pf.getOpHash());
 
             } else
                 ;//XXX: error???
@@ -159,10 +157,10 @@ public class SELF extends AbstractQuery {
 				
 				Node currentThe = Utils.getSingleREF(r.getEndNode());
 
-				if (r.isType(IS._) && theNode.equals(currentThe)) {
+				if (r.isType(AN._) && theNode.equals(currentThe)) {
 					foundIS = true;
 					
-				} else if (r.isType(HAVE._) && (theNode.equals(currentThe) || foundIS)) {
+				} else if (r.isType(AN._) && (theNode.equals(currentThe) || foundIS)) {
 					thisResult = r;
 					thisDeep++;
 				
@@ -175,7 +173,7 @@ public class SELF extends AbstractQuery {
 						thisResult = AnimoGraph.execute(new GraphOperation<Relationship>() {
 							@Override
 							public Relationship execute() {
-								Relationship res = sN.createRelationshipTo(eN, HAVE._);
+								Relationship res = sN.createRelationshipTo(eN, AN._);
 								//RID.set(res, r.getId());
 								return res;
 							}

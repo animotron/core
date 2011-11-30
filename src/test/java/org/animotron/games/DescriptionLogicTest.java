@@ -26,10 +26,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.HAVE_NOT;
-import org.animotron.statement.relation.IS;
-import org.animotron.statement.relation.IS_NOT;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -49,29 +45,29 @@ public class DescriptionLogicTest extends ATest {
 		//Woman ≡ Person ⊓ Female
 		new JExpression(
 			_(THE._, "woman"),
-				_(IS._, "person"),
-				_(IS._, "female")
+				_(AN._, "person"),
+				_(AN._, "female")
 		);
 
 		//Man ≡ Person ⊓ ¬Woman
 		new JExpression(
 			_(THE._, "man"),
-				_(IS._, "person"),
-				_(IS_NOT._, "woman")
+				_(AN._, "person")/*,
+				_(IS_NOT._, "woman")*/
 		);
 
 		//Mother ≡ Woman ⊓ ∃hasChild.Person
 		new JExpression(
 			_(THE._, "mother"),
-				_(IS._, "woman"),
-				_(HAVE._, "child", _(IS._, "person"))
+				_(AN._, "woman"),
+				_(AN._, "child", _(AN._, "person"))
 		);
 		
 		//Father ≡ Man ⊓ ∃hasChild.Person
 		new JExpression(
 			_(THE._, "father"),
-				_(IS._, "man"),
-				_(HAVE._, "child", _(IS._, "person"))
+				_(AN._, "man"),
+				_(AN._, "child", _(AN._, "person"))
 		);
 
 		//TODO: find a way to describe ⊔ ....
@@ -80,15 +76,15 @@ public class DescriptionLogicTest extends ATest {
  		//Parent ≡ Mother ⊔ Father.
 		new JExpression(
 			_(THE._, "parent"),
-				_(IS._, "mother"),
-				_(IS._, "father")
+				_(AN._, "mother"),
+				_(AN._, "father")
 		);
 		
 		//Grandmother ≡ Mother ⊓ ∃hasChild.Parent
 		new JExpression(
 			_(THE._, "grandmother"),
-				_(IS._, "mother"),
-				_(HAVE._, "child", _(IS._, "parent"))
+				_(AN._, "mother"),
+				_(AN._, "child", _(AN._, "parent"))
 		);
 
 		//MotherWith3Children  ≡ Mother ⊓ >= 3 hasChild
@@ -100,32 +96,32 @@ public class DescriptionLogicTest extends ATest {
 		//MotherWithoutDaughter ≡ Mother ⊓ ∀hasChild.¬Woman
 		new JExpression(
 			_(THE._, "motherWithoutDaughter"),
-				_(ANY._, "mother", _(HAVE_NOT._, "child", _(IS._, "woman")))
+				_(ANY._, "mother"/*, _(HAVE_NOT._, "child", _(AN._, "woman"))*/)
 		);
 
 		//Wife  ≡ Woman ⊓ ∃hasHusband.Man
 		new JExpression(
 			_(THE._, "wife"),
-				_(IS._, "woman", 
-				_(HAVE._, "husband", _(IS._, "man")))
+				_(AN._, "woman",
+				_(AN._, "husband", _(AN._, "man")))
 		);
 		
 
 		new JExpression(
 			_(THE._, "personA"),
-				_(IS._, "man")
+				_(AN._, "man")
 		);
 		
 		new JExpression(
 			_(THE._, "personB"),
-				_(IS._, "woman"),
-				_(HAVE._, "child", _(AN._, "personA"))
+				_(AN._, "woman"),
+				_(AN._, "child", _(AN._, "personA"))
 		);
 
 		//TODO: Is personA mother? (personA is mother => is:mother an:personA)
 		JExpression a = new JExpression(
 			_(THE._, "a"),
-				_(AN._, "Question", _(IS._, "mother", _(AN._, "personB")))
+				_(AN._, "Question", _(AN._, "mother", _(AN._, "personB")))
 				//is:personB an:mother?
 				//eq an:personB; an:mother?
 		);
@@ -135,16 +131,16 @@ public class DescriptionLogicTest extends ATest {
 	}
 
 	public void famaly_02() throws Exception {
-		testAnimo("the joe (is father john) (have child john) (have son john) (is parent john).");
-		testAnimo("the john (have father joe) (is child joe) (is son joe) (have parent joe).");
+		testAnimo("the joe (father john) (child john) (son john) (parent john).");
+		testAnimo("the john (father joe) (child joe) (son joe) (parent joe).");
 	}
 
 	public void famaly_03() throws Exception {
-		testAnimo("the parent have child.");
-		testAnimo("the child have parent.");
+		testAnimo("the parent child.");
+		testAnimo("the child parent.");
 
-		testAnimo("the john (have child joe).");
+		testAnimo("the john (child joe).");
 
-		assertAnimoResult("john", "the joe have parent john.");
+		assertAnimoResult("john", "the joe parent john.");
 	}
 }

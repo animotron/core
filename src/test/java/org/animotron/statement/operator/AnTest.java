@@ -20,7 +20,6 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.relation.HAVE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -42,8 +41,8 @@ public class AnTest extends ATest {
         assertAnimoResult(A, "the A the B.");
 
         JExpression.__(new JExpression(
-                _(THE._, "B", _(HAVE._, "C", text("y")))
+                _(THE._, "B", _(AN._, "C", text("y")))
         ));
-        assertAnimoResult(A, "the A the B have C \"y\".");
+        assertAnimoResult(A, "the A the B C \"y\".");
     }
 }

@@ -23,8 +23,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.EQ;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -42,25 +40,25 @@ public class AnyTest extends ATest {
         
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "value"))
+                        _(THE._, "A", _(AN._, "value"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "value", text("B")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "value", text("C")))
                 )
         );
 
         JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "A"))
         );
-        assertAnimoResult(a, "the a the B (is A) (have value \"B\").");
+        assertAnimoResult(a, "the a the B (A) (value \"B\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "B"))
         );
-        assertAnimoResult(b, "the b the C (is B) (have value \"C\").");
+        assertAnimoResult(b, "the b the C (B) (value \"C\").");
 
     }
 	
@@ -69,31 +67,31 @@ public class AnyTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "value"))
+                        _(THE._, "A", _(AN._, "value"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"), _(HAVE._, "value", text("B")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "value", text("B")))
                 ),
                 new JExpression(
-                        _(THE._, "B1", _(IS._, "B"), _(HAVE._, "value", text("B")))
+                        _(THE._, "B1", _(AN._, "B"), _(AN._, "value", text("B")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "B"), _(HAVE._, "value", text("C")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "value", text("C")))
                 ),
                 new JExpression(
-                        _(THE._, "C1", _(IS._, "C"), _(HAVE._, "value", text("C")))
+                        _(THE._, "C1", _(AN._, "C"), _(AN._, "value", text("C")))
                 )
         );
 
         JExpression D = new JExpression(
             _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
         );
-        assertAnimoResult(D, "the D the B (is A) (have value \"B\").");
+        assertAnimoResult(D, "the D the B (A) (value \"B\").");
 
         JExpression E = new JExpression(
             _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
         );
-        assertAnimoResult(E, "the E the C (is B) (have value \"C\").");
+        assertAnimoResult(E, "the E the C (B) (value \"C\").");
 
     }
 
@@ -103,20 +101,20 @@ public class AnyTest extends ATest {
 		JExpression.__(
                 new JExpression(
                         _(THE._, "text-plain",
-                                _(IS._, "mime-type"),
-                                _(IS._, "text"),
-                                _(HAVE._, "type", text("text/plain")),
-                                _(HAVE._, "reference", text("Plain text")),
-                                _(HAVE._, "extension", text("txt"))
+                                _(AN._, "mime-type"),
+                                _(AN._, "text"),
+                                _(AN._, "type", text("text/plain")),
+                                _(AN._, "reference", text("Plain text")),
+                                _(AN._, "extension", text("txt"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "application-atom",
-                                _(IS._, "mime-type"),
-                                _(IS._, "application"),
-                                _(HAVE._, "type", text("application/atom+xml")),
-                                _(HAVE._, "reference", text("Atom Feed Document")),
-                                _(HAVE._, "extension", text("atom"))
+                                _(AN._, "mime-type"),
+                                _(AN._, "application"),
+                                _(AN._, "type", text("application/atom+xml")),
+                                _(AN._, "reference", text("Atom Feed Document")),
+                                _(AN._, "extension", text("atom"))
                         )
                 )
         );
@@ -126,7 +124,7 @@ public class AnyTest extends ATest {
 				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 			)
 		);
-        assertAnimoResult(test, "the test the text-plain (is mime-type) (is text) (have type \"text/plain\") (have reference \"Plain text\") (have extension \"txt\").");
+        assertAnimoResult(test, "the test the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
 
 	}
 

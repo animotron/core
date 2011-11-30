@@ -22,8 +22,8 @@ import org.animotron.graph.index.State;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Prepare;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
@@ -46,7 +46,7 @@ public class Preparator extends StatementManipulator {
 	
 	public void execute(Node op) throws IOException {
         for (Relationship r : op.getRelationships(INCOMING)) {
-            if (r.isType(IS._) || r.isType(USE._) || r.isType(REF) || r.isType(org.animotron.statement.operator.REF._)) {
+            if (r.isType(AN._) || r.isType(USE._) || r.isType(REF) || r.isType(org.animotron.statement.operator.REF._)) {
 			    super.execute(r);
             }
 		}

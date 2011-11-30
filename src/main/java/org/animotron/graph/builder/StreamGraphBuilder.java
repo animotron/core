@@ -32,9 +32,7 @@ import java.security.MessageDigest;
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.utils.MessageDigester.byteArrayToHex;
-import static org.animotron.utils.MessageDigester.cloneMD;
-import static org.animotron.utils.MessageDigester.updateMD;
+import static org.animotron.utils.MessageDigester.*;
 
 /**
  * Animo graph builder, it do optimization/compression and 

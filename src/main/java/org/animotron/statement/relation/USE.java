@@ -19,16 +19,32 @@
 package org.animotron.statement.relation;
 
 
+import org.animotron.exception.AnimoException;
+import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.THE;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
+
 /**
  * Operator 'USE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class USE extends Relation {
+public class USE extends AbstractStatement {
 	
 	public static final USE _ = new USE();
 	
 	private USE() { super("use"); }
 	
+    @Override
+    public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        return parent.createRelationshipTo(reference(reference, ignoreNotFound), this);
+    }
+
+    @Override
+    public Object reference(Relationship r){
+        return THE._.reference(r);
+    }
+
 }

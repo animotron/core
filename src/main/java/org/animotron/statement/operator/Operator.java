@@ -18,11 +18,11 @@
  */
 package org.animotron.statement.operator;
 
-import static org.animotron.Properties.NAME;
-
 import org.animotron.statement.link.AbstractLink;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.Properties.NAME;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

@@ -18,25 +18,19 @@
  */
 package org.animotron.statement.operator;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-
 import javolution.util.FastList;
-
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.Suffix;
-import org.animotron.statement.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -45,9 +39,11 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
-import static org.animotron.Properties.CID;
-import static org.animotron.Properties.NAME;
-import static org.animotron.Properties.RID;
+import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+
+import static org.animotron.Properties.*;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -69,13 +65,13 @@ public class Utils {
 	public static TraversalDescription td_eval_IS = 
 			Traversal.description().
 				breadthFirst().
-				relationships(IS._, OUTGOING);
+				relationships(AN._, OUTGOING);
 				//relationships(IC._.relationshipType(), OUTGOING);
 		
 	public static TraversalDescription upIS = 
 			Traversal.description().
 				breadthFirst().
-				relationships(IS._, INCOMING);
+				relationships(AN._, INCOMING);
 				//relationships(IC._.relationshipType(), OUTGOING);
 
 

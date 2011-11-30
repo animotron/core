@@ -21,7 +21,6 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -39,35 +38,35 @@ public class CrossUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(IS._, "S"), _(IS._, "X"))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IS._, "S"), _(IS._, "Y"))
+                        _(THE._, "B", _(AN._, "S"), _(AN._, "Y"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IS._, "S"), _(IS._, "X"), _(IS._, "Y"))
+                        _(THE._, "C", _(AN._, "S"), _(AN._, "X"), _(AN._, "Y"))
                 )
         );
 
         JExpression s = new JExpression(
             _(THE._, "s", _(ANY._, "S"))
         );
-        assertAnimoResult(s, "the s the A (is S) (is X).");
+        assertAnimoResult(s, "the s the A (S) (X).");
 
         JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "S", _(USE._, "X")))
         );
-        assertAnimoResult(a, "the a the A (is S) (is X).");
+        assertAnimoResult(a, "the a the A (S) (X).");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(USE._, "Y")))
         );
-        assertAnimoResult(b, "the b the B (is S) (is Y).");
+        assertAnimoResult(b, "the b the B (S) (Y).");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(USE._, "X"), _(USE._, "Y")))
         );
-        assertAnimoResult(c, "the c the C (is S) (is X) (is Y).");
+        assertAnimoResult(c, "the c the C (S) (X) (Y).");
 
     }
 

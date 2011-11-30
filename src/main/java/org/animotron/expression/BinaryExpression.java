@@ -22,10 +22,9 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.value.STREAM;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
@@ -115,22 +114,22 @@ public class BinaryExpression extends AbstractExpression {
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
         builder.start(THE._);
-            builder._(IS._, FILE);
+            builder._(AN._, FILE);
             builder._(STREAM._, hash);
             Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
             while (it.hasNext()) {
                 String i = it.next();
-                builder._(IS._, i);
+                builder._(AN._, i);
                 if (!it.hasNext()) {
                     Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
                     if (jt.hasNext()) {
-                        builder.start(HAVE._);
+                        builder.start(AN._);
                             builder._(REF._, NAME);
                             builder._(jt.next());
                         builder.end();
                     }
                     if (jt.hasNext()) {
-                        builder.start(HAVE._);
+                        builder.start(AN._);
                             builder._(REF._, EXTENSION);
                             do {
                                 builder._(jt.next());

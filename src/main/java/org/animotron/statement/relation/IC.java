@@ -18,13 +18,15 @@
  */
 package org.animotron.statement.relation;
 
+import org.animotron.statement.operator.Operator;
+
 /**
  * Operator 'IC'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends HAVE { //Operator implements Evaluable {
+public class IC extends Operator { //Operator implements Evaluable {
 	
 	public static final IC _ = new IC();
 	

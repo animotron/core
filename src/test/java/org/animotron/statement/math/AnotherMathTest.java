@@ -92,7 +92,7 @@ public class AnotherMathTest extends ATest {
     @Test
 	public void test_08() throws Exception {
         __(
-            new AnimoExpression("the a (have x 1) (have y 2) (have z 3)")
+            new AnimoExpression("the a (x 1) (y 2) (z 3)")
         );
         Expression e = new AnimoExpression("+ (get x a) (get y a) (get z a)");
     	assertStringResult(e, "6");
@@ -101,7 +101,7 @@ public class AnotherMathTest extends ATest {
     @Test
 	public void test_09() throws Exception {
         __(
-            new AnimoExpression("the a (have x 1) (have y 2) (have z 3)"),
+            new AnimoExpression("the a (x 1) (y 2) (z 3)"),
             new AnimoExpression("the b + (get x) (get y) (get z)")
         );
         Expression e = new AnimoExpression("b a");

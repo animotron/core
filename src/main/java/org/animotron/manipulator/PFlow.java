@@ -25,8 +25,6 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.animotron.utils.MessageDigester;
 import org.jetlang.channels.Channel;
@@ -222,7 +220,7 @@ public class PFlow {
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 
-			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), HAVE._);
+			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), AN._);
 			
 			parent.answer.publish(new QCAVector(op, answer, answerVector.getContext()));
 		}
@@ -526,7 +524,7 @@ public class PFlow {
 
 						//Allow ...<-IS->...
 						} if (path.length() > 1 && 
-								r.isType(IS._)) {
+								r.isType(AN._)) {
 							return EXCLUDE_AND_CONTINUE;
 						}
 						return EXCLUDE_AND_PRUNE;

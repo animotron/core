@@ -22,8 +22,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -40,34 +38,34 @@ public class AnimoSerializerTest extends ATest {
 	public void test_00() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(IS._, "X"),
+                _(AN._, "X"),
                 _(USE._, "Y")
             )
         );
-        assertAnimo(A, "the A (is X) (use Y).");
+        assertAnimo(A, "the A (X) (use Y).");
     }
 
     @Test
     public void test_01() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(HAVE._, "X"),
-                _(HAVE._, "Y")
+                _(AN._, "X"),
+                _(AN._, "Y")
             )
         );
-        assertAnimo(A, "the A (have X) (have Y).");
+        assertAnimo(A, "the A (X) (Y).");
     }
 
     @Test
     public void test_02() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(HAVE._, "X",
-                    _(HAVE._, "Y")
+                _(AN._, "X",
+                    _(AN._, "Y")
                 )
             )
         );
-        assertAnimo(A, "the A have X have Y.");
+        assertAnimo(A, "the A X Y.");
     }
 
     @Test
@@ -97,110 +95,110 @@ public class AnimoSerializerTest extends ATest {
     public void test_05() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(HAVE._, "B",
+                _(AN._, "B",
                     _(AN._, "C",
-                        _(HAVE._, "D", text("."))
+                        _(AN._, "D", text("."))
                     )
                 )
             )
         );
-        assertAnimo(A, "the A have B C have D \".\".");
+        assertAnimo(A, "the A B C D \".\".");
     }
 
     @Test
     public void test_06() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(HAVE._, "B",
+                _(AN._, "B",
                     _(AN._, "C",
-                        _(HAVE._, "D"),
+                        _(AN._, "D"),
                         text(".")
                     )
                 )
             )
         );
-        assertAnimo(A, "the A have B C (have D) \".\".");
+        assertAnimo(A, "the A B C (D) \".\".");
     }
 
     @Test
     public void test_07() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(HAVE._, "B",
+                _(AN._, "B",
                     _(AN._, "C",
-                        _(HAVE._, "D", text(".")),
-                        _(HAVE._, "E", text("_"))
+                        _(AN._, "D", text(".")),
+                        _(AN._, "E", text("_"))
                     )
                 )
             )
         );
-        assertAnimo(A, "the A have B C (have D \".\") (have E \"_\").");
+        assertAnimo(A, "the A B C (D \".\") (E \"_\").");
     }
 
     @Test
     public void test_08() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(IS._, "X"),
-                _(HAVE._, "B",
+                _(AN._, "X"),
+                _(AN._, "B",
                     _(AN._, "C",
-                        _(HAVE._, "D", text(".")),
-                        _(HAVE._, "E", text("_"))
+                        _(AN._, "D", text(".")),
+                        _(AN._, "E", text("_"))
                     )
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B C (have D \".\") (have E \"_\")).");
+        assertAnimo(A, "the A (X) (B C (D \".\") (E \"_\")).");
     }
 
     @Test
     public void test_09() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(IS._, "X"),
-                _(HAVE._, "B",
+                _(AN._, "X"),
+                _(AN._, "B",
                     _(AN._, "C",
-                        _(HAVE._, "D", text(".")),
-                        _(HAVE._, "E", text("_"))
+                        _(AN._, "D", text(".")),
+                        _(AN._, "E", text("_"))
                     ),
                     _(AN._, "F",
-                        _(HAVE._, "G", text(":")),
-                        _(HAVE._, "H", text(";"))
+                        _(AN._, "G", text(":")),
+                        _(AN._, "H", text(";"))
                     )
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (C (have D \".\") (have E \"_\")) (F (have G \":\") (have H \";\"))).");
+        assertAnimo(A, "the A (X) (B (C (D \".\") (E \"_\")) (F (G \":\") (H \";\"))).");
     }
 
     @Test
     public void test_0A() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                _(IS._, "X"),
-                _(HAVE._, "B",
+                _(AN._, "X"),
+                _(AN._, "B",
                     _(AN._, "C",
-                        _(HAVE._, "D", text("1")),
-                        _(HAVE._, "E", text("2"))
+                        _(AN._, "D", text("1")),
+                        _(AN._, "E", text("2"))
                     ),
                     _(AN._, "F",
-                        _(HAVE._, "G", text("3")),
-                        _(HAVE._, "H", text("4"))
+                        _(AN._, "G", text("3")),
+                        _(AN._, "H", text("4"))
                     )
                 ),
-                _(HAVE._, "I",
+                _(AN._, "I",
                     _(AN._, "J",
-                        _(HAVE._, "K", text("5")),
-                        _(HAVE._, "L", text("6"))
+                        _(AN._, "K", text("5")),
+                        _(AN._, "L", text("6"))
                     ),
                     _(AN._, "M",
-                        _(HAVE._, "N", text("7")),
-                        _(HAVE._, "O", text("8"))
+                        _(AN._, "N", text("7")),
+                        _(AN._, "O", text("8"))
                     )
                 )
             )
         );
-        assertAnimo(A, "the A (is X) (have B (C (have D \"1\") (have E \"2\")) (F (have G \"3\") (have H \"4\"))) (have I (J (have K \"5\") (have L \"6\")) (M (have N \"7\") (have O \"8\"))).");
+        assertAnimo(A, "the A (X) (B (C (D \"1\") (E \"2\")) (F (G \"3\") (H \"4\"))) (I (J (K \"5\") (L \"6\")) (M (N \"7\") (O \"8\"))).");
 	}
 
     @Test

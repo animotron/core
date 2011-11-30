@@ -49,10 +49,10 @@ public class YetAnotherMathTest extends ATest {
     @Test
 	public void test_01() throws Exception {
         __(
-            new AnimoExpression("the a (is z) (1)"),
-            new AnimoExpression("the b (is z) (2)"),
-            new AnimoExpression("the c (is z) (3)"),
-            new AnimoExpression("the d (is z) (4)")
+            new AnimoExpression("the a (z) (1)"),
+            new AnimoExpression("the b (z) (2)"),
+            new AnimoExpression("the c (z) (3)"),
+            new AnimoExpression("the d (z) (4)")
         );
         Expression e = new AnimoExpression("+ all z");
     	assertStringResult(e, "10");
@@ -61,10 +61,10 @@ public class YetAnotherMathTest extends ATest {
     @Test
 	public void test_02() throws Exception {
         __(
-            new AnimoExpression("the a have x 1"),
-            new AnimoExpression("the b have x 2"),
-            new AnimoExpression("the c have x 3"),
-            new AnimoExpression("the d have x 4")
+            new AnimoExpression("the a x 1"),
+            new AnimoExpression("the b x 2"),
+            new AnimoExpression("the c x 3"),
+            new AnimoExpression("the d x 4")
         );
         Expression e = new AnimoExpression("+ get x (a) (b) (c) (d)");
     	assertStringResult(e, "10");
@@ -73,10 +73,10 @@ public class YetAnotherMathTest extends ATest {
     @Test
 	public void test_03() throws Exception {
         __(
-            new AnimoExpression("the a (is z) (have x 1)"),
-            new AnimoExpression("the b (is z) (have x 2)"),
-            new AnimoExpression("the c (is z) (have x 3)"),
-            new AnimoExpression("the d (is z) (have x 4)")
+            new AnimoExpression("the a (z) (x 1)"),
+            new AnimoExpression("the b (z) (x 2)"),
+            new AnimoExpression("the c (z) (x 3)"),
+            new AnimoExpression("the d (z) (x 4)")
         );
         Expression e = new AnimoExpression("+ get x all z");
     	assertStringResult(e, "10");

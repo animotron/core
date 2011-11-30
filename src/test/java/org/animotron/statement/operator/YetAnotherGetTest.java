@@ -22,9 +22,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
-import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IC;
-import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -42,17 +40,17 @@ public class YetAnotherGetTest extends ATest{
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"))
+                        _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", text("π")))
                 )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "C")))
         );
-        assertAnimoResult(E, "the E have B \"π\".");
+        assertAnimoResult(E, "the E B \"π\".");
 
     }
 
@@ -61,20 +59,20 @@ public class YetAnotherGetTest extends ATest{
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"))
+                        _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
                         _(THE._, "C", _(IC._, "B", text("π")))
                 ),
                 new JExpression(
-                        _(THE._, "D", _(IS._, "C"))
+                        _(THE._, "D", _(AN._, "C"))
                 )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
-        //XXX: assertAnimoResult(E, "the E have B \"π\".");
+        //XXX: assertAnimoResult(E, "the E B \"π\".");
         assertAnimoResult(E, "the E ic B \"π\".");
     }
 
@@ -83,20 +81,20 @@ public class YetAnotherGetTest extends ATest{
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"))
+                        _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", text("π")))
                 ),
                 new JExpression(
-                        _(THE._, "D", _(IS._, "C"))
+                        _(THE._, "D", _(AN._, "C"))
                 )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
-        assertAnimoResult(E, "the E have B \"π\".");
+        assertAnimoResult(E, "the E B \"π\".");
 
     }
 
@@ -105,17 +103,17 @@ public class YetAnotherGetTest extends ATest{
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"))
+                        _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", text("π")))
                 )
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(IS._, "C"), _(SELF._, "A"))
+            _(THE._, "E", _(AN._, "C"), _(SELF._, "A"))
         );
-        assertAnimoResult(E, "the E (is C) (have B \"π\").");
+        assertAnimoResult(E, "the E (C) (B \"π\").");
 
     }
 
@@ -124,20 +122,20 @@ public class YetAnotherGetTest extends ATest{
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"))
+                        _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
                         _(THE._, "C", _(IC._, "B", text("π")))
                 ),
                 new JExpression(
-                        _(THE._, "D", _(IS._, "C"))
+                        _(THE._, "D", _(AN._, "C"))
                 )
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
+            _(THE._, "E", _(AN._, "D"), _(SELF._, "A"))
         );
-        assertAnimoResult(E, "the E (is D) (have B \"π\").");
+        assertAnimoResult(E, "the E (D) (B \"π\").");
 
     }
 
@@ -146,20 +144,20 @@ public class YetAnotherGetTest extends ATest{
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "B", _(IS._, "A"))
+                        _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(HAVE._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", text("π")))
                 ),
                 new JExpression(
-                        _(THE._, "D", _(IS._, "C"))
+                        _(THE._, "D", _(AN._, "C"))
                 )
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(IS._, "D"), _(SELF._, "A"))
+            _(THE._, "E", _(AN._, "D"), _(SELF._, "A"))
         );
 
-        assertAnimoResult(E, "the E (is D) (have B \"π\").");
+        assertAnimoResult(E, "the E (D) (B \"π\").");
     }
 }

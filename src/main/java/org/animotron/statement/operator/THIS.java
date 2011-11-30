@@ -18,16 +18,14 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.manipulator.QCAVector;
+import javolution.util.FastSet;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.relation.HAVE;
+import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.util.Set;
-
-import javolution.util.FastSet;
 
 /**
  * Operation 'THIS'. Reference to the closest instance in PFlow.
@@ -68,7 +66,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 					if (cs != null)
 						for (QCAVector c : cs) {
 							Relationship toCheck = c.getQuestion();
-							if (toCheck.isType(HAVE._)) {
+							if (toCheck.isType(AN._)) {
 								if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
 									pf.sendAnswer(new QCAVector(op, c.getUnrelaxedAnswer(), c.getContext()));
 									pf.done();

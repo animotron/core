@@ -20,13 +20,13 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Result;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.Relation;
+import org.animotron.statement.relation.USE;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -115,7 +115,7 @@ public class ResultTraverser extends AnimoTraverser {
         if (s != null) {
             if (s instanceof Query || s instanceof Evaluable) {
                 result(handler, pf, rr, level, isOne);
-			} else if (!(s instanceof Relation || s instanceof REF)) {
+			} else if (!(s instanceof USE || s instanceof REF)) {
 				Relationship r = rr.getClosest();
 				
                 if (s instanceof AbstractValue)

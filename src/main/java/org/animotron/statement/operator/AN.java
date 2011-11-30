@@ -19,9 +19,9 @@
 package org.animotron.statement.operator;
 
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 
 /**

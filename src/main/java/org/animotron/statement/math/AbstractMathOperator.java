@@ -19,8 +19,8 @@
 package org.animotron.statement.math;
 
 import org.animotron.graph.serializer.StringResultSerializer;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.value.AbstractValue;

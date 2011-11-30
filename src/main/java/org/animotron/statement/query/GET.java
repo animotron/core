@@ -24,19 +24,20 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.HAVE;
 import org.animotron.statement.relation.IC;
-import org.animotron.statement.relation.IS;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.*;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -48,7 +49,7 @@ import java.util.Set;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
@@ -71,7 +72,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	private static TraversalDescription td_eval_ic = 
 			Traversal.description().
 				breadthFirst().
-				relationships(IS._, OUTGOING).
+				relationships(AN._, OUTGOING).
 				relationships(IC._, OUTGOING);
 
 	public OnQuestion onCalcQuestion() {
@@ -127,11 +128,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						final Set<QCAVector> rSet = get(pf, op, new QCAVector(null, vector.getUnrelaxedAnswer()), thes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, HAVE._);
+								pf.sendAnswer(v, AN._);
 							}
 						}
 //						Relationship have = searchForHAVE(pf, vector.getUnrelaxedAnswer(), thes);
-//						if (have != null && !pf.isInStack(have)) { 
+//						if (have != null && !pf.isInStack(have)) {
 //							pf.sendAnswer(new QCAVector(op, vector, have));
 //						}
 						
@@ -169,7 +170,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, HAVE._);
+								pf.sendAnswer(v, AN._);
 							}
 							break;
 						}
@@ -191,7 +192,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		Set<QCAVector> set = new FastSet<QCAVector>();
 		
 		Relationship have = searchForHAVE(pf, ref, thes);
-		if (have != null && !pf.isInStack(have)) 
+		if (have != null && !pf.isInStack(have))
 			set.add(new QCAVector(pf.getOP(), have));
 		
 		if (!set.isEmpty()) return set;
@@ -208,7 +209,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		visitedREFs.add(toCheck);
 
 		Relationship have = searchForHAVE(pf, toCheck, thes);
-		if (have != null && !pf.isInStack(have)) { 
+		if (have != null && !pf.isInStack(have)) {
 			set.add(new QCAVector(op, v, have));
 			return true;
 		}
@@ -308,7 +309,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 //				//System.out.println("getEndNode OUTGOING");
 				t = vector.getUnrelaxedAnswer();
 				if (t != null) {
-					if (! t.isType(HAVE._))
+					if (! t.isType(AN._))
 						getOutgoingReferences(pf, t, t.getStartNode(), newREFs, visitedREFs);
 					
 					getOutgoingReferences(pf, t, t.getEndNode(), newREFs, visitedREFs);
@@ -418,7 +419,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				return AnimoGraph.execute(new GraphOperation<Relationship>() {
 					@Override
 					public Relationship execute() {
-						Relationship res = sNode.createRelationshipTo(eNode, HAVE._);
+						Relationship res = sNode.createRelationshipTo(eNode, AN._);
 						RID.set(res, id);
 						return res;
 					}
@@ -458,7 +459,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
 			
 			Statement st = Statements.relationshipType(tdR);
-			if (st instanceof IS) {
+			if (false /*st instanceof IS*/) {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
@@ -480,14 +481,14 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					return AnimoGraph.execute(new GraphOperation<Relationship>() {
 						@Override
 						public Relationship execute() {
-							Relationship res = sNode.createRelationshipTo(r.getEndNode(), HAVE._);
+							Relationship res = sNode.createRelationshipTo(r.getEndNode(), AN._);
 							//RID.set(res, r.getId());
 							return res;
 						}
 					});
 					
 					//in-memory
-					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), HAVE._.relationshipType());
+					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), AN._.relationshipType());
 					//RID.set(res, tdR.getId());
 					//return res;
 					
@@ -514,7 +515,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, thes, HAVE._);
+				return _evaluate_(path, thes, AN._);
 			}
 		});
 
@@ -524,7 +525,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			//System.out.println(path);
 			for (Relationship r : path.relationships()) {
 				if (!pflow.isInStack(r)) {
-					if (r.isType(HAVE._)) {
+					if (r.isType(AN._)) {
 						res = r;
 						break;
 					}
@@ -592,7 +593,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 					return EXCLUDE_AND_CONTINUE;
 				
 				//XXX: check direction!
-				} else if (r.isType(IS._)) {
+				} else if (r.isType(AN._)) {
 					if (r.getEndNode().equals(path.endNode())) {
 						return EXCLUDE_AND_CONTINUE;
 					}

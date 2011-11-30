@@ -31,8 +31,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -93,9 +91,9 @@ public class BindTest extends ATest {
             _(AN._, "a")
         );
         Expression b = new JExpression(new StreamGraphBuilder(),
-            _(THE._, "b", _(IS._, "x"), _(a))
+            _(THE._, "b", _(AN._, "x"), _(a))
         );
-        test(b, "the b (is x) (a).");
+        test(b, "the b (x) (a).");
 	}
 
     @Test
@@ -104,9 +102,9 @@ public class BindTest extends ATest {
             _(AN._, "a")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(IS._, "x"), _(a))
+            _(THE._, "b", _(AN._, "x"), _(a))
         );
-        test(b, "the b (is x) (a).");
+        test(b, "the b (x) (a).");
 	}
 
     @Test
@@ -118,9 +116,9 @@ public class BindTest extends ATest {
             _(THE._, "y")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(IS._, x), _(HAVE._, y))
+            _(THE._, "b", _(AN._, x), _(AN._, y))
         );
-        test(b, "the b (is x) (have y).");
+        test(b, "the b (x) (y).");
 	}
 
     @Test
@@ -129,9 +127,9 @@ public class BindTest extends ATest {
             _(ANY._, "a")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(HAVE._, "y", _(a)))
+            _(THE._, "b", _(AN._, "y", _(a)))
         );
-        test(b, "the b have y any a.");
+        test(b, "the b y any a.");
 	}
 
     @Test
@@ -146,9 +144,9 @@ public class BindTest extends ATest {
             _(THE._, "y")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(IS._, x), _(HAVE._, y, _(a)))
+            _(THE._, "b", _(AN._, x), _(AN._, y, _(a)))
         );
-        test(b, "the b (is x) (have y any a).");
+        test(b, "the b (x) (y any a).");
 	}
 
     @Test
@@ -171,13 +169,13 @@ public class BindTest extends ATest {
         Expression b = new AnimoExpression("all b.");
         Expression c = new AnimoExpression("the c bla bla bla.");
         Expression x = new JExpression(
-            _(HAVE._, c, _(a), _(b))
+            _(AN._, c, _(a), _(b))
         );
         Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
         Expression z = new JExpression(
             element("z", _(GET._, "e", _(x)), _(y.getEndNode().getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
         );
-        test(z, "\\z (get e have c (any a) (all b)) (\\y (@z \"test\") \"content\").");
+        test(z, "\\z (get e c (any a) (all b)) (\\y (@z \"test\") \"content\").");
 	}
 
 }

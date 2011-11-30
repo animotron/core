@@ -18,10 +18,7 @@
  */
 package org.animotron.statement.operator;
 
-import java.util.Set;
-
 import javolution.util.FastSet;
-
 import org.animotron.Executor;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -31,6 +28,8 @@ import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import java.util.Set;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -98,7 +97,7 @@ public class POSSESSIVE extends Operator implements Suffix {
 //					Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
 //					if (rSet != null) {
 //						for (QCAVector v : rSet) {
-//							pf.sendAnswer(v, HAVE._);
+//							pf.sendAnswer(v, AN._);
 //						}
 //						break;
 //					}

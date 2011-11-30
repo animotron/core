@@ -23,8 +23,8 @@ import org.animotron.ATest;
 import org.animotron.Properties;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.State;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.relation.IS;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Node;
@@ -48,13 +48,13 @@ public class IsLoopTest extends ATest {
 	public void storeAndSerializeResult() throws Exception {
         JExpression.__(new JExpression(_(THE._, "A")));
         test("A");
-        JExpression.__(new JExpression(_(THE._, "A", _(IS._, "C"))));
+        JExpression.__(new JExpression(_(THE._, "A", _(AN._, "C"))));
         test("C");
-        JExpression.__(new JExpression(_(THE._, "B", _(IS._, "A"))));
+        JExpression.__(new JExpression(_(THE._, "B", _(AN._, "A"))));
         test("C");
-        JExpression.__(new JExpression(_(THE._, "C", _(IS._, "B"))));
+        JExpression.__(new JExpression(_(THE._, "C", _(AN._, "B"))));
         test("C");
-        JExpression.__(new JExpression(_(THE._, "C", _(IS._, "B"), _(IS._, "D"))));
+        JExpression.__(new JExpression(_(THE._, "C", _(AN._, "B"), _(AN._, "D"))));
         test("D");
 	}
 

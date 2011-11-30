@@ -33,127 +33,127 @@ public class UpdateTest extends ATest {
 
     @Test
 	public void test_00() throws Exception {
-        Relationship e = __(new AnimoExpression("the a have x 1."));
-        eval(new AnimoExpression("add a have y 2."));
-        assertAnimo(e, "the a (have x 1) (have y 2).");
+        Relationship e = __(new AnimoExpression("the a x 1."));
+        eval(new AnimoExpression("add a y 2."));
+        assertAnimo(e, "the a (x 1) (y 2).");
 	}
 
     @Test
 	public void test_01() throws Exception {
-        Relationship e = __(new AnimoExpression("the a have x 1."));
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
-        assertAnimo(e, "the a have y 2.");
+        Relationship e = __(new AnimoExpression("the a x 1."));
+        eval(new AnimoExpression("replace (get x a) (y 2)."));
+        assertAnimo(e, "the a y 2.");
 	}
 
     @Test
 	public void test_02() throws Exception {
-        Relationship e = __(new AnimoExpression("the a have x 1."));
+        Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("set (get x a) (2)."));
-        assertAnimo(e, "the a have x 2.");
+        assertAnimo(e, "the a x 2.");
 	}
 
     @Test
 	public void test_03() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have x 1."),
-            new AnimoExpression("the b have x 1."),
-            new AnimoExpression("the c have x 1.")
+            new AnimoExpression("the a x 1."),
+            new AnimoExpression("the b x 1."),
+            new AnimoExpression("the c x 1.")
         );
         eval(new AnimoExpression("set (get x a) (2)."));
-        assertAnimo(e[0], "the a have x 2.");
-        assertAnimo(e[1], "the b have x 1.");
-        assertAnimo(e[2], "the c have x 1.");
+        assertAnimo(e[0], "the a x 2.");
+        assertAnimo(e[1], "the b x 1.");
+        assertAnimo(e[2], "the c x 1.");
 	}
 
     @Test
 	public void test_04() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have x 1."),
-            new AnimoExpression("the b have x 1."),
-            new AnimoExpression("the c have x 1.")
+            new AnimoExpression("the a x 1."),
+            new AnimoExpression("the b x 1."),
+            new AnimoExpression("the c x 1.")
         );
-        eval(new AnimoExpression("replace (get x a) (have y 2)."));
-        assertAnimo(e[0], "the a have y 2.");
-        assertAnimo(e[1], "the b have x 1.");
-        assertAnimo(e[2], "the c have x 1.");
+        eval(new AnimoExpression("replace (get x a) (y 2)."));
+        assertAnimo(e[0], "the a y 2.");
+        assertAnimo(e[1], "the b x 1.");
+        assertAnimo(e[2], "the c x 1.");
 	}
 
     @Test
 	public void test_05() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have z have y have x 1."),
-            new AnimoExpression("the b have x 1."),
-            new AnimoExpression("the c have x 1.")
+            new AnimoExpression("the a z y x 1."),
+            new AnimoExpression("the b x 1."),
+            new AnimoExpression("the c x 1.")
         );
         eval(new AnimoExpression("set (get z get y get x a) (2)."));
-        assertAnimo(e[0], "the a have z have y have x 2.");
-        assertAnimo(e[1], "the b have x 1.");
-        assertAnimo(e[2], "the c have x 1.");
+        assertAnimo(e[0], "the a z y x 2.");
+        assertAnimo(e[1], "the b x 1.");
+        assertAnimo(e[2], "the c x 1.");
 	}
 
     @Test
 	public void test_06() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have z have y have x 1."),
-            new AnimoExpression("the b have x 1."),
-            new AnimoExpression("the c have x 1.")
+            new AnimoExpression("the a z y x 1."),
+            new AnimoExpression("the b x 1."),
+            new AnimoExpression("the c x 1.")
         );
-        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
-        assertAnimo(e[0], "the a have z have y have y 2.");
-        assertAnimo(e[1], "the b have x 1.");
-        assertAnimo(e[2], "the c have x 1.");
+        eval(new AnimoExpression("replace (get z get y get x a) (y 2)."));
+        assertAnimo(e[0], "the a z y y 2.");
+        assertAnimo(e[1], "the b x 1.");
+        assertAnimo(e[2], "the c x 1.");
 	}
 
     @Test
 	public void test_07() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have z have y have x 1."),
-            new AnimoExpression("the b have z have y have x 1."),
-            new AnimoExpression("the c have z have y have x 1.")
+            new AnimoExpression("the a z y x 1."),
+            new AnimoExpression("the b z y x 1."),
+            new AnimoExpression("the c z y x 1.")
         );
         eval(new AnimoExpression("set (get z get y get x a) (2)."));
-        assertAnimo(e[0], "the a have z have y have x 2.");
-        assertAnimo(e[1], "the b have z have y have x 1.");
-        assertAnimo(e[2], "the c have z have y have x 1.");
+        assertAnimo(e[0], "the a z y x 2.");
+        assertAnimo(e[1], "the b z y x 1.");
+        assertAnimo(e[2], "the c z y x 1.");
 	}
 
     @Test
 	public void test_08() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have z have y have x 1."),
-            new AnimoExpression("the b have z have y have x 1."),
-            new AnimoExpression("the c have z have y have x 1.")
+            new AnimoExpression("the a z y x 1."),
+            new AnimoExpression("the b z y x 1."),
+            new AnimoExpression("the c z y x 1.")
         );
-        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
-        assertAnimo(e[0], "the a have z have y have y 2.");
-        assertAnimo(e[1], "the b have z have y have x 1.");
-        assertAnimo(e[2], "the c have z have y have x 1.");
+        eval(new AnimoExpression("replace (get z get y get x a) (y 2)."));
+        assertAnimo(e[0], "the a z y y 2.");
+        assertAnimo(e[1], "the b z y x 1.");
+        assertAnimo(e[2], "the c z y x 1.");
 	}
 
     @Test
 	public void test_09() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have z (have y have x 1) (have α 3)."),
-            new AnimoExpression("the b have z (have y have x 1) (have α 3)."),
-            new AnimoExpression("the c have z have y have x 1.")
+            new AnimoExpression("the a z (y x 1) (α 3)."),
+            new AnimoExpression("the b z (y x 1) (α 3)."),
+            new AnimoExpression("the c z y x 1.")
         );
         eval(new AnimoExpression("set (get z get y get x a) (2)."));
-        assertAnimo(e[0], "the a have z (have y have x 2) (have α 3).");
-        assertAnimo(e[1], "the b have z (have y have x 1) (have α 3).");
-        assertAnimo(e[2], "the c have z have y have x 1.");
+        assertAnimo(e[0], "the a z (y x 2) (α 3).");
+        assertAnimo(e[1], "the b z (y x 1) (α 3).");
+        assertAnimo(e[2], "the c z y x 1.");
 	}
 
     @Test
 	public void test_10() throws Exception {
         Relationship[] e = __(
-            new AnimoExpression("the a have z (have y have x 1) (have α 3)."),
-            new AnimoExpression("the b have z (have y have x 1) (have α 3)."),
-            new AnimoExpression("the c have z have y have x 1.")
+            new AnimoExpression("the a z (y x 1) (α 3)."),
+            new AnimoExpression("the b z (y x 1) (α 3)."),
+            new AnimoExpression("the c z y x 1.")
         );
-        eval(new AnimoExpression("replace (get z get y get x a) (have y 2)."));
-        assertAnimo(e[0], "the a have z (have y have y 2) (have α 3).");
-        assertAnimo(e[1], "the b have z (have y have x 1) (have α 3).");
-        assertAnimo(e[2], "the c have z have y have x 1.");
+        eval(new AnimoExpression("replace (get z get y get x a) (y 2)."));
+        assertAnimo(e[0], "the a z (y y 2) (α 3).");
+        assertAnimo(e[1], "the b z (y x 1) (α 3).");
+        assertAnimo(e[2], "the c z y x 1.");
 	}
 
 }

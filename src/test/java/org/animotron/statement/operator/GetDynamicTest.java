@@ -22,8 +22,6 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -41,17 +39,17 @@ public class GetDynamicTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "A", _(HAVE._, "Z", text("A")))
+                _(THE._, "A", _(AN._, "Z", text("A")))
             ),
             new JExpression(
-                _(THE._, "B", _(HAVE._, "Z", text("B")))
+                _(THE._, "B", _(AN._, "Z", text("B")))
             )
         );
 
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (have Z \"A\") (have Z \"B\").");
+        assertAnimoResult(d, "the d (Z \"A\") (Z \"B\").");
 	}
 
 	@Test
@@ -59,20 +57,20 @@ public class GetDynamicTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "ZZ", _(IS._, "Z"))
+                _(THE._, "ZZ", _(AN._, "Z"))
             ),
             new JExpression(
-                _(THE._, "A", _(HAVE._, "Z", text("A")))
+                _(THE._, "A", _(AN._, "Z", text("A")))
             ),
             new JExpression(
-                _(THE._, "B", _(HAVE._, "ZZ", text("B")))
+                _(THE._, "B", _(AN._, "ZZ", text("B")))
             )
         );
 
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (have Z \"A\") (have ZZ \"B\").");
+        assertAnimoResult(d, "the d (Z \"A\") (ZZ \"B\").");
 	}
 
 	@Test
@@ -80,44 +78,44 @@ public class GetDynamicTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "B", _(IS._, "A"))
+                _(THE._, "B", _(AN._, "A"))
             ),
             new JExpression(
-                _(THE._, "C", _(IS._, "Z"), _(HAVE._, "B", text("π")))
+                _(THE._, "C", _(AN._, "Z"), _(AN._, "B", text("π")))
             ),
             new JExpression(
-                _(THE._, "D", _(IS._, "Z"), _(HAVE._, "A", text("Aπ")))
+                _(THE._, "D", _(AN._, "Z"), _(AN._, "A", text("Aπ")))
             )
         );
 
         JExpression E = new JExpression(
             _(THE._, "E", _(GET._, "A", _(ALL._, "Z")))
         );
-        assertAnimoResult(E, "the E (have B \"π\") (have A \"Aπ\").");
+        assertAnimoResult(E, "the E (B \"π\") (A \"Aπ\").");
 
         JExpression E1 = new JExpression(
             _(THE._, "E1", _(GET._, "B", _(ALL._, "Z")))
         );
-        assertAnimoResult(E1, "the E1 have B \"π\".");
+        assertAnimoResult(E1, "the E1 B \"π\".");
 
         JExpression F = new JExpression(
             _(THE._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
         );
-        assertAnimoResult(F, "the F have B \"π\".");
+        assertAnimoResult(F, "the F B \"π\".");
     }
 
     @Test
     public void test_00() throws Exception {
-    	testAnimo("the z have a z1.");
-    	testAnimo("the b have z1 \"z1\".");
+    	testAnimo("the z a z1.");
+    	testAnimo("the b z1 \"z1\".");
 
     	testAnimoResult("get (get a z) (b).", "have z1 \"z1\".");
     }
 
     @Test
     public void test_01() throws Exception {
-    	testAnimo("the z (is k) (have a z1).");
-    	testAnimo("the b (is k) (have z1 \"z1\").");
+    	testAnimo("the z (k) (a z1).");
+    	testAnimo("the b (k) (z1 \"z1\").");
 
     	testAnimoResult("get (get a z) (all k).", "have z1 \"z1\".");
     }

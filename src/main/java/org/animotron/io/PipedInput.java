@@ -18,8 +18,6 @@
  */
 package org.animotron.io;
 
-import org.animotron.expression.Expression;
-
 import java.io.IOException;
 import java.util.Iterator;
 

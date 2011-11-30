@@ -22,8 +22,6 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.junit.Test;
 
 import static org.animotron.expression.Expression.__;
@@ -42,7 +40,7 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
@@ -52,11 +50,11 @@ public class HaveLoopTest extends ATest {
         JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A",
-                    _(HAVE._, "B", text("test"))
+                    _(AN._, "B", text("test"))
                 )
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
+        assertAnimoResult(s, "the s the A B the C B \"test\".");
 
     }
 
@@ -65,7 +63,7 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
@@ -75,11 +73,11 @@ public class HaveLoopTest extends ATest {
         JExpression s = new JExpression(
             _(THE._, "s",
                 _(AN._, "A",
-                    _(HAVE._, "B", text("test"))
+                    _(AN._, "B", text("test"))
                 )
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
+        assertAnimoResult(s, "the s the A B the C B \"test\".");
 
     }
 
@@ -88,14 +86,14 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
                 ),
                 new JExpression(
                         _(THE._, "D",
-                                _(HAVE._, "B", text("test"))
+                                _(AN._, "B", text("test"))
                         )
                 )
         );
@@ -105,7 +103,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
+        assertAnimoResult(s, "the s the A B the C B \"test\".");
 
     }
 
@@ -114,7 +112,7 @@ public class HaveLoopTest extends ATest {
 
         __(
             new JExpression(
-                _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                _(THE._, "A", _(AN._, "B", _(AN._, "C")))
             ),
             new JExpression(
                 _(THE._, "C", _(GET._, "B"))
@@ -126,7 +124,7 @@ public class HaveLoopTest extends ATest {
             ),
             new JExpression(
                 _(THE._, "E",
-                    _(HAVE._, "B", text("test"))
+                    _(AN._, "B", text("test"))
                 )
             )
         );
@@ -136,7 +134,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(AN._, "D"))
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
+        assertAnimoResult(s, "the s the A B the C B \"test\".");
     }
 
     @Test
@@ -144,15 +142,15 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
                 ),
                 new JExpression(
                         _(THE._, "D",
-                                _(IS._, "d"),
-                                _(HAVE._, "B", text("test"))
+                                _(AN._, "d"),
+                                _(AN._, "B", text("test"))
                         )
                 )
         );
@@ -162,7 +160,7 @@ public class HaveLoopTest extends ATest {
                 _(AN._, "A", _(ANY._, "d"))
             )
         );
-        assertAnimoResult(s, "the s the A have B the C have B \"test\".");
+        assertAnimoResult(s, "the s the A B the C B \"test\".");
 
     }
 
@@ -171,7 +169,7 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
@@ -182,13 +180,13 @@ public class HaveLoopTest extends ATest {
             _(THE._, "s",
                 _(GET._, "B",
                     _(AN._, "A",
-                        _(HAVE._, "B", text("test"))
+                        _(AN._, "B", text("test"))
                     )
                 )
             )
         );
 
-        assertAnimoResult(s, "the s have B \"test\".");
+        assertAnimoResult(s, "the s B \"test\".");
 
     }
 
@@ -198,14 +196,14 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
                 ),
                 new JExpression(
                         _(THE._, "D",
-                                _(HAVE._, "B", text("test"))
+                                _(AN._, "B", text("test"))
                         )
                 )
         );
@@ -217,7 +215,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\".");
+        assertAnimoResult(s, "the s B the C B \"test\".");
 
     }
 
@@ -227,7 +225,7 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
@@ -239,7 +237,7 @@ public class HaveLoopTest extends ATest {
                 ),
                 new JExpression(
                         _(THE._, "E",
-                                _(HAVE._, "B", text("test"))
+                                _(AN._, "B", text("test"))
                         )
                 )
         );
@@ -251,7 +249,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\".");
+        assertAnimoResult(s, "the s B the C B \"test\".");
 
     }
 
@@ -261,15 +259,15 @@ public class HaveLoopTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(HAVE._, "B", _(AN._, "C")))
+                        _(THE._, "A", _(AN._, "B", _(AN._, "C")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(GET._, "B"))
                 ),
                 new JExpression(
                         _(THE._, "D",
-                                _(IS._, "d"),
-                                _(HAVE._, "B", text("test"))
+                                _(AN._, "d"),
+                                _(AN._, "B", text("test"))
                         )
                 )
         );
@@ -281,7 +279,7 @@ public class HaveLoopTest extends ATest {
                 )
             )
         );
-        assertAnimoResult(s, "the s have B the C have B \"test\".");
+        assertAnimoResult(s, "the s B the C B \"test\".");
 
     }
 

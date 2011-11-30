@@ -23,8 +23,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.HAVE;
-import org.animotron.statement.relation.IS;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -52,13 +50,13 @@ public class AnimoPath {
 		patterns.add(
 			new Pattern(
 				USE._, 
-				many(IS._), one(USE._)
+				many(AN._), one(USE._)
 			)
 		);
 		patterns.add(
 			new Pattern(
 				ANY._, 
-				many(IS._), one(REF), one(ANY._)
+				many(AN._), one(REF), one(ANY._)
 			)
 		);
 		patterns.add(
@@ -69,8 +67,8 @@ public class AnimoPath {
 		);
 		patterns.add(
 			new Pattern(
-				HAVE._, 
-				one(REF), one(HAVE._)
+				AN._,
+				one(REF), one(AN._)
 			)
 		);
 

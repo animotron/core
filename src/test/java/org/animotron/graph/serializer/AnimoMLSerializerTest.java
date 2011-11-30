@@ -46,7 +46,7 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_01() throws Exception {
-    	test("the a \\ get element-name have element-name \"b\"", "the a \\ have element-name \"b\".");
+    	test("the a \\ get element-name element-name \"b\"", "the a \\ element-name \"b\".");
     }
 
     @Test
