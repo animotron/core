@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.math;
 
-import org.animotron.graph.serializer.StringResultSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.instruction.Instruction;
@@ -37,7 +37,7 @@ public abstract class AbstractMathOperator extends Instruction implements Evalua
 	protected AbstractMathOperator(String name) { super(name); }
 
     protected Number param (PFlow pf, QCAVector vector) throws IOException {
-    	String number = StringResultSerializer._.serialize(pf, vector);
+    	String number = CachedSerializer.STRING.serialize(pf, vector);
     	
     	if (number.isEmpty()) return null;
     	

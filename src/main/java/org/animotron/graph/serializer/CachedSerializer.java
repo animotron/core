@@ -19,13 +19,27 @@
 package org.animotron.graph.serializer;
 
 import org.animotron.cache.Cache;
+import org.animotron.graph.handler.AnimoGraphHandler;
+import org.animotron.graph.handler.AnimoPrettyGraphHandler;
+import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.handler.StAXGraphHandler;
+import org.animotron.graph.handler.TextGraphHandler;
+import org.animotron.graph.traverser.AnimoResultTraverser;
 import org.animotron.graph.traverser.AnimoTraverser;
+import org.animotron.graph.traverser.MLResultTraverser;
+import org.animotron.graph.traverser.AnimoResultOneStepTraverser;
+import org.animotron.graph.traverser.ResultTraverser;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 
+import com.ctc.wstx.api.WriterConfig;
+import com.ctc.wstx.stax.WstxOutputFactory;
+
 import java.io.IOException;
 import java.io.OutputStream;
+
+import javax.xml.stream.XMLStreamException;
 
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
@@ -35,8 +49,110 @@ import static org.animotron.utils.MessageDigester.byteArrayToHex;
  *
  */
 public abstract class CachedSerializer extends AbstractSerializer {
+	
+    public static CachedSerializer STRING = new CachedSerializer(ResultTraverser._, ".txt") {
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+	        return new TextGraphHandler(out);
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+	        return new TextGraphHandler(out);
+		}
+	};
+	
+	public static CachedSerializer XML = new CachedSerializer(MLResultTraverser._, ".xml") {
+		
+	    public final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-    private String ext;
+		{
+	        WriterConfig conf = OUTPUT_FACTORY.getConfig();
+	        conf.doSupportNamespaces(true);
+	        conf.enableAutomaticNamespaces(false);
+		}
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+	        throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+	        try {
+	            return new StAXGraphHandler(OUTPUT_FACTORY.createXMLStreamWriter(out));
+	        } catch (XMLStreamException e) {
+	            throw new IOException(e);
+	        }
+		}
+	};
+	
+	public static CachedSerializer PRETTY_ANIMO_RESULT = new CachedSerializer(AnimoTraverser._, "-src-pretty.animo") {
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+	        return new AnimoPrettyGraphHandler(out);
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+	        return new AnimoPrettyGraphHandler(out);
+		}
+	};
+	
+	public static CachedSerializer PRETTY_ANIMO = new CachedSerializer(AnimoTraverser._, "-src-pretty.animo") {
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+			return new AnimoPrettyGraphHandler(out);
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+			return new AnimoPrettyGraphHandler(out);
+		}
+	};
+
+	public static CachedSerializer ANIMO_RESULT = new CachedSerializer(AnimoResultTraverser._, "-res.animo") {
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+			return new AnimoGraphHandler(out);
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+			return new AnimoGraphHandler(out);
+		}
+	};
+	
+	public static CachedSerializer ANIMO = new CachedSerializer(AnimoTraverser._, "-src.animo") {
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+			return new AnimoGraphHandler(out);
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+			return new AnimoGraphHandler(out);
+		}
+	};
+
+	public static CachedSerializer ANIMO_RESULT_ONE_STEP = new CachedSerializer(AnimoResultOneStepTraverser._, "-1step-res.animo") {
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+			return new AnimoGraphHandler(out);
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+			return new AnimoGraphHandler(out);
+		}
+	};
+
+	private String ext;
 
     protected CachedSerializer(AnimoTraverser traverser, String ext){
         super(traverser);

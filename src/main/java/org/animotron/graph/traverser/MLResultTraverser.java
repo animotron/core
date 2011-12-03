@@ -19,7 +19,7 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.serializer.StringResultSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Prefix;
@@ -82,7 +82,7 @@ public class MLResultTraverser extends ResultTraverser {
                         it.remove();
                     }
                 } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
-                    String param = StringResultSerializer._.serialize(pf, rr);
+                    String param = CachedSerializer.STRING.serialize(pf, rr);
                     handler.start(s, param, level++, isOne, pos, isLast);
                     handler.end(s, param, --level, isOne, pos, isLast);
                 }
@@ -106,7 +106,7 @@ public class MLResultTraverser extends ResultTraverser {
     private String param(PFlow pf, Object o) throws IOException {
         return
             o instanceof Relationship
-                ? StringResultSerializer._.serialize(pf, (Relationship) o)
+                ? CachedSerializer.STRING.serialize(pf, (Relationship) o)
                 : (String) node.getProperty((String) o);
     }
 

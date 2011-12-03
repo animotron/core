@@ -23,7 +23,7 @@ import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
-import org.animotron.graph.serializer.StringResultSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
@@ -69,14 +69,14 @@ public class AfterLast extends Instruction implements Evaluable {
             //pattern
             String pattern;
 			try {
-				pattern = StringResultSerializer._.serialize(pf, params[1]);
+				pattern = CachedSerializer.STRING.serialize(pf, params[1]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;
 			}
             String source;
 			try {
-				source = StringResultSerializer._.serialize(pf, params[2]);
+				source = CachedSerializer.STRING.serialize(pf, params[2]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;

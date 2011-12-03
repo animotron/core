@@ -21,7 +21,7 @@ package org.animotron.graph;
 import org.animotron.ATest;
 import org.animotron.expression.CommonExpression;
 import org.animotron.expression.JExpression;
-import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.query.ANY;
@@ -66,7 +66,7 @@ public class StoreBinaryTest extends ATest {
         System.out.println("Test binary stream ...");
         
     	Relationship r = new CommonExpression(new ByteArrayInputStream(TXT.getBytes()), PATH);
-        AnimoSerializer._.serialize(r, System.out);
+    	CachedSerializer.ANIMO.serialize(r, System.out);
 
         JExpression s = new JExpression(
           _(AN._, r)

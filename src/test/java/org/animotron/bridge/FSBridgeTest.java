@@ -19,7 +19,7 @@
 package org.animotron.bridge;
 
 import org.animotron.ATest;
-import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -39,7 +39,7 @@ public class FSBridgeTest extends ATest {
 	private void check(String the) throws IOException {
         Relationship r = THE._.get(the);
         assertNotNull(r);
-        AnimoSerializer._.serialize(r, System.out);
+        CachedSerializer.ANIMO.serialize(r, System.out);
         System.out.println();
 	}
 	

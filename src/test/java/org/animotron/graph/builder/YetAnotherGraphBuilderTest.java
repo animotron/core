@@ -25,7 +25,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.expression.StAXExpression;
-import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -37,7 +37,6 @@ import java.io.StringReader;
 
 import static org.animotron.Properties.HASH;
 import static org.animotron.expression.JExpression._;
-
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -61,11 +60,11 @@ public class YetAnotherGraphBuilderTest extends ATest {
     private void test_0(String animo, String xml) throws Exception {
         Expression e;
         e = the(new AnimoExpression(new FastGraphBuilder(), animo));
-        String inA = AnimoSerializer._.serialize(e);
+        String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         cleanDb();
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
-        String outA = AnimoSerializer._.serialize(e);
+        String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
@@ -74,10 +73,10 @@ public class YetAnotherGraphBuilderTest extends ATest {
     private void test_1(String animo, String xml) throws Exception {
         Expression e;
         e = the(new AnimoExpression(new FastGraphBuilder(), animo));
-        String inA = AnimoSerializer._.serialize(e);
+        String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
-        String outA = AnimoSerializer._.serialize(e);
+        String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);
@@ -86,10 +85,10 @@ public class YetAnotherGraphBuilderTest extends ATest {
     private void test_2(String animo, String xml) throws Exception {
         Expression e;
         e = the(new AnimoExpression(new StreamGraphBuilder(), animo));
-        String outA = AnimoSerializer._.serialize(e);
+        String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
-        String inA = AnimoSerializer._.serialize(e);
+        String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
         Assert.assertEquals(inA, outA);

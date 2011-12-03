@@ -20,6 +20,7 @@ package org.animotron.graph.traverser;
 
 import javolution.util.FastList;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -61,7 +62,7 @@ public class AnimoTraverser {
 	
     public void traverse(GraphHandler handler, QCAVector vector) throws IOException {
         handler.startGraph();
-        build(handler, null, vector, 0, true, 0, true);
+        build(handler, new PFlow(Evaluator._), vector, 0, true, 0, true);
         handler.endGraph();
     }
 

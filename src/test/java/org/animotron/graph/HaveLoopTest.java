@@ -20,7 +20,7 @@ package org.animotron.graph;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
@@ -44,13 +44,13 @@ public class HaveLoopTest extends ATest {
 
 		System.out.println("Prepare");
 		System.out.print("The a: ");
-		AnimoSerializer._.serialize(A, System.out);
+		CachedSerializer.ANIMO.serialize(A, System.out);
 		System.out.println();
 		System.out.print("The b: ");
-		AnimoSerializer._.serialize(B, System.out);
+		CachedSerializer.ANIMO.serialize(B, System.out);
 		System.out.println();
 		System.out.print("The c: ");
-		AnimoSerializer._.serialize(C, System.out);
+		CachedSerializer.ANIMO.serialize(C, System.out);
 		System.out.println();
 		System.out.println();
 

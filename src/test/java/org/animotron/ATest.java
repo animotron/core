@@ -24,8 +24,6 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.serializer.*;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.PFlow;
 import org.junit.After;
 import org.junit.Before;
 import org.neo4j.graphdb.Node;
@@ -127,7 +125,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("Animo serializer...");
-        String result = pretty ? AnimoPrettySerializer._.serialize(op) : AnimoSerializer._.serialize(op);
+        String result = pretty ? CachedSerializer.PRETTY_ANIMO.serialize(op) : CachedSerializer.ANIMO.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -143,19 +141,31 @@ public abstract class ATest {
     }
 
     protected void eval(Relationship op) throws IOException {
-        AnimoResultSerializer._.serialize(op);
+    	CachedSerializer.ANIMO_RESULT.serialize(op);
     }
 
     protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
-        String result = pretty ? AnimoPrettyResultSerializer._.serialize(op) : AnimoResultSerializer._.serialize(op);
+        String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(op) : CachedSerializer.ANIMO_RESULT.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
         System.out.println();
     }
+    
+    protected void assertOneStepAnimoResult(Relationship op, String expected) throws IOException {
+        assertNotNull(op);
+
+        System.out.println("One step Animo result serializer...");
+        String result = CachedSerializer.ANIMO_RESULT_ONE_STEP.serialize(op);
+        System.out.println(result);
+        Assert.assertEquals("", expected, result);
+
+        System.out.println();
+    }
+    
 
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
@@ -165,7 +175,7 @@ public abstract class ATest {
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream(in);
 
-        XMLResultSerializer._.serialize(op, out);
+        CachedSerializer.XML.serialize(op, out);
         out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();
@@ -179,7 +189,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         if (messagers) System.out.println("VALUE result serializer...");
-        String result = StringResultSerializer._.serialize(new PFlow(Evaluator._), op);
+        String result = CachedSerializer.STRING.serialize(op);
         if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -207,7 +217,7 @@ public abstract class ATest {
         });
     }
 
-    private void removeNodes() {
+	private void removeNodes() {
         Node refNode = getROOT();
         for (Node node : getDb().getAllNodes()) {
         	boolean delete = true;

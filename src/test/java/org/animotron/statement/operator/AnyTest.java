@@ -60,7 +60,7 @@ public class AnyTest extends ATest {
             _(ANY._, "B")
         );
         //assertAnimoResult(b, "the C (B) (value \"C\").");
-        assertAnimoResult(b, "the C B, value.");
+        assertOneStepAnimoResult(b, "the C B, value.");
     }
 	
     @Test

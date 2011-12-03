@@ -21,7 +21,7 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxInputFactory;
 import junit.framework.Assert;
 import org.animotron.expression.StAXExpression;
-import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.Test;
 import org.neo4j.graphdb.Direction;
@@ -53,11 +53,11 @@ public class XMLTest extends ATest {
         Iterator<Relationship> it = r.getEndNode().getRelationships(Direction.OUTGOING).iterator();
         if (it.hasNext()) {
             Relationship i = it.next();
-            s.append(truncate(AnimoSerializer._.serialize(i)));
+            s.append(truncate(CachedSerializer.ANIMO.serialize(i)));
             while (it.hasNext()) {
                 i = it.next();
                 s.append(" ");
-                s.append(truncate(AnimoSerializer._.serialize(i)));
+                s.append(truncate(CachedSerializer.ANIMO.serialize(i)));
             }
             s.append(".");
         }

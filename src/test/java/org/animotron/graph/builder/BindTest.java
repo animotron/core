@@ -24,7 +24,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.expression.StAXExpression;
-import org.animotron.graph.serializer.AnimoSerializer;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.operator.AN;
@@ -51,12 +51,12 @@ import static org.animotron.expression.JExpression.element;
 public class BindTest extends ATest {
 
     public void test(Expression e, String animo) throws Exception {
-        String inA = AnimoSerializer._.serialize(e);
+        String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, DigestSerializer._.serialize(e));
         cleanDb();
         Expression x = new AnimoExpression(animo);
-        String outA = AnimoSerializer._.serialize(x);
+        String outA = CachedSerializer.ANIMO.serialize(x);
         byte[] outH = (byte[]) HASH.get(x);
         assertEquals(outH, DigestSerializer._.serialize(x));
         assertEquals(inH, outH);
