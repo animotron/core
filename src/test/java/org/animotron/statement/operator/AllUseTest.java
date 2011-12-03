@@ -52,16 +52,17 @@ public class AllUseTest extends ATest {
                 )
         );
 
-        JExpression b = new JExpression(
-            _(THE._, "b", _(AN._, "s", _(USE._, "B")))
+        JExpression test = new JExpression(
+            _(AN._, "s", _(USE._, "B"))
         );
-        assertAnimoResult(b, "the b the s (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
+        //assertAnimoResult(test, "the b the s (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
+        assertAnimoResult(test, "the s (the B A, Y) (the C B, Z, X).");
 
-        JExpression c = new JExpression(
-            _(THE._, "c", _(AN._, "s", _(USE._, "C")))
+        test = new JExpression(
+            _(AN._, "s", _(USE._, "C"))
         );
-        assertAnimoResult(c, "the c the s the C (B) (Z \"γ\") (X \"αα\").");
-
+        //assertAnimoResult(test, "the c the s the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult(test, "the s the C B, Z, X.");
     }
 
     @Test

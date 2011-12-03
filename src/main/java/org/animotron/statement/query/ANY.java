@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.query;
 
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -25,6 +26,7 @@ import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Set;
 
@@ -65,27 +67,26 @@ public class ANY extends AbstractQuery implements Reference {
 					Set<Node> uses = lists[1];
 					Set<Node> directed = lists[2];
 					
-					boolean underUSE = false;
+//					boolean underUSE = false;
 					if (directed != null && directed.size() == 1) { 
-						underUSE = true;
+//						underUSE = true;
 						node = directed.iterator().next();
 					}
 		
-					//System.out.println(" node = "+node);
+					System.out.println(" node = "+node);
 		
-					if (underUSE && filtering(pf, node, uses)) {
-						pf.sendAnswer( getThe(node) );
-					} else {
-			            for (Relationship tdR : td_IS.traverse(node).relationships()) {
-		                    //System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
-		                    Node res = tdR.getStartNode();
-		                    if (filtering(pf, res, uses)) {
-		
-		                        pf.sendAnswer( getThe(res) );
-		                        break;
-		                    }
-		                }
-					}
+					//if (underUSE && filtering(pf, node, uses)) {
+					//	pf.sendAnswer( getThe(node) );
+					//} else {
+		            for (Relationship tdR : td_IS.traverse(node).relationships()) {
+	                    System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
+
+	                    Node n = tdR.getStartNode();
+	                    if (filtering(pf, n, uses)) {
+	                    	pf.sendAnswer( getThe(n) );
+	                    	break;
+	                    }
+		            }
 				}
 			}
             pf.done();

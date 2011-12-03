@@ -133,7 +133,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                     }
                 } else if (!(ps instanceof LINK || statement instanceof Suffix)) {
                     if (statement instanceof REF && ps instanceof REF) {
-                        write(",");
+                        write(", ");
                     } else {
                         if (!(statement instanceof REF && ps instanceof AN)) {
                         	if (statement instanceof Evaluable) {

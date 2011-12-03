@@ -51,15 +51,16 @@ public class AnyTest extends ATest {
         );
 
         JExpression a = new JExpression(
-            _(THE._, "a", _(ANY._, "A"))
+            _(ANY._, "A")
         );
-        assertAnimoResult(a, "the a the B (A) (value \"B\").");
+        //assertAnimoResult(a, "the B (A) (value \"B\").");
+        assertAnimoResult(a, "the B A, value.");
 
         JExpression b = new JExpression(
-            _(THE._, "b", _(ANY._, "B"))
+            _(ANY._, "B")
         );
-        assertAnimoResult(b, "the b the C (B) (value \"C\").");
-
+        //assertAnimoResult(b, "the C (B) (value \"C\").");
+        assertAnimoResult(b, "the C B, value.");
     }
 	
     @Test
@@ -83,15 +84,16 @@ public class AnyTest extends ATest {
                 )
         );
 
-        JExpression D = new JExpression(
-            _(THE._, "D", _(ANY._, "A", _(WITH._, "value", text("B"))))
+        JExpression test = new JExpression(
+            _(ANY._, "A", _(WITH._, "value", text("B")))
         );
-        assertAnimoResult(D, "the D the B (A) (value \"B\").");
+        //assertAnimoResult(test, "the B (A) (value \"B\").");
+        assertAnimoResult(test, "the B A, value.");
 
-        JExpression E = new JExpression(
-            _(THE._, "E", _(ANY._, "A", _(WITH._, "value", text("C"))))
+        test = new JExpression(
+            _(ANY._, "A", _(WITH._, "value", text("C")))
         );
-        assertAnimoResult(E, "the E the C (B) (value \"C\").");
+        assertAnimoResult(test, "the C B, value.");
 
     }
 
@@ -120,12 +122,9 @@ public class AnyTest extends ATest {
         );
 
 		JExpression test = new JExpression(
-			_(THE._, "test", 
-				_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
-			)
+			_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 		);
-        assertAnimoResult(test, "the test the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
-
+        //assertAnimoResult(test, "the test the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
+        assertAnimoResult(test, "the text-plain mime-type, text, type, reference, extension.");
 	}
-
 }

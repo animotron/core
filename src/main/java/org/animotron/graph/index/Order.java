@@ -77,6 +77,7 @@ public class Order {
         return INDEX.query(NAME, sort(NAME), node, null);
     }
 
+    @Deprecated //not safe to use
     public static IndexHits<Relationship> queryUp(Node node) {
         return INDEX.query(NAME, sort(NAME), null, node);
     }

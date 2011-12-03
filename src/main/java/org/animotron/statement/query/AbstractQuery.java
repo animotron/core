@@ -56,8 +56,27 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     protected TraversalDescription td_IS =
         Traversal.description().
             breadthFirst().
+            relationships(REF._, INCOMING ).
             relationships(AN._, INCOMING ).
-            evaluator(Evaluators.excludeStartPosition());
+            //evaluator(Evaluators.excludeStartPosition()).
+            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+    			@Override
+    			public Evaluation evaluate(Path path) {
+    				System.out.println(path);
+    				
+    				if (path.length() < 2)
+    					return EXCLUDE_AND_CONTINUE;
+    				
+    				if (path.length() % 2 == 0 && path.lastRelationship().isType(AN._))
+    					return INCLUDE_AND_CONTINUE;
+    				
+    				if (path.length() % 2 == 1 && !path.lastRelationship().isType(REF._))
+    					return EXCLUDE_AND_PRUNE;
+    					
+
+    				return EXCLUDE_AND_CONTINUE;
+    			}
+    		});
 
     protected boolean filtering(PFlow pf, Node node, Set<Node> uses) {
     	if (uses != null) {
