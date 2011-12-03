@@ -139,7 +139,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 
-	public static CachedSerializer ANIMO_RESULT_ONE_STEP = new CachedSerializer(AnimoResultOneStepTraverser._, "-1step-res.animo") {
+	public static CachedSerializer ANIMO_RESULT_ONE_STEP = new CachedSerializer(new AnimoResultOneStepTraverser(), "-1step-res.animo") {
 		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {

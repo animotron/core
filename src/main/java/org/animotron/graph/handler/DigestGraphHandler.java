@@ -86,4 +86,13 @@ public class DigestGraphHandler implements GraphHandler {
         return md.digest();
     }
 
+	private boolean stepMade = false;
+	
+	public void stepMade() {
+		stepMade = true;
+	}
+
+	public boolean isStepMade() {
+		return stepMade;
+	}
 }

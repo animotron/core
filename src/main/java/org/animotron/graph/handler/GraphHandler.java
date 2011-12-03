@@ -48,4 +48,6 @@ public interface GraphHandler {
 
 	public void endGraph() throws IOException;
 
+	@Deprecated //XXX: find better way 
+	public boolean isStepMade();
 }

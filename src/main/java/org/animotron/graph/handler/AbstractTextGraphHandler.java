@@ -29,6 +29,14 @@ public abstract class AbstractTextGraphHandler implements GraphHandler {
 
     private Handler out;
 
+    public AbstractTextGraphHandler(GraphHandler gh) {
+    	if (gh instanceof AbstractTextGraphHandler) {
+			out = ((AbstractTextGraphHandler) gh).out;
+			stepMade = true;
+		} else
+			throw new UnsupportedOperationException();
+    }
+
     public AbstractTextGraphHandler(OutputStream stream) {
         out = new StreamHandler(stream);
     }
@@ -36,6 +44,12 @@ public abstract class AbstractTextGraphHandler implements GraphHandler {
     public AbstractTextGraphHandler(StringBuilder builder) {
         out = new StringHandler(builder);
     }
+
+	private boolean stepMade = false;
+	
+	public boolean isStepMade() {
+		return stepMade;
+	}
 
     protected void write(String text) throws IOException {
         out.write(text);

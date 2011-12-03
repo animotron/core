@@ -84,4 +84,14 @@ public class BinaryGraphHandler implements GraphHandler {
     @Override
     public void endGraph() {
     }
+
+	private boolean stepMade = false;
+	
+	public void stepMade() {
+		stepMade = true;
+	}
+
+	public boolean isStepMade() {
+		return stepMade;
+	}
 }

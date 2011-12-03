@@ -54,14 +54,12 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        //assertAnimoResult(D, "the D (the B (A) (value \"B\")) (the C (B) (value \"C\")).");
-        assertAnimoResult(test, "the B A, value. the C B, value.");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
 
         test = new JExpression(
             _(ALL._, "A")
         );
-        //assertAnimoResult(D, "the D (the B (A) (value \"B\")) (the C (B) (value \"C\")).");
-        assertAnimoResult(test, "the B A, value. the C B, value.");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
     }
 	
     @Test
@@ -82,11 +80,8 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        //assertAnimoResult(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
-        assertAnimoResult(test, "the B A, value. the C B, value.");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
         //assertAnimoResult(test, "the B\n    (A)\n    (value \"B\").\nthe C\n    (B)\n    (value \"C\").\n", true);
-        assertAnimoResult(test, "the B A, value.\nthe C B, value.\n", true);
-
     }
 
     @Test
@@ -113,13 +108,12 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", text("B")))
         );
-        //assertAnimoResult(test, "the D (the B (A) (value \"B\")) (the B1 (B) (value \"B\")).");
-        assertAnimoResult(test, "the B A, value. the B1 B, value.");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the B1 (B) (value \"B\").");
 
         test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", text("C")))
         );
-        assertAnimoResult(test, "the C B, value. the C1 C, value.");
+        assertAnimoResultOneStep(test, "the C (B) (value \"C\"). the C1 (C) (value \"C\").");
     }
 
 	@Test
@@ -150,6 +144,6 @@ public class AllTest extends ATest {
 			_(ALL._, "mime-type", _(EQ._, "extension", text("txt")))
 		);
         //assertAnimoResult(test, "the test the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
-        assertAnimoResult(test, "the text-plain mime-type, text, type, reference, extension.");
+		assertAnimoResultOneStep(test, "the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
 	}
 }

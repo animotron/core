@@ -75,5 +75,4 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void endGraph() throws IOException {
     }
-
 }

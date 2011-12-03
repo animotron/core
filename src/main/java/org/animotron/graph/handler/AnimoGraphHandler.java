@@ -39,9 +39,13 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  *
  */
 public class AnimoGraphHandler extends AbstractTextGraphHandler {
+	
+    public AnimoGraphHandler(GraphHandler gh) {
+    	super(gh);
+    }
 
-    public AnimoGraphHandler(OutputStream stream) {
-        super (stream);
+	public AnimoGraphHandler(OutputStream stream) {
+        super(stream);
     }
 
     public AnimoGraphHandler(StringBuilder builder) {
@@ -170,5 +174,4 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     @Override
     public void endGraph() throws IOException {
     }
-
 }

@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -37,19 +38,14 @@ import java.io.IOException;
  */
 public class AnimoResultOneStepTraverser extends ResultTraverser {
 	
-    public static AnimoResultOneStepTraverser _ = new AnimoResultOneStepTraverser();
-    
-    private boolean stepMade = false;
-
-    protected AnimoResultOneStepTraverser() {}
+    public AnimoResultOneStepTraverser() {}
 
     @Override
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-            if ((s instanceof Query || s instanceof Evaluable) && !stepMade) {
-                result(handler, pf, rr, level, isOne);
-                
-                stepMade = true;
+            if ((s instanceof Query || s instanceof Evaluable) && !handler.isStepMade()) {
+            	GraphHandler gh = new AnimoGraphHandler(handler);
+                result(gh, pf, rr, level, isOne);
                 
 			//workaround IS and USE
 			} else if (s instanceof USE) {

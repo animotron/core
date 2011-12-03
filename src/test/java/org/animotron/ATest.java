@@ -155,7 +155,7 @@ public abstract class ATest {
         System.out.println();
     }
     
-    protected void assertOneStepAnimoResult(Relationship op, String expected) throws IOException {
+    protected void assertAnimoResultOneStep(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
         System.out.println("One step Animo result serializer...");

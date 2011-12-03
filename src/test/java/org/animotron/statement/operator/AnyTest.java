@@ -53,14 +53,12 @@ public class AnyTest extends ATest {
         JExpression a = new JExpression(
             _(ANY._, "A")
         );
-        //assertAnimoResult(a, "the B (A) (value \"B\").");
-        assertAnimoResult(a, "the B A, value.");
+        assertAnimoResultOneStep(a, "the B (A) (value \"B\").");
 
         JExpression b = new JExpression(
             _(ANY._, "B")
         );
-        //assertAnimoResult(b, "the C (B) (value \"C\").");
-        assertOneStepAnimoResult(b, "the C B, value.");
+        assertAnimoResultOneStep(b, "the C (B) (value \"C\").");
     }
 	
     @Test
@@ -87,13 +85,12 @@ public class AnyTest extends ATest {
         JExpression test = new JExpression(
             _(ANY._, "A", _(WITH._, "value", text("B")))
         );
-        //assertAnimoResult(test, "the B (A) (value \"B\").");
-        assertAnimoResult(test, "the B A, value.");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\").");
 
         test = new JExpression(
             _(ANY._, "A", _(WITH._, "value", text("C")))
         );
-        assertAnimoResult(test, "the C B, value.");
+        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
 
     }
 
@@ -124,7 +121,6 @@ public class AnyTest extends ATest {
 		JExpression test = new JExpression(
 			_(ANY._, "mime-type", _(EQ._, "extension", text("txt")))
 		);
-        //assertAnimoResult(test, "the test the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
-        assertAnimoResult(test, "the text-plain mime-type, text, type, reference, extension.");
+		assertAnimoResultOneStep(test, "the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
 	}
 }

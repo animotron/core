@@ -62,7 +62,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
             evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
     			@Override
     			public Evaluation evaluate(Path path) {
-    				System.out.println(path);
+    				//System.out.println(path);
     				
     				if (path.length() < 2)
     					return EXCLUDE_AND_CONTINUE;
