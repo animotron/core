@@ -531,10 +531,11 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 				if (!pflow.isInStack(r)) {
 					if (r.isType(AN._)) {
 						res = r;
-						break;
+						//break;
 					}
 				}
 			}
+			if (res != null) break;
 		}
 		
 		while (true) {
@@ -575,7 +576,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets, RelationshipType type) {
-			System.out.println(path);
+			//System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
