@@ -61,7 +61,7 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_param() throws Exception {
 
     	JExpression.__(new JExpression(
-            _(THE._, "A", _(element("B" , _(GET._, "C"))))
+            _(THE._, "A", element("B" , _(GET._, "C")))
         ));
     	JExpression D = new JExpression(
 			_(THE._, "D", _(AN._, "A", _(AN._, "C", text("."))))
