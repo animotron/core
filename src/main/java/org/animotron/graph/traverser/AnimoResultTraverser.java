@@ -22,6 +22,7 @@ import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
@@ -46,8 +47,9 @@ public class AnimoResultTraverser extends ResultTraverser {
     @Override
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-        	if ((s instanceof Shift && rr.getUnrelaxedAnswer() == null)
-        			|| (s instanceof Evaluable && !(s instanceof Shift))  
+        	Statement qS = Statements.relationshipType(rr.getQuestion());
+        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
+        			|| (s instanceof Evaluable && !(qS instanceof Shift))  
             	) {
                 result(handler, pf, rr, level, isOne);
                 

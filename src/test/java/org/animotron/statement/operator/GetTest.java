@@ -75,7 +75,7 @@ public class GetTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(AN._, "A1", _(AN._, "B1", text("."))))
 		);
-    	assertAnimoResult(d, "the d A1, B1 \".\".");
+    	assertAnimoResult(d, "the d A1 B1 \".\".");
 
 	}
 	

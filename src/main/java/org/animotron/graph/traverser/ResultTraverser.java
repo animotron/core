@@ -66,56 +66,24 @@ public class ResultTraverser extends AnimoTraverser {
 
     	Relationship r = rr.getClosest();
     	
-//        int addedContexts = 0;
-
-//		addedContexts += 
 		QCAVector v = pf.addContextPoint(rr);
-    	
-//        if (r.isType(RESULT)) {
-//        	r = getDb().getRelationshipById(
-//                (Long) r.getProperty(RID.name())
-//            );
-//            addedContexts += pf.addContextPoint(r);
-//        }
 
-        Statement s;
-//        Statement q = Statements.relationshipType(rr.getQuestion());
-//        if (r.isType(REF._) && !(q instanceof Definition) && !(q instanceof REF)) {
-//            s = THE._;
-//            
-//        } else if (r.isType(POSSESSIVE._) || r.isType(THE._)) {
-//            s = THE._;
-//            
-//        } else {
-            s = Statements.relationshipType(r);
-//        }
-        
-        //if (s instanceof Reference || s instanceof HAVE)
-	    //    addedContexts += pf.addContextPoint(rr);
-
-//        try {
-//        	Relationship context = getDb().getRelationshipById(
-//        		(Long)r.getProperty(CID.name())
-//        	);
-//        	addedContexts += pf.addContextPoint(context);
-//        } catch (Exception e) {
-//        }
-        
+		Statement s = Statements.relationshipType(r);
+	        
         process(handler, pf, s, rr, level, isOne, 0, false);
         
         pf.popContextPoint(v);
-
-//        while (addedContexts > 0) {
-//        	pf.popContextPoint();
-//        	addedContexts--;
-//        }
     }
     
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-            if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, rr, level, isOne);
-			} else if (!(s instanceof USE)) { // || s instanceof REF
+        	if ((s instanceof Shift && rr.getUnrelaxedAnswer() == null)
+        			|| (s instanceof Evaluable && !(s instanceof Shift))
+    			) {
+                
+        		result(handler, pf, rr, level, isOne);
+			
+        	} else if (!(s instanceof USE)) { // || s instanceof REF
 				Relationship r = rr.getClosest();
 				
                 if (s instanceof AbstractValue)
