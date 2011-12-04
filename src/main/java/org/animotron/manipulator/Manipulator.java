@@ -29,6 +29,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.THE;
+import org.animotron.statement.query.GET;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -120,7 +121,11 @@ public abstract class Manipulator {
                         Relationship msg = context.getAnswer();
 
         				if (context.getUnrelaxedAnswer().isType(RESULT)) {
-                			if (!fullEval) {
+        					if (context.getQuestion().isType(GET._)) {
+                				out.write(context);
+                				return;
+        					
+        					} else if (!fullEval) {
                 				out.write(context);
                 				return;
                 			}

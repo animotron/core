@@ -25,6 +25,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
 
@@ -44,7 +45,9 @@ public class AnimoResultTraverser extends ResultTraverser {
     @Override
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-            if (s instanceof Query || s instanceof Evaluable) {
+            if ((s instanceof Query || s instanceof Evaluable) 
+        		&& (rr.getUnrelaxedAnswer() == null && !rr.getQuestion().isType(GET._))) {
+            	
                 result(handler, pf, rr, level, isOne);
 			//workaround IS and USE
 			} else if (s instanceof USE) {
