@@ -61,14 +61,14 @@ public abstract class Manipulator {
 	}
 
 	public final PipedInput<QCAVector> execute(PFlow pf, Relationship op) throws IOException {
-		return execute(pf, new QCAVector(op), null);
+		return execute(pf, new QCAVector(op), null, true);
 	}
 	
 	public final PipedInput<QCAVector> execute(PFlow pf, QCAVector vector) throws IOException {
-		return execute(pf, vector, null);
+		return execute(pf, vector, null, true);
 	}
 
-	public final PipedInput<QCAVector> execute(PFlow pflow, QCAVector vector, Subscribable<PFlow> sub) throws IOException {
+	public final PipedInput<QCAVector> execute(PFlow pflow, QCAVector vector, Subscribable<PFlow> sub, final boolean fullEval) throws IOException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
 
@@ -120,6 +120,11 @@ public abstract class Manipulator {
                         Relationship msg = context.getAnswer();
 
         				if (context.getUnrelaxedAnswer().isType(RESULT)) {
+                			if (!fullEval) {
+                				out.write(context);
+                				return;
+                			}
+                			
                             try {
                                 s = Statements.name((String) THE._.reference(msg));
                             } catch (Exception e){}
@@ -128,9 +133,10 @@ public abstract class Manipulator {
             			if (msg.isType(org.animotron.statement.operator.REF._) || msg.isType(REF)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
+            			
 
                         if (s instanceof Evaluable) {
-                        	PipedInput<QCAVector> in = execute(new PFlow(pf, context), context, ((Evaluable) s).onCalcQuestion());
+                        	PipedInput<QCAVector> in = execute(new PFlow(pf, context), context, ((Evaluable) s).onCalcQuestion(), fullEval);
                             for (QCAVector v : in) {
                             	out.write(v);
                             }
@@ -147,7 +153,6 @@ public abstract class Manipulator {
                         } else {
                             out.write(context);
                         }
-                        
                     } else {
                         //what to do if msg is null?
                     	//ignore -- XXX: log warning

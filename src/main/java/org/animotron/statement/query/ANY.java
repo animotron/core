@@ -18,7 +18,6 @@
  */
 package org.animotron.statement.query;
 
-import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -26,7 +25,6 @@ import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Set;
 

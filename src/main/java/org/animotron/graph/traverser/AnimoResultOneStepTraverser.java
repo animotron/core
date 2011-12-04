@@ -20,6 +20,8 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.Result;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -28,8 +30,10 @@ import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -65,4 +69,26 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
             }
         }
     }
+    
+    protected boolean result(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne) throws IOException {
+    	Relationship r = rr.getClosest();
+    	
+    	PFlow pflow = new PFlow(pf);
+
+    	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+//    	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
+//    	boolean found;
+//    	try {
+//	        found = iterate(handler, pflow, i, level, isOne);
+//    	} finally {
+//    		i.close();
+//    	}
+//        if (!found) {
+            Iterator<QCAVector>in = Evaluator._.execute(pflow, new QCAVector(r, rr), null, false);
+            iterate(handler, pflow, in, level, isOne);
+//        }
+
+        return true;
+    }
+
 }

@@ -49,8 +49,10 @@ import java.util.Set;
 
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
+import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * Query operator 'Get'. Return 'have' relations on provided context.
@@ -128,7 +130,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						final Set<QCAVector> rSet = get(pf, op, new QCAVector(null, vector.getUnrelaxedAnswer()), thes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, AN._);
+								pf.sendAnswer(v, RESULT);//, AN._);
 							}
 						}
 //						Relationship have = searchForHAVE(pf, vector.getUnrelaxedAnswer(), thes);
@@ -170,7 +172,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 						}
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, AN._);
+								pf.sendAnswer(v, RESULT);//, AN._);
 							}
 							break;
 						}
@@ -459,7 +461,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
 			
 			Statement st = Statements.relationshipType(tdR);
-			if (false /*st instanceof IS*/) {
+			if (st instanceof AN) {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
@@ -512,6 +514,8 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 		if (context == null) return null;
 		
 		TraversalDescription trav = td.
+				relationships(AN._, OUTGOING).
+				relationships(REF._, OUTGOING).
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
@@ -571,7 +575,7 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 	abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets, RelationshipType type) {
-			//System.out.println(path);
+			System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
@@ -603,4 +607,23 @@ public class GET extends AbstractQuery implements Evaluable, Query {
 			return EXCLUDE_AND_PRUNE;
 		}
 	}
+
+	abstract class Searcher2 implements org.neo4j.graphdb.traversal.Evaluator {
+		@Override
+		public Evaluation evaluate(Path path) {
+			//System.out.println(path);
+			
+			if (path.length() < 2)
+				return EXCLUDE_AND_CONTINUE;
+			
+			if (path.length() % 2 == 0 && path.lastRelationship().isType(AN._))
+				return INCLUDE_AND_CONTINUE;
+			
+			if (path.length() % 2 == 1 && !path.lastRelationship().isType(REF._))
+				return EXCLUDE_AND_PRUNE;
+				
+
+			return EXCLUDE_AND_CONTINUE;
+		}
+	};
 }

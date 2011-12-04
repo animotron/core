@@ -220,7 +220,7 @@ public class PFlow {
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 
-			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), AN._);
+			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), rType);
 			
 			parent.answer.publish(new QCAVector(op, answer, answerVector.getContext()));
 		}
