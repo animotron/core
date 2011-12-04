@@ -24,6 +24,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.NS;
@@ -31,6 +32,7 @@ import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Shift;
 import org.animotron.statement.relation.USE;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
@@ -86,12 +88,19 @@ public class MLResultTraverser extends ResultTraverser {
                     handler.start(s, param, level++, isOne, pos, isLast);
                     handler.end(s, param, --level, isOne, pos, isLast);
                 }
-            } else if (s instanceof Query || s instanceof Evaluable) {
-                result(handler, pf, rr, level, isOne);
-			//workaround IS and USE
-			} else if (!(s instanceof USE || s instanceof REF)) {
-                node = rr.getClosest().getEndNode();
-                iterate(handler, pf, new It(node), level);
+            } else {
+            	//XXX: send to super method?
+            	Statement qS = Statements.relationshipType(rr.getQuestion());
+            	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
+            			|| (s instanceof Evaluable && !(qS instanceof Shift))
+        			) {
+
+            		result(handler, pf, rr, level, isOne);
+            		//workaround IS and USE
+            	} else if (!(s instanceof USE || s instanceof REF)) {
+            		node = rr.getClosest().getEndNode();
+            		iterate(handler, pf, new It(node), level);
+            	}
             }
         }
     }

@@ -77,8 +77,9 @@ public class ResultTraverser extends AnimoTraverser {
     
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-        	if ((s instanceof Shift && rr.getUnrelaxedAnswer() == null)
-        			|| (s instanceof Evaluable && !(s instanceof Shift))
+        	Statement qS = Statements.relationshipType(rr.getQuestion());
+        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
+        			|| (s instanceof Evaluable && !(qS instanceof Shift))
     			) {
                 
         		result(handler, pf, rr, level, isOne);
