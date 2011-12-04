@@ -25,6 +25,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Shift;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
@@ -45,10 +46,11 @@ public class AnimoResultTraverser extends ResultTraverser {
     @Override
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-            if ((s instanceof Query || s instanceof Evaluable) 
-        		&& (rr.getUnrelaxedAnswer() == null && !rr.getQuestion().isType(GET._))) {
-            	
+        	if ((s instanceof Shift && rr.getUnrelaxedAnswer() == null)
+        			|| (s instanceof Evaluable && !(s instanceof Shift))  
+            	) {
                 result(handler, pf, rr, level, isOne);
+                
 			//workaround IS and USE
 			} else if (s instanceof USE) {
 				Relationship r = rr.getClosest();
@@ -59,10 +61,10 @@ public class AnimoResultTraverser extends ResultTraverser {
 				Relationship r = rr.getClosest();
 
 				handler.start(s, r, level++, isOne, pos, isLast);
-                if (!(s instanceof REF)) {
+                //if (!(s instanceof REF)) {
                     node = r.getEndNode();
                     iterate(handler, pf, new It(node), level);
-                }
+                //}
                 handler.end(s, r, --level, isOne, pos, isLast);
             }
         }

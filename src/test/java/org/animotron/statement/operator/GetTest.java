@@ -29,8 +29,7 @@ import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
 import static org.animotron.expression.Expression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -62,12 +61,12 @@ public class GetTest extends ATest {
 	public void getFromPFlow_an_with_param() throws Exception {
 
     	JExpression.__(new JExpression(
-            _(THE._, "A", _(AN._, "B", _(GET._, "C")))
+            _(THE._, "A", _(element("B" , _(GET._, "C"))))
         ));
     	JExpression D = new JExpression(
 			_(THE._, "D", _(AN._, "A", _(AN._, "C", text("."))))
 		);
-    	assertAnimoResultOneStep(D, "the D the A B C \".\".");
+    	assertAnimoResult(D, "the D A \\B C \".\".");
 
     	JExpression.__(new JExpression(
             _(THE._, "A1", _(GET._, "B1"))
@@ -76,7 +75,7 @@ public class GetTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(AN._, "A1", _(AN._, "B1", text("."))))
 		);
-    	assertAnimoResultOneStep(d, "the d the A1 B1 \".\".");
+    	assertAnimoResult(d, "the d A1, B1 \".\".");
 
 	}
 	

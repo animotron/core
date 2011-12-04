@@ -60,7 +60,7 @@ import static org.animotron.graph.RelationshipTypes.RESULT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends AbstractQuery implements Evaluable, Query {
+public class GET extends AbstractQuery implements Evaluable, Shift {
 
 	public static final GET _ = new GET();
 	

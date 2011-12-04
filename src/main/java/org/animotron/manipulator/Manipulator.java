@@ -28,8 +28,8 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
+import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.query.GET;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -121,7 +121,9 @@ public abstract class Manipulator {
                         Relationship msg = context.getAnswer();
 
         				if (context.getUnrelaxedAnswer().isType(RESULT)) {
-        					if (context.getQuestion().isType(GET._)) {
+        					Statement qS = Statements.relationshipType(context.getQuestion());
+
+        					if (qS instanceof Shift) {
                 				out.write(context);
                 				return;
         					

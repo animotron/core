@@ -38,11 +38,12 @@ public class AnTest extends ATest {
         JExpression A = new JExpression(
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
         );
-        assertAnimoResult(A, "the A the B.");
+        //assertAnimoResultOneStep(A, "the A the B.");
+        assertAnimoResultOneStep(A, "the A B.");
 
         JExpression.__(new JExpression(
-                _(THE._, "B", _(AN._, "C", text("y")))
+            _(THE._, "B", _(AN._, "C", text("y")))
         ));
-        assertAnimoResult(A, "the A the B C \"y\".");
+        assertAnimoResultOneStep(A, "the A B C \"y\".");
     }
 }
