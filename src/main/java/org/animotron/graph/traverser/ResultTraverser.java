@@ -48,7 +48,7 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, new PFlow(Evaluator._, r), r, 0, true, 0, true);
+        build(handler, new PFlow(Evaluator._, r), null, r, 0, true, 0, true);
         handler.endGraph();
     }
 
@@ -56,13 +56,13 @@ public class ResultTraverser extends AnimoTraverser {
     public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
         handler.startGraph();
         QCAVector v = pf.addContextPoint(r);
-        build(handler, pf, r, 0, true, 0, true);
+        build(handler, pf, null, r, 0, true, 0, true);
         pf.popContextPoint(v);
         handler.endGraph();
     }
 
     @Override
-    protected void build(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void build(GraphHandler handler, PFlow pf, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
     	Relationship r = rr.getClosest();
     	
@@ -70,12 +70,12 @@ public class ResultTraverser extends AnimoTraverser {
 
 		Statement s = Statements.relationshipType(r);
 	        
-        process(handler, pf, s, rr, level, isOne, 0, false);
+        process(handler, pf, s, null, rr, level, isOne, 0, false);
         
         pf.popContextPoint(v);
     }
     
-    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
@@ -88,15 +88,15 @@ public class ResultTraverser extends AnimoTraverser {
 				Relationship r = rr.getClosest();
 				
                 if (s instanceof AbstractValue)
-                    handler.start(s, r, level++, isOne, pos, isLast);
+                    handler.start(s, parent, r, level++, isOne, pos, isLast);
                 
                 if (!(s instanceof REF  && !(qS instanceof AN))) {
 	                node = r.getEndNode();
-	                iterate(handler, pf, new It(node), level);
+	                iterate(handler, pf, s, new It(node), level);
                 }
                 
                 if (s instanceof AbstractValue)
-                    handler.end(s, r, --level, isOne, pos, isLast);
+                    handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
         }
     }
@@ -110,7 +110,7 @@ public class ResultTraverser extends AnimoTraverser {
     	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
     	boolean found;
     	try {
-	        found = iterate(handler, pflow, i, level, isOne);
+	        found = iterate(handler, pflow, null, i, level, isOne);
     	} finally {
     		i.close();
     	}
@@ -118,7 +118,7 @@ public class ResultTraverser extends AnimoTraverser {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
             Iterator<QCAVector>in = Evaluator._.execute(pflow, new QCAVector(r, rr));
-            iterate(handler, pflow, in, level, isOne);
+            iterate(handler, pflow, null, in, level, isOne);
         }
 
         return found;
@@ -133,7 +133,7 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
 //    }
 
-    protected boolean iterate(GraphHandler handler, PFlow pf, Iterator<QCAVector> it, int level, boolean isOne) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Statement parent, Iterator<QCAVector> it, int level, boolean isOne) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
         QCAVector i = null;
@@ -142,14 +142,14 @@ public class ResultTraverser extends AnimoTraverser {
         	i = it.next();
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, pf, i, level, false, pos++, true);
+                    build(handler, pf, parent, i, level, false, pos++, true);
                 	i = it.next();
-                    build(handler, pf, i, level, false, pos++, !it.hasNext());
+                    build(handler, pf, parent, i, level, false, pos++, !it.hasNext());
                 } else {
-                    build(handler, pf, i, level, true, pos++, !it.hasNext());
+                    build(handler, pf, parent, i, level, true, pos++, !it.hasNext());
                 }
             } else {
-                build(handler, pf, i, level, false, pos++, !it.hasNext());
+                build(handler, pf, parent, i, level, false, pos++, !it.hasNext());
             }
             isFirst = false;
             found = true;

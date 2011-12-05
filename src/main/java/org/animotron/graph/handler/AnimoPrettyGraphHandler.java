@@ -62,8 +62,8 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        Object[] item = {statement, r, level, isOne, new LinkedList<Object[]>(), !isOne, pos};
+    public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        Object[] item = {statement, r, level, isOne, new LinkedList<Object[]>(), !isOne, pos, parent};
         if (!stack.empty()) {
             Object[]p = stack.peek();
             ((List<Object[]>) p[4]).add(item);
@@ -72,7 +72,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         root = stack.pop();
         int size = ((List<Object[]>)root[4]).size();
         //if (statement instanceof Prefix) size--;
@@ -147,7 +147,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                         }
                     }
                 }
-                if (!(statement instanceof REF || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+                if (!(statement instanceof REF && o[7] != null || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
                     write("(");
                 }
             }
@@ -159,7 +159,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         }
         if (level == 0) {
             write(".");
-        } else if (!(statement instanceof REF || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF && o[7] != null || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
     }

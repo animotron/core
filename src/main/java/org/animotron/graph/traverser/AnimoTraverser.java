@@ -34,8 +34,6 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 import java.util.List;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -50,59 +48,59 @@ public class AnimoTraverser {
 	
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, null, r, 0, true, 0, true);
+        build(handler, null, null, r, 0, true, 0, true);
         handler.endGraph();
     }
 
 	public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, pf, r, 0, true, 0, true);
+		build(handler, pf, null, r, 0, true, 0, true);
 		handler.endGraph();
 	}
 	
     public void traverse(GraphHandler handler, QCAVector vector) throws IOException {
         handler.startGraph();
-        build(handler, new PFlow(Evaluator._), vector, 0, true, 0, true);
+        build(handler, new PFlow(Evaluator._), null, vector, 0, true, 0, true);
         handler.endGraph();
     }
 
     public void traverse(GraphHandler handler, PFlow pf, QCAVector vector) throws IOException {
         handler.startGraph();
-        build(handler, pf, vector, 0, true, 0, true);
+        build(handler, pf, null, vector, 0, true, 0, true);
         handler.endGraph();
     }
 
-	protected void build(GraphHandler handler, PFlow pf, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+	protected void build(GraphHandler handler, PFlow pf, Statement parent, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (o instanceof Relationship) {
-            build(handler, pf, new QCAVector((Relationship)o), level, isOne, pos, isLast);
+            build(handler, pf, parent, new QCAVector((Relationship)o), level, isOne, pos, isLast);
 
         } else if (o instanceof QCAVector) {
-            build(handler, pf, (QCAVector)o, level, isOne, pos, isLast);
+            build(handler, pf, parent, (QCAVector)o, level, isOne, pos, isLast);
             
         } else {
             String name = (String) o;
             Statement statement = Statements.name(name);
             String reference = (String) node.getProperty(name);
-            handler.start(statement, reference, level, isOne, pos, isLast);
-            handler.end(statement, reference, level, isOne, pos, isLast);
+            handler.start(statement, parent, reference, level, isOne, pos, isLast);
+            handler.end(statement, parent, reference, level, isOne, pos, isLast);
         }
     }
 
-	protected void build(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+	protected void build(GraphHandler handler, PFlow pf, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 		Relationship r = rr.getClosest();
 		Statement statement = Statements.relationshipType(r);
 		if (statement == null)
 			return;
-		handler.start(statement, r, level++, isOne, pos, isLast);
+		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof USE || statement instanceof REF)) {
             node = r.getEndNode();
             It it = new It(node);
-            iterate(handler, pf, it, level);
+            iterate(handler, pf, statement, it, level);
 		}
-		handler.end(statement, r, --level, isOne, pos, isLast);
+		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, PFlow pf, It it, int level) throws IOException {
+    protected void iterate(GraphHandler handler, PFlow pf, Statement parent, It it, int level) throws IOException {
         List<Object> o = new FastList<Object>();
         try {
             int count = 0;
@@ -128,24 +126,15 @@ public class AnimoTraverser {
             boolean isOne = o.size() - count < 2;
             for (Object i : o) {
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
-                build(handler, pf, i, level, isOne, pos, isLast);
+                build(handler, pf, parent, i, level, isOne, pos, isLast);
                 pos++;
             }
             while (it.hasNext()) {
-                build(handler, pf, it.next(), level, isOne, pos++, !it.hasNext());
+                build(handler, pf, parent, it.next(), level, isOne, pos++, !it.hasNext());
             }
         } finally {
             it.remove();
         }
-    }
-
-    protected int ignoreStatements(Node node, Statement... s) {
-        int n = 0;
-        for (Statement i : s) {
-            if (node.hasProperty(i.name()) ||
-               node.hasRelationship(i, OUTGOING)) n++;
-        }
-        return n;
     }
 
 }

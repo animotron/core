@@ -20,7 +20,6 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.index.Result;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -28,12 +27,10 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -48,7 +45,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     public AnimoResultOneStepTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
@@ -62,17 +59,17 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 			} else if (s instanceof USE) {
 				Relationship r = rr.getClosest();
 				
-				handler.start(s, r, level++, isOne, pos, isLast);
-				handler.end(s, r, --level, isOne, pos, isLast);
+				handler.start(s, parent, r, level++, isOne, pos, isLast);
+				handler.end(s, parent, r, --level, isOne, pos, isLast);
             } else {
 				Relationship r = rr.getClosest();
 
-				handler.start(s, r, level++, isOne, pos, isLast);
+				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
                     node = r.getEndNode();
-                    iterate(handler, pf, new It(node), level);
+                    iterate(handler, pf, s, new It(node), level);
                 }
-                handler.end(s, r, --level, isOne, pos, isLast);
+                handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
         }
     }
@@ -92,7 +89,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 //    	}
 //        if (!found) {
             Iterator<QCAVector>in = Evaluator._.execute(pflow, new QCAVector(r, rr), null, false);
-            iterate(handler, pflow, in, level, isOne);
+            iterate(handler, pflow, null, in, level, isOne);
 //        }
 
         return true;

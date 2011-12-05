@@ -30,7 +30,6 @@ import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.relation.USE;
@@ -51,7 +50,7 @@ public class MLResultTraverser extends ResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
@@ -76,17 +75,17 @@ public class MLResultTraverser extends ResultTraverser {
                                     }
                                 }
                             }
-                            handler.start(s, param, level++, isOne, pos, isLast);
-                            iterate(handler, pf, it, level);
-                            handler.end(s, param, --level, isOne, pos, isLast);
+                            handler.start(s, parent, param, level++, isOne, pos, isLast);
+                            iterate(handler, pf, s, it, level);
+                            handler.end(s, parent, param, --level, isOne, pos, isLast);
                         }
                     } finally {
                         it.remove();
                     }
                 } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
                     String param = CachedSerializer.STRING.serialize(pf, rr);
-                    handler.start(s, param, level++, isOne, pos, isLast);
-                    handler.end(s, param, --level, isOne, pos, isLast);
+                    handler.start(s, parent, param, level++, isOne, pos, isLast);
+                    handler.end(s, parent, param, --level, isOne, pos, isLast);
                 }
             } else {
             	//XXX: send to super method?
@@ -99,7 +98,7 @@ public class MLResultTraverser extends ResultTraverser {
             		//workaround IS and USE
             	} else if (!(s instanceof USE || s instanceof REF)) {
             		node = rr.getClosest().getEndNode();
-            		iterate(handler, pf, new It(node), level);
+            		iterate(handler, pf, s, new It(node), level);
             	}
             }
         }

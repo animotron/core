@@ -86,7 +86,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     private Statement ps = null;
     @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof AN) {
             if (level == 0) {
                 if (dot) {
@@ -111,26 +111,26 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             }
             ps = statement;
         } else {
-            start(statement, statement.reference(r), level, isOne, 0, false);
+            start(statement, parent, statement.reference(r), level, isOne, 0, false);
         }
     }
 
     @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        end(statement, level, isOne);
+    public void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        end(statement, parent, level, isOne);
     }
 
     @Override
-    public void start(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     private boolean dot = false;
     @Override
-    public void start(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (level == 0) {
             if (dot) {
                 write(" ");
@@ -145,7 +145,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                     }
                 }
             }
-            if (!(statement instanceof REF || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+            if (!(statement instanceof REF && parent != null || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
                 write("(");
             }
         }
@@ -154,15 +154,15 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        end(statement, level, isOne);
+    public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        end(statement, null, level, isOne);
     }
 
-    private void end(Statement statement, int level, boolean isOne) throws IOException {
+    private void end(Statement statement, Statement parent, int level, boolean isOne) throws IOException {
         if (level==0) {
             write(".");
             dot = true;
-        } else if (!(statement instanceof REF || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF && parent != null || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
     }

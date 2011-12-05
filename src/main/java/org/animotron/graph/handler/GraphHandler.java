@@ -32,17 +32,17 @@ import java.io.IOException;
  */
 public interface GraphHandler {
 	
-    public abstract void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException;
+    public abstract void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
-    public abstract void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException;
+    public abstract void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
-    public abstract void start(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
+    public abstract void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
-    public abstract void end(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
+    public abstract void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
-    public abstract void start(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
+    public abstract void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
-    public abstract void end(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
+    public abstract void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
 	public void startGraph() throws IOException;
 

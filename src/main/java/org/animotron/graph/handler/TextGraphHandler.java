@@ -40,7 +40,7 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof AbstractValue) {
             Object o = statement.reference(r);
             if (o != null)
@@ -49,23 +49,23 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void end(Statement statement, Relationship r, int level, boolean isOne, int pos, boolean isLast) {
+    public void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) {
     }
 
     @Override
-    public void start(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override
-    public void start(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override
-    public void end(Statement statement, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     }
 
     @Override

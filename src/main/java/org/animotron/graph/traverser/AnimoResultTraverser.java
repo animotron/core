@@ -25,10 +25,8 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
-import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
 
@@ -46,7 +44,7 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
@@ -58,17 +56,17 @@ public class AnimoResultTraverser extends ResultTraverser {
 			} else if (s instanceof USE) {
 				Relationship r = rr.getClosest();
 				
-				handler.start(s, r, level++, isOne, pos, isLast);
-				handler.end(s, r, --level, isOne, pos, isLast);
+				handler.start(s, parent, r, level++, isOne, pos, isLast);
+				handler.end(s, parent, r, --level, isOne, pos, isLast);
             } else {
 				Relationship r = rr.getClosest();
 
-				handler.start(s, r, level++, isOne, pos, isLast);
+				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
                     node = r.getEndNode();
-                    iterate(handler, pf, new It(node), level);
+                    iterate(handler, pf, s, new It(node), level);
                 }
-                handler.end(s, r, --level, isOne, pos, isLast);
+                handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
         }
     }
