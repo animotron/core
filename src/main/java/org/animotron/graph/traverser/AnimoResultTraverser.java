@@ -23,6 +23,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
@@ -63,7 +64,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 				Relationship r = rr.getClosest();
 
 				handler.start(s, r, level++, isOne, pos, isLast);
-                if (!(s instanceof REF)) {
+                if (!(s instanceof REF && !(qS instanceof AN))) {
                     node = r.getEndNode();
                     iterate(handler, pf, new It(node), level);
                 }
