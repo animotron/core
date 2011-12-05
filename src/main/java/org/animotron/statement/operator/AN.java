@@ -53,7 +53,7 @@ public class AN extends Operator implements Reference, Evaluable {
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
 			
 			if (!Utils.results(pf, hash)) {
-
+				
 				for (QCAVector r : getREFs(pf, op)) {
 
 					pf.sendAnswer(r);//.getAnswer(), RESULT, hash);

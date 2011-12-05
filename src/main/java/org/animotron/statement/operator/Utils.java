@@ -212,7 +212,7 @@ public class Utils {
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			out.write(new QCAVector(null, r));
+			out.write(new QCAVector(op, r));
 		}
 		
 		return out;

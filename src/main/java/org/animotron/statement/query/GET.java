@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get"); }
 
@@ -127,7 +127,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 						}
 
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, op, new QCAVector(null, vector.getUnrelaxedAnswer()), thes, visitedREFs);
+						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);//new QCAVector(null, vector.getUnrelaxedAnswer())
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, RESULT);//, AN._);
@@ -193,7 +193,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 	public Set<QCAVector> get(final PFlow pf, Relationship op, Node ref, final Set<Node> thes, final Set<Relationship> visitedREFs) {
 		Set<QCAVector> set = new FastSet<QCAVector>();
 		
-		Relationship have = searchForHAVE(pf, ref, thes);
+		Relationship have = searchForHAVE(pf, null, ref, thes);
 		if (have != null && !pf.isInStack(have))
 			set.add(new QCAVector(pf.getOP(), have));
 		
@@ -392,20 +392,20 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		
 		//search for local 'HAVE'
 		if (checkStart) {
-			have = getByHave(pf, ref.getStartNode(), thes);
+			have = getByHave(pf, null, ref.getStartNode(), thes);
 			if (have != null) return have;
 		}
 
 		//search for inside 'HAVE'
-		return searchForHAVE(pf, ref.getEndNode(), thes);
+		return searchForHAVE(pf, ref, ref.getEndNode(), thes);
 	}
 
-	private Relationship searchForHAVE(final PFlow pflow, final Node ref, final Set<Node> thes) {
+	private Relationship searchForHAVE(final PFlow pflow, Relationship op, final Node ref, final Set<Node> thes) {
 		
 		Relationship have = null;
 
 		//search for inside 'HAVE'
-		have = getByHave(pflow, ref, thes);
+		have = getByHave(pflow, op, ref, thes);
 		if (have != null) return have;
 
 		//search 'IC' by 'IS' topology
@@ -429,7 +429,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			}
 			
 			//search for have
-			have = getByHave(pflow, tdR.getEndNode(), thes);
+			have = getByHave(pflow, tdR, tdR.getEndNode(), thes);
 			if (have != null) return have;
 		}
 		
@@ -442,7 +442,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
-		Relationship have = getByHave(pf, context, thes);
+		Relationship have = getByHave(pf, null, context, thes);
 		if (have != null) return have;
 
 		Node instance = Utils.getSingleREF(context);
@@ -451,7 +451,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			context = instance;
 			
 			//search for have
-			have = getByHave(pf, context, thes);
+			have = getByHave(pf, null, context, thes);
 			if (have != null) return have;
 		}
 		
@@ -465,7 +465,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 				//System.out.println("GET IC -> IS "+tdR);
 				if (prevTHE != null) {
 					//search for have
-					have = getByHave(pf, prevTHE.getEndNode(), thes);
+					have = getByHave(pf, prevTHE, prevTHE.getEndNode(), thes);
 					if (have != null) return have;
 				}
 				prevTHE = tdR;
@@ -503,14 +503,14 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		
 		if (prevTHE != null) {
 			//search for have
-			have = getByHave(pf, prevTHE.getEndNode(), thes);
+			have = getByHave(pf, prevTHE, prevTHE.getEndNode(), thes);
 			if (have != null) return have;
 		}
 
 		return null;
 	}
 	
-	private Relationship getByHave(final PFlow pflow, final Node context, final Set<Node> thes) {
+	private Relationship getByHave(final PFlow pflow, Relationship op, final Node context, final Set<Node> thes) {
 		if (context == null) return null;
 		
 		TraversalDescription trav = td.
@@ -527,6 +527,15 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		for (Path path : trav.traverse(context)) {
 			//TODO: check that this is only one answer
 			System.out.println(path);
+			
+			if (path.length() == 1) {
+				if (op == null) 
+					System.out.println("WARNING: DONT KNOW OP");
+				
+				res = op;
+				break;
+			}
+			
 			for (Relationship r : path.relationships()) {
 				if (!pflow.isInStack(r)) {
 					if (r.isType(AN._)) {
@@ -584,6 +593,9 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			Relationship r = path.lastRelationship(); 
 
 			if (path.length() == 1) {
+				if (r.isType(REF._) && targets.contains(r.getEndNode()))
+					return INCLUDE_AND_PRUNE;
+
 				if (r.isType(type))
 					return EXCLUDE_AND_CONTINUE;
 					
