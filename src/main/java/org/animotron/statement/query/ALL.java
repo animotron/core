@@ -72,13 +72,17 @@ public class ALL extends AbstractQuery implements Reference {
 					}
 		
 					if (underUSE && filtering(pf, node, uses))
-						pf.sendAnswer( getThe(node) );
+		            	try {
+		            		pf.sendAnswer( getThe(node) );
+		            	} catch (Exception e) {}
 		
 			        for (Relationship tdR : td_IS.traverse(node).relationships()) {
-			            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
+			            System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
 			            Node res = tdR.getStartNode();
 			            if (filtering(pf, res, uses)) {
-			                pf.sendAnswer( getThe(res) );
+			            	try {
+			            		pf.sendAnswer( getThe(res) );
+			            	} catch (Exception e) {}
 			            }
 			        }
     			}

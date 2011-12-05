@@ -109,7 +109,7 @@ public class GetDynamicTest extends ATest {
     	testAnimo("the z a z1.");
     	testAnimo("the b z1 \"z1\".");
 
-    	testAnimoResult("get (get a z) (b).", "have z1 \"z1\".");
+    	testAnimoResult("get (get a z) (b).", "z1 \"z1\".");
     }
 
     @Test
@@ -117,6 +117,6 @@ public class GetDynamicTest extends ATest {
     	testAnimo("the z (k) (a z1).");
     	testAnimo("the b (k) (z1 \"z1\").");
 
-    	testAnimoResult("get (get a z) (all k).", "have z1 \"z1\".");
+    	testAnimoResult("get (get a z) (all k).", "z1 \"z1\".");
     }
 }
