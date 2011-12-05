@@ -57,7 +57,7 @@ public class AllUseTest extends ATest {
             _(AN._, "s", _(USE._, "B"))
         );
         //assertAnimoResult(test, "the b the s (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
-        assertAnimoResult(test, "s (the B (A (S) (\\X \"α\")) (\\Y \"β\")) (the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (Z \"γ\") (X \"αα\")).");
+        assertAnimoResult(test, "the s the B (A (S) (\\X \"α\")) (\\Y \"β\")) (the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (Z \"γ\") (X \"αα\").");
 
         test = new JExpression(
             _(AN._, "s", _(USE._, "C"))
