@@ -52,13 +52,13 @@ public class AnimoMLSerializerTest extends ATest {
     @Test
     public void test_02() throws Exception {
         __(new JExpression(_(THE._, "b", text("c"))));
-        test("the a \\ b", "the a \\ the b \"c\".");
+        test("the a \\ b", "the a \\ b \"c\".");
     }
 
     @Test
     public void test_03() throws Exception {
         __(new JExpression(_(THE._, "b", text("c"))));
-        test("the a \\ an b", "the a \\ the b \"c\".");
+        test("the a \\ an b", "the a \\ b \"c\".");
     }
 
     @Test
@@ -84,7 +84,7 @@ public class AnimoMLSerializerTest extends ATest {
                 new JExpression(_(THE._, "d", text("d"))),
                 new JExpression(_(THE._, "e", text("e")))
         );
-        test("the a \\ (b) (@ (c) (d)) (e)", "the a \\ (the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \"e\").");
+        test("the a \\ (b) (@ (c) (d)) (e)", "the a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \"e\").");
     }
 
     @Test
@@ -95,7 +95,7 @@ public class AnimoMLSerializerTest extends ATest {
                 new JExpression(_(THE._, "d", text("d"))),
                 new JExpression(_(THE._, "e", text("e")))
         );
-        test("the a \\((b) (@ (c) (d)) (e))", "the a \\ ((the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \"e\")).");
+        test("the a \\((b) (@ (c) (d)) (e))", "the a \\ ((b \"b\") (@ (c \"c\") (d \"d\")) (e \"e\")).");
     }
 
     @Test
@@ -106,6 +106,6 @@ public class AnimoMLSerializerTest extends ATest {
                 new JExpression(_(THE._, "d", text("d"))),
                 new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
         );
-        test("the a \\(b) (@ (c) (d)) (e)", "the a \\ (the b \"b\") (@ (the c \"c\") (the d \"d\")) (the e \\e (the b \"b\") (the c \"c\") (the d \"d\")).");
+        test("the a \\(b) (@ (c) (d)) (e)", "the a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\e (b \"b\") (c \"c\") (d \"d\")).");
     }
 }
