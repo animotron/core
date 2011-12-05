@@ -43,7 +43,7 @@ public class FormGeneratorTest extends ATest {
         
         assertNotNull(r);
         
-        assertAnimoResult(r, "the form-generator the THE.");
+        assertAnimoResult(r, "the form-generator THE.");
         
         //XXX: complete
 	}

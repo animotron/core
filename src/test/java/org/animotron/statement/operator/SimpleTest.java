@@ -48,7 +48,7 @@ public class SimpleTest extends ATest {
     	JExpression C = new JExpression(
 			_(THE._, "CC", _(AN._, "BB"))
 		);
-        assertAnimoResult(C, "the CC the BB AA \"a@b\".");
+        assertAnimoResultOneStep(C, "the CC BB AA \"a@b\".");
 
 	}
 

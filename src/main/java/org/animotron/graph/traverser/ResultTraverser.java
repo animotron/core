@@ -90,7 +90,7 @@ public class ResultTraverser extends AnimoTraverser {
                 if (s instanceof AbstractValue)
                     handler.start(s, r, level++, isOne, pos, isLast);
                 
-                if (!(s instanceof REF)) {
+                if (!(s instanceof REF  && !(qS instanceof AN))) {
 	                node = r.getEndNode();
 	                iterate(handler, pf, new It(node), level);
                 }

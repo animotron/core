@@ -25,9 +25,12 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Shift;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -47,7 +50,11 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     @Override
     protected void process(GraphHandler handler, PFlow pf, Statement s, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
-            if ((s instanceof Query || s instanceof Evaluable) && !handler.isStepMade()) {
+        	Statement qS = Statements.relationshipType(rr.getQuestion());
+        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
+        			|| (s instanceof Evaluable && !(qS instanceof Shift))
+    			&& !handler.isStepMade() ) {
+
             	GraphHandler gh = new AnimoGraphHandler(handler);
                 result(gh, pf, rr, level, isOne);
                 
@@ -61,7 +68,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 				Relationship r = rr.getClosest();
 
 				handler.start(s, r, level++, isOne, pos, isLast);
-                if (!(s instanceof REF)) {
+                if (!(s instanceof REF && !(qS instanceof AN))) {
                     node = r.getEndNode();
                     iterate(handler, pf, new It(node), level);
                 }
