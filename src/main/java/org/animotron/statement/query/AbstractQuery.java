@@ -21,6 +21,7 @@ package org.animotron.statement.query;
 import javolution.util.FastSet;
 import org.animotron.Properties;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
@@ -102,61 +103,89 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         return true;
     }
     
-	protected Set<Node>[] getUSEs(Node start, Relationship end) {
+    private void searchForUSE(Set<Node> uses, QCAVector[] vectors) {
+    	if (vectors == null) return;
+    	
+		for (QCAVector vector : vectors) {
+			searchForUSE(uses, vector);
+		}
+    }
 
-    	Set<Node> uses = null;
+    private void searchForUSE(Set<Node> uses, QCAVector vector) {
+		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
+			uses.add(r.getEndNode());
+		}
+		searchForUSE(uses, vector.getContext());
+    }
+    
+	protected Set<Node>[] getUSEs(PFlow pf) {
+
+    	Set<Node> uses = new FastSet<Node>();
     	Set<Node> directed = null;
+    	Set<Node> deepestSet = null;//new FastSet<Node>();
     	
-    	TraversalDescription td = getUSEtravers(end);
-    	
-    	int deep = 0;
-    	int deepest = 0;
-    	Node deepestNode = null;
+    	for (QCAVector v : pf.getPFlowPath()) {
+    		searchForUSE(uses, v);
+    	}
 
-		for (Path path : td.traverse(start)) {
-			//System.out.println(" path = "+path);
-			
-			Node lastNode = path.startNode();
-			boolean isDirected = true;
-			deep = 0;
-			for (Relationship p : path.relationships()) {
-				if (p.isType(USE._)) {
-					
-					if (isDirected) {
-						if (directed == null) directed = new FastSet<Node>();
-						directed.add( p.getEndNode() );
-						
-						if (deepest < deep) {
-							deepestNode = p.getEndNode();
-							deepest = deep;
-						}
-						
-					} else {
-						if (uses == null) uses = new FastSet<Node>();
-						uses.add( p.getEndNode() );
-					}
-					break;
-				
-				} else if (!(p.isType(AN._))) {
-					break;
-				}
-				
-				if (isDirected && !lastNode.equals(p.getEndNode()))
-					isDirected = false;
-				else {
-					deep++;
-					lastNode = p.getStartNode();
-				}
-			}
-		}
-
-		Set<Node> deepestSet = null;
-		if (deepestNode != null) {
-			deepestSet = new FastSet<Node>();
-			deepestSet.add(deepestNode);			
-		}
 		return new Set[] {directed, uses, deepestSet};
     }
+
+//	protected Set<Node>[] getUSEs(Node start, Relationship end) {
+//
+//    	Set<Node> uses = null;
+//    	Set<Node> directed = null;
+//    	
+//    	TraversalDescription td = getUSEtravers(end);
+//    	
+//    	int deep = 0;
+//    	int deepest = 0;
+//    	Node deepestNode = null;
+//
+//		for (Path path : td.traverse(start)) {
+//			//System.out.println(" path = "+path);
+//			
+//			Node lastNode = path.startNode();
+//			boolean isDirected = true;
+//			deep = 0;
+//			for (Relationship p : path.relationships()) {
+//				if (p.isType(USE._)) {
+//					
+//					if (isDirected) {
+//						if (directed == null) directed = new FastSet<Node>();
+//						directed.add( p.getEndNode() );
+//						
+//						if (deepest < deep) {
+//							deepestNode = p.getEndNode();
+//							deepest = deep;
+//						}
+//						
+//					} else {
+//						if (uses == null) uses = new FastSet<Node>();
+//						uses.add( p.getEndNode() );
+//					}
+//					break;
+//				
+//				} else if (!(p.isType(AN._))) {
+//					break;
+//				}
+//				
+//				if (isDirected && !lastNode.equals(p.getEndNode()))
+//					isDirected = false;
+//				else {
+//					deep++;
+//					lastNode = p.getStartNode();
+//				}
+//			}
+//		}
+//
+//		Set<Node> deepestSet = null;
+//		if (deepestNode != null) {
+//			deepestSet = new FastSet<Node>();
+//			deepestSet.add(deepestNode);			
+//		}
+//		return new Set[] {directed, uses, deepestSet};
+//    }
 
 	protected Relationship getThe(Node node) {
 		return THE._.get((String) Properties.NAME.get(node));
@@ -169,23 +198,29 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				if (path.length() > 0) {
-					
-					//System.out.println(" "+path);
+				System.out.println(" "+path);
+
+				Node sNode;
+				if (path.length() == 0) {
+					sNode = path.startNode();
+				} else {
 					
 					Relationship r = path.lastRelationship();
-					if (!r.isType(AN._))
-						return EXCLUDE_AND_PRUNE;
-						
-					Node sNode = r.getEndNode();
+    				if (path.length() % 2 == 1 && !r.isType(AN._))
+    					return EXCLUDE_AND_PRUNE;
+    				
+    				if (path.length() % 2 == 0 && !r.isType(REF._))
+    					return EXCLUDE_AND_PRUNE;
+
+					sNode = r.getEndNode();
 					if (!sNode.equals(path.endNode()))
 						return EXCLUDE_AND_PRUNE;
-					
-					mustHave.remove(sNode);
-					if (mustHave.size() == 0)
-						return INCLUDE_AND_PRUNE;
-
 				}
+				
+				mustHave.remove(sNode);
+				if (mustHave.size() == 0)
+					return INCLUDE_AND_PRUNE;
+
 				return EXCLUDE_AND_CONTINUE;
 			}
 		});

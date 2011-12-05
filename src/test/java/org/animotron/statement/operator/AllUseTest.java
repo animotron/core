@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.element;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,13 +40,13 @@ public class AllUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ALL._, "S"))
@@ -56,7 +57,7 @@ public class AllUseTest extends ATest {
             _(AN._, "s", _(USE._, "B"))
         );
         //assertAnimoResult(test, "the b the s (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
-        assertAnimoResult(test, "the s (the B A, Y) (the C B, Z, X).");
+        assertAnimoResult(test, "s (the B (A (S) (\\X \"α\")) (\\Y \"β\")) (the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (Z \"γ\") (X \"αα\")).");
 
         test = new JExpression(
             _(AN._, "s", _(USE._, "C"))
