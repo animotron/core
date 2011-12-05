@@ -137,7 +137,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             }
         } else if (!(statement instanceof QNAME)) {
             if (!(ps instanceof LINK || statement instanceof Suffix)) {
-                if (statement instanceof REF && ps instanceof REF) {
+                if (statement instanceof REF && ps instanceof REF && parent != null) {
                     write(", ");
                 } else {
                     if (!(statement instanceof REF && ps instanceof AN)) {

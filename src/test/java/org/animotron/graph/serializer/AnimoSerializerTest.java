@@ -219,7 +219,8 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "C")
             )
         );
-        assertAnimoResult(A, "the A B, C.");
+        assertAnimo(A, "the A (B) (C).");
+        assertAnimoResult(A, "the A (B) (C).");
     }
 
     @Test
