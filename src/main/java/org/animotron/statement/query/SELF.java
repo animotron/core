@@ -26,7 +26,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -166,7 +166,7 @@ public class SELF extends AbstractQuery {
 					thisResult = r;
 					thisDeep++;
 				
-				} else if (r.isType(IC._) && (theNode.equals(currentThe) || foundIS)) {
+				} else if (r.isType(SHALL._) && (theNode.equals(currentThe) || foundIS)) {
 					if (foundIS) {
 						//store
 						final Node sN = eNode;

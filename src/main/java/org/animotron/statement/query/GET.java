@@ -32,7 +32,7 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
@@ -73,7 +73,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			Traversal.description().
 				breadthFirst().
 				relationships(AN._, OUTGOING).
-				relationships(IC._, OUTGOING);
+				relationships(SHALL._, OUTGOING);
 
 	public OnQuestion onCalcQuestion() {
 		return question;
@@ -217,8 +217,8 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		if (toCheck == null) return false;
 		
 		visitedREFs.add(toCheck);
-
-		Relationship[] have = searchForHAVE(pf, toCheck, thes);
+		
+		Relationship[] have = searchForHAVE(pf, toCheck, v, thes);
 		if (have != null) {
 			boolean added = false;
 			for (int i = 0; i < have.length; i++) { 
@@ -387,8 +387,13 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 	
 	private Relationship[] searchForHAVE(
 			final PFlow pf, 
-			final Relationship ref, 
+			final Relationship ref,
+			final QCAVector v,
 			final Set<Node> thes) {
+		
+		if (ref.isType(REF._) && thes.contains(ref.getEndNode())) {
+			return new Relationship[] {v.getQuestion()};
+		}
 		
 		boolean checkStart = true;
 		if (ref.isType(AN._)) {
@@ -483,7 +488,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 				}
 				prevTHE = tdR;
 				
-			} else if (st instanceof IC) {
+			} else if (st instanceof SHALL) {
 				//System.out.print("GET IC -> "+tdR);
 				
 				if (thes.contains(Utils.getSingleREF(tdR.getEndNode()))) {

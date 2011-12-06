@@ -24,7 +24,7 @@ import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
@@ -148,10 +148,10 @@ public class GetTest extends ATest {
                 _(THE._, "A",
                     _(AN._, "A1", text("some.path")),
 
-                    _(IC._, "A2",
+                    _(SHALL._, "A2",
                         _(SELF._, "A1")),
 
-                    _(IC._, "B1",
+                    _(SHALL._, "B1",
                         _(AfterLast._,
                             text("."),
                             _(SELF._, "A1")))

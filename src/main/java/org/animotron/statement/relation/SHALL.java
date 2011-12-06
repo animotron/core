@@ -21,14 +21,14 @@ package org.animotron.statement.relation;
 import org.animotron.statement.operator.Operator;
 
 /**
- * Operator 'IC'.
+ * Operator 'SHALL'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IC extends Operator { //Operator implements Evaluable {
+public class SHALL extends Operator { //Operator implements Evaluable {
 	
-	public static final IC _ = new IC();
+	public static final SHALL _ = new SHALL();
 	
-	private IC() { super("ic"); }
+	private SHALL() { super("shall"); }
 }

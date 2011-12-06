@@ -24,7 +24,7 @@ import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
@@ -52,12 +52,12 @@ public class ConnectionTest extends ATest {
                                 _(AN._, "reference", text("file")),
                                 _(AN._, "path"),
 
-                                _(IC._, "extension",
+                                _(SHALL._, "extension",
                                         _(AfterLast._,
                                                 text("."),
                                                 _(SELF._, "path"))),
 
-                                _(IC._, "mime-type",
+                                _(SHALL._, "mime-type",
                                         _(ANY._, "mime-type",
                                                 _(WITH._, "extension",
                                                         _(SELF._, "extension"))))
@@ -133,15 +133,15 @@ public class ConnectionTest extends ATest {
                                 _(AN._, "reference", text("file")),
                                 _(AN._, "path1", text("some.path.text")),
 
-                                _(IC._, "path2",
+                                _(SHALL._, "path2",
                                         _(SELF._, "path1")),
 
-                                _(IC._, "extension1",
+                                _(SHALL._, "extension1",
                                         _(AfterLast._,
                                                 text("."),
                                                 _(SELF._, "path1"))),
 
-                                _(IC._, "mime-type",
+                                _(SHALL._, "mime-type",
                                         _(ANY._, "mime-type",
                                                 _(WITH._, "extension",
                                                         _(SELF._, "extension1"))))

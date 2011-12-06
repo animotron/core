@@ -22,7 +22,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -62,7 +62,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IC._, "B", text("π")))
+                        _(THE._, "C", _(SHALL._, "B", text("π")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"))
@@ -125,7 +125,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(IC._, "B", text("π")))
+                        _(THE._, "C", _(SHALL._, "B", text("π")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"))

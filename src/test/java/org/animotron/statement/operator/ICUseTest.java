@@ -21,7 +21,7 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class ICUseTest extends ATest {
                         _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+                        _(THE._, "B", _(SHALL._, "X", text("χ")), _(SHALL._, "Υ", text("υ")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"))
@@ -70,7 +70,7 @@ public class ICUseTest extends ATest {
                         _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+                        _(THE._, "B", _(SHALL._, "X", text("χ")), _(SHALL._, "Υ", text("υ")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"), _(USE._, "X"))
@@ -95,7 +95,7 @@ public class ICUseTest extends ATest {
                         _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IC._, "X", text("χ")), _(IC._, "Υ", text("υ")))
+                        _(THE._, "B", _(SHALL._, "X", text("χ")), _(SHALL._, "Υ", text("υ")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"))

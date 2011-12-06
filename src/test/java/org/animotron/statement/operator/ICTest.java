@@ -21,7 +21,7 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.IC;
+import org.animotron.statement.relation.SHALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -41,7 +41,7 @@ public class ICTest extends ATest {
                         _(THE._, "A")
                 ),
                 new JExpression(
-                        _(THE._, "B", _(IC._, "A", text(".")))
+                        _(THE._, "B", _(SHALL._, "A", text(".")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"))
