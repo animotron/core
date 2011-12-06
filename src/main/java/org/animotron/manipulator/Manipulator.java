@@ -142,14 +142,14 @@ public abstract class Manipulator {
                         }
             			
 
-                        if (s instanceof Evaluable) {
+                        if (s != null && s instanceof Evaluable) {
                         	PipedInput<QCAVector> in = execute(new PFlow(pf, context), context, ((Evaluable) s).onCalcQuestion(), fullEval);
                             for (QCAVector v : in) {
                             	out.write(v);
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
-                            if (s instanceof Query || s instanceof Evaluable) {
+                            if (s instanceof Evaluable && !(s instanceof Shift)) {
                                 PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, context), context);
                                 for (QCAVector v : in) {
                                     out.write(v);

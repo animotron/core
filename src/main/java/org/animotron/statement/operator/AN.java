@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AN extends Operator implements Reference, Evaluable {
+public class AN extends Operator implements Reference, Evaluable, Shift {
 	
 	public static final AN _ = new AN();
 	
@@ -51,6 +51,8 @@ public class AN extends Operator implements Reference, Evaluable {
 			byte[] hash = pf.getOpHash();
 
 			//System.out.println("AN "+op+" "+pf.getOpHash()+" ");
+			
+			//pf.sendAnswer(new QCAVector(op,op));
 			
 			if (!Utils.results(pf, hash)) {
 				
