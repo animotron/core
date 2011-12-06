@@ -124,13 +124,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	Set<Node> directed = null;
     	Set<Node> deepestSet = null;//new FastSet<Node>();
     	
-    	boolean first = true;
+    	//boolean first = true;
     	
     	for (QCAVector v : pf.getPFlowPath()) {
-    		if (first) {
-    			first = false;
-        		searchForUSE(uses, v.getContext());
-    		} else
+    		//if (first) {
+    		//	first = false;
+        	//	searchForUSE(uses, v.getContext());
+    		//} else
     			searchForUSE(uses, v);
     	}
 
