@@ -48,8 +48,8 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
-        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
-        			|| (s instanceof Evaluable && !(qS instanceof Shift))
+        	if (((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
+        			|| (s instanceof Evaluable && !(qS instanceof Shift)))
     			&& !handler.isStepMade() ) {
 
             	GraphHandler gh = new AnimoGraphHandler(handler);
