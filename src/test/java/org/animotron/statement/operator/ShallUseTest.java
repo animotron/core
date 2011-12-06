@@ -32,10 +32,10 @@ import static org.animotron.expression.JExpression.text;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ICUseTest extends ATest {
+public class ShallUseTest extends ATest {
 	
 	@Test
-	public void testIC() throws Exception {
+	public void test_0() throws Exception {
         
         JExpression.__(
                 new JExpression(
@@ -56,11 +56,11 @@ public class ICUseTest extends ATest {
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(USE._, "X"))))
         );
         //XXX: assertAnimoResult(D, "the D X \"χ\".");
-        assertAnimoResult(D, "the D ic X \"χ\".");
+        assertAnimoResult(D, "the D shall X \"χ\".");
 	}
 
     @Test
-    public void testIC_1() throws Exception {
+    public void test_1() throws Exception {
 
         JExpression.__(
                 new JExpression(
@@ -81,11 +81,11 @@ public class ICUseTest extends ATest {
             _(THE._, "D", _(GET._, "A", _(AN._, "C")))
         );
         //XXX: assertAnimoResult(D, "the D X \"χ\".");
-        assertAnimoResult(D, "the D ic X \"χ\".");
+        assertAnimoResult(D, "the D shall X \"χ\".");
     }
 
     @Test
-    public void testIC_2() throws Exception {
+    public void test_2() throws Exception {
 
         JExpression.__(
                 new JExpression(
@@ -108,6 +108,6 @@ public class ICUseTest extends ATest {
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
         );
         //XXX: assertAnimoResult(D, "the D X \"χ\".");
-        assertAnimoResult(D, "the D ic X \"χ\".");
+        assertAnimoResult(D, "the D shall X \"χ\".");
     }
 }

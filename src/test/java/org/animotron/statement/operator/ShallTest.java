@@ -31,10 +31,10 @@ import static org.animotron.expression.JExpression.text;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ICTest extends ATest {
+public class ShallTest extends ATest {
 	
 	@Test
-	public void testIC() throws Exception {
+	public void test() throws Exception {
         
     	JExpression.__(
                 new JExpression(
@@ -54,6 +54,6 @@ public class ICTest extends ATest {
 
         assertStringResult(D, ".");
         //XXX: assertAnimoResult(D, "the D have A \".\".");
-        assertAnimoResult(D, "the D ic A \".\".");
+        assertAnimoResult(D, "the D shall A \".\".");
 	}
 }
