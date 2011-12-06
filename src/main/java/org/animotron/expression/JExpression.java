@@ -72,7 +72,7 @@ public class JExpression extends AbstractExpression {
     }
 
     private void buildStatement(Object[] e) throws AnimoException, IOException {
-        if (e.length == 1) {
+        if (e.length == 1 && e[0] instanceof Relationship) {
             builder.bind((Relationship) e[0]);
         } else {
             if (e[0] instanceof Instruction) {
