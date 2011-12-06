@@ -123,9 +123,10 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 							pf.countDown();
 							return;
 						}
-
+						QCAVector nV = new QCAVector(vector.getQuestion(), vector.getUnrelaxedAnswer());
+						
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);//new QCAVector(null, vector.getUnrelaxedAnswer())
+						final Set<QCAVector> rSet = get(pf, op, nV, thes, visitedREFs);//new QCAVector(null, vector.getUnrelaxedAnswer())
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, RESULT);//, AN._);
@@ -543,8 +544,10 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			System.out.println(path);
 			
 			if (path.length() == 1) {
-				if (op == null) 
+				if (op == null) {
 					System.out.println("WARNING: DONT KNOW OP");
+					continue;
+				}
 				
 				paths.put(op, path);
 				//break;
