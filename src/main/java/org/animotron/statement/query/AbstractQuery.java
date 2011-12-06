@@ -307,7 +307,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
-		public Evaluation _evaluate_(Path path, Set<Node> targets, RelationshipType type) {
+		public Evaluation _evaluate_(Path path, Set<Node> targets) { //, RelationshipType type
 			//System.out.println(path);
 			
 			if (path.length() == 0)
@@ -319,13 +319,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (r.isType(REF._) && targets.contains(r.getEndNode()))
 					return INCLUDE_AND_PRUNE;
 
-				if (r.isType(type))
-					return EXCLUDE_AND_CONTINUE;
+//				if (r.isType(type))
+//					return EXCLUDE_AND_CONTINUE;
 					
-				return EXCLUDE_AND_PRUNE;
+				return EXCLUDE_AND_CONTINUE;
 				
 			} else if (path.length() >= 2) {
-				if (r.isType(org.animotron.statement.operator.REF._)) {
+				if (r.isType(REF._)) {
 					Node node = r.getEndNode();
 					if (targets.contains(node)) 
 						return INCLUDE_AND_PRUNE;

@@ -125,10 +125,9 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 						}
 						
 						QCAVector nV;
-						if (vector.getQuestion().isType(AN._))
-							nV = new QCAVector(null, vector.getQuestion(), vector.getContext());
-
-						else
+						//if (vector.getQuestion().isType(AN._))
+						//	nV = new QCAVector(null, vector.getQuestion(), vector.getContext());
+						//else
 							nV = new QCAVector(null, vector.getUnrelaxedAnswer(), vector.getContext());
 						
 						//final Relationship have = searchForHAVE(context, name);
@@ -392,27 +391,24 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			final Set<Node> thes) {
 		
 		boolean checkStart = true;
-//		if (!ref.isType(RESULT) || !(ref.isType(REF) || ref.isType(org.animotron.statement.operator.REF._))) {
-			//System.out.print("WRONG WRONG WRONG WRONG ref = "+ref+" - "+ref.getType());
-//			try {
-//				System.out.print(" "+reference(ref));
-//			} catch (Exception e) {
-//			} finally {
-//				System.out.println();
-//			}
-//			checkStart = false;
-//		}
+		if (ref.isType(AN._)) {
+			checkStart = false;
+		}
 		
 		Relationship[] have = null;
 		
+		//search for inside 'HAVE'
+		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
+		have = getByHave(pf, ref, ref.getEndNode(), thes);
+		if (have != null) return have;
+
 		//search for local 'HAVE'
 		if (checkStart) {
 			have = getByHave(pf, null, ref.getStartNode(), thes);
 			if (have != null) return have;
 		}
 
-		//search for inside 'HAVE'
-		return searchForHAVE(pf, ref, ref.getEndNode(), thes);
+		return null;
 	}
 
 	private Relationship[] searchForHAVE(final PFlow pflow, Relationship op, final Node ref, final Set<Node> thes) {
@@ -538,8 +534,8 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(path);
-				return _evaluate_(path, thes, AN._);
+				System.out.println(path);
+				return _evaluate_(path, thes);
 			}
 		});
 		
@@ -547,7 +543,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 
 		for (Path path : trav.traverse(context)) {
 			//TODO: check that this is only one answer
-			System.out.println(path);
+			System.out.println("* "+path);
 			
 			if (path.length() == 1) {
 				if (op == null) {
@@ -598,7 +594,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, thes, IC._);
+				return _evaluate_(path, thes); //, IC._
 			}
 		});
 
