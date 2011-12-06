@@ -31,7 +31,7 @@ import static org.animotron.expression.JExpression.text;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class ICTest extends ATest {
+public class ShallTest extends ATest {
 	
 	@Test
 	public void testIC() throws Exception {
