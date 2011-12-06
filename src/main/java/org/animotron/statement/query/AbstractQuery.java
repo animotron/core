@@ -31,7 +31,6 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
@@ -129,6 +128,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			searchForUSE(allUses, v);
     	}
 
+    	if (allUses.isEmpty()) {
+    		return new Set[] {directed, allUses, deepestSet};
+    	}
+    		
     	final Set<Node> uses = new FastSet<Node>();
 
     	TraversalDescription trav = td.
