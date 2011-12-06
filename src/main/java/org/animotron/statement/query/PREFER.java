@@ -60,7 +60,7 @@ public class PREFER extends AbstractQuery implements Reference {
 	            	Relationship ref = v.getAnswer(); 
 	            	Node node = ref.getEndNode();
 	
-					Set<Node>[] lists = getUSEs(pf);
+					Set<Node>[] lists = getUSEs(pf, node);
 					Set<Node> uses = lists[1];
 					Set<Node> directed = lists[2];
 					

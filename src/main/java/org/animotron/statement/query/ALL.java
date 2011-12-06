@@ -61,7 +61,7 @@ public class ALL extends AbstractQuery implements Reference {
     				
     				Node node = the.getEndNode();
 
-	            	Set<Node>[] lists = getUSEs(pf);
+	            	Set<Node>[] lists = getUSEs(pf, node);
 					Set<Node> uses = lists[1];
 					Set<Node> directed = lists[2];
 					

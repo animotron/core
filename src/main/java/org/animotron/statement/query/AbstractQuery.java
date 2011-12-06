@@ -29,6 +29,7 @@ import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -118,22 +119,30 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		searchForUSE(uses, vector.getContext());
     }
     
-	protected Set<Node>[] getUSEs(PFlow pf) {
+	protected Set<Node>[] getUSEs(PFlow pf, Node theNode) {
 
-    	Set<Node> uses = new FastSet<Node>();
+    	final Set<Node> allUses = new FastSet<Node>();
     	Set<Node> directed = null;
     	Set<Node> deepestSet = null;//new FastSet<Node>();
     	
-    	//boolean first = true;
-    	
     	for (QCAVector v : pf.getPFlowPath()) {
-    		//if (first) {
-    		//	first = false;
-        	//	searchForUSE(uses, v.getContext());
-    		//} else
-    			searchForUSE(uses, v);
+			searchForUSE(allUses, v);
     	}
 
+    	final Set<Node> uses = new FastSet<Node>();
+
+    	TraversalDescription trav = td.
+				relationships(AN._, OUTGOING).
+				relationships(REF._, OUTGOING).
+		evaluator(new IntersectionSearcher(){
+			@Override
+			public Evaluation evaluate(Path path) {
+				return _evaluate_(path, allUses, uses);
+			}
+		});
+    	
+    	trav.traverse(theNode);
+    	
 		return new Set[] {directed, uses, deepestSet};
     }
 
@@ -288,4 +297,75 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			}
 		});
 	};
+	
+	TraversalDescription td = Traversal.description().
+			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
+
+	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
+
+		public Evaluation _evaluate_(Path path, Set<Node> targets, RelationshipType type) {
+			//System.out.println(path);
+			
+			if (path.length() == 0)
+				return EXCLUDE_AND_CONTINUE;
+			
+			Relationship r = path.lastRelationship(); 
+
+			if (path.length() == 1) {
+				if (r.isType(REF._) && targets.contains(r.getEndNode()))
+					return INCLUDE_AND_PRUNE;
+
+				if (r.isType(type))
+					return EXCLUDE_AND_CONTINUE;
+					
+				return EXCLUDE_AND_PRUNE;
+				
+			} else if (path.length() >= 2) {
+				if (r.isType(org.animotron.statement.operator.REF._)) {
+					Node node = r.getEndNode();
+					if (targets.contains(node)) 
+						return INCLUDE_AND_PRUNE;
+
+					return EXCLUDE_AND_CONTINUE;
+				
+				//XXX: check direction!
+				} else if (r.isType(AN._)) {
+					if (r.getEndNode().equals(path.endNode())) {
+						return EXCLUDE_AND_CONTINUE;
+					}
+					return EXCLUDE_AND_PRUNE;
+				}
+			}
+			return EXCLUDE_AND_PRUNE;
+		}
+	}
+
+	abstract class IntersectionSearcher implements org.neo4j.graphdb.traversal.Evaluator {
+
+		public Evaluation _evaluate_(Path path, Set<Node> targets, Set<Node> intersection) {
+			//System.out.println(path);
+			
+			if (path.length() < 2)
+				return EXCLUDE_AND_CONTINUE;
+			
+			Relationship r = path.lastRelationship();
+			
+			if (path.length() % 2 == 0 && !r.isType(AN._))
+				return EXCLUDE_AND_PRUNE;
+			
+			if (path.length() % 2 == 1)
+				if (!r.isType(REF._))
+					return EXCLUDE_AND_PRUNE;
+				else {
+					Node n = r.getEndNode(); 
+					if (targets.contains(n)) {
+						intersection.add(n);
+					}
+				}
+				
+
+			return EXCLUDE_AND_CONTINUE;
+		}
+	};
+
 }
