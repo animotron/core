@@ -80,9 +80,12 @@ public class AnimoTraverser {
         } else {
             String name = (String) o;
             Statement statement = Statements.name(name);
-            String reference = (String) node.getProperty(name);
-            handler.start(statement, parent, reference, level, isOne, pos, isLast);
-            handler.end(statement, parent, reference, level, isOne, pos, isLast);
+            try {
+	            String reference = (String) node.getProperty(name);
+	            handler.start(statement, parent, reference, level, isOne, pos, isLast);
+	            handler.end(statement, parent, reference, level, isOne, pos, isLast);
+            } catch (Exception e) {
+			}
         }
     }
 

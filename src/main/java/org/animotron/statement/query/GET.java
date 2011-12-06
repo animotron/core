@@ -527,7 +527,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(path);
+				//System.out.println(path);
 				return _evaluate_(path, thes);
 			}
 		});
@@ -535,8 +535,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		Map<Relationship, Path> paths = new FastMap<Relationship, Path>();
 
 		for (Path path : trav.traverse(context)) {
-			//TODO: check that this is only one answer
-			System.out.println("* "+path);
+			//System.out.println("* "+path);
 			
 			if (path.length() == 1) {
 				if (op == null) {

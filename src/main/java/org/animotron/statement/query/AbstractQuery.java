@@ -136,16 +136,22 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	final Set<Node> uses = new FastSet<Node>();
 
     	TraversalDescription trav = td.
-				relationships(AN._, OUTGOING).
-				relationships(REF._, OUTGOING).
+				relationships(AN._, INCOMING).
+				relationships(REF._, INCOMING).
+				relationships(THE._, INCOMING).
 		evaluator(new IntersectionSearcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
+				System.out.println(" "+path);
 				return _evaluate_(path, allUses, uses);
 			}
 		});
     	
-    	trav.traverse(theNode);
+    	for (Path path : trav.traverse(theNode)) {
+    		System.out.println(" * "+path);
+    	}
+		if (allUses.contains(theNode))
+			uses.add(theNode);
     	
 		return new Set[] {directed, uses, deepestSet};
     }
@@ -347,17 +353,21 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	abstract class IntersectionSearcher implements Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets, Set<Node> intersection) {
-			System.out.println(path);
-			
 			if (path.length() < 2)
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
 			
-			if (path.length() % 2 == 0 && !r.isType(AN._))
-				return EXCLUDE_AND_PRUNE;
+			if (r.isType(THE._)) {
+				Node n = r.getEndNode(); 
+				if (targets.contains(n)) {
+					intersection.add(n);
+				}
 			
-			if (path.length() % 2 == 1)
+			} else if (path.length() % 2 == 0 && !r.isType(AN._))
+				return EXCLUDE_AND_PRUNE;
+
+			else if (path.length() % 2 == 1)
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {
