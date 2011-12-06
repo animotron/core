@@ -56,7 +56,7 @@ public class ICUseTest extends ATest {
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(USE._, "X"))))
         );
         //XXX: assertAnimoResult(D, "the D X \"χ\".");
-        assertAnimoResult(D, "the D ic X \"χ\".");
+        assertAnimoResult(D, "the D shall X \"χ\".");
 	}
 
     @Test
@@ -81,7 +81,7 @@ public class ICUseTest extends ATest {
             _(THE._, "D", _(GET._, "A", _(AN._, "C")))
         );
         //XXX: assertAnimoResult(D, "the D X \"χ\".");
-        assertAnimoResult(D, "the D ic X \"χ\".");
+        assertAnimoResult(D, "the D shall X \"χ\".");
     }
 
     @Test
@@ -108,6 +108,6 @@ public class ICUseTest extends ATest {
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))
         );
         //XXX: assertAnimoResult(D, "the D X \"χ\".");
-        assertAnimoResult(D, "the D ic X \"χ\".");
+        assertAnimoResult(D, "the D shall X \"χ\".");
     }
 }

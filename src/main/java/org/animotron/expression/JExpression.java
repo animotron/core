@@ -82,6 +82,7 @@ public class JExpression extends AbstractExpression {
                 builder.start((Operator) e[0]);
                 if (e[1] instanceof Object[]) {
                     for (Object o : (Object[]) e[1]) {
+
                         builder._(REF._, o);
                     }
                 } else if (e[1] != null) {

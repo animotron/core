@@ -73,7 +73,7 @@ public class YetAnotherGetTest extends ATest{
             _(THE._, "E", _(GET._, "A", _(AN._, "D")))
         );
         //XXX: assertAnimoResult(E, "the E B \"π\".");
-        assertAnimoResult(E, "the E ic B \"π\".");
+        assertAnimoResult(E, "the E shall B \"π\".");
     }
 
     @Test

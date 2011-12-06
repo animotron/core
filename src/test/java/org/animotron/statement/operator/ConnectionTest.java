@@ -98,7 +98,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //XXX: assertAnimoResult(C, "the C extension \"txt\".");
-        assertAnimoResult(C, "the C ic extension \"txt\".");
+        assertAnimoResult(C, "the C shall extension \"txt\".");
 
         JExpression D = new JExpression(
         _(THE._, "D",
@@ -106,7 +106,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //XXX: assertAnimoResult(D, "the D mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
-        assertAnimoResult(D, "the D ic mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
+        assertAnimoResult(D, "the D shall mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
 
         JExpression E = new JExpression(
         _(THE._, "E",
@@ -175,7 +175,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //XXX: assertAnimoResult(B2, "the B2 path2 path1 \"some.path.text\".");
-        assertAnimoResult(B2, "the B2 ic path2 path1 \"some.path.text\".");
+        assertAnimoResult(B2, "the B2 shall path2 path1 \"some.path.text\".");
 
         JExpression C1 = new JExpression(
         _(THE._, "C1",
@@ -183,7 +183,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //XXX: assertAnimoResult(C1, "the C1 extension1 \"text\".");
-        assertAnimoResult(C1, "the C1 ic extension1 \"text\".");
+        assertAnimoResult(C1, "the C1 shall extension1 \"text\".");
 
         JExpression D = new JExpression(
         _(THE._, "D",
@@ -191,7 +191,7 @@ public class ConnectionTest extends ATest {
                 _(AN._, "fileA")
         )));
         //XXX: assertAnimoResult(D, "the D mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
-        assertAnimoResult(D, "the D ic mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
+        assertAnimoResult(D, "the D shall mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
 
         JExpression E = new JExpression(
         _(THE._, "E",
