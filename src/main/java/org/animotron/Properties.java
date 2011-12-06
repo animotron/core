@@ -42,5 +42,9 @@ public enum Properties  {
 	public boolean has(PropertyContainer container) {
 		return container.hasProperty(name());
 	}
+    
+    public boolean equals(String s) {
+        return name().equals(s);
+    }
 
 }
