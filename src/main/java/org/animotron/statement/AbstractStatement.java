@@ -25,6 +25,7 @@ import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import static org.animotron.Properties.CONTEXT;
 import static org.animotron.Properties.NAME;
 import static org.animotron.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -99,6 +100,7 @@ public abstract class AbstractStatement implements Statement {
 
     @Override
 	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        CONTEXT.set(parent, true);
 		return parent.createRelationshipTo(throwCache(reference, hash, ready, ignoreNotFound), this);
 	}
 
