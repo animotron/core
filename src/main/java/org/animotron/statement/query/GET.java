@@ -124,14 +124,14 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 							return;
 						}
 						
-						QCAVector nV;
+						//QCAVector nV;
 						//if (vector.getQuestion().isType(AN._))
 						//	nV = new QCAVector(null, vector.getQuestion(), vector.getContext());
 						//else
-							nV = new QCAVector(null, vector.getUnrelaxedAnswer(), vector.getContext());
+						//	nV = new QCAVector(null, vector.getUnrelaxedAnswer(), vector.getContext());
 						
 						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, op, nV, thes, visitedREFs);//new QCAVector(null, vector.getUnrelaxedAnswer())
+						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);//new QCAVector(null, vector.getUnrelaxedAnswer())
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
 								pf.sendAnswer(v, RESULT);//, AN._);
