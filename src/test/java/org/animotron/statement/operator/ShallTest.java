@@ -34,7 +34,7 @@ import static org.animotron.expression.JExpression.text;
 public class ShallTest extends ATest {
 	
 	@Test
-	public void testIC() throws Exception {
+	public void test() throws Exception {
         
     	JExpression.__(
                 new JExpression(

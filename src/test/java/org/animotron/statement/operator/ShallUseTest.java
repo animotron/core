@@ -35,7 +35,7 @@ import static org.animotron.expression.JExpression.text;
 public class ShallUseTest extends ATest {
 	
 	@Test
-	public void testIC() throws Exception {
+	public void test_0() throws Exception {
         
         JExpression.__(
                 new JExpression(
@@ -60,7 +60,7 @@ public class ShallUseTest extends ATest {
 	}
 
     @Test
-    public void testIC_1() throws Exception {
+    public void test_1() throws Exception {
 
         JExpression.__(
                 new JExpression(
@@ -85,7 +85,7 @@ public class ShallUseTest extends ATest {
     }
 
     @Test
-    public void testIC_2() throws Exception {
+    public void test_2() throws Exception {
 
         JExpression.__(
                 new JExpression(
