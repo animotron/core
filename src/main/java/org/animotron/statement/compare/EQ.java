@@ -57,17 +57,21 @@ public class EQ extends Operator implements Predicate {
 		Set<Node> thes = new FastSet<Node>();
 		thes.add(theNode);
 		
-		Relationship have = GET._.getBySELF(pf, ref, thes);
+		Relationship[] have = GET._.getBySELF(pf, ref, thes);
 		if (have == null) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
+		PipedInput<QCAVector> in;
+		
 		//System.out.println("Eval actual");
-		PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), have.getEndNode());
-		for (QCAVector e : in) {
-			actual.add(e);
-			//System.out.println("actual "+e);
+		for (int i = 0; i < have.length; i++) { 
+			in = Evaluator._.execute(new PFlow(pf), have[i].getEndNode());
+			for (QCAVector e : in) {
+				actual.add(e);
+				//System.out.println("actual "+e);
+			}
 		}
 
 		//System.out.println("Eval expected");

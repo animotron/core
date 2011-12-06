@@ -96,17 +96,19 @@ public class SELF extends AbstractQuery {
 
             if (ref != null) {
                 //reference in processing flow
-                res = GET._.getBySELF(pf, ref.getEndNode(), thes);
+                Relationship[] ress = GET._.getBySELF(pf, ref.getEndNode(), thes);
 
-                if (res != null)
-                    pf.sendAnswer(res, AN._, pf.getOpHash());
+                if (ress != null)
+                	for (int i = 0; i < ress.length; i++)
+                		pf.sendAnswer(ress[i], AN._, pf.getOpHash());
 
             } else if (searchHave == 2) {
                 //the instance self in have
-                res = GET._.getBySELF(pf, pf.getStartNode(), thes);
+            	Relationship[] ress = GET._.getBySELF(pf, pf.getStartNode(), thes);
 
-                if (res != null)
-                    pf.sendAnswer(res, AN._, pf.getOpHash());
+                if (ress != null)
+                	for (int i = 0; i < ress.length; i++)
+                		pf.sendAnswer(ress[i], AN._, pf.getOpHash());
 
             } else
                 ;//XXX: error???

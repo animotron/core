@@ -31,6 +31,7 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
@@ -343,10 +344,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
 	}
 
-	abstract class IntersectionSearcher implements org.neo4j.graphdb.traversal.Evaluator {
+	abstract class IntersectionSearcher implements Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets, Set<Node> intersection) {
-			//System.out.println(path);
+			System.out.println(path);
 			
 			if (path.length() < 2)
 				return EXCLUDE_AND_CONTINUE;

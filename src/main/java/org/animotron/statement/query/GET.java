@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.query;
 
+import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.animotron.Executor;
 import org.animotron.graph.AnimoGraph;
@@ -44,10 +45,10 @@ import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Set;
 
 import static org.animotron.Properties.RID;
-import static org.animotron.graph.AnimoGraph.getDb;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -190,9 +191,13 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 	public Set<QCAVector> get(final PFlow pf, Relationship op, Node ref, final Set<Node> thes, final Set<Relationship> visitedREFs) {
 		Set<QCAVector> set = new FastSet<QCAVector>();
 		
-		Relationship have = searchForHAVE(pf, null, ref, thes);
-		if (have != null && !pf.isInStack(have))
-			set.add(new QCAVector(pf.getOP(), have));
+		Relationship[] have = searchForHAVE(pf, null, ref, thes);
+		if (have != null) { 
+			for (int i = 0; i < have.length; i++) { 
+				if (!pf.isInStack(have[i]))
+					set.add(new QCAVector(pf.getOP(), have[i]));
+			}
+		}
 		
 		if (!set.isEmpty()) return set;
 
@@ -207,10 +212,16 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		
 		visitedREFs.add(toCheck);
 
-		Relationship have = searchForHAVE(pf, toCheck, thes);
-		if (have != null && !pf.isInStack(have)) {
-			set.add(new QCAVector(op, v, have));
-			return true;
+		Relationship[] have = searchForHAVE(pf, toCheck, thes);
+		if (have != null) {
+			boolean added = false;
+			for (int i = 0; i < have.length; i++) { 
+				if (!pf.isInStack(have[i])) {
+					set.add(new QCAVector(op, v, have[i]));
+					added = true;
+				}
+			}
+			return added;
 		}
 		return false;
 	}
@@ -368,7 +379,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		}
 	}
 	
-	private Relationship searchForHAVE(
+	private Relationship[] searchForHAVE(
 			final PFlow pf, 
 			final Relationship ref, 
 			final Set<Node> thes) {
@@ -385,7 +396,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 //			checkStart = false;
 //		}
 		
-		Relationship have = null;
+		Relationship[] have = null;
 		
 		//search for local 'HAVE'
 		if (checkStart) {
@@ -397,9 +408,9 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		return searchForHAVE(pf, ref, ref.getEndNode(), thes);
 	}
 
-	private Relationship searchForHAVE(final PFlow pflow, Relationship op, final Node ref, final Set<Node> thes) {
+	private Relationship[] searchForHAVE(final PFlow pflow, Relationship op, final Node ref, final Set<Node> thes) {
 		
-		Relationship have = null;
+		Relationship[] have = null;
 
 		//search for inside 'HAVE'
 		have = getByHave(pflow, op, ref, thes);
@@ -415,14 +426,16 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 				final Node sNode = ref;
 				final Node eNode = r.getEndNode();
 				final long id = r.getId();
-				return AnimoGraph.execute(new GraphOperation<Relationship>() {
-					@Override
-					public Relationship execute() {
-						Relationship res = sNode.createRelationshipTo(eNode, AN._);
-						RID.set(res, id);
-						return res;
-					}
-				});
+				return new Relationship[] {
+					AnimoGraph.execute(new GraphOperation<Relationship>() {
+						@Override
+						public Relationship execute() {
+							Relationship res = sNode.createRelationshipTo(eNode, AN._);
+							RID.set(res, id);
+							return res;
+						}
+					})	
+				};
 			}
 			
 			//search for have
@@ -434,12 +447,12 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 	}
 	
 	//XXX: in-use by SELF
-	public Relationship getBySELF(final PFlow pf, Node context, final Set<Node> thes) {
+	public Relationship[] getBySELF(final PFlow pf, Node context, final Set<Node> thes) {
 		
 		//System.out.println("GET get context = "+context);
 
 		//search for local 'HAVE'
-		Relationship have = getByHave(pf, null, context, thes);
+		Relationship[] have = getByHave(pf, null, context, thes);
 		if (have != null) return have;
 
 		Node instance = Utils.getSingleREF(context);
@@ -477,14 +490,16 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 					final Node sNode = context;
 					final Relationship r = tdR;
 
-					return AnimoGraph.execute(new GraphOperation<Relationship>() {
-						@Override
-						public Relationship execute() {
-							Relationship res = sNode.createRelationshipTo(r.getEndNode(), AN._);
-							//RID.set(res, r.getId());
-							return res;
-						}
-					});
+					return new Relationship[] {
+						AnimoGraph.execute(new GraphOperation<Relationship>() {
+							@Override
+							public Relationship execute() {
+								Relationship res = sNode.createRelationshipTo(r.getEndNode(), AN._);
+								//RID.set(res, r.getId());
+								return res;
+							}
+						})
+					};
 					
 					//in-memory
 					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), AN._.relationshipType());
@@ -507,7 +522,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		return null;
 	}
 	
-	private Relationship getByHave(final PFlow pflow, Relationship op, final Node context, final Set<Node> thes) {
+	private Relationship[] getByHave(final PFlow pflow, Relationship op, final Node context, final Set<Node> thes) {
 		if (context == null) return null;
 		
 		TraversalDescription trav = td.
@@ -516,11 +531,13 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
+				//System.out.println(path);
 				return _evaluate_(path, thes, AN._);
 			}
 		});
+		
+		Map<Relationship, Path> paths = new FastMap<Relationship, Path>();
 
-		Relationship res = null;
 		for (Path path : trav.traverse(context)) {
 			//TODO: check that this is only one answer
 			System.out.println(path);
@@ -529,30 +546,40 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 				if (op == null) 
 					System.out.println("WARNING: DONT KNOW OP");
 				
-				res = op;
-				break;
+				paths.put(op, path);
+				//break;
 			}
 			
+			Relationship fR = path.relationships().iterator().next();
+			Path p = paths.get(fR);
+			if (p == null || p.length() > path.length()) {
+				paths.put(fR, path);
+			}
+		}
+		
+		int i = 0;
+		
+		Relationship[] res = new Relationship[paths.size()];
+		for (Path path : paths.values()) {
 			for (Relationship r : path.relationships()) {
 				if (!pflow.isInStack(r)) {
 					if (r.isType(AN._)) {
-						res = r;
-						//break;
+						res[i] = r;
 					}
 				}
 			}
-			if (res != null) break;
+			i++;
 		}
-		
-		while (true) {
-			try {
-				res = getDb().getRelationshipById(
-	                (Long)res.getProperty(RID.name())
-	            );
-			} catch (Exception e) {
-				break;
-			}
-		}
+
+//		while (true) {
+//			try {
+//				res = getDb().getRelationshipById(
+//	                (Long)res.getProperty(RID.name())
+//	            );
+//			} catch (Exception e) {
+//				break;
+//			}
+//		}
 		
 		return res;
 	}
