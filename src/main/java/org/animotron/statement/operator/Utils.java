@@ -352,23 +352,27 @@ public class Utils {
 		return haveSome;
 	}
 	
-	public static boolean haveContext(Node node) {
-		
-		for (Relationship r : node.getRelationships(OUTGOING)) {
-			
-			if (r.isType(REF)) {
-				//ignore REF
-			} else {
-				return true;
-			}
-		}
-		
-		return false;
-	}
+//	public static boolean haveContext(Node node) {
+//		
+//		for (Relationship r : node.getRelationships(OUTGOING)) {
+//			
+//			if (r.isType(REF)) {
+//				//ignore REF
+//			} else {
+//				return true;
+//			}
+//		}
+//		
+//		return false;
+//	}
 
 	public static boolean haveContext(PFlow pf) {
+		return haveContext(pf.getOPNode());
+	}
+	
+	public static boolean haveContext(Node node) {
 		
-		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
+		IndexHits<Relationship> q = Order.queryDown(node);
 		try {
 			while (q.hasNext()) {
 				Relationship r = q.next();
@@ -380,7 +384,7 @@ public class Utils {
 					
 					continue;
 				
-				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
+				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
 				
 				if (onQuestion != null) {
 					return true;

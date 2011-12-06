@@ -124,24 +124,12 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 							return;
 						}
 						
-						//QCAVector nV;
-						//if (vector.getQuestion().isType(AN._))
-						//	nV = new QCAVector(null, vector.getQuestion(), vector.getContext());
-						//else
-						//	nV = new QCAVector(null, vector.getUnrelaxedAnswer(), vector.getContext());
-						
-						//final Relationship have = searchForHAVE(context, name);
-						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);//new QCAVector(null, vector.getUnrelaxedAnswer())
+						final Set<QCAVector> rSet = get(pf, op, vector, thes, visitedREFs);
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, RESULT);//, AN._);
+								pf.sendAnswer(v, RESULT);//, AN._); //XXX: change to AN
 							}
 						}
-//						Relationship have = searchForHAVE(pf, vector.getUnrelaxedAnswer(), thes);
-//						if (have != null && !pf.isInStack(have)) {
-//							pf.sendAnswer(new QCAVector(op, vector, have));
-//						}
-						
 					}
 
 					@Override
@@ -176,7 +164,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 						}
 						if (rSet != null) {
 							for (QCAVector v : rSet) {
-								pf.sendAnswer(v, RESULT);//, AN._);
+								pf.sendAnswer(v, RESULT);//, AN._); //XXX: change to AN
 							}
 							break;
 						}
@@ -574,7 +562,10 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			for (Relationship r : path.relationships()) {
 				if (!pflow.isInStack(r)) {
 					if (r.isType(AN._)) {
-						res[i] = r;
+						if (Utils.haveContext(r.getEndNode())) {
+							res[i] = r;
+							break;
+						}
 					}
 				}
 			}
