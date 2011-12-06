@@ -55,7 +55,7 @@ public class DocumentTest extends ATest {
 		testAnimo("the table " +
 					"(column) " +
 					"(row) " +
-					"(ic html " +
+					"(shall html " +
 						"\\table " +
 							"(\\tr each (get column) (\\th get name)) " +
 							"(each (get row) (\\tr each (get column) (\\td get name get (this column) (this row))))" +
