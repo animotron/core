@@ -171,6 +171,9 @@ public class QCAVector {
 	}
 
 	public boolean haveRelationship(Relationship r) {
+		
+		if (r == null)
+			return false;
 
 		boolean debug = false;
 		

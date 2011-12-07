@@ -77,7 +77,7 @@ public class CurrentSiteTest extends ATest {
         );
 
         assertAnimoResult(s,
-            "the rest " +
+            "rest " +
                 "the test-service " +
                 "(service) " +
                     "(server-name \"localhost\") " +
