@@ -25,6 +25,7 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
+import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -319,7 +320,18 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
 			
-			Relationship r = path.lastRelationship(); 
+			Relationship r = path.lastRelationship();
+			
+			if (r.isType(SHALL._)) {
+				if (path.length() < 2)
+					return EXCLUDE_AND_PRUNE;
+
+				for (QCAVector rr : Utils.getByREF(null, r))
+					if (targets.contains(rr.getAnswer().getEndNode()))
+						return INCLUDE_AND_PRUNE;
+				
+				return EXCLUDE_AND_PRUNE;
+			}
 
 			if (path.length() == 1) {
 				if (r.isType(REF._) && targets.contains(r.getEndNode()))

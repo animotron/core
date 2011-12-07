@@ -417,7 +417,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 
 			//System.out.println("GET IC -> IS "+tdR);
 			
-			Relationship r = getByIC(tdR.getEndNode(), thes);
+			Relationship r = getShall(tdR.getEndNode(), thes);
 			if (r != null) {
 				final Node sNode = ref;
 				final Node eNode = r.getEndNode();
@@ -524,6 +524,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		TraversalDescription trav = td.
 				relationships(AN._, OUTGOING).
 				relationships(REF._, OUTGOING).
+				relationships(SHALL._, OUTGOING).
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
@@ -565,6 +566,8 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 							res[i] = r;
 							//break;
 						}
+					} else if (r.isType(SHALL._)) {
+						res[i] = r;
 					}
 				}
 			}
@@ -584,25 +587,32 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		return res;
 	}
 	
-	private Relationship getByIC(final Node context, final Set<Node> thes) {
-		TraversalDescription trav = td.
-		evaluator(new Searcher(){
-			@Override
-			public Evaluation evaluate(Path path) {
-				return _evaluate_(path, thes); //, IC._
-			}
-		});
-
-		Relationship res = null;
-		for (Path path : trav.traverse(context)) {
-			//TODO: check that this is only one answer
-			//System.out.println(path);
-			for (Relationship r : path.relationships()) {
-				res = r;
-				break;
+	private Relationship getShall(final Node context, final Set<Node> thes) {
+//		TraversalDescription trav = td.
+//		evaluator(new Searcher(){
+//			@Override
+//			public Evaluation evaluate(Path path) {
+//				return _evaluate_(path, thes); //, IC._
+//			}
+//		});
+//
+//		Relationship res = null;
+//		for (Path path : trav.traverse(context)) {
+//			//TODO: check that this is only one answer
+//			//System.out.println(path);
+//			for (Relationship r : path.relationships()) {
+//				res = r;
+//				break;
+//			}
+//		}
+		
+		for (Relationship r : context.getRelationships(OUTGOING, SHALL._)) {
+			for (QCAVector rr : Utils.getByREF(null, r)) {
+				if (thes.contains(rr.getAnswer().getEndNode()))
+					return r;
 			}
 		}
 		
-		return res;
+		return null;
 	}
 }
