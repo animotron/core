@@ -76,7 +76,7 @@ public class MLResultTraverser extends ResultTraverser {
                                 }
                             }
                             handler.start(s, parent, param, level++, isOne, pos, isLast);
-                            iterate(handler, pf, s, it, level);
+                            iterate(handler, pf, rr, s, it, level);
                             handler.end(s, parent, param, --level, isOne, pos, isLast);
                         }
                     } finally {
@@ -98,7 +98,7 @@ public class MLResultTraverser extends ResultTraverser {
             		//workaround IS and USE
             	} else if (!(s instanceof USE || s instanceof REF)) {
             		node = rr.getClosest().getEndNode();
-            		iterate(handler, pf, s, new It(node), level);
+            		iterate(handler, pf, rr, s, new It(node), level);
             	}
             }
         }

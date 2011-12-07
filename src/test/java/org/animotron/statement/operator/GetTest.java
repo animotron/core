@@ -211,10 +211,10 @@ public class GetTest extends ATest {
                 _(THE._, "A",
                     _(AN._, "A1", text("some.path")),
 
-                    _(AN._, "A2",
+                    _(SHALL._, "A2",
                         _(SELF._, "A1")),
 
-                    _(AN._, "B1",
+                    _(SHALL._, "B1",
                         _(AfterLast._,
                             text("."),
                             _(SELF._, "A1")))

@@ -98,12 +98,12 @@ public class AnimoTraverser {
 		if (!(statement instanceof USE || statement instanceof REF)) {
             node = r.getEndNode();
             It it = new It(node);
-            iterate(handler, pf, statement, it, level);
+            iterate(handler, pf, rr, statement, it, level);
 		}
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, PFlow pf, Statement parent, It it, int level) throws IOException {
+    protected void iterate(GraphHandler handler, PFlow pf, QCAVector v, Statement parent, It it, int level) throws IOException {
         List<Object> o = new FastList<Object>();
         try {
             int count = 0;
@@ -129,7 +129,11 @@ public class AnimoTraverser {
             boolean isOne = o.size() - count < 2;
             for (Object i : o) {
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
-                build(handler, pf, parent, i, level, isOne, pos, isLast);
+                if (i instanceof Relationship) {
+                	build(handler, pf, parent, new QCAVector((Relationship)i,v), level, isOne, pos, isLast);
+                } else {
+                	build(handler, pf, parent, i, level, isOne, pos, isLast);
+                }
                 pos++;
             }
             while (it.hasNext()) {

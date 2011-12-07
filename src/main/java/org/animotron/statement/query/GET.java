@@ -535,7 +535,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		Map<Relationship, Path> paths = new FastMap<Relationship, Path>();
 
 		for (Path path : trav.traverse(context)) {
-			//System.out.println("* "+path);
+			System.out.println("* "+path);
 			
 			if (path.length() == 1) {
 				if (op == null) {
@@ -563,7 +563,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 					if (r.isType(AN._)) {
 						if (Utils.haveContext(r.getEndNode())) {
 							res[i] = r;
-							break;
+							//break;
 						}
 					}
 				}

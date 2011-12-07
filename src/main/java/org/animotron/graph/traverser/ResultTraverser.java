@@ -92,7 +92,7 @@ public class ResultTraverser extends AnimoTraverser {
                 
                 if (!(s instanceof REF  && !(qS instanceof AN))) {
 	                node = r.getEndNode();
-	                iterate(handler, pf, s, new It(node), level);
+	                iterate(handler, pf, rr, s, new It(node), level);
                 }
                 
                 if (s instanceof AbstractValue)
