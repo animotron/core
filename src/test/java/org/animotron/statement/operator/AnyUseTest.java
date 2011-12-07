@@ -22,10 +22,12 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.USE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.element;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,13 +41,13 @@ public class AnyUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ANY._, "S"))
@@ -55,31 +57,32 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the s the B (A) (Y \"β\").");
+        assertAnimoResult(b, "the b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        assertAnimoResult(c, "the c the s the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult(c, "the c s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
 
         //check cache
-        assertAnimoResult(b, "the b the s the B (A) (Y \"β\").");
-        assertAnimoResult(c, "the c the s the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult(b, "the b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
+        assertAnimoResult(c, "the c s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
 
     }
 
     @Test
+    @Ignore
     public void simple_any_Use_1() throws Exception {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ANY._, "S"))
@@ -109,19 +112,19 @@ public class AnyUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "B1", _(AN._, "B"), _(AN._, "Y", text("ββ")))
+                        _(THE._, "B1", _(AN._, "B"), element("Y", text("ββ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
                 ),
                 new JExpression(
-                        _(THE._, "C1", _(AN._, "C"), _(AN._, "Z", text("γγ")), _(AN._, "X", text("ααα")))
+                        _(THE._, "C1", _(AN._, "C"), element("Z", text("γγ")), element("X", text("ααα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ANY._, "S"))
@@ -131,33 +134,34 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(USE._, "B")))
         );
-        assertAnimoResult(b, "the b the s the B (A) (Y \"β\").");
+        assertAnimoResult(b, "the b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(USE._, "C")))
         );
-        assertAnimoResult(c, "the c the s the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult(c, "the c s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
 
     }
 
     @Test
+    @Ignore
     public void complex_any_Use_1() throws Exception {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
                 ),
                 new JExpression(
-                        _(THE._, "B1", _(AN._, "B"), _(AN._, "Y", text("ββ")))
+                        _(THE._, "B1", _(AN._, "B"), element("Y", text("ββ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
                 ),
                 new JExpression(
-                        _(THE._, "C1", _(AN._, "C"), _(AN._, "Z", text("γγ")), _(AN._, "X", text("ααα")))
+                        _(THE._, "C1", _(AN._, "C"), element("Z", text("γγ")), element("X", text("ααα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ANY._, "S"))
@@ -173,12 +177,12 @@ public class AnyUseTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(AN._, "s", _(AN._, "ub")))
         );
-        assertAnimoResult(b, "the b the s the B (A) (Y \"β\").");
+        assertAnimoResult(b, "the b s the B (A) (Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(AN._, "s", _(AN._, "uc")))
         );
-        assertAnimoResult(c, "the c the s the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult(c, "the c s the C (B) (Z \"γ\") (X \"αα\").");
 
     }
 
