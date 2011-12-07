@@ -40,7 +40,6 @@ import static org.animotron.expression.JExpression.*;
 public class WebFramework__Test extends ATest {
 
 	@Test
-	@Ignore
 	public void test() throws Exception {
 
         __(
@@ -148,12 +147,12 @@ public class WebFramework__Test extends ATest {
 
         assertAnimoResult(s,
             "the s " +
-                "the current-service " +
+                "current-service " +
                     "the root-service " +
                         "(service) " +
-                        "(uri \"/\") " +
-                        "(the html " +
-                            "the html-composition " +
+                        "(uri) " + //\"/\"
+                        "(html " +
+                            "html-composition " +
                                 "(composition) " +
                                 "(content " +
                                     "\\html " +

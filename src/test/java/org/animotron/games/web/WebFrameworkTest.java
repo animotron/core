@@ -141,9 +141,9 @@ public class WebFrameworkTest extends ATest {
             "the s " +
                 "the root-service " +
                     "(service) " +
-                    "(uri \"/\") " +
-                    "(the html " +
-                        "the html-composition " +
+                    "(uri) " + // \"/\"
+                    "(html " +
+                        "html-composition " +
                             "(composition) " +
                             "(content " +
                                 "\\html " +

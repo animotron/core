@@ -115,11 +115,11 @@ public class YetAnotherWebFramework____Test extends ATest {
         );
 
         assertAnimoResult(s,
-                "the rest " +
-                    "the root-service " +
+                "rest " +
+                    "root-service " +
                         "(service) " +
-                        "(uri \"/\") " +
-                        "(the html " +
+                        "(uri) " + // \"/\"
+                        "(html " +
                             "\\html " +
                                 "(\\head \\title title \"Welcome to Animo\") " +
                                 "(\\body the theme-concrete-root-layout (root-layout) " +

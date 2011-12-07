@@ -141,14 +141,14 @@ public class WebFramework_Test extends ATest {
             "the s " +
                 "the root-service " +
                     "(service) " +
-                    "(uri \"/\") " +
-                    "(the html " +
-                        "the html-composition " +
+                    "(uri) " + // \"/\"
+                    "(html " +
+                        "html-composition " +
                             "(composition) " +
                             "(content " +
                                 "\\html " +
-                                    "(the html-head \\head \\title title \"Welcome to Animotron\") " +
-                                    "(\\body the theme-concrete-root-layout " +
+                                    "(html-head \\head \\title title \"Welcome to Animotron\") " +
+                                    "(\\body theme-concrete-root-layout " +
                                         "(root-layout) " +
                                         "(content " +
                                             "(\\div (@id \"title\") (title \"Welcome to Animotron\")) " +
