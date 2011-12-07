@@ -18,13 +18,14 @@
  */
 package org.animotron.graph.traverser;
 
-import org.animotron.Properties;
 import org.animotron.graph.index.Order;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Iterator;
+
+import static org.animotron.Properties.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -70,7 +71,7 @@ public class It implements Iterator<Object>, Iterable<Object> {
     private Object step() {
         if (p.hasNext()) {
             String o = p.next();
-            if (Properties.VALUE.name().equals(o) || Properties.NAME.name().equals(o)) {
+            if (VALUE.equals(o) || NAME.equals(o) || CONTEXT.equals(o)) {
                 return step();
             } else {
                 return o;
