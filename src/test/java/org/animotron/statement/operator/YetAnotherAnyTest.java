@@ -52,17 +52,17 @@ public class YetAnotherAnyTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "the a the A (S) (X \"α\").");
+        assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimoResult(b, "the b the B (A) (Y \"β\").");
+        assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimoResult(c, "the c the C (B) (Z \"γ\").");
+        assertAnimoResultOneStep(c, "the c the C (B) (Z \"γ\").");
     }
 
     @Test
@@ -83,16 +83,16 @@ public class YetAnotherAnyTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResult(a, "the a the A (S) (X \"α\").");
+        assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimoResult(b, "the b the B (A) (X \"β\").");
+        assertAnimoResultOneStep(b, "the b the B (A) (X \"β\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimoResult(c, "the c the C (B) (X \"γ\").");
+        assertAnimoResultOneStep(c, "the c the C (B) (X \"γ\").");
     }
 }
