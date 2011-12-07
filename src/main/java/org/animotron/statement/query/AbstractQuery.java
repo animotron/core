@@ -30,7 +30,6 @@ import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -116,6 +115,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     private void searchForUSE(Set<Node> uses, QCAVector vector) {
 		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
 			uses.add(r.getEndNode());
+			//System.out.println(" + "+r.getEndNode());
 		}
 		searchForUSE(uses, vector.getContext());
     }
@@ -143,13 +143,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new IntersectionSearcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+				//System.out.println(" "+path);
 				return _evaluate_(path, allUses, uses);
 			}
 		});
     	
     	for (Path path : trav.traverse(theNode)) {
-    		System.out.println(" * "+path);
+    		//System.out.println(" * "+path);
     	}
 		if (allUses.contains(theNode))
 			uses.add(theNode);
@@ -224,7 +224,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+				//System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -364,6 +364,55 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 	abstract class IntersectionSearcher implements Evaluator {
 
+		public Evaluation _evaluate_(Path path, final Set<Node> targets, final Set<Node> intersection) {
+			if (path.length() < 2)
+				return EXCLUDE_AND_CONTINUE;
+			
+			Relationship r = path.lastRelationship();
+			
+			if (r.isType(THE._)) {
+				Node n = r.getEndNode(); 
+				if (targets.contains(n)) {
+					intersection.add(n);
+				}
+			
+			} else if (path.length() % 2 == 0) {
+				if (!r.isType(AN._))
+					return EXCLUDE_AND_PRUNE;
+				
+		    	TraversalDescription trav = td.
+						relationships(AN._, OUTGOING).
+						relationships(REF._, OUTGOING).
+						relationships(THE._, OUTGOING).
+				evaluator(new DownIntersectionSearcher(){
+					@Override
+					public Evaluation evaluate(Path path) {
+						//System.out.println("  "+path);
+						return _evaluate_(path, targets, intersection);
+					}
+				});
+
+		    	for (Path p : trav.traverse(r.getStartNode())) {
+		    		//System.out.println(" ** "+p);
+		    	}
+
+			} else if (path.length() % 2 == 1)
+				if (!r.isType(REF._))
+					return EXCLUDE_AND_PRUNE;
+				else {
+					Node n = r.getEndNode(); 
+					if (targets.contains(n)) {
+						intersection.add(n);
+					}
+				}
+				
+
+			return EXCLUDE_AND_CONTINUE;
+		}
+	};
+
+	abstract class DownIntersectionSearcher implements Evaluator {
+
 		public Evaluation _evaluate_(Path path, Set<Node> targets, Set<Node> intersection) {
 			if (path.length() < 2)
 				return EXCLUDE_AND_CONTINUE;
@@ -376,10 +425,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					intersection.add(n);
 				}
 			
-			} else if (path.length() % 2 == 0 && !r.isType(AN._))
-				return EXCLUDE_AND_PRUNE;
-
-			else if (path.length() % 2 == 1)
+			} else if (path.length() % 2 == 1) {
+				if (!r.isType(AN._))
+					return EXCLUDE_AND_PRUNE;
+				
+			} else if (path.length() % 2 == 0)
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {

@@ -75,8 +75,8 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s the rest the root-service (service) (root) (title \"root\").");
-
+        //assertAnimoResult(s, "the s rest the root-service (service resource) (root) (title \"root\").");
+        assertAnimoResult(s, "the s rest the root-service (service resource) (root) (title).");
     }
 
     @Test
@@ -124,7 +124,8 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s the rest (the root-service (service) (root) (title \"root\")) (the root-service1 (service) (root) (title \"root1\")).");
+        //assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (service resource) (root) (title \"root1\")).");
+        assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title)) (the root-service1 (service resource) (root) (title)).");
 
     }
 
@@ -172,7 +173,8 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s the rest (the root-service (service) (root) (title \"root\")) (the root-service1 (root-service) (title \"root1\")).");
+        //assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (root-service (service resource) (root) (title \"root\")) (title)) (title \"root1\")).");
+        assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title)) (the root-service1 (root-service (service resource) (root) (title)) (title)).");
 
     }
 
@@ -209,8 +211,8 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s the rest the root-service (service) (root) (title \"root\").");
-
+        //assertAnimoResult(s, "the s rest the root-service (service) (root) (title \"root\").");
+        assertAnimoResult(s, "the s rest the root-service (service) (root) (title).");
     }
 
     @Test
@@ -253,8 +255,8 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s the rest (the root-service (service) (root) (title \"root\")) (the root-service1 (service) (root) (title \"root1\")).");
-
+        //assertAnimoResult(s, "the s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (service) (root) (title \"root1\")).");
+        assertAnimoResult(s, "the s rest (the root-service (service) (root) (title)) (the root-service1 (service) (root) (title)).");
     }
 
     @Test
@@ -296,10 +298,7 @@ public class ResourceTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "the s the rest (the root-service (service) (root) (title \"root\")) (the root-service1 (root-service) (title \"root1\")).");
-
+        //assertAnimoResult(s, "the s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (root-service) (title \"root1\")).");
+        assertAnimoResult(s, "the s rest (the root-service (service) (root) (title)) (the root-service1 (root-service (service) (root) (title)) (title)).");
     }
-
 }
-
-
