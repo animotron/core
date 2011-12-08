@@ -24,16 +24,16 @@ import org.animotron.manipulator.PFlow;
 /**
  * Query operator 'IS'.
  * 
- * Return "true" if object has a given property
+ * Return "true" if object is of given type/class
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class HAS extends AbstractQuery {
+public class IS extends AbstractQuery {
 
-	public static final HAS _ = new HAS();
+	public static final IS _ = new IS();
 
-	private HAS() { super("is"); }
+	private IS() { super("is"); }
 
 	public OnQuestion onCalcQuestion() {
         return question;
