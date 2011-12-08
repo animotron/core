@@ -403,5 +403,15 @@ public class GetTest extends ATest {
         );
 	}
 
+	@Test
+	public void test_05() throws Exception {
+		testAnimo("the site host \"localhost\".");
+		
+		testAnimo("the resource get host.");
+		
+		assertAnimoResult("an site, resource", "site host. resource host \"localhost\".");
+		
+		assertAnimoResult("an resource, site", "resource host \"localhost\". site host.");
+	}
 
 }
