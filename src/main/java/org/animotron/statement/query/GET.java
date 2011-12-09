@@ -548,6 +548,11 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 				//break;
 			}
 			
+			if (path.length() == 2) {
+				//UNDERSTAND: should we check context
+				return new Relationship[] {path.relationships().iterator().next()}; 
+			}
+
 			Relationship fR = path.relationships().iterator().next();
 			Path p = paths.get(fR);
 			if (p == null || p.length() > path.length()) {
