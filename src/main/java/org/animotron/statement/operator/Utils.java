@@ -371,33 +371,34 @@ public class Utils {
 	}
 	
 	public static boolean haveContext(Node node) {
+		return CONTEXT.has(node);
 		
-		IndexHits<Relationship> q = Order.queryDown(node);
-		try {
-			while (q.hasNext()) {
-				Relationship r = q.next();
-				
-				Statement s = Statements.relationshipType(r);
-				if (r.isType(org.animotron.statement.operator.REF._)
-					|| r.isType(REF)
-					|| s instanceof Suffix) 
-					
-					continue;
-				
-				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
-				
-				if (onQuestion != null) {
-					return true;
-					
-				} else {
-					return true;
-				}
-			}
-			
-			return false;
-		} finally {
-			q.close();
-		}
+//		IndexHits<Relationship> q = Order.queryDown(node);
+//		try {
+//			while (q.hasNext()) {
+//				Relationship r = q.next();
+//				
+//				Statement s = Statements.relationshipType(r);
+//				if (r.isType(org.animotron.statement.operator.REF._)
+//					|| r.isType(REF)
+//					|| s instanceof Suffix) 
+//					
+//					continue;
+//				
+//				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
+//				
+//				if (onQuestion != null) {
+//					return true;
+//					
+//				} else {
+//					return true;
+//				}
+//			}
+//			
+//			return false;
+//		} finally {
+//			q.close();
+//		}
 	}
 
 	public static Relationship relax(Relationship relation) {
