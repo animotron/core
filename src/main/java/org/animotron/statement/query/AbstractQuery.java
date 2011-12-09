@@ -91,7 +91,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         			public Evaluation evaluate(Path path) {
         				System.out.println(" "+path);
         				
-        				if (path.length() < 2)
+        				if (path.length() < 1)
         					return EXCLUDE_AND_CONTINUE;
         				
         				if (path.length() % 2 == 0 && !path.lastRelationship().isType(AN._))
