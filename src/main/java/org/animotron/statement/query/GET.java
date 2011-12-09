@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.query;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.animotron.Executor;
@@ -45,6 +46,7 @@ import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -528,7 +530,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(path);
+				//System.out.println(path);
 				return _evaluate_(path, thes);
 			}
 		});
@@ -561,35 +563,44 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		}
 		
 		int i = 0;
+		int j = 0;
 		
-		Relationship[] res = new Relationship[paths.size()];
+		Relationship startBy = null;
+		
+		Relationship res = null;
+		List<Relationship> resByHAVE = new FastList<Relationship>();
+		List<Relationship> resByIS = new FastList<Relationship>();
+
 		for (Path path : paths.values()) {
 			for (Relationship r : path.relationships()) {
+				if (startBy == null)
+					startBy = r;
+					
 				if (!pflow.isInStack(r)) {
 					if (r.isType(AN._)) {
 						if (Utils.haveContext(r.getEndNode())) {
-							res[i] = r;
+							res = r;
 							//break;
 						}
 					} else if (r.isType(SHALL._)) {
-						res[i] = r;
+						res = r;
+						break;
 					}
 				}
 			}
-			i++;
+			if (res != null) {
+				if (startBy != null && startBy.isType(REF._))
+					resByIS.add(res);
+				else
+					resByHAVE.add(res);
+			}
+			startBy = null;
 		}
 
-//		while (true) {
-//			try {
-//				res = getDb().getRelationshipById(
-//	                (Long)res.getProperty(RID.name())
-//	            );
-//			} catch (Exception e) {
-//				break;
-//			}
-//		}
-		
-		return res;
+		if (resByHAVE.isEmpty())
+			return resByHAVE.toArray(new Relationship[resByHAVE.size()]); 
+
+		return resByIS.toArray(new Relationship[resByHAVE.size()]); 
 	}
 	
 	private Relationship getShall(final Node context, final Set<Node> thes) {
