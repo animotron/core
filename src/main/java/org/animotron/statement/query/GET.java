@@ -562,9 +562,6 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			}
 		}
 		
-		int i = 0;
-		int j = 0;
-		
 		Relationship startBy = null;
 		
 		Relationship res = null;
@@ -584,7 +581,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 						}
 					} else if (r.isType(SHALL._)) {
 						res = r;
-						break;
+						//break;
 					}
 				}
 			}
@@ -597,10 +594,10 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			startBy = null;
 		}
 
-		if (resByHAVE.isEmpty())
+		if (!resByHAVE.isEmpty())
 			return resByHAVE.toArray(new Relationship[resByHAVE.size()]); 
 
-		return resByIS.toArray(new Relationship[resByHAVE.size()]); 
+		return resByIS.toArray(new Relationship[resByIS.size()]); 
 	}
 	
 	private Relationship getShall(final Node context, final Set<Node> thes) {
