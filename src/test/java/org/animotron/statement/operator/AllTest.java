@@ -56,10 +56,6 @@ public class AllTest extends ATest {
         );
         assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
 
-        test = new JExpression(
-            _(ALL._, "A")
-        );
-        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
     }
 	
     @Test
