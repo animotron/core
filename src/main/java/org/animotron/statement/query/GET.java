@@ -528,7 +528,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(path);
+				System.out.println(path);
 				return _evaluate_(path, thes);
 			}
 		});

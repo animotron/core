@@ -55,7 +55,7 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
-    public void get_ic_via_is() throws Exception {
+    public void get_shall_via_is() throws Exception {
 
         JExpression.__(
                 new JExpression(

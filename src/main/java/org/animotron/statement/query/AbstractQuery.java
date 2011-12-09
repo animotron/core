@@ -80,6 +80,31 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     			}
     		});
 
+    protected TraversalDescription td_IS_down =
+            Traversal.description().
+                breadthFirst().
+                relationships(REF._, OUTGOING ).
+                relationships(AN._, OUTGOING ).
+                //evaluator(Evaluators.excludeStartPosition()).
+                evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+        			@Override
+        			public Evaluation evaluate(Path path) {
+        				System.out.println(" "+path);
+        				
+        				if (path.length() < 2)
+        					return EXCLUDE_AND_CONTINUE;
+        				
+        				if (path.length() % 2 == 0 && !path.lastRelationship().isType(AN._))
+        					return EXCLUDE_AND_PRUNE;
+        				
+        				if (path.length() % 2 == 1 && path.lastRelationship().isType(REF._))
+        					return INCLUDE_AND_CONTINUE;
+        					
+
+        				return EXCLUDE_AND_CONTINUE;
+        			}
+        		});
+
     protected boolean filtering(PFlow pf, Node node, Set<Node> uses) {
     	if (uses != null) {
     		//check intersection
@@ -326,9 +351,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (path.length() < 2)
 					return EXCLUDE_AND_PRUNE;
 
-				for (QCAVector rr : Utils.getByREF(null, r))
-					if (targets.contains(rr.getAnswer().getEndNode()))
+				for (Path p : td_IS_down.traverse(r.getEndNode())) {
+					if (targets.contains(p.lastRelationship().getEndNode()))
 						return INCLUDE_AND_PRUNE;
+				}
+				//for (QCAVector rr : Utils.getByREF(null, r))
+				//	if (targets.contains(rr.getAnswer().getEndNode()))
+				//		return INCLUDE_AND_PRUNE;
 				
 				return EXCLUDE_AND_PRUNE;
 			}
