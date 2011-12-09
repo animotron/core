@@ -141,7 +141,7 @@ public class GetTest extends ATest {
 	}
 	
     @Test
-    public void checkIConIS() throws Exception {
+    public void checkSHALLonISandSELF() throws Exception {
 
         JExpression.__(
             new JExpression(
@@ -204,7 +204,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void checkHAVEonIS() throws Exception {
+    public void checkHAVEonISandSELF() throws Exception {
 
         JExpression.__(
             new JExpression(
