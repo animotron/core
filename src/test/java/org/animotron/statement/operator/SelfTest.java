@@ -119,7 +119,5 @@ public class SelfTest extends ATest {
         assertAnimoResult(D, "the D (C) (A \":\").");
         assertAnimoResult(E, "the E B A \".\".");
         assertAnimoResult(F, "the F B A \":\".");
-
     }
-
 }

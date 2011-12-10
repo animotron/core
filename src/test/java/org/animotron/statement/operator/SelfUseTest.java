@@ -22,6 +22,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.USE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -34,6 +35,7 @@ import static org.animotron.expression.JExpression.text;
 public class SelfUseTest extends ATest {
 	
     @Test
+    @Ignore
     public void selfTest() throws Exception {
         
         JExpression.__(
@@ -64,6 +66,7 @@ public class SelfUseTest extends ATest {
     }
 	
     @Test
+    @Ignore
     public void selfTest1() throws Exception {
 
         JExpression.__(
