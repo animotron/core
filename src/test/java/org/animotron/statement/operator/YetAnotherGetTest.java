@@ -23,6 +23,7 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.SHALL;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -99,6 +100,7 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
+    @Ignore
     public void self_via_is() throws Exception {
 
         JExpression.__(
@@ -118,7 +120,8 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
-    public void self_ic_via_is() throws Exception {
+    @Ignore
+    public void self_shall_via_is() throws Exception {
 
         JExpression.__(
                 new JExpression(
@@ -140,6 +143,7 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
+    @Ignore
     public void self_have_via_is() throws Exception {
 
         JExpression.__(
