@@ -132,6 +132,10 @@ public class QCAVector {
 		return context;
 	}
 	
+	public void setPrecedingSibling(QCAVector prev) {
+		preceding_sibling = prev;
+	}
+
 	public QCAVector getPrecedingSibling() {
 		return preceding_sibling;
 	}
@@ -247,6 +251,15 @@ public class QCAVector {
 		if (question.getId() != vector.question.getId()) return false;
 		
 		return true;
+	}
+
+	public boolean merged(QCAVector vector) {
+		if (canBeMerged(vector)) {
+			answer = vector.answer;
+			context = vector.context;
+			return true;
+		}
+		return false;
 	}
 	
 	public int hashCode() {

@@ -351,20 +351,6 @@ public class Utils {
 		return haveSome;
 	}
 	
-//	public static boolean haveContext(Node node) {
-//		
-//		for (Relationship r : node.getRelationships(OUTGOING)) {
-//			
-//			if (r.isType(REF)) {
-//				//ignore REF
-//			} else {
-//				return true;
-//			}
-//		}
-//		
-//		return false;
-//	}
-
 	public static boolean haveContext(PFlow pf) {
 		return haveContext(pf.getOPNode());
 	}

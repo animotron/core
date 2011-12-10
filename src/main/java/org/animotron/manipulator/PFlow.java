@@ -427,8 +427,8 @@ public class PFlow {
 			
 		} else if (!path.isEmpty()) {
 			QCAVector v = path.get(0);
-			if (v.canBeMerged(vector)) {
-				path.set(0, vector);
+			if (v.merged(vector)) {
+				//path.set(0, vector);
 				if (debug) System.out.println(" (merge)");
 				return vector;
 			} else {

@@ -110,15 +110,15 @@ public class ResultTraverser extends AnimoTraverser {
     	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
     	boolean found;
     	try {
-	        found = iterate(handler, pflow, null, i, level, isOne);
+	        found = iterate(handler, pflow, null, rr, i, level, isOne);
     	} finally {
     		i.close();
     	}
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<QCAVector>in = Evaluator._.execute(pflow, new QCAVector(r, rr));
-            iterate(handler, pflow, null, in, level, isOne);
+            Iterator<QCAVector> in = Evaluator._.execute(pflow, new QCAVector(r, rr));
+            iterate(handler, pflow, null, rr, in, level, isOne);
         }
 
         return found;
@@ -133,17 +133,24 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
 //    }
 
-    protected boolean iterate(GraphHandler handler, PFlow pf, Statement parent, Iterator<QCAVector> it, int level, boolean isOne) throws IOException {
+    protected boolean iterate(GraphHandler handler, PFlow pf, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
+
+        QCAVector prev = null;
+        
         QCAVector i = null;
         int pos = 0;
         while (it.hasNext()) {
         	i = it.next();
+        	i.setPrecedingSibling(prev);
+        	prev = i;
             if (isFirst) {
                 if (it.hasNext()) {
                     build(handler, pf, parent, i, level, false, pos++, true);
                 	i = it.next();
+                	i.setPrecedingSibling(prev);
+                	prev = i;
                     build(handler, pf, parent, i, level, false, pos++, !it.hasNext());
                 } else {
                     build(handler, pf, parent, i, level, true, pos++, !it.hasNext());

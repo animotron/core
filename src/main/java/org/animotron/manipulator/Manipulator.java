@@ -27,7 +27,6 @@ import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;

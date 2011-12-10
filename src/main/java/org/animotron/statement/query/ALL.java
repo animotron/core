@@ -18,13 +18,17 @@
  */
 package org.animotron.statement.query;
 
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Set;
 
@@ -77,13 +81,37 @@ public class ALL extends AbstractQuery implements Reference {
 		            	} catch (Exception e) {}
 		
 			        for (Relationship tdR : td_IS.traverse(node).relationships()) {
-			            //System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]");
-			            Node res = tdR.getStartNode();
-			            if (filtering(pf, res, uses)) {
-			            	try {
-			            		pf.sendAnswer( getThe(res) );
-			            	} catch (Exception e) {}
-			            }
+			            System.out.println("ALL get next "+tdR+" ["+tdR.getStartNode()+"]"+" ["+tdR.getEndNode()+"]");
+			        	if (!Utils.haveContext(tdR.getEndNode())) {
+				            Node res = tdR.getStartNode();
+			        		if (filtering(pf, res, uses)) {
+			        			try {
+			        				pf.sendAnswer( getThe(res) );
+			        			} catch (Exception e) {}
+			        		}
+			        	} else {
+			    			IndexHits<Relationship> hits = Order.queryDown(tdR.getEndNode());
+			    			try {
+			    				boolean first = true;
+			    				for (Relationship res : hits) {
+			    					if (first) {
+			    						first = false;
+			    						continue;
+			    					}
+			    					
+			    					if (res.isType(REF._)) continue;
+			    					
+			    					if (res.isType(AN._)) {
+			    						if (filtering(pf, res.getEndNode(), uses)) {
+					        				pf.sendAnswer( res );
+			    						}
+			    					}
+			    				}
+			    				
+			    			} finally {
+			    				hits.close();
+			    			}
+			        	}
 			        }
     			}
             }
