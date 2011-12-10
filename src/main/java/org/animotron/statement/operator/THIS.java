@@ -25,6 +25,7 @@ import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -62,7 +63,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 				
 				for (QCAVector r : pf.getPFlowPath()) {
 					//System.out.println(r);
-					QCAVector[] cs = r.getContext();
+					List<QCAVector> cs = r.getContext();
 					if (cs != null)
 						for (QCAVector c : cs) {
 							Relationship toCheck = c.getQuestion();
