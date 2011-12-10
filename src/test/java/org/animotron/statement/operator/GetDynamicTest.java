@@ -146,4 +146,12 @@ public class GetDynamicTest extends ATest {
         testAnimoResult("get (get a z) (x).", "b z1.");
     }
 
+    @Test
+    public void test_05() throws Exception {
+        testAnimo("the x y z.");
+
+        testAnimoResult("all y.", "z.");
+        testAnimoResult("get z x.", "y z.");
+    }
+
 }
