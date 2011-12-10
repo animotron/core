@@ -139,10 +139,11 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_04() throws Exception {
-        testAnimo("the z (k) (a z1).");
-        testAnimo("the b (k) (z1 \"z1\").");
+        testAnimo("the z a z1.");
+        testAnimo("the x b z1.");
 
         testAnimoResult("get (get a z) (z).", "a z1.");
+        testAnimoResult("get (get a z) (x).", "b z1.");
     }
 
 }
