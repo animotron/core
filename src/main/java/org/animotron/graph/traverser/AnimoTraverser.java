@@ -125,19 +125,29 @@ public class AnimoTraverser {
                 o.add(it.next());
                 n++;
             }
+            
+            QCAVector prev = null;
             int pos = 0;
             boolean isOne = o.size() - count < 2;
             for (Object i : o) {
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
                 if (i instanceof Relationship) {
-                	build(handler, pf, parent, new QCAVector((Relationship)i,v), level, isOne, pos, isLast);
+                	prev = new QCAVector((Relationship)i, v, prev);
+                	build(handler, pf, parent, prev, level, isOne, pos, isLast);
                 } else {
                 	build(handler, pf, parent, i, level, isOne, pos, isLast);
                 }
                 pos++;
             }
+            
+            Object i = null;
             while (it.hasNext()) {
-                build(handler, pf, parent, it.next(), level, isOne, pos++, !it.hasNext());
+            	i = it.next();
+                if (i instanceof Relationship) {
+                	prev = new QCAVector((Relationship)i, v, prev);
+                	build(handler, pf, parent, prev, level, isOne, pos++, !it.hasNext());
+                } else
+                	build(handler, pf, parent, i, level, isOne, pos++, !it.hasNext());
             }
         } finally {
             it.remove();

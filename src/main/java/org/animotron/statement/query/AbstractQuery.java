@@ -139,6 +139,24 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     }
 
     private void searchForUSE(Set<Node> uses, QCAVector vector) {
+    	System.out.println("searchForUSE");
+    	QCAVector prev = vector.getPrecedingSibling();
+    	System.out.println(" prev "+prev);
+    	if (prev != null) {
+    		if (prev.getQuestion() != null)
+	    		for (Relationship r : prev.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
+	    			uses.add(r.getEndNode());
+	    			//System.out.println(" + "+r.getEndNode());
+	    		}
+
+    		if (prev.getUnrelaxedAnswer() != null)
+	    		for (Relationship r : prev.getUnrelaxedAnswer().getEndNode().getRelationships(OUTGOING, USE._)) {
+	    			uses.add(r.getEndNode());
+	    			//System.out.println(" + "+r.getEndNode());
+	    		}
+
+    	}
+    	
 		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
 			uses.add(r.getEndNode());
 			//System.out.println(" + "+r.getEndNode());

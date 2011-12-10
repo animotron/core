@@ -38,12 +38,12 @@ import static org.animotron.utils.MessageDigester.longToByteArray;
  */
 public class QCAVector {
 	
-	private Relationship question = null;
+	private final Relationship question;
 	private Relationship answer = null;
 	
 	private List<QCAVector> context = null;
 
-	private List<QCAVector> preceding_sibling = null;
+	private QCAVector preceding_sibling = null;
 	
 
 	public QCAVector(Relationship question) {
@@ -64,24 +64,19 @@ public class QCAVector {
 		this.answer = answer;
 	}
 	
-	@Deprecated
-	public QCAVector(Relationship question, QCAVector ... context) {
+	public QCAVector(Relationship question, QCAVector context) {
 		this.question = question;
+
 		this.context = FastList.newInstance();
-		for (int i = 0 ; i < context.length ; i++) {
-			this.context.add(context[i]);
-		}
+		this.context.add(context);
 	}
 
-	@Deprecated
-	public QCAVector(Relationship question, Relationship answer, QCAVector ... context) {
+	public QCAVector(Relationship question, Relationship answer, QCAVector context) {
 		this.question = question;
 		this.answer = answer;
 
 		this.context = FastList.newInstance();
-		for (int i = 0 ; i < context.length ; i++) {
-			this.context.add(context[i]);
-		}
+		this.context.add(context);
 	}
 
 	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context) {
@@ -97,6 +92,16 @@ public class QCAVector {
 
 		this.context = FastList.newInstance();
 		this.context.add(new QCAVector(null, answer));
+	}
+
+	public QCAVector(Relationship question, QCAVector context, QCAVector precedingSibling) {
+		this.question = question;
+		//this.answer = answer;
+		
+		this.context = FastList.newInstance();
+		this.context.add(context);
+		
+		this.preceding_sibling = precedingSibling;
 	}
 
 	public Relationship getClosest() {
@@ -125,6 +130,10 @@ public class QCAVector {
 
 	public List<QCAVector> getContext() {
 		return context;
+	}
+	
+	public QCAVector getPrecedingSibling() {
+		return preceding_sibling;
 	}
 
 	public boolean questionEquals(QCAVector vector) {
