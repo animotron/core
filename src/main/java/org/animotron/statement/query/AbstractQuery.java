@@ -36,6 +36,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -129,7 +130,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         return true;
     }
     
-    private void searchForUSE(Set<Node> uses, QCAVector[] vectors) {
+    private void searchForUSE(Set<Node> uses, final List<QCAVector> vectors) {
     	if (vectors == null) return;
     	
 		for (QCAVector vector : vectors) {

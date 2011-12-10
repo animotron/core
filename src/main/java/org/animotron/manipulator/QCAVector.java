@@ -26,6 +26,9 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.List;
+
+import javolution.util.FastList;
 
 import static org.animotron.utils.MessageDigester.longToByteArray;
 
@@ -38,7 +41,10 @@ public class QCAVector {
 	private Relationship question = null;
 	private Relationship answer = null;
 	
-	private QCAVector[] context = null;
+	private List<QCAVector> context = null;
+
+	private List<QCAVector> preceding_sibling = null;
+	
 
 	public QCAVector(Relationship question) {
 		this.question = question;
@@ -51,26 +57,46 @@ public class QCAVector {
 
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
 		this.question = question;
-		if (context != null)
-			this.context = new QCAVector[] {context};
+		if (context != null) {
+			this.context = FastList.newInstance();
+			this.context.add(context);
+		}
 		this.answer = answer;
 	}
 	
+	@Deprecated
 	public QCAVector(Relationship question, QCAVector ... context) {
 		this.question = question;
-		this.context = context;
+		this.context = FastList.newInstance();
+		for (int i = 0 ; i < context.length ; i++) {
+			this.context.add(context[i]);
+		}
 	}
 
+	@Deprecated
 	public QCAVector(Relationship question, Relationship answer, QCAVector ... context) {
 		this.question = question;
-		this.context = context;
 		this.answer = answer;
+
+		this.context = FastList.newInstance();
+		for (int i = 0 ; i < context.length ; i++) {
+			this.context.add(context[i]);
+		}
+	}
+
+	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context) {
+		this.question = question;
+		this.answer = answer;
+		
+		this.context = context;
 	}
 
 	public QCAVector(Relationship question, Relationship context, Relationship answer) {
 		this.question = question;
-		this.context = new QCAVector[] {new QCAVector(null, answer)};
 		this.answer = answer;
+
+		this.context = FastList.newInstance();
+		this.context.add(new QCAVector(null, answer));
 	}
 
 	public Relationship getClosest() {
@@ -97,7 +123,7 @@ public class QCAVector {
 		return answer;
 	}
 
-	public QCAVector[] getContext() {
+	public List<QCAVector> getContext() {
 		return context;
 	}
 

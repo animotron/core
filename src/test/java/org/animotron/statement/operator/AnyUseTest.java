@@ -186,4 +186,15 @@ public class AnyUseTest extends ATest {
 
     }
 
+    @Test
+    public void useUnderAny() throws Exception {
+		testAnimo("the resource-B resource.");
+		testAnimo("the resource-A resource.");
+
+		testAnimo("the local-site (site) (use resource-A).");
+		testAnimo("the localhost (site) (use resource-B).");
+
+		assertAnimoResult("the rest (any site) (any resource).",
+			"the rest (the local-site (site) (use resource-A)) (the resource-A resource).");
+    }
 }

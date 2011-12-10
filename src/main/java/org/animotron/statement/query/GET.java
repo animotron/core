@@ -258,7 +258,7 @@ public class GET extends AbstractQuery implements Evaluable, Shift {
 			Set<QCAVector> newREFs = new FastSet<QCAVector>();
 
 			for (QCAVector vector : nextREFs) {
-				QCAVector[] cs = vector.getContext();
+				List<QCAVector> cs = vector.getContext();
 				if (cs != null) {
 					for (QCAVector c : cs) {
 						t = c.getUnrelaxedAnswer();

@@ -31,7 +31,6 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.Suffix;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -427,7 +426,7 @@ public class Utils {
 		return createResult(pf, null, node, r, rType, pf.getPathHash());
 	}
 
-	public static Relationship createResult(final PFlow pf, final QCAVector[] context, final Node node, final Relationship r, final RelationshipType rType) {
+	public static Relationship createResult(final PFlow pf, final List<QCAVector> context, final Node node, final Relationship r, final RelationshipType rType) {
 		return createResult(pf, context, node, r, rType, pf.getPathHash());
 	}
 
@@ -435,7 +434,7 @@ public class Utils {
 		return createResult(pf, null, node, r, rType, hash);
 	}
 
-	public static Relationship createResult(final PFlow pf, final QCAVector[] context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+	public static Relationship createResult(final PFlow pf, final List<QCAVector> context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
@@ -456,7 +455,7 @@ public class Utils {
 				RID.set(res, r.getId());
 				//for debug
 				if (context != null) {
-					if (context.length > 1) System.out.println("WARNING ... more then one context for CID"); 
+					if (context.size() > 1) System.out.println("WARNING ... more then one context for CID"); 
 					for (QCAVector c : context) {
 						CID.set(res, c.mashup());
 					}
