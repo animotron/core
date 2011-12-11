@@ -114,12 +114,16 @@ public class BinaryExpression extends AbstractExpression {
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
         builder.start(THE._);
-            builder._(AN._, FILE);
+            builder.start(AN._);
+                builder._(REF._, FILE);
+            builder.end();
             builder._(STREAM._, hash);
             Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
             while (it.hasNext()) {
                 String i = it.next();
-                builder._(AN._, i);
+                builder.start(AN._);
+                    builder._(REF._, i);
+                builder.end();
                 if (!it.hasNext()) {
                     Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
                     if (jt.hasNext()) {
