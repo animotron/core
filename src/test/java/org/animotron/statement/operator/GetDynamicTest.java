@@ -155,4 +155,20 @@ public class GetDynamicTest extends ATest {
         testAnimoResult("all y.", "z.");
     }
 
+    @Test
+    public void test_06() throws Exception {
+        testAnimo("the y a.");
+        testAnimo("the x y z.");
+
+        testAnimoResult("all a.", "the y a. z.");
+    }
+
+    @Test
+    public void test_07() throws Exception {
+        testAnimo("the y a.");
+        testAnimo("the x y z.");
+
+        testAnimoResult("all a use y.", "z.");
+    }
+
 }
