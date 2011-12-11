@@ -197,4 +197,46 @@ public class GetDynamicTest extends ATest {
         testAnimoResult("all b use y.", "the y a b. the x y a b.");
     }
 
+    @Test
+    public void test_11() throws Exception {
+        testAnimo("the y a.");
+        testAnimo("the x y z.");
+
+        testAnimoResult("prefer a.", "");
+    }
+
+    @Test
+    public void test_12() throws Exception {
+        testAnimo("the y a.");
+        testAnimo("the x y z.");
+
+        testAnimoResult("prefer a use y.", "the y a. z.");
+    }
+
+    @Test
+    public void test_13() throws Exception {
+        testAnimo("the y a.");
+        testAnimo("the x y.");
+
+        testAnimoResult("prefer a use y.", "the y a. the x y a.");
+    }
+
+    @Test
+    public void test_14() throws Exception {
+        testAnimo("the a b.");
+        testAnimo("the y a.");
+        testAnimo("the x y z.");
+
+        testAnimoResult("prefer b use y.", "the y a b. z.");
+    }
+
+    @Test
+    public void test_15() throws Exception {
+        testAnimo("the a b.");
+        testAnimo("the y a.");
+        testAnimo("the x y.");
+
+        testAnimoResult("prefer b use y.", "the y a b. the x y a b.");
+    }
+
 }
