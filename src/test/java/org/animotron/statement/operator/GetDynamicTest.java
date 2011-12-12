@@ -239,4 +239,12 @@ public class GetDynamicTest extends ATest {
         testAnimoResult("prefer b use y.", "the y a b. the x y a b.");
     }
 
+    @Test
+    public void test_16() throws Exception {
+        testAnimo("the a b c.");
+        testAnimo("the x a.");
+
+        testAnimoResult("get b x.", "b c.");
+    }
+
 }
