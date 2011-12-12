@@ -18,13 +18,19 @@
  */
 package org.animotron.statement.query;
 
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Set;
 
@@ -73,19 +79,49 @@ public class ANY extends AbstractQuery implements Reference {
 		
 					System.out.println(" node = "+node);
 		
-					//if (underUSE && filtering(pf, node, uses)) {
-					//	pf.sendAnswer( getThe(node) );
-					//} else {
-		            for (Relationship tdR : td_IS.traverse(node).relationships()) {
-	                    System.out.println("ANY get next "+tdR+" ["+tdR.getStartNode()+"]");
+			        for (Path path : td_IS_leaf.traverse(node)) {
+			        	
+			        	System.out.println(path);
 
-	                    Node n = tdR.getStartNode();
-	                    if (filtering(pf, n, uses)) {
-	                    	pf.sendAnswer( getThe(n) );
-	                    	break;
-	                    }
-		            }
-				}
+			        	Relationship r = path.lastRelationship();
+			        	if (!Utils.haveContext(r.getEndNode())) {
+			        		
+			        		//XXX: need better check, it can be reference from other then AN
+			        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+			        			continue;
+
+		        			Node res = r.getStartNode();
+		        			if (filtering(pf, res, uses)) {
+			        			try {
+			        				pf.sendAnswer( getThe(res) );
+			        				break;
+			        			} catch (Exception e) {}
+		        			}
+			        	} else {
+			    			IndexHits<Relationship> hits = Order.queryDown(r.getEndNode());
+			    			try {
+			    				boolean first = true;
+			    				for (Relationship res : hits) {
+			    					if (first) {
+			    						first = false;
+			    						continue;
+			    					}
+			    					
+			    					if (res.isType(REF._)) continue;
+			    					
+			    					if (res.isType(AN._)) {
+			    						if (filtering(pf, res.getStartNode(), uses)) {
+					        				pf.sendAnswer( res );
+					        				break;
+			    						}
+			    					}
+			    				}
+			    			} finally {
+			    				hits.close();
+			    			}
+			        	}
+			        }
+		        }
 			}
             pf.done();
         }
