@@ -49,20 +49,22 @@ public class YetAnotherAnyTest extends ATest {
                 )
         );
 
-        JExpression a = new JExpression(
+        JExpression test = new JExpression(
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
+        //assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
+        assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
 
-        JExpression b = new JExpression(
+        test = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
+        //assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
+        assertAnimoResultOneStep(test, "the b the C (B) (Z \"γ\").");
 
-        JExpression c = new JExpression(
+        test = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", text("γ"))))
         );
-        assertAnimoResultOneStep(c, "the c the C (B) (Z \"γ\").");
+        assertAnimoResultOneStep(test, "the c the C (B) (Z \"γ\").");
     }
 
     @Test
@@ -80,19 +82,19 @@ public class YetAnotherAnyTest extends ATest {
                 )
         );
 
-        JExpression a = new JExpression(
+        JExpression test = new JExpression(
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
+        assertAnimoResultOneStep(test, "the a the A (S) (X \"α\").");
 
-        JExpression b = new JExpression(
+        test = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "X", text("β"))))
         );
-        assertAnimoResultOneStep(b, "the b the B (A) (X \"β\").");
+        assertAnimoResultOneStep(test, "the b the B (A) (X \"β\").");
 
-        JExpression c = new JExpression(
+        test = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "X", text("γ"))))
         );
-        assertAnimoResultOneStep(c, "the c the C (B) (X \"γ\").");
+        assertAnimoResultOneStep(test, "the c the C (B) (X \"γ\").");
     }
 }
