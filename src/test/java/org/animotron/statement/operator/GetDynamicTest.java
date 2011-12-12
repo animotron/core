@@ -117,7 +117,7 @@ public class GetDynamicTest extends ATest {
     	testAnimo("the z (k) (a z1).");
     	testAnimo("the b (k) (z1 \"z1\").");
 
-    	testAnimoResult("get (get a z) (all k).", "a z1. z1 \"z1\".");
+    	testAnimoResult("get (get a z) (all k).", "z1 \"z1\".");
     }
 
     @Test
@@ -160,7 +160,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
-        testAnimoResult("all a.", "the y a. z.");
+        testAnimoResult("all a.", "z.");
     }
 
     @Test
@@ -176,7 +176,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y.");
 
-        testAnimoResult("all a use y.", "the y a. the x y a.");
+        testAnimoResult("all a use y.", "the x y a.");
     }
 
     @Test
@@ -194,7 +194,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y.");
 
-        testAnimoResult("all b use y.", "the y a b. the x y a b.");
+        testAnimoResult("all b use y.", "the x y a b.");
     }
 
     @Test
@@ -210,7 +210,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
-        testAnimoResult("prefer a use y.", "the y a. z.");
+        testAnimoResult("prefer a use y.", "z.");
     }
 
     @Test
@@ -218,7 +218,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y.");
 
-        testAnimoResult("prefer a use y.", "the y a. the x y a.");
+        testAnimoResult("prefer a use y.", "the x y a.");
     }
 
     @Test
@@ -227,7 +227,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
-        testAnimoResult("prefer b use y.", "the y a b. z.");
+        testAnimoResult("prefer b use y.", "z.");
     }
 
     @Test
@@ -236,7 +236,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y.");
 
-        testAnimoResult("prefer b use y.", "the y a b. the x y a b.");
+        testAnimoResult("prefer b use y.", "the x y a b.");
     }
 
     @Test

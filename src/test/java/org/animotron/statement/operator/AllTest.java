@@ -54,7 +54,7 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
+        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
 
     }
 	
@@ -76,7 +76,7 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the C (B) (value \"C\").");
+        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
         //assertAnimoResult(test, "the B\n    (A)\n    (value \"B\").\nthe C\n    (B)\n    (value \"C\").\n", true);
     }
 
@@ -104,12 +104,12 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", text("B")))
         );
-        assertAnimoResultOneStep(test, "the B (A) (value \"B\"). the B1 (B) (value \"B\").");
+        assertAnimoResultOneStep(test, "the B1 (B) (value \"B\").");
 
         test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", text("C")))
         );
-        assertAnimoResultOneStep(test, "the C (B) (value \"C\"). the C1 (C) (value \"C\").");
+        assertAnimoResultOneStep(test, "the C1 (C) (value \"C\").");
     }
 
 	@Test
