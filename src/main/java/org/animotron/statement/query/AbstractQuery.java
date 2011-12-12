@@ -56,7 +56,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         super(name);
     }
 
-    protected TraversalDescription td_IS =
+    protected static TraversalDescription td_IS =
         Traversal.description().
             breadthFirst().
             relationships(REF._, INCOMING ).
@@ -81,7 +81,32 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     			}
     		});
 
-    protected TraversalDescription td_IS_down =
+    protected static TraversalDescription td_IS_leaf =
+            Traversal.description().
+                breadthFirst().
+                relationships(REF._, INCOMING ).
+                relationships(AN._, INCOMING ).
+                //evaluator(Evaluators.excludeStartPosition()).
+                evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+        			@Override
+        			public Evaluation evaluate(Path path) {
+        				//System.out.println(path);
+        				
+        				if (path.length() < 2)
+        					return EXCLUDE_AND_CONTINUE;
+        				
+        				if (path.length() % 2 == 0 && path.lastRelationship().isType(AN._))
+        					return INCLUDE_AND_CONTINUE;
+        				
+        				if (path.length() % 2 == 1 && !path.lastRelationship().isType(REF._))
+        					return EXCLUDE_AND_PRUNE;
+        					
+
+        				return EXCLUDE_AND_CONTINUE;
+        			}
+        		});
+    
+    protected static TraversalDescription td_IS_down =
             Traversal.description().
                 breadthFirst().
                 relationships(REF._, OUTGOING ).
@@ -268,21 +293,31 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(" "+path);
+				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
 					sNode = path.startNode();
 				} else {
 					
-					Relationship r = path.lastRelationship();
-    				if (path.length() % 2 == 1 && !r.isType(AN._))
-    					return EXCLUDE_AND_PRUNE;
-    				
-    				if (path.length() % 2 == 0 && !r.isType(REF._))
-    					return EXCLUDE_AND_PRUNE;
+					Relationship firstR = firstRelationsip(path);
+					Relationship lastR = path.lastRelationship();
+					if (firstR.isType(AN._)) {
+	    				if (path.length() % 2 == 1 && !lastR.isType(AN._))
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+	    				if (path.length() % 2 == 0 && !lastR.isType(REF._))
+	    					return EXCLUDE_AND_PRUNE;
+					
+					} else if (firstR.isType(REF._)) {
+	    				if (path.length() % 2 == 0 && !lastR.isType(AN._))
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+	    				if (path.length() % 2 == 1 && !lastR.isType(REF._))
+	    					return EXCLUDE_AND_PRUNE;
+					}
 
-					sNode = r.getEndNode();
+					sNode = lastR.getEndNode();
 					if (!sNode.equals(path.endNode()))
 						return EXCLUDE_AND_PRUNE;
 				}
@@ -292,6 +327,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					return INCLUDE_AND_PRUNE;
 
 				return EXCLUDE_AND_CONTINUE;
+			}
+
+			private Relationship firstRelationsip(Path path) {
+				return path.relationships().iterator().next();
 			}
 		});
 	};

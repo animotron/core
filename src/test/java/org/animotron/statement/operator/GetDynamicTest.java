@@ -168,7 +168,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
-        testAnimoResult("all a use y.", "the y a. z.");
+        testAnimoResult("all a use y.", "z.");
     }
 
     @Test
