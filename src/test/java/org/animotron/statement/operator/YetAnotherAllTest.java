@@ -52,12 +52,12 @@ public class YetAnotherAllTest extends ATest {
         JExpression a = new JExpression(
             _(THE._, "a", _(ALL._, "S", _(WITH._, "X", text("α"))))
         );
-        assertAnimoResultOneStep(a, "the a (the A (S) (X \"α\")) (the B (A) (Y \"β\")).");
+        assertAnimoResultOneStep(a, "the a the B (A) (Y \"β\").");
 
         JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", text("β"))))
         );
-        assertAnimoResultOneStep(b, "the b (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
+        assertAnimoResultOneStep(b, "the b the C (B) (Z \"γ\") (X \"αα\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", text("γ"))))
