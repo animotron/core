@@ -94,6 +94,7 @@ public class PFlow {
 		path.addAll(parent.path);
 	}
 
+	@Deprecated //use one with vector
 	public PFlow(PFlow parent, Relationship op) throws AnimoException {
 //		System.out.print("new PFlow ");
 //		System.out.println("this = "+Utils.shortID(this)+" parent = "+Utils.shortID(parent));
@@ -142,6 +143,10 @@ public class PFlow {
 		addContextPoint(vector);
 
 		this.op = vector.getUnrelaxedClosest();
+	}
+
+	protected void cyclingDetection() throws AnimoException {
+		cyclingDetection(getOP());
 	}
 
 	private void cyclingDetection(Relationship op) throws AnimoException {

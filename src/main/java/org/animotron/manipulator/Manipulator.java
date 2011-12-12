@@ -95,7 +95,8 @@ public abstract class Manipulator {
 			pf = new PFlow(pflow, (Node)op);
 		} else {
 			try {
-				pf = new PFlow(pflow, (Relationship)op);
+				pf = new PFlow(pflow, vector);
+				pf.cyclingDetection();
 			} catch (AnimoException e) {
 				e.printStackTrace();
 				throw new IOException(e);
