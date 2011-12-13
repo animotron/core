@@ -119,7 +119,7 @@ public class MathTest extends ATest {
     
     @Test
 	public void test_09() throws Exception {
-        Expression e = new AnimoExpression("-5 * 6 7"); //5-6*7
-    	assertStringResult(e, "-37");
+    	Expression test = new AnimoExpression("- 5 * 6 7"); //5-6*7
+    	assertStringResult(test, "-37");
     }
 }

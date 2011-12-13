@@ -231,6 +231,16 @@ public class Utils {
 		try {
 		
 			Statement s = Statements.relationshipType(r);
+			if (s instanceof AN) {
+                try {
+                    s = Statements.name((String) THE._.reference(r));
+                    
+                } catch (Exception e) {
+    				out.write(new QCAVector(null, r));
+    				return;
+                }
+			}
+
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
 				PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
