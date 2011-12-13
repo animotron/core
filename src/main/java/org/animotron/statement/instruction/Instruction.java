@@ -19,13 +19,14 @@
 package org.animotron.statement.instruction;
 
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.Shift;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Instruction extends AbstractStatement {
+public abstract class Instruction extends AbstractStatement implements Shift {
 
     public Instruction(String name) {
         super(name);
