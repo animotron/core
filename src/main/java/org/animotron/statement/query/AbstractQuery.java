@@ -90,6 +90,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
         			@Override
         			public Evaluation evaluate(Path path) {
+        				if (path.endNode().getId() == 0)
+        					return EXCLUDE_AND_PRUNE;
+        				
         				//System.out.println(path);
         				
         				if (path.length() < 2)
@@ -130,6 +133,29 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				return EXCLUDE_AND_CONTINUE;
         			}
         		});
+    
+    protected static TraversalDescription THE_by_REF =
+            Traversal.description().
+                breadthFirst().
+                relationships(REF._, INCOMING ).
+                relationships(AN._, INCOMING ).
+                //evaluator(Evaluators.excludeStartPosition()).
+                evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+        			@Override
+        			public Evaluation evaluate(Path path) {
+        				if (path.length() == 0)
+        					return EXCLUDE_AND_CONTINUE;
+        					
+        				if (path.length() == 1 && path.lastRelationship().isType(REF._))
+    						return EXCLUDE_AND_CONTINUE;
+        					
+        				if (path.length() == 2 && path.lastRelationship().isType(THE._))
+    						return INCLUDE_AND_PRUNE;
+        				
+    					return EXCLUDE_AND_PRUNE;
+        			}
+        		});
+
 
     protected boolean filtering(PFlow pf, Node node, Set<Node> uses) {
     	if (uses != null) {
