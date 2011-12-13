@@ -80,8 +80,9 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 		                		else
 		                			x = execute(pf, r);
 		                			
-		                	} else
+		                	} else {
 		                		x = execute(x, pf, r);
+                            }
 	                	}
 	                }
                     Relationship r = new JExpression(value(x));
