@@ -19,6 +19,7 @@
 package org.animotron.statement.math;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.junit.Test;
@@ -115,5 +116,10 @@ public class MathTest extends ATest {
         );
     	assertStringResult(e, "10.0");
 	}
-
+    
+    @Test
+	public void test_09() throws Exception {
+        Expression e = new AnimoExpression("-5 * 6 7"); //5-6*7
+    	assertStringResult(e, "-37");
+    }
 }
