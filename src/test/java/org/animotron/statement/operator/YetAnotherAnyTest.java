@@ -22,6 +22,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -68,6 +69,8 @@ public class YetAnotherAnyTest extends ATest {
     }
 
     @Test
+    @Ignore
+    //TODO is all select a closest not leaf by a predicate?
     public void one_more_deep_any() throws Exception {
 
         JExpression.__(
