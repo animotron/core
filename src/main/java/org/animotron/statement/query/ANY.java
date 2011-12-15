@@ -87,7 +87,8 @@ public class ANY extends AbstractQuery implements Reference {
 			        	if (!Utils.haveContext(r.getEndNode())) {
 			        		
 			        		//XXX: need better check, it can be reference from other then AN
-			        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+			        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext())
 			        			continue;
 
 		        			Node res = r.getStartNode();
