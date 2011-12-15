@@ -46,7 +46,7 @@ public class PREFER extends AbstractQuery implements Reference {
 
 	public static final PREFER _ = new PREFER();
 
-	private PREFER() { super("prefer"); }
+	private PREFER() { super("prefer", "~~~"); }
 
     public OnQuestion onCalcQuestion() {
         return question;

@@ -33,7 +33,7 @@ public class IS extends AbstractQuery {
 
 	public static final IS _ = new IS();
 
-	private IS() { super("is"); }
+	private IS() { super("?is"); }
 
 	public OnQuestion onCalcQuestion() {
         return question;

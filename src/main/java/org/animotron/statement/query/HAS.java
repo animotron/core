@@ -33,7 +33,7 @@ public class HAS extends AbstractQuery {
 
 	public static final HAS _ = new HAS();
 
-	private HAS() { super("is"); }
+	private HAS() { super("?has"); }
 
 	public OnQuestion onCalcQuestion() {
         return question;

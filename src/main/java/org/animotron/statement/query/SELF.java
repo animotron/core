@@ -43,6 +43,7 @@ import static org.animotron.graph.RelationshipTypes.REF;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
+@Deprecated
 public class SELF extends AbstractQuery {
 	
 	public static final SELF _ = new SELF();
