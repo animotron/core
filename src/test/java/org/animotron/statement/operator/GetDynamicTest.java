@@ -21,7 +21,7 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.ALL;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -48,7 +48,7 @@ public class GetDynamicTest extends ATest {
         );
 
     	JExpression d = new JExpression(
-			_(THE._, "d", _(GETALL._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
+			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
         assertAnimoResult(d, "the d (Z \"A\") (Z \"B\").");
 	}
@@ -69,7 +69,7 @@ public class GetDynamicTest extends ATest {
         );
 
     	JExpression d = new JExpression(
-			_(THE._, "d", _(GETALL._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
+			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
         assertAnimoResult(d, "the d (Z \"A\") (ZZ \"B\").");
 	}
@@ -91,17 +91,17 @@ public class GetDynamicTest extends ATest {
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(GETALL._, "A", _(ALL._, "Z")))
+            _(THE._, "E", _(GET._, "A", _(ALL._, "Z")))
         );
         assertAnimoResult(E, "the E (B \"π\") (A \"Aπ\").");
 
         JExpression E1 = new JExpression(
-            _(THE._, "E1", _(GETALL._, "B", _(ALL._, "Z")))
+            _(THE._, "E1", _(GET._, "B", _(ALL._, "Z")))
         );
         assertAnimoResult(E1, "the E1 B \"π\".");
 
         JExpression F = new JExpression(
-            _(THE._, "F", _(GETALL._, _(ALL._, "A"), _(ALL._, "Z")))
+            _(THE._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
         );
         assertAnimoResult(F, "the F B \"π\".");
     }

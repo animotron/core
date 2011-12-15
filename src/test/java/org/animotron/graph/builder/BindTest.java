@@ -30,7 +30,7 @@ import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -173,7 +173,7 @@ public class BindTest extends ATest {
         );
         Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
         Expression z = new JExpression(
-            element("z", _(GETALL._, "e", _(x)), _(y.getEndNode().getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
+            element("z", _(GET._, "e", _(x)), _(y.getEndNode().getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
         );
         test(z, "\\z (get e c (any a) (all b)) (\\y (@z \"test\") \"content\").");
 	}

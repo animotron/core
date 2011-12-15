@@ -26,7 +26,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.PTRN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.text;
@@ -47,8 +47,8 @@ public class Factorial extends ATest {
 						_(Q._, "N0", text("Q:N1")),
 						_(Q._, "N0>", 
 							_(MUL._,
-								_(GETALL._, "number"),
-								_(AN._, "factorial", _(SUM._, _(GETALL._, "number"), _(Q._, "N-1")))
+								_(GET._, "number"),
+								_(AN._, "factorial", _(SUM._, _(GET._, "number"), _(Q._, "N-1")))
 							)
 						) 
 					)

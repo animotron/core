@@ -20,7 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -65,7 +65,7 @@ public class SimpleTest extends ATest {
         );
 
     	JExpression C = new JExpression(
-			_(THE._, "C", _(GETALL._, "A", _(AN._, "B")))
+			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
 		);
         assertAnimoResult(C, "the C A \"a@b\".");
 

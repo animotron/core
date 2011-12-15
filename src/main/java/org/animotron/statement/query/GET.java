@@ -60,15 +60,15 @@ import static org.animotron.graph.RelationshipTypes.RESULT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GETALL extends AbstractQuery implements Shift {
+public class GET extends AbstractQuery implements Shift {
 
-	public static final GETALL _ = new GETALL();
+	public static final GET _ = new GET();
 	
 	private static boolean debug = true;
 	
-	private GETALL() { super("get", "~~>"); }
+	private GET() { super("get", "<~"); }
 
-    protected GETALL(String... name) {
+    protected GET(String... name) {
         super(name);
     }
 
@@ -114,7 +114,7 @@ public class GETALL extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) {
 			
-			Utils.debug(GETALL._, op, thes);
+			Utils.debug(GET._, op, thes);
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {

@@ -20,7 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.SHALL;
 import org.junit.Test;
 
@@ -49,7 +49,7 @@ public class ShallTest extends ATest {
         );
 
     	JExpression D = new JExpression(
-			_(THE._, "D", _(GETALL._, "A", _(AN._, "C")))
+			_(THE._, "D", _(GET._, "A", _(AN._, "C")))
 		);
 
         assertStringResult(D, ".");

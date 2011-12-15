@@ -24,7 +24,7 @@ import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class CurrentWebFrameworkTest extends ATest {
                                 _(AN._, "content",
                                         element("html",
                                                 element("head",
-                                                        element("title", _(GETALL._, "title"))
+                                                        element("title", _(GET._, "title"))
                                                 ),
                                                 element("body",
                                                         _(ANY._, "layout")
@@ -65,7 +65,7 @@ public class CurrentWebFrameworkTest extends ATest {
                         _(THE._, "resource-not-found",
                                 _(AN._, "not-found-content"),
                                 _(AN._, "title", text("Not found")),
-                                _(AN._, "content", text("Can't find resource \""), _(GETALL._, "uri"), text("\""))
+                                _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
                         )
                 ),
                 new JExpression(
@@ -106,7 +106,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 new JExpression(
                         _(THE._, "not-found-layout",
                                 _(AN._, "layout"),
-                                element("p", _(GETALL._, "content"))
+                                element("p", _(GET._, "content"))
                         )
                 ),
                 new JExpression(
@@ -118,11 +118,11 @@ public class CurrentWebFrameworkTest extends ATest {
                 new JExpression(
                         _(THE._, "theme-concrete-root-layout",
                                 _(AN._, "root-layout"),
-                                element("h1", _(GETALL._, "title")),
-                                element("p", _(GETALL._, "content")),
+                                element("h1", _(GET._, "title")),
+                                element("p", _(GET._, "content")),
                                 element("ul",
-                                        element("li", text("host: \""), element("strong", _(GETALL._, "host")), text("\"")),
-                                        element("li", text("uri: \""), element("strong", _(GETALL._, "uri")), text("\""))
+                                        element("li", text("host: \""), element("strong", _(GET._, "host")), text("\"")),
+                                        element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
                                 )
                         )
                 ),
@@ -136,7 +136,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 new JExpression(
                         _(THE._, "rest",
                               _(ANY._, "site",
-                            		  _(WITH._, "server-name", _(GETALL._, "host"))
+                            		  _(WITH._, "server-name", _(GET._, "host"))
                     		  ),
                     		  _(ANY._, "resource")
                         )
@@ -144,7 +144,7 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         JExpression s = new JExpression(
-            _(GETALL._, "content",
+            _(GET._, "content",
                 _(AN._, "rest",
                     _(USE._, "root"),
                     _(AN._, "uri", text("/")),
@@ -181,7 +181,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "</html>");
         
         JExpression ss = new JExpression(
-                _(GETALL._, "content",
+                _(GET._, "content",
                     _(AN._, "rest",
                         _(USE._, "favicon.ico"),
                         _(AN._, "uri", text("/favicon.ico")),

@@ -24,7 +24,7 @@ import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GETALL;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class CurrentSite_Test extends ATest {
                 new JExpression(
                         _(THE._, "current-site",
                                 _(ANY._, "site",
-                                        _(WITH._, "server-name", _(GETALL._, "host", _(ANY._, "request")))
+                                        _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                                 )
                         )
                 ),
