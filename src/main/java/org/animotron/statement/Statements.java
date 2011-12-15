@@ -50,7 +50,9 @@ public class Statements {
 			try {
 				Field field = clazz.getField("_");
 				Statement statement = (Statement) field.get(clazz);
-                statementsByName.put(statement.name(), statement);
+                for (String i :statement.names()) {
+                    statementsByName.put(i, statement);
+                }
 			} catch (Exception e) {
 				//TODO: log
 				e.printStackTrace();

@@ -22,7 +22,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
-import org.animotron.statement.query.GET;
+import org.animotron.statement.query.GETALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -43,7 +43,7 @@ public class AfterLastTest extends ATest {
         ));
     	
     	JExpression C = new JExpression(
-			_(THE._, "C", _(AfterLast._, text("."), _(GET._, "B", JExpression._(AN._, "A"))))
+			_(THE._, "C", _(AfterLast._, text("."), _(GETALL._, "B", JExpression._(AN._, "A"))))
 		);
     	
         assertAnimoResult(C, "the C \"z\".");

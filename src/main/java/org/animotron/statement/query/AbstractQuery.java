@@ -52,7 +52,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  */
 public abstract class AbstractQuery extends Operator implements Evaluable, Query {
 
-    public AbstractQuery(String name) {
+    public AbstractQuery(String... name) {
         super(name);
     }
 

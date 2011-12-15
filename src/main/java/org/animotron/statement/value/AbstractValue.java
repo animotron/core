@@ -40,7 +40,7 @@ import static org.animotron.graph.AnimoGraph.createNode;
  */
 public abstract class AbstractValue extends AbstractStatement {
 
-	protected AbstractValue(String name) { super(name); }
+	protected AbstractValue(String... name) { super(name); }
 
     @Override
     protected final Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {

@@ -46,7 +46,7 @@ public class ALL extends AbstractQuery implements Reference {
 	
 	public static final ALL _ = new ALL();
 	
-	private ALL() { super("all"); }
+	private ALL() { super("all", "~~"); }
 
     public OnQuestion onCalcQuestion() {
         return question;

@@ -28,7 +28,7 @@ import org.animotron.statement.operator.Shift;
  */
 public abstract class Instruction extends AbstractStatement implements Shift {
 
-    public Instruction(String name) {
+    public Instruction(String... name) {
         super(name);
     }
 

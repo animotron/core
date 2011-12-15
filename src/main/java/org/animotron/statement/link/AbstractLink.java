@@ -31,7 +31,7 @@ import static org.animotron.graph.AnimoGraph.createNode;
  */
 public abstract class AbstractLink extends AbstractStatement {
 
-	protected AbstractLink(String name) { super(name); }
+	protected AbstractLink(String... name) { super(name); }
 
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {

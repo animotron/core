@@ -96,7 +96,7 @@ public class SELF extends AbstractQuery {
 
             if (ref != null) {
                 //reference in processing flow
-                Relationship[] ress = GET._.getBySELF(pf, ref.getEndNode(), thes);
+                Relationship[] ress = GETALL._.getBySELF(pf, ref.getEndNode(), thes);
 
                 if (ress != null)
                 	for (int i = 0; i < ress.length; i++)
@@ -104,7 +104,7 @@ public class SELF extends AbstractQuery {
 
             } else if (searchHave == 2) {
                 //the instance self in have
-            	Relationship[] ress = GET._.getBySELF(pf, pf.getStartNode(), thes);
+            	Relationship[] ress = GETALL._.getBySELF(pf, pf.getStartNode(), thes);
 
                 if (ress != null)
                 	for (int i = 0; i < ress.length; i++)

@@ -37,7 +37,7 @@ import java.io.IOException;
  */
 public abstract class AbstractUpdate extends Operator implements Evaluable {
 
-	protected AbstractUpdate(String name) { super(name); }
+	protected AbstractUpdate(String... name) { super(name); }
 
     protected abstract void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> target);
 	

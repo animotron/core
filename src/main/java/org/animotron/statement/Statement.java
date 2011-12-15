@@ -31,8 +31,10 @@ import org.neo4j.graphdb.RelationshipType;
 public interface Statement extends RelationshipType {
 	
 	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException;
-	
+
     public String name();
+
+    public String[] names();
 
     public Object reference(Relationship r);
 

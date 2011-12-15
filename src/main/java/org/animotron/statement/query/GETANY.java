@@ -51,8 +51,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.animotron.Properties.RID;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'Get'. Return 'have' relations on provided context.
@@ -60,13 +60,13 @@ import static org.animotron.graph.RelationshipTypes.RESULT;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class GET extends AbstractQuery implements Shift {
+public class GETANY extends AbstractQuery implements Shift {
 
-	public static final GET _ = new GET();
-	
+	public static final GETANY _ = new GETANY();
+
 	private static boolean debug = true;
-	
-	private GET() { super("get"); }
+
+	private GETANY() { super("~>"); }
 
 	TraversalDescription td = Traversal.description().
 			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
@@ -110,7 +110,7 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) {
 			
-			Utils.debug(GET._, op, thes);
+			Utils.debug(GETANY._, op, thes);
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {

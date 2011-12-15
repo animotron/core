@@ -28,7 +28,7 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.query.GET;
+import org.animotron.statement.query.GETALL;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -60,7 +60,7 @@ public class WITH extends Operator implements Predicate {
 		Set<Node> thes = new FastSet<Node>();
 		thes.add(theNode);
 
-		Set<QCAVector> haveSet = GET._.get(pf, op, ref, thes, null);
+		Set<QCAVector> haveSet = GETALL._.get(pf, op, ref, thes, null);
 		if (haveSet == null || haveSet.isEmpty()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();

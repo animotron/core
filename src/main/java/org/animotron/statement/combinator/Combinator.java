@@ -29,6 +29,6 @@ import org.animotron.statement.operator.Evaluable;
  */
 public abstract class Combinator extends AbstractLink implements Evaluable {
 
-	protected Combinator(String name) { super(name); }
+	protected Combinator(String... name) { super(name); }
 
 }

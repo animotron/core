@@ -20,7 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GET;
+import org.animotron.statement.query.GETALL;
 import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.SHALL;
 import org.junit.Ignore;
@@ -49,7 +49,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(GET._, "A", _(AN._, "C")))
+            _(THE._, "E", _(GETALL._, "A", _(AN._, "C")))
         );
         assertAnimoResult(E, "the E B \"π\".");
 
@@ -71,7 +71,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(GET._, "A", _(AN._, "D")))
+            _(THE._, "E", _(GETALL._, "A", _(AN._, "D")))
         );
         //XXX: assertAnimoResult(E, "the E B \"π\".");
         assertAnimoResult(E, "the E shall B \"π\".");
@@ -93,7 +93,7 @@ public class YetAnotherGetTest extends ATest{
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(GET._, "A", _(AN._, "D")))
+            _(THE._, "E", _(GETALL._, "A", _(AN._, "D")))
         );
         assertAnimoResult(E, "the E B \"π\".");
 

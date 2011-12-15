@@ -29,6 +29,6 @@ public class VALUE extends AbstractValue {
 
     private VALUE() { super("value"); }
 
-    protected VALUE(String name) { super(name); }
+    protected VALUE(String... name) { super(name); }
 
 }

@@ -31,7 +31,7 @@ import static org.animotron.Properties.NAME;
  */
 public abstract class Operator extends AbstractLink {
 
-	protected Operator(String name) { super(name); }
+	protected Operator(String... name) { super(name); }
 
     @Override
     public Object reference(Relationship r) {

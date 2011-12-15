@@ -37,9 +37,9 @@ import static org.animotron.graph.RelationshipTypes.RESULT;
  */
 public abstract class AbstractStatement implements Statement {
 	
-	private String name;
+	private String[] name;
 
-	public AbstractStatement(String name) {
+	public AbstractStatement(String... name) {
 		this.name = name;
 	}
 
@@ -47,12 +47,16 @@ public abstract class AbstractStatement implements Statement {
 //        this(reference);
 //	}
 
-	@Override
-	public String name() {
-		return name;
-	}
-	
-	protected Relationship createResultInMemory(Node node, Relationship r) {
+    @Override
+    public String name() {
+        return name[0];
+    }
+    @Override
+    public String[] names() {
+        return name;
+    }
+
+    protected Relationship createResultInMemory(Node node, Relationship r) {
 		Relationship res = new InMemoryRelationship(node, r.getEndNode(), RESULT);
 		//store to relationship arrow
 		RID.set(res, r.getId());

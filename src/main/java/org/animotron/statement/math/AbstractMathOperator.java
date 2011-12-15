@@ -34,7 +34,7 @@ import java.io.IOException;
  */
 public abstract class AbstractMathOperator extends Instruction implements Evaluable{
 
-	protected AbstractMathOperator(String name) { super(name); }
+	protected AbstractMathOperator(String... name) { super(name); }
 
     protected Number param (PFlow pf, QCAVector vector) throws IOException {
     	String number = CachedSerializer.STRING.serialize(pf, vector);

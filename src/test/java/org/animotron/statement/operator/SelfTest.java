@@ -20,7 +20,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GET;
+import org.animotron.statement.query.GETALL;
 import org.animotron.statement.query.SELF;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -60,11 +60,11 @@ public class SelfTest extends ATest {
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(GET._, "B", _(AN._, "C")))
+            _(THE._, "E", _(GETALL._, "B", _(AN._, "C")))
         );
     	
         JExpression F = new JExpression(
-            _(THE._, "F", _(GET._, "B", _(AN._, "D")))
+            _(THE._, "F", _(GETALL._, "B", _(AN._, "D")))
         );
     	
         assertAnimoResult(C, "the C (A \".\") (B A \".\").");
@@ -104,12 +104,12 @@ public class SelfTest extends ATest {
         assertAnimoResult(D, "the D (C) (A \":\").");
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(GET._, "B", _(AN._, "C")))
+            _(THE._, "E", _(GETALL._, "B", _(AN._, "C")))
         );
         assertAnimoResult(E, "the E B A \".\".");
 
         JExpression F = new JExpression(
-            _(THE._, "F", _(GET._, "B", _(AN._, "D")))
+            _(THE._, "F", _(GETALL._, "B", _(AN._, "D")))
         );
         assertAnimoResult(F, "the F B A \":\".");
 

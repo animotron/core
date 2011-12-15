@@ -27,7 +27,7 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.query.GET;
+import org.animotron.statement.query.GETALL;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -57,7 +57,7 @@ public class EQ extends Operator implements Predicate {
 		Set<Node> thes = new FastSet<Node>();
 		thes.add(theNode);
 		
-		Relationship[] have = GET._.getBySELF(pf, ref, thes);
+		Relationship[] have = GETALL._.getBySELF(pf, ref, thes);
 		if (have == null) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
