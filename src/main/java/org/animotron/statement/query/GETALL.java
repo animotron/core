@@ -68,6 +68,10 @@ public class GETALL extends AbstractQuery implements Shift {
 	
 	private GETALL() { super("get", "~~>"); }
 
+    protected GETALL(String... name) {
+        super(name);
+    }
+
 	TraversalDescription td = Traversal.description().
 			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
 
@@ -77,7 +81,7 @@ public class GETALL extends AbstractQuery implements Shift {
 				relationships(AN._, OUTGOING).
 				relationships(SHALL._, OUTGOING);
 
-	public OnQuestion onCalcQuestion() {
+    public OnQuestion onCalcQuestion() {
 		return question;
 	}
 	
