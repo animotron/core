@@ -206,6 +206,12 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	    			//System.out.println(" + "+r.getEndNode());
 	    		}
 
+    		if (prev.getAnswers() != null)
+    			for (Relationship a : prev.getAnswers())
+		    		for (Relationship r : a.getEndNode().getRelationships(OUTGOING, USE._)) {
+		    			uses.add(r.getEndNode());
+		    			//System.out.println(" + "+r.getEndNode());
+		    		}
     	}
     	
 		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {

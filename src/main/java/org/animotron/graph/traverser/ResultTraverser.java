@@ -119,7 +119,7 @@ public class ResultTraverser extends AnimoTraverser {
         if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<QCAVector> in = Evaluator._.execute(pflow, new QCAVector(r, rr));
+            Iterator<QCAVector> in = Evaluator._.execute(pflow, rr.question(r));
             iterate(handler, pflow, null, rr, in, level, isOne);
         }
         
@@ -147,6 +147,7 @@ public class ResultTraverser extends AnimoTraverser {
         int pos = 0;
         while (it.hasNext()) {
         	i = it.next();
+        	rr.addAnswer(i);
         	i.setPrecedingSibling(prev);
         	prev = i;
             if (isFirst) {

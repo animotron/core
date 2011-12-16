@@ -109,16 +109,10 @@ public class PFlow {
 		
 		cyclingDetection(op);
 
-		//XXX: remove?
-		Statement s = Statements.relationshipType(op);
-		if (s instanceof Reference || op.isType(REF))
-			addContextPoint(op);
-		
-		else if (op.isType(RESULT))
-			addContextPoint(new QCAVector(null,Utils.relax(op)));
-			
 		if (path.isEmpty())
 			path.add(new QCAVector(op));
+		else if (!path.firstElement().getQuestion().equals(op))
+			path.add(new QCAVector(op, path.firstElement()));
 		
 		this.op = op;
 	}
@@ -214,7 +208,7 @@ public class PFlow {
 
 			Relationship createdAnswer = Utils.createResult( this, op.getEndNode(), answer, rType, hash );
 			
-			parent.answer.publish(new QCAVector(op, createdAnswer));
+			parent.answer.publish(path.firstElement().answered(createdAnswer));
 		}
 	}
 
@@ -568,5 +562,9 @@ public class PFlow {
 	private void ops(StringBuilder sb) {
 		if (op != null) { sb.append(op); sb.append(" ");}
 		if (parent != null) parent.ops(sb);
+	}
+
+	public QCAVector getVector() {
+		return path.firstElement();
 	}
 }
