@@ -97,8 +97,20 @@ public class GET extends AbstractQuery implements Shift {
 
 			final Set<Node> thes = new FastSet<Node>(); 
 			
+			Relationship r = null;
 			for (QCAVector theNode : AN.getREFs(pf, op)) {
-				thes.add(theNode.getAnswer().getEndNode());
+				r = theNode.getAnswer();
+				if (r.isType(AN._)) {
+					try {
+						for (QCAVector rr : Utils.eval(pf, theNode)) {
+							thes.add(rr.getAnswer().getEndNode());
+						}
+					} catch (IOException e) {
+						pf.sendException(e);
+						return;
+					}
+				} else
+					thes.add(r.getEndNode());
 			}
 
 			evalGet(pf, op, node, thes, visitedREFs);
