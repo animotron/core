@@ -196,12 +196,12 @@ public class Utils {
 				PFlow _pf_ = new PFlow(pf);
 				_pf_.addContextPoint(e);
 				
-				Relationship result = e.getAnswer();
-				
-				if (result.isType(REF) 
-						|| result.isType(org.animotron.statement.operator.REF._)
-						|| result.isType(THE._)
-					) {
+                Statement aS = Statements.relationshipType(e.getAnswer());
+				if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
+//				if (result.isType(REF) 
+//						|| result.isType(org.animotron.statement.operator.REF._)
+//						|| result.isType(THE._)
+//					) {
 					out.write(e);
 				} else {
 					for (QCAVector rr : eval(_pf_, e)) {

@@ -150,7 +150,8 @@ public abstract class Manipulator {
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
-                            if (s instanceof Evaluable && !(s instanceof Shift)) {
+                            Statement qS = Statements.relationshipType(context.getQuestion());
+                            if (s instanceof Evaluable && !(qS instanceof Shift)) {
                                 PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, context), context);
                                 for (QCAVector v : in) {
                                     out.write(v);

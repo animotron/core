@@ -41,7 +41,7 @@ public class UpdateTest extends ATest {
     @Test
     public void test_001() throws Exception {
         __(new AnimoExpression("the a x z."));
-        assertAnimoResult(new AnimoExpression("all x"), "z.");
+        assertAnimoResult("all x", "z.");
     }
 
     @Test
