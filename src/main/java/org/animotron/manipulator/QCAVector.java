@@ -244,9 +244,9 @@ public class QCAVector {
 		b.append(super.hashCode());
 		b.append("] ");
 
-		//System.out.println("DEBUG START");
-		//debug(b);
-		//System.out.println("DEBUG END");
+		System.out.println("DEBUG START");
+		debug(b);
+		System.out.println("DEBUG END");
 		return b.toString();
 	}
 
