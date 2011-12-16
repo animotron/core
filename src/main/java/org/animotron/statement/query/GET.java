@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -152,7 +152,7 @@ public class GET extends AbstractQuery implements Shift {
 					boolean first = true;
 					Set<QCAVector> rSet = null;
 					for (QCAVector vector : pf.getPFlowPath()) {
-						System.out.println("CHECK PFLOW "+vector);
+						//System.out.println("CHECK PFLOW "+vector);
 						if (first) {
 							first = false;
 
@@ -542,7 +542,7 @@ public class GET extends AbstractQuery implements Shift {
 		Map<Relationship, Path> paths = new FastMap<Relationship, Path>();
 
 		for (Path path : trav.traverse(context)) {
-			System.out.println("* "+path);
+			//System.out.println("* "+path);
 			
 			if (path.length() == 1) {
 				if (op == null) {

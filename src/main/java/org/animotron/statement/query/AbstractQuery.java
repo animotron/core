@@ -118,7 +118,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
         			@Override
         			public Evaluation evaluate(Path path) {
-        				System.out.println(" "+path);
+        				//System.out.println(" "+path);
         				
         				if (path.length() < 1)
         					return EXCLUDE_AND_CONTINUE;
@@ -190,9 +190,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     }
 
     private void searchForUSE(Set<Node> uses, QCAVector vector) {
-    	System.out.println("searchForUSE");
+    	//System.out.println("searchForUSE");
     	QCAVector prev = vector.getPrecedingSibling();
-    	System.out.println(" prev "+prev);
+    	//System.out.println(" prev "+prev);
     	if (prev != null) {
     		if (prev.getQuestion() != null)
 	    		for (Relationship r : prev.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
@@ -325,7 +325,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+				//System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {

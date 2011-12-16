@@ -81,7 +81,7 @@ public class PREFER extends AbstractQuery implements Reference {
 			
 				        for (Path path : td_IS_leaf.traverse(node)) {
 				        	
-				        	System.out.println(path);
+				        	//System.out.println(path);
 
 				        	Relationship r = path.lastRelationship();
 				        	if (!Utils.haveContext(r.getEndNode())) {

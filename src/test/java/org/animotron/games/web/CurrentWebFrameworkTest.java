@@ -126,20 +126,13 @@ public class CurrentWebFrameworkTest extends ATest {
                                 )
                         )
                 ),
-//                new JExpression(
-//                        _(THE._, "current-site",
-//                                _(ANY._, "site",
-//                                        _(WITH._, "server-name", _(GET._, "host"))
-//                                )
-//                        )
-//                ),
                 new JExpression(
-                        _(THE._, "rest",
-                              _(ANY._, "site",
-                            		  _(WITH._, "server-name", _(GET._, "host"))
-                    		  ),
-                    		  _(ANY._, "resource")
-                        )
+            		_(THE._, "rest",
+        				_(ANY._, "site",
+    						_(WITH._, "server-name", _(GET._, "host"))
+						),
+						_(ANY._, "resource")
+    				)
                 )
         );
 

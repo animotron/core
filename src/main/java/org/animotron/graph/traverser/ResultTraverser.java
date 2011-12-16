@@ -104,8 +104,6 @@ public class ResultTraverser extends AnimoTraverser {
     protected boolean result(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne) throws IOException {
     	Relationship r = rr.getClosest();
     	
-        System.out.println(" BEFORE "+rr);
-
         PFlow pflow = new PFlow(pf);
 
     	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
@@ -123,8 +121,6 @@ public class ResultTraverser extends AnimoTraverser {
             iterate(handler, pflow, null, rr, in, level, isOne);
         }
         
-        System.out.println(" AFTER "+rr);
-
         return found;
 
     }
