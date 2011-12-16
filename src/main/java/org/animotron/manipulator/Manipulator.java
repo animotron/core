@@ -83,7 +83,8 @@ public abstract class Manipulator {
 		
 		if (sub == null) {
 			if (op instanceof Relationship) {
-				out.write( new QCAVector((Relationship)op, (Relationship)op) ); //XXX: is it correct???
+				vector.setAnswer(op);
+				out.write( vector );
 			} else
 				System.out.println("UNHANDLED op "+op);
 			out.close();

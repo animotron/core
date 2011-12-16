@@ -128,6 +128,10 @@ public class QCAVector {
 		return question;
 	}
 
+	public void setAnswer(Relationship r) {
+		answer = r;
+	}
+
 	public Relationship getAnswer() {
 		return Utils.relax(answer);
 	}
