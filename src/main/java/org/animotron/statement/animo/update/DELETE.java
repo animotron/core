@@ -18,14 +18,6 @@
  */
 package org.animotron.statement.animo.update;
 
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
-
-import java.io.IOException;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -37,23 +29,8 @@ public class DELETE extends AbstractUpdate {
 	private DELETE() {super("delete");}
 
     @Override
-    protected void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> target) {
+    protected void execute() {
         //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    protected void execute(PFlow pf, IndexHits<Relationship> params) throws IOException {
-        if (params.size() > 2) {
-            for (Relationship r : params) {
-                for (QCAVector i : Evaluator._.execute(pf, r)) {
-                    execute(i, null, null);
-                }
-            }
-        } else if (params.hasNext()) {
-            for (QCAVector i : Evaluator._.execute(pf, params.next())) {
-                execute(i, params.next(), null);
-            }
-        }
     }
 
 }
