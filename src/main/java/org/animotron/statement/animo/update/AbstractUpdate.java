@@ -24,13 +24,12 @@ import org.animotron.io.PipedInput;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Utils;
+import org.animotron.statement.operator.*;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -69,16 +68,36 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 target.add(r);
             }
             for (QCAVector v : destination) {
-                Relationship r = v.getClosest();
-                execute(v, target);
+                Relationship r = getDestination(v);
+                execute(v, r, target);
             }
         } finally {
             it.close();
         }
     }
 
-    private void execute(QCAVector v, Set<Relationship> target) {
+    private Relationship getDestination(QCAVector v){
+        return v.getClosest();
+    };
+
+    private void execute(QCAVector v, Relationship destination, Set<Relationship> target) {
+        List<QCAVector> c = v.getContext();
+        if (c != null) {
+            for (QCAVector i : c) {
+                execute(i, destination, target);
+            }
+        } else {
+            rebuild(getThe(v.getClosest()), destination, target);
+        }
+    }
+
+    private Relationship getThe(Relationship r) {
+        return r.getEndNode().getSingleRelationship(THE._, Direction.INCOMING);
+    }
+
+    private void rebuild(Relationship the, Relationship destination, Set<Relationship> target) {
 
     }
+
 
 }
