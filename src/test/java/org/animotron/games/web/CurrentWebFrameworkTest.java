@@ -41,99 +41,99 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test() throws Exception {
 
         __(
-                new JExpression(
-                        _(THE._, "service",
-                                _(AN._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "html",
-                                _(AN._, "mime-type", text("text/html")),
-                                _(AN._, "content",
-                                        element("html",
-                                                element("head",
-                                                        element("title", _(GET._, "title"))
-                                                ),
-                                                element("body",
-                                                        _(ANY._, "layout")
-                                                )
-                                        )
-                                )
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "resource-not-found",
-                                _(AN._, "not-found-content"),
-                                _(AN._, "title", text("Not found")),
-                                _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "it-working",
-                                _(AN._, "root-content"),
-                                _(AN._, "title", text("Welcome to Animo")),
-                                _(AN._, "content", text("It is working!"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "localhost-site",
-                                _(AN._, "site"),
-                                _(AN._, "server-name", text("localhost")),
-                                _(USE._, "theme-concrete-root-layout"),
-                                _(USE._, "it-working")
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "html",
-                                        _(ANY._, "not-found-content"),
-                                        _(USE._, "not-found-layout")
-                                )
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "html",
-                                        _(ANY._, "root-content"),
-                                        _(USE._, "root-layout")
-                                )
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-layout",
-                                _(AN._, "layout"),
-                                element("p", _(GET._, "content"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-layout",
-                                _(AN._, "layout"),
-                                element("p", text("The default root layout!"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "theme-concrete-root-layout",
-                                _(AN._, "root-layout"),
-                                element("h1", _(GET._, "title")),
-                                element("p", _(GET._, "content")),
-                                element("ul",
-                                        element("li", text("host: \""), element("strong", _(GET._, "host")), text("\"")),
-                                        element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
-                                )
-                        )
-                ),
-                new JExpression(
-            		_(THE._, "rest",
-        				_(ANY._, "site",
-    						_(WITH._, "server-name", _(GET._, "host"))
-						),
-						_(ANY._, "resource")
-    				)
+            new JExpression(
+                _(THE._, "service",
+                    _(AN._, "resource")
                 )
+            ),
+            new JExpression(
+                _(THE._, "html",
+                    _(AN._, "mime-type", text("text/html")),
+                    _(AN._, "content",
+                        element("html",
+                            element("head",
+                                element("title", _(GET._, "title"))
+                            ),
+                            element("body",
+                                _(ANY._, "layout")
+                            )
+                        )
+                    )
+                )
+            ),
+            new JExpression(
+                _(THE._, "resource-not-found",
+                    _(AN._, "not-found-content"),
+                    _(AN._, "title", text("Not found")),
+                    _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
+                )
+            ),
+            new JExpression(
+                _(THE._, "it-working",
+                    _(AN._, "root-content"),
+                    _(AN._, "title", text("Welcome to Animo")),
+                    _(AN._, "content", text("It is working!"))
+                )
+            ),
+            new JExpression(
+                _(THE._, "localhost-site",
+                    _(AN._, "site"),
+                    _(AN._, "server-name", text("localhost")),
+                    _(USE._, "theme-concrete-root-layout"),
+                    _(USE._, "it-working")
+                )
+            ),
+            new JExpression(
+                _(THE._, "not-found-service",
+                    _(AN._, "service"),
+                    _(AN._, "not-found"),
+                    _(AN._, "html",
+                        _(ANY._, "not-found-content"),
+                        _(USE._, "not-found-layout")
+                    )
+                )
+            ),
+            new JExpression(
+                _(THE._, "root-service",
+                    _(AN._, "service"),
+                    _(AN._, "root"),
+                    _(AN._, "html",
+                        _(ANY._, "root-content"),
+                        _(USE._, "root-layout")
+                    )
+                )
+            ),
+            new JExpression(
+                _(THE._, "not-found-layout",
+                    _(AN._, "layout"),
+                    element("p", _(GET._, "content"))
+                )
+            ),
+            new JExpression(
+                _(THE._, "root-layout",
+                    _(AN._, "layout"),
+                    element("p", text("The default root layout!"))
+                )
+            ),
+            new JExpression(
+                _(THE._, "theme-concrete-root-layout",
+                    _(AN._, "root-layout"),
+                    element("h1", _(GET._, "title")),
+                    element("p", _(GET._, "content")),
+                    element("ul",
+                        element("li", text("host: \""), element("strong", _(GET._, "host")), text("\"")),
+                        element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
+                    )
+                )
+            ),
+            new JExpression(
+        		_(THE._, "rest",
+    				_(ANY._, "site",
+						_(WITH._, "server-name", _(GET._, "host"))
+					),
+					_(ANY._, "resource")
+				)
+            )
         );
 
         JExpression s = new JExpression(
