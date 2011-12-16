@@ -88,7 +88,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 //    		i.close();
 //    	}
 //        if (!found) {
-            Iterator<QCAVector> in = Evaluator._.execute(pflow, new QCAVector(r, rr), null, false);
+            Iterator<QCAVector> in = Evaluator._.execute(pflow, rr.question(r), null, false);
             iterate(handler, pflow, null, rr, in, level, isOne);
 //        }
 
