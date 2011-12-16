@@ -26,6 +26,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -113,7 +114,7 @@ public class ALL extends AbstractQuery implements Reference {
 			    					
 			    					if (res.isType(REF._)) continue;
 			    					
-			    					if (res.isType(AN._)) {
+			    					if (res.isType(AN._) || res.isType(VALUE._)) {
 			    						if (filtering(pf, res.getStartNode(), uses)) {
 					        				pf.sendAnswer( res );
 			    						}
