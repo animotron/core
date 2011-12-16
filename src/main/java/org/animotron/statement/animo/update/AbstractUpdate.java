@@ -18,18 +18,20 @@
  */
 package org.animotron.statement.animo.update;
 
+import javolution.util.FastSet;
 import org.animotron.graph.index.Order;
-import org.animotron.manipulator.Evaluator;
+import org.animotron.io.PipedInput;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,39 +41,44 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
 	protected AbstractUpdate(String... name) { super(name); }
 
-    protected abstract void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> target);
-	
-    @Override
-	public OnQuestion onCalcQuestion() {
-		return question;
-	}
+    protected abstract void execute();
 
-    protected void execute(PFlow pf, IndexHits<Relationship> params) throws IOException {
-        if (params.hasNext()) {
-            Relationship point = params.next();
-            Relationship pattern = params.size() > 2 ? params.next() : null;
-            for (QCAVector i : Evaluator._.execute(pf, point)) {
-                execute(i, pattern, params);
+    public OnQuestion onCalcQuestion() {
+        return question;
+    }
+
+    private OnQuestion question = new OnQuestion() {
+        @Override
+        public void onMessage(PFlow pf) {
+            PipedInput<QCAVector> destination = Utils.getByREF(pf);
+            execute(destination, Order.queryDown(pf.getOP().getEndNode()));
+            pf.done();
+        }
+    };
+
+    private void execute(PipedInput<QCAVector> destination, IndexHits<Relationship> it) {
+        try {
+            Set<Relationship> target = new FastSet<Relationship>();
+            boolean first = true;
+            for (Relationship r : it) {
+                if (first) {
+                    first = false;
+                    continue;
+                }
+                if (r.isType(REF._)) continue;
+                target.add(r);
             }
+            for (QCAVector v : destination) {
+                Relationship r = v.getClosest();
+                execute(v, target);
+            }
+        } finally {
+            it.close();
         }
     }
 
-	private OnQuestion question = new OnQuestion() {
-		@Override
-		public void onMessage(final PFlow pf) {
-            if (!Utils.results(pf)) {
-                IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
-                try {
-                    execute(pf, params);
-                } catch (IOException e) {
-                    pf.sendException(e);
-                    return;
-                } finally {
-                    params.close();
-                }
-            }
-            pf.done();
-		}
-	};
-	
+    private void execute(QCAVector v, Set<Relationship> target) {
+
+    }
+
 }

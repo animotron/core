@@ -25,7 +25,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.graph.index.State;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Node;
 
@@ -44,7 +43,6 @@ public class IsLoopTest extends ATest {
     }
 
 	@Test
-	@Ignore
 	public void storeAndSerializeResult() throws Exception {
         JExpression.__(new JExpression(_(THE._, "A")));
         test("A");

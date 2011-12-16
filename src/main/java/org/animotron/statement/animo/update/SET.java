@@ -18,10 +18,6 @@
  */
 package org.animotron.statement.animo.update;
 
-import org.animotron.manipulator.QCAVector;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -33,7 +29,7 @@ public class SET extends AbstractUpdate {
 	private SET() {super("set");}
 
     @Override
-    protected void execute(QCAVector destination, Relationship pattern, IndexHits<Relationship> target) {
+    protected void execute() {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }
