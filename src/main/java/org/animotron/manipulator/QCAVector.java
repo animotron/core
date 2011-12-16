@@ -330,6 +330,9 @@ public class QCAVector {
 	}
 
 	public QCAVector question(Relationship q) {
+		if (question == null)
+			return new QCAVector(q, this);
+			
 		if (question.equals(q) && answer == null)
 			return this;
 		
