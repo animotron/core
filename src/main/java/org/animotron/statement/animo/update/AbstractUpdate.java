@@ -29,6 +29,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
@@ -40,7 +41,9 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
 	protected AbstractUpdate(String... name) { super(name); }
 
-    protected abstract void execute();
+    protected abstract void execute(Relationship the, Relationship destination, Set<Relationship> target);
+
+    protected abstract void execute(Relationship the, Set<Relationship> target) throws IOException;
 
     public OnQuestion onCalcQuestion() {
         return question;
@@ -50,12 +53,16 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         @Override
         public void onMessage(PFlow pf) {
             PipedInput<QCAVector> destination = Utils.getByREF(pf);
-            execute(destination, Order.queryDown(pf.getOP().getEndNode()));
+            try {
+                execute(destination, Order.queryDown(pf.getOP().getEndNode()));
+            } catch (IOException e) {
+                pf.sendException(e);
+            }
             pf.done();
         }
     };
 
-    private void execute(PipedInput<QCAVector> destination, IndexHits<Relationship> it) {
+    private void execute(PipedInput<QCAVector> destination, IndexHits<Relationship> it) throws IOException {
         try {
             Set<Relationship> target = new FastSet<Relationship>();
             boolean first = true;
@@ -79,24 +86,24 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         return v.getClosest();
     };
 
-    private void execute(QCAVector v, Relationship destination, Set<Relationship> target) {
+    private void execute(QCAVector v, Relationship destination, Set<Relationship> target) throws IOException {
         List<QCAVector> c = v.getContext();
         if (c != null) {
             for (QCAVector i : c) {
                 execute(i, destination, target);
             }
         } else {
-            rebuild(getThe(v.getClosest()), destination, target);
+            Relationship the = getThe(v.getClosest());
+            if (the.getEndNode().equals(destination.getEndNode())) {
+                execute(the, target);
+            } else {
+                execute(the, destination, target);
+            }
         }
     }
 
     private Relationship getThe(Relationship r) {
         return r.getEndNode().getSingleRelationship(THE._, Direction.INCOMING);
     }
-
-    private void rebuild(Relationship the, Relationship destination, Set<Relationship> target) {
-
-    }
-
 
 }

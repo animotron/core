@@ -18,6 +18,10 @@
  */
 package org.animotron.statement.animo.update;
 
+import org.neo4j.graphdb.Relationship;
+
+import java.util.Set;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -29,7 +33,13 @@ public class REPLACE extends AbstractUpdate {
 	private REPLACE() {super("replace");}
 
     @Override
-    protected void execute() {
+    protected void execute(Relationship the, Relationship destination, Set<Relationship> target) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
+
+    @Override
+    protected void execute(Relationship the, Set<Relationship> target) {
+        throw new UnsupportedOperationException();
+    }
+
 }
