@@ -69,6 +69,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             }
             for (QCAVector v : destination) {
                 Relationship r = getDestination(v);
+                System.out.println(v);
                 execute(v, r, target);
             }
         } finally {

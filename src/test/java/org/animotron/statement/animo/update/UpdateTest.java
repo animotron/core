@@ -39,6 +39,18 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    public void test_001() throws Exception {
+        __(new AnimoExpression("the a x z."));
+        assertAnimoResult(new AnimoExpression("all x"), "z.");
+    }
+
+    @Test
+    public void test_002() throws Exception {
+        __(new AnimoExpression("the a x 1."));
+        assertAnimoResult(new AnimoExpression("all x"), "1.");
+    }
+
+    @Test
 	public void test_01() throws Exception {
         Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("replace (get x a) (y 2)."));
