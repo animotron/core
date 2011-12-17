@@ -41,9 +41,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
 	protected AbstractUpdate(String... name) { super(name); }
 
-    protected abstract void execute(Relationship the, Relationship destination, Set<Relationship> target);
-
-    protected abstract void execute(Relationship the, Set<Relationship> target) throws IOException;
+    protected abstract void execute(Set<Relationship> the, Set<Relationship> destination, Set<Relationship> target) throws IOException;
 
     public OnQuestion onCalcQuestion() {
         return question;
@@ -64,7 +62,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
     private void execute(PipedInput<QCAVector> destination, IndexHits<Relationship> it) throws IOException {
         try {
-            Set<Relationship> target = new FastSet<Relationship>();
+            Set<Relationship> param = new FastSet<Relationship>();
             boolean first = true;
             for (Relationship r : it) {
                 if (first) {
@@ -72,38 +70,29 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                     continue;
                 }
                 if (r.isType(REF._)) continue;
-                target.add(r);
+                param.add(r);
             }
+            Set<Relationship> the = new FastSet<Relationship>();
+            Set<Relationship> d = new FastSet<Relationship>();
             for (QCAVector v : destination) {
-                execute(v, getDestination(v), target);
+                d.add(v.getClosest());
+                getThe(v, the);
             }
+            execute(the, d, param);
         } finally {
             it.close();
         }
     }
 
-    private Relationship getDestination(QCAVector v){
-        return v.getClosest();
-    };
-
-    private void execute(QCAVector v, Relationship destination, Set<Relationship> target) throws IOException {
+    private void getThe(QCAVector v, Set<Relationship> the) throws IOException {
         List<QCAVector> c = v.getContext();
         if (c != null) {
             for (QCAVector i : c) {
-                execute(i, destination, target);
+                getThe(i, the);
             }
         } else {
-            Relationship the = getThe(v.getClosest());
-            if (the.getEndNode().equals(destination.getEndNode())) {
-                execute(the, target);
-            } else {
-                execute(the, destination, target);
-            }
+            the.add(v.getClosest().getEndNode().getSingleRelationship(THE._, Direction.INCOMING));
         }
-    }
-
-    private Relationship getThe(Relationship r) {
-        return r.getEndNode().getSingleRelationship(THE._, Direction.INCOMING);
     }
 
 }

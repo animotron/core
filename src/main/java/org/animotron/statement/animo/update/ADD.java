@@ -20,6 +20,7 @@ package org.animotron.statement.animo.update;
 
 import org.neo4j.graphdb.Relationship;
 
+import java.io.IOException;
 import java.util.Set;
 
 /**
@@ -33,12 +34,7 @@ public class ADD extends AbstractUpdate {
 	private ADD() {super("add");}
 
     @Override
-    protected void execute(Relationship the, Relationship destination, Set<Relationship> target) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    protected void execute(Relationship the, Set<Relationship> target) {
+    protected void execute(Set<Relationship> the, Set<Relationship> destination, Set<Relationship> target) throws IOException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
