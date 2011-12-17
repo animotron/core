@@ -147,7 +147,7 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertAnimoResult(s,
-            "have content " +
+            "content " +
                 "\\html " +
                     "(\\head \\title title \"Welcome to Animo\") " +
                     "(\\body the theme-concrete-root-layout (root-layout) " +

@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -214,7 +214,7 @@ public class GET extends AbstractQuery implements Shift {
 		if (!set.isEmpty()) return set;
 
 		Set<QCAVector> newREFs = new FastSet<QCAVector>();
-		getOutgoingReferences(pf, null, ref, newREFs, null);
+		getOutgoingReferences(pf, pf.getVector(), null, ref, newREFs, null);
 		
 		return get(pf, op, newREFs, thes, visitedREFs); 
 	}
@@ -288,53 +288,12 @@ public class GET extends AbstractQuery implements Shift {
 					}
 				}
 				
-				
-//				Relationship n = vector.getClosest();
-//				//System.out.println(""+n);
-//				//System.out.println("getStartNode OUTGOING");
-//				if (first || !REFs.contains(n)) {
-//					IndexHits<Relationship> it = Order.queryDown(n.getStartNode());
-//					try {
-//						for (Relationship r : it) {
-//							if (r.equals(n)) continue;
-//							//System.out.println(r);
-//							
-//							Statement st = Statements.relationshipType(r);
-//							if (st instanceof AN) {
-//								for (QCAVector v : AN.getREFs(pf, r)) {
-//									Relationship t = v.getAnswer();
-//									if (!visitedREFs.contains(t))
-//										newREFs.add(v);
-//								}
-//							} else if (st instanceof Reference) {
-//								try {
-//									if (!pf.isInStack(r)) {
-//										PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
-//										
-//										for (QCAVector rr : in) {
-//											if (!visitedREFs.contains(rr.getAnswer()))
-//												newREFs.add(rr);
-//										}
-//									}
-//								} catch (IOException e) {
-//									// TODO Auto-generated catch block
-//									e.printStackTrace();
-//								}
-//							}
-//						}
-//					} finally {
-//						it.close();
-//					}
-//				}
-//				first = false;
-//
-//				//System.out.println("getEndNode OUTGOING");
 				t = vector.getUnrelaxedAnswer();
 				if (t != null) {
 					if (! t.isType(AN._))
-						getOutgoingReferences(pf, t, t.getStartNode(), newREFs, visitedREFs);
+						getOutgoingReferences(pf, vector, t, t.getStartNode(), newREFs, visitedREFs);
 					
-					getOutgoingReferences(pf, t, t.getEndNode(), newREFs, visitedREFs);
+					getOutgoingReferences(pf, vector, t, t.getEndNode(), newREFs, visitedREFs);
 				}
 			}
 
@@ -344,8 +303,9 @@ public class GET extends AbstractQuery implements Shift {
 		}
 	}
 	
-	private void getOutgoingReferences(PFlow pf, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
+	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
+		QCAVector prev = null;
 		IndexHits<Relationship> it = Order.queryDown(node);
 		try {
 			boolean first = rr == null || !rr.isType(REF._);
@@ -358,20 +318,25 @@ public class GET extends AbstractQuery implements Shift {
 				}
 				if (r.isType(REF._)) continue;
 	
+				prev = vector.question(r, prev); 
+
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
 					for (QCAVector v : AN.getREFs(pf, r)) {
 						Relationship t = v.getAnswer();
 						//System.out.println(t);
-						if (visitedREFs != null && !visitedREFs.contains(t))
+						if (visitedREFs != null && !visitedREFs.contains(t)) {
+							v.setPrecedingSibling(prev);
+							prev = v;
 							newREFs.add(v);
+						}
 					}
 	
 				} else if (st instanceof Reference) {
 					if (!pf.isInStack(r)) {
 						try {
-							PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf, r), r);
+							PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), prev);
 							
 							for (QCAVector v : in) {
 								if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
