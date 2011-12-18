@@ -264,9 +264,15 @@ public class GET extends AbstractQuery implements Shift {
 
 			for (QCAVector v : nextREFs) {
 				if (debug) System.out.println("checking "+v);
-				if (!check(set, pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
-					check(set, pf, op, v, v.getQuestion(), thes, visitedREFs);
+				
+				QCAVector next = v;
+				while (next != null) {
+					if (!check(set, pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
+						check(set, pf, op, v, v.getQuestion(), thes, visitedREFs);
+					}
+					next = next.getPrecedingSibling();
 				}
+
 			}
 			
 			if (set.size() > 0) return set;
@@ -288,12 +294,16 @@ public class GET extends AbstractQuery implements Shift {
 					}
 				}
 				
-				t = vector.getUnrelaxedAnswer();
-				if (t != null) {
-					if (! t.isType(AN._))
-						getOutgoingReferences(pf, vector, t, t.getStartNode(), newREFs, visitedREFs);
-					
-					getOutgoingReferences(pf, vector, t, t.getEndNode(), newREFs, visitedREFs);
+				QCAVector next = vector;
+				while (next != null) {
+					t = next.getUnrelaxedAnswer();
+					if (t != null) {
+						if (! t.isType(AN._))
+							getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
+						
+						getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
+					}
+					next = next.getPrecedingSibling();
 				}
 			}
 
