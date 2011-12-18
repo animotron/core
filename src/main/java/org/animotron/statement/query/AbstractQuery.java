@@ -189,35 +189,40 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
     }
 
-    private void searchForUSE(Set<Node> uses, QCAVector vector) {
-    	//System.out.println("searchForUSE");
-    	QCAVector prev = vector.getPrecedingSibling();
-    	//System.out.println(" prev "+prev);
-    	if (prev != null) {
-    		if (prev.getQuestion() != null)
-	    		for (Relationship r : prev.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
-	    			uses.add(r.getEndNode());
-	    			//System.out.println(" + "+r.getEndNode());
-	    		}
+    private void checkVectorForUSE(Set<Node> uses, QCAVector vector) {
+    	if (vector == null)
+    		return;
 
-    		if (prev.getUnrelaxedAnswer() != null)
-	    		for (Relationship r : prev.getUnrelaxedAnswer().getEndNode().getRelationships(OUTGOING, USE._)) {
-	    			uses.add(r.getEndNode());
-	    			//System.out.println(" + "+r.getEndNode());
-	    		}
-
-    		if (prev.getAnswers() != null)
-    			for (Relationship a : prev.getAnswers())
-		    		for (Relationship r : a.getEndNode().getRelationships(OUTGOING, USE._)) {
-		    			uses.add(r.getEndNode());
-		    			//System.out.println(" + "+r.getEndNode());
-		    		}
-    	}
+    	//System.out.println(" cheking "+vector);
     	
-		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
-			uses.add(r.getEndNode());
-			//System.out.println(" + "+r.getEndNode());
-		}
+		if (vector.getQuestion() != null)
+    		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
+    			uses.add(r.getEndNode());
+    			//System.out.println(" + "+r.getEndNode());
+    		}
+
+		if (vector.getUnrelaxedAnswer() != null)
+    		for (Relationship r : vector.getUnrelaxedAnswer().getEndNode().getRelationships(OUTGOING, USE._)) {
+    			uses.add(r.getEndNode());
+    			//System.out.println(" + "+r.getEndNode());
+    		}
+
+		if (vector.getAnswers() != null)
+			for (Relationship a : vector.getAnswers())
+	    		for (Relationship r : a.getEndNode().getRelationships(OUTGOING, USE._)) {
+	    			uses.add(r.getEndNode());
+	    			//System.out.println(" + "+r.getEndNode());
+	    		}
+    }
+    
+    private void searchForUSE(Set<Node> uses, QCAVector vector) {
+    	//System.out.println("searchForUSE "+vector);
+    	QCAVector prev = vector.getPrecedingSibling();
+    	
+    	checkVectorForUSE(uses, prev); 
+    	
+    	checkVectorForUSE(uses, vector); 
+
 		searchForUSE(uses, vector.getContext());
     }
     

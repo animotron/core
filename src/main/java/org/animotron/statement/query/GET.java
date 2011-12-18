@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -325,6 +325,9 @@ public class GET extends AbstractQuery implements Shift {
 					//System.out.println(r);
 					for (QCAVector v : AN.getREFs(pf, r)) {
 						Relationship t = v.getAnswer();
+						
+						prev.addAnswer(v);
+						
 						//System.out.println(t);
 						if (visitedREFs != null && !visitedREFs.contains(t)) {
 							v.setPrecedingSibling(prev);
@@ -339,6 +342,7 @@ public class GET extends AbstractQuery implements Shift {
 							PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), prev);
 							
 							for (QCAVector v : in) {
+								prev.addAnswer(v);
 								if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
 									newREFs.add(v);
 							}

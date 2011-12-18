@@ -221,7 +221,7 @@ public class PFlow {
 
 			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), rType);
 			
-			parent.answer.publish(new QCAVector(op, answer, answerVector.getContext()));
+			parent.answer.publish(new QCAVector(op, answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
 		}
 	}
 

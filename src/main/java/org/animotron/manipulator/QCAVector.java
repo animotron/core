@@ -95,13 +95,23 @@ public class QCAVector {
 		if (debug) System.out.println(" .... create vector 6 .... ");
 	}
 
+	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context, QCAVector preceding_sibling) {
+		this.question = question;
+		this.answer = answer;
+		
+		this.context = context;
+		
+		this.preceding_sibling = preceding_sibling;
+		if (debug) System.out.println(" .... create vector 7 .... ");
+	}
+
 	public QCAVector(Relationship question, Relationship context, Relationship answer) {
 		this.question = question;
 		this.answer = answer;
 
 		this.context = FastList.newInstance();
 		this.context.add(new QCAVector(null, answer));
-		if (debug) System.out.println(" .... create vector 7 .... ");
+		if (debug) System.out.println(" .... create vector 8 .... ");
 	}
 
 	public QCAVector(Relationship question, QCAVector context, QCAVector precedingSibling) {
@@ -112,7 +122,7 @@ public class QCAVector {
 		this.context.add(context);
 		
 		this.preceding_sibling = precedingSibling;
-		if (debug) System.out.println(" .... create vector 8 .... ");//Relationship question, QCAVector context, QCAVector precedingSibling");
+		if (debug) System.out.println(" .... create vector 9 .... ");//Relationship question, QCAVector context, QCAVector precedingSibling");
 	}
 
 	public Relationship getClosest() {
@@ -329,7 +339,7 @@ public class QCAVector {
 	}
 
 	public QCAVector answered(Relationship createdAnswer) {
-		 return new QCAVector(question, createdAnswer, context);
+		 return new QCAVector(question, createdAnswer, context, preceding_sibling);
 	}
 
 	public QCAVector question(Relationship q) {
