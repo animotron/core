@@ -52,8 +52,8 @@ public class WITH extends Operator implements Predicate {
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Node ref) throws InterruptedException, IOException {
 		
-		System.out.println("==================================================");
-		System.out.println("WITH op "+op+" ref "+ref);
+		//System.out.println("==================================================");
+		//System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 		Node theNode = Utils.getSingleREF(op.getEndNode());
 		

@@ -193,7 +193,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	if (vector == null)
     		return;
 
-    	//System.out.println(" cheking "+vector);
+    	System.out.println(" cheking "+vector);
     	
 		if (vector.getQuestion() != null)
     		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {

@@ -126,7 +126,7 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) {
 			
-			Utils.debug(GET._, op, thes);
+			//Utils.debug(GET._, op, thes);
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {

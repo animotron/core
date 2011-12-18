@@ -109,7 +109,7 @@ public abstract class Manipulator {
         //answers transfer to output
         Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
             public void onMessage(QCAVector context) {
-            	System.out.println("get answer "+context);
+            	//System.out.println("get answer "+context);
             	try {
             		if (context == null) {
 

@@ -416,7 +416,7 @@ public class PFlow {
 
 
 	public QCAVector addContextPoint(QCAVector vector) {
-		boolean debug = false;
+		boolean debug = true;
 		if (debug) System.out.print("adding "+this+" "+vector);
 //		System.out.println(new IOException().getStackTrace()[1]);
 		if (path.isEmpty()) {

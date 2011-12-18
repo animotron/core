@@ -275,6 +275,8 @@ public class Utils {
         PipedInput<QCAVector> in = out.getInputStream();
         
         Relationship op = vector.getClosest();
+        
+        QCAVector prev = null;
 
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
 		for (Relationship rr : hits) {
@@ -282,7 +284,8 @@ public class Utils {
 			
 			Statement _s = Statements.relationshipType(rr);
 			if (_s instanceof Query || _s instanceof Evaluable) {
-				PipedInput<QCAVector> _in = Evaluator._.execute(new PFlow(pf), rr);
+				prev = vector.question(rr, prev);
+				PipedInput<QCAVector> _in = Evaluator._.execute(new PFlow(pf), prev);
 				for (QCAVector ee : _in) {
 					//XXX: ee should be context too???
 					out.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));

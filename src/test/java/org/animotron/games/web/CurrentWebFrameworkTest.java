@@ -111,8 +111,9 @@ public class CurrentWebFrameworkTest extends ATest {
             ),
             new JExpression(
                 _(THE._, "root-layout",
-                    _(AN._, "layout"),
-                    element("p", text("The default root layout!"))
+                    _(AN._, "layout")
+                    //,
+                    //element("p", text("The default root layout!"))
                 )
             ),
             new JExpression(
@@ -150,7 +151,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "content " +
                 "\\html " +
                     "(\\head \\title title \"Welcome to Animo\") " +
-                    "(\\body the theme-concrete-root-layout (root-layout) " +
+                    "(\\body the theme-concrete-root-layout (root-layout layout) " +
                         "(\\h1 title \"Welcome to Animo\") " +
                         "(\\p content \"It is working!\") " +
                         "(\\ul " +
