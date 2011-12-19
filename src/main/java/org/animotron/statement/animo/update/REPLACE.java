@@ -34,14 +34,12 @@ public class REPLACE extends AbstractUpdate {
 	private REPLACE() {super("replace");}
 
     @Override
-    protected void execute(Set<Relationship> the, Set<Relationship> destination, Set<Relationship> target) throws IOException {
-        for (Relationship d: destination) {
-            for (Relationship r: the) {
-                if (r.getEndNode().equals(d.getEndNode())) {
-                    throw new UnsupportedOperationException();
-                } else {
-                    //TODO : implement
-                }
+    protected void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException {
+        for (Relationship r: the) {
+            if (r.getEndNode().equals(destination.getEndNode())) {
+                throw new UnsupportedOperationException();
+            } else {
+                //TODO : implement
             }
         }
     }

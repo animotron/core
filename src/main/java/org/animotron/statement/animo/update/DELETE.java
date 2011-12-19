@@ -35,14 +35,12 @@ public class DELETE extends AbstractUpdate {
 	private DELETE() {super("delete");}
 
     @Override
-    protected void execute(Set<Relationship> the, Set<Relationship> destination, Set<Relationship> target) throws IOException {
-        for (Relationship d: destination) {
-            for (Relationship r: the) {
-                if (r.getEndNode().equals(d.getEndNode())) {
-                    GC._.execute(r);
-                } else {
-                    //TODO: implement
-                }
+    protected void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException {
+        for (Relationship r: the) {
+            if (r.getEndNode().equals(destination.getEndNode())) {
+                GC._.execute(r);
+            } else {
+                //TODO: implement
             }
         }
     }
