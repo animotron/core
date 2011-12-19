@@ -41,7 +41,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
 	protected AbstractUpdate(String... name) { super(name); }
 
-    protected abstract void execute(Set<Relationship> the, Set<Relationship> destination, Set<Relationship> target) throws IOException;
+    protected abstract void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException;
 
     public OnQuestion onCalcQuestion() {
         return question;
@@ -72,13 +72,12 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 if (r.isType(REF._)) continue;
                 param.add(r);
             }
-            Set<Relationship> the = new FastSet<Relationship>();
             Set<Relationship> d = new FastSet<Relationship>();
             for (QCAVector v : destination) {
-                d.add(v.getClosest());
+                Set<Relationship> the = new FastSet<Relationship>();
                 getThe(v, the);
+                execute(the, v.getClosest(), param);
             }
-            execute(the, d, param);
         } finally {
             it.close();
         }

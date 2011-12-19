@@ -34,7 +34,7 @@ public class SET extends AbstractUpdate {
 	private SET() {super("set");}
 
     @Override
-    protected void execute(Set<Relationship> the, Set<Relationship> destination, Set<Relationship> target) throws IOException {
+    protected void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
