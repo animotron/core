@@ -71,7 +71,7 @@ public class CurrentWebFrameworkTest extends ATest {
             ),
             new JExpression(
                 _(THE._, "it-working",
-                    _(AN._, "resource"),
+                    _(AN._, "service"),
                     _(AN._, "root"),
                     _(AN._, "html",
                         _(AN._, "title", text("Welcome to Animo")),
@@ -133,7 +133,7 @@ public class CurrentWebFrameworkTest extends ATest {
                     "(use theme-concrete) " +
                     "(use it-working)) " +
                 "(the it-working " +
-                    "(resource) " +
+                    "(service resource) " +
                     "(root) " +
                     "(html " +
                         "(mime-type) " +
