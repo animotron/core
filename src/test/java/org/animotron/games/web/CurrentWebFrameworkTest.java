@@ -63,6 +63,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 _(THE._, "resource-not-found",
                     _(AN._, "service"),
                     _(AN._, "not-found"),
+                    _(AN._, "animo"),
+                    _(AN._, "localhost"),
                     _(AN._, "html",
                         _(AN._, "title", text("Not found")),
                         _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
@@ -70,12 +72,13 @@ public class CurrentWebFrameworkTest extends ATest {
                 )
             ),
             new JExpression(
-                _(THE._, "it-working",
+                _(THE._, "is-it-working",
                     _(AN._, "service"),
                     _(AN._, "root"),
+                    _(AN._, "localhost"),
                     _(AN._, "html",
-                        _(AN._, "title", text("Welcome to Animo")),
-                        _(AN._, "content", text("It is working!"))
+                        _(AN._, "title", text("Welcome to Localhost")),
+                        _(AN._, "content", text("Is it working?"))
                     )
                 )
             ),
@@ -84,7 +87,26 @@ public class CurrentWebFrameworkTest extends ATest {
                     _(AN._, "site"),
                     _(AN._, "server-name", text("localhost")),
                     _(USE._, "theme-concrete"),
-                    _(USE._, "it-working")
+                    _(USE._, "localhost")
+                )
+            ),
+            new JExpression(
+                _(THE._, "it-working",
+                    _(AN._, "service"),
+                    _(AN._, "root"),
+                    _(AN._, "animo"),
+                    _(AN._, "html",
+                            _(AN._, "title", text("Welcome to Animo")),
+                            _(AN._, "content", text("It is working!"))
+                    )
+                )
+            ),
+            new JExpression(
+                _(THE._, "animo-site",
+                    _(AN._, "site"),
+                    _(AN._, "server-name", text("animo")),
+                    _(USE._, "theme-concrete"),
+                    _(USE._, "animo")
                 )
             ),
             new JExpression(
@@ -108,6 +130,15 @@ public class CurrentWebFrameworkTest extends ATest {
                 )
             ),
             new JExpression(
+                _(THE._, "theme-concrete-not-found-layout",
+                    _(AN._, "theme-concrete"),
+                    _(AN._, "layout"),
+                    _(AN._, "not-found"),
+                    element("h1", _(GET._, "title")),
+                    element("p", _(GET._, "content"))
+                )
+            ),
+            new JExpression(
         		_(THE._, "rest",
     				_(ANY._, "site",
 						_(WITH._, "server-name", _(GET._, "host"))
@@ -117,7 +148,7 @@ public class CurrentWebFrameworkTest extends ATest {
             )
         );
 
-        JExpression s = new JExpression(
+        JExpression s1 = new JExpression(
             _(AN._, "rest",
                 _(USE._, "root"),
                 _(AN._, "uri", text("/")),
@@ -125,16 +156,66 @@ public class CurrentWebFrameworkTest extends ATest {
             )
         );
 
-        assertAnimoResult(s,
+        assertAnimoResult(s1,
             "rest " +
                 "(the localhost-site " +
                     "(site) " +
                     "(server-name) " +
                     "(use theme-concrete) " +
-                    "(use it-working)) " +
+                    "(use localhost)) " +
+                "(the is-it-working " +
+                    "(service resource) " +
+                    "(root) " +
+                    "(localhost) " +
+                    "(html " +
+                        "(mime-type) " +
+                        "(\\html " +
+                            "(\\head \\title title \"Welcome to Localhost\") " +
+                            "(\\body " +
+                                "the theme-concrete-root-layout " +
+                                    "(theme-concrete) " +
+                                    "(layout) " +
+                                    "(root) " +
+                                    "(\\h1 title \"Welcome to Localhost\") " +
+                                    "(\\p content \"Is it working?\") " +
+                                    "(\\ul " +
+                                        "(\\li \"host: \\\"\" (\\strong host \"localhost\") \"\\\"\") " +
+                                        "(\\li \"uri: \\\"\" (\\strong uri \"/\") \"\\\"\")))))).");
+
+        assertXMLResult(s1,
+            "<html>" +
+                "<head>" +
+                    "<title>Welcome to Localhost</title>" +
+                "</head>" +
+                "<body>" +
+                    "<h1>Welcome to Localhost</h1>" +
+                    "<p>Is it working?</p>" +
+                    "<ul>" +
+                        "<li>host: \"<strong>localhost</strong>\"</li>" +
+                        "<li>uri: \"<strong>/</strong>\"</li>" +
+                    "</ul>" +
+                "</body>" +
+            "</html>");
+
+        JExpression s2 = new JExpression(
+            _(AN._, "rest",
+                _(USE._, "root"),
+                _(AN._, "uri", text("/")),
+                _(AN._, "host", text("animo"))
+            )
+        );
+
+        assertAnimoResult(s2,
+            "rest " +
+                "(the animo-site " +
+                    "(site) " +
+                    "(server-name) " +
+                    "(use theme-concrete) " +
+                    "(use animo)) " +
                 "(the it-working " +
                     "(service resource) " +
                     "(root) " +
+                    "(animo) " +
                     "(html " +
                         "(mime-type) " +
                         "(\\html " +
@@ -147,10 +228,10 @@ public class CurrentWebFrameworkTest extends ATest {
                                     "(\\h1 title \"Welcome to Animo\") " +
                                     "(\\p content \"It is working!\") " +
                                     "(\\ul " +
-                                        "(\\li \"host: \\\"\" (\\strong host \"localhost\") \"\\\"\") " +
+                                        "(\\li \"host: \\\"\" (\\strong host \"animo\") \"\\\"\") " +
                                         "(\\li \"uri: \\\"\" (\\strong uri \"/\") \"\\\"\")))))).");
 
-        assertXMLResult(s,
+        assertXMLResult(s2,
             "<html>" +
                 "<head>" +
                     "<title>Welcome to Animo</title>" +
@@ -159,11 +240,98 @@ public class CurrentWebFrameworkTest extends ATest {
                     "<h1>Welcome to Animo</h1>" +
                     "<p>It is working!</p>" +
                     "<ul>" +
-                        "<li>host: \"<strong>localhost</strong>\"</li>" +
+                        "<li>host: \"<strong>animo</strong>\"</li>" +
                         "<li>uri: \"<strong>/</strong>\"</li>" +
                     "</ul>" +
                 "</body>" +
             "</html>");
-        
+
+        JExpression s3 = new JExpression(
+            _(AN._, "rest",
+                _(USE._, "not-found"),
+                _(AN._, "uri", text("/foo")),
+                _(AN._, "host", text("localhost"))
+            )
+        );
+
+        assertAnimoResult(s3,
+            "rest " +
+                "(the localhost-site " +
+                    "(site) " +
+                    "(server-name) " +
+                    "(use theme-concrete) " +
+                    "(use localhost)) " +
+                "(the resource-not-found " +
+                    "(service resource) " +
+                    "(not-found) " +
+                    "(animo) " +
+                    "(localhost) " +
+                    "(html " +
+                        "(mime-type) " +
+                        "(\\html " +
+                            "(\\head \\title title \"Not found\") " +
+                            "(\\body " +
+                                "the theme-concrete-not-found-layout " +
+                                    "(theme-concrete) " +
+                                    "(layout) " +
+                                    "(not-found) " +
+                                    "(\\h1 title \"Not found\") " +
+                                    "(\\p (content) \"Can't find resource \\\"\" (uri \"/foo\") \"\\\"\"))))).");
+
+        assertXMLResult(s3,
+                "<html>" +
+                    "<head>" +
+                        "<title>Not found</title>" +
+                    "</head>" +
+                    "<body>" +
+                        "<h1>Not found</h1>" +
+                        "<p>Can't find resource \"/foo\"</p>" +
+                    "</body>" +
+                "</html>");
+
+        JExpression s4 = new JExpression(
+            _(AN._, "rest",
+                _(USE._, "not-found"),
+                _(AN._, "uri", text("/bar")),
+                _(AN._, "host", text("animo"))
+            )
+        );
+
+        assertAnimoResult(s4,
+            "rest " +
+                "(the animo-site " +
+                    "(site) " +
+                    "(server-name) " +
+                    "(use theme-concrete) " +
+                    "(use animo)) " +
+                "(the resource-not-found " +
+                    "(service resource) " +
+                    "(not-found) " +
+                    "(animo) " +
+                    "(localhost) " +
+                    "(html " +
+                    "(mime-type) " +
+                    "(\\html " +
+                        "(\\head \\title title \"Not found\") " +
+                        "(\\body " +
+                            "the theme-concrete-not-found-layout " +
+                                "(theme-concrete) " +
+                                "(layout) " +
+                                "(not-found) " +
+                                "(\\h1 title \"Not found\") " +
+                                "(\\p (content) \"Can't find resource \\\"\" (uri \"/bar\") \"\\\"\"))))).");
+
+        assertXMLResult(s4,
+            "<html>" +
+                "<head>" +
+                    "<title>Not found</title>" +
+                "</head>" +
+                "<body>" +
+                    "<h1>Not found</h1>" +
+                    "<p>Can't find resource \"/bar\"</p>" +
+                "</body>" +
+            "</html>");
+
     }
+
 }
