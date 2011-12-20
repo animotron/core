@@ -35,7 +35,7 @@ import static org.animotron.expression.JExpression.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class CurrentWebFrameworkTest extends ATest {
+public class WebFrameworkTest extends ATest {
 
     @Test
     public void test() throws Exception {
@@ -49,56 +49,76 @@ public class CurrentWebFrameworkTest extends ATest {
             new JExpression(
                 _(THE._, "html",
                     _(AN._, "mime-type", text("text/html")),
-                    element("html",
+                    _(AN._, "content",
+                        element("html",
                             element("head",
-                                    element("title", _(GET._, "title"))
+                                element("title", _(GET._, "title"))
                             ),
                             element("body",
-                                    _(ANY._, "layout")
+                                _(ANY._, "layout")
                             )
+                        )
                     )
                 )
             ),
             new JExpression(
                 _(THE._, "resource-not-found",
-                    _(AN._, "service"),
-                    _(AN._, "not-found"),
-                    _(AN._, "html",
-                        _(AN._, "title", text("Not found")),
-                        _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
-                    )
+                    _(AN._, "not-found-content"),
+                    _(AN._, "title", text("Not found")),
+                    _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
                 )
             ),
             new JExpression(
                 _(THE._, "it-working",
-                    _(AN._, "resource"),
-                    _(AN._, "root"),
-                    _(AN._, "html",
-                        _(AN._, "title", text("Welcome to Animo")),
-                        _(AN._, "content", text("It is working!"))
-                    )
+                    _(AN._, "root-content"),
+                    _(AN._, "title", text("Welcome to Animo")),
+                    _(AN._, "content", text("It is working!"))
                 )
             ),
             new JExpression(
                 _(THE._, "localhost-site",
                     _(AN._, "site"),
                     _(AN._, "server-name", text("localhost")),
-                    _(USE._, "theme-concrete"),
+                    _(USE._, "theme-concrete-root-layout"),
                     _(USE._, "it-working")
+                )
+            ),
+            new JExpression(
+                _(THE._, "not-found-service",
+                    _(AN._, "service"),
+                    _(AN._, "not-found"),
+                    _(AN._, "html",
+                        _(ANY._, "not-found-content"),
+                        _(USE._, "not-found-layout")
+                    )
+                )
+            ),
+            new JExpression(
+                _(THE._, "root-service",
+                    _(AN._, "service"),
+                    _(AN._, "root"),
+                    _(AN._, "html",
+                        _(ANY._, "root-content"),
+                        _(USE._, "root-layout")
+                    )
                 )
             ),
             new JExpression(
                 _(THE._, "not-found-layout",
                     _(AN._, "layout"),
-                    _(AN._, "not-found"),
                     element("p", _(GET._, "content"))
                 )
             ),
             new JExpression(
+                _(THE._, "root-layout",
+                    _(AN._, "layout")
+                    //,
+                    //element("p", text("The default root layout!"))
+                )
+            ),
+            new JExpression(
                 _(THE._, "theme-concrete-root-layout",
-                    _(AN._, "theme-concrete"),
-                    _(AN._, "layout"),
-                    _(AN._, "root"),
+                    _(AN._, "root-layout"),
                     element("h1", _(GET._, "title")),
                     element("p", _(GET._, "content")),
                     element("ul",
@@ -118,37 +138,26 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         JExpression s = new JExpression(
-            _(AN._, "rest",
-                _(USE._, "root"),
-                _(AN._, "uri", text("/")),
-                _(AN._, "host", text("localhost"))
+            _(GET._, "content",
+                _(AN._, "rest",
+                    _(USE._, "root"),
+                    _(AN._, "uri", text("/")),
+                    _(AN._, "host", text("localhost"))
+                )
             )
         );
 
         assertAnimoResult(s,
-            "rest " +
-                "(the localhost-site " +
-                    "(site) " +
-                    "(server-name) " +
-                    "(use theme-concrete) " +
-                    "(use it-working)) " +
-                "(the it-working " +
-                    "(resource) " +
-                    "(root) " +
-                    "(html " +
-                        "(mime-type) " +
-                        "(\\html " +
-                            "(\\head \\title title \"Welcome to Animo\") " +
-                            "(\\body " +
-                                "the theme-concrete-root-layout " +
-                                    "(theme-concrete) " +
-                                    "(layout) " +
-                                    "(root) " +
-                                    "(\\h1 title \"Welcome to Animo\") " +
-                                    "(\\p content \"It is working!\") " +
-                                    "(\\ul " +
-                                        "(\\li \"host: \\\"\" (\\strong host \"localhost\") \"\\\"\") " +
-                                        "(\\li \"uri: \\\"\" (\\strong uri \"/\") \"\\\"\")))))).");
+            "content " +
+                "\\html " +
+                    "(\\head \\title title \"Welcome to Animo\") " +
+                    "(\\body the theme-concrete-root-layout (root-layout layout) " +
+                        "(\\h1 title \"Welcome to Animo\") " +
+                        "(\\p content \"It is working!\") " +
+                        "(\\ul " +
+                            "(\\li \"host: \\\"\" (\\strong host \"localhost\") \"\\\"\") " +
+                            "(\\li \"uri: \\\"\" (\\strong uri \"/\") \"\\\"\"))).");
+
 
         assertXMLResult(s,
             "<html>" +
@@ -165,5 +174,15 @@ public class CurrentWebFrameworkTest extends ATest {
                 "</body>" +
             "</html>");
         
+        JExpression ss = new JExpression(
+                _(GET._, "content",
+                    _(AN._, "rest",
+                        _(USE._, "favicon.ico"),
+                        _(AN._, "uri", text("/favicon.ico")),
+                        _(AN._, "host", text("localhost"))
+                    )
+                )
+            );
+        assertAnimoResult(ss, "");
     }
 }
