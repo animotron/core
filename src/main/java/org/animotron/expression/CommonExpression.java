@@ -35,7 +35,6 @@ public class CommonExpression extends Expression {
 
     private AbstractExpression e;
 
-
     public CommonExpression(String data) throws Exception {
         e = new AnimoExpression(data);
     }
@@ -53,10 +52,10 @@ public class CommonExpression extends Expression {
 
 
     public CommonExpression(File file, String path) throws IOException {
-        this(new FileInputStream(file), path);
+        this(new FileInputStream(file), path, true);
     }
     public CommonExpression(GraphBuilder builder, File file, String path) throws IOException {
-        this(builder, new FileInputStream(file), path);
+        this(builder, new FileInputStream(file), path, true);
     }
 
     public CommonExpression(InputStream stream) {
@@ -67,21 +66,25 @@ public class CommonExpression extends Expression {
     }
 
     public CommonExpression(InputStream stream, String path) {
-        e = isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path);
+    	this(stream, path, true);
     }
-    public CommonExpression(GraphBuilder builder, InputStream stream, String path) {
-        e = isAnimo(path) ? new AnimoExpression(builder, stream) : new BinaryExpression(builder, stream, path);
+    public CommonExpression(InputStream stream, String path, boolean closeStream) {
+        e = isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path, closeStream);
     }
 
+    public CommonExpression(GraphBuilder builder, InputStream stream, String path) {
+    	this(builder, stream, path, true);
+    }
+    public CommonExpression(GraphBuilder builder, InputStream stream, String path, boolean closeStream) {
+        e = isAnimo(path) ? new AnimoExpression(builder, stream) : new BinaryExpression(builder, stream, path, closeStream);
+    }
 
 	private static boolean isAnimo(String path) {
 		return path.endsWith(".animo");
 	}
 
-
     @Override
     protected Relationship relationship() {
         return e.relationship();
     }
-
 }

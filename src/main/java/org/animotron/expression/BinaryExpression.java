@@ -53,6 +53,7 @@ public class BinaryExpression extends AbstractExpression {
     private final static Node EXTENSION = the("extension");
     private final static Node FILE = the("file");
     private final static Node NAME = the("name");
+    
 
     private static Node the(final String name) {
         return execute(new GraphOperation<Node>() {
@@ -66,6 +67,7 @@ public class BinaryExpression extends AbstractExpression {
 
     private InputStream stream;
     private String path;
+    private boolean closeStream = true;
 
     static {
 		BIN_STORAGE.mkdirs();
@@ -73,13 +75,22 @@ public class BinaryExpression extends AbstractExpression {
 	}
 
     public BinaryExpression(InputStream stream, String path) {
-        this(new FastGraphBuilder(), stream, path);
+        this(stream, path, true);
+    }
+
+    public BinaryExpression(InputStream stream, String path, boolean closeStream) {
+        this(new FastGraphBuilder(), stream, path, closeStream);
     }
 
     public BinaryExpression(GraphBuilder builder, InputStream stream, String path) {
+        this(builder, stream, path, true);
+    }
+
+    public BinaryExpression(GraphBuilder builder, InputStream stream, String path, boolean closeStream) {
         super(builder);
         this.stream = stream;
         this.path = path;
+        this.closeStream = closeStream;
     }
 
     @Override
@@ -98,7 +109,8 @@ public class BinaryExpression extends AbstractExpression {
             size += len;
         }
         out.close();
-        stream.close();
+        if (closeStream) stream.close();
+        
         String hash = byteArrayToHex(md.digest()) + longToHex(size);
         File dir = getFolder(hash);
         File bin = getFile(dir, hash);

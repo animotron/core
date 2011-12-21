@@ -32,9 +32,7 @@ import static org.junit.Assert.assertNotNull;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class FSBridgeTest extends ATest {
-	
-	private static final String PATH = "src/test/animo/application-animo.animo";
+public class BridgeTest extends ATest {
 	
 	private void check(String the) throws IOException {
         Relationship r = THE._.get(the);
@@ -44,11 +42,20 @@ public class FSBridgeTest extends ATest {
 	}
 	
 	@Test
-	public void loadAndSerialize() throws Exception {
+	public void FSloadAndSerialize() throws Exception {
         System.out.println("Test repository loader ...");
-        FSBridge.load(PATH);
+        FSBridge.load("src/test/animo/application-animo.animo");
         System.out.println("loaded ...");
         check("application-animo");
+        System.out.println("done.");
+	}
+
+	@Test
+	public void ZIPloadAndSerialize() throws Exception {
+        System.out.println("Test repository loader ...");
+        ZipBridge.load("src/test/resources/test.zip");
+        System.out.println("loaded ...");
+        check("second.txt");
         System.out.println("done.");
 	}
 }
