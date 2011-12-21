@@ -41,7 +41,7 @@ public class QCAVector {
 	private final Relationship question;
 	private Relationship answer = null;
 	
-	private List<Relationship> answers = null;
+	private List<QCAVector> answers = null;
 
 	private List<QCAVector> context = null;
 
@@ -231,16 +231,13 @@ public class QCAVector {
 		if (answers != null) {
 			b.append(" *");
 			boolean first = true;
-			for (Relationship a : answers) {
+			for (QCAVector a : answers) {
 				if (!first)
 					b.append(", ");
 				else
 					first = false;
 				
-				b.append(a.getId());
-				b.append(" '");
-				b.append(a.getType());
-				b.append("'");
+				a.debug(b);
 			}
 			b.append("*");
 			
@@ -360,10 +357,10 @@ public class QCAVector {
 		if (answers == null)
 			answers = FastList.newInstance();
 		
-		answers.add(i.answer);
+		answers.add(i);
 	}
 
-	public List<Relationship> getAnswers() {
+	public List<QCAVector> getAnswers() {
 		return answers;
 	}
 }

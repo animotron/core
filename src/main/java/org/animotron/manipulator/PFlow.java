@@ -453,8 +453,10 @@ public class PFlow {
 			return;
 		}
 		
-		if (path.get(0) == vector)
-			path.remove(0);
+//		if (path.get(0) == vector)
+//			path.remove(0);
+		
+		path.set(0, vector);
 	}
 
 	public byte[] getPathHash() {

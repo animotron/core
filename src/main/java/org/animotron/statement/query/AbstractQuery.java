@@ -193,7 +193,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	if (vector == null)
     		return;
 
-    	System.out.println(" cheking "+vector);
+    	//System.out.println(" cheking "+vector);
     	
 		if (vector.getQuestion() != null)
     		for (Relationship r : vector.getQuestion().getEndNode().getRelationships(OUTGOING, USE._)) {
@@ -208,11 +208,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		}
 
 		if (vector.getAnswers() != null)
-			for (Relationship a : vector.getAnswers())
-	    		for (Relationship r : a.getEndNode().getRelationships(OUTGOING, USE._)) {
-	    			uses.add(r.getEndNode());
-	    			//System.out.println(" + "+r.getEndNode());
-	    		}
+			for (QCAVector a : vector.getAnswers())
+				checkVectorForUSE(uses, a);
     }
     
     private void searchForUSE(Set<Node> uses, QCAVector vector) {
