@@ -86,7 +86,7 @@ public class POSSESSIVE extends Operator implements Suffix {
 					return Executor.getFiber();
 				}
 			};
-			pf.answer.subscribe(onContext);
+			pf.answerChannel().subscribe(onContext);
 
 			if (Utils.haveContext(pf)) {
 				super.onMessage(pf);

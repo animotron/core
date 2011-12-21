@@ -74,7 +74,7 @@ public class MAP extends Combinator {
 				}
 			};
 			
-			pf.answer.subscribe(onContext);
+			pf.answerChannel().subscribe(onContext);
 			
 			int count = 0;
 
@@ -92,9 +92,9 @@ public class MAP extends Combinator {
 					} catch (AnimoException e) {
 						continue;
 					}
-					nextPF.question.subscribe(onQuestion);
+					nextPF.questionChannel().subscribe(onQuestion);
 					
-					nextPF.question.publish(nextPF);
+					nextPF.questionChannel().publish(nextPF);
 					
 					count++;
 				}

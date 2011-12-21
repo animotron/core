@@ -103,7 +103,7 @@ public abstract class Manipulator {
 				throw new IOException(e);
 			}
 		}
-		pf.question.subscribe(sub);
+		pf.questionChannel().subscribe(sub);
 
 		
         //answers transfer to output
@@ -180,12 +180,12 @@ public abstract class Manipulator {
 //        System.out.println("pf "+pf);
 //        System.out.println("pf.answer.subscribe(onAnswer) "+pf.parent.answer);
 		
-        pf.parent.answer.subscribe(onAnswer);
+        pf.parent.answerChannel().subscribe(onAnswer);
 		if (vector.getClosest().isType(FAKE))
-	        pf.answer.subscribe(onAnswer);
+	        pf.answerChannel().subscribe(onAnswer);
 
         //send question to evaluation
-        pf.question.publish(pf);
+        pf.questionChannel().publish(pf);
 		
 		//XXX: what to do with this?
         //reset.await(5, TimeUnit.SECONDS);

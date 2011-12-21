@@ -20,10 +20,7 @@ package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedOutput;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.relation.USE;
 import org.animotron.utils.MessageDigester;
@@ -62,9 +59,9 @@ public class PFlow {
 	
 	private final Manipulator m;
 
-	public final Channel<QCAVector> answer = new MemoryChannel<QCAVector>();
-	public final Channel<PFlow> question = new MemoryChannel<PFlow>();
-	public final Channel<Throwable> stop = new MemoryChannel<Throwable>();
+	private Channel<QCAVector> aChannel = null;
+	private Channel<PFlow> qChannel = null;
+	private Channel<Throwable> sChannel = null;
 	
 	protected final PFlow parent;
 	private Relationship op = null;
@@ -93,7 +90,7 @@ public class PFlow {
 		//XXX: maybe, clone faster?
 		path.addAll(parent.path);
 	}
-
+	
 	@Deprecated //use one with vector
 	public PFlow(PFlow parent, Relationship op) throws AnimoException {
 //		System.out.print("new PFlow ");
@@ -137,6 +134,27 @@ public class PFlow {
 		addContextPoint(vector);
 
 		this.op = vector.getUnrelaxedClosest();
+	}
+
+	public Channel<PFlow> questionChannel() {
+		if (qChannel == null)
+			qChannel = new MemoryChannel<PFlow>();
+		
+		return qChannel;
+	}
+
+	public Channel<QCAVector> answerChannel() {
+		if (aChannel == null)
+			aChannel = new MemoryChannel<QCAVector>();
+		
+		return aChannel;
+	}
+
+	public Channel<Throwable> stopChannel() {
+		if (sChannel == null)
+			sChannel = new MemoryChannel<Throwable>();
+		
+		return sChannel;
 	}
 
 	protected void cyclingDetection() throws AnimoException {
@@ -191,7 +209,7 @@ public class PFlow {
 			System.out.println("WORNG - no parent");
 			throw new IllegalArgumentException("NULL parent @pflow"); 
 		} else {
-			parent.answer.publish(r);
+			parent.answerChannel().publish(r);
 		}
 	}
 
@@ -208,7 +226,7 @@ public class PFlow {
 
 			Relationship createdAnswer = Utils.createResult( this, op.getEndNode(), answer, rType, hash );
 			
-			parent.answer.publish(path.firstElement().answered(createdAnswer));
+			parent.answerChannel().publish(path.firstElement().answered(createdAnswer));
 		}
 	}
 
@@ -221,7 +239,7 @@ public class PFlow {
 
 			Relationship answer = Utils.createResult(this, answerVector.getContext(), op.getEndNode(), answerVector.getAnswer(), rType);
 			
-			parent.answer.publish(new QCAVector(op, answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
+			parent.answerChannel().publish(new QCAVector(op, answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
 		}
 	}
 
@@ -239,7 +257,7 @@ public class PFlow {
 		} else {
 			//System.out.println("send answer to "+parent.answer+" (parent = "+parent+")");
 
-			parent.answer.publish(new QCAVector(question, context, answer));
+			parent.answerChannel().publish(new QCAVector(question, context, answer));
 		}
 	}
 
@@ -253,13 +271,13 @@ public class PFlow {
 		} else {
 			ae = new AnimoException(op, t);
 		}
-		parent.stop.publish(ae);
+		parent.stopChannel().publish(ae);
 		done();
 	}
 
 	public void done() {
-		if (parent == null) answer.publish(null);
-		else parent.answer.publish(null);
+		if (parent == null) answerChannel().publish(null);
+		else parent.answerChannel().publish(null);
 	}
 
 	protected CountDownLatch waitBeforeClosePipe = null;

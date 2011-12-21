@@ -155,7 +155,7 @@ public class GET extends AbstractQuery implements Shift {
 						return Executor.getFiber();
 					}
 				};
-				pf.answer.subscribe(onContext);
+				pf.answerChannel().subscribe(onContext);
 				
 				if (Utils.haveContext(pf)) {
 					super.onMessage(pf);

@@ -82,7 +82,7 @@ public class COUNT extends Instruction implements Evaluable {
 				}
 			};
 			
-			pf.answer.subscribe(onContext);
+			pf.answerChannel().subscribe(onContext);
 		}
 	};
 }

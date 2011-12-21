@@ -65,7 +65,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 					} catch (AnimoException e) {
 						continue;
 					}
-					nextPF.question.subscribe(onQuestion);
+					nextPF.questionChannel().subscribe(onQuestion);
 					
 					list.add(nextPF);
 					
@@ -85,7 +85,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 			pf.waitBeforeClosePipe(list.size());
 		
 		for (PFlow nextPF : list) {
-			nextPF.question.publish(nextPF);
+			nextPF.questionChannel().publish(nextPF);
 		}
 	}
 
