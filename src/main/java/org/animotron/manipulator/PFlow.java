@@ -167,7 +167,7 @@ public class PFlow {
 			if (deep > 0 && v.haveRelationship(op)) {
 				if (count > 2)
 					throw new AnimoException(op, "cycling detected "+path);
-				else
+                else
 					count++;
 			}
 			deep++;
