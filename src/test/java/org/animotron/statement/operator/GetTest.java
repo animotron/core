@@ -425,4 +425,15 @@ public class GetTest extends ATest {
 		
 		assertAnimoResult("get mime-type file", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain Text\") (extension (\"txt\") (\"text\")).");
 	}
+	
+	@Test
+	public void test_07() throws Exception {
+		testAnimo("the male sex.");
+		testAnimo("the john male.");
+		
+		assertAnimoResult("get sex john", "male.");
+	}
+	
+	
+	
 }
