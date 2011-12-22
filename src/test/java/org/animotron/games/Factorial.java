@@ -29,7 +29,7 @@ import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.GET;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,7 +44,7 @@ public class Factorial extends ATest {
 			_(THE._, "factorial", 
 				_(AN._, "number",
 					_(PTRN._, "number", 
-						_(Q._, "N0", text("Q:N1")),
+						_(Q._, "N0", value("Q:N1")),
 						_(Q._, "N0>", 
 							_(MUL._,
 								_(GET._, "number"),

@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -48,15 +48,15 @@ public class SelfTest extends ATest {
         );
     	
         JExpression C = new JExpression(
-            _(THE._, "C", _(AN._, "A", text(".")), _(AN._, "B", _(SELF._, "A")))
+            _(THE._, "C", _(AN._, "A", value(".")), _(AN._, "B", _(SELF._, "A")))
         );
 
         JExpression CC = new JExpression(
-            _(THE._, "CC", _(AN._, "A", text("CC")), _(AN._, "B", _(SELF._, "A")))
+            _(THE._, "CC", _(AN._, "A", value("CC")), _(AN._, "B", _(SELF._, "A")))
         );
 
         JExpression D = new JExpression(
-            _(THE._, "D", _(AN._, "C"), _(AN._, "A", text(":")))
+            _(THE._, "D", _(AN._, "C"), _(AN._, "A", value(":")))
         );
 
         JExpression E = new JExpression(
@@ -89,17 +89,17 @@ public class SelfTest extends ATest {
         );
 
         JExpression C = new JExpression(
-            _(THE._, "C", _(AN._, "A", text(".")), _(AN._, "B", _(SELF._, "X")))
+            _(THE._, "C", _(AN._, "A", value(".")), _(AN._, "B", _(SELF._, "X")))
         );
         assertAnimoResult(C, "the C (A \".\") (B A \".\").");
 
         JExpression CC = new JExpression(
-            _(THE._, "CC", _(AN._, "A", text("CC")), _(AN._, "B", _(SELF._, "X")))
+            _(THE._, "CC", _(AN._, "A", value("CC")), _(AN._, "B", _(SELF._, "X")))
         );
         assertAnimoResult(CC, "the CC (A \"CC\") (B A \"CC\").");
 
         JExpression D = new JExpression(
-            _(THE._, "D", _(AN._, "C"), _(AN._, "A", text(":")))
+            _(THE._, "D", _(AN._, "C"), _(AN._, "A", value(":")))
         );
         assertAnimoResult(D, "the D (C) (A \":\").");
 

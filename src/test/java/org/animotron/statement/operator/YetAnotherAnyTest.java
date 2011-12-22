@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,30 +40,30 @@ public class YetAnotherAnyTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")))
                 )
         );
 
         JExpression test = new JExpression(
-            _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
+            _(THE._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
         );
         //assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
         assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
 
         test = new JExpression(
-            _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", text("β"))))
+            _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", value("β"))))
         );
         //assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
         assertAnimoResultOneStep(test, "the b the C (B) (Z \"γ\").");
 
         test = new JExpression(
-            _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", text("γ"))))
+            _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))
         );
         assertAnimoResultOneStep(test, "the c the C (B) (Z \"γ\").");
     }
@@ -75,28 +75,28 @@ public class YetAnotherAnyTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "X", text("β")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "X", value("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "X", text("γ")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "X", value("γ")))
                 )
         );
 
         JExpression test = new JExpression(
-            _(THE._, "a", _(ANY._, "S", _(WITH._, "X", text("α"))))
+            _(THE._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
         );
         assertAnimoResultOneStep(test, "the a the A (S) (X \"α\").");
 
         test = new JExpression(
-            _(THE._, "b", _(ANY._, "S", _(WITH._, "X", text("β"))))
+            _(THE._, "b", _(ANY._, "S", _(WITH._, "X", value("β"))))
         );
         assertAnimoResultOneStep(test, "the b the B (A) (X \"β\").");
 
         test = new JExpression(
-            _(THE._, "c", _(ANY._, "S", _(WITH._, "X", text("γ"))))
+            _(THE._, "c", _(ANY._, "S", _(WITH._, "X", value("γ"))))
         );
         assertAnimoResultOneStep(test, "the c the C (B) (X \"γ\").");
     }

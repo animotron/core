@@ -24,7 +24,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -49,11 +49,11 @@ public class TheTest extends ATest {
         System.out.println("Test the 'THE' ...");
         
     	JExpression A = new JExpression(
-			_(THE._, "A", _(AN._, "B", _(THE._, "C", _(AN._, "D", text(".")))))
+			_(THE._, "A", _(AN._, "B", _(THE._, "C", _(AN._, "D", value(".")))))
 		);
     	
     	new JExpression(
-			_(THE._, "C", _(AN._, "D", text(".")))
+			_(THE._, "C", _(AN._, "D", value(".")))
 		);
         
     	JExpression E = new JExpression(

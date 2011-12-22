@@ -32,7 +32,7 @@ import org.junit.Test;
 
 import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -161,12 +161,12 @@ public class WHouseTest extends ATest {
         new JExpression(
     		_(THE._, "R01", 
 				_(AN._, "whouse-document"),
-				_(AN._, "date", text("T2011-08-07")), //TODO: date instruction
+				_(AN._, "date", value("T2011-08-07")), //TODO: date instruction
 				_(AN._, "issue-party", _(AN._, "ORG-01")),
 				_(AN._, "receipt-party", _(AN._, "I")),
 				_(AN._, "SKU",
 					_(THE._, "item01", 
-						_(AN._, "reference", text("item01")),
+						_(AN._, "reference", value("item01")),
 						_(AN._, "qty",
 							_(AN._, "number", _(Q._, "N2")),
 							_(AN._, "UoM", _(AN._, "KG")) //TODO: _(AN._, "UoM", KG))

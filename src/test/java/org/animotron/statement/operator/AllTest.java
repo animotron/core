@@ -26,7 +26,7 @@ import org.animotron.statement.query.ALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,10 +44,10 @@ public class AllTest extends ATest {
                 _(THE._, "A", _(AN._, "value"))
             ),
             new JExpression(
-                _(THE._, "B", _(AN._, "A"), _(AN._, "value", text("B")))
+                _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
             ),
             new JExpression(
-                _(THE._, "C", _(AN._, "B"), _(AN._, "value", text("C")))
+                _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
             )
         );
 
@@ -66,10 +66,10 @@ public class AllTest extends ATest {
                 _(THE._, "A", _(AN._, "value"))
             ),
             new JExpression(
-                _(THE._, "B", _(AN._, "A"), _(AN._, "value", text("B")))
+                _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
             ),
             new JExpression(
-                _(THE._, "C", _(AN._, "B"), _(AN._, "value", text("C")))
+                _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
             )
         );
 
@@ -88,26 +88,26 @@ public class AllTest extends ATest {
                         _(THE._, "A", _(AN._, "value"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "value", text("B")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
                 ),
                 new JExpression(
-                        _(THE._, "B1", _(AN._, "B"), _(AN._, "value", text("B")))
+                        _(THE._, "B1", _(AN._, "B"), _(AN._, "value", value("B")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "value", text("C")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
                 ),
                 new JExpression(
-                        _(THE._, "C1", _(AN._, "C"), _(AN._, "value", text("C")))
+                        _(THE._, "C1", _(AN._, "C"), _(AN._, "value", value("C")))
                 )
         );
 
         JExpression test = new JExpression(
-            _(ALL._, "A", _(WITH._, "value", text("B")))
+            _(ALL._, "A", _(WITH._, "value", value("B")))
         );
         assertAnimoResultOneStep(test, "the B1 (B) (value \"B\").");
 
         test = new JExpression(
-            _(ALL._, "A", _(WITH._, "value", text("C")))
+            _(ALL._, "A", _(WITH._, "value", value("C")))
         );
         assertAnimoResultOneStep(test, "the C1 (C) (value \"C\").");
     }
@@ -117,29 +117,29 @@ public class AllTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "text-plain",
+                        _(THE._, "value-plain",
                                 _(AN._, "mime-type"),
-                                _(AN._, "text"),
-                                _(AN._, "type", text("text/plain")),
-                                _(AN._, "reference", text("Plain text")),
-                                _(AN._, "extension", text("txt"))
+                                _(AN._, "value"),
+                                _(AN._, "type", value("value/plain")),
+                                _(AN._, "reference", value("Plain value")),
+                                _(AN._, "extension", value("txt"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "application-atom",
                                 _(AN._, "mime-type"),
                                 _(AN._, "application"),
-                                _(AN._, "type", text("application/atom+xml")),
-                                _(AN._, "reference", text("Atom Feed Document")),
-                                _(AN._, "extension", text("atom"))
+                                _(AN._, "type", value("application/atom+xml")),
+                                _(AN._, "reference", value("Atom Feed Document")),
+                                _(AN._, "extension", value("atom"))
                         )
                 )
         );
 
 		JExpression test = new JExpression(
-			_(ALL._, "mime-type", _(EQ._, "extension", text("txt")))
+			_(ALL._, "mime-type", _(EQ._, "extension", value("txt")))
 		);
-        //assertAnimoResult(test, "the test the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
-		assertAnimoResultOneStep(test, "the text-plain (mime-type) (text) (type \"text/plain\") (reference \"Plain text\") (extension \"txt\").");
+        //assertAnimoResult(test, "the test the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+		assertAnimoResultOneStep(test, "the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
 	}
 }

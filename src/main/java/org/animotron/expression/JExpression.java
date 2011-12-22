@@ -216,12 +216,4 @@ public class JExpression extends AbstractExpression {
         return _(VALUE._, value, p);
     }
 
-    public static Object[] text(Object value) {
-        return _(TEXT._, value);
-    }
-
-    public static Object[] text(String value, Object[] p) {
-        return _(TEXT._, value, p);
-    }
-
 }

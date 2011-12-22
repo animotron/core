@@ -43,10 +43,10 @@ public class GetTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "A", _(AN._, "Z", text("A")))
+                _(THE._, "A", _(AN._, "Z", value("A")))
             ),
             new JExpression(
-                _(THE._, "B", _(AN._, "Z", text("B")))
+                _(THE._, "B", _(AN._, "Z", value("B")))
             )
         );
 
@@ -68,7 +68,7 @@ public class GetTest extends ATest {
             _(THE._, "A", element("B" , _(GET._, "C")))
         ));
     	JExpression test = new JExpression(
-			_(AN._, "A", _(AN._, "C", text(".")))
+			_(AN._, "A", _(AN._, "C", value(".")))
 		);
     	assertAnimoResult(test, "A \\B C \".\".");
 
@@ -77,7 +77,7 @@ public class GetTest extends ATest {
         ));
 
     	test = new JExpression(
-			_(AN._, "A1", _(AN._, "B1", text(".")))
+			_(AN._, "A1", _(AN._, "B1", value(".")))
 		);
     	assertAnimoResult(test, "A1 B1 \".\".");
 	}
@@ -95,7 +95,7 @@ public class GetTest extends ATest {
         );
     	
     	JExpression test = new JExpression(
-			_(AN._, "D", _(AN._, "A", _(AN._, "C", text(":"))))
+			_(AN._, "D", _(AN._, "A", _(AN._, "C", value(":"))))
 		);
     	assertAnimoResult(test, "D \\E B C \":\".");
 	}
@@ -108,7 +108,7 @@ public class GetTest extends ATest {
                 _(THE._, "A", element("B", _(GET._, "C")))
             ),
             new JExpression(
-                _(THE._, "D", _(AN._, "C", text(".")))
+                _(THE._, "D", _(AN._, "C", value(".")))
             )
         );
 
@@ -126,15 +126,15 @@ public class GetTest extends ATest {
                 _(THE._, "A", element("B", _(GET._, "C")))
             ),
             new JExpression(
-                _(THE._, "D", _(AN._, "C", text(".")))
+                _(THE._, "D", _(AN._, "C", value(".")))
             ),
             new JExpression(
-                _(THE._, "E", _(AN._, "C", text(":")))
+                _(THE._, "E", _(AN._, "C", value(":")))
             )
         );
 
     	JExpression test = new JExpression(
-			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(AN._, "C", text("_")))))
+			_(THE._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(AN._, "C", value("_")))))
 		);
     	assertAnimoResult(test, "the F A \\B (C \".\") (C \"_\").");
 
@@ -147,21 +147,21 @@ public class GetTest extends ATest {
         JExpression.__(
             new JExpression(
                 _(THE._, "A",
-                    _(AN._, "A1", text("some.path")),
+                    _(AN._, "A1", value("some.path")),
 
                     _(SHALL._, "A2",
                         _(GET._, "A1")),
 
                     _(SHALL._, "B1",
                         _(AfterLast._,
-                            text("."),
+                            value("."),
                             _(GET._, "A1")))
                 )),
 
             new JExpression(
                 _(THE._, "B",
                     _(AN._, "A"),
-                    _(AN._, "A1", text("test.txt"))
+                    _(AN._, "A1", value("test.txt"))
                 ))
 
         );
@@ -211,21 +211,21 @@ public class GetTest extends ATest {
         JExpression.__(
             new JExpression(
                 _(THE._, "A",
-                    _(AN._, "A1", text("some.path")),
+                    _(AN._, "A1", value("some.path")),
 
                     _(SHALL._, "A2",
                         _(GET._, "A1")),
 
                     _(SHALL._, "B1",
                         _(AfterLast._,
-                            text("."),
+                            value("."),
                             _(GET._, "A1")))
                 )),
 
             new JExpression(
                 _(THE._, "B",
                     _(AN._, "A"),
-                    _(AN._, "A1", text("test.txt"))
+                    _(AN._, "A1", value("test.txt"))
                 ))
 
         );
@@ -282,7 +282,7 @@ public class GetTest extends ATest {
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(AN._, "C", _(AN._, "X", text("α")), _(AN._, "Y", text("β")), _(AN._, "Z", text("γ"))))
+            _(THE._, "E", _(AN._, "C", _(AN._, "X", value("α")), _(AN._, "Y", value("β")), _(AN._, "Z", value("γ"))))
         );
         assertAnimoResult(E, "the E C (Z \"γ\") (B (Y \"β\") (A X \"α\")).");
     }
@@ -292,7 +292,7 @@ public class GetTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "A", _(GET._, "X"), _(AN._, "Z", text("γ")))
+                _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
             ),
             new JExpression(
                 _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
@@ -303,7 +303,7 @@ public class GetTest extends ATest {
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "B", text("β")))))
+            _(THE._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "B", value("β")))))
         );
         assertAnimoResult(E, "the E C Z \"γ\".");
 
@@ -314,7 +314,7 @@ public class GetTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "A", _(GET._, "X"), _(AN._, "Z", text("γ")))
+                _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
             ),
             new JExpression(
                 _(THE._, "B", _(GET._, "Y"))
@@ -346,7 +346,7 @@ public class GetTest extends ATest {
         );
 
         JExpression D = new JExpression(
-            _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(AN._, "X", text("."))))))
+            _(THE._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(AN._, "X", value("."))))))
         );
         assertAnimoResult(D, "the D C Z Y X \".\".");
     }
@@ -420,9 +420,9 @@ public class GetTest extends ATest {
 	public void test_06() throws Exception {
 		testAnimo("the file extension \"txt\" (any mime-type with extension get extension).");
 		
-		testAnimo("the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain Text\") (extension \"txt\" \"text\")");
-		testAnimo("the text-html (mime-type) (text) (type \"text/html\") (name \"HTML Document\") (extension \"htm\" \"html\")");
+		testAnimo("the value-plain (mime-type) (value) (type \"value/plain\") (name \"Plain value\") (extension \"txt\" \"value\")");
+		testAnimo("the value-html (mime-type) (value) (type \"value/html\") (name \"HTML Document\") (extension \"htm\" \"html\")");
 		
-		assertAnimoResult("get mime-type file", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain Text\") (extension (\"txt\") (\"text\")).");
+		assertAnimoResult("get mime-type file", "value-plain (mime-type) (value) (type \"value/plain\") (name \"Plain value\") (extension (\"txt\") (\"value\")).");
 	}
 }

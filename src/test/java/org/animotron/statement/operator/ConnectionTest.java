@@ -28,7 +28,7 @@ import org.animotron.statement.string.AfterLast;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -49,12 +49,12 @@ public class ConnectionTest extends ATest {
 
                 new JExpression(
                         _(THE._, "file",
-                                _(AN._, "reference", text("file")),
+                                _(AN._, "reference", value("file")),
                                 _(AN._, "path"),
 
                                 _(SHALL._, "extension",
                                         _(AfterLast._,
-                                                text("."),
+                                                value("."),
                                                 _(GET._, "path"))),
 
                                 _(SHALL._, "mime-type",
@@ -66,14 +66,14 @@ public class ConnectionTest extends ATest {
                 new JExpression(
                         _(THE._, "fileA",
                                 _(AN._, "file"),
-                                _(AN._, "path", text("/home/test.txt"))
+                                _(AN._, "path", value("/home/test.txt"))
                         )),
 
                 new JExpression(
-                        _(THE._, "text-plain",
+                        _(THE._, "value-plain",
                                 _(AN._, "mime-type"),
-                                _(AN._, "type", text("text/plain")),
-                                _(AN._, "extension", text("txt"), text("text"))
+                                _(AN._, "type", value("value/plain")),
+                                _(AN._, "extension", value("txt"), value("value"))
                         ))
 
         );
@@ -105,9 +105,9 @@ public class ConnectionTest extends ATest {
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
-        //XXX: assertAnimoResult(D, "the D mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
-        //assertAnimoResult(D, "the D shall mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
-        assertAnimoResult(D, "the D shall mime-type the text-plain (mime-type) (type) (extension).");
+        //XXX: assertAnimoResult(D, "the D mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
+        //assertAnimoResult(D, "the D shall mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
+        assertAnimoResult(D, "the D shall mime-type the value-plain (mime-type) (type) (extension).");
 
         JExpression E = new JExpression(
         _(THE._, "E",
@@ -115,7 +115,7 @@ public class ConnectionTest extends ATest {
                 _(GET._, "mime-type",
                     _(AN._, "fileA")
         ))));
-        assertAnimoResult(E, "the E type \"text/plain\".");
+        assertAnimoResult(E, "the E type \"value/plain\".");
     }
 	
     @Test
@@ -131,15 +131,15 @@ public class ConnectionTest extends ATest {
 
                 new JExpression(
                         _(THE._, "file",
-                                _(AN._, "reference", text("file")),
-                                _(AN._, "path1", text("some.path.text")),
+                                _(AN._, "reference", value("file")),
+                                _(AN._, "path1", value("some.path.value")),
 
                                 _(SHALL._, "path2",
                                         _(GET._, "path1")),
 
                                 _(SHALL._, "extension1",
                                         _(AfterLast._,
-                                                text("."),
+                                                value("."),
                                                 _(GET._, "path1"))),
 
                                 _(SHALL._, "mime-type",
@@ -151,14 +151,14 @@ public class ConnectionTest extends ATest {
                 new JExpression(
                         _(THE._, "fileA",
                                 _(AN._, "file"),
-                                _(AN._, "path", text("/home/test.txt"))
+                                _(AN._, "path", value("/home/test.txt"))
                         )),
 
                 new JExpression(
-                        _(THE._, "text-plain",
+                        _(THE._, "value-plain",
                                 _(AN._, "mime-type"),
-                                _(AN._, "type", text("text/plain")),
-                                _(AN._, "extension", text("txt"), text("text"))
+                                _(AN._, "type", value("value/plain")),
+                                _(AN._, "extension", value("txt"), value("value"))
                         ))
 
         );
@@ -168,32 +168,32 @@ public class ConnectionTest extends ATest {
             _(GET._, "path1",
                 _(AN._, "fileA")
         )));
-        assertAnimoResult(B1, "the B1 path1 \"some.path.text\".");
+        assertAnimoResult(B1, "the B1 path1 \"some.path.value\".");
 
         JExpression B2 = new JExpression(
         _(THE._, "B2",
             _(GET._, "path2",
                 _(AN._, "fileA")
         )));
-        //XXX: assertAnimoResult(B2, "the B2 path2 path1 \"some.path.text\".");
-        assertAnimoResult(B2, "the B2 shall path2 path1 \"some.path.text\".");
+        //XXX: assertAnimoResult(B2, "the B2 path2 path1 \"some.path.value\".");
+        assertAnimoResult(B2, "the B2 shall path2 path1 \"some.path.value\".");
 
         JExpression C1 = new JExpression(
         _(THE._, "C1",
             _(GET._, "extension1",
                 _(AN._, "fileA")
         )));
-        //XXX: assertAnimoResult(C1, "the C1 extension1 \"text\".");
-        assertAnimoResult(C1, "the C1 shall extension1 \"text\".");
+        //XXX: assertAnimoResult(C1, "the C1 extension1 \"value\".");
+        assertAnimoResult(C1, "the C1 shall extension1 \"value\".");
 
         JExpression D = new JExpression(
         _(THE._, "D",
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         )));
-        //XXX: assertAnimoResult(D, "the D mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
-        //assertAnimoResult(D, "the D shall mime-type the text-plain (mime-type) (type \"text/plain\") (extension \"txt\" \"text\").");
-        assertAnimoResult(D, "the D shall mime-type the text-plain (mime-type) (type) (extension).");
+        //XXX: assertAnimoResult(D, "the D mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
+        //assertAnimoResult(D, "the D shall mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
+        assertAnimoResult(D, "the D shall mime-type the value-plain (mime-type) (type) (extension).");
 
         JExpression E = new JExpression(
         _(THE._, "E",
@@ -202,7 +202,7 @@ public class ConnectionTest extends ATest {
             ),
             _(GET._, "type")
         ));
-        //assertAnimoResult(E, "the E type \"text/plain\".");
-        assertAnimoResult(E, "the E (shall mime-type the text-plain (mime-type) (type) (extension)) (type \"text/plain\").");
+        //assertAnimoResult(E, "the E type \"value/plain\".");
+        assertAnimoResult(E, "the E (shall mime-type the value-plain (mime-type) (type) (extension)) (type \"value/plain\").");
     }
 }

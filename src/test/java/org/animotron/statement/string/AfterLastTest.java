@@ -26,7 +26,7 @@ import org.animotron.statement.query.GET;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -39,11 +39,11 @@ public class AfterLastTest extends ATest {
         System.out.println("Test 'AfterLast' ...");
         
     	JExpression.__(new JExpression(
-                JExpression._(THE._, "A", _(AN._, "B", text("x.y.z")))
+                JExpression._(THE._, "A", _(AN._, "B", value("x.y.z")))
         ));
     	
     	JExpression C = new JExpression(
-			_(THE._, "C", _(AfterLast._, text("."), _(GET._, "B", JExpression._(AN._, "A"))))
+			_(THE._, "C", _(AfterLast._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
 		);
     	
         assertAnimoResult(C, "the C \"z\".");

@@ -26,7 +26,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,7 +45,7 @@ public class ShallUseTest extends ATest {
                         _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(SHALL._, "X", text("χ")), _(SHALL._, "Υ", text("υ")))
+                        _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"))
@@ -70,7 +70,7 @@ public class ShallUseTest extends ATest {
                         _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(SHALL._, "X", text("χ")), _(SHALL._, "Υ", text("υ")))
+                        _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"), _(USE._, "X"))
@@ -95,7 +95,7 @@ public class ShallUseTest extends ATest {
                         _(THE._, "Y", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(SHALL._, "X", text("χ")), _(SHALL._, "Υ", text("υ")))
+                        _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"))

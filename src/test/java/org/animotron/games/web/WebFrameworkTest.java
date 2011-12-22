@@ -48,7 +48,7 @@ public class WebFrameworkTest extends ATest {
             ),
             new JExpression(
                 _(THE._, "html",
-                    _(AN._, "mime-type", text("text/html")),
+                    _(AN._, "mime-type", value("value/html")),
                     _(AN._, "content",
                         element("html",
                             element("head",
@@ -64,21 +64,21 @@ public class WebFrameworkTest extends ATest {
             new JExpression(
                 _(THE._, "resource-not-found",
                     _(AN._, "not-found-content"),
-                    _(AN._, "title", text("Not found")),
-                    _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
+                    _(AN._, "title", value("Not found")),
+                    _(AN._, "content", value("Can't find resource \""), _(GET._, "uri"), value("\""))
                 )
             ),
             new JExpression(
                 _(THE._, "it-working",
                     _(AN._, "root-content"),
-                    _(AN._, "title", text("Welcome to Animo")),
-                    _(AN._, "content", text("It is working!"))
+                    _(AN._, "title", value("Welcome to Animo")),
+                    _(AN._, "content", value("It is working!"))
                 )
             ),
             new JExpression(
                 _(THE._, "localhost-site",
                     _(AN._, "site"),
-                    _(AN._, "server-name", text("localhost")),
+                    _(AN._, "server-name", value("localhost")),
                     _(USE._, "theme-concrete-root-layout"),
                     _(USE._, "it-working")
                 )
@@ -113,7 +113,7 @@ public class WebFrameworkTest extends ATest {
                 _(THE._, "root-layout",
                     _(AN._, "layout")
                     //,
-                    //element("p", text("The default root layout!"))
+                    //element("p", value("The default root layout!"))
                 )
             ),
             new JExpression(
@@ -122,8 +122,8 @@ public class WebFrameworkTest extends ATest {
                     element("h1", _(GET._, "title")),
                     element("p", _(GET._, "content")),
                     element("ul",
-                        element("li", text("host: \""), element("strong", _(GET._, "host")), text("\"")),
-                        element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
+                        element("li", value("host: \""), element("strong", _(GET._, "host")), value("\"")),
+                        element("li", value("uri: \""), element("strong", _(GET._, "uri")), value("\""))
                     )
                 )
             ),
@@ -141,8 +141,8 @@ public class WebFrameworkTest extends ATest {
             _(GET._, "content",
                 _(AN._, "rest",
                     _(USE._, "root"),
-                    _(AN._, "uri", text("/")),
-                    _(AN._, "host", text("localhost"))
+                    _(AN._, "uri", value("/")),
+                    _(AN._, "host", value("localhost"))
                 )
             )
         );
@@ -178,8 +178,8 @@ public class WebFrameworkTest extends ATest {
                 _(GET._, "content",
                     _(AN._, "rest",
                         _(USE._, "favicon.ico"),
-                        _(AN._, "uri", text("/favicon.ico")),
-                        _(AN._, "host", text("localhost"))
+                        _(AN._, "uri", value("/favicon.ico")),
+                        _(AN._, "host", value("localhost"))
                     )
                 )
             );

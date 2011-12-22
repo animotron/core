@@ -25,7 +25,7 @@ import org.animotron.statement.relation.SHALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,7 +41,7 @@ public class ShallTest extends ATest {
                         _(THE._, "A")
                 ),
                 new JExpression(
-                        _(THE._, "B", _(SHALL._, "A", text(".")))
+                        _(THE._, "B", _(SHALL._, "A", value(".")))
                 ),
                 new JExpression(
                         _(THE._, "C", _(AN._, "B"))

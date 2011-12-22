@@ -26,7 +26,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -97,7 +97,7 @@ public class AnimoSerializerTest extends ATest {
             _(THE._, "A",
                 _(AN._, "B",
                     _(AN._, "C",
-                        _(AN._, "D", text("."))
+                        _(AN._, "D", value("."))
                     )
                 )
             )
@@ -112,7 +112,7 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "B",
                     _(AN._, "C",
                         _(AN._, "D"),
-                        text(".")
+                        value(".")
                     )
                 )
             )
@@ -126,8 +126,8 @@ public class AnimoSerializerTest extends ATest {
             _(THE._, "A",
                 _(AN._, "B",
                     _(AN._, "C",
-                        _(AN._, "D", text(".")),
-                        _(AN._, "E", text("_"))
+                        _(AN._, "D", value(".")),
+                        _(AN._, "E", value("_"))
                     )
                 )
             )
@@ -142,8 +142,8 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "X"),
                 _(AN._, "B",
                     _(AN._, "C",
-                        _(AN._, "D", text(".")),
-                        _(AN._, "E", text("_"))
+                        _(AN._, "D", value(".")),
+                        _(AN._, "E", value("_"))
                     )
                 )
             )
@@ -158,12 +158,12 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "X"),
                 _(AN._, "B",
                     _(AN._, "C",
-                        _(AN._, "D", text(".")),
-                        _(AN._, "E", text("_"))
+                        _(AN._, "D", value(".")),
+                        _(AN._, "E", value("_"))
                     ),
                     _(AN._, "F",
-                        _(AN._, "G", text(":")),
-                        _(AN._, "H", text(";"))
+                        _(AN._, "G", value(":")),
+                        _(AN._, "H", value(";"))
                     )
                 )
             )
@@ -178,22 +178,22 @@ public class AnimoSerializerTest extends ATest {
                 _(AN._, "X"),
                 _(AN._, "B",
                     _(AN._, "C",
-                        _(AN._, "D", text("1")),
-                        _(AN._, "E", text("2"))
+                        _(AN._, "D", value("1")),
+                        _(AN._, "E", value("2"))
                     ),
                     _(AN._, "F",
-                        _(AN._, "G", text("3")),
-                        _(AN._, "H", text("4"))
+                        _(AN._, "G", value("3")),
+                        _(AN._, "H", value("4"))
                     )
                 ),
                 _(AN._, "I",
                     _(AN._, "J",
-                        _(AN._, "K", text("5")),
-                        _(AN._, "L", text("6"))
+                        _(AN._, "K", value("5")),
+                        _(AN._, "L", value("6"))
                     ),
                     _(AN._, "M",
-                        _(AN._, "N", text("7")),
-                        _(AN._, "O", text("8"))
+                        _(AN._, "N", value("7")),
+                        _(AN._, "O", value("8"))
                     )
                 )
             )
@@ -205,7 +205,7 @@ public class AnimoSerializerTest extends ATest {
     public void test_0B() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                text("bla"), text("bla")
+                value("bla"), value("bla")
             )
         );
         assertAnimo(A, "the A \"bla\" \"bla\".");
@@ -227,7 +227,7 @@ public class AnimoSerializerTest extends ATest {
     public void test_0D() throws Exception {
         JExpression A = new JExpression(
             _(THE._, "A",
-                text("B", text("C"))
+                value("B", value("C"))
             )
         );
         assertAnimo(A, "the A \"B\" \"C\".");

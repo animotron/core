@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 import static org.animotron.expression.JExpression.element;
 
 /**
@@ -41,13 +41,13 @@ public class AllUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", value("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", value("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ALL._, "S"))
@@ -73,13 +73,13 @@ public class AllUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ALL._, "S"))
@@ -109,19 +109,19 @@ public class AllUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), element("X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), element("X", value("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), element("Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), element("Y", value("β")))
                 ),
                 new JExpression(
-                        _(THE._, "B1", _(AN._, "B"), element("Y", text("ββ")))
+                        _(THE._, "B1", _(AN._, "B"), element("Y", value("ββ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), element("Z", text("γ")), element("X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
                 ),
                 new JExpression(
-                        _(THE._, "C1", _(AN._, "C"), element("Z", text("γγ")), element("X", text("ααα")))
+                        _(THE._, "C1", _(AN._, "C"), element("Z", value("γγ")), element("X", value("ααα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ALL._, "S"))
@@ -148,19 +148,19 @@ public class AllUseTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", text("α")))
+                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
                 ),
                 new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", text("β")))
+                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
                 ),
                 new JExpression(
-                        _(THE._, "B1", _(AN._, "B"), _(AN._, "Y", text("ββ")))
+                        _(THE._, "B1", _(AN._, "B"), _(AN._, "Y", value("ββ")))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", text("γ")), _(AN._, "X", text("αα")))
+                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
                 ),
                 new JExpression(
-                        _(THE._, "C1", _(AN._, "C"), _(AN._, "Z", text("γγ")), _(AN._, "X", text("ααα")))
+                        _(THE._, "C1", _(AN._, "C"), _(AN._, "Z", value("γγ")), _(AN._, "X", value("ααα")))
                 ),
                 new JExpression(
                         _(THE._, "s", _(ALL._, "S"))

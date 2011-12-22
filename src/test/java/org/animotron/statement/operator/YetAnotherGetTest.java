@@ -27,7 +27,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,7 +44,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", value("π")))
                 )
         );
 
@@ -63,7 +63,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(SHALL._, "B", text("π")))
+                        _(THE._, "C", _(SHALL._, "B", value("π")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"))
@@ -85,7 +85,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", value("π")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"))
@@ -108,7 +108,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", value("π")))
                 )
         );
 
@@ -128,7 +128,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(SHALL._, "B", text("π")))
+                        _(THE._, "C", _(SHALL._, "B", value("π")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"))
@@ -151,7 +151,7 @@ public class YetAnotherGetTest extends ATest{
                         _(THE._, "B", _(AN._, "A"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "B", text("π")))
+                        _(THE._, "C", _(AN._, "B", value("π")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"))

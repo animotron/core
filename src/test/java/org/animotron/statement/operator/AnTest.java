@@ -23,7 +23,7 @@ import org.animotron.expression.JExpression;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,7 +42,7 @@ public class AnTest extends ATest {
         assertAnimoResultOneStep(A, "the A B.");
 
         JExpression.__(new JExpression(
-            _(THE._, "B", _(AN._, "C", text("y")))
+            _(THE._, "B", _(AN._, "C", value("y")))
         ));
         assertAnimoResultOneStep(A, "the A B C \"y\".");
     }

@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,10 +40,10 @@ public class GetDynamicTest extends ATest {
 
         JExpression.__(
             new JExpression(
-                _(THE._, "A", _(AN._, "Z", text("A")))
+                _(THE._, "A", _(AN._, "Z", value("A")))
             ),
             new JExpression(
-                _(THE._, "B", _(AN._, "Z", text("B")))
+                _(THE._, "B", _(AN._, "Z", value("B")))
             )
         );
 
@@ -61,10 +61,10 @@ public class GetDynamicTest extends ATest {
                 _(THE._, "ZZ", _(AN._, "Z"))
             ),
             new JExpression(
-                _(THE._, "A", _(AN._, "Z", text("A")))
+                _(THE._, "A", _(AN._, "Z", value("A")))
             ),
             new JExpression(
-                _(THE._, "B", _(AN._, "ZZ", text("B")))
+                _(THE._, "B", _(AN._, "ZZ", value("B")))
             )
         );
 
@@ -83,10 +83,10 @@ public class GetDynamicTest extends ATest {
                 _(THE._, "B", _(AN._, "A"))
             ),
             new JExpression(
-                _(THE._, "C", _(AN._, "Z"), _(AN._, "B", text("π")))
+                _(THE._, "C", _(AN._, "Z"), _(AN._, "B", value("π")))
             ),
             new JExpression(
-                _(THE._, "D", _(AN._, "Z"), _(AN._, "A", text("Aπ")))
+                _(THE._, "D", _(AN._, "Z"), _(AN._, "A", value("Aπ")))
             )
         );
 

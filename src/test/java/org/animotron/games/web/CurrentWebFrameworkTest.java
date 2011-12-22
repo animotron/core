@@ -48,7 +48,7 @@ public class CurrentWebFrameworkTest extends ATest {
             ),
             new JExpression(
                 _(THE._, "html",
-                    _(AN._, "mime-type", text("text/html")),
+                    _(AN._, "mime-type", value("value/html")),
                     element("html",
                             element("head",
                                     element("title", _(GET._, "title"))
@@ -66,8 +66,8 @@ public class CurrentWebFrameworkTest extends ATest {
                     _(AN._, "animo"),
                     _(AN._, "localhost"),
                     _(AN._, "html",
-                        _(AN._, "title", text("Not found")),
-                        _(AN._, "content", text("Can't find resource \""), _(GET._, "uri"), text("\""))
+                        _(AN._, "title", value("Not found")),
+                        _(AN._, "content", value("Can't find resource \""), _(GET._, "uri"), value("\""))
                     )
                 )
             ),
@@ -77,15 +77,15 @@ public class CurrentWebFrameworkTest extends ATest {
                     _(AN._, "root"),
                     _(AN._, "localhost"),
                     _(AN._, "html",
-                        _(AN._, "title", text("Welcome to Localhost")),
-                        _(AN._, "content", text("Is it working?"))
+                        _(AN._, "title", value("Welcome to Localhost")),
+                        _(AN._, "content", value("Is it working?"))
                     )
                 )
             ),
             new JExpression(
                 _(THE._, "localhost-site",
                     _(AN._, "site"),
-                    _(AN._, "server-name", text("localhost")),
+                    _(AN._, "server-name", value("localhost")),
                     _(USE._, "theme-concrete"),
                     _(USE._, "localhost")
                 )
@@ -96,15 +96,15 @@ public class CurrentWebFrameworkTest extends ATest {
                     _(AN._, "root"),
                     _(AN._, "animo"),
                     _(AN._, "html",
-                            _(AN._, "title", text("Welcome to Animo")),
-                            _(AN._, "content", text("It is working!"))
+                            _(AN._, "title", value("Welcome to Animo")),
+                            _(AN._, "content", value("It is working!"))
                     )
                 )
             ),
             new JExpression(
                 _(THE._, "animo-site",
                     _(AN._, "site"),
-                    _(AN._, "server-name", text("animo")),
+                    _(AN._, "server-name", value("animo")),
                     _(USE._, "theme-concrete"),
                     _(USE._, "animo")
                 )
@@ -124,8 +124,8 @@ public class CurrentWebFrameworkTest extends ATest {
                     element("h1", _(GET._, "title")),
                     element("p", _(GET._, "content")),
                     element("ul",
-                        element("li", text("host: \""), element("strong", _(GET._, "host")), text("\"")),
-                        element("li", text("uri: \""), element("strong", _(GET._, "uri")), text("\""))
+                        element("li", value("host: \""), element("strong", _(GET._, "host")), value("\"")),
+                        element("li", value("uri: \""), element("strong", _(GET._, "uri")), value("\""))
                     )
                 )
             ),
@@ -151,8 +151,8 @@ public class CurrentWebFrameworkTest extends ATest {
         JExpression s1 = new JExpression(
             _(AN._, "rest",
                 _(USE._, "root"),
-                _(AN._, "uri", text("/")),
-                _(AN._, "host", text("localhost"))
+                _(AN._, "uri", value("/")),
+                _(AN._, "host", value("localhost"))
             )
         );
 
@@ -200,8 +200,8 @@ public class CurrentWebFrameworkTest extends ATest {
         JExpression s2 = new JExpression(
             _(AN._, "rest",
                 _(USE._, "root"),
-                _(AN._, "uri", text("/")),
-                _(AN._, "host", text("animo"))
+                _(AN._, "uri", value("/")),
+                _(AN._, "host", value("animo"))
             )
         );
 
@@ -249,8 +249,8 @@ public class CurrentWebFrameworkTest extends ATest {
         JExpression s3 = new JExpression(
             _(AN._, "rest",
                 _(USE._, "not-found"),
-                _(AN._, "uri", text("/foo")),
-                _(AN._, "host", text("localhost"))
+                _(AN._, "uri", value("/foo")),
+                _(AN._, "host", value("localhost"))
             )
         );
 
@@ -292,8 +292,8 @@ public class CurrentWebFrameworkTest extends ATest {
         JExpression s4 = new JExpression(
             _(AN._, "rest",
                 _(USE._, "not-found"),
-                _(AN._, "uri", text("/bar")),
-                _(AN._, "host", text("animo"))
+                _(AN._, "uri", value("/bar")),
+                _(AN._, "host", value("animo"))
             )
         );
 

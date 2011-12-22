@@ -29,7 +29,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -57,7 +57,7 @@ public class CurrentSite_Test extends ATest {
                 new JExpression(
                         _(THE._, "localhost-site",
                                 _(AN._, "site"),
-                                _(AN._, "server-name", text("localhost"))
+                                _(AN._, "server-name", value("localhost"))
                         )
                 ),
                 new JExpression(
@@ -70,7 +70,7 @@ public class CurrentSite_Test extends ATest {
                 new JExpression(
                         _(THE._, "current-request",
                                 _(AN._, "request"),
-                                _(AN._, "host", text("localhost"))
+                                _(AN._, "host", value("localhost"))
                         )
                 )
         );

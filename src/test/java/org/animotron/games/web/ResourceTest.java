@@ -28,7 +28,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -50,14 +50,14 @@ public class ResourceTest extends ATest {
                         _(THE._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root"))
+                                _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
-                                _(AN._, "title", text("404"))
+                                _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
@@ -92,21 +92,21 @@ public class ResourceTest extends ATest {
                         _(THE._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root"))
+                                _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "root-service1",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root1"))
+                                _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
-                                _(AN._, "title", text("404"))
+                                _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
@@ -142,20 +142,20 @@ public class ResourceTest extends ATest {
                         _(THE._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root"))
+                                _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "root-service1",
                                 _(AN._, "root-service"),
-                                _(AN._, "title", text("root1"))
+                                _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
-                                _(AN._, "title", text("404"))
+                                _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
@@ -186,14 +186,14 @@ public class ResourceTest extends ATest {
                         _(THE._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root"))
+                                _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
-                                _(AN._, "title", text("404"))
+                                _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
@@ -223,21 +223,21 @@ public class ResourceTest extends ATest {
                         _(THE._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root"))
+                                _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "root-service1",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root1"))
+                                _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
-                                _(AN._, "title", text("404"))
+                                _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
@@ -267,20 +267,20 @@ public class ResourceTest extends ATest {
                         _(THE._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
-                                _(AN._, "title", text("root"))
+                                _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "root-service1",
                                 _(AN._, "root-service"),
-                                _(AN._, "title", text("root1"))
+                                _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
                         _(THE._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
-                                _(AN._, "title", text("404"))
+                                _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(

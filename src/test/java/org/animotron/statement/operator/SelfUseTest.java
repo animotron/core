@@ -26,7 +26,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.text;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -46,7 +46,7 @@ public class SelfUseTest extends ATest {
                         _(THE._, "B", _(AN._, "X"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "A", text(".")), _(AN._, "B", text("..")))
+                        _(THE._, "C", _(AN._, "A", value(".")), _(AN._, "B", value("..")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"), _(SELF._, "X"))
@@ -77,7 +77,7 @@ public class SelfUseTest extends ATest {
                         _(THE._, "B", _(AN._, "X"))
                 ),
                 new JExpression(
-                        _(THE._, "C", _(AN._, "A", text(".")), _(AN._, "B", text("..")))
+                        _(THE._, "C", _(AN._, "A", value(".")), _(AN._, "B", value("..")))
                 ),
                 new JExpression(
                         _(THE._, "D", _(AN._, "C"), _(SELF._, "X"))
