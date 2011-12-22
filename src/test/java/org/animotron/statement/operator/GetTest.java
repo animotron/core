@@ -416,4 +416,13 @@ public class GetTest extends ATest {
 		assertAnimoResult("an resource, site", "resource host \"localhost\". site host.");
 	}
 
+	@Test
+	public void test_06() throws Exception {
+		testAnimo("the file extension \"txt\" (any mime-type with extension get extension).");
+		
+		testAnimo("the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain Text\") (extension \"txt\" \"text\")");
+		testAnimo("the text-html (mime-type) (text) (type \"text/html\") (name \"HTML Document\") (extension \"htm\" \"html\")");
+		
+		assertAnimoResult("get mime-type file", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain Text\") (extension (\"txt\") (\"text\")).");
+	}
 }
