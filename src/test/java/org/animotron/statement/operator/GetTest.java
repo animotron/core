@@ -425,15 +425,56 @@ public class GetTest extends ATest {
 		
 		assertAnimoResult("get mime-type file", "value-plain (mime-type) (value) (type \"value/plain\") (name \"Plain value\") (extension (\"txt\") (\"value\")).");
 	}
-	
-	@Test
-	public void test_07() throws Exception {
-		testAnimo("the male sex.");
-		testAnimo("the john male.");
-		
-		assertAnimoResult("get sex john", "male.");
-	}
-	
-	
-	
+
+    @Test
+    public void test_07() throws Exception {
+        testAnimo("the male sex.");
+        testAnimo("the john male.");
+
+        assertAnimoResult("get sex john", "male.");
+    }
+
+    @Test
+    public void test_08() throws Exception {
+        testAnimo("the male sex.");
+        testAnimo("the john male.");
+
+        assertAnimoResult("get sex any male", "male.");
+    }
+
+    @Test
+    public void test_09() throws Exception {
+        testAnimo("the male sex.");
+        testAnimo("the john male.");
+        testAnimo("the man john.");
+
+        assertAnimoResult("get sex man", "male.");
+    }
+
+    @Test
+    public void test_10() throws Exception {
+        testAnimo("the male sex.");
+        testAnimo("the john male.");
+        testAnimo("the man any male.");
+
+        assertAnimoResult("get sex man", "male.");
+    }
+
+    @Test
+    public void test_11() throws Exception {
+        testAnimo("the male sex.");
+        testAnimo("the john person, male.");
+
+        assertAnimoResult("get sex any person", "male.");
+    }
+
+    @Test
+    public void test_12() throws Exception {
+        testAnimo("the male sex.");
+        testAnimo("the john person, male.");
+        testAnimo("the man any person.");
+
+        assertAnimoResult("get sex man", "male.");
+    }
+
 }
