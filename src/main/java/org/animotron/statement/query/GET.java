@@ -573,7 +573,7 @@ public class GET extends AbstractQuery implements Shift {
 						if (Utils.haveContext(r.getEndNode())) {
 							res = r;
 							//break;
-						} else if (startBy.isType(REF._)) {
+						} else if (startBy.isType(REF._) || (op != null && op.isType(RESULT))) {
 							res = r;
 							break;
 						}
