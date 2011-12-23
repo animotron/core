@@ -519,6 +519,7 @@ public class GET extends AbstractQuery implements Shift {
 		if (context == null) return null;
 		
 		TraversalDescription trav = td.
+				relationships(ANY._, OUTGOING).
 				relationships(AN._, OUTGOING).
 				relationships(REF._, OUTGOING).
 				relationships(SHALL._, OUTGOING).
