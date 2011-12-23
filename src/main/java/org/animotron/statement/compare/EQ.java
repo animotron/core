@@ -20,7 +20,10 @@ package org.animotron.statement.compare;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
+
+import org.animotron.Executor;
 import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -28,6 +31,8 @@ import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -57,17 +62,41 @@ public class EQ extends Operator implements Predicate {
 		Set<Node> thes = new FastSet<Node>();
 		thes.add(theNode);
 		
-		Relationship[] have = GET._.getBySELF(pf, ref, thes);
-		if (have == null) return false;
+		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
+		PipedInput<QCAVector> in = out.getInputStream();
+		
+		PFlow pflow = new PFlow(new PFlow(Evaluator._), pf.getVector().question(op));
+		
+		pflow.getParent().answerChannel().subscribe(new Subscribable<QCAVector>() {
+			
+			@Override
+			public void onMessage(QCAVector message) {
+				try {
+					if (message == null)
+						out.close();
+
+					out.write(message);
+				} catch (IOException e) {
+				}
+			}
+			
+			@Override
+			public DisposingExecutor getQueue() {
+				return Executor.getFiber();
+			}
+		});
+		
+		GET._.getBySELF(pflow, ref, thes);
+		pflow.done();
+		
+		if (!in.hasNext()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
-		PipedInput<QCAVector> in;
-		
 		//System.out.println("Eval actual");
-		for (int i = 0; i < have.length; i++) { 
-			in = Evaluator._.execute(new PFlow(pf), have[i].getEndNode());
+		for (QCAVector res : in) { 
+			in = Evaluator._.execute(new PFlow(pf), res);
 			for (QCAVector e : in) {
 				actual.add(e);
 				//System.out.println("actual "+e);

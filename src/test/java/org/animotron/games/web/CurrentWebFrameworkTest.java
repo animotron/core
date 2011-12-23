@@ -63,8 +63,6 @@ public class CurrentWebFrameworkTest extends ATest {
                 _(THE._, "resource-not-found",
                     _(AN._, "service"),
                     _(AN._, "not-found"),
-                    _(AN._, "animo"),
-                    _(AN._, "localhost"),
                     _(AN._, "html",
                         _(AN._, "title", value("Not found")),
                         _(AN._, "content", value("Can't find resource \""), _(GET._, "uri"), value("\""))
@@ -264,7 +262,6 @@ public class CurrentWebFrameworkTest extends ATest {
                 "(the resource-not-found " +
                     "(service resource) " +
                     "(not-found) " +
-                    "(animo) " +
                     "(localhost) " +
                     "(html " +
                         "(mime-type) " +

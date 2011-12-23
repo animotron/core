@@ -20,8 +20,12 @@ package org.animotron.statement.compare;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
+
+import org.animotron.Executor;
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
+import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -29,6 +33,8 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.query.GET;
+import org.jetlang.channels.Subscribable;
+import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -60,22 +66,48 @@ public class WITH extends Operator implements Predicate {
 		Set<Node> thes = new FastSet<Node>();
 		thes.add(theNode);
 
-		Set<QCAVector> haveSet = GET._.get(pf, op, ref, thes, null);
-		if (haveSet == null || haveSet.isEmpty()) return false;
+		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
+		PipedInput<QCAVector> in = out.getInputStream();
+		
+		PFlow pflow = new PFlow(new PFlow(Evaluator._), pf.getVector().question(op));
+		
+		pflow.getParent().answerChannel().subscribe(new Subscribable<QCAVector>() {
+			
+			@Override
+			public void onMessage(QCAVector message) {
+				try {
+					if (message == null)
+						out.close();
+					
+					out.write(message);
+				} catch (IOException e) {
+				}
+			}
+			
+			@Override
+			public DisposingExecutor getQueue() {
+				return Executor.getFiber();
+			}
+		});
+
+		GET._.get(pflow, op, ref, thes, null);
+		pflow.done();
+		
+		//if (!in.hasNext()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
-		PipedInput<QCAVector> in;
-		
 		//System.out.println("Eval actual");
-		for (QCAVector have : haveSet) {
-			in = Evaluator._.execute(new PFlow(pf), have.getAnswer().getEndNode());
+		for (QCAVector have : in) {
+			in = Evaluator._.execute(new PFlow(pf), have);
 			for (QCAVector e : in) {
 				actual.add(e);
 				//System.out.println("actual "+e);
 			}
 		}
+		
+		if (actual.isEmpty()) return false;
 
 		//System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());

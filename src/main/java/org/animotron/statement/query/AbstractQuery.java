@@ -252,7 +252,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		});
     	
     	for (Path path : trav.traverse(theNode)) {
-    		//System.out.println(" * "+path);
+    		//System.out.println(" * use * "+path);
     	}
 		if (allUses.contains(theNode))
 			uses.add(theNode);
@@ -508,13 +508,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				evaluator(new DownIntersectionSearcher(){
 					@Override
 					public Evaluation evaluate(Path path) {
-						//System.out.println("  "+path);
+						//System.out.println(" - "+path);
 						return _evaluate_(path, targets, intersection);
 					}
 				});
 
 		    	for (Path p : trav.traverse(r.getStartNode())) {
-		    		//System.out.println(" ** "+p);
+		    		System.out.println(" ** "+p);
 		    	}
 
 			} else if (path.length() % 2 == 1)

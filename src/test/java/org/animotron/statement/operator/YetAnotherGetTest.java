@@ -21,9 +21,7 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.query.SELF;
 import org.animotron.statement.relation.SHALL;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
@@ -97,71 +95,5 @@ public class YetAnotherGetTest extends ATest{
         );
         assertAnimoResult(E, "the E B \"π\".");
 
-    }
-
-    @Test
-    @Ignore
-    public void self_via_is() throws Exception {
-
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B", value("π")))
-                )
-        );
-
-        JExpression E = new JExpression(
-            _(THE._, "E", _(AN._, "C"), _(SELF._, "A"))
-        );
-        assertAnimoResult(E, "the E (C) (B \"π\").");
-
-    }
-
-    @Test
-    @Ignore
-    public void self_shall_via_is() throws Exception {
-
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(SHALL._, "B", value("π")))
-                ),
-                new JExpression(
-                        _(THE._, "D", _(AN._, "C"))
-                )
-        );
-
-        JExpression E = new JExpression(
-            _(THE._, "E", _(AN._, "D"), _(SELF._, "A"))
-        );
-        assertAnimoResult(E, "the E (D) (B \"π\").");
-
-    }
-
-    @Test
-    @Ignore
-    public void self_have_via_is() throws Exception {
-
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B", value("π")))
-                ),
-                new JExpression(
-                        _(THE._, "D", _(AN._, "C"))
-                )
-        );
-
-        JExpression E = new JExpression(
-            _(THE._, "E", _(AN._, "D"), _(SELF._, "A"))
-        );
-
-        assertAnimoResult(E, "the E (D) (B \"π\").");
     }
 }

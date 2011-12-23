@@ -142,10 +142,9 @@ public class ConnectionTest extends ATest {
                                                 value("."),
                                                 _(GET._, "path1"))),
 
-                                _(SHALL._, "mime-type",
-                                        _(ANY._, "mime-type",
-                                                _(WITH._, "extension",
-                                                        _(GET._, "extension1"))))
+                                _(ANY._, "mime-type",
+                                        _(WITH._, "extension",
+                                                _(GET._, "extension1")))
                         )),
 
                 new JExpression(
