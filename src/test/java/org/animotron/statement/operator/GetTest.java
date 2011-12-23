@@ -459,7 +459,8 @@ public class GetTest extends ATest {
         testAnimo("the male sex.");
         testAnimo("the john person, male.");
 
-        assertAnimoResult("get sex any person", "male.");
+        assertAnimoResult("any person", "the john (person) (male sex).");
+        assertAnimoResult("get sex any person", "person male.");
     }
 
     @Test
