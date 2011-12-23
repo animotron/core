@@ -60,11 +60,11 @@ public class OnQuestion implements Subscribable<PFlow> {
 				
 				if (onQuestion != null) {
 					PFlow nextPF;
-					try {
-						nextPF = new PFlow(pf, r);
-					} catch (AnimoException e) {
-						continue;
-					}
+//					try {
+						nextPF = new PFlow(pf, pf.getVector().question(r));
+//					} catch (AnimoException e) {
+//						continue;
+//					}
 					nextPF.questionChannel().subscribe(onQuestion);
 					
 					list.add(nextPF);
