@@ -70,7 +70,7 @@ public class ResultTraverser extends AnimoTraverser {
 
 		Statement s = Statements.relationshipType(r);
 	        
-        process(handler, pf, s, null, rr, level, isOne, 0, false);
+        process(handler, pf, s, parent, rr, level, isOne, 0, false);
         
         pf.popContextPoint(v);
     }
