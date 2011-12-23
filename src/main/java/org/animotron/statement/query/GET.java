@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -161,6 +161,8 @@ public class GET extends AbstractQuery implements Shift {
 					super.onMessage(pf);
 				} else {
 					
+					if (debug) System.out.println("GET ["+op+"] empty ");
+
 					boolean first = true;
 					Set<QCAVector> rSet = null;
 					for (QCAVector vector : pf.getPFlowPath()) {
@@ -515,7 +517,23 @@ public class GET extends AbstractQuery implements Shift {
 		return null;
 	}
 	
-	private Relationship[] getByHave(final PFlow pflow, Relationship op, final Node context, final Set<Node> thes) {
+	private Relationship relaxReference(PFlow pf, QCAVector vector) {
+		if (!vector.getQuestion().isType(ANY._))
+			return vector.getQuestion();
+		
+		System.out.println("Relaxing ....");
+		try {
+			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), vector);
+			for (QCAVector v : in) {
+				return v.getAnswer();
+			}
+		} catch (IOException e) {
+			pf.sendException(e);
+		}
+		return null;
+	}
+	
+	private Relationship[] getByHave(final PFlow pf, Relationship op, final Node context, final Set<Node> thes) {
 		if (context == null) return null;
 		
 		TraversalDescription trav = td.
@@ -548,7 +566,10 @@ public class GET extends AbstractQuery implements Shift {
 			
 			if (path.length() == 2) {
 				//UNDERSTAND: should we check context
-				return new Relationship[] {path.relationships().iterator().next()}; 
+				Relationship r = path.relationships().iterator().next();
+				r = relaxReference(pf, pf.getVector().question(r));
+				if (r != null)
+					return new Relationship[] {r}; 
 			}
 
 			Relationship fR = path.relationships().iterator().next();
@@ -569,7 +590,7 @@ public class GET extends AbstractQuery implements Shift {
 				if (startBy == null)
 					startBy = r;
 					
-				if (!pflow.isInStack(r)) {
+				if (!pf.isInStack(r)) {
 					if (r.isType(AN._)) {
 						if (Utils.haveContext(r.getEndNode())) {
 							res = r;
