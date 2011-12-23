@@ -439,10 +439,10 @@ public class GetTest extends ATest {
     @Test
     public void test_08() throws Exception {
         testAnimo("the male sex.");
-        testAnimo("the john male.");
-        testAnimo("the man john.");
+        testAnimo("the man male.");
+        testAnimo("the john man.");
 
-        assertAnimoResult("get sex man", "male.");
+        assertAnimoResult("get sex john", "male.");
     }
 
     @Test
