@@ -460,7 +460,7 @@ public class GetTest extends ATest {
         testAnimo("the john person, male.");
 
         assertAnimoResult("any person", "the john (person) (male sex).");
-        assertAnimoResult("get sex any person", "person male.");
+        assertAnimoResult("get sex any person", "person, male.");
     }
 
     @Test
@@ -471,4 +471,13 @@ public class GetTest extends ATest {
 
         assertAnimoResult("get sex man", "male.");
     }
+
+    @Test
+    public void test_12() throws Exception {
+        testAnimo("the x b, c 1.");
+        assertAnimoResult("get c, b x", "b, c 1.");
+        assertAnimoResult("get c x", "b, c 1.");
+        assertAnimoResult("get b x", "b, c 1.");
+    }
+
 }
