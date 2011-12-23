@@ -54,13 +54,13 @@ public class YetAnotherAnyTest extends ATest {
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
         );
         //assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
-        assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
+        assertAnimoResultOneStep(test, "the a the A (S) (X \"α\").");
 
         test = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", value("β"))))
         );
         //assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
-        assertAnimoResultOneStep(test, "the b the C (B) (Z \"γ\").");
+        assertAnimoResultOneStep(test, "the b the B (A) (Y \"β\").");
 
         test = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))
