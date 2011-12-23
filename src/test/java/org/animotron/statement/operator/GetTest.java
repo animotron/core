@@ -471,4 +471,13 @@ public class GetTest extends ATest {
 
         assertAnimoResult("get sex man", "person, male.");
     }
+
+    @Test
+    public void test_12() throws Exception {
+        testAnimo("the x b, c 1.");
+        assertAnimoResult("get c, b x", "b, c 1.");
+        assertAnimoResult("get c x", "b, c 1.");
+        assertAnimoResult("get b x", "b, c 1.");
+    }
+
 }
