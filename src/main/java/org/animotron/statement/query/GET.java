@@ -576,7 +576,7 @@ public class GET extends AbstractQuery implements Shift {
 							//break;
 						} else if (startBy.isType(REF._) || (op != null && op.isType(RESULT))) {
 							res = r;
-							break;
+							//break;
 						}
 					} else if (r.isType(SHALL._)) {
 						res = r;
