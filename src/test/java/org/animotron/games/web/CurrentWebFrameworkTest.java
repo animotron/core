@@ -276,7 +276,7 @@ public class CurrentWebFrameworkTest extends ATest {
                                     "(layout) " +
                                     "(not-found) " +
                                     "(\\h1 title \"Not found\") " +
-                                    "(\\p (content) \"Can't find resource \\\"\" (uri \"/foo\") \"\\\"\"))))).");
+                                    "(\\p content \"Can't find resource \\\"\" (uri \"/foo\") \"\\\"\"))))).");
 
         assertXMLResult(s3,
                 "<html>" +
@@ -319,7 +319,7 @@ public class CurrentWebFrameworkTest extends ATest {
                                 "(layout) " +
                                 "(not-found) " +
                                 "(\\h1 title \"Not found\") " +
-                                "(\\p (content) \"Can't find resource \\\"\" (uri \"/bar\") \"\\\"\"))))).");
+                                "(\\p content \"Can't find resource \\\"\" (uri \"/bar\") \"\\\"\"))))).");
 
         assertXMLResult(s4,
             "<html>" +
