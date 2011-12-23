@@ -53,13 +53,11 @@ public class AnyTest extends ATest {
         JExpression test = new JExpression(
             _(ANY._, "A")
         );
-        //assertAnimoResultOneStep(a, "the B (A) (value \"B\").");
-        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\").");
 
         test = new JExpression(
             _(ANY._, "B")
         );
-        //assertAnimoResultOneStep(b, "the C (B) (value \"C\").");
         assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
     }
 	
@@ -87,14 +85,12 @@ public class AnyTest extends ATest {
         JExpression test = new JExpression(
             _(ANY._, "A", _(WITH._, "value", value("B")))
         );
-        //assertAnimoResultOneStep(test, "the B (A) (value \"B\").");
-        assertAnimoResultOneStep(test, "the B1 (B) (value \"B\").");
+        assertAnimoResultOneStep(test, "the B (A) (value \"B\").");
 
         test = new JExpression(
             _(ANY._, "A", _(WITH._, "value", value("C")))
         );
-        //assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
-        assertAnimoResultOneStep(test, "the C1 (C) (value \"C\").");
+        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
     }
 
 	@Test
