@@ -31,6 +31,4 @@ public class USE extends Relation {
 	
 	private USE() { super("use"); }
 
-	protected USE(String name) { super(name); }
-	
 }
