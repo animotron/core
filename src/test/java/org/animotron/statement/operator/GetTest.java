@@ -418,12 +418,12 @@ public class GetTest extends ATest {
 
 	@Test
 	public void test_06() throws Exception {
-		testAnimo("the file extension \"txt\" (any mime-type with extension get extension).");
+		testAnimo("the file (extension \"txt\") (any mime-type with extension get extension).");
 		
-		testAnimo("the value-plain (mime-type) (value) (type \"value/plain\") (name \"Plain value\") (extension \"txt\" \"value\")");
-		testAnimo("the value-html (mime-type) (value) (type \"value/html\") (name \"HTML Document\") (extension \"htm\" \"html\")");
+		testAnimo("the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\")");
+		testAnimo("the text-html (mime-type) (text) (type \"text/html\") (name \"HTML Document\") (extension \"htm\" \"html\")");
 		
-		assertAnimoResult("get mime-type file", "value-plain (mime-type) (value) (type \"value/plain\") (name \"Plain value\") (extension (\"txt\") (\"value\")).");
+		assertAnimoResult("get mime-type file", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension (\"txt\") (\"text\")).");
 	}
 
     @Test
