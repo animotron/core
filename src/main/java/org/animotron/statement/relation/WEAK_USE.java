@@ -18,35 +18,16 @@
  */
 package org.animotron.statement.relation;
 
-
-import org.animotron.exception.AnimoException;
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.THE;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-
 /**
- * Operator 'USE'.
+ * Operator 'WEAK-USE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class USE extends AbstractStatement {
+public class WEAK_USE extends USE {
 	
-	public static final USE _ = new USE();
+	public static final WEAK_USE _ = new WEAK_USE();
 	
-	private USE() { super("use"); }
-
-	protected USE(String name) { super(name); }
+	private WEAK_USE() { super("weak-use"); }
 	
-    @Override
-    public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        return parent.createRelationshipTo(reference(reference, ignoreNotFound), this);
-    }
-
-    @Override
-    public Object reference(Relationship r){
-        return THE._.reference(r);
-    }
-
 }
