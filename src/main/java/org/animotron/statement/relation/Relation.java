@@ -31,7 +31,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class Relation extends AbstractStatement {
+public abstract class Relation extends AbstractStatement {
 
 	protected Relation(String... name) { super(name); }
 	
