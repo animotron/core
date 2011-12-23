@@ -30,5 +30,7 @@ public class USE extends Relation {
 	public static final USE _ = new USE();
 	
 	private USE() { super("use"); }
+
+	protected USE(String name) { super(name); }
 	
 }

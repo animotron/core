@@ -472,7 +472,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					return EXCLUDE_AND_CONTINUE;
 				
 				//XXX: check direction!
-				} else if (r.isType(AN._)) {
+				} else if (r.isType(AN._) || r.isType(ANY._)) {
 					if (r.getEndNode().equals(path.endNode())) {
 						return EXCLUDE_AND_CONTINUE;
 					}

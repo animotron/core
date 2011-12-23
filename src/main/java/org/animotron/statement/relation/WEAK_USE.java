@@ -18,17 +18,16 @@
  */
 package org.animotron.statement.relation;
 
-
 /**
- * Operator 'USE'.
+ * Operator 'WEAK-USE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class WEAK_USE extends Relation {
-
+public class WEAK_USE extends USE {
+	
 	public static final WEAK_USE _ = new WEAK_USE();
-
+	
 	private WEAK_USE() { super("weak-use"); }
 	
 }
