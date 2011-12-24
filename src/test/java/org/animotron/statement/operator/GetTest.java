@@ -446,9 +446,14 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_09() throws Exception {
         testAnimo("the male sex.");
         testAnimo("the john male.");
+
+        testAnimo("the _man_ john.");
+        assertAnimoResult("get sex _man_", "male.");
+
         testAnimo("the man any male.");
 
         assertAnimoResult("get sex man", "male.");
