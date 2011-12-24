@@ -53,12 +53,14 @@ public class WITH extends Operator implements Predicate {
 	public static final WITH _ = new WITH();
 	
 	private WITH() { super("with"); }
+	
+	private static boolean debug = false;
 
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		
 		//System.out.println("==================================================");
-		System.out.println("WITH op "+op+" ref "+ref);
+		if (debug) System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 		Set<Node> thes = new FastSet<Node>();
 		for (QCAVector v : Utils.getByREF(pf, op)) {
@@ -99,16 +101,16 @@ public class WITH extends Operator implements Predicate {
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
-		System.out.println("Eval actual");
+		if (debug) System.out.println("Eval actual");
 		for (QCAVector have : in) {
-			System.out.println("actual get "+have);
+			if (debug) System.out.println("actual get "+have);
 			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
 					in = Evaluator._.execute(new PFlow(pf), have.question(r));
 					for (QCAVector e : in) {
 						actual.add(e);
-						System.out.println("actual "+e);
+						if (debug) System.out.println("actual "+e);
 					}
 				}
 			} finally {
@@ -118,11 +120,11 @@ public class WITH extends Operator implements Predicate {
 		
 		if (actual.isEmpty()) return false;
 
-		System.out.println("Eval expected");
+		if (debug) System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
-			System.out.println("expected "+e);
+			if (debug) System.out.println("expected "+e);
 		}
 		
 		if (actual.size() >= 1 && expected.size() == 1) {
@@ -140,10 +142,10 @@ public class WITH extends Operator implements Predicate {
 //				}
 			}
 
-			System.out.println("***** expected = "+g.getAnswer().getEndNode());
+			if (debug) System.out.println("***** expected = "+g.getAnswer().getEndNode());
 			
 			for (QCAVector e : actual) {
-				System.out.println("***** actual = "+e.getAnswer().getEndNode());
+				if (debug) System.out.println("***** actual = "+e.getAnswer().getEndNode());
 				if (e.getAnswer().isType(g.getAnswer().getType())
 					&& e.getAnswer().getEndNode().equals(g.getAnswer().getEndNode()))
 					

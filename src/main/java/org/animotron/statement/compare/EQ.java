@@ -55,10 +55,11 @@ public class EQ extends Operator implements Predicate {
 	
 	private EQ() { super("eq"); }
 
+	private static boolean debug = false;
+	
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
-		System.out.println("==================================================");
-		System.out.println("EQ op "+op+" ref "+ref);
+		if (debug) System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
 		Set<Node> thes = new FastSet<Node>();
 		for (QCAVector v : Utils.getByREF(pf, op)) {
@@ -99,7 +100,7 @@ public class EQ extends Operator implements Predicate {
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
-		System.out.println("Eval actual");
+		if (debug) System.out.println("Eval actual");
 		for (QCAVector have : in) { 
 			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
@@ -107,7 +108,7 @@ public class EQ extends Operator implements Predicate {
 					in = Evaluator._.execute(new PFlow(pf), vector.question(r));
 					for (QCAVector e : in) {
 						actual.add(e);
-						System.out.println("actual "+e);
+						if (debug) System.out.println("actual "+e);
 					}
 				}
 			} finally {
@@ -115,7 +116,7 @@ public class EQ extends Operator implements Predicate {
 			}
 		}
 
-		System.out.println("Eval expected");
+		if (debug) System.out.println("Eval expected");
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
 		try {
 			boolean first = true;
@@ -129,7 +130,7 @@ public class EQ extends Operator implements Predicate {
 				in = Evaluator._.execute(new PFlow(pf), vector.question(r));
 				for (QCAVector e : in) {
 					expected.add(e);
-					System.out.println("expected "+e);
+					if (debug) System.out.println("expected "+e);
 				}
 			}
 		} finally {
