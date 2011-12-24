@@ -55,7 +55,7 @@ public class WITH extends Operator implements Predicate {
 	private WITH() { super("with"); }
 
 	@Override
-	public boolean filter(PFlow pf, Relationship op, Node ref) throws InterruptedException, IOException {
+	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		
 		//System.out.println("==================================================");
 		//System.out.println("WITH op "+op+" ref "+ref);
@@ -68,7 +68,9 @@ public class WITH extends Operator implements Predicate {
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
 		PipedInput<QCAVector> in = out.getInputStream();
 		
-		PFlow pflow = new PFlow(new PFlow(Evaluator._), pf.getVector().question(op));
+		QCAVector vector = pf.getVector().answered(ref);
+		
+		PFlow pflow = new PFlow(new PFlow(Evaluator._), vector.question(op));
 		
 		pflow.getParent().answerChannel().subscribe(new Subscribable<QCAVector>() {
 			
@@ -89,7 +91,7 @@ public class WITH extends Operator implements Predicate {
 			}
 		});
 
-		GET._.get(pflow, op, ref, thes, null);
+		GET._.get(pflow, op, vector, thes, null);
 		pflow.done();
 		
 		//if (!in.hasNext()) return false;
@@ -131,10 +133,10 @@ public class WITH extends Operator implements Predicate {
 //				}
 			}
 
-			//System.out.println("***** expected = "+g.getEndNode());
+			System.out.println("***** expected = "+g.getAnswer().getEndNode());
 			
 			for (QCAVector e : actual) {
-				//System.out.println("***** actual = "+e.getEndNode());
+				System.out.println("***** actual = "+e.getAnswer().getEndNode());
 				if (e.getAnswer().isType(g.getAnswer().getType())
 					&& e.getAnswer().getEndNode().equals(g.getAnswer().getEndNode()))
 					

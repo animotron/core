@@ -157,11 +157,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         		});
 
 
-    protected boolean filtering(PFlow pf, Node node, Set<Node> uses) {
+    protected boolean filtering(PFlow pf, Relationship ref, Set<Node> uses) {
     	if (uses != null) {
     		//check intersection
     		TraversalDescription td = getIntersectionChecktravers(new FastSet<Node>(uses));
-    		if (!td.traverse(node).iterator().hasNext())
+    		if (!td.traverse(ref.getEndNode()).iterator().hasNext())
     			return false;
     	}
     	
@@ -169,7 +169,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
             Statement st = Statements.relationshipType(r);
             if (st instanceof Predicate) {
                 try {
-                    if (!((Predicate) st).filter(pf, r, node))
+                    if (!((Predicate) st).filter(pf, r, ref))
                         return false;
                 } catch (Exception e) {
                     //XXX: report

@@ -87,11 +87,11 @@ public class ANY extends AbstractQuery implements Reference {
 			        		
 			        		//XXX: need better check, it can be reference from other then AN
 			        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext())
+			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) //XXX: sure that StartNode? 
 			        			continue;
 
 		        			Node res = r.getStartNode();
-		        			if (filtering(pf, res, uses)) {
+		        			if (filtering(pf, getThe(res), uses)) {
 			        			try {
 			        				pf.sendAnswer( getThe(res) );
 			        				break;
@@ -110,7 +110,7 @@ public class ANY extends AbstractQuery implements Reference {
 			    					if (res.isType(REF._)) continue;
 			    					
 			    					if (res.isType(AN._)) {
-			    						if (filtering(pf, res.getStartNode(), uses)) {
+			    						if (filtering(pf, getThe(res.getStartNode()), uses)) {
 					        				pf.sendAnswer( res );
 					        				break;
 			    						}

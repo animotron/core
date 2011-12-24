@@ -21,7 +21,6 @@ package org.animotron.statement.compare;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -37,7 +36,7 @@ public class GE extends Operator implements Predicate {
 	private GE() { super("ge"); }
 
 	@Override
-	public boolean filter(PFlow pf, Relationship op, Node ref) {
+	public boolean filter(PFlow pf, Relationship op, Relationship ref) {
 		// TODO Auto-generated method stub
 		return false;
 	}

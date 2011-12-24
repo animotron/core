@@ -91,7 +91,7 @@ public class PREFER extends AbstractQuery implements Reference {
 				        			continue;
 
 			        			Node res = r.getStartNode();
-			        			if (filtering(pf, res, uses)) {
+			        			if (filtering(pf, getThe(res), uses)) {
 				        			try {
 				        				pf.sendAnswer( getThe(res) );
 				        			} catch (Exception e) {}
@@ -109,7 +109,7 @@ public class PREFER extends AbstractQuery implements Reference {
 				    					if (res.isType(REF._)) continue;
 				    					
 				    					if (res.isType(AN._)) {
-				    						if (filtering(pf, res.getStartNode(), uses)) {
+				    						if (filtering(pf, getThe(res.getStartNode()), uses)) {
 						        				pf.sendAnswer( res );
 				    						}
 				    					}
