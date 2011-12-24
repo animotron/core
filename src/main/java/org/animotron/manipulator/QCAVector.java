@@ -41,9 +41,9 @@ public class QCAVector {
 	private final Relationship question;
 	private Relationship answer = null;
 	
-	private FastList<QCAVector> answers = null;
+	private List<QCAVector> answers = null;
 
-	private FastList<QCAVector> context = null;
+	private List<QCAVector> context = null;
 
 	private QCAVector preceding_sibling = null;
 	
@@ -87,7 +87,7 @@ public class QCAVector {
 		if (debug) System.out.println(" .... create vector 5 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer, FastList<QCAVector> context) {
+	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context) {
 		this.question = question;
 		this.answer = answer;
 		
@@ -95,7 +95,7 @@ public class QCAVector {
 		if (debug) System.out.println(" .... create vector 6 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer, FastList<QCAVector> context, QCAVector preceding_sibling) {
+	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context, QCAVector preceding_sibling) {
 		this.question = question;
 		this.answer = answer;
 		
@@ -153,7 +153,7 @@ public class QCAVector {
 		return answer;
 	}
 
-	public FastList<QCAVector> getContext() {
+	public List<QCAVector> getContext() {
 		return context;
 	}
 	
@@ -379,7 +379,8 @@ public class QCAVector {
 			for (QCAVector c : context)
 				c.recycle();
 			
-			FastList.recycle(context);
+			if (context instanceof FastList)
+				FastList.recycle((FastList<QCAVector>) context);
 		}
 	}
 }

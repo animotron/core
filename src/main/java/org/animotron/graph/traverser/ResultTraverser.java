@@ -66,13 +66,13 @@ public class ResultTraverser extends AnimoTraverser {
 
     	Relationship r = rr.getClosest();
     	
-		QCAVector v = pf.addContextPoint(rr);
+		//QCAVector v = pf.addContextPoint(rr);
 
 		Statement s = Statements.relationshipType(r);
 	        
         process(handler, pf, s, parent, rr, level, isOne, 0, false);
         
-        pf.popContextPoint(v);
+        //pf.popContextPoint(v);
     }
     
     protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
