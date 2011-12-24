@@ -67,7 +67,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -248,7 +248,7 @@ public class GET extends AbstractQuery implements Shift {
 		Set<QCAVector> nextREFs = new FastSet<QCAVector>();
 		nextREFs.addAll(REFs);
 
-		boolean found = true;
+		boolean found = false;
 		
 		Relationship t = null;
 		
