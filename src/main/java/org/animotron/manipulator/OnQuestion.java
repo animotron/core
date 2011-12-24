@@ -49,7 +49,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
 				if (onQuestion != null) {
-					PFlow nextPF = new PFlow(pf, pf.getVector().question(r));
+					PFlow nextPF = new PFlow(pf, pf.getVector().question2(r));
 					nextPF.questionChannel().subscribe(onQuestion);
 					
 					list.add(nextPF);

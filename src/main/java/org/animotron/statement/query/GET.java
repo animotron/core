@@ -341,13 +341,13 @@ public class GET extends AbstractQuery implements Shift {
 			final QCAVector v,
 			final Set<Node> thes) {
 		
-		if ((ref.isType(REF._) || ref.isType(THE._)) && thes.contains(ref.getEndNode())) {
-			if (!pf.isInStack(ref)) {
-				pf.sendAnswer(pf.getVector().answered(ref, v));
-				return true;
-			}
-			return false;
-		}
+//		if ((ref.isType(REF._) || ref.isType(THE._)) && thes.contains(ref.getEndNode())) {
+//			if (!pf.isInStack(ref)) {
+//				pf.sendAnswer(pf.getVector().answered(ref, v), AN._);
+//				return true;
+//			}
+//			return false;
+//		}
 		
 		boolean checkStart = true;
 		if (ref.isType(AN._)) {
@@ -485,14 +485,14 @@ public class GET extends AbstractQuery implements Shift {
 		QCAVector c = pf.getVector();
 		if (!resByHAVE.isEmpty()) {
 			for (Relationship r : resByHAVE) {
-				pf.sendAnswer(c.answered(r, vector));
+				pf.sendAnswer(c.answered(r, vector), RESULT);
 			}
 		} else {
 			if (resByIS.isEmpty())
 				return false;
 	
 			for (Relationship r : resByIS) {
-				pf.sendAnswer(c.answered(r, vector));
+				pf.sendAnswer(c.answered(r, vector), RESULT);
 			}
 		}
 		return true;

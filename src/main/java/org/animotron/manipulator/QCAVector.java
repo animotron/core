@@ -26,6 +26,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastList;
@@ -51,13 +52,13 @@ public class QCAVector {
 
 	public QCAVector(Relationship question) {
 		this.question = question;
-		if (debug) System.out.println(" .... create vector 1 .... ");//Relationship question ");
+		if (debug) System.out.println(" .... create vector 1 .... ");
 	}
 
 	public QCAVector(Relationship question, Relationship answer) {
 		this.question = question;
 		this.answer = answer;
-		if (debug) System.out.println(" .... create vector 2 .... ");//Relationship question, Relationship answer ");
+		if (debug) System.out.println(" .... create vector 2 .... ");
 	}
 
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
@@ -75,7 +76,14 @@ public class QCAVector {
 
 		this.context = FastList.newInstance();
 		this.context.add(context);
-		if (debug) System.out.println(" .... create vector 4 .... ");//Relationship question, QCAVector context");
+		if (debug) System.out.println(" .... create vector 4 .... ");
+	}
+	
+	public QCAVector(Relationship question, List<QCAVector> context) {
+		this.question = question;
+
+		this.context = context;
+		if (debug) System.out.println(" .... create vector 4 .... ");
 	}
 
 	public QCAVector(Relationship question, Relationship answer, QCAVector context) {
@@ -122,7 +130,7 @@ public class QCAVector {
 		this.context.add(context);
 		
 		this.preceding_sibling = precedingSibling;
-		if (debug) System.out.println(" .... create vector 9 .... ");//Relationship question, QCAVector context, QCAVector precedingSibling");
+		if (debug) System.out.println(" .... create vector 9 .... ");
 	}
 
 	public Relationship getClosest() {
@@ -340,6 +348,8 @@ public class QCAVector {
 	}
 
 	public QCAVector answered(Relationship createdAnswer, QCAVector context) {
+		//context.removeThis(this);
+		
 		FastList<QCAVector> c = FastList.newInstance();
 		c.add(context);
 		if (this.context != null) {
@@ -347,6 +357,20 @@ public class QCAVector {
 		}
 			
 		return new QCAVector(question, createdAnswer, c, preceding_sibling);
+	}
+	
+	private void removeThis(QCAVector vector) {
+		if (this == vector)
+			return;
+		
+		Iterator<QCAVector> it = getContext().iterator();
+		while (it.hasNext()) {
+			QCAVector c = it.next();
+			if (c == this)
+				it.remove();
+			else
+				c.removeThis(vector);
+		}
 	}
 
 	public QCAVector answered(Relationship createdAnswer, List<QCAVector> contexts) {
@@ -360,6 +384,19 @@ public class QCAVector {
 		return new QCAVector(q, this);
 	}
 
+	public QCAVector question2(Relationship q) {
+		if (question != null && question.equals(q) && answer == null)
+			return this;
+		
+		if (answer == null) {
+			QCAVector v = new QCAVector(q);
+			v.setPrecedingSibling(this);
+			return v;
+		}
+		
+		return new QCAVector(q, this);
+	}
+	
 	public QCAVector question(Relationship q, QCAVector prev) {
 		if (question != null && question.equals(q) && preceding_sibling == prev && answer == null)
 			return this;
