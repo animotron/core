@@ -106,4 +106,7 @@ public class Order {
 		}
 	}
 
+    public static IndexHits<Relationship> context(Node node) {
+        return new ContextHits(INDEX.query(NAME, sort(NAME), node, null));
+    }
 }
