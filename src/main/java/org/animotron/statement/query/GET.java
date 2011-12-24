@@ -61,22 +61,13 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
     protected GET(String... name) {
         super(name);
     }
-
-	static TraversalDescription td = Traversal.description().
-			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
-
-	private static TraversalDescription td_eval_ic = 
-			Traversal.description().
-				breadthFirst().
-				relationships(AN._, OUTGOING).
-				relationships(SHALL._, OUTGOING);
 
     public OnQuestion onCalcQuestion() {
 		return question;
@@ -153,7 +144,7 @@ public class GET extends AbstractQuery implements Shift {
 					super.onMessage(pf);
 				} else {
 					
-					if (debug) System.out.println("GET ["+op+"] empty ");
+					if (debug) System.out.println("\nGET ["+op+"] empty ");
 
 					boolean first = true;
 					boolean rSet = false;
@@ -193,24 +184,6 @@ public class GET extends AbstractQuery implements Shift {
 		}
 	}
 
-//	public boolean get(final PFlow pf, Relationship op, Node ref, final Set<Node> thes, final Set<Relationship> visitedREFs) {
-//		if (searchForHAVE(pf, op, ref, thes))
-//			return true;
-////				if (!pf.isInStack(have[i]))
-////					set.add(new QCAVector(pf.getOP(), have[i]));
-//		
-//		//if (!set.isEmpty()) return set;
-//
-//		FastSet<QCAVector> newREFs = FastSet.newInstance();
-//		try {
-//			getOutgoingReferences(pf, pf.getVector(), null, ref, newREFs, null);
-//			
-//			return get(pf, op, newREFs, thes, visitedREFs);
-//		} finally {
-//			FastSet.recycle(newREFs);
-//		}
-//	}
-	
 	private boolean check(final PFlow pf, final Relationship op, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
 		if (toCheck == null) return false;
 		
@@ -319,7 +292,7 @@ public class GET extends AbstractQuery implements Shift {
 		IndexHits<Relationship> it = Order.context(node);
 		try {
 			for (Relationship r : it) {
-				//System.out.println(r);
+				System.out.println(r);
 	
 				prev = vector.question(r, prev); 
 
@@ -396,120 +369,6 @@ public class GET extends AbstractQuery implements Shift {
 		return false;
 	}
 
-//	private boolean searchForHAVE(final PFlow pflow, Relationship op, final Node ref, final Set<Node> thes) {
-//		
-//		//search for inside 'HAVE'
-//		if (getByHave(pflow, pflow.getVector(), op, ref, thes))
-//			return true;
-//
-//		//search 'IC' by 'IS' topology
-//		for (Relationship tdR : Utils.td_eval_IS.traverse(ref).relationships()) {
-//
-//			//System.out.println("GET IC -> IS "+tdR);
-//			
-//			Relationship r = getShall(tdR.getEndNode(), thes);
-//			if (r != null) {
-//				final Node sNode = ref;
-//				final Node eNode = r.getEndNode();
-//				final long id = r.getId();
-//				Relationship res = 
-//					AnimoGraph.execute(new GraphOperation<Relationship>() {
-//						@Override
-//						public Relationship execute() {
-//							Relationship res = sNode.createRelationshipTo(eNode, AN._);
-//							RID.set(res, id);
-//							return res;
-//						}
-//					});
-//				
-//				pflow.sendAnswer(pflow.getVector().answered(res));
-//			}
-//			
-//			//search for have
-//			if (getByHave(pflow, pflow.getVector(), tdR, tdR.getEndNode(), thes))
-//				return true;
-//		}
-//		
-//		return false;
-//	}
-	
-	//XXX: in-use by SELF
-//	public boolean getBySELF(final PFlow pf, Node context, final Set<Node> thes) {
-//		
-//		//System.out.println("GET get context = "+context);
-//
-//		//search for local 'HAVE'
-//		if (getByHave(pf, pf.getVector(), null, context, thes))
-//			return true;
-//
-//		Node instance = Utils.getSingleREF(context);
-//		if (instance != null) {
-//			//change context to the-instance by REF
-//			context = instance;
-//			
-//			//search for have
-//			if (getByHave(pf, pf.getVector(), null, context, thes))
-//				return true;
-//		}
-//		
-//		Relationship prevTHE = null;
-//		
-//		//search 'IC' by 'IS' topology
-//		for (Relationship tdR : td_eval_ic.traverse(context).relationships()) {
-//			
-//			Statement st = Statements.relationshipType(tdR);
-//			if (st instanceof AN) {
-//				//System.out.println("GET IC -> IS "+tdR);
-//				if (prevTHE != null) {
-//					//search for have
-//					if (getByHave(pf, pf.getVector(), prevTHE, prevTHE.getEndNode(), thes))
-//						return true;
-//				}
-//				prevTHE = tdR;
-//				
-//			} else if (st instanceof SHALL) {
-//				//System.out.print("GET IC -> "+tdR);
-//				
-//				if (thes.contains(Utils.getSingleREF(tdR.getEndNode()))) {
-//					//System.out.println(" MATCH");
-//					
-//					//store
-//					final Node sNode = context;
-//					final Relationship r = tdR;
-//
-//					Relationship res = 
-//						AnimoGraph.execute(new GraphOperation<Relationship>() {
-//							@Override
-//							public Relationship execute() {
-//								Relationship res = sNode.createRelationshipTo(r.getEndNode(), AN._);
-//								//RID.set(res, r.getId());
-//								return res;
-//							}
-//						});
-//					pf.sendAnswer(pf.getVector().answered(res), RESULT);
-//					return true;
-//					
-//					//in-memory
-//					//Relationship res = new InMemoryRelationship(context, tdR.getEndNode(), AN._.relationshipType());
-//					//RID.set(res, tdR.getId());
-//					//return res;
-//					
-//					//as it
-//					//return tdR;
-//				}
-//				//System.out.println();
-//			}
-//		}
-//		
-//		if (prevTHE != null) {
-//			//search for have
-//			if (getByHave(pf, pf.getVector(), prevTHE, prevTHE.getEndNode(), thes))
-//				return true;
-//		}
-//
-//		return false;
-//	}
-	
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
 		if (!op.isType(ANY._)) {
 			pf.sendAnswer(vector.answered(op), RESULT);
@@ -540,7 +399,10 @@ public class GET extends AbstractQuery implements Shift {
 		return false;
 	}
 
-	private static TraversalDescription prepared = td.
+	private static TraversalDescription prepared = 
+			Traversal.description().
+			depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			relationships(ANY._, OUTGOING).
 			relationships(AN._, OUTGOING).
 			relationships(REF._, OUTGOING).
@@ -637,32 +499,32 @@ public class GET extends AbstractQuery implements Shift {
 		return true;
 	}
 	
-	private Relationship getShall(final Node context, final Set<Node> thes) {
-//		TraversalDescription trav = td.
-//		evaluator(new Searcher(){
-//			@Override
-//			public Evaluation evaluate(Path path) {
-//				return _evaluate_(path, thes); //, IC._
-//			}
-//		});
-//
-//		Relationship res = null;
-//		for (Path path : trav.traverse(context)) {
-//			//TODO: check that this is only one answer
-//			//System.out.println(path);
-//			for (Relationship r : path.relationships()) {
-//				res = r;
-//				break;
+//	private Relationship getShall(final Node context, final Set<Node> thes) {
+////		TraversalDescription trav = td.
+////		evaluator(new Searcher(){
+////			@Override
+////			public Evaluation evaluate(Path path) {
+////				return _evaluate_(path, thes); //, IC._
+////			}
+////		});
+////
+////		Relationship res = null;
+////		for (Path path : trav.traverse(context)) {
+////			//TODO: check that this is only one answer
+////			//System.out.println(path);
+////			for (Relationship r : path.relationships()) {
+////				res = r;
+////				break;
+////			}
+////		}
+//		
+//		for (Relationship r : context.getRelationships(OUTGOING, SHALL._)) {
+//			for (QCAVector rr : Utils.getByREF(null, r)) {
+//				if (thes.contains(rr.getAnswer().getEndNode()))
+//					return r;
 //			}
 //		}
-		
-		for (Relationship r : context.getRelationships(OUTGOING, SHALL._)) {
-			for (QCAVector rr : Utils.getByREF(null, r)) {
-				if (thes.contains(rr.getAnswer().getEndNode()))
-					return r;
-			}
-		}
-		
-		return null;
-	}
+//		
+//		return null;
+//	}
 }

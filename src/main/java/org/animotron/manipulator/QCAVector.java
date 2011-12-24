@@ -349,6 +349,10 @@ public class QCAVector {
 		return new QCAVector(question, createdAnswer, c, preceding_sibling);
 	}
 
+	public QCAVector answered(Relationship createdAnswer, List<QCAVector> contexts) {
+		return new QCAVector(question, createdAnswer, contexts, preceding_sibling);
+	}
+
 	public QCAVector question(Relationship q) {
 		if (question != null && question.equals(q) && answer == null)
 			return this;

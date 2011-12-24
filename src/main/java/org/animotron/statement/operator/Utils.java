@@ -151,7 +151,7 @@ public class Utils {
 				Relationship theNode = THE.__((String)THE._.reference(node));
 
 				if (theNode != null) {
-					out.write(new QCAVector(op, theNode));
+					out.write(pf.getVector().answered(theNode));
 					out.close();
 					return in;
 				}
@@ -163,7 +163,7 @@ public class Utils {
 			try {
 				for (Relationship res : hits) {
 					if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-						evaluable(pf, res, out, op);
+						evaluable(pf, pf.getVector().question(res), out, op);
 						if (first == null)
 							first = res;
 					} else
@@ -186,15 +186,16 @@ public class Utils {
 		return null;
 	}
 
-	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final Relationship r, final PipedOutput<QCAVector> out, final Relationship op) throws InterruptedException, IOException {
+	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final QCAVector v, final PipedOutput<QCAVector> out, final Relationship op) throws InterruptedException, IOException {
 		
+		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
+			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), v);
 			for (QCAVector e : in) {
 				PFlow _pf_ = new PFlow(pf);
-				_pf_.addContextPoint(e);
+				//_pf_.addContextPoint(e);
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
 				if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
@@ -211,7 +212,7 @@ public class Utils {
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			out.write(new QCAVector(op, r));
+			out.write(v.getContext().get(0).answered(r));
 		}
 		
 		return out;

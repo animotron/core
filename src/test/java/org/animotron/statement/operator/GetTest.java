@@ -282,9 +282,9 @@ public class GetTest extends ATest {
         );
 
         JExpression E = new JExpression(
-            _(THE._, "E", _(AN._, "C", _(AN._, "X", value("α")), _(AN._, "Y", value("β")), _(AN._, "Z", value("γ"))))
+            _(AN._, "C", _(AN._, "X", value("α")), _(AN._, "Y", value("β")), _(AN._, "Z", value("γ")))
         );
-        assertAnimoResult(E, "the E C (Z \"γ\") (B (Y \"β\") (A X \"α\")).");
+        assertAnimoResult(E, "C (Z \"γ\") (B (Y \"β\") (A X \"α\")).");
     }
 
     @Test

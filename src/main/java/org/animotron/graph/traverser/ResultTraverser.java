@@ -67,7 +67,7 @@ public class ResultTraverser extends AnimoTraverser {
     	Relationship r = rr.getClosest();
     	
 		//QCAVector v = pf.addContextPoint(rr);
-
+    	
 		Statement s = Statements.relationshipType(r);
 	        
         process(handler, pf, s, parent, rr, level, isOne, 0, false);
