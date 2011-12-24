@@ -631,16 +631,17 @@ public class GET extends AbstractQuery implements Shift {
 			startBy = null;
 		}
 
+		QCAVector c = pf.getVector();
 		if (!resByHAVE.isEmpty()) {
 			for (Relationship r : resByHAVE) {
-				pf.sendAnswer(pf.getVector().answered(r));//XXX: add context?
+				pf.sendAnswer(c.answered(r, vector));
 			}
 		} else {
 			if (resByIS.isEmpty())
 				return false;
 	
 			for (Relationship r : resByIS) {
-				pf.sendAnswer(pf.getVector().answered(r));//XXX: add context?
+				pf.sendAnswer(c.answered(r, vector));
 			}
 		}
 		return true;

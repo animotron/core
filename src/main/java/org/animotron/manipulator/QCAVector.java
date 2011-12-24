@@ -41,9 +41,9 @@ public class QCAVector {
 	private final Relationship question;
 	private Relationship answer = null;
 	
-	private List<QCAVector> answers = null;
+	private FastList<QCAVector> answers = null;
 
-	private List<QCAVector> context = null;
+	private FastList<QCAVector> context = null;
 
 	private QCAVector preceding_sibling = null;
 	
@@ -87,7 +87,7 @@ public class QCAVector {
 		if (debug) System.out.println(" .... create vector 5 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context) {
+	public QCAVector(Relationship question, Relationship answer, FastList<QCAVector> context) {
 		this.question = question;
 		this.answer = answer;
 		
@@ -95,7 +95,7 @@ public class QCAVector {
 		if (debug) System.out.println(" .... create vector 6 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context, QCAVector preceding_sibling) {
+	public QCAVector(Relationship question, Relationship answer, FastList<QCAVector> context, QCAVector preceding_sibling) {
 		this.question = question;
 		this.answer = answer;
 		
@@ -153,7 +153,7 @@ public class QCAVector {
 		return answer;
 	}
 
-	public List<QCAVector> getContext() {
+	public FastList<QCAVector> getContext() {
 		return context;
 	}
 	
@@ -339,6 +339,16 @@ public class QCAVector {
 		 return new QCAVector(question, createdAnswer, context, preceding_sibling);
 	}
 
+	public QCAVector answered(Relationship createdAnswer, QCAVector context) {
+		FastList<QCAVector> c = FastList.newInstance();
+		c.add(context);
+		if (this.context != null) {
+			c.addAll(this.context);
+		}
+			
+		return new QCAVector(question, createdAnswer, c, preceding_sibling);
+	}
+
 	public QCAVector question(Relationship q) {
 		if (question != null && question.equals(q) && answer == null)
 			return this;
@@ -362,5 +372,14 @@ public class QCAVector {
 
 	public List<QCAVector> getAnswers() {
 		return answers;
+	}
+	
+	public void recycle() {
+		if (context != null) {
+			for (QCAVector c : context)
+				c.recycle();
+			
+			FastList.recycle(context);
+		}
 	}
 }
