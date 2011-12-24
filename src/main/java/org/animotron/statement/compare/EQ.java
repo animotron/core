@@ -60,11 +60,11 @@ public class EQ extends Operator implements Predicate {
 		System.out.println("==================================================");
 		System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
-		Node theNode = Utils.getSingleREF(op.getEndNode());
-
 		Set<Node> thes = new FastSet<Node>();
-		thes.add(theNode);
-		
+		for (QCAVector v : Utils.getByREF(pf, op)) {
+			thes.add(v.getAnswer().getEndNode());
+		}
+
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
 		PipedInput<QCAVector> in = out.getInputStream();
 		
