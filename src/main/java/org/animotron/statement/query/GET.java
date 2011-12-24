@@ -180,12 +180,7 @@ public class GET extends AbstractQuery implements Shift {
 						} else {
 							rSet = get(pf, op, vector, thes, visitedREFs);
 						}
-						if (rSet) {
-//							for (QCAVector v : rSet) {
-//								pf.sendAnswer(v, RESULT);//, AN._); //XXX: change to AN
-//							}
-							break;
-						}
+						if (rSet) break;
 					}
 				}
 			}
@@ -212,13 +207,17 @@ public class GET extends AbstractQuery implements Shift {
 		
 		//if (!set.isEmpty()) return set;
 
-		Set<QCAVector> newREFs = new FastSet<QCAVector>();
-		getOutgoingReferences(pf, pf.getVector(), null, ref, newREFs, null);
-		
-		return get(pf, op, newREFs, thes, visitedREFs); 
+		FastSet<QCAVector> newREFs = FastSet.newInstance();
+		try {
+			getOutgoingReferences(pf, pf.getVector(), null, ref, newREFs, null);
+			
+			return get(pf, op, newREFs, thes, visitedREFs);
+		} finally {
+			FastSet.recycle(newREFs);
+		}
 	}
 	
-	private boolean check(Set<QCAVector> set, final PFlow pf, final Relationship op, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
+	private boolean check(final PFlow pf, final Relationship op, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
 		if (toCheck == null) return false;
 		
 		visitedREFs.add(toCheck);
@@ -243,69 +242,80 @@ public class GET extends AbstractQuery implements Shift {
 		
 		if (visitedREFs == null) visitedREFs = new FastSet<Relationship>();
 		
-		Set<QCAVector> set = new FastSet<QCAVector>();
+		FastSet<QCAVector> nextREFs = FastSet.newInstance();
+		FastSet<QCAVector> newREFs = FastSet.newInstance();
 		
-		Set<QCAVector> nextREFs = new FastSet<QCAVector>();
-		nextREFs.addAll(REFs);
+		FastSet<QCAVector> tmp = null;
 
-		boolean found = false;
-		
-		Relationship t = null;
-		
-		while (true) {
+		try {
+			nextREFs.addAll(REFs);
+	
+			boolean found = false;
 			
-			if (debug) System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
-
-			for (QCAVector v : nextREFs) {
-				if (debug) System.out.println("checking "+v);
+			Relationship t = null;
+			
+			while (true) {
 				
-				QCAVector next = v;
-				while (next != null) {
-					if (!check(set, pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
-						found = found || check(set, pf, op, v, v.getQuestion(), thes, visitedREFs);
-					} else {
-						found = true;
+				if (debug) System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
+	
+				for (QCAVector v : nextREFs) {
+					if (debug) System.out.println("checking "+v);
+					
+					QCAVector next = v;
+					while (next != null) {
+						if (!check(pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
+							found = found || check(pf, op, v, v.getQuestion(), thes, visitedREFs);
+						} else {
+							found = true;
+						}
+						next = next.getPrecedingSibling();
 					}
-					next = next.getPrecedingSibling();
+	
 				}
-
-			}
-			
-			if (found) return true;
-
-			Set<QCAVector> newREFs = new FastSet<QCAVector>();
-
-			for (QCAVector vector : nextREFs) {
-				List<QCAVector> cs = vector.getContext();
-				if (cs != null) {
-					for (QCAVector c : cs) {
-						t = c.getUnrelaxedAnswer();
-						if (t != null && !visitedREFs.contains(t))
-							newREFs.add(c);
-						else {
-							t = c.getQuestion();
-							if (!visitedREFs.contains(t))
+				
+				if (found) return true;
+	
+				//newREFs = new FastSet<QCAVector>();
+	
+				for (QCAVector vector : nextREFs) {
+					List<QCAVector> cs = vector.getContext();
+					if (cs != null) {
+						for (QCAVector c : cs) {
+							t = c.getUnrelaxedAnswer();
+							if (t != null && !visitedREFs.contains(t))
 								newREFs.add(c);
+							else {
+								t = c.getQuestion();
+								if (!visitedREFs.contains(t))
+									newREFs.add(c);
+							}
 						}
 					}
-				}
-				
-				QCAVector next = vector;
-				while (next != null) {
-					t = next.getUnrelaxedAnswer();
-					if (t != null) {
-						if (! t.isType(AN._))
-							getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
-						
-						getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
+					
+					QCAVector next = vector;
+					while (next != null) {
+						t = next.getUnrelaxedAnswer();
+						if (t != null) {
+							if (! t.isType(AN._))
+								getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
+							
+							getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
+						}
+						next = next.getPrecedingSibling();
 					}
-					next = next.getPrecedingSibling();
 				}
+	
+				if (newREFs.size() == 0) return false;
+				
+				//swap
+				tmp = nextREFs; 
+				nextREFs = newREFs;
+				newREFs = tmp;
+				newREFs.clear();
 			}
-
-			if (newREFs.size() == 0) return false;
-			
-			nextREFs = newREFs;
+		} finally {
+			FastSet.recycle(nextREFs);
+			FastSet.recycle(newREFs);
 		}
 	}
 	
