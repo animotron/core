@@ -158,10 +158,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 
     protected boolean filtering(PFlow pf, Relationship ref, Set<Node> uses) {
+    	return filtering(pf, ref, ref.getEndNode(), uses);
+    }
+
+    protected boolean filtering(PFlow pf, Relationship ref, Node toCheckByUSE, Set<Node> uses) {
     	if (uses != null) {
     		//check intersection
     		TraversalDescription td = getIntersectionChecktravers(new FastSet<Node>(uses));
-    		if (!td.traverse(ref.getEndNode()).iterator().hasNext())
+    		if (!td.traverse(toCheckByUSE).iterator().hasNext())
     			return false;
     	}
     	

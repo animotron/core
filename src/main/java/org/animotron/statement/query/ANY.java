@@ -113,7 +113,7 @@ public class ANY extends AbstractQuery implements Reference {
 			    					if (res.isType(REF._)) continue;
 			    					
 			    					if (res.isType(AN._)) {
-			    						if (filtering(pf, getThe(res.getStartNode()), uses)) {
+			    						if (filtering(pf, res, r.getEndNode(), uses)) {
 					        				pf.sendAnswer( res );
 					        				break;
 			    						}

@@ -26,6 +26,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -90,12 +91,15 @@ public class PREFER extends AbstractQuery implements Reference {
 				        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
 				        			continue;
 
-			        			Node res = r.getStartNode();
-			        			if (filtering(pf, getThe(res), uses)) {
-				        			try {
-				        				pf.sendAnswer( getThe(res) );
-				        			} catch (Exception e) {}
-			        			}
+				        		try {
+				        			Relationship res = getThe(r.getStartNode());
+				        			if (filtering(pf, res, uses)) {
+					        			try {
+					        				pf.sendAnswer( res );
+					        			} catch (Exception e) {}
+				        			}
+				        		} catch (Exception e) {
+								}
 				        	} else {
 				    			IndexHits<Relationship> hits = Order.queryDown(r.getEndNode());
 				    			try {
@@ -108,8 +112,8 @@ public class PREFER extends AbstractQuery implements Reference {
 				    					
 				    					if (res.isType(REF._)) continue;
 				    					
-				    					if (res.isType(AN._)) {
-				    						if (filtering(pf, getThe(res.getStartNode()), uses)) {
+				    					if (res.isType(AN._) || res.isType(VALUE._)) {
+				    						if (filtering(pf, res, r.getEndNode(), uses)) {
 						        				pf.sendAnswer( res );
 				    						}
 				    					}
