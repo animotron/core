@@ -101,16 +101,9 @@ public class EQ extends Operator implements Predicate {
 
 		System.out.println("Eval actual");
 		for (QCAVector have : in) { 
-			IndexHits<Relationship> hits = Order.queryDown(have.getAnswer().getEndNode());
+			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
-				boolean first = true;
 				for (Relationship r : hits) {
-					if (first) {
-						first = false;
-						continue;
-					}
-					if (r.isType(REF._)) continue;
-					
 					in = Evaluator._.execute(new PFlow(pf), vector.question(r));
 					for (QCAVector e : in) {
 						actual.add(e);

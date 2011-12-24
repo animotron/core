@@ -102,7 +102,7 @@ public class WITH extends Operator implements Predicate {
 		System.out.println("Eval actual");
 		for (QCAVector have : in) {
 			System.out.println("actual get "+have);
-			IndexHits<Relationship> hits = Order.queryDown(have.getAnswer().getEndNode());
+			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
 					in = Evaluator._.execute(new PFlow(pf), have.question(r));

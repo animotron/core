@@ -22,8 +22,6 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import org.animotron.Executor;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
@@ -50,7 +48,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static org.animotron.Properties.RID;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -319,17 +316,10 @@ public class GET extends AbstractQuery implements Shift {
 	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
 		QCAVector prev = null;
-		IndexHits<Relationship> it = Order.queryDown(node);
+		IndexHits<Relationship> it = Order.context(node);
 		try {
-			boolean first = rr == null || !rr.isType(REF._);
 			for (Relationship r : it) {
 				//System.out.println(r);
-				
-				if (first) {
-					first = false;
-					continue;
-				}
-				if (r.isType(REF._)) continue;
 	
 				prev = vector.question(r, prev); 
 

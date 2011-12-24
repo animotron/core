@@ -52,7 +52,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         public void onMessage(PFlow pf) {
             PipedInput<QCAVector> destination = Utils.getByREF(pf);
             try {
-                execute(destination, Order.queryDown(pf.getOP().getEndNode()));
+                execute(destination, Order.context(pf.getOP().getEndNode()));
             } catch (IOException e) {
                 pf.sendException(e);
             }
@@ -63,13 +63,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
     private void execute(PipedInput<QCAVector> destination, IndexHits<Relationship> it) throws IOException {
         try {
             Set<Relationship> param = new FastSet<Relationship>();
-            boolean first = true;
             for (Relationship r : it) {
-                if (first) {
-                    first = false;
-                    continue;
-                }
-                if (r.isType(REF._)) continue;
                 param.add(r);
             }
             Set<Relationship> d = new FastSet<Relationship>();

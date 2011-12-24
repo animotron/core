@@ -101,16 +101,9 @@ public class ANY extends AbstractQuery implements Reference {
 			        		} catch (Exception e) {
 							}
 			        	} else {
-			    			IndexHits<Relationship> hits = Order.queryDown(r.getEndNode());
+			    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
 			    			try {
-			    				boolean first = true;
 			    				for (Relationship res : hits) {
-			    					if (first) {
-			    						first = false;
-			    						continue;
-			    					}
-			    					
-			    					if (res.isType(REF._)) continue;
 			    					
 			    					if (res.isType(AN._)) {
 			    						if (filtering(pf, res, r.getEndNode(), uses)) {

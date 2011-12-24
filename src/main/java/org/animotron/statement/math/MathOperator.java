@@ -68,11 +68,10 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
         @Override
         public void onMessage(final PFlow pf) {
         	if (!Utils.results(pf)) {
-	            IndexHits<Relationship> params = Order.queryDown(pf.getOP().getStartNode());
+	            IndexHits<Relationship> params = Order.context(pf.getOP().getStartNode());
 	            try {
 	                Number x = null;
 	                for (Relationship param : params) {
-	                	if (param.isType(REF._)) continue;
 	                	for (QCAVector r : Utils.getTheRelationships(pf, param)) {
 		                	if (x == null) {
 		                		if (params.hasNext())

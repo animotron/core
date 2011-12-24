@@ -42,35 +42,20 @@ public class OnQuestion implements Subscribable<PFlow> {
 		
         List<PFlow> list = new FastList<PFlow>();
 
-		IndexHits<Relationship> q = Order.queryDown(pf.getOPNode());
+		IndexHits<Relationship> q = Order.context(pf.getOPNode());
 		try {
-			boolean first = true;
-			
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {
 				Relationship r = it.next();
 				
-				if (first) {
-					first = false;
-					continue;
-				}
-				if (r.isType(REF._)) continue;
-				
 				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
 				
 				if (onQuestion != null) {
-					PFlow nextPF;
-//					try {
-						nextPF = new PFlow(pf, pf.getVector().question(r));
-//					} catch (AnimoException e) {
-//						continue;
-//					}
+					PFlow nextPF = new PFlow(pf, pf.getVector().question(r));
 					nextPF.questionChannel().subscribe(onQuestion);
 					
 					list.add(nextPF);
 					
-//				} else if (RelationshipTypes.REF.name().equals(r.getType().name())) {
-//					//ignore REF
 				} else {
 					pf.sendAnswer(pf.getVector().answered(r));
 				}
