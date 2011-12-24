@@ -26,7 +26,6 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -45,8 +44,6 @@ import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
-
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.io.IOException;
 import java.util.List;

@@ -71,9 +71,9 @@ public class PREFER extends AbstractQuery implements Reference {
 					Set<Node> directed = lists[2];
 					
 					if (uses.size() > 0) {
-						boolean underUSE = false;
+						//boolean underUSE = false;
 						if (directed != null && directed.size() == 1) { 
-							underUSE = true;
+							//underUSE = true;
 							node = directed.iterator().next();
 						}
 			
