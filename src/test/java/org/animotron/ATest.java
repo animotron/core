@@ -155,6 +155,10 @@ public abstract class ATest {
         System.out.println();
     }
     
+    protected void assertAnimoResultOneStep(String op, String expected) throws IOException {
+    	assertAnimoResultOneStep(new AnimoExpression(op), expected);
+    }
+
     protected void assertAnimoResultOneStep(Relationship op, String expected) throws IOException {
         assertNotNull(op);
 
