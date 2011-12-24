@@ -90,13 +90,16 @@ public class ANY extends AbstractQuery implements Reference {
 			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) //XXX: sure that StartNode? 
 			        			continue;
 
-		        			Node res = r.getStartNode();
-		        			if (filtering(pf, getThe(res), uses)) {
-			        			try {
-			        				pf.sendAnswer( getThe(res) );
-			        				break;
-			        			} catch (Exception e) {}
-		        			}
+			        		try {
+			        			Relationship res = getThe(r.getStartNode());
+			        			if (filtering(pf, res, uses)) {
+				        			try {
+				        				pf.sendAnswer( res );
+				        				break;
+				        			} catch (Exception e) {}
+			        			}
+			        		} catch (Exception e) {
+							}
 			        	} else {
 			    			IndexHits<Relationship> hits = Order.queryDown(r.getEndNode());
 			    			try {

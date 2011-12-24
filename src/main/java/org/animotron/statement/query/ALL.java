@@ -96,12 +96,15 @@ public class ALL extends AbstractQuery implements Reference {
 			        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
 			        			continue;
 
-		        			Node res = r.getStartNode();
-		        			if (filtering(pf, getThe(res), uses)) {
-			        			try {
-			        				pf.sendAnswer( getThe(res) );
-			        			} catch (Exception e) {}
-		        			}
+		        			try {
+				        		Relationship res = getThe(r.getStartNode());
+			        			if (filtering(pf, res, uses)) {
+				        			try {
+				        				pf.sendAnswer( res );
+				        			} catch (Exception e) {}
+			        			}
+		        			} catch (Exception e) {
+							}
 			        	} else {
 			    			IndexHits<Relationship> hits = Order.queryDown(r.getEndNode());
 			    			try {
