@@ -118,7 +118,7 @@ public class ALL extends AbstractQuery implements Reference {
 			    					if (res.isType(REF._)) continue;
 			    					
 			    					if (res.isType(AN._) || res.isType(VALUE._)) {
-			    						if (filtering(pf, getThe(res.getStartNode()), uses)) {
+			    						if (filtering(pf, res, uses)) {
 					        				pf.sendAnswer( res );
 			    						}
 			    					}

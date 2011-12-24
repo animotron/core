@@ -22,6 +22,7 @@ import javolution.util.FastList;
 import javolution.util.FastSet;
 
 import org.animotron.Executor;
+import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
@@ -35,6 +36,7 @@ import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.List;
@@ -96,20 +98,27 @@ public class EQ extends Operator implements Predicate {
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
-		//System.out.println("Eval actual");
-		for (QCAVector res : in) { 
-			in = Evaluator._.execute(new PFlow(pf), res);
-			for (QCAVector e : in) {
-				actual.add(e);
-				//System.out.println("actual "+e);
+		System.out.println("Eval actual");
+		for (QCAVector have : in) { 
+			IndexHits<Relationship> hits = Order.queryDown(have.getAnswer().getEndNode());
+			try {
+				for (Relationship r : hits) {
+					in = Evaluator._.execute(new PFlow(pf), vector.question(r));
+					for (QCAVector e : in) {
+						actual.add(e);
+						System.out.println("actual "+e);
+					}
+				}
+			} finally {
+				hits.close();
 			}
 		}
 
-		//System.out.println("Eval expected");
+		System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
-			//System.out.println("expected "+e);
+			System.out.println("expected "+e);
 		}
 		
 		if (actual.size() == 1 && expected.size() == 1) {
