@@ -386,5 +386,13 @@ public class QCAVector {
 			if (context instanceof FastList)
 				FastList.recycle((FastList<QCAVector>) context);
 		}
+		
+		if (answers != null) {
+			for (QCAVector c : answers)
+				c.recycle();
+
+			if (answers instanceof FastList)
+				FastList.recycle((FastList<QCAVector>) answers);
+		}
 	}
 }

@@ -292,7 +292,7 @@ public class GET extends AbstractQuery implements Shift {
 		IndexHits<Relationship> it = Order.context(node);
 		try {
 			for (Relationship r : it) {
-				System.out.println(r);
+				//System.out.println(r);
 	
 				prev = vector.question(r, prev); 
 
@@ -415,7 +415,7 @@ public class GET extends AbstractQuery implements Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(path);
+				System.out.println(path);
 				return _evaluate_(path, thes);
 			}
 		});
@@ -498,33 +498,4 @@ public class GET extends AbstractQuery implements Shift {
 		}
 		return true;
 	}
-	
-//	private Relationship getShall(final Node context, final Set<Node> thes) {
-////		TraversalDescription trav = td.
-////		evaluator(new Searcher(){
-////			@Override
-////			public Evaluation evaluate(Path path) {
-////				return _evaluate_(path, thes); //, IC._
-////			}
-////		});
-////
-////		Relationship res = null;
-////		for (Path path : trav.traverse(context)) {
-////			//TODO: check that this is only one answer
-////			//System.out.println(path);
-////			for (Relationship r : path.relationships()) {
-////				res = r;
-////				break;
-////			}
-////		}
-//		
-//		for (Relationship r : context.getRelationships(OUTGOING, SHALL._)) {
-//			for (QCAVector rr : Utils.getByREF(null, r)) {
-//				if (thes.contains(rr.getAnswer().getEndNode()))
-//					return r;
-//			}
-//		}
-//		
-//		return null;
-//	}
 }
