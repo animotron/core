@@ -18,28 +18,18 @@
  */
 package org.animotron.graph.serializer;
 
+import com.ctc.wstx.api.WriterConfig;
+import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.cache.Cache;
-import org.animotron.graph.handler.AnimoGraphHandler;
-import org.animotron.graph.handler.AnimoPrettyGraphHandler;
-import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.handler.StAXGraphHandler;
-import org.animotron.graph.handler.TextGraphHandler;
-import org.animotron.graph.traverser.AnimoResultTraverser;
-import org.animotron.graph.traverser.AnimoTraverser;
-import org.animotron.graph.traverser.MLResultTraverser;
-import org.animotron.graph.traverser.AnimoResultOneStepTraverser;
-import org.animotron.graph.traverser.ResultTraverser;
+import org.animotron.graph.handler.*;
+import org.animotron.graph.traverser.*;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 
-import com.ctc.wstx.api.WriterConfig;
-import com.ctc.wstx.stax.WstxOutputFactory;
-
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.OutputStream;
-
-import javax.xml.stream.XMLStreamException;
 
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
@@ -87,7 +77,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 	
-	public static CachedSerializer PRETTY_ANIMO_RESULT = new CachedSerializer(AnimoTraverser._, "-src-pretty.animo") {
+	public static CachedSerializer PRETTY_ANIMO_RESULT = new CachedSerializer(AnimoResultTraverser._, "-res-pretty.animo") {
 		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
