@@ -30,6 +30,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
 import org.jetlang.channels.Subscribable;
@@ -102,7 +103,14 @@ public class EQ extends Operator implements Predicate {
 		for (QCAVector have : in) { 
 			IndexHits<Relationship> hits = Order.queryDown(have.getAnswer().getEndNode());
 			try {
+				boolean first = true;
 				for (Relationship r : hits) {
+					if (first) {
+						first = false;
+						continue;
+					}
+					if (r.isType(REF._)) continue;
+					
 					in = Evaluator._.execute(new PFlow(pf), vector.question(r));
 					for (QCAVector e : in) {
 						actual.add(e);
@@ -115,10 +123,24 @@ public class EQ extends Operator implements Predicate {
 		}
 
 		System.out.println("Eval expected");
-		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
-		for (QCAVector e : in) {
-			expected.add(e);
-			System.out.println("expected "+e);
+		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
+		try {
+			boolean first = true;
+			for (Relationship r : hits) {
+				if (first) {
+					first = false;
+					continue;
+				}
+				if (r.isType(REF._)) continue;
+				
+				in = Evaluator._.execute(new PFlow(pf), vector.question(r));
+				for (QCAVector e : in) {
+					expected.add(e);
+					System.out.println("expected "+e);
+				}
+			}
+		} finally {
+			hits.close();
 		}
 		
 		if (actual.size() == 1 && expected.size() == 1) {
