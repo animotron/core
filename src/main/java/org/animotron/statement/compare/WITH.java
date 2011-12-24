@@ -58,12 +58,12 @@ public class WITH extends Operator implements Predicate {
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		
 		//System.out.println("==================================================");
-		//System.out.println("WITH op "+op+" ref "+ref);
+		System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
-		Node theNode = Utils.getSingleREF(op.getEndNode());
-		
 		Set<Node> thes = new FastSet<Node>();
-		thes.add(theNode);
+		for (QCAVector v : Utils.getByREF(pf, op)) {
+			thes.add(v.getAnswer().getEndNode());
+		}
 
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
 		PipedInput<QCAVector> in = out.getInputStream();

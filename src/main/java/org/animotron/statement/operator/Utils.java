@@ -301,6 +301,7 @@ public class Utils {
 		return in;
 	}
 
+	@Deprecated
 	public static Node getSingleREF(final Node node) {
 		try {
 			try {
