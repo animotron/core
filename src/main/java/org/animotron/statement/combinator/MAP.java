@@ -18,22 +18,9 @@
  */
 package org.animotron.statement.combinator;
 
-import org.animotron.Executor;
-import org.animotron.exception.AnimoException;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
-import org.animotron.statement.operator.Query;
-import org.animotron.statement.operator.Reference;
 import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.Relationship;
-
-import java.util.Iterator;
-
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Operation 'MAP'.
@@ -58,54 +45,7 @@ public class MAP extends Combinator {
 		public void onMessage(final PFlow pf) {
 			System.out.println("MAP");
 			
-			Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
-				@Override
-				public void onMessage(QCAVector context) {
-					System.out.println("MAP vector "+context);
-					if (context == null) {
-						pf.countDown();
-						return;
-					}
-				}
-
-				@Override
-				public DisposingExecutor getQueue() {
-					return Executor.getFiber();
-				}
-			};
-			
-			pf.answerChannel().subscribe(onContext);
-			
-			int count = 0;
-
-			Iterator<Relationship> it = pf.getOPNode().getRelationships(OUTGOING).iterator();
-			while (it.hasNext()) {
-				Relationship r = it.next();
-				Statement s = Statements.relationshipType(r);
-				
-				if (s instanceof Reference || s instanceof Query) {
-					Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
-
-					PFlow nextPF;
-					try {
-						nextPF = new PFlow(pf, r);
-					} catch (AnimoException e) {
-						continue;
-					}
-					nextPF.questionChannel().subscribe(onQuestion);
-					
-					nextPF.questionChannel().publish(nextPF);
-					
-					count++;
-				}
-			}
-			
-			if (count == 0)
-				pf.done();
-			else {
-				pf.await();
-				pf.done();
-			}
+			pf.done();
 		}
 	};
 }

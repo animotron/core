@@ -24,7 +24,6 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
