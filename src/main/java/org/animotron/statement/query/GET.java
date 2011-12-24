@@ -61,7 +61,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -130,7 +130,7 @@ public class GET extends AbstractQuery implements Shift {
 							return;
 						}
 						
-						get(pf, op, vector, thes, visitedREFs);
+						get(pf, vector, thes, visitedREFs);
 					}
 
 					@Override
@@ -160,10 +160,10 @@ public class GET extends AbstractQuery implements Shift {
 								refs.add(v);
 								
 							}
-							rSet = get(pf, op, refs, thes, visitedREFs); 
+							rSet = get(pf, refs, thes, visitedREFs); 
 							
 						} else {
-							rSet = get(pf, op, vector, thes, visitedREFs);
+							rSet = get(pf, vector, thes, visitedREFs);
 						}
 						if (rSet) break;
 					}
@@ -173,18 +173,18 @@ public class GET extends AbstractQuery implements Shift {
 
 	};
 	
-	public boolean get(PFlow pf, Relationship op, QCAVector vector, final Set<Node> thes, Set<Relationship> visitedREFs) {
+	public boolean get(PFlow pf, QCAVector vector, final Set<Node> thes, Set<Relationship> visitedREFs) {
 		FastSet<QCAVector> refs = FastSet.newInstance();
 		try {
 			refs.add(vector);
 			
-			return get(pf, op, refs, thes, visitedREFs);
+			return get(pf, refs, thes, visitedREFs);
 		} finally {
 			FastSet.recycle(refs);
 		}
 	}
 
-	private boolean check(final PFlow pf, final Relationship op, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
+	private boolean check(final PFlow pf, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
 		if (toCheck == null) return false;
 		
 		visitedREFs.add(toCheck);
@@ -200,7 +200,6 @@ public class GET extends AbstractQuery implements Shift {
 
 	public boolean get(
 			final PFlow pf,
-			final Relationship op,
 			final Set<QCAVector> REFs, 
 			final Set<Node> thes, 
 			Set<Relationship> visitedREFs) {
@@ -230,8 +229,8 @@ public class GET extends AbstractQuery implements Shift {
 					
 					QCAVector next = v;
 					while (next != null) {
-						if (!check(pf, op, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
-							found = found || check(pf, op, next, next.getQuestion(), thes, visitedREFs);
+						if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
+							found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
 						} else {
 							found = true;
 						}
@@ -342,7 +341,7 @@ public class GET extends AbstractQuery implements Shift {
 			final QCAVector v,
 			final Set<Node> thes) {
 		
-		if (ref.isType(REF._) && thes.contains(ref.getEndNode())) {
+		if ((ref.isType(REF._) || ref.isType(THE._)) && thes.contains(ref.getEndNode())) {
 			if (!pf.isInStack(ref)) {
 				pf.sendAnswer(pf.getVector().answered(ref, v));
 				return true;
@@ -415,7 +414,7 @@ public class GET extends AbstractQuery implements Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(path);
+				//System.out.println(path);
 				return _evaluate_(path, thes);
 			}
 		});

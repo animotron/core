@@ -72,7 +72,7 @@ public class ALL extends AbstractQuery implements Reference {
 					Set<Node> uses = lists[1];
 					Set<Node> directed = lists[2];
 					
-					System.out.println(uses);
+					//System.out.println(uses);
 					
 					boolean underUSE = false;
 					if (directed != null && directed.size() == 1) { 

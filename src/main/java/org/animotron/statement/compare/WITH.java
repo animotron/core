@@ -91,7 +91,7 @@ public class WITH extends Operator implements Predicate {
 			}
 		});
 
-		GET._.get(pflow, op, vector, thes, null);
+		GET._.get(pflow, vector, thes, null);
 		pflow.done();
 		
 		//if (!in.hasNext()) return false;
