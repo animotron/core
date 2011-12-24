@@ -471,6 +471,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_11() throws Exception {
         testAnimo("the male sex.");
         testAnimo("the john person, male.");
