@@ -22,7 +22,6 @@ import javolution.util.FastList;
 import javolution.util.FastSet;
 
 import org.animotron.Executor;
-import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
@@ -98,22 +97,23 @@ public class WITH extends Operator implements Predicate {
 		List<QCAVector> actual = new FastList<QCAVector>();
 		List<QCAVector> expected = new FastList<QCAVector>();
 
-		//System.out.println("Eval actual");
+		System.out.println("Eval actual");
 		for (QCAVector have : in) {
+			System.out.println("actual get "+have);
 			in = Evaluator._.execute(new PFlow(pf), have);
 			for (QCAVector e : in) {
 				actual.add(e);
-				//System.out.println("actual "+e);
+				System.out.println("actual "+e);
 			}
 		}
 		
 		if (actual.isEmpty()) return false;
 
-		//System.out.println("Eval expected");
+		System.out.println("Eval expected");
 		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
-			//System.out.println("expected "+r);
+			System.out.println("expected "+e);
 		}
 		
 		if (actual.size() >= 1 && expected.size() == 1) {

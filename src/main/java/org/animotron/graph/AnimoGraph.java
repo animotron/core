@@ -128,6 +128,8 @@ public class AnimoGraph {
 		try {
 			result = operation.execute();
 			tx.success();
+		} catch (Exception e) {
+			e.printStackTrace();
         } finally {
 			finishTx(tx);
             return result;

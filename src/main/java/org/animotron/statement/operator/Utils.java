@@ -454,9 +454,13 @@ public class Utils {
 				RID.set(res, r.getId());
 				//for debug
 				if (context != null) {
-					if (context.size() > 1) System.out.println("WARNING ... more then one context for CID"); 
+					if (context.size() > 1) System.out.println("WARNING ... more then one context for CID");
+					//XXX: rewrite!
 					for (QCAVector c : context) {
-						CID.set(res, c.mashup());
+						try {
+							CID.set(res, c.mashup());
+						} catch (Exception e) {
+						}
 					}
 				}
 				Result.add(res, hash);

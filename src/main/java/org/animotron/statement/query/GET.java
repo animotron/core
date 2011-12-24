@@ -75,7 +75,7 @@ public class GET extends AbstractQuery implements Shift {
         super(name);
     }
 
-	TraversalDescription td = Traversal.description().
+	static TraversalDescription td = Traversal.description().
 			depthFirst().uniqueness(Uniqueness.RELATIONSHIP_PATH);
 
 	private static TraversalDescription td_eval_ic = 
@@ -542,15 +542,17 @@ public class GET extends AbstractQuery implements Shift {
 		}
 		return false;
 	}
+
+	private static TraversalDescription prepared = td.
+			relationships(ANY._, OUTGOING).
+			relationships(AN._, OUTGOING).
+			relationships(REF._, OUTGOING).
+			relationships(SHALL._, OUTGOING);
 	
 	private boolean getByHave(final PFlow pf, QCAVector vector, Relationship op, final Node context, final Set<Node> thes) {
 		if (context == null) return false;
 		
-		TraversalDescription trav = td.
-				relationships(ANY._, OUTGOING).
-				relationships(AN._, OUTGOING).
-				relationships(REF._, OUTGOING).
-				relationships(SHALL._, OUTGOING).
+		TraversalDescription trav = prepared.
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
