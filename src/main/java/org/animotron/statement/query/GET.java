@@ -230,8 +230,8 @@ public class GET extends AbstractQuery implements Shift {
 					
 					QCAVector next = v;
 					while (next != null) {
-						if (!check(pf, op, v, v.getUnrelaxedAnswer(), thes, visitedREFs)) {
-							found = found || check(pf, op, v, v.getQuestion(), thes, visitedREFs);
+						if (!check(pf, op, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
+							found = found || check(pf, op, next, next.getQuestion(), thes, visitedREFs);
 						} else {
 							found = true;
 						}
