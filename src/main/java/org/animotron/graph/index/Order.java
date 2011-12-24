@@ -93,7 +93,7 @@ public class Order {
 //	}
 
 	public static Relationship[] first(int qty, Node node) {
-		IndexHits<Relationship> q = context(node);
+		IndexHits<Relationship> q = queryDown(node);
 		try {
 			Relationship[] res = new Relationship[qty];
 			for (int i = 0; i < qty; i++) {
