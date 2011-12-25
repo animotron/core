@@ -288,7 +288,12 @@ public class GET extends AbstractQuery implements Shift {
 	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
 		QCAVector prev = null;
-		IndexHits<Relationship> it = Order.context(node);
+		IndexHits<Relationship> it;
+		if (rr.isType(REF._) && rr.getEndNode().equals(node)) {
+			it = Order.queryDown(node);
+		} else
+			it = Order.context(node);
+		
 		try {
 			for (Relationship r : it) {
 				if (debug) System.out.println(r);
@@ -298,15 +303,15 @@ public class GET extends AbstractQuery implements Shift {
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					for (QCAVector v : AN.getREFs(pf, pf.getVector(), r)) {
+					for (QCAVector v : AN.getREFs(pf, prev, r)) {
 						Relationship t = v.getAnswer();
 						
 						prev.addAnswer(v);
 						
 						//System.out.println(t);
 						if (visitedREFs != null && !visitedREFs.contains(t)) {
-							v.setPrecedingSibling(prev);
-							prev = v;
+							//v.setPrecedingSibling(prev);
+							//prev = v;
 							newREFs.add(v);
 						}
 					}
