@@ -187,6 +187,9 @@ public class GET extends AbstractQuery implements Shift {
 	private boolean check(final PFlow pf, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
 		if (toCheck == null) return false;
 		
+		if (visitedREFs.contains(toCheck)) return false;
+		if (toCheck.isType(REF._) && visitedREFs.contains(v.getQuestion())) return false;
+		
 		visitedREFs.add(toCheck);
 		
 		if (searchForHAVE(pf, toCheck, v, thes))
@@ -230,8 +233,10 @@ public class GET extends AbstractQuery implements Shift {
 					QCAVector next = v;
 					while (next != null) {
 						if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
+							if (debug) System.out.println("checking question");
 							found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
 						} else {
+							visitedREFs.add(next.getQuestion());
 							found = true;
 						}
 						next = next.getPrecedingSibling();
@@ -349,18 +354,13 @@ public class GET extends AbstractQuery implements Shift {
 //			return false;
 //		}
 		
-		boolean checkStart = true;
-		if (ref.isType(AN._)) {
-			checkStart = false;
-		}
-		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
 		if (getByHave(pf, v, ref, ref.getEndNode(), thes))
 			return true;
 
 		//search for local 'HAVE'
-		if (checkStart) {
+		if (ref.isType(REF._)) {
 			if (getByHave(pf, v, null, ref.getStartNode(), thes))
 				return true;
 		}
@@ -449,6 +449,8 @@ public class GET extends AbstractQuery implements Shift {
 				paths.put(fR, path);
 			}
 		}
+		
+		if (paths.isEmpty()) return false;
 		
 		Relationship startBy = null;
 		
