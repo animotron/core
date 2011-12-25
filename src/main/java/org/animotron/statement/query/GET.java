@@ -386,7 +386,7 @@ public class GET extends AbstractQuery implements Shift {
 			for (QCAVector v : in) {
 				res = v.getAnswer();
 				if (!pf.isInStack(res)) {
-					pf.sendAnswer(v, RESULT);
+					pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
 					answered = true;
 				}
 			}
@@ -467,6 +467,9 @@ public class GET extends AbstractQuery implements Shift {
 							res = r;
 							//break;
 						}
+					} else if (r.isType(ANY._)) {
+						res = r;
+
 					} else if (r.isType(SHALL._)) {
 						res = r;
 						//break;
@@ -482,17 +485,16 @@ public class GET extends AbstractQuery implements Shift {
 			startBy = null;
 		}
 
-		QCAVector c = pf.getVector();
 		if (!resByHAVE.isEmpty()) {
 			for (Relationship r : resByHAVE) {
-				pf.sendAnswer(c.answered(r, vector), RESULT);
+				relaxReference(pf, vector, r);
 			}
 		} else {
 			if (resByIS.isEmpty())
 				return false;
 	
 			for (Relationship r : resByIS) {
-				pf.sendAnswer(c.answered(r, vector), RESULT);
+				relaxReference(pf, vector, r);
 			}
 		}
 		return true;
