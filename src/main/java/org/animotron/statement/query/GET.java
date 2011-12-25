@@ -188,7 +188,7 @@ public class GET extends AbstractQuery implements Shift {
 		if (toCheck == null) return false;
 		
 		if (visitedREFs.contains(toCheck)) return false;
-		if (toCheck.isType(REF._) && visitedREFs.contains(v.getQuestion())) return false;
+		//if (toCheck.isType(REF._) && visitedREFs.contains(v.getQuestion())) return false;
 		
 		visitedREFs.add(toCheck);
 		
