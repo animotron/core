@@ -260,7 +260,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	for (Path path : trav.traverse(theNode)) {
     		System.out.println(" * use * "+path);
     	}
-		if (allUses.contains(theNode))
+
+    	if (allUses.contains(theNode))
 			uses.add(theNode);
     	
 		return new Set[] {directed, uses, deepestSet};
@@ -508,22 +509,22 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (!r.isType(AN._))
 					return EXCLUDE_AND_PRUNE;
 				
-//		    	TraversalDescription trav = td.
-//						relationships(AN._, OUTGOING).
-//						relationships(REF._, OUTGOING).
-//						relationships(THE._, OUTGOING).
-//				evaluator(new DownIntersectionSearcher(){
-//					@Override
-//					public Evaluation evaluate(Path path) {
-//						//System.out.println(" - "+path);
-//						return _evaluate_(path, targets, intersection);
-//					}
-//				});
-//
-//				System.out.println(" - "+path);
-//		    	for (Path p : trav.traverse(r.getStartNode())) {
-//		    		System.out.println(" ** "+p);
-//		    	}
+		    	TraversalDescription trav = td.
+						relationships(AN._, OUTGOING).
+						relationships(REF._, OUTGOING).
+						relationships(THE._, OUTGOING).
+				evaluator(new DownIntersectionSearcher(){
+					@Override
+					public Evaluation evaluate(Path path) {
+						//System.out.println(" - "+path);
+						return _evaluate_(path, targets, intersection);
+					}
+				});
+
+				System.out.println(" - "+path);
+		    	for (Path p : trav.traverse(r.getStartNode())) {
+		    		System.out.println(" ** "+p);
+		    	}
 
 			} else if (path.length() % 2 == 1)
 				if (!r.isType(REF._))

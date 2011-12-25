@@ -45,6 +45,8 @@ public class ANY extends AbstractQuery implements Reference {
 	public static final ANY _ = new ANY();
 	
 	private ANY() { super("any", "~"); }
+	
+	private static boolean debug = true;
 
 	public OnQuestion onCalcQuestion() {
         return question;
@@ -54,7 +56,7 @@ public class ANY extends AbstractQuery implements Reference {
         @Override
         public void onMessage(final PFlow pf) {
 			//final Relationship op = pf.getOP();
-			System.out.println("ANY "+pf.getVector());
+			if (debug) System.out.println("ANY "+pf.getVector());
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			//(new IOException()).printStackTrace();
             
@@ -69,19 +71,26 @@ public class ANY extends AbstractQuery implements Reference {
 					Set<Node> uses = lists[1];
 					Set<Node> directed = lists[2];
 					
-					System.out.println(uses);
+					if (debug) System.out.println(uses);
 					
 //					boolean underUSE = false;
 					if (directed != null && directed.size() == 1) { 
 //						underUSE = true;
 						node = directed.iterator().next();
 					}
+					
+					if (uses.size() == 1) {
+						node = uses.iterator().next();
+						uses.clear();
+					} else {
+						System.out.println("MORE THEN ONE IN USE");
+					}
 		
-					System.out.println(" node = "+node);
+					if (debug) System.out.println(" node = "+node);
 		
 			        for (Path path : td_IS_leaf.traverse(node)) {
 			        	
-			        	System.out.println(path);
+			        	if (debug) System.out.println(path);
 
 			        	Relationship r = path.lastRelationship();
 			        	if (!Utils.haveContext(r.getEndNode())) {
@@ -123,6 +132,5 @@ public class ANY extends AbstractQuery implements Reference {
             pf.done();
             //System.out.println("ANY end "+pf.getVector());
         }
-
     };
 }
