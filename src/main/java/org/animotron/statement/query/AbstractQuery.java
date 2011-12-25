@@ -51,6 +51,8 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 public abstract class AbstractQuery extends Operator implements Evaluable, Query {
+	
+	private static boolean debugUSE = true;
 
     public AbstractQuery(String... name) {
         super(name);
@@ -256,7 +258,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		});
     	
     	for (Path path : trav.traverse(theNode)) {
-    		//System.out.println(" * use * "+path);
+    		System.out.println(" * use * "+path);
     	}
 		if (allUses.contains(theNode))
 			uses.add(theNode);
@@ -498,6 +500,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(THE._)) {
 				Node n = r.getEndNode(); 
 				if (targets.contains(n)) {
+					System.out.println("->"+path);
 					intersection.add(n);
 				}
 			
@@ -505,21 +508,22 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (!r.isType(AN._))
 					return EXCLUDE_AND_PRUNE;
 				
-		    	TraversalDescription trav = td.
-						relationships(AN._, OUTGOING).
-						relationships(REF._, OUTGOING).
-						relationships(THE._, OUTGOING).
-				evaluator(new DownIntersectionSearcher(){
-					@Override
-					public Evaluation evaluate(Path path) {
-						//System.out.println(" - "+path);
-						return _evaluate_(path, targets, intersection);
-					}
-				});
-
-		    	for (Path p : trav.traverse(r.getStartNode())) {
-		    		System.out.println(" ** "+p);
-		    	}
+//		    	TraversalDescription trav = td.
+//						relationships(AN._, OUTGOING).
+//						relationships(REF._, OUTGOING).
+//						relationships(THE._, OUTGOING).
+//				evaluator(new DownIntersectionSearcher(){
+//					@Override
+//					public Evaluation evaluate(Path path) {
+//						//System.out.println(" - "+path);
+//						return _evaluate_(path, targets, intersection);
+//					}
+//				});
+//
+//				System.out.println(" - "+path);
+//		    	for (Path p : trav.traverse(r.getStartNode())) {
+//		    		System.out.println(" ** "+p);
+//		    	}
 
 			} else if (path.length() % 2 == 1)
 				if (!r.isType(REF._))
@@ -560,6 +564,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				else {
 					Node n = r.getEndNode(); 
 					if (targets.contains(n)) {
+						System.out.println(" -> "+path);
 						intersection.add(n);
 					}
 				}

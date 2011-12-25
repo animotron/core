@@ -54,7 +54,7 @@ public class ANY extends AbstractQuery implements Reference {
         @Override
         public void onMessage(final PFlow pf) {
 			//final Relationship op = pf.getOP();
-			//System.out.println("ANY "+pf.getVector());
+			System.out.println("ANY "+pf.getVector());
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			//(new IOException()).printStackTrace();
             
@@ -69,17 +69,19 @@ public class ANY extends AbstractQuery implements Reference {
 					Set<Node> uses = lists[1];
 					Set<Node> directed = lists[2];
 					
+					System.out.println(uses);
+					
 //					boolean underUSE = false;
 					if (directed != null && directed.size() == 1) { 
 //						underUSE = true;
 						node = directed.iterator().next();
 					}
 		
-					//System.out.println(" node = "+node);
+					System.out.println(" node = "+node);
 		
 			        for (Path path : td_IS_leaf.traverse(node)) {
 			        	
-			        	//System.out.println(path);
+			        	System.out.println(path);
 
 			        	Relationship r = path.lastRelationship();
 			        	if (!Utils.haveContext(r.getEndNode())) {
