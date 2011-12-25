@@ -26,7 +26,6 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 import javolution.util.FastList;
@@ -64,7 +63,7 @@ public class QCAVector {
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
 		this.question = question;
 		if (context != null) {
-			this.context = FastList.newInstance();
+			this.context = new FastList<QCAVector>();
 			this.context.add(context);
 		}
 		this.answer = answer;
@@ -74,7 +73,7 @@ public class QCAVector {
 	public QCAVector(Relationship question, QCAVector context) {
 		this.question = question;
 
-		this.context = FastList.newInstance();
+		this.context = new FastList<QCAVector>();
 		this.context.add(context);
 		if (debug) System.out.println(" .... create vector 4 .... ");
 	}
@@ -90,7 +89,7 @@ public class QCAVector {
 		this.question = question;
 		this.answer = answer;
 
-		this.context = FastList.newInstance();
+		this.context = new FastList<QCAVector>();
 		this.context.add(context);
 		if (debug) System.out.println(" .... create vector 5 .... ");
 	}
@@ -117,7 +116,7 @@ public class QCAVector {
 		this.question = question;
 		this.answer = answer;
 
-		this.context = FastList.newInstance();
+		this.context = new FastList<QCAVector>();
 		this.context.add(new QCAVector(null, answer));
 		if (debug) System.out.println(" .... create vector 8 .... ");
 	}
@@ -126,7 +125,7 @@ public class QCAVector {
 		this.question = question;
 		//this.answer = answer;
 		
-		this.context = FastList.newInstance();
+		this.context = new FastList<QCAVector>();
 		this.context.add(context);
 		
 		this.preceding_sibling = precedingSibling;
@@ -350,7 +349,7 @@ public class QCAVector {
 	public QCAVector answered(Relationship createdAnswer, QCAVector context) {
 		//context.removeThis(this);
 		
-		FastList<QCAVector> c = FastList.newInstance();
+		FastList<QCAVector> c = new FastList<QCAVector>();
 		c.add(context);
 		if (this.context != null) {
 			c.addAll(this.context);
@@ -359,20 +358,6 @@ public class QCAVector {
 		return new QCAVector(question, createdAnswer, c, preceding_sibling);
 	}
 	
-	private void removeThis(QCAVector vector) {
-		if (this == vector)
-			return;
-		
-		Iterator<QCAVector> it = getContext().iterator();
-		while (it.hasNext()) {
-			QCAVector c = it.next();
-			if (c == this)
-				it.remove();
-			else
-				c.removeThis(vector);
-		}
-	}
-
 	public QCAVector answered(Relationship createdAnswer, List<QCAVector> contexts) {
 		return new QCAVector(question, createdAnswer, contexts, preceding_sibling);
 	}
@@ -406,7 +391,7 @@ public class QCAVector {
 
 	public void addAnswer(QCAVector i) {
 		if (answers == null)
-			answers = FastList.newInstance();
+			answers = new FastList<QCAVector>();
 		
 		answers.add(i);
 	}
