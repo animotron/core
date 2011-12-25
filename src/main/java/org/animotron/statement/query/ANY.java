@@ -46,7 +46,7 @@ public class ANY extends AbstractQuery implements Reference {
 	
 	private ANY() { super("any", "~"); }
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 
 	public OnQuestion onCalcQuestion() {
         return question;

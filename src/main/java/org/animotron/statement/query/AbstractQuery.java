@@ -52,7 +52,7 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  */
 public abstract class AbstractQuery extends Operator implements Evaluable, Query {
 	
-	private static boolean debugUSE = true;
+	private static boolean debugUSE = false;
 
     public AbstractQuery(String... name) {
         super(name);
@@ -501,7 +501,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(THE._)) {
 				Node n = r.getEndNode(); 
 				if (targets.contains(n)) {
-					System.out.println("->"+path);
+					if (debugUSE) System.out.println("->"+path);
 					intersection.add(n);
 				}
 			
@@ -521,7 +521,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					}
 				});
 
-				System.out.println(" - "+path);
+				if (debugUSE) System.out.println(" - "+path);
 		    	for (Path p : trav.traverse(r.getStartNode())) {
 		    		System.out.println(" ** "+p);
 		    	}
@@ -565,7 +565,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				else {
 					Node n = r.getEndNode(); 
 					if (targets.contains(n)) {
-						System.out.println(" -> "+path);
+						if (debugUSE) System.out.println(" -> "+path);
 						intersection.add(n);
 					}
 				}
