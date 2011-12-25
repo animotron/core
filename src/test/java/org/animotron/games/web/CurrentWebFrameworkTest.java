@@ -26,6 +26,7 @@ import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
+import org.animotron.statement.relation.WEAK_USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression.*;
@@ -84,8 +85,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 _(THE._, "localhost-site",
                     _(AN._, "site"),
                     _(AN._, "server-name", value("localhost")),
-                    _(USE._, "theme-concrete"),
-                    _(USE._, "localhost")
+                    _(WEAK_USE._, "theme-concrete"),
+                    _(WEAK_USE._, "localhost")
                 )
             ),
             new JExpression(
@@ -103,8 +104,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 _(THE._, "animo-site",
                     _(AN._, "site"),
                     _(AN._, "server-name", value("animo")),
-                    _(USE._, "theme-concrete"),
-                    _(USE._, "animo")
+                    _(WEAK_USE._, "theme-concrete"),
+                    _(WEAK_USE._, "animo")
                 )
             ),
             new JExpression(
@@ -159,8 +160,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 "(the localhost-site " +
                     "(site) " +
                     "(server-name) " +
-                    "(use theme-concrete) " +
-                    "(use localhost)) " +
+                    "(weak-use theme-concrete) " +
+                    "(weak-use localhost)) " +
                 "(the is-it-working " +
                     "(service resource) " +
                     "(root) " +
@@ -208,8 +209,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 "(the animo-site " +
                     "(site) " +
                     "(server-name) " +
-                    "(use theme-concrete) " +
-                    "(use animo)) " +
+                    "(weak-use theme-concrete) " +
+                    "(weak-use animo)) " +
                 "(the it-working " +
                     "(service resource) " +
                     "(root) " +
@@ -257,8 +258,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 "(the localhost-site " +
                     "(site) " +
                     "(server-name) " +
-                    "(use theme-concrete) " +
-                    "(use localhost)) " +
+                    "(weak-use theme-concrete) " +
+                    "(weak-use localhost)) " +
                 "(the resource-not-found " +
                     "(service resource) " +
                     "(not-found) " +
@@ -299,8 +300,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 "(the animo-site " +
                     "(site) " +
                     "(server-name) " +
-                    "(use theme-concrete) " +
-                    "(use animo)) " +
+                    "(weak-use theme-concrete) " +
+                    "(weak-use animo)) " +
                 "(the resource-not-found " +
                     "(service resource) " +
                     "(not-found) " +
