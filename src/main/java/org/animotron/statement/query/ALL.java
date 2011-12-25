@@ -59,7 +59,7 @@ public class ALL extends AbstractQuery implements Reference {
         	final Relationship op = pf.getOP();
 			//System.out.println("ALL **************************");
             
-            for (QCAVector theVector : Utils.getByREF(pf, op)) {
+            for (QCAVector theVector : Utils.getByREF(pf, pf.getVector(), op)) {
             	
             	Relationship the = theVector.getAnswer();
 

@@ -61,7 +61,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -86,7 +86,7 @@ public class GET extends AbstractQuery implements Shift {
 			final Set<Node> thes = new FastSet<Node>(); 
 			
 			Relationship r = null;
-			for (QCAVector theNode : AN.getREFs(pf, op)) {
+			for (QCAVector theNode : AN.getREFs(pf, pf.getVector(), op)) {
 				r = theNode.getAnswer();
 				if (r.isType(AN._)) {
 					try {
@@ -291,14 +291,14 @@ public class GET extends AbstractQuery implements Shift {
 		IndexHits<Relationship> it = Order.context(node);
 		try {
 			for (Relationship r : it) {
-				//System.out.println(r);
+				if (debug) System.out.println(r);
 	
 				prev = vector.question(r, prev); 
 
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					for (QCAVector v : AN.getREFs(pf, r)) {
+					for (QCAVector v : AN.getREFs(pf, pf.getVector(), r)) {
 						Relationship t = v.getAnswer();
 						
 						prev.addAnswer(v);

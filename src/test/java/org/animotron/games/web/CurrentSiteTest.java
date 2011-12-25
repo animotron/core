@@ -41,33 +41,33 @@ public class CurrentSiteTest extends ATest {
     public void test() throws Exception {
 
     	JExpression.__(
-                new JExpression(
-                        _(THE._, "current-site",
-                                _(ANY._, "site",
-                                        _(WITH._, "server-name", _(GET._, "host"))
-                                )
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "test-service",
-                                _(AN._, "service"),
-                                _(GET._, "server-name"),
-                                _(GET._, "host")
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "localhost-site",
-                                _(AN._, "site"),
-                                _(AN._, "server-name", value("localhost"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ANY._, "service",
-                                        _(AN._, "current-site")
-                                )
-                        )
+            new JExpression(
+                _(THE._, "current-site",
+                    _(ANY._, "site",
+                        _(WITH._, "server-name", _(GET._, "host"))
+                    )
                 )
+            ),
+            new JExpression(
+                _(THE._, "test-service",
+                    _(AN._, "service"),
+                    _(GET._, "server-name"),
+                    _(GET._, "host")
+                )
+            ),
+            new JExpression(
+                _(THE._, "localhost-site",
+                    _(AN._, "site"),
+                    _(AN._, "server-name", value("localhost"))
+                )
+            ),
+            new JExpression(
+                _(THE._, "rest",
+                    _(ANY._, "service",
+                        _(AN._, "current-site")
+                    )
+                )
+            )
         );
 
         JExpression s = new JExpression(
@@ -84,5 +84,4 @@ public class CurrentSiteTest extends ATest {
                     "(host \"localhost\").");
 
     }
-
 }

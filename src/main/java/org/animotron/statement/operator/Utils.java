@@ -135,11 +135,11 @@ public class Utils {
 		return list;
 	}
 	
-	public static PipedInput<QCAVector> getByREF(PFlow pf) {
-		return getByREF(pf, pf.getOP());
+	public static PipedInput<QCAVector> getByREF(final PFlow pf) {
+		return getByREF(pf, pf.getVector(), pf.getOP());
 	}
 
-	public static PipedInput<QCAVector> getByREF(PFlow pf, final Relationship op) {
+	public static PipedInput<QCAVector> getByREF(final PFlow pf, final QCAVector vector, final Relationship op) {
 		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
 		PipedInput<QCAVector> in = out.getInputStream();
 		
@@ -151,7 +151,7 @@ public class Utils {
 				Relationship theNode = THE.__((String)THE._.reference(node));
 
 				if (theNode != null) {
-					out.write(pf.getVector().answered(theNode));
+					out.write(vector.answered(theNode));
 					out.close();
 					return in;
 				}
@@ -163,7 +163,7 @@ public class Utils {
 			try {
 				for (Relationship res : hits) {
 					if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-						evaluable(pf, pf.getVector().question(res), out, op);
+						evaluable(pf, vector.question(res), out, op);
 						if (first == null)
 							first = res;
 					} else

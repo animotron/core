@@ -53,7 +53,7 @@ public class POSSESSIVE extends Operator implements Suffix {
 			
 			final Set<Node> thes = new FastSet<Node>(); 
 			
-			for (QCAVector theNode : AN.getREFs(pf, op)) {
+			for (QCAVector theNode : AN.getREFs(pf, pf.getVector(), op)) {
 				thes.add(theNode.getAnswer().getEndNode());
 			}
 			Utils.debug(POSSESSIVE._, op, thes);

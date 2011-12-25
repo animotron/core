@@ -54,7 +54,7 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 			//pf.sendAnswer(new QCAVector(op,op));
 			
 			if (!Utils.results(pf, hash)) {
-				for (QCAVector r : getREFs(pf, op)) {
+				for (QCAVector r : getREFs(pf, pf.getVector(), op)) {
 					pf.sendAnswer(r);
 				}
 			}
@@ -62,7 +62,7 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 		}
 	};
 	
-	public static PipedInput<QCAVector> getREFs(PFlow pf, Relationship op) {
-		return Utils.getByREF(pf, op);
+	public static PipedInput<QCAVector> getREFs(final PFlow pf, final QCAVector vector, final Relationship op) {
+		return Utils.getByREF(pf, vector, op);
 	}
 }

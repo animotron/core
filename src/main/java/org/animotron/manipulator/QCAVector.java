@@ -206,7 +206,7 @@ public class QCAVector {
 			b.append("'");
 			
 			try {
-				PipedInput<QCAVector> thes = AN.getREFs(null, question);
+				PipedInput<QCAVector> thes = AN.getREFs(null, new QCAVector(question), question);
 				for (QCAVector v : thes) {
 					Object name = THE._.reference(v.getClosest());
 					if (name != null) {

@@ -62,7 +62,7 @@ public class EQ extends Operator implements Predicate {
 		if (debug) System.out.println("EQ op "+op+" ref "+ref);
 		//XXX: fix
 		Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, op)) {
+		for (QCAVector v : Utils.getByREF(pf, pf.getVector(), op)) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
