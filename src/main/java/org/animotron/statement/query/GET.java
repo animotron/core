@@ -61,7 +61,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -370,11 +370,12 @@ public class GET extends AbstractQuery implements Shift {
 
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
 		if (!op.isType(ANY._)) {
+			if (debug) System.out.println("["+pf.getOP()+"] answered "+op);
 			pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
 			return true;
 		}
 		
-		//System.out.println("Relaxing ....");
+		if (debug) System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
 		try {
 			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), vector.question(op));
 
@@ -386,6 +387,7 @@ public class GET extends AbstractQuery implements Shift {
 			for (QCAVector v : in) {
 				res = v.getAnswer();
 				if (!pf.isInStack(res)) {
+					if (debug) System.out.println("["+pf.getOP()+"] answered "+v.getAnswer());
 					pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
 					answered = true;
 				}
@@ -422,7 +424,7 @@ public class GET extends AbstractQuery implements Shift {
 		Map<Relationship, Path> paths = new FastMap<Relationship, Path>();
 
 		for (Path path : trav.traverse(context)) {
-			if (debug) System.out.println("* "+path);
+			if (debug) System.out.println("["+pf.getOP()+"] * "+path);
 			
 			if (path.length() == 1) {
 				if (op == null) {

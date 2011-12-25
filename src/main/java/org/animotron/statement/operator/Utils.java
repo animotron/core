@@ -330,11 +330,13 @@ public class Utils {
 	}
 
 	public static boolean results(PFlow pf) {
-		return results(pf.getOP(), pf, pf.getPathHash());
+		return false;
+		//return results(pf.getOP(), pf, pf.getPathHash());
 	}
 
 	public static boolean results(PFlow pf, byte[] hash) {
-		return results(pf.getOP(), pf, hash);
+		return false;
+		//return results(pf.getOP(), pf, hash);
 	}
 
 	public static boolean results(Relationship op, PFlow pf) {
