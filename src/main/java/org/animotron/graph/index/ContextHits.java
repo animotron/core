@@ -18,7 +18,9 @@
  */
 package org.animotron.graph.index;
 
+import org.animotron.Properties;
 import org.animotron.statement.operator.REF;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.index.impl.lucene.AbstractIndexHits;
@@ -32,8 +34,10 @@ public class ContextHits extends AbstractIndexHits<Relationship> implements Inde
 	IndexHits<Relationship> it;
 	boolean first = true;
 	
-	ContextHits(IndexHits<Relationship> hits) {
+	ContextHits(Node node, IndexHits<Relationship> hits) {
 		it = hits;
+		
+		first = !Properties.NAME.has(node);
 	}
 
 	@Override
