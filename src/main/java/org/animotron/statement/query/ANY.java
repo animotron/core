@@ -79,12 +79,12 @@ public class ANY extends AbstractQuery implements Reference {
 						node = directed.iterator().next();
 					}
 					
-					if (uses.size() == 1) {
-						node = uses.iterator().next();
-						uses.clear();
-					} else {
-						System.out.println("MORE THEN ONE IN USE");
-					}
+//					if (uses.size() == 1) {
+//						node = uses.iterator().next();
+//						uses.clear();
+//					} else {
+//						System.out.println("MORE THEN ONE IN USE");
+//					}
 		
 					if (debug) System.out.println(" node = "+node);
 		
