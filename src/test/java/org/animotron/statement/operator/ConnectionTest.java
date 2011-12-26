@@ -192,14 +192,6 @@ public class ConnectionTest extends ATest {
             )
         );
         assertAnimoResult(test, "type \"value/plain\".");
-
-        test = new JExpression(
-	        _(GET._, "mime-type",
-	            _(AN._, "fileA")
-	        ),
-	        _(GET._, "type")
-        );
-        assertAnimoResult(test, "type \"value/plain\".");
     }
 
     @Test
@@ -207,41 +199,36 @@ public class ConnectionTest extends ATest {
     public void mimeType_parallel() throws Exception {
 
         JExpression.__(
+            new JExpression(_(THE._, "mime-type")),
 
-                new JExpression(
-                        _(THE._, "mime-type"
-                    		//,
-                            //_(AN._, "extension")
-                        )),
+            new JExpression(
+                _(THE._, "file",
+                    _(AN._, "reference", value("file")),
+                    _(AN._, "path"),
 
-                new JExpression(
-                        _(THE._, "file",
-                                _(AN._, "reference", value("file")),
-                                _(AN._, "path"),
+                    _(AN._, "extension",
+                        _(AfterLast._,
+                            value("."),
+                            _(GET._, "path"))),
 
-                                _(AN._, "extension",
-                                        _(AfterLast._,
-                                                value("."),
-                                                _(GET._, "path"))),
+                    _(AN._, "mime-type",
+                        _(ANY._, "mime-type",
+                            _(WITH._, "extension",
+                                _(GET._, "extension"))))
+            )),
 
-                                _(AN._, "mime-type",
-                                        _(ANY._, "mime-type",
-                                                _(WITH._, "extension",
-                                                        _(GET._, "extension"))))
-                        )),
+            new JExpression(
+	            _(THE._, "fileA",
+	                _(AN._, "file"),
+	                _(AN._, "path", value("/home/test.txt"))
+            )),
 
-                new JExpression(
-                        _(THE._, "fileA",
-                                _(AN._, "file"),
-                                _(AN._, "path", value("/home/test.txt"))
-                        )),
-
-                new JExpression(
-                        _(THE._, "value-plain",
-                                _(AN._, "mime-type"),
-                                _(AN._, "type", value("value/plain")),
-                                _(AN._, "extension", value("txt"), value("value"))
-                        ))
+            new JExpression(
+                _(THE._, "value-plain",
+                    _(AN._, "mime-type"),
+                    _(AN._, "type", value("value/plain")),
+                    _(AN._, "extension", value("txt"), value("value"))
+            ))
 
         );
         JExpression test;
