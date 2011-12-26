@@ -233,7 +233,7 @@ public class GET extends AbstractQuery implements Shift {
 					QCAVector next = v;
 					while (next != null) {
 						if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
-							if (debug) System.out.println("checking question");
+							//if (debug) System.out.println("checking question");
 							found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
 						} else {
 							visitedREFs.add(next.getQuestion());
@@ -296,7 +296,7 @@ public class GET extends AbstractQuery implements Shift {
 		IndexHits<Relationship> it = Order.context(node);
 		try {
 			for (Relationship r : it) {
-				if (debug) System.out.println(r);
+				//if (debug) System.out.println(r);
 	
 				prev = vector.question(r, prev); 
 
