@@ -29,6 +29,7 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 import java.security.MessageDigest;
 
+import static org.animotron.Properties.CONTEXT;
 import static org.animotron.Properties.HASH;
 import static org.animotron.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
@@ -143,7 +144,9 @@ public class StreamGraphBuilder extends GraphBuilder {
     @Override
     public void bind(Relationship r, Object[] o, byte[] hash) throws IOException {
         step();
-        order(copy(((Relationship) o[1]).getEndNode(), r));
+        Node n = ((Relationship) o[1]).getEndNode();
+        order(copy(n , r));
+        CONTEXT.set(n, true);
     }
 
 }

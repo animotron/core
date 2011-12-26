@@ -33,6 +33,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.animotron.Properties.CONTEXT;
 import static org.animotron.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.utils.MessageDigester.cloneMD;
@@ -180,8 +181,9 @@ public class FastGraphBuilder extends GraphBuilder {
     private void build(Object[] item) throws AnimoException {
         Relationship r;
         if (item.length == 2) {
-            Object[] p = (Object[]) item[0];
-            r = copy((Node) p[4], (Relationship) item[1]);
+            Node n = (Node) ((Object[]) item[0])[4];
+            r = copy(n, (Relationship) item[1]);
+            CONTEXT.set(n, true);
         } else {
             Object[] p =  (Object[]) item[5];
             if (p != null) {
