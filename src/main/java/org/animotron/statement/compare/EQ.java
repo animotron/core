@@ -71,9 +71,9 @@ public class EQ extends Operator implements Predicate {
 		
 		QCAVector vector = pf.getVector().answered(ref);
 		
-		PFlow pflow = new PFlow(new PFlow(Evaluator._), vector.question(op));
+		PFlow pflow = new PFlow(vector.question(op));
 		
-		pflow.getParent().answerChannel().subscribe(new Subscribable<QCAVector>() {
+		pflow.answerChannel().subscribe(new Subscribable<QCAVector>() {
 			
 			@Override
 			public void onMessage(QCAVector message) {
@@ -105,7 +105,7 @@ public class EQ extends Operator implements Predicate {
 			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					in = Evaluator._.execute(new PFlow(pf), vector.question(r));
+					in = Evaluator._.execute(vector.question(r));
 					for (QCAVector e : in) {
 						actual.add(e);
 						if (debug) System.out.println("actual "+e);
@@ -127,7 +127,7 @@ public class EQ extends Operator implements Predicate {
 				}
 				if (r.isType(REF._)) continue;
 				
-				in = Evaluator._.execute(new PFlow(pf), vector.question(r));
+				in = Evaluator._.execute(vector.question(r));
 				for (QCAVector e : in) {
 					expected.add(e);
 					if (debug) System.out.println("expected "+e);

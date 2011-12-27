@@ -19,6 +19,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.graph.index.State;
+import org.animotron.io.PipedInput;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
@@ -44,12 +45,13 @@ public class Preparator extends StatementManipulator {
 	
 	private Preparator() {};
 	
-	public void execute(Node op) throws IOException {
+	public PipedInput<QCAVector> execute(Node op) throws IOException {
         for (Relationship r : op.getRelationships(INCOMING)) {
             if (r.isType(AN._) || r.isType(USE._) || r.isType(REF) || r.isType(org.animotron.statement.operator.REF._)) {
 			    super.execute(r);
             }
 		}
+        return null;
 	}
 	
 	@Override

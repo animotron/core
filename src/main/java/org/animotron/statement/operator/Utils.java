@@ -192,10 +192,8 @@ public class Utils {
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), v);
+			PipedInput<QCAVector> in = Evaluator._.execute(v);
 			for (QCAVector e : in) {
-				PFlow _pf_ = new PFlow(pf);
-				//_pf_.addContextPoint(e);
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
 				if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
@@ -205,7 +203,7 @@ public class Utils {
 //					) {
 					out.write(e);
 				} else {
-					for (QCAVector rr : eval(_pf_, e)) {
+					for (QCAVector rr : eval(e)) {
 						out.write(rr);
 					}
 				}
@@ -244,11 +242,9 @@ public class Utils {
 
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-				PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
+				PipedInput<QCAVector> in = Evaluator._.execute(r);
 				for (QCAVector e : in) {
-					PFlow _pf_ = new PFlow(pf);
-					//_pf_.addContextPoint(e);
-					
+
 					Relationship result = e.getUnrelaxedAnswer();
 					
 					if (result.isType(REF) 
@@ -257,7 +253,7 @@ public class Utils {
 						) {
 						out.write(e);
 					} else {
-						for (QCAVector rr : eval(_pf_, e)) {
+						for (QCAVector rr : eval(e)) {
 							out.write(rr);
 						}
 					}
@@ -271,7 +267,7 @@ public class Utils {
 		}
 	}
 	
-	public static PipedInput<QCAVector> eval(PFlow pf, QCAVector vector) throws IOException {
+	public static PipedInput<QCAVector> eval(QCAVector vector) throws IOException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
         
@@ -286,7 +282,7 @@ public class Utils {
 			Statement _s = Statements.relationshipType(rr);
 			if (_s instanceof Query || _s instanceof Evaluable) {
 				prev = vector.question(rr, prev);
-				PipedInput<QCAVector> _in = Evaluator._.execute(new PFlow(pf), prev);
+				PipedInput<QCAVector> _in = Evaluator._.execute(prev);
 				for (QCAVector ee : _in) {
 					//XXX: ee should be context too???
 					out.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));

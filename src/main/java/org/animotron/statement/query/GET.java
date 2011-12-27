@@ -90,7 +90,7 @@ public class GET extends AbstractQuery implements Shift {
 				r = theNode.getAnswer();
 				if (r.isType(AN._)) {
 					try {
-						for (QCAVector rr : Utils.eval(pf, theNode)) {
+						for (QCAVector rr : Utils.eval(theNode)) {
 							thes.add(rr.getAnswer().getEndNode());
 						}
 					} catch (IOException e) {
@@ -307,7 +307,7 @@ public class GET extends AbstractQuery implements Shift {
 				} else if (st instanceof Reference) {
 					if (!pf.isInStack(r)) {
 						try {
-							PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), prev);
+							PipedInput<QCAVector> in = Evaluator._.execute(prev);
 							
 							for (QCAVector v : in) {
 								prev.addAnswer(v);
@@ -365,7 +365,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		if (debug) System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
 		try {
-			PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), vector.question(op));
+			PipedInput<QCAVector> in = Evaluator._.execute(vector.question(op));
 
 			if (!in.hasNext()) return false;
 			

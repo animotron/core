@@ -46,7 +46,7 @@ public class OnQuestion implements Subscribable<PFlow> {
 			while (it.hasNext()) {
 				Relationship r = it.next();
 				
-				Subscribable<PFlow> onQuestion = pf.getManipulator().onQuestion(r);
+				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
 				
 				if (onQuestion != null) {
 					PFlow nextPF = new PFlow(pf, pf.getVector().question2(r));

@@ -50,14 +50,14 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     protected abstract Number execute (Number a, Number b);
     protected abstract Number execute (Number a);
 
-    private final Number execute (PFlow pf, QCAVector vector) throws IOException {
-    	Number a = param(pf, vector);
+    private final Number execute (QCAVector vector) throws IOException {
+    	Number a = param(vector);
     	if (a == null) return null;
     	return execute(a);
     }
 
-    private final Number execute (Number a, PFlow pf, QCAVector vector) throws IOException {
-    	Number b = param(pf, vector);
+    private final Number execute (Number a, QCAVector vector) throws IOException {
+    	Number b = param(vector);
     	if (b == null) return a;
     	return execute(a, b);
     }
@@ -74,12 +74,12 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	                	for (QCAVector r : Utils.getTheRelationships(pf, param)) {
 		                	if (x == null) {
 		                		if (params.hasNext())
-		                			x = param(pf, r);
+		                			x = param(r);
 		                		else
-		                			x = execute(pf, r);
+		                			x = execute(r);
 		                			
 		                	} else {
-		                		x = execute(x, pf, r);
+		                		x = execute(x, r);
                             }
 	                	}
 	                }

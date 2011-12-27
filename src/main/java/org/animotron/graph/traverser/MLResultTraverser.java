@@ -20,7 +20,6 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
@@ -45,7 +44,7 @@ public class MLResultTraverser extends ResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
@@ -56,9 +55,9 @@ public class MLResultTraverser extends ResultTraverser {
                     try {
                         if (it.hasNext()) {
                             Object p = it.next();
-                            param[0] = param(pf, p);
+                            param[0] = param(p);
                             if (!(s instanceof ELEMENT)) {
-                                param[1] = param(pf, it);
+                                param[1] = param(it);
                                 if (param[1] == null) {
                                     if (s instanceof NS) {
                                         if (QNAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
@@ -71,34 +70,34 @@ public class MLResultTraverser extends ResultTraverser {
                                 }
                             }
                             handler.start(s, parent, param, level++, isOne, pos, isLast);
-                            iterate(handler, pf, rr, s, it, level);
+                            iterate(handler, rr, s, it, level);
                             handler.end(s, parent, param, --level, isOne, pos, isLast);
                         }
                     } finally {
                         it.remove();
                     }
                 } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
-                    String param = CachedSerializer.STRING.serialize(pf, rr);
+                    String param = CachedSerializer.STRING.serialize(rr);
                     handler.start(s, parent, param, level++, isOne, pos, isLast);
                     handler.end(s, parent, param, --level, isOne, pos, isLast);
                 }
             } else {
-                super.process(handler, pf, s, parent, rr, level, isOne, pos, isLast);
+                super.process(handler, s, parent, rr, level, isOne, pos, isLast);
             }
         }
     }
 
-    private String param(PFlow pf, It it) throws IOException {
+    private String param(It it) throws IOException {
         if (it.hasNext()) {
-            return param(pf, it.next());
+            return param(it.next());
         }
         return null;
     }
 
-    private String param(PFlow pf, Object o) throws IOException {
+    private String param(Object o) throws IOException {
         return
             o instanceof Relationship
-                ? CachedSerializer.STRING.serialize(pf, (Relationship) o)
+                ? CachedSerializer.STRING.serialize((Relationship) o)
                 : (String) node.getProperty((String) o);
     }
 

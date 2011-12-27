@@ -72,9 +72,9 @@ public class WITH extends Operator implements Predicate {
 		
 		QCAVector vector = pf.getVector().answered(ref);
 		
-		PFlow pflow = new PFlow(new PFlow(Evaluator._), vector.question(op));
+		PFlow pflow = new PFlow(vector.question(op));
 		
-		pflow.getParent().answerChannel().subscribe(new Subscribable<QCAVector>() {
+		pflow.answerChannel().subscribe(new Subscribable<QCAVector>() {
 			
 			@Override
 			public void onMessage(QCAVector message) {
@@ -107,7 +107,7 @@ public class WITH extends Operator implements Predicate {
 			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					in = Evaluator._.execute(new PFlow(pf), have.question(r));
+					in = Evaluator._.execute(have.question(r));
 					for (QCAVector e : in) {
 						actual.add(e);
 						if (debug) System.out.println("actual "+e);
@@ -121,7 +121,7 @@ public class WITH extends Operator implements Predicate {
 		if (actual.isEmpty()) return false;
 
 		if (debug) System.out.println("Eval expected");
-		in = Evaluator._.execute(new PFlow(pf), op.getEndNode());
+		in = Evaluator._.execute(op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
 			if (debug) System.out.println("expected "+e);
@@ -131,7 +131,7 @@ public class WITH extends Operator implements Predicate {
 			QCAVector g = expected.get(0);
 			
 			//XXX: finish
-			List<QCAVector> l = evaluable(pf, g.getAnswer().getEndNode());
+			List<QCAVector> l = evaluable(g.getAnswer().getEndNode());
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) {
@@ -156,7 +156,7 @@ public class WITH extends Operator implements Predicate {
 		return false;
 	}
 	
-	private List<QCAVector> evaluable(PFlow pf, Node node) throws InterruptedException, IOException {
+	private List<QCAVector> evaluable(Node node) throws InterruptedException, IOException {
 		List<QCAVector> list = new FastList<QCAVector>();
 		
 		IndexHits<Relationship> q = Order.queryDown(node);
@@ -167,7 +167,7 @@ public class WITH extends Operator implements Predicate {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput<QCAVector> in = Evaluator._.execute(pf, i);
+    				PipedInput<QCAVector> in = Evaluator._.execute(i);
     				for (QCAVector e : in) {
     					list.add(e);
     					//System.out.println("get from Evaluator "+r);
@@ -179,7 +179,6 @@ public class WITH extends Operator implements Predicate {
 		} finally {
 			q.close();
 		}
-
 		
 		return list;
 	}

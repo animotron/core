@@ -20,8 +20,6 @@ package org.animotron.graph.traverser;
 
 import javolution.util.FastList;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -46,36 +44,24 @@ public class AnimoTraverser {
 
     protected AnimoTraverser() {}
 	
-    public void traverse(GraphHandler handler, Relationship r) throws IOException {
-        handler.startGraph();
-        build(handler, null, null, r, 0, true, 0, true);
-        handler.endGraph();
-    }
-
-	public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
+	public void traverse(GraphHandler handler, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, pf, null, r, 0, true, 0, true);
+		build(handler, null, r, 0, true, 0, true);
 		handler.endGraph();
 	}
 	
     public void traverse(GraphHandler handler, QCAVector vector) throws IOException {
         handler.startGraph();
-        build(handler, new PFlow(Evaluator._), null, vector, 0, true, 0, true);
+        build(handler, null, vector, 0, true, 0, true);
         handler.endGraph();
     }
 
-    public void traverse(GraphHandler handler, PFlow pf, QCAVector vector) throws IOException {
-        handler.startGraph();
-        build(handler, pf, null, vector, 0, true, 0, true);
-        handler.endGraph();
-    }
-
-	protected void build(GraphHandler handler, PFlow pf, Statement parent, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+	protected void build(GraphHandler handler, Statement parent, Object o, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (o instanceof Relationship) {
-            build(handler, pf, parent, new QCAVector((Relationship)o), level, isOne, pos, isLast);
+            build(handler, parent, new QCAVector((Relationship)o), level, isOne, pos, isLast);
 
         } else if (o instanceof QCAVector) {
-            build(handler, pf, parent, (QCAVector)o, level, isOne, pos, isLast);
+            build(handler, parent, (QCAVector)o, level, isOne, pos, isLast);
             
         } else {
             String name = (String) o;
@@ -89,7 +75,7 @@ public class AnimoTraverser {
         }
     }
 
-	protected void build(GraphHandler handler, PFlow pf, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+	protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
 		Relationship r = rr.getClosest();
 		Statement statement = Statements.relationshipType(r);
 		if (statement == null)
@@ -98,12 +84,12 @@ public class AnimoTraverser {
 		if (!(statement instanceof USE || statement instanceof REF)) {
             node = r.getEndNode();
             It it = new It(node);
-            iterate(handler, pf, rr, statement, it, level);
+            iterate(handler, rr, statement, it, level);
 		}
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, PFlow pf, QCAVector v, Statement parent, It it, int level) throws IOException {
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level) throws IOException {
         List<Object> o = new FastList<Object>();
         try {
             int count = 0;
@@ -133,9 +119,9 @@ public class AnimoTraverser {
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
                 if (i instanceof Relationship) {
                 	prev = new QCAVector((Relationship)i, v, prev);
-                	build(handler, pf, parent, prev, level, isOne, pos, isLast);
+                	build(handler, parent, prev, level, isOne, pos, isLast);
                 } else {
-                	build(handler, pf, parent, i, level, isOne, pos, isLast);
+                	build(handler, parent, i, level, isOne, pos, isLast);
                 }
                 pos++;
             }
@@ -145,13 +131,12 @@ public class AnimoTraverser {
             	i = it.next();
                 if (i instanceof Relationship) {
                 	prev = new QCAVector((Relationship)i, v, prev);
-                	build(handler, pf, parent, prev, level, isOne, pos++, !it.hasNext());
+                	build(handler, parent, prev, level, isOne, pos++, !it.hasNext());
                 } else
-                	build(handler, pf, parent, i, level, isOne, pos++, !it.hasNext());
+                	build(handler, parent, i, level, isOne, pos++, !it.hasNext());
             }
         } finally {
             it.remove();
         }
     }
-
 }

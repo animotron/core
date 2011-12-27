@@ -21,7 +21,6 @@ package org.animotron.graph.traverser;
 import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -45,7 +44,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     public AnimoResultOneStepTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if (((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
@@ -53,7 +52,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     			&& !handler.isStepMade() ) {
 
             	GraphHandler gh = new AnimoGraphHandler(handler);
-                result(gh, pf, rr, level, isOne);
+                result(gh, rr, level, isOne);
                 
 			//workaround IS and USE
 			} else if (s instanceof USE) {
@@ -67,18 +66,16 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
                     node = r.getEndNode();
-                    iterate(handler, pf, rr, s, new It(node), level);
+                    iterate(handler, rr, s, new It(node), level);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
         }
     }
     
-    protected boolean result(GraphHandler handler, PFlow pf, QCAVector rr, int level, boolean isOne) throws IOException {
+    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne) throws IOException {
     	Relationship r = rr.getClosest();
     	
-    	PFlow pflow = new PFlow(pf);
-
     	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 //    	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
 //    	boolean found;
@@ -88,11 +85,8 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 //    		i.close();
 //    	}
 //        if (!found) {
-            Iterator<QCAVector> in = Evaluator._.execute(pflow, rr.question(r), null, false);
-            iterate(handler, pflow, null, rr, in, level, isOne);
+            Iterator<QCAVector> in = Evaluator._.execute(rr.question(r), null, false);
+            iterate(handler, null, rr, in, level, isOne);
 //        }
-
-        return true;
     }
-
 }

@@ -20,7 +20,6 @@ package org.animotron.graph.serializer;
 
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
-import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.neo4j.graphdb.Relationship;
 
@@ -52,28 +51,12 @@ public abstract class AbstractSerializer {
         traverser.traverse(handler(out), v);
     }
 
-    public final void serialize(PFlow pf, Relationship r, OutputStream out) throws IOException {
-        traverser.traverse(handler(out), pf, r);
-    }
-
-    public final void serialize(PFlow pf, QCAVector v, OutputStream out) throws IOException {
-        traverser.traverse(handler(out), pf, v);
-    }
-
     public final void serialize(Relationship r, StringBuilder out) throws IOException {
         traverser.traverse(handler(out), r);
     }
 
     public final void serialize(QCAVector v, StringBuilder out) throws IOException {
         traverser.traverse(handler(out), v);
-    }
-
-    public final void serialize(PFlow pf, Relationship r, StringBuilder out) throws IOException {
-        traverser.traverse(handler(out), pf, r);
-    }
-
-    public final void serialize(PFlow pf, QCAVector v, StringBuilder out) throws IOException {
-        traverser.traverse(handler(out), pf, v);
     }
 
     public final String serialize(Relationship r) throws IOException {
@@ -85,18 +68,6 @@ public abstract class AbstractSerializer {
     public final String serialize(QCAVector v) throws IOException {
         StringBuilder out = new StringBuilder(1024);
         traverser.traverse(handler(out), v);
-        return out.toString();
-    }
-
-	public final String serialize(PFlow pf, Relationship r) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        traverser.traverse(handler(out), pf, r);
-        return out.toString();
-    }
-
-	public final String serialize(PFlow pf, QCAVector v) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
-        traverser.traverse(handler(out), pf, v);
         return out.toString();
     }
 }

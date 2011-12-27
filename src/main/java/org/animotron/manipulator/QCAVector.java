@@ -160,6 +160,13 @@ public class QCAVector {
 		return answer;
 	}
 
+	public void addContext(List<QCAVector> cs) {
+		if (context == null)
+			context = cs;
+		else
+			context.addAll(cs);
+	}
+
 	public List<QCAVector> getContext() {
 		return context;
 	}

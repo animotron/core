@@ -19,7 +19,6 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -44,13 +43,13 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, PFlow pf, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (s != null) {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
         			|| (s instanceof Evaluable && !(qS instanceof Shift))  
             	) {
-                result(handler, pf, rr, level, isOne);
+                result(handler, rr, level, isOne);
                 
 			//workaround IS and USE
 			} else if (s instanceof USE) {
@@ -64,7 +63,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
                     node = r.getEndNode();
-                    iterate(handler, pf, rr, s, new It(node), level);
+                    iterate(handler, rr, s, new It(node), level);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
