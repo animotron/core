@@ -83,7 +83,7 @@ public class MLResultTraverser extends ResultTraverser {
                     handler.end(s, parent, param, --level, isOne, pos, isLast);
                 }
             } else {
-                super.process(handler, pf, s, null, rr, level, isOne, pos, isLast);
+                super.process(handler, pf, s, parent, rr, level, isOne, pos, isLast);
             }
         }
     }
