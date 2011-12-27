@@ -21,7 +21,6 @@ package org.animotron.manipulator;
 import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Order;
-import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.marker.Marker;
@@ -39,6 +38,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import javolution.util.FastList;
 
@@ -57,9 +57,13 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public PipedInput<QCAVector> execute(Node op) throws IOException {
-		Relationship r = new InMemoryRelationship(null, op, FAKE);
-		return execute(r);
+	public PipedInput<QCAVector> execute(QCAVector vector, Node node) throws IOException {
+        final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
+        PipedInput<QCAVector> in = out.getInputStream();
+		
+        sendQuestion(out, vector, node);
+        
+        return in;
 	}
 
 	public final PipedInput<QCAVector> execute(Relationship op) throws IOException {
@@ -76,11 +80,7 @@ public abstract class Manipulator {
 
         Relationship op = vector.getClosest();
         if (sub == null) {
-			if (vector.getClosest().isType(FAKE)) {
-				sub = onQuestion(null);
-			} else {
-				sub = onQuestion(op);
-			}
+			sub = onQuestion(op);
         }
 		
 		if (sub == null) {
@@ -192,23 +192,11 @@ public abstract class Manipulator {
 		return new OnQuestion();
 	}
 
-	public void sendQuestion(final PFlow pf) {
+	public void sendQuestion(final PipedOutput<QCAVector> out, QCAVector vector, Node node) throws IOException {
 		
         List<PFlow> list = new FastList<PFlow>();
         
-        Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
-            public void onMessage(QCAVector context) {
-            	pf.sendAnswer(context);
-            }
-
-			@Override
-			public DisposingExecutor getQueue() {
-				return Executor.getFiber();
-			}
-        };
-        
-
-		IndexHits<Relationship> q = Order.context(pf.getOPNode());
+		IndexHits<Relationship> q = Order.context(node);
 		try {
 			Iterator<Relationship> it = q.iterator();
 			while (it.hasNext()) {
@@ -217,27 +205,54 @@ public abstract class Manipulator {
 				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
 				
 				if (onQuestion != null) {
-					PFlow nextPF = new PFlow(pf.getVector().question2(r));
+					PFlow nextPF = new PFlow(vector.question2(r));
 					nextPF.questionChannel().subscribe(onQuestion);
-					nextPF.answerChannel().subscribe(onAnswer);
 					
 					list.add(nextPF);
 					
 				} else {
-					pf.sendAnswer(pf.getVector().answered(r));
+					out.write(vector.answered(r));
 				}
 			}
 		} finally {
 			q.close();
 		}
 		
-		if (list.isEmpty())
-			pf.done();
-		else
-			pf.waitBeforeClosePipe(list.size());
+		if (list.isEmpty()) {
+			out.close();
+			return;
+		}
+
+		final CountDownLatch cd = new CountDownLatch(list.size());
 		
+        Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
+            public void onMessage(QCAVector context) {
+            	if (context == null)
+            		cd.countDown();
+            	
+            	try {
+            		out.write(context);
+            	} catch (Exception e) {
+            		e.printStackTrace();
+				}
+            }
+
+			@Override
+			public DisposingExecutor getQueue() {
+				return Executor.getFiber();
+			}
+        };
+        
 		for (PFlow nextPF : list) {
+			nextPF.answerChannel().subscribe(onAnswer);
+			
 			nextPF.questionChannel().publish(nextPF);
+		}
+		
+		try {
+			cd.await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 }

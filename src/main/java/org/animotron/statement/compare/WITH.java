@@ -121,7 +121,7 @@ public class WITH extends Operator implements Predicate {
 		if (actual.isEmpty()) return false;
 
 		if (debug) System.out.println("Eval expected");
-		in = Evaluator._.execute(op.getEndNode());
+		in = Evaluator._.execute(vector, op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
 			if (debug) System.out.println("expected "+e);

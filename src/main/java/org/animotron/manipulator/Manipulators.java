@@ -74,7 +74,7 @@ public class Manipulators {
 		
 		private void destructive() throws IOException {
 			for (Node n : destructive) {
-				GC._.execute(n);
+				//XXX: GC._.execute(n);
 			}
 		}
 		
