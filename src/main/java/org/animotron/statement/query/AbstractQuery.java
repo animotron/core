@@ -167,8 +167,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	if (uses != null) {
     		//check intersection
     		TraversalDescription td = getIntersectionChecktravers(new FastSet<Node>(uses));
-    		if (!td.traverse(toCheckByUSE).iterator().hasNext())
+    		if (!td.traverse(toCheckByUSE).iterator().hasNext()) {
+    			System.out.println("fildeted out by USE "+uses);
     			return false;
+    		}
     	}
     	
         for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
@@ -356,6 +358,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	    				
 	    				if (path.length() % 2 == 1 && !lastR.isType(REF._))
 	    					return EXCLUDE_AND_PRUNE;
+					} else {
+						return EXCLUDE_AND_PRUNE;
 					}
 
 					sNode = lastR.getEndNode();
