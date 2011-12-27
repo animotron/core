@@ -340,32 +340,21 @@ public class Utils {
 	}
 
 	public static boolean results(Relationship op, PFlow pf) {
-		return results(op, pf, pf.getPathHash());
+		return false;
+		//return results(op, pf, pf.getPathHash());
 	}
 
 	public static boolean results(Relationship op, PFlow pf, byte[] hash) {
-		boolean haveSome = false;
-
-		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-		for (QCAVector v : Result.get(hash, op)) {
-			pf.sendAnswer(v);
-			
-			haveSome = true;
-		}
-//		if (haveSome)
-//			System.out.println("CACHED RESULT FOUND");
-		
-//		for (Relationship res : node.getRelationships(OUTGOING)) {
+		return false;
+//		boolean haveSome = false;
+//
+//		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
+//		for (QCAVector v : Result.get(hash, op)) {
+//			pf.sendAnswer(v);
 //			
-//			if (res.getType().reference().startsWith("RESULT")) {
-//				//System.out.println("GET result = "+res);
-//				
-//				pf.sendAnswer(res);
-//				
-//				haveSome = true;
-//			}
+//			haveSome = true;
 //		}
-		return haveSome;
+//		return haveSome;
 	}
 	
 	public static boolean haveContext(PFlow pf) {
@@ -374,33 +363,6 @@ public class Utils {
 	
 	public static boolean haveContext(Node node) {
 		return CONTEXT.has(node);
-		
-//		IndexHits<Relationship> q = Order.queryDown(node);
-//		try {
-//			while (q.hasNext()) {
-//				Relationship r = q.next();
-//				
-//				Statement s = Statements.relationshipType(r);
-//				if (r.isType(org.animotron.statement.operator.REF._)
-//					|| r.isType(REF)
-//					|| s instanceof Suffix) 
-//					
-//					continue;
-//				
-//				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
-//				
-//				if (onQuestion != null) {
-//					return true;
-//					
-//				} else {
-//					return true;
-//				}
-//			}
-//			
-//			return false;
-//		} finally {
-//			q.close();
-//		}
 	}
 
 	public static Relationship relax(Relationship relation) {
@@ -457,16 +419,16 @@ public class Utils {
 				//store to relationship arrow
 				RID.set(res, r.getId());
 				//for debug
-				if (context != null) {
-					if (context.size() > 1) System.out.println("WARNING ... more then one context for CID");
-					//XXX: rewrite!
-					for (QCAVector c : context) {
-						try {
-							CID.set(res, c.mashup());
-						} catch (Exception e) {
-						}
-					}
-				}
+//				if (context != null) {
+//					if (context.size() > 1) System.out.println("WARNING ... more then one context for CID");
+//					//XXX: rewrite!
+//					for (QCAVector c : context) {
+//						try {
+//							CID.set(res, c.mashup());
+//						} catch (Exception e) {
+//						}
+//					}
+//				}
 				Result.add(res, hash);
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;

@@ -60,6 +60,7 @@ public class ResultHits extends AbstractIndexHits<QCAVector> implements IndexHit
 		if (!it.hasNext()) return null;
 		
 		Relationship r = it.next();
+		//XXX: rewrite
 		Relationship c = null;
 		try {
 			long id = (Long)r.getProperty(CID.name());
