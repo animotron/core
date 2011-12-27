@@ -40,6 +40,8 @@ public class THIS extends Operator implements Reference, Evaluable {
 
 	private THIS() { super("this"); }
 	
+	private static boolean debug = true;
+	
     @Override
 	public OnQuestion onCalcQuestion() {
 		return question;
@@ -60,24 +62,28 @@ public class THIS extends Operator implements Reference, Evaluable {
 			Utils.debug(THIS._, op, thes);
 			
 			if (!Utils.results(pf)) {
-				
-				for (QCAVector r : pf.getPFlowPath()) {
-					//System.out.println(r);
-					List<QCAVector> cs = r.getContext();
-					if (cs != null)
-						for (QCAVector c : cs) {
-							Relationship toCheck = c.getQuestion();
-							if (toCheck.isType(AN._)) {
-								if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
-									pf.sendAnswer(new QCAVector(op, c.getUnrelaxedAnswer(), c.getContext()));
-									pf.done();
-									return;
-								}
-							}
-						}
-				}
+				search(pf, thes, pf.getVector().getContext());
 			}
 			pf.done();
 		}
 	};
+	
+	private boolean search(final PFlow pf, final Set<Node> thes, List<QCAVector> cs) {
+		if (cs != null) {
+			for (QCAVector c : cs) {
+				//if (debug) System.out.println(c);
+				Relationship toCheck = c.getQuestion();
+				if (toCheck.isType(AN._)) {
+					if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
+						if (debug) System.out.println("answer "+c.getUnrelaxedAnswer());
+						pf.sendAnswer(new QCAVector(pf.getOP(), c.getUnrelaxedAnswer(), c.getContext()));
+						return true;
+					}
+				}
+				if (search(pf, thes, c.getContext()))
+					return true;
+			}
+		}
+		return false;
+	}
 }

@@ -18,6 +18,7 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.Result;
 import org.animotron.manipulator.Evaluator;
@@ -55,9 +56,14 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     public void traverse(GraphHandler handler, PFlow pf, Relationship r) throws IOException {
         handler.startGraph();
-        QCAVector v = pf.addContextPoint(r);
-        build(handler, pf, null, r, 0, true, 0, true);
-        pf.popContextPoint(v);
+
+		try {
+			PFlow pflow = new PFlow(pf, r);
+	        build(handler, pflow, null, r, 0, true, 0, true);
+		} catch (AnimoException e) {
+			pf.sendException(e);
+		}
+
         handler.endGraph();
     }
 

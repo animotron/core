@@ -71,8 +71,8 @@ public class EACH extends Combinator {
 						}
 					else {
 						for (QCAVector r : set) {
-							//System.out.println("!!!! "+r);
 							QCAVector rr = new QCAVector(pf.getOP(), r, element);
+							System.out.println("!!!! "+rr);
 							pf.sendAnswer(rr);
 						}
 					}

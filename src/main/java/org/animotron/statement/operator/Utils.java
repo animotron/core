@@ -247,7 +247,7 @@ public class Utils {
 				PipedInput<QCAVector> in = Evaluator._.execute(new PFlow(pf), r);
 				for (QCAVector e : in) {
 					PFlow _pf_ = new PFlow(pf);
-					_pf_.addContextPoint(e);
+					//_pf_.addContextPoint(e);
 					
 					Relationship result = e.getUnrelaxedAnswer();
 					
@@ -438,13 +438,17 @@ public class Utils {
 
 	public static void debug(Statement st, Relationship op, Set<Node> thes) {
 		System.out.print(st.name()+" "+op.getId()+" ");
-		for (Node theNode : thes) {
-			try {
-				System.out.print("'"+name(theNode)+"'");
-			} catch (Exception e) {
-				System.out.print("???");
+		if (thes.isEmpty())
+			System.out.print("no the-nodes in bag!");
+		else {
+			for (Node theNode : thes) {
+				try {
+					System.out.print("'"+name(theNode)+"'");
+				} catch (Exception e) {
+					System.out.print("???");
+				}
+				System.out.print(" ["+theNode+"], ");
 			}
-			System.out.print(" ["+theNode+"], ");
 		}
 		System.out.println();
 	}

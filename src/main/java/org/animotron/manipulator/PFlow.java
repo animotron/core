@@ -40,10 +40,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
 import static org.animotron.graph.RelationshipTypes.REF;
@@ -67,7 +64,8 @@ public class PFlow {
 	private Relationship op = null;
 	private Node opNode = null;
 	
-	private Vector<QCAVector> path = new Vector<QCAVector>();
+	//private Vector<QCAVector> path = new Vector<QCAVector>();
+	private QCAVector path;
 	
 	public PFlow(Manipulator m) {
 		parent = null;
@@ -80,7 +78,7 @@ public class PFlow {
 		this.m = m;
 
 		this.op = op; 
-		path.add(new QCAVector(op));
+		path = new QCAVector(op);
 	}
 
 	public PFlow(PFlow parent) {
@@ -88,7 +86,7 @@ public class PFlow {
 		this.m = parent.m;
 		
 		//XXX: maybe, clone faster?
-		path.addAll(parent.path);
+		path = parent.path;
 	}
 	
 	@Deprecated //use one with vector
@@ -102,24 +100,21 @@ public class PFlow {
 		this.m = parent.m;
 		
 		//XXX: maybe, clone faster?
-		path.addAll(parent.path);
+		path = parent.path;
+		path = path.question(op);
 		
 		cyclingDetection(op);
 
-		if (path.isEmpty())
-			path.add(new QCAVector(op));
-		else if (!path.firstElement().getQuestion().equals(op))
-			path.add(new QCAVector(op, path.firstElement()));
-		
 		this.op = op;
 	}
 
 	public PFlow(PFlow parent, Node opNode) {
+		System.out.println("WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG");
 		this.parent = parent;
 		this.m = parent.m;
 		
 		//XXX: maybe, clone faster?
-		path.addAll(parent.path);
+		path = parent.path;
 
 		this.opNode = opNode;
 	}
@@ -128,10 +123,9 @@ public class PFlow {
 		this.parent = parent;
 		this.m = parent.m;
 		
-		//XXX: maybe, clone faster?
-		path.addAll(parent.path);
+		path = vector;
 		
-		addContextPoint(vector);
+		//addContextPoint(vector);
 
 		this.op = vector.getUnrelaxedClosest();
 	}
@@ -163,15 +157,15 @@ public class PFlow {
 
 	private void cyclingDetection(Relationship op) throws AnimoException {
 		int deep = 0; int count = 0;
-		for (QCAVector v : path) {
-			if (deep > 0 && v.haveRelationship(op)) {
+		//for (QCAVector v : path) {
+			if (deep > 0 && path.haveRelationship(op)) {
 				if (count > 2)
 					throw new AnimoException(op, "cycling detected "+path);
                 else
 					count++;
 			}
 			deep++;
-		}
+		//}
 	}
 
 	public PFlow getParent() {
@@ -184,12 +178,12 @@ public class PFlow {
 
 	//XXX: still required?
 	public Relationship getStartOP() {
-		return path.lastElement().getQuestion();
+		return path.getQuestion();
 	}
 	
 	//XXX: still required?
 	public Node getStartNode() {
-		return path.lastElement().getQuestion().getEndNode();
+		return path.getQuestion().getEndNode();
 	}
 
 	public Node getOPNode() {
@@ -226,7 +220,7 @@ public class PFlow {
 
 			Relationship createdAnswer = Utils.createResult( this, op.getEndNode(), answer, rType, hash );
 			
-			parent.answerChannel().publish(path.firstElement().answered(createdAnswer));
+			parent.answerChannel().publish(path.answered(createdAnswer));
 		}
 	}
 
@@ -332,7 +326,7 @@ public class PFlow {
 		return m;
 	}
 	
-	public List<QCAVector> getPFlowPath() {
+	public QCAVector getPFlowPath() {
 		return path;
 	}
 	
@@ -433,60 +427,60 @@ public class PFlow {
 	}
 
 
-	public QCAVector addContextPoint(QCAVector vector) {
-		boolean debug = false;
-		if (debug) System.out.print("adding "+this+" "+vector);
-//		System.out.println(new IOException().getStackTrace()[1]);
-		if (path.isEmpty()) {
-			if (debug) System.out.println(" (added)");
-			path.insertElementAt(vector, 0);
-			return vector;
-			
-		} else if (!path.isEmpty()) {
-			QCAVector v = path.get(0);
-			if (v.merged(vector)) {
-				//path.set(0, vector);
-				if (debug) System.out.println(" (merge)");
-				return vector;
-			} else {
-				path.insertElementAt(vector, 0);
-				if (debug) System.out.println(" (added)");
-				return vector;
-			}
-		}
-		if (debug) System.out.println(" (ignored)");
-		return null;
-	}
-
-	public QCAVector addContextPoint(Relationship r) {
-		return addContextPoint(new QCAVector(r));
-	}
-
-	public void popContextPoint(QCAVector vector) {
-		//System.out.println("pop "+this+" "+path);
-		if (vector == null) return;
-		
-		if (path.size() == 0) {
-			System.out.println("WARNING - path is empty");
-			return;
-		}
-		
-//		if (path.get(0) == vector)
-//			path.remove(0);
-		
-		path.set(0, vector);
-	}
+//	public QCAVector addContextPoint(QCAVector vector) {
+//		boolean debug = false;
+//		if (debug) System.out.print("adding "+this+" "+vector);
+////		System.out.println(new IOException().getStackTrace()[1]);
+//		if (path.isEmpty()) {
+//			if (debug) System.out.println(" (added)");
+//			path.insertElementAt(vector, 0);
+//			return vector;
+//			
+//		} else if (!path.isEmpty()) {
+//			QCAVector v = path.get(0);
+//			if (v.merged(vector)) {
+//				//path.set(0, vector);
+//				if (debug) System.out.println(" (merge)");
+//				return vector;
+//			} else {
+//				path.insertElementAt(vector, 0);
+//				if (debug) System.out.println(" (added)");
+//				return vector;
+//			}
+//		}
+//		if (debug) System.out.println(" (ignored)");
+//		return null;
+//	}
+//
+//	public QCAVector addContextPoint(Relationship r) {
+//		return addContextPoint(new QCAVector(r));
+//	}
+//
+//	public void popContextPoint(QCAVector vector) {
+//		//System.out.println("pop "+this+" "+path);
+//		if (vector == null) return;
+//		
+//		if (path.size() == 0) {
+//			System.out.println("WARNING - path is empty");
+//			return;
+//		}
+//		
+////		if (path.get(0) == vector)
+////			path.remove(0);
+//		
+//		path.set(0, vector);
+//	}
 
 	public byte[] getPathHash() {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();  
 		DataOutputStream dos = new DataOutputStream(bos);  
 		
-		for (QCAVector p : path) {
+//		for (QCAVector p : path) {
 			try {
-				p.collectHash(dos);
+				path.collectHash(dos);
 			} catch (IOException e) {
 			}
-		}
+//		}
 		MessageDigest md = MessageDigester.md();
 		md.update(bos.toByteArray());
 		return md.digest();
@@ -509,21 +503,8 @@ public class PFlow {
 	public Relationship getLastContext() {
 		boolean debug = false;
 		if (debug) System.out.print("PFlow get last context ");
-//		for (QCAVector v : path) {
-//			Relationship r = v.getQuestion();
-//			if (r.isType(AN._)) {
-//				if (debug) System.out.println(r);
-//				return r;
-//			} else if (r.isType(REF)) {
-//				if (debug) System.out.println(r);
-//				return r;
-//			} else if (r.isType(RESULT)) {
-//				if (debug) System.out.println(r);
-//				return r;
-//			}
-//		}
-		if (debug) System.out.println(path.lastElement());
-		return path.lastElement().getQuestion();
+		if (debug) System.out.println(path);
+		return path.getQuestion();
 	}
 
 	private TraversalDescription get_td_flow() {
@@ -556,12 +537,12 @@ public class PFlow {
 	public boolean isInStack(Relationship r) {
 		boolean debug = false;
 		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
-		for (QCAVector v : path) {
-			if (v.haveRelationship(r)) {
+		//for (QCAVector v : path) {
+			if (path.haveRelationship(r)) {
 				if (debug) System.out.println("FOUND!!!");
 				return true;
 			}
-		}
+		//}
 		if (debug) System.out.println("NOT FOUND");
 		return false;
 
@@ -572,7 +553,7 @@ public class PFlow {
 		sb.append("DEBUG PFlow ");
 		//sb.append(Utils.shortID(this));
 		sb.append("\nPath = ");
-		sb.append(Arrays.toString(path.toArray()));
+		sb.append(path);
 		sb.append("\n");
 		sb.append("OPs ");
 		ops(sb);
@@ -585,6 +566,6 @@ public class PFlow {
 	}
 
 	public QCAVector getVector() {
-		return path.firstElement();
+		return path;
 	}
 }

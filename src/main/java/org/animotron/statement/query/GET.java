@@ -114,7 +114,7 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) {
 			
-			//Utils.debug(GET._, op, thes);
+			Utils.debug(GET._, op, thes);
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {
@@ -146,26 +146,14 @@ public class GET extends AbstractQuery implements Shift {
 					
 					if (debug) System.out.println("\nGET ["+op+"] empty ");
 
-					boolean first = true;
-					boolean rSet = false;
-					for (QCAVector vector : pf.getPFlowPath()) {
-						//System.out.println("CHECK PFLOW "+vector);
-						if (first) {
-							first = false;
-
-							if (vector.getContext() == null) continue;
-							
-							Set<QCAVector> refs = new FastSet<QCAVector>();
-							for (QCAVector v : vector.getContext()) {
-								refs.add(v);
-								
-							}
-							rSet = get(pf, refs, thes, visitedREFs); 
-							
-						} else {
-							rSet = get(pf, vector, thes, visitedREFs);
+					QCAVector vector = pf.getVector();
+					if (vector.getContext() != null) {
+					
+						Set<QCAVector> refs = new FastSet<QCAVector>();
+						for (QCAVector v : vector.getContext()) {
+							refs.add(v);
 						}
-						if (rSet) break;
+						get(pf, refs, thes, visitedREFs);
 					}
 				}
 			}
