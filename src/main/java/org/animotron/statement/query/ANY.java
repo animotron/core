@@ -90,15 +90,19 @@ public class ANY extends AbstractQuery implements Reference {
 		
 			        for (Path path : td_IS_leaf.traverse(node)) {
 			        	
-			        	if (debug) System.out.println(path);
-
 			        	Relationship r = path.lastRelationship();
+
+			        	if (debug) System.out.println(path);
+			        	if (debug) System.out.println("have context = "+Utils.haveContext(r.getEndNode()));
+
 			        	if (!Utils.haveContext(r.getEndNode())) {
 			        		
 			        		//XXX: need better check, it can be reference from other then AN
 			        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) //XXX: sure that StartNode? 
+			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) { //XXX: sure that StartNode? 
+					        	if (debug) System.out.println("continue");
 			        			continue;
+			        		}
 
 			        		try {
 			        			Relationship res = getThe(r.getStartNode());

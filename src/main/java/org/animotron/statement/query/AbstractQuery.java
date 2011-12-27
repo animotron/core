@@ -168,7 +168,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		//check intersection
     		TraversalDescription td = getIntersectionChecktravers(new FastSet<Node>(uses));
     		if (!td.traverse(toCheckByUSE).iterator().hasNext()) {
-    			System.out.println("fildeted out by USE "+uses);
+    			if (debugUSE) System.out.println("fildeted out by USE "+uses);
     			return false;
     		}
     	}
@@ -268,62 +268,6 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	
 		return new Set[] {directed, uses, deepestSet};
     }
-
-//	protected Set<Node>[] getUSEs(Node start, Relationship end) {
-//
-//    	Set<Node> uses = null;
-//    	Set<Node> directed = null;
-//    	
-//    	TraversalDescription td = getUSEtravers(end);
-//    	
-//    	int deep = 0;
-//    	int deepest = 0;
-//    	Node deepestNode = null;
-//
-//		for (Path path : td.traverse(start)) {
-//			//System.out.println(" path = "+path);
-//			
-//			Node lastNode = path.startNode();
-//			boolean isDirected = true;
-//			deep = 0;
-//			for (Relationship p : path.relationships()) {
-//				if (p.isType(USE._)) {
-//					
-//					if (isDirected) {
-//						if (directed == null) directed = new FastSet<Node>();
-//						directed.add( p.getEndNode() );
-//						
-//						if (deepest < deep) {
-//							deepestNode = p.getEndNode();
-//							deepest = deep;
-//						}
-//						
-//					} else {
-//						if (uses == null) uses = new FastSet<Node>();
-//						uses.add( p.getEndNode() );
-//					}
-//					break;
-//				
-//				} else if (!(p.isType(AN._))) {
-//					break;
-//				}
-//				
-//				if (isDirected && !lastNode.equals(p.getEndNode()))
-//					isDirected = false;
-//				else {
-//					deep++;
-//					lastNode = p.getStartNode();
-//				}
-//			}
-//		}
-//
-//		Set<Node> deepestSet = null;
-//		if (deepestNode != null) {
-//			deepestSet = new FastSet<Node>();
-//			deepestSet.add(deepestNode);			
-//		}
-//		return new Set[] {directed, uses, deepestSet};
-//    }
 
 	protected Relationship getThe(Node node) {
 		return THE._.get((String) Properties.NAME.get(node));
