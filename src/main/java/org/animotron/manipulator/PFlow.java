@@ -475,12 +475,12 @@ public class PFlow {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();  
 		DataOutputStream dos = new DataOutputStream(bos);  
 		
-//		for (QCAVector p : path) {
-			try {
-				path.collectHash(dos);
-			} catch (IOException e) {
-			}
-//		}
+		if (path == null) return new byte[0];
+		try {
+			path.collectHash(dos);
+		} catch (IOException e) {
+		}
+
 		MessageDigest md = MessageDigester.md();
 		md.update(bos.toByteArray());
 		return md.digest();
