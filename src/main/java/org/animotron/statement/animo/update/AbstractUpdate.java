@@ -84,7 +84,9 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 getThe(i, the);
             }
         } else {
-            the.add(v.getClosest().getEndNode().getSingleRelationship(THE._, Direction.INCOMING));
+        	Relationship r = v.getClosest().getEndNode().getSingleRelationship(THE._, Direction.INCOMING);
+        	if (r != null)
+        		the.add(r);
         }
     }
 
