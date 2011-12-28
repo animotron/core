@@ -33,8 +33,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.SHALL;
-import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -148,14 +146,25 @@ public class GET extends AbstractQuery implements Shift {
 					
 					if (debug) System.out.println("\nGET ["+op+"] empty ");
 
-					QCAVector vector = pf.getVector();
-					if (vector.getContext() != null) {
-					
-						Set<QCAVector> refs = new FastSet<QCAVector>();
-						for (QCAVector v : vector.getContext()) {
-							refs.add(v);
+					FastSet<QCAVector> refs = FastSet.newInstance();
+					try {
+						QCAVector vector = pf.getVector();
+						if (vector.getContext() != null) {
+						
+							for (QCAVector v : vector.getContext()) {
+								refs.add(v);
+							}
 						}
+						
+						vector = vector.getPrecedingSibling();
+						while (vector != null) {
+							refs.add(vector);
+							vector = vector.getPrecedingSibling();
+						}
+						
 						get(pf, refs, thes, visitedREFs);
+					} finally {
+						FastSet.recycle(refs);
 					}
 				}
 			}
