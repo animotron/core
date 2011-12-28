@@ -25,6 +25,7 @@ import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -77,6 +78,9 @@ public class GET extends AbstractQuery implements Shift {
 
 		@Override
 		public void onMessage(final PFlow pf) {
+
+			System.out.println("GET "+Thread.currentThread());
+
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
@@ -103,7 +107,6 @@ public class GET extends AbstractQuery implements Shift {
 
 			evalGet(pf, op, node, thes, visitedREFs);
 			
-			pf.await();
 			pf.done();
 		}
 
@@ -120,9 +123,10 @@ public class GET extends AbstractQuery implements Shift {
 			if (!Utils.results(pf)) {
 				//no pre-calculated result, calculate it
 				
-				Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
+				OnContext onContext = new OnContext(Executor.getFiber()) {
 					@Override
 					public void onMessage(QCAVector vector) {
+						System.out.println("GET on context "+Thread.currentThread());
 						if (debug) System.out.println("GET ["+op+"] vector "+vector);
 						
 						if (vector == null) {
@@ -132,16 +136,12 @@ public class GET extends AbstractQuery implements Shift {
 						
 						get(pf, vector, thes, visitedREFs);
 					}
-
-					@Override
-					public DisposingExecutor getQueue() {
-						return Executor.getFiber();
-					}
 				};
-				pf.answerChannel().subscribe(onContext);
+				//pf.answerChannel().subscribe(onContext);
 				
 				if (Utils.haveContext(pf)) {
-					super.onMessage(pf);
+					Evaluator.sendQuestion(onContext, pf.getVector(), node);
+					//super.onMessage(pf);
 				} else {
 					
 					if (debug) System.out.println("\nGET ["+op+"] empty ");
