@@ -101,7 +101,7 @@ public abstract class Manipulator {
 			e.printStackTrace();
 			throw new IOException(e);
 		}
-		pf.questionChannel().subscribe(Executor.getFiber(), sub);
+		pf.questionChannel().subscribe(sub);
 
 		
         //answers transfer to output

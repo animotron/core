@@ -216,33 +216,33 @@ public class Utils {
 		return out;
 	}
 	
-	public static PipedInput<QCAVector> getTheRelationships(PFlow pf, Relationship r) throws IOException {
+	public static PipedInput<QCAVector> getTheRelationships(PFlow pf, QCAVector v) throws IOException {
 		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
 		PipedInput<QCAVector> in = out.getInputStream();
 
-		getTheRelationships(pf, r, out);
+		getTheRelationships(pf, v, out);
 		out.close();
 		
 		return in;
 	}
 
-	public static void getTheRelationships(PFlow pf, Relationship r, PipedOutput<QCAVector> out) {
+	public static void getTheRelationships(PFlow pf, QCAVector v, PipedOutput<QCAVector> out) {
 		try {
 		
-			Statement s = Statements.relationshipType(r);
+			Statement s = Statements.relationshipType(v.getClosest());
 			if (s instanceof AN) {
                 try {
-                    s = Statements.name((String) THE._.reference(r));
+                    s = Statements.name((String) THE._.reference(v.getClosest()));
                     
                 } catch (Exception e) {
-    				out.write(new QCAVector(null, r));
+    				out.write(v.answered(v.getClosest()));
     				return;
                 }
 			}
 
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-				PipedInput<QCAVector> in = Evaluator._.execute(r);
+				PipedInput<QCAVector> in = Evaluator._.execute(v);
 				for (QCAVector e : in) {
 
 					Relationship result = e.getUnrelaxedAnswer();
@@ -260,7 +260,7 @@ public class Utils {
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 			} else {
-				out.write(new QCAVector(null, r));
+				out.write(v.answered(v.getClosest()));
 			}
 		} catch (Exception e) {
 			pf.sendException(e);

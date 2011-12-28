@@ -66,7 +66,7 @@ public class EACH extends Combinator {
 				while (elements.hasNext()) {
 					Relationship element = elements.next();
 					if (elements.hasNext())
-						for (QCAVector r : Utils.getTheRelationships(pf, element)) {
+						for (QCAVector r : Utils.getTheRelationships(pf, pf.getVector().question(element))) {
 							set.add(r);
 						}
 					else {
