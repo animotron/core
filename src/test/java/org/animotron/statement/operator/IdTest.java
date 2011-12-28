@@ -19,6 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -47,6 +48,7 @@ public class IdTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_03() throws Exception {
         testAnimo("the a (x) (y 1).");
         assertAnimoResult("id get y a", "\"y\".");
