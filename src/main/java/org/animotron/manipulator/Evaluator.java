@@ -60,7 +60,5 @@ public class Evaluator extends StatementManipulator {
 		public Manipulator manipulator() {
 			return Evaluator._;
 		}
-		
 	}
-
 }

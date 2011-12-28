@@ -170,16 +170,16 @@ public class PFlow {
 	}
 
 	public void done() {
+		await();
 		answerChannel().publish(null);
 	}
 
 	protected CountDownLatch waitBeforeClosePipe = null;
 	
-	public void waitBeforeClosePipe(int count) {
-		//System.out.println("waitBeforeClosePipe "+count+" "+this);
+	public CountDownLatch waitBeforeClosePipe(int count) {
 		waitBeforeClosePipe = new CountDownLatch(count);
-//		if (parent == null) answer.publish(null);
-//		else parent.answer.publish(null);
+		
+		return waitBeforeClosePipe;
 	}
 
 	public void countDown() {

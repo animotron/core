@@ -31,13 +31,14 @@ import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
+import org.jetlang.fibers.Fiber;
+import org.jetlang.fibers.ThreadFiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 import javolution.util.FastList;
@@ -192,48 +193,13 @@ public abstract class Manipulator {
 		return new OnQuestion();
 	}
 
-	public void sendQuestion(final PipedOutput<QCAVector> out, QCAVector vector, Node node) throws IOException {
-		
-        List<PFlow> list = new FastList<PFlow>();
-        
-		IndexHits<Relationship> q = Order.context(node);
-		try {
-			Iterator<Relationship> it = q.iterator();
-			while (it.hasNext()) {
-				Relationship r = it.next();
-				
-				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
-				
-				if (onQuestion != null) {
-					PFlow nextPF = new PFlow(vector.question2(r));
-					nextPF.questionChannel().subscribe(onQuestion);
-					
-					list.add(nextPF);
-					
-				} else {
-					out.write(vector.answered(r));
-				}
-			}
-		} finally {
-			q.close();
-		}
-		
-		if (list.isEmpty()) {
-			out.close();
-			return;
-		}
-
-		final CountDownLatch cd = new CountDownLatch(list.size());
-		
+	public static void sendQuestion(final PipedOutput<QCAVector> out, final QCAVector vector, final Node node) throws IOException {
         Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
             public void onMessage(QCAVector context) {
-            	if (context == null)
-            		cd.countDown();
-            	
             	try {
-            		out.write(context);
-            	} catch (Exception e) {
-            		e.printStackTrace();
+					out.write(context);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
             }
 
@@ -242,11 +208,55 @@ public abstract class Manipulator {
 				return Executor.getFiber();
 			}
         };
-        
-		for (PFlow nextPF : list) {
-			nextPF.answerChannel().subscribe(onAnswer);
+
+		sendQuestion(onAnswer, vector, node);
+		
+		out.close();
+	}
+	
+	public static void sendQuestion(final Subscribable<QCAVector> onAnswer, final QCAVector vector, final Node node) {
+		
+		final CountDownLatch cd;
+		
+		FastList<PFlow> list = FastList.newInstance();
+		try {
+			IndexHits<Relationship> q = Order.context(node);
+			try {
+				Iterator<Relationship> it = q.iterator();
+				while (it.hasNext()) {
+					Relationship r = it.next();
+					
+					Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
+					
+					if (onQuestion != null) {
+						PFlow nextPF = new PFlow(vector.question2(r));
+						nextPF.questionChannel().subscribe(onQuestion);
+						
+						list.add(nextPF);
+						
+					} else {
+						onAnswer.onMessage(vector.answered(r));
+					}
+				}
+			} finally {
+				q.close();
+			}
 			
-			nextPF.questionChannel().publish(nextPF);
+			if (list.isEmpty()) {
+				onAnswer.onMessage(null);
+				return;
+			}
+	
+			cd = new CountDownLatch(list.size());
+			
+			for (PFlow nextPF : list) {
+				nextPF.answerChannel().subscribe(onAnswer);
+				
+				nextPF.questionChannel().publish(nextPF);
+			}
+
+		} finally {
+			FastList.recycle(list);
 		}
 		
 		try {

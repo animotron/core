@@ -77,6 +77,9 @@ public class GET extends AbstractQuery implements Shift {
 
 		@Override
 		public void onMessage(final PFlow pf) {
+
+			System.out.println(Thread.currentThread());
+
 			final Relationship op = pf.getOP();
 			
 			final Node node = op.getEndNode();
@@ -103,7 +106,6 @@ public class GET extends AbstractQuery implements Shift {
 
 			evalGet(pf, op, node, thes, visitedREFs);
 			
-			pf.await();
 			pf.done();
 		}
 
@@ -123,6 +125,7 @@ public class GET extends AbstractQuery implements Shift {
 				Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
 					@Override
 					public void onMessage(QCAVector vector) {
+						System.out.println(Thread.currentThread());
 						if (debug) System.out.println("GET ["+op+"] vector "+vector);
 						
 						if (vector == null) {
@@ -138,10 +141,11 @@ public class GET extends AbstractQuery implements Shift {
 						return Executor.getFiber();
 					}
 				};
-				pf.answerChannel().subscribe(onContext);
+				//pf.answerChannel().subscribe(onContext);
 				
 				if (Utils.haveContext(pf)) {
-					super.onMessage(pf);
+					Evaluator.sendQuestion(onContext, pf.getVector(), node);
+					//super.onMessage(pf);
 				} else {
 					
 					if (debug) System.out.println("\nGET ["+op+"] empty ");

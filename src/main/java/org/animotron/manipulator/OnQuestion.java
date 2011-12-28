@@ -18,16 +18,9 @@
  */
 package org.animotron.manipulator;
 
-import javolution.util.FastList;
 import org.animotron.Executor;
-import org.animotron.graph.index.Order;
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
-
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,40 +29,53 @@ import java.util.List;
 public class OnQuestion implements Subscribable<PFlow> {
 	
 	@Override
-	public void onMessage(PFlow pf) {
+	public void onMessage(final PFlow pf) {
 		
-        List<PFlow> list = new FastList<PFlow>();
+        Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
+            public void onMessage(QCAVector context) {
+            	pf.answerChannel().publish(context);
+            }
 
-		IndexHits<Relationship> q = Order.context(pf.getOPNode());
-		try {
-			Iterator<Relationship> it = q.iterator();
-			while (it.hasNext()) {
-				Relationship r = it.next();
-				
-				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
-				
-				if (onQuestion != null) {
-					PFlow nextPF = new PFlow(pf, pf.getVector().question2(r));
-					nextPF.questionChannel().subscribe(onQuestion);
-					
-					list.add(nextPF);
-					
-				} else {
-					pf.sendAnswer(pf.getVector().answered(r));
-				}
+			@Override
+			public DisposingExecutor getQueue() {
+				return Executor.getFiber();
 			}
-		} finally {
-			q.close();
-		}
+        };
+
+		Evaluator.sendQuestion(onAnswer, pf.getVector(), pf.getVector().getUnrelaxedClosest().getEndNode());
 		
-		if (list.isEmpty())
-			pf.done();
-		else
-			pf.waitBeforeClosePipe(list.size());
-		
-		for (PFlow nextPF : list) {
-			nextPF.questionChannel().publish(nextPF);
-		}
+//        List<PFlow> list = new FastList<PFlow>();
+//
+//		IndexHits<Relationship> q = Order.context(pf.getOPNode());
+//		try {
+//			Iterator<Relationship> it = q.iterator();
+//			while (it.hasNext()) {
+//				Relationship r = it.next();
+//				
+//				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
+//				
+//				if (onQuestion != null) {
+//					PFlow nextPF = new PFlow(pf, pf.getVector().question2(r));
+//					nextPF.questionChannel().subscribe(onQuestion);
+//					
+//					list.add(nextPF);
+//					
+//				} else {
+//					pf.sendAnswer(pf.getVector().answered(r));
+//				}
+//			}
+//		} finally {
+//			q.close();
+//		}
+//		
+//		if (list.isEmpty())
+//			pf.done();
+//		else
+//			pf.waitBeforeClosePipe(list.size());
+//		
+//		for (PFlow nextPF : list) {
+//			nextPF.questionChannel().publish(nextPF);
+//		}
 	}
 
 	@Override
