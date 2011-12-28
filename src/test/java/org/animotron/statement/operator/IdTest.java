@@ -60,4 +60,14 @@ public class IdTest extends ATest {
         assertAnimoResult("id any x with y 2", "\"b\".");
     }
 
+    @Test
+    public void test_05() throws Exception {
+        testAnimo("the a (x) (y 1).");
+        testAnimo("the b (x) (y 2).");
+        testAnimo("the c (x) (y 3).");
+        assertAnimoResult("each (all x) (\\foo id this x)", "\\foo \"a\". \\foo \"b\". \\foo \"c\". ");
+        //Or so?
+        assertAnimoResult("each (id all x) (\\foo)", "\\foo \"a\". \\foo \"b\". \\foo \"c\". ");
+    }
+
 }
