@@ -22,6 +22,9 @@ import javolution.util.FastSet;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.query.ALL;
+import org.animotron.statement.query.ANY;
+import org.animotron.statement.query.PREFER;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -73,10 +76,10 @@ public class THIS extends Operator implements Reference, Evaluable {
 			for (QCAVector c : cs) {
 				//if (debug) System.out.println(c);
 				Relationship toCheck = c.getQuestion();
-				if (toCheck.isType(AN._)) {
+				if (toCheck.isType(AN._) || toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
 					if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
 						if (debug) System.out.println("answer "+c.getUnrelaxedAnswer());
-						pf.sendAnswer(new QCAVector(pf.getOP(), c.getUnrelaxedAnswer(), c.getContext()));
+						pf.sendAnswer(pf.getVector().answered(c.getUnrelaxedAnswer(), c.getContext()));
 						return true;
 					}
 				}
