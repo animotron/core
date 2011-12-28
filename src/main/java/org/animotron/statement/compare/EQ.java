@@ -26,6 +26,7 @@ import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Operator;
@@ -60,28 +61,31 @@ public class EQ extends Operator implements Predicate {
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		if (debug) System.out.println("EQ op "+op+" ref "+ref);
+
+		QCAVector vector = pf.getVector().answered(ref);
+		vector = vector.question(op);
+
 		//XXX: fix
 		Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, pf.getVector())) {
+		for (QCAVector v : Utils.getByREF(pf, vector)) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
 		PipedInput<QCAVector> in = out.getInputStream();
 		
-		QCAVector vector = pf.getVector().answered(ref);
+		PFlow pflow = new PFlow(vector);
 		
-		PFlow pflow = new PFlow(vector.question(op));
-		
-		pflow.answerChannel().subscribe(new Subscribable<QCAVector>() {
+		pflow.answerChannel().subscribe(new OnContext(Executor.getFiber()) {
 			
 			@Override
-			public void onMessage(QCAVector message) {
+			public void onMessage(QCAVector vector) {
+				super.onMessage(vector);
 				try {
-					if (message == null)
+					if (vector == null)
 						out.close();
 
-					out.write(message);
+					out.write(vector);
 				} catch (IOException e) {
 				}
 			}
