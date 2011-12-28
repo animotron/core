@@ -22,6 +22,7 @@ import java.util.concurrent.CountDownLatch;
 
 import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
+import org.jetlang.fibers.Fiber;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -29,11 +30,11 @@ import org.jetlang.core.DisposingExecutor;
  */
 public abstract class OnContext implements Subscribable<QCAVector> {
 	
-	DisposingExecutor queue;
+	Fiber fiber;
 	CountDownLatch cd = null;
 	
-	public OnContext(DisposingExecutor queue) {
-		this.queue = queue;		
+	public OnContext(Fiber fiber) {
+		this.fiber = fiber;		
 	}
 	
 	public void setCountDown(int number) {
@@ -42,14 +43,17 @@ public abstract class OnContext implements Subscribable<QCAVector> {
 	
 	@Override
 	public void onMessage(QCAVector vector) {
-		if (vector == null && cd != null)
+		if (vector == null && cd != null) { 
 			cd.countDown();
+			if (cd.getCount() == 0)
+				fiber.dispose();
+		}
 	}
 	
 
 	@Override
 	public DisposingExecutor getQueue() {
-		return queue;
+		return fiber;
 	}
 
 	public void isDone() {

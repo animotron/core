@@ -35,6 +35,8 @@ public class OnQuestion implements Subscribable<PFlow> {
 		
 		OnContext onAnswer = new OnContext(Executor.getFiber()) {
             public void onMessage(QCAVector context) {
+            	super.onMessage(context);
+            	
             	pf.answerChannel().publish(context);
             }
         };

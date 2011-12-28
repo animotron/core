@@ -105,8 +105,10 @@ public abstract class Manipulator {
 
 		
         //answers transfer to output
-        Subscribable<QCAVector> onAnswer = new Subscribable<QCAVector>() {
+        Subscribable<QCAVector> onAnswer = new OnContext(Executor.getFiber()) {
             public void onMessage(QCAVector context) {
+            	super.onMessage(context);
+            	
             	//System.out.println("get answer "+context);
             	try {
             		if (context == null) {
@@ -168,17 +170,9 @@ public abstract class Manipulator {
 					pf.sendException(e);
 				}
             }
-
-			@Override
-			public DisposingExecutor getQueue() {
-				//System.out.println("onAnswer getQueue");
-				return Executor.getFiber();
-			}
         };
-//        System.out.println("pf "+pf);
-//        System.out.println("pf.answer.subscribe(onAnswer) "+pf.parent.answer);
 		
-        pf.answerChannel().subscribe(Executor.getFiber(), onAnswer);
+        pf.answerChannel().subscribe(onAnswer.getQueue(), onAnswer);
 
         //send question to evaluation
         pf.questionChannel().publish(pf);
@@ -196,11 +190,11 @@ public abstract class Manipulator {
 	public static void sendQuestion(final PipedOutput<QCAVector> out, final QCAVector vector, final Node node) throws IOException {
 		OnContext onAnswer = new OnContext(Executor.getFiber()) {
             public void onMessage(QCAVector context) {
+            	super.onMessage(context);
+            	
             	try {
             		if (context != null)
             			out.write(context);
-            		else
-            			cd.countDown();
 
 	        		if (cd != null && cd.getCount() == 0)
 	        			out.close();

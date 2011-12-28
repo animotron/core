@@ -126,6 +126,8 @@ public class GET extends AbstractQuery implements Shift {
 				OnContext onContext = new OnContext(Executor.getFiber()) {
 					@Override
 					public void onMessage(QCAVector vector) {
+						super.onMessage(vector);
+						
 						System.out.println("GET on context "+Thread.currentThread());
 						if (debug) System.out.println("GET ["+op+"] vector "+vector);
 						
