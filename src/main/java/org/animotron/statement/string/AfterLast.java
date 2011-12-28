@@ -18,26 +18,19 @@
  */
 package org.animotron.statement.string;
 
-import org.animotron.Properties;
 import org.animotron.expression.JExpression;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.jetlang.channels.Subscribable;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
 import static org.animotron.expression.JExpression.value;
-import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * VALUE instruction 'after-last'.
@@ -96,21 +89,8 @@ public class AfterLast extends Instruction implements Evaluable {
 					pf.sendException(e);
 					return;
 				}
-				final Node rNode = r.getEndNode();
-				final long rID = r.getId();
-				r = AnimoGraph.execute(new GraphOperation<Relationship>() {
-					@Override
-					public Relationship execute() {
-						Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
-						Relationship res = sNode.createRelationshipTo(rNode, RESULT);
-						Properties.RID.set(res, rID);
-						//Properties.CID.set(res, pf.getLastContext().getId());
-						return res;
-					}
-				});
-
-				//XXX: fix context
-				pf.sendAnswer(r);
+				
+				answered(pf, r);
             }
 
             pf.done();

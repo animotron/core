@@ -18,8 +18,18 @@
  */
 package org.animotron.statement.instruction;
 
+import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.INCOMING;
+
+import org.animotron.Properties;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
+import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Shift;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -31,7 +41,23 @@ public abstract class Instruction extends AbstractStatement implements Shift {
     public Instruction(String... name) {
         super(name);
     }
+    
+    protected void answered(final PFlow pf, final Relationship r) {
+		Relationship res = AnimoGraph.execute(new GraphOperation<Relationship>() {
+			@Override
+			public Relationship execute() {
+				Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
+				Relationship res = sNode.createRelationshipTo(r.getEndNode(), RESULT);
+				Properties.RID.set(res, r.getId());
+				//Properties.CID.set(res, pf.getLastContext().getId());
+				return res;
+			}
+		});
 
+		//XXX: fix context
+		pf.sendAnswer(pf.getVector().answered(res));
+    }
+ 
 //    @Override
 //	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
 //        return AN._.build(parent, name(), hash, ready, ignoreNotFound);
