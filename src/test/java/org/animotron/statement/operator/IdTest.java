@@ -71,16 +71,19 @@ public class IdTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_06() throws Exception {
-        testAnimo("the a (x) (y id).");
-        testAnimo("the b (x) (y id).");
-        testAnimo("the c (x) (y id).");
+        testAnimo("the a (x) (y id this).");
+        testAnimo("the b (x) (y id this).");
+        testAnimo("the c (x) (y id this).");
+
         assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo  y\"b\". \\foo y \"c\".");
     }
 
     @Test
+    @Ignore
     public void test_07() throws Exception {
-        testAnimo("the x y id.");
+        testAnimo("the x y id this.");
         testAnimo("the a x.");
         testAnimo("the b x.");
         testAnimo("the c x.");
