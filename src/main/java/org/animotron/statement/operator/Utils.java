@@ -18,7 +18,6 @@
  */
 package org.animotron.statement.operator;
 
-import javolution.util.FastList;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
@@ -30,7 +29,6 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.Suffix;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -74,67 +72,6 @@ public class Utils {
 				//relationships(IC._.relationshipType(), OUTGOING);
 
 
-//	public static PipedInput<ACQVector> getREFs(PFlow pf, final Node node) {
-//		PipedOutput<ACQVector> out = new PipedOutput<ACQVector>(); 
-//		PipedInput<ACQVector> in = out.getInputStream();
-//
-//		//System.out.println(node);
-//		try {
-//			try {
-//				Relationship theNode = THE.__((String)THE._.reference(node));
-//
-//				if (theNode != null) {
-//					List<Relationship> res = new FastList<Relationship>();
-//					res.add(theNode);
-//					
-//					return res;
-//				}
-//			} catch (Exception e) {
-//			}
-//
-//			Relationship first = null;
-//			List<Relationship> list = new FastList<Relationship>();
-//			IndexHits<Relationship> hits = Order.queryDown(node);
-//			try {
-//				for (Relationship res : hits) {
-//					if (first == null) first = res;
-//					
-//					if (res.isType(org.animotron.statement.operator.REF._))
-//						list = getTheRelationships(pf, res, list);
-//				}
-//
-//				if (first != null && list.isEmpty())
-//					getTheRelationships(pf, first, list);
-//				
-//			} finally {
-//				hits.close();
-//			}
-//			return list;
-//
-//		} catch (Exception e) {
-//			pf.sendException(e);
-//		}
-//		return null;
-//	}
-
-	@Deprecated
-	public static List<Relationship> getSuffixes(final Node node) {
-		List<Relationship> list = null;
-		IndexHits<Relationship> hits = Order.queryDown(node);
-		try {
-			for (Relationship res : hits) {
-				Statement s = Statements.relationshipType(res);
-				if (s instanceof Suffix) {
-					if (list == null) list = new FastList<Relationship>();
-					list.add(res);
-				}
-			}
-		} finally {
-			hits.close();
-		}
-		return list;
-	}
-	
 	public static PipedInput<QCAVector> getByREF(final PFlow pf) {
 		return getByREF(pf, pf.getVector());
 	}
