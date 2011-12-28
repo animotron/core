@@ -181,7 +181,7 @@ public class Utils {
 				PipedInput<QCAVector> in = Evaluator._.execute(v);
 				for (QCAVector e : in) {
 
-					Relationship result = e.getUnrelaxedAnswer();
+					Relationship result = e.getAnswer();
 					
 					if (result.isType(REF) 
 							|| result.isType(org.animotron.statement.operator.REF._)
