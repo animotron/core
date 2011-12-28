@@ -294,7 +294,7 @@ public class GET extends AbstractQuery implements Shift {
 				if (st instanceof AN) {
 					//System.out.println(r);
 					for (QCAVector v : AN.getREFs(pf, prev)) {
-						Relationship t = v.getAnswer();
+						Relationship t = v.getClosest();
 						
 						prev.addAnswer(v);
 						

@@ -157,24 +157,23 @@ public class Utils {
 				}
 			} catch (Exception e) {
 			}
-
-			Relationship first = null;
-			IndexHits<Relationship> hits = Order.queryDown(node);
-			try {
-				for (Relationship res : hits) {
-					if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-						evaluable(pf, vector.question(res), out);
-						if (first == null)
-							first = res;
-					} else
-						break;
+			
+			if (pf != null) {
+				Relationship first = null;
+				IndexHits<Relationship> hits = Order.queryDown(node);
+				try {
+					for (Relationship res : hits) {
+						if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
+							evaluable(pf, vector.question(res), out);
+							if (first == null)
+								first = res;
+						} else
+							break;
+					}
+					
+				} finally {
+					hits.close();
 				}
-				
-//				if (first != null && out.isEmpty())
-//					evaluable(pf, first, out, op);
-				
-			} finally {
-				hits.close();
 			}
 
 			out.close();

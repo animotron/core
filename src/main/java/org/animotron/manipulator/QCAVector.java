@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javolution.util.FastList;
+import javolution.util.FastSet;
 
 import static org.animotron.utils.MessageDigester.longToByteArray;
 
@@ -201,11 +202,16 @@ public class QCAVector {
         return longToByteArray(answer.getId());
 	}
 	
-	public void debug(StringBuilder b) {
+	public void debug(StringBuilder b, FastSet<Relationship> visited) {
 		b.append("QCA(");
 		if (question == null)
 			b.append("NULL");
 		else {
+			if (visited.contains(question)) {
+				b.append(" cycling detected "+question);
+				return;
+			}
+				
 			b.append(question.getId());
 			b.append(" '");
 			b.append(question.getType());
@@ -230,11 +236,16 @@ public class QCAVector {
 				b.append(i); i++;
 				b.append("=");
 				
-				c.debug(b);
+				c.debug(b, visited);
 			}
 		}
 		b.append("}");
 		if (answer != null) {
+			if (visited.contains(answer)) {
+				b.append(" cycling detected "+answer);
+				return;
+			}
+
 			b.append(" ");
 			b.append(answer.getId());
 			b.append(" '");
@@ -251,7 +262,7 @@ public class QCAVector {
 				else
 					first = false;
 				
-				a.debug(b);
+				a.debug(b, visited);
 			}
 			b.append("*");
 			
@@ -262,12 +273,14 @@ public class QCAVector {
 	public String toString() {
 		StringBuilder b = new StringBuilder();
 		
+		FastSet<Relationship> visited = new FastSet<Relationship>();
+		
 		b.append("[");
 		b.append(super.hashCode());
 		b.append("] ");
 
 		if (debug) System.out.println("DEBUG START");
-		debug(b);
+		debug(b, visited);
 		if (debug) System.out.println("DEBUG END");
 		return b.toString();
 	}

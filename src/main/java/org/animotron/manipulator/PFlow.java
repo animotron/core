@@ -125,6 +125,7 @@ public class PFlow {
 	}
 
 	public void sendAnswer(QCAVector r) {
+		System.out.println(getOP()+" answer "+r);
 		answerChannel().publish(r);
 	}
 
