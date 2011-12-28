@@ -210,7 +210,7 @@ public class Utils {
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			out.write(v);//.getContext().get(0).answered(r)
+			out.write(v.getContext().get(0).answered(r));
 		}
 		
 		return out;
