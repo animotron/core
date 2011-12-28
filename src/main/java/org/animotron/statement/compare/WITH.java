@@ -62,17 +62,19 @@ public class WITH extends Operator implements Predicate {
 		//System.out.println("==================================================");
 		if (debug) System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
+
+		QCAVector vector = pf.getVector().answered(ref);
+		vector = vector.question(op);
+
 		Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, pf.getVector())) {
+		for (QCAVector v : Utils.getByREF(pf, vector)) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
 		PipedInput<QCAVector> in = out.getInputStream();
 		
-		QCAVector vector = pf.getVector().answered(ref);
-		
-		PFlow pflow = new PFlow(vector.question(op));
+		PFlow pflow = new PFlow(vector);
 		
 		pflow.answerChannel().subscribe(new Subscribable<QCAVector>() {
 			
@@ -104,7 +106,7 @@ public class WITH extends Operator implements Predicate {
 		if (debug) System.out.println("Eval actual");
 		for (QCAVector have : in) {
 			if (debug) System.out.println("actual get "+have);
-			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
+			IndexHits<Relationship> hits = Order.context(have.getClosest().getEndNode());
 			try {
 				for (Relationship r : hits) {
 					in = Evaluator._.execute(have.question(r));

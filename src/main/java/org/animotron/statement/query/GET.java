@@ -287,6 +287,10 @@ public class GET extends AbstractQuery implements Shift {
 		try {
 			for (Relationship r : it) {
 				//if (debug) System.out.println(r);
+				
+				if (visitedREFs != null && !visitedREFs.contains(r)) {
+					continue;
+				}
 	
 				prev = vector.question(r, prev); 
 
