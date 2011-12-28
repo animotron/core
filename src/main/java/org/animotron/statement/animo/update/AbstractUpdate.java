@@ -55,6 +55,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 execute(destination, Order.context(pf.getOP().getEndNode()));
             } catch (IOException e) {
                 pf.sendException(e);
+                return;
             }
             pf.done();
         }
