@@ -52,11 +52,12 @@ public class ID extends Operator implements Evaluable {
         public void onMessage(final PFlow pf) {
            for (QCAVector v : Utils.getByREF(pf)) {
                 try {
-                    pf.sendAnswer(
-                        new JExpression(
-                            value(
-                                Utils.name(v.getClosest().getEndNode())
-                            )
+                    pf.sendAnswer(pf.getVector().answered(
+	                        new JExpression(
+	                            value(
+	                                Utils.name(v.getClosest().getEndNode())
+	                            )
+	                        )
                         )
                     );
                 } catch (Exception e) {
