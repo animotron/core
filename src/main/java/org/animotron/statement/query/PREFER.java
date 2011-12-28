@@ -61,7 +61,7 @@ public class PREFER extends AbstractQuery implements Reference {
         	final Relationship op = pf.getOP();
             
 			if (!Utils.results(pf)) {
-	            for (QCAVector v : AN.getREFs(pf, pf.getVector(), op)) {
+	            for (QCAVector v : AN.getREFs(pf, pf.getVector())) {
 	            	
 	            	Relationship ref = v.getAnswer(); 
 	            	Node node = ref.getEndNode();

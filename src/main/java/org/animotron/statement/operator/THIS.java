@@ -55,7 +55,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 			Relationship op = pf.getOP();
 			
 			final Set<Node> thes = new FastSet<Node>(); 
-			for (QCAVector theNode : AN.getREFs(pf, pf.getVector(), op)) {
+			for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
 				thes.add(theNode.getAnswer().getEndNode());
 			}
 

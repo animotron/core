@@ -136,14 +136,14 @@ public class Utils {
 	}
 	
 	public static PipedInput<QCAVector> getByREF(final PFlow pf) {
-		return getByREF(pf, pf.getVector(), pf.getOP());
+		return getByREF(pf, pf.getVector());
 	}
 
-	public static PipedInput<QCAVector> getByREF(final PFlow pf, final QCAVector vector, final Relationship op) {
+	public static PipedInput<QCAVector> getByREF(final PFlow pf, final QCAVector vector) {
 		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
 		PipedInput<QCAVector> in = out.getInputStream();
 		
-		Node node = op.getEndNode();
+		Node node = vector.getClosest().getEndNode();
 		
 		//System.out.println(node);
 		try {
@@ -163,7 +163,7 @@ public class Utils {
 			try {
 				for (Relationship res : hits) {
 					if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-						evaluable(pf, vector.question(res), out, op);
+						evaluable(pf, vector.question(res), out);
 						if (first == null)
 							first = res;
 					} else
@@ -186,7 +186,7 @@ public class Utils {
 		return null;
 	}
 
-	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final QCAVector v, final PipedOutput<QCAVector> out, final Relationship op) throws InterruptedException, IOException {
+	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final QCAVector v, final PipedOutput<QCAVector> out) throws InterruptedException, IOException {
 		
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
@@ -210,7 +210,7 @@ public class Utils {
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			out.write(v.getContext().get(0).answered(r));
+			out.write(v);//.getContext().get(0).answered(r)
 		}
 		
 		return out;
