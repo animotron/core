@@ -42,8 +42,8 @@ public class AllAnyGetTest extends ATest {
 
     @Test
     public void test_020() throws Exception {
-        testAnimo("the john sex male.");
-        assertAnimoResult("all male", "the john sex.");
+        testAnimo("the joe male.");
+        assertAnimoResult("all male", "the joe male.");
     }
 
     @Test

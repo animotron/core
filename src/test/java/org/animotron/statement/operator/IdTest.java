@@ -77,7 +77,7 @@ public class IdTest extends ATest {
         testAnimo("the b (x) (y id this).");
         testAnimo("the c (x) (y id this).");
 
-        assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo  y\"b\". \\foo y \"c\".");
+        assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo y \"b\". \\foo y \"c\".");
     }
 
     @Test
