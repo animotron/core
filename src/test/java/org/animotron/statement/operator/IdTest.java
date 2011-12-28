@@ -68,8 +68,23 @@ public class IdTest extends ATest {
         testAnimo("the b (x) (y 2).");
         testAnimo("the c (x) (y 3).");
         assertAnimoResult("each (all x) (\\foo id this x)", "\\foo \"a\". \\foo \"b\". \\foo \"c\". ");
-        //Or so?
-        assertAnimoResult("each (id all x) (\\foo)", "\\foo \"a\". \\foo \"b\". \\foo \"c\". ");
+    }
+
+    @Test
+    public void test_06() throws Exception {
+        testAnimo("the a (x) (y id).");
+        testAnimo("the b (x) (y id).");
+        testAnimo("the c (x) (y id).");
+        assertAnimoResult("each (all x) (\\foo get y)", "\\foo \"a\". \\foo \"b\". \\foo \"c\". ");
+    }
+
+    @Test
+    public void test_07() throws Exception {
+        testAnimo("the x y id.");
+        testAnimo("the a x.");
+        testAnimo("the b x.");
+        testAnimo("the c x.");
+        assertAnimoResult("each (all x) (\\foo get y)", "\\foo \"a\". \\foo \"b\". \\foo \"c\". ");
     }
 
 }
