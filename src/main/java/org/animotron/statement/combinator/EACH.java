@@ -60,13 +60,14 @@ public class EACH extends Combinator {
 		@Override
 		public void onMessage(final PFlow pf) {
 			System.out.println("EACH EACH EACH EACH");
+			
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
 				Set<QCAVector> set = new FastSet<QCAVector>();
 				while (elements.hasNext()) {
 					Relationship element = elements.next();
 					if (elements.hasNext())
-						for (QCAVector r : Utils.getTheRelationships(pf, pf.getVector().question(element))) {
+						for (QCAVector r : Utils.getTheRelationships(pf, pf.getVector().question2(element))) {
 							set.add(r);
 						}
 					else {
