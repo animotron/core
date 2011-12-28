@@ -197,17 +197,22 @@ public abstract class Manipulator {
 		OnContext onAnswer = new OnContext(Executor.getFiber()) {
             public void onMessage(QCAVector context) {
             	try {
-					out.write(context);
-				} catch (IOException e) {
+            		if (context != null)
+            			out.write(context);
+            		else
+            			cd.countDown();
+
+	        		if (cd != null && cd.getCount() == 0)
+	        			out.close();
+            	} catch (IOException e) {
 					e.printStackTrace();
 				}
+
             }
         };
 
 		sendQuestion(onAnswer, vector, node);
 		
-		onAnswer.isDone();
-		out.close();
 	}
 	
 	public static void sendQuestion(final OnContext onAnswer, final QCAVector vector, final Node node) {
@@ -239,7 +244,8 @@ public abstract class Manipulator {
 			}
 			
 			if (list.isEmpty()) {
-				onAnswer.setCountDown(0);
+				onAnswer.setCountDown(1);
+				onAnswer.onMessage(null);				
 				return;
 			}
 	
