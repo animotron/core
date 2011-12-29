@@ -161,28 +161,38 @@ public abstract class ATest {
 
     protected void assertAnimoResultOneStep(Relationship op, String expected) throws IOException {
         assertNotNull(op);
-
         System.out.println("One step Animo result serializer...");
         String result = CachedSerializer.ANIMO_RESULT_ONE_STEP.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
-
         System.out.println();
     }
-    
+
 
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
-
         System.out.println("XML Result serializer...");
-
         PipedInputStream in = new PipedInputStream();
         PipedOutputStream out = new PipedOutputStream(in);
-
         CachedSerializer.XML.serialize(op, out);
         out.close();
         assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();
+    }
+
+    protected void assertHtmlResult(Relationship op, String expected) throws IOException, InterruptedException {
+        assertHtmlResult(op, expected, true);
+    }
+
+    protected void assertHtmlResult(Relationship op, String expected, boolean messagers) throws IOException {
+        assertNotNull(op);
+
+        if (messagers) System.out.println("HTML result serializer...");
+        String result = CachedSerializer.HTML.serialize(op);
+        if (messagers) System.out.println(result);
+        Assert.assertEquals("", expected, result);
+
+        if (messagers) System.out.println();
     }
 
     protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
