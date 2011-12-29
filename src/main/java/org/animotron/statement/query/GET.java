@@ -265,12 +265,12 @@ public class GET extends AbstractQuery implements Shift {
 							getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
 						}
 
-						cs = next.getContext();
-						if (cs != null) {
-							for (QCAVector c : cs) {
-								checkVector(c, newREFs, visitedREFs);
-							}
-						}
+						//cs = next.getContext();
+						//if (cs != null) {
+						//	for (QCAVector c : cs) {
+						//		checkVector(c, newREFs, visitedREFs);
+						//	}
+						//}
 						next = next.getPrecedingSibling();
 					}
 				}
