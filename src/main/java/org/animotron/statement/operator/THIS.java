@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.operator;
 
+import javolution.util.FastList;
 import javolution.util.FastSet;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -59,13 +60,28 @@ public class THIS extends Operator implements Reference, Evaluable {
 			
 			final Set<Node> thes = new FastSet<Node>(); 
 			for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
-				thes.add(theNode.getAnswer().getEndNode());
+				thes.add(theNode.getClosest().getEndNode());
 			}
 
 			Utils.debug(THIS._, op, thes);
 			
 			if (!Utils.results(pf)) {
-				search(pf, thes, pf.getVector().getContext());
+				FastList<QCAVector> list = FastList.newInstance();
+				try {
+					if (pf.getVector().getContext() != null)
+						list.addAll( pf.getVector().getContext() );
+					
+					QCAVector next = pf.getVector().getPrecedingSibling();
+					while (next != null) {
+						list.add(next);
+						next = next.getPrecedingSibling();
+					}
+					
+					search(pf, thes, list);
+					
+				} finally {
+					FastList.recycle(list);
+				}
 			}
 			pf.done();
 		}
@@ -74,17 +90,33 @@ public class THIS extends Operator implements Reference, Evaluable {
 	private boolean search(final PFlow pf, final Set<Node> thes, List<QCAVector> cs) {
 		if (cs != null) {
 			for (QCAVector c : cs) {
-				//if (debug) System.out.println(c);
-				Relationship toCheck = c.getQuestion();
-				if (toCheck.isType(AN._) || toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
-					if (thes.contains( Utils.getByREF(toCheck).getEndNode() )) {
-						if (debug) System.out.println("answer "+c.getUnrelaxedAnswer());
-						pf.sendAnswer(pf.getVector().answered(c.getUnrelaxedAnswer(), c.getContext()));
-						return true;
+				if (debug) System.out.println(c);
+				
+				FastList<QCAVector> list = FastList.newInstance();
+				try {
+					QCAVector next = c;
+					while (next != null) {
+						Relationship toCheck = next.getQuestion();
+						if (toCheck.isType(AN._) || toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
+							Node n = Utils.getByREF(toCheck).getEndNode();
+							if (debug) System.out.println(n);
+							if (thes.contains( n )) {
+								if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
+								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext()));
+								return true;
+							}
+						}
+						if (next.getContext() != null)
+							list.addAll(next.getContext());
+						
+						next = next.getPrecedingSibling();
 					}
+					if (search(pf, thes, list))
+						return true;
+					
+				} finally {
+					FastList.recycle(list);
 				}
-				if (search(pf, thes, c.getContext()))
-					return true;
 			}
 		}
 		return false;
