@@ -64,10 +64,10 @@ public class WITH extends Operator implements Predicate {
 		//XXX: fix
 
 		QCAVector vector = pf.getVector().answered(ref);
-		vector = vector.question(op);
+		QCAVector qVector = vector.question(op);
 
 		Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, vector)) {
+		for (QCAVector v : Utils.getByREF(pf, qVector)) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
@@ -161,18 +161,16 @@ public class WITH extends Operator implements Predicate {
 	private List<QCAVector> evaluable(Node node) throws InterruptedException, IOException {
 		List<QCAVector> list = new FastList<QCAVector>();
 		
-		IndexHits<Relationship> q = Order.queryDown(node);
+		IndexHits<Relationship> q = Order.context(node);
 		try {
 			for (Relationship i : q) {
-				if (i.isType(REF._)) continue;
-				
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
     				PipedInput<QCAVector> in = Evaluator._.execute(i);
     				for (QCAVector e : in) {
     					list.add(e);
-    					//System.out.println("get from Evaluator "+r);
+    					System.out.println("get from Evaluator "+e);
     				}
     			} else {
     				list.add(new QCAVector(null, i));

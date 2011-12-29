@@ -60,7 +60,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -77,7 +77,7 @@ public class GET extends AbstractQuery implements Shift {
 		@Override
 		public void onMessage(final PFlow pf) {
 
-			System.out.println("GET "+Thread.currentThread());
+			if (debug) System.out.println("GET "+Thread.currentThread());
 
 			final Relationship op = pf.getOP();
 			
@@ -115,7 +115,7 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) {
 			
-			Utils.debug(GET._, op, thes);
+			if (debug) Utils.debug(GET._, op, thes);
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {
@@ -126,7 +126,7 @@ public class GET extends AbstractQuery implements Shift {
 					public void onMessage(QCAVector vector) {
 						super.onMessage(vector);
 						
-						System.out.println("GET on context "+Thread.currentThread());
+						if (debug) System.out.println("GET on context "+Thread.currentThread());
 						if (debug) System.out.println("GET ["+op+"] vector "+vector);
 						
 						if (vector == null) {
@@ -251,14 +251,7 @@ public class GET extends AbstractQuery implements Shift {
 					List<QCAVector> cs = vector.getContext();
 					if (cs != null) {
 						for (QCAVector c : cs) {
-							t = c.getUnrelaxedAnswer();
-							if (t != null && !visitedREFs.contains(t))
-								newREFs.add(c);
-							else {
-								t = c.getQuestion();
-								if (!visitedREFs.contains(t))
-									newREFs.add(c);
-							}
+							checkVector(c, newREFs, visitedREFs);
 						}
 					}
 					
@@ -270,6 +263,13 @@ public class GET extends AbstractQuery implements Shift {
 								getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
 							
 							getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
+						}
+
+						cs = next.getContext();
+						if (cs != null) {
+							for (QCAVector c : cs) {
+								checkVector(c, newREFs, visitedREFs);
+							}
 						}
 						next = next.getPrecedingSibling();
 					}
@@ -289,6 +289,17 @@ public class GET extends AbstractQuery implements Shift {
 		}
 	}
 	
+	private void checkVector(final QCAVector c, final Set<QCAVector> newREFs, final Set<Relationship> visitedREFs) {
+		Relationship t = c.getUnrelaxedAnswer();
+		if (t != null && !visitedREFs.contains(t))
+			newREFs.add(c);
+		else {
+			t = c.getQuestion();
+			if (!visitedREFs.contains(t))
+				newREFs.add(c);
+		}
+	}
+	
 	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
 		QCAVector prev = null;
@@ -297,9 +308,9 @@ public class GET extends AbstractQuery implements Shift {
 			for (Relationship r : it) {
 				//if (debug) System.out.println(r);
 				
-				if (visitedREFs != null && !visitedREFs.contains(r)) {
-					continue;
-				}
+//				if (visitedREFs != null && !visitedREFs.contains(r)) {
+//					continue;
+//				}
 	
 				prev = vector.question(r, prev); 
 

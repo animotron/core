@@ -423,7 +423,7 @@ public class GetTest extends ATest {
 		testAnimo("the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 		testAnimo("the text-html (mime-type) (text) (type \"text/html\") (name \"HTML Document\") (extension \"htm\" \"html\").");
 		
-		assertAnimoResultOneStep("any mime-type with extension \"txt\"", "the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
+		//assertAnimoResultOneStep("any mime-type with extension \"txt\"", "the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 
 		assertAnimoResultOneStep("get mime-type file", "the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 	}

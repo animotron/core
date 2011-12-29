@@ -56,7 +56,6 @@ public class ALL extends AbstractQuery implements Reference {
     private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-        	final Relationship op = pf.getOP();
 			//System.out.println("ALL **************************");
             
             for (QCAVector theVector : Utils.getByREF(pf, pf.getVector())) {

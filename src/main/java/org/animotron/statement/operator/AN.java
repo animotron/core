@@ -22,7 +22,6 @@ import org.animotron.io.PipedInput;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -33,6 +32,8 @@ import org.neo4j.graphdb.Relationship;
 public class AN extends Operator implements Reference, Evaluable, Shift {
 	
 	public static final AN _ = new AN();
+	
+	private static boolean debug = false;
 	
 	private AN() { super("an"); }
 	
@@ -46,11 +47,9 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 		@Override
 		public void onMessage(final PFlow pf) {
 			
-			Relationship op = pf.getOP();
-			
 			byte[] hash = pf.getOpHash();
 
-			System.out.println("AN "+Thread.currentThread());
+			if (debug) System.out.println("AN "+Thread.currentThread());
 			//System.out.println("AN "+pf.getVector());
 			//pf.sendAnswer(new QCAVector(op,op));
 			
