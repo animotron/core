@@ -18,9 +18,7 @@
  */
 package org.animotron.graph.serializer;
 
-import com.ctc.wstx.api.EmptyElementHandler;
 import com.ctc.wstx.api.WriterConfig;
-import com.ctc.wstx.api.WstxOutputProperties;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.cache.Cache;
 import org.animotron.graph.handler.*;
@@ -52,31 +50,53 @@ public abstract class CachedSerializer extends AbstractSerializer {
 	        return new TextGraphHandler(out);
 		}
 	};
+	
+	public static CachedSerializer XML = new CachedSerializer(MLResultTraverser._, ".xml") {
+		
+	    public final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-    public static CachedSerializer XML = new StAXSerializer(".xml") {
-        private WstxOutputFactory factory = new WstxOutputFactory();
-        {
-            WriterConfig conf = factory.getConfig();
-            conf.doSupportNamespaces(true);
-            conf.enableAutomaticNamespaces(false);
-        }
+		{
+	        WriterConfig conf = OUTPUT_FACTORY.getConfig();
+	        conf.doSupportNamespaces(true);
+	        conf.enableAutomaticNamespaces(false);
+		}
+		
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+	        throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+	        try {
+	            return new StAXGraphHandler(OUTPUT_FACTORY.createXMLStreamWriter(out));
+	        } catch (XMLStreamException e) {
+	            throw new IOException(e);
+	        }
+		}
+	};
+
+    public static CachedSerializer HTML = new CachedSerializer(MLResultTraverser._, ".html") {
         @Override
-        public WstxOutputFactory getFactory() {
-            return factory;
+        protected GraphHandler handler(StringBuilder out) {
+            return new HtmlGraphHandler(out);
+        }
+
+        @Override
+        protected GraphHandler handler(OutputStream out) throws IOException {
+            return new HtmlGraphHandler(out);
         }
     };
 
-    public static CachedSerializer HTML = new StAXSerializer(".html") {
-        private WstxOutputFactory factory = new WstxOutputFactory();
-        {
-            factory.setProperty(
-                WstxOutputProperties.P_OUTPUT_EMPTY_ELEMENT_HANDLER,
-                EmptyElementHandler.HtmlEmptyElementHandler.getInstance()
-            );
-        }
+    public static CachedSerializer HTML_PART = new CachedSerializer(MLResultTraverser._, ".html.part") {
         @Override
-        public WstxOutputFactory getFactory() {
-            return factory;
+        protected GraphHandler handler(StringBuilder out) {
+            return new HtmlPartGraphHandler(out);
+        }
+
+        @Override
+        protected GraphHandler handler(OutputStream out) throws IOException {
+            return new HtmlPartGraphHandler(out);
         }
     };
 
@@ -232,31 +252,4 @@ public abstract class CachedSerializer extends AbstractSerializer {
             return out.toString();
         }
     }
-
-    private abstract static class StAXSerializer extends CachedSerializer {
-
-        protected StAXSerializer(String ext) {
-            super(MLResultTraverser._, ext);
-        }
-
-        public abstract WstxOutputFactory getFactory();
-
-        @Override
-        protected GraphHandler handler(StringBuilder out) {
-            throw new UnsupportedOperationException();
-        }
-
-        @Override
-        protected GraphHandler handler(OutputStream out) throws IOException {
-            try {
-                return new StAXGraphHandler(getFactory().createXMLStreamWriter(out));
-            } catch (XMLStreamException e) {
-                throw new IOException(e);
-            }
-        }
-
-    };
-
-
-
 }
