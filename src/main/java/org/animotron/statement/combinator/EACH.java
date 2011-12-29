@@ -60,6 +60,7 @@ public class EACH extends Combinator {
 		@Override
 		public void onMessage(final PFlow pf) {
 			System.out.println("EACH EACH EACH EACH");
+			System.out.println(pf.getVector());
 			
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
@@ -73,7 +74,6 @@ public class EACH extends Combinator {
 					else {
 						for (QCAVector r : set) {
 							QCAVector rr = new QCAVector(pf.getOP(), r, element);
-							System.out.println("!!!! "+rr);
 							pf.sendAnswer(rr);
 						}
 					}
