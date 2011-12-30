@@ -41,40 +41,35 @@ public class ConnectionTest extends ATest {
         
         JExpression.__(
 
-                new JExpression(
-                        _(THE._, "mime-type"
-                    		//,
-                            //_(AN._, "extension")
-                        )),
+                new JExpression(_(THE._, "mime-type")),
 
                 new JExpression(
-                        _(THE._, "file",
-                                _(AN._, "reference", value("file")),
-                                _(AN._, "path"),
+                    _(THE._, "file",
+                        _(AN._, "reference", value("file")),
+                        _(AN._, "path"),
 
-                                _(AN._, "extension",
-                                        _(AfterLast._,
-                                                value("."),
-                                                _(GET._, "path"))),
+                        _(AN._, "extension",
+                            _(AfterLast._,
+                                value("."),
+                                _(GET._, "path"))),
 
-                                _(AN._, "mime-type",
-                                        _(ANY._, "mime-type",
-                                                _(WITH._, "extension",
-                                                        _(GET._, "extension"))))
-                        )),
-
-                new JExpression(
-                        _(THE._, "fileA",
-                                _(AN._, "file"),
-                                _(AN._, "path", value("/home/test.txt"))
-                        )),
+                        _(ANY._, "mime-type",
+                            _(WITH._, "extension",
+                        		_(GET._, "extension")))
+                    )),
 
                 new JExpression(
-                        _(THE._, "value-plain",
-                                _(AN._, "mime-type"),
-                                _(AN._, "type", value("value/plain")),
-                                _(AN._, "extension", value("txt"), value("value"))
-                        ))
+                    _(THE._, "fileA",
+                        _(AN._, "file"),
+                        _(AN._, "path", value("/home/test.txt"))
+                    )),
+
+                new JExpression(
+                    _(THE._, "value-plain",
+                        _(AN._, "mime-type"),
+                        _(AN._, "type", value("value/plain")),
+                        _(AN._, "extension", value("txt"), value("value"))
+                    ))
 
         );
 
@@ -121,40 +116,38 @@ public class ConnectionTest extends ATest {
 
         JExpression.__(
 
-                new JExpression(
-                    _(THE._, "mime-type")
-                ),
+            new JExpression(_(THE._, "mime-type")),
 
-                new JExpression(
-                        _(THE._, "file",
-                                _(AN._, "reference", value("file")),
-                                _(AN._, "path1", value("some.path.value")),
+            new JExpression(
+                _(THE._, "file",
+                    _(AN._, "reference", value("file")),
+                    _(AN._, "path1", value("some.path.value")),
 
-                                _(AN._, "path2",
-                                        _(GET._, "path1")),
+                    _(AN._, "path2",
+                        _(GET._, "path1")),
 
-                                _(AN._, "extension1",
-                                        _(AfterLast._,
-                                                value("."),
-                                                _(GET._, "path1"))),
+                    _(AN._, "extension1",
+                        _(AfterLast._,
+                            value("."),
+                            _(GET._, "path1"))),
 
-                                _(ANY._, "mime-type",
-                                        _(WITH._, "extension",
-                                                _(GET._, "extension1")))
-                        )),
+                    _(ANY._, "mime-type",
+                        _(WITH._, "extension",
+                            _(GET._, "extension1")))
+                )),
 
-                new JExpression(
-                        _(THE._, "fileA",
-                                _(AN._, "file"),
-                                _(AN._, "path", value("/home/test.txt"))
-                        )),
+            new JExpression(
+                _(THE._, "fileA",
+                    _(AN._, "file"),
+                    _(AN._, "path", value("/home/test.txt"))
+                )),
 
-                new JExpression(
-                        _(THE._, "value-plain",
-                                _(AN._, "mime-type"),
-                                _(AN._, "type", value("value/plain")),
-                                _(AN._, "extension", value("txt"), value("value"))
-                        ))
+            new JExpression(
+                _(THE._, "value-plain",
+                    _(AN._, "mime-type"),
+                    _(AN._, "type", value("value/plain")),
+                    _(AN._, "extension", value("txt"), value("value"))
+                ))
 
         );
         JExpression test;
@@ -211,10 +204,9 @@ public class ConnectionTest extends ATest {
                             value("."),
                             _(GET._, "path"))),
 
-                    _(AN._, "mime-type",
-                        _(ANY._, "mime-type",
-                            _(WITH._, "extension",
-                                _(GET._, "extension"))))
+                    _(ANY._, "mime-type",
+                        _(WITH._, "extension",
+                            _(GET._, "extension")))
             )),
 
             new JExpression(

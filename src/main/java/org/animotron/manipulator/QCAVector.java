@@ -394,7 +394,7 @@ public class QCAVector {
 			return this;
 		
 		if (answer == null) {
-			QCAVector v = new QCAVector(q);
+			QCAVector v = new QCAVector(q, context);
 			v.setPrecedingSibling(this);
 			return v;
 		}
