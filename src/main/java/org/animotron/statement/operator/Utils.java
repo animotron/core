@@ -30,9 +30,12 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
@@ -46,6 +49,9 @@ import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
+import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_CONTINUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -71,7 +77,36 @@ public class Utils {
 				relationships(AN._, INCOMING);
 				//relationships(IC._.relationshipType(), OUTGOING);
 
+	public static TraversalDescription td_THE = 
+			Traversal.description().
+				breadthFirst().
+				evaluator(Evaluators.excludeStartPosition()).
+	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+	    			@Override
+	    			public Evaluation evaluate(Path path) {
+	    				//System.out.println(path);
 
+	    				
+
+	    				if (path.length() == 0)
+	    					return EXCLUDE_AND_CONTINUE;
+	    				
+	    				if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+	    				if (path.lastRelationship().isType(org.animotron.statement.operator.REF._) 
+	    						|| path.lastRelationship().isType(RESULT))
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+
+    					if (path.lastRelationship().isType(THE._))
+	    					return INCLUDE_AND_CONTINUE;
+	    				
+	    				return EXCLUDE_AND_CONTINUE;
+	    			}
+	    		});
+
+	
 	public static PipedInput<QCAVector> getByREF(final PFlow pf) {
 		return getByREF(pf, pf.getVector());
 	}
