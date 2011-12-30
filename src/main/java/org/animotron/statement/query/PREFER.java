@@ -58,7 +58,7 @@ public class PREFER extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
 			//System.out.println("ALL **************************");
         	
-        	final Relationship op = pf.getOP();
+        	//final Relationship op = pf.getOP();
             
 			if (!Utils.results(pf)) {
 	            for (QCAVector v : AN.getREFs(pf, pf.getVector())) {
@@ -94,11 +94,15 @@ public class PREFER extends AbstractQuery implements Reference {
 				        		try {
 				        			Relationship res = getThe(r.getStartNode());
 				        			if (filtering(pf, res, uses)) {
-					        			try {
-					        				pf.sendAnswer( res );
-					        			} catch (Exception e) {}
+				        				pf.sendAnswer( res );
 				        			}
 				        		} catch (Exception e) {
+			        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
+			        					Relationship res = p.lastRelationship();
+					        			if (filtering(pf, res, uses)) {
+					        				pf.sendAnswer( res );
+					        			}
+			        				}
 								}
 				        	} else {
 				    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
