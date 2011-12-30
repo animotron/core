@@ -63,30 +63,25 @@ public class Utils {
 		Traversal.description().
 			breadthFirst().
 			relationships(RESULT, OUTGOING );
-			//.evaluator(Evaluators.excludeStartPosition());
 
 	public static TraversalDescription td_eval_IS = 
 			Traversal.description().
 				breadthFirst().
 				relationships(AN._, OUTGOING);
-				//relationships(IC._.relationshipType(), OUTGOING);
 		
 	public static TraversalDescription upIS = 
 			Traversal.description().
 				breadthFirst().
 				relationships(AN._, INCOMING);
-				//relationships(IC._.relationshipType(), OUTGOING);
 
 	public static TraversalDescription td_THE = 
 			Traversal.description().
 				breadthFirst().
-				evaluator(Evaluators.excludeStartPosition()).
+				relationships(AN._, INCOMING).
+				relationships(THE._, INCOMING).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 	    			@Override
 	    			public Evaluation evaluate(Path path) {
-	    				//System.out.println(path);
-
-	    				
 
 	    				if (path.length() == 0)
 	    					return EXCLUDE_AND_CONTINUE;
