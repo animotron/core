@@ -23,6 +23,7 @@ import javolution.util.FastSet;
 
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
+import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;
@@ -123,6 +124,7 @@ public class WITH extends Operator implements Predicate {
 		if (actual.isEmpty()) return false;
 
 		if (debug) System.out.println("Eval expected");
+		qVector = pf.getVector().answered(pf.getVector().getClosest());
 		in = Evaluator._.execute(qVector, op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
@@ -184,4 +186,5 @@ public class WITH extends Operator implements Predicate {
 		
 		return list;
 	}
+	
 }
