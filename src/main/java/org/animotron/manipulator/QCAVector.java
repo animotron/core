@@ -372,7 +372,10 @@ public class QCAVector {
 		FastList<QCAVector> c = new FastList<QCAVector>();
 		c.add(context);
 		if (this.context != null) {
-			c.addAll(this.context);
+			for (QCAVector v : this.context) {
+				if (v == context) continue;
+				c.add(v);
+			}
 		}
 			
 		return new QCAVector(question, createdAnswer, c, preceding_sibling);
