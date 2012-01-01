@@ -198,10 +198,13 @@ public class Utils {
 			Statement s = Statements.relationshipType(v.getClosest());
 			if (s instanceof AN) {
                 try {
+//                	for (QCAVector a : AN._.getREFs(pf, v)) {
+//                		out.write(a);
+//                	}
                     s = Statements.name((String) THE._.reference(v.getClosest()));
                     
                 } catch (Exception e) {
-    				out.write(v.answered(v.getClosest()));
+    				out.write(v);//.answered(v.getClosest())
     				return;
                 }
 			}
@@ -226,7 +229,7 @@ public class Utils {
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 			} else {
-				out.write(v.answered(v.getClosest()));
+				out.write(v);//.answered(v.getClosest())
 			}
 		} catch (Exception e) {
 			pf.sendException(e);
