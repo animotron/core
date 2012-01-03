@@ -34,6 +34,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
+import static org.animotron.graph.RelationshipTypes.TRI;
+
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
@@ -93,8 +95,9 @@ public class MUL extends MathOperator implements Prepare {
 	
 						@Override
 						public Void execute() throws Exception {
-							Relationship r = thes.get(0).createRelationshipTo(thes.get(1), MUL._);
-							Properties.RID.set(r, pf.getOP().getStartNode().getId());
+							Relationship r = thes.get(0).createRelationshipTo(thes.get(1), TRI);
+							Properties.TYPE.set(r, MUL._.name());
+							Properties.TO_NODE.set(r, pf.getOP().getStartNode().getId());
 							return null;
 						}
 	    				
