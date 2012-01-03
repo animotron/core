@@ -79,7 +79,12 @@ public class StoreBinaryTest extends ATest {
         assertBinary(f, TXT);
 
         JExpression t = new JExpression(
-          _(ANY._, "test.txt")
+            _(ANY._, "test")
+        );
+        assertBinary(t, TXT);
+
+        t = new JExpression(
+            _(ANY._, "txt")
         );
         assertBinary(t, TXT);
 

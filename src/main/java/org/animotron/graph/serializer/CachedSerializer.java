@@ -189,7 +189,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
             cache.get(key, out);
         } else {
             OutputStream os = cache.stream(key, out);
-            serialize(r, os);
+            try {
+                serialize(r, os);
+            } catch (IOException e) {
+                cache.drop(key);
+                throw e;
+            }
             os.close();
         }
     }
@@ -200,7 +205,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
             cache.get(key, out);
         } else {
             OutputStream os = cache.stream(key, out);
-            serialize(v, os);
+            try {
+                serialize(v, os);
+            } catch (IOException e) {
+                cache.drop(key);
+                throw e;
+            }
             os.close();
         }
     }
@@ -211,7 +221,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
             cache.get(key, out);
         } else {
             OutputStream os = cache.stream(key, out);
-            serialize(r, os);
+            try {
+                serialize(r, os);
+            } catch (IOException e) {
+                cache.drop(key);
+                throw e;
+            }
             os.close();
         }
     }
@@ -222,7 +237,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
             cache.get(key, out);
         } else {
             OutputStream os = cache.stream(key, out);
-            serialize(v, os);
+            try {
+                serialize(v, os);
+            } catch (IOException e) {
+                cache.drop(key);
+                throw e;
+            }
             os.close();
         }
     }
@@ -234,7 +254,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
         } else {
             StringBuilder out = new StringBuilder(1024);
             OutputStream os = cache.stream(key, out);
-            serialize(r, os);
+            try {
+                serialize(r, os);
+            } catch (IOException e) {
+                cache.drop(key);
+                throw e;
+            }
             os.close();
             return out.toString();
         }
@@ -247,7 +272,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
         } else {
             StringBuilder out = new StringBuilder(1024);
             OutputStream os = cache.stream(key, out);
-            serialize(v, os);
+            try {
+                serialize(v, os);
+            } catch (IOException e) {
+                cache.drop(key);
+                throw e;
+            }
             os.close();
             return out.toString();
         }
