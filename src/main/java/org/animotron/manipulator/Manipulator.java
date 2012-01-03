@@ -30,16 +30,12 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
-import org.jetlang.fibers.Fiber;
-import org.jetlang.fibers.ThreadFiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
 
 import javolution.util.FastList;
 
