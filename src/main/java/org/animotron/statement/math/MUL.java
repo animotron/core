@@ -18,12 +18,16 @@
  */
 package org.animotron.statement.math;
 
+import org.animotron.manipulator.PFlow;
+import org.animotron.statement.operator.Prepare;
+import org.jetlang.channels.Subscribable;
+
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class MUL extends MathOperator {
+public class MUL extends MathOperator implements Prepare {
 	
 	public static final MUL _ = new MUL();
 	
@@ -42,5 +46,12 @@ public class MUL extends MathOperator {
     protected Number execute(Number a) {
         return a;
     }
+
+	@Override
+	public Subscribable<PFlow> onPrepareQuestion() {
+		System.out.println("prepare question of MUL");
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -20,7 +20,6 @@ package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedOutput;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Utils;
 import org.animotron.utils.MessageDigester;
 import org.jetlang.channels.Channel;
@@ -35,9 +34,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.concurrent.CountDownLatch;
 
-import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -222,17 +219,17 @@ public class PFlow {
 		}
 	}
 
-	public Iterable<Relationship> getStackContext(Relationship r, boolean goDown) {
-//		return td_context.traverse(node).relationships();
-		
-		Node node = r.getEndNode();
-		
-		if (goDown && r.isType(AN._)) {
-			node = node.getSingleRelationship(REF, OUTGOING).getEndNode();
-		}
-		
-		return node.getRelationships(AN._, OUTGOING);
-	}
+//	public Iterable<Relationship> getStackContext(Relationship r, boolean goDown) {
+////		return td_context.traverse(node).relationships();
+//		
+//		Node node = r.getEndNode();
+//		
+//		if (goDown && r.isType(AN._)) {
+//			node = node.getSingleRelationship(REF, OUTGOING).getEndNode();
+//		}
+//		
+//		return node.getRelationships(AN._, OUTGOING);
+//	}
 
 	public byte[] getPathHash() {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();  

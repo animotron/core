@@ -21,6 +21,7 @@ package org.animotron.graph;
 import javolution.util.FastList;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.USE;
@@ -29,8 +30,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 
 import java.util.List;
-
-import static org.animotron.graph.RelationshipTypes.REF;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -56,19 +55,19 @@ public class AnimoPath {
 		patterns.add(
 			new Pattern(
 				ANY._, 
-				many(AN._), one(REF), one(ANY._)
+				many(AN._), one(REF._), one(ANY._)
 			)
 		);
 		patterns.add(
 			new Pattern(
 				AN._, 
-				one(REF), one(AN._)
+				one(REF._), one(AN._)
 			)
 		);
 		patterns.add(
 			new Pattern(
 				AN._,
-				one(REF), one(AN._)
+				one(REF._), one(AN._)
 			)
 		);
 

@@ -23,7 +23,6 @@ import javolution.util.FastSet;
 
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
-import org.animotron.inmemory.InMemoryRelationship;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
 import org.animotron.manipulator.Evaluator;

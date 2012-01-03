@@ -27,6 +27,7 @@ import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
@@ -134,7 +135,7 @@ public abstract class Manipulator {
                             } catch (Exception e){}
         				}
 
-            			if (msg.isType(org.animotron.statement.operator.REF._) || msg.isType(REF)) {
+            			if (msg.isType(REF._)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
             			

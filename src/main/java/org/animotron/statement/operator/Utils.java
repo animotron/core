@@ -35,7 +35,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.Evaluators;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
@@ -45,13 +44,9 @@ import java.util.Set;
 
 import static org.animotron.Properties.*;
 import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.RelationshipTypes.REF;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -216,10 +211,7 @@ public class Utils {
 
 					Relationship result = e.getAnswer();
 					
-					if (result.isType(REF) 
-							|| result.isType(org.animotron.statement.operator.REF._)
-							|| result.isType(THE._)
-						) {
+					if (result.isType(REF._) || result.isType(THE._)) {
 						out.write(e);
 					} else {
 						for (QCAVector rr : eval(e)) {
@@ -246,7 +238,7 @@ public class Utils {
 
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
 		for (Relationship rr : hits) {
-			if (rr.isType(REF) || rr.isType(org.animotron.statement.operator.REF._)) continue;
+			if (rr.isType(REF._)) continue;
 			
 			Statement _s = Statements.relationshipType(rr);
 			if (_s instanceof Query || _s instanceof Evaluable) {
