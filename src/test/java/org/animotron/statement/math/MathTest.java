@@ -24,7 +24,7 @@ import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression.__;
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
 
@@ -184,7 +184,7 @@ public class MathTest extends ATest {
     @Test
 	public void test_18() throws Exception {
         __(
-            new AnimoExpression("the a (x 1) (y 2) (z 3)")
+            "the a (x 1) (y 2) (z 3)"
         );
     	assertStringResult("+ (get x a) (get y a) (get z a)", "6");
 	}
@@ -192,8 +192,8 @@ public class MathTest extends ATest {
     @Test
 	public void test_19() throws Exception {
         __(
-            new AnimoExpression("the a (x 1) (y 2) (z 3)"),
-            new AnimoExpression("the b + (get x) (get y) (get z)")
+            "the a (x 1) (y 2) (z 3)",
+            "the b + (get x) (get y) (get z)"
         );
     	assertStringResult("b a", "6");
 	}
@@ -231,10 +231,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_30() throws Exception {
         __(
-            new AnimoExpression("the a 1"),
-            new AnimoExpression("the b 2"),
-            new AnimoExpression("the c 3"),
-            new AnimoExpression("the d 4")
+            "the a 1",
+            "the b 2",
+            "the c 3",
+            "the d 4"
         );
     	assertStringResult("a", "1");
     	assertStringResult("+ (a) (b) (c) (d)", "10");
@@ -243,10 +243,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_31() throws Exception {
         __(
-            new AnimoExpression("the a (z) (1)"),
-            new AnimoExpression("the b (z) (2)"),
-            new AnimoExpression("the c (z) (3)"),
-            new AnimoExpression("the d (z) (4)")
+            "the a (z) (1)",
+            "the b (z) (2)",
+            "the c (z) (3)",
+            "the d (z) (4)"
         );
     	assertStringResult("+ all z", "10");
 	}
@@ -254,10 +254,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_32() throws Exception {
         __(
-            new AnimoExpression("the a x 1"),
-            new AnimoExpression("the b x 2"),
-            new AnimoExpression("the c x 3"),
-            new AnimoExpression("the d x 4")
+            "the a x 1",
+            "the b x 2",
+            "the c x 3",
+            "the d x 4"
         );
     	assertStringResult("+ get x (a) (b) (c) (d)", "10");
 	}
@@ -265,10 +265,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_33() throws Exception {
         __(
-            new AnimoExpression("the a (z) (x 1)"),
-            new AnimoExpression("the b (z) (x 2)"),
-            new AnimoExpression("the c (z) (x 3)"),
-            new AnimoExpression("the d (z) (x 4)")
+            "the a (z) (x 1)",
+            "the b (z) (x 2)",
+            "the c (z) (x 3)",
+            "the d (z) (x 4)"
         );
     	assertStringResult("+ get x all z", "10");
 	}
