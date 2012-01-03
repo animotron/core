@@ -42,39 +42,6 @@ public class OnQuestion implements Subscribable<PFlow> {
         };
 
 		Evaluator.sendQuestion(onAnswer, pf.getVector(), pf.getVector().getUnrelaxedClosest().getEndNode());
-		
-//        List<PFlow> list = new FastList<PFlow>();
-//
-//		IndexHits<Relationship> q = Order.context(pf.getOPNode());
-//		try {
-//			Iterator<Relationship> it = q.iterator();
-//			while (it.hasNext()) {
-//				Relationship r = it.next();
-//				
-//				Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
-//				
-//				if (onQuestion != null) {
-//					PFlow nextPF = new PFlow(pf, pf.getVector().question2(r));
-//					nextPF.questionChannel().subscribe(onQuestion);
-//					
-//					list.add(nextPF);
-//					
-//				} else {
-//					pf.sendAnswer(pf.getVector().answered(r));
-//				}
-//			}
-//		} finally {
-//			q.close();
-//		}
-//		
-//		if (list.isEmpty())
-//			pf.done();
-//		else
-//			pf.waitBeforeClosePipe(list.size());
-//		
-//		for (PFlow nextPF : list) {
-//			nextPF.questionChannel().publish(nextPF);
-//		}
 	}
 
 	@Override

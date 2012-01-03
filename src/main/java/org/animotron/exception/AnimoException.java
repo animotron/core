@@ -18,7 +18,8 @@
  */
 package org.animotron.exception;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
+
 import org.neo4j.graphdb.Relationship;
 
 import java.util.List;
@@ -32,7 +33,7 @@ public class AnimoException extends Exception {
 	private static final long serialVersionUID = 2923211415661487122L;
 
 	private Relationship op;
-	private List<Relationship> stack = new FastList<Relationship>();
+	private List<Relationship> stack = new FastTable<Relationship>();
 
 	public AnimoException(Relationship op) {
 		super();

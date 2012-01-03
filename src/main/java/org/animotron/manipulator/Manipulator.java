@@ -39,6 +39,7 @@ import java.io.IOException;
 import java.util.Iterator;
 
 import javolution.util.FastList;
+import javolution.util.FastTable;
 
 import static org.animotron.graph.RelationshipTypes.*;
 
@@ -210,8 +211,10 @@ public abstract class Manipulator {
 		
 		//final CountDownLatch cd;
 		
-		FastList<PFlow> list = FastList.newInstance();
+		FastTable<PFlow> list = FastTable.newInstance();
 		try {
+			PFlow nextPF = null;
+
 			IndexHits<Relationship> q = Order.context(node);
 			try {
 				Iterator<Relationship> it = q.iterator();
@@ -221,7 +224,7 @@ public abstract class Manipulator {
 					Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
 					
 					if (onQuestion != null) {
-						PFlow nextPF = new PFlow(vector.question2(r));
+						nextPF = new PFlow(vector.question2(r));
 						nextPF.questionChannel().subscribe(onQuestion);
 						
 						list.add(nextPF);
@@ -243,14 +246,16 @@ public abstract class Manipulator {
 			onAnswer.setCountDown(list.size());
 			//cd = new CountDownLatch(list.size());
 			
-			for (PFlow nextPF : list) {
+			for (int i = 0, n = list.size(); i < n; i++) {
+				nextPF = list.get(i);
+				
 				nextPF.answerChannel().subscribe(onAnswer);
 				
 				nextPF.questionChannel().publish(nextPF);
 			}
 
 		} finally {
-			FastList.recycle(list);
+			FastTable.recycle(list);
 		}
 	}
 }
