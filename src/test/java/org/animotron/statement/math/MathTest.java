@@ -170,8 +170,7 @@ public class MathTest extends ATest {
 
     @Test
 	public void test_16() throws Exception {
-        Expression e = new AnimoExpression("/ 4 2");
-    	assertStringResult(e, "2.0");
+    	assertStringResult("/ 4 2", "2.0");
 	}
 
     @Test
@@ -187,8 +186,7 @@ public class MathTest extends ATest {
         __(
             new AnimoExpression("the a (x 1) (y 2) (z 3)")
         );
-        Expression e = new AnimoExpression("+ (get x a) (get y a) (get z a)");
-    	assertStringResult(e, "6");
+    	assertStringResult("+ (get x a) (get y a) (get z a)", "6");
 	}
 
     @Test
@@ -197,44 +195,37 @@ public class MathTest extends ATest {
             new AnimoExpression("the a (x 1) (y 2) (z 3)"),
             new AnimoExpression("the b + (get x) (get y) (get z)")
         );
-        Expression e = new AnimoExpression("b a");
-    	assertStringResult(e, "6");
+    	assertStringResult("b a", "6");
 	}
 
     @Test
 	public void test_20() throws Exception {
-        Expression e = new AnimoExpression("+ \"1\" \"2\" \"3\" \"4\"");
-    	assertStringResult(e, "10");
+    	assertStringResult("+ \"1\" \"2\" \"3\" \"4\"", "10");
 	}
 
     @Test
 	public void test_21() throws Exception {
-        Expression e = new AnimoExpression("+ 1 \"2\" \"3.0\" 4");
-    	assertStringResult(e, "10.0");
+    	assertStringResult("+ 1 \"2\" \"3.0\" 4", "10.0");
 	}
 
     @Test
 	public void test_22() throws Exception {
-        Expression e = new AnimoExpression("+ -1");
-    	assertStringResult(e, "-1");
+    	assertStringResult("+ -1", "-1");
 	}
 
     @Test
 	public void test_23() throws Exception {
-        Expression e = new AnimoExpression("- -1");
-    	assertStringResult(e, "1");
+    	assertStringResult("- -1", "1");
 	}
 
     @Test
 	public void test_24() throws Exception {
-        Expression e = new AnimoExpression("/ 2");
-    	assertStringResult(e, "0.5");
+    	assertStringResult("/ 2", "0.5");
 	}
 
     @Test
 	public void test_25() throws Exception {
-        Expression e = new AnimoExpression("/  5 2");
-    	assertStringResult(e, "2.5");
+    	assertStringResult("/  5 2", "2.5");
 	}
 
     @Test
@@ -245,11 +236,8 @@ public class MathTest extends ATest {
             new AnimoExpression("the c 3"),
             new AnimoExpression("the d 4")
         );
-        Expression e = new AnimoExpression("a");
-    	assertStringResult(e, "1");
-
-        e = new AnimoExpression("+ (a) (b) (c) (d)");
-    	assertStringResult(e, "10");
+    	assertStringResult("a", "1");
+    	assertStringResult("+ (a) (b) (c) (d)", "10");
 	}
 
     @Test
@@ -260,8 +248,7 @@ public class MathTest extends ATest {
             new AnimoExpression("the c (z) (3)"),
             new AnimoExpression("the d (z) (4)")
         );
-        Expression e = new AnimoExpression("+ all z");
-    	assertStringResult(e, "10");
+    	assertStringResult("+ all z", "10");
 	}
 
     @Test
@@ -272,8 +259,7 @@ public class MathTest extends ATest {
             new AnimoExpression("the c x 3"),
             new AnimoExpression("the d x 4")
         );
-        Expression e = new AnimoExpression("+ get x (a) (b) (c) (d)");
-    	assertStringResult(e, "10");
+    	assertStringResult("+ get x (a) (b) (c) (d)", "10");
 	}
 
     @Test
@@ -284,7 +270,6 @@ public class MathTest extends ATest {
             new AnimoExpression("the c (z) (x 3)"),
             new AnimoExpression("the d (z) (x 4)")
         );
-        Expression e = new AnimoExpression("+ get x all z");
-    	assertStringResult(e, "10");
+    	assertStringResult("+ get x all z", "10");
 	}
 }
