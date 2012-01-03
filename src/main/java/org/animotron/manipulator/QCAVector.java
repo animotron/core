@@ -28,7 +28,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javolution.util.FastList;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 

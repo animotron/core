@@ -18,14 +18,12 @@
  */
 package org.animotron.manipulator;
 
-import javolution.util.FastList;
 import javolution.util.FastTable;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

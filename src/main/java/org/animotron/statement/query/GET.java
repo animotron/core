@@ -18,9 +18,10 @@
  */
 package org.animotron.statement.query;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+import javolution.util.FastTable;
+
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
@@ -477,52 +478,56 @@ public class GET extends AbstractQuery implements Shift {
 			Relationship startBy = null;
 			
 			Relationship res = null;
-			List<Relationship> resByHAVE = new FastList<Relationship>();
-			List<Relationship> resByIS = new FastList<Relationship>();
-	
-			for (Path path : paths.values()) {
-				for (Relationship r : path.relationships()) {
-					if (startBy == null)
-						startBy = r;
-						
-					if (!pf.isInStack(r)) {
-						if (r.isType(AN._)) {
-							if (Utils.haveContext(r.getEndNode())) {
+			FastTable<Relationship> resByHAVE = FastTable.newInstance();
+			FastTable<Relationship> resByIS = FastTable.newInstance();
+			try {
+				for (Path path : paths.values()) {
+					for (Relationship r : path.relationships()) {
+						if (startBy == null)
+							startBy = r;
+							
+						if (!pf.isInStack(r)) {
+							if (r.isType(AN._)) {
+								if (Utils.haveContext(r.getEndNode())) {
+									res = r;
+									//break;
+								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
+									res = r;
+									//break;
+								}
+							} else if (r.isType(ANY._)) {
 								res = r;
-								//break;
-							} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
+		
+							} else if (r.isType(SHALL._)) {
 								res = r;
 								//break;
 							}
-						} else if (r.isType(ANY._)) {
-							res = r;
-	
-						} else if (r.isType(SHALL._)) {
-							res = r;
-							//break;
 						}
 					}
+					if (res != null) {
+						if (startBy != null && startBy.isType(REF._))
+							resByIS.add(res);
+						else
+							resByHAVE.add(res);
+					}
+					startBy = null;
 				}
-				if (res != null) {
-					if (startBy != null && startBy.isType(REF._))
-						resByIS.add(res);
-					else
-						resByHAVE.add(res);
-				}
-				startBy = null;
-			}
-	
-			if (!resByHAVE.isEmpty()) {
-				for (Relationship r : resByHAVE) {
-					relaxReference(pf, vector, r);
-				}
-			} else {
-				if (resByIS.isEmpty())
-					return false;
 		
-				for (Relationship r : resByIS) {
-					relaxReference(pf, vector, r);
+				if (!resByHAVE.isEmpty()) {
+					for (Relationship r : resByHAVE) {
+						relaxReference(pf, vector, r);
+					}
+				} else {
+					if (resByIS.isEmpty())
+						return false;
+			
+					for (Relationship r : resByIS) {
+						relaxReference(pf, vector, r);
+					}
 				}
+			} finally{
+				FastTable.recycle(resByHAVE);
+				FastTable.recycle(resByIS);
 			}
 			return true;
 		} finally {

@@ -38,7 +38,6 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javolution.util.FastList;
 import javolution.util.FastTable;
 
 import static org.animotron.graph.RelationshipTypes.*;
