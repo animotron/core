@@ -62,9 +62,26 @@ public class WITH extends Operator implements Predicate {
 		//System.out.println("==================================================");
 		if (debug) System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
+		
+		QCAVector qVector = null;
+		PipedInput<QCAVector> in = null;
 
-		QCAVector aVector = pf.getVector().answered(ref);
-		QCAVector qVector = pf.getVector().question2(op);
+		List<QCAVector> expected = (List<QCAVector>) pf.getData(op);
+
+		if (expected == null) {
+			if (debug) System.out.println("Eval expected");
+			expected = new FastList<QCAVector>();
+			qVector = pf.getVector().answered(pf.getVector().getClosest());
+			in = Evaluator._.execute(qVector, op.getEndNode());
+			for (QCAVector e : in) {
+				expected.add(e);
+				if (debug) System.out.println("expected "+e);
+			}
+			pf.putData(op, expected);
+		}
+		
+
+		qVector = pf.getVector().question2(op);
 
 		Set<Node> thes = new FastSet<Node>();
 		for (QCAVector v : Utils.getByREF(pf, qVector)) {
@@ -72,7 +89,7 @@ public class WITH extends Operator implements Predicate {
 		}
 
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
-		PipedInput<QCAVector> in = out.getInputStream();
+		in = out.getInputStream();
 		
 		PFlow pflow = new PFlow(qVector);
 		
@@ -95,15 +112,13 @@ public class WITH extends Operator implements Predicate {
 			}
 		});
 
-		qVector = pf.getVector().answered(pf.getVector().getClosest());
-
+		QCAVector aVector = pf.getVector().answered(ref);
 		GET._.get(pflow, aVector, thes, null);
 		pflow.done();
 		
 		//if (!in.hasNext()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
-		List<QCAVector> expected = new FastList<QCAVector>();
 
 		if (debug) System.out.println("Eval actual");
 		for (QCAVector have : in) {
@@ -124,17 +139,8 @@ public class WITH extends Operator implements Predicate {
 		
 		if (actual.isEmpty()) return false;
 
-		if (debug) System.out.println("Eval expected");
-		in = Evaluator._.execute(qVector, op.getEndNode());
-		for (QCAVector e : in) {
-			expected.add(e);
-			if (debug) System.out.println("expected "+e);
-		}
-		
 		if (actual.size() >= 1 && expected.size() == 1) {
 			QCAVector g = expected.get(0);
-			
-			System.out.println(g);
 			
 			//XXX: finish
 			List<QCAVector> l = evaluable(g.getClosest().getEndNode());
