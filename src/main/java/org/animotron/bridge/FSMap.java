@@ -16,35 +16,30 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.ml;
+package org.animotron.bridge;
 
-import org.animotron.ATest;
-import org.animotron.bridge.FSBridge;
-import org.animotron.statement.operator.THE;
-import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
+import org.animotron.expression.BinaryMapExpression;
 
 import java.io.File;
+import java.io.IOException;
 
-import static org.junit.Assert.assertNotNull;
+import static org.animotron.expression.Expression.__;
 
 /**
+ * Map FS to animo
+ * 
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class FormGeneratorTest extends ATest {
+public class FSMap extends AbstractFSBridge {
 
-	@Test
-	public void check() throws Exception {
+    public static final FSMap _ = new FSMap();
 
-		FSBridge._.load(new File("src/main/animo/form-generator.animo"), "/binary/");
-        
-        Relationship r = THE._.get("form-generator");
-        
-        assertNotNull(r);
-        
-        assertAnimoResult(r, "the form-generator THE.");
-        
-        //XXX: complete
-	}
+    private FSMap(){}
+
+    @Override
+    protected void load (File file, String path, String uriContext) throws IOException {
+        __(new BinaryMapExpression(path, uriContext));
+    }
+
 }

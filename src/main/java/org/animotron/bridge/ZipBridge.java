@@ -35,15 +35,16 @@ import static org.animotron.expression.Expression.__;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class ZipBridge {
+public class ZipBridge extends AbstractFSBridge{
+
+    public static final ZipBridge _ = new ZipBridge();
+
+    private ZipBridge(){}
 
 	static final int BUFFER = 2048;
 
-	public static void load(String path) throws IOException {
-		load(new File(path));
-	}
-
-	public static void load(File file) throws IOException {
+    @Override
+	public void load(File file, String uriContext) throws IOException {
 		if (!file.exists()) {
 			return;
 		}
@@ -53,28 +54,13 @@ public class ZipBridge {
 		ZipEntry entry;
 		while ((entry = zis.getNextEntry()) != null) {
 			System.out.println("Extracting: " + entry);
-			__(new CommonExpression(zis, entry.getName(), false));
+			__(new CommonExpression(zis, entry.getName(), uriContext, false));
 		}
 		zis.close();
 	}
 
-	private static void loadDir(String root, File path) throws IOException {
-		for (File file : path.listFiles()) {
-			load(root, file);
-		}
-	}
-
-	private static void loadFile(String root, File file) throws IOException {
-		String path = file.getPath().substring(root.length());
-		__(new CommonExpression(file, path));
-	}
-
-	private static void load(String root, File path) throws IOException {
-		if (path.isDirectory()) {
-			loadDir(root, path);
-		} else {
-			loadFile(root, path);
-		}
-	}
+    @Override
+    protected void load(File file, String path, String uriContext) throws IOException {
+    }
 
 }
