@@ -227,4 +227,18 @@ public class WHouseTest extends ATest {
         Expression e = new AnimoExpression("get qty (measument1) (UoM kg)."); //???
     	assertStringResult(e, "have qty (number 1) (UoM kg)");
 	}
+
+	@Test
+	public void test_02() throws Exception {
+        __(
+            new AnimoExpression("the qty number."),
+            new AnimoExpression("the cost number."),
+            new AnimoExpression("the price / (cost) (qty)."),
+
+            new AnimoExpression("the * invert /.")
+            
+            //new AnimoExpression("the m1 (qty 10) (cost 50).")
+		);
+    	//assertStringResult("get cost m1.", "50");
+	}
 }

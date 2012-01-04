@@ -24,6 +24,7 @@ import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.junit.Test;
 
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
 
@@ -122,4 +123,153 @@ public class MathTest extends ATest {
     	Expression test = new AnimoExpression("- 5 * 6 7"); //5-6*7
     	assertStringResult(test, "-37");
     }
+
+    @Test
+	public void test_10() throws Exception {
+        Expression e = new AnimoExpression("+ 1 2 3 4");
+    	assertStringResult(e, "10");
+	}
+
+    @Test
+	public void test_11() throws Exception {
+        Expression e = new AnimoExpression("* 2 2");
+    	assertStringResult(e, "4");
+	}
+
+    @Test
+	public void test_12() throws Exception {
+        Expression e = new AnimoExpression("* 2 2.0");
+        
+    	assertAnimo(e, "* 2 2.0.");
+    	assertStringResult(e, "4.0");
+	}
+
+    @Test
+	public void test_13() throws Exception {
+        Expression e = new AnimoExpression("* 2.0 2");
+
+    	assertAnimo(e, "* 2.0 2.");
+        assertStringResult(e, "4.0");
+	}
+
+    @Test
+	public void test_14() throws Exception {
+        Expression e = new AnimoExpression("* 2.0 2.0");
+
+        assertAnimo(e, "* 2.0 2.0.");
+    	assertStringResult(e, "4.0");
+	}
+
+    @Test
+	public void test_15() throws Exception {
+        Expression e = new AnimoExpression("/ 4.0 2.0");
+
+        assertAnimo(e, "/ 4.0 2.0.");
+    	assertStringResult(e, "2.0");
+	}
+
+    @Test
+	public void test_16() throws Exception {
+    	assertStringResult("/ 4 2", "2.0");
+	}
+
+    @Test
+	public void test_17() throws Exception {
+        Expression e = new AnimoExpression("- 1 2 3.0 4");
+
+        assertAnimo(e, "- 1 2 3.0 4.");
+        assertStringResult(e, "-8.0");
+	}
+
+    @Test
+	public void test_18() throws Exception {
+        __(
+            "the a (x 1) (y 2) (z 3)"
+        );
+    	assertStringResult("+ (get x a) (get y a) (get z a)", "6");
+	}
+
+    @Test
+	public void test_19() throws Exception {
+        __(
+            "the a (x 1) (y 2) (z 3)",
+            "the b + (get x) (get y) (get z)"
+        );
+    	assertStringResult("b a", "6");
+	}
+
+    @Test
+	public void test_20() throws Exception {
+    	assertStringResult("+ \"1\" \"2\" \"3\" \"4\"", "10");
+	}
+
+    @Test
+	public void test_21() throws Exception {
+    	assertStringResult("+ 1 \"2\" \"3.0\" 4", "10.0");
+	}
+
+    @Test
+	public void test_22() throws Exception {
+    	assertStringResult("+ -1", "-1");
+	}
+
+    @Test
+	public void test_23() throws Exception {
+    	assertStringResult("- -1", "1");
+	}
+
+    @Test
+	public void test_24() throws Exception {
+    	assertStringResult("/ 2", "0.5");
+	}
+
+    @Test
+	public void test_25() throws Exception {
+    	assertStringResult("/  5 2", "2.5");
+	}
+
+    @Test
+	public void test_30() throws Exception {
+        __(
+            "the a 1",
+            "the b 2",
+            "the c 3",
+            "the d 4"
+        );
+    	assertStringResult("a", "1");
+    	assertStringResult("+ (a) (b) (c) (d)", "10");
+	}
+
+    @Test
+	public void test_31() throws Exception {
+        __(
+            "the a (z) (1)",
+            "the b (z) (2)",
+            "the c (z) (3)",
+            "the d (z) (4)"
+        );
+    	assertStringResult("+ all z", "10");
+	}
+
+    @Test
+	public void test_32() throws Exception {
+        __(
+            "the a x 1",
+            "the b x 2",
+            "the c x 3",
+            "the d x 4"
+        );
+    	assertStringResult("+ get x (a) (b) (c) (d)", "10");
+	}
+
+    @Test
+	public void test_33() throws Exception {
+        __(
+            "the a (z) (x 1)",
+            "the b (z) (x 2)",
+            "the c (z) (x 3)",
+            "the d (z) (x 4)"
+        );
+    	assertStringResult("+ get x all z", "10");
+	}
 }

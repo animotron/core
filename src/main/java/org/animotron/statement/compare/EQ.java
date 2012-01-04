@@ -34,7 +34,6 @@ import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
-import org.jetlang.channels.Subscribable;
 import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

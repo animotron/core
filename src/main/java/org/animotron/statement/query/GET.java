@@ -18,9 +18,10 @@
  */
 package org.animotron.statement.query;
 
-import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
+import javolution.util.FastTable;
+
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.PipedInput;
@@ -44,7 +45,6 @@ import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -83,29 +83,31 @@ public class GET extends AbstractQuery implements Shift {
 			
 			final Node node = op.getEndNode();
 			
-			final Set<Relationship> visitedREFs = new FastSet<Relationship>();
-
-			final Set<Node> thes = new FastSet<Node>(); 
-			
-			Relationship r = null;
-			for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
-				r = theNode.getClosest();
-				if (r.isType(AN._)) {
-					try {
-						for (QCAVector rr : Utils.eval(theNode)) {
-							thes.add(rr.getClosest().getEndNode());
+			final FastSet<Relationship> visitedREFs = FastSet.newInstance();
+			final FastSet<Node> thes = FastSet.newInstance(); 
+			try {
+				Relationship r = null;
+				for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
+					r = theNode.getClosest();
+					if (r.isType(AN._)) {
+						try {
+							for (QCAVector rr : Utils.eval(theNode)) {
+								thes.add(rr.getClosest().getEndNode());
+							}
+						} catch (IOException e) {
+							pf.sendException(e);
+							return;
 						}
-					} catch (IOException e) {
-						pf.sendException(e);
-						return;
-					}
-				} else
-					thes.add(r.getEndNode());
+					} else
+						thes.add(r.getEndNode());
+				}
+	
+				evalGet(pf, op, node, thes, visitedREFs);
+			} finally {
+				FastSet.recycle(thes);
+				FastSet.recycle(visitedREFs);
+				pf.done();
 			}
-
-			evalGet(pf, op, node, thes, visitedREFs);
-			
-			pf.done();
 		}
 
 		private void evalGet(
@@ -141,7 +143,6 @@ public class GET extends AbstractQuery implements Shift {
 				
 				if (Utils.haveContext(pf)) {
 					Evaluator.sendQuestion(onContext, pf.getVector(), node);
-					//super.onMessage(pf);
 				} else {
 					
 					if (debug) System.out.println("\nGET ["+op+"] empty ");
@@ -183,7 +184,7 @@ public class GET extends AbstractQuery implements Shift {
 		}
 	}
 
-	private boolean check(final PFlow pf, final QCAVector v, final Relationship toCheck, final Set<Node> thes, Set<Relationship> visitedREFs) {
+	private boolean check(final PFlow pf, final QCAVector v, final Relationship toCheck, final Set<Node> thes, final Set<Relationship> visitedREFs) {
 		if (toCheck == null) return false;
 		
 		if (visitedREFs.contains(toCheck)) return false;
@@ -226,7 +227,10 @@ public class GET extends AbstractQuery implements Shift {
 				
 				if (debug) System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
 	
-				for (QCAVector v : nextREFs) {
+				QCAVector v = null;
+				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
+					v = nextREFs.valueOf(r);
+					
 					if (debug) System.out.println("checking "+v);
 					
 					QCAVector next = v;
@@ -247,15 +251,17 @@ public class GET extends AbstractQuery implements Shift {
 	
 				//newREFs = new FastSet<QCAVector>();
 	
-				for (QCAVector vector : nextREFs) {
-					List<QCAVector> cs = vector.getContext();
+				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
+					v = nextREFs.valueOf(r);
+
+					List<QCAVector> cs = v.getContext();
 					if (cs != null) {
 						for (QCAVector c : cs) {
 							checkVector(c, newREFs, visitedREFs);
 						}
 					}
 					
-					QCAVector next = vector;
+					QCAVector next = v;
 					while (next != null) {
 						t = next.getUnrelaxedAnswer();
 						if (t != null) {
@@ -435,89 +441,97 @@ public class GET extends AbstractQuery implements Shift {
 			}
 		});
 		
-		Map<Relationship, Path> paths = new FastMap<Relationship, Path>();
-
-		for (Path path : trav.traverse(context)) {
-			if (debug) System.out.println("["+pf.getOP()+"] * "+path);
-			
-			if (path.length() == 1) {
-				if (op == null) {
-					System.out.println("WARNING: DONT KNOW OP");
+		FastMap<Relationship, Path> paths = FastMap.newInstance();
+		try {
+	
+			for (Path path : trav.traverse(context)) {
+				if (debug) System.out.println("["+pf.getOP()+"] * "+path);
+				
+				if (path.length() == 1) {
+					if (op == null) {
+						System.out.println("WARNING: DONT KNOW OP");
+						continue;
+					}
+					
+					if (pf.getOP().equals(op))
+						continue;
+					
+					paths.put(op, path);
 					continue;
 				}
 				
-				if (pf.getOP().equals(op))
-					continue;
-				
-				paths.put(op, path);
-				continue;
+				if (path.length() == 2) {
+					//UNDERSTAND: should we check context
+					if (relaxReference(pf, vector, path.relationships().iterator().next()))
+						return true;
+				}
+	
+				Relationship fR = path.relationships().iterator().next();
+				Path p = paths.get(fR);
+				if (p == null || p.length() > path.length()) {
+					paths.put(fR, path);
+				}
 			}
 			
-			if (path.length() == 2) {
-				//UNDERSTAND: should we check context
-				if (relaxReference(pf, vector, path.relationships().iterator().next()))
-					return true;
-			}
-
-			Relationship fR = path.relationships().iterator().next();
-			Path p = paths.get(fR);
-			if (p == null || p.length() > path.length()) {
-				paths.put(fR, path);
-			}
-		}
+			if (paths.isEmpty()) return false;
+			
+			Relationship startBy = null;
+			
+			Relationship res = null;
+			FastTable<Relationship> resByHAVE = FastTable.newInstance();
+			FastTable<Relationship> resByIS = FastTable.newInstance();
+			try {
+				for (Path path : paths.values()) {
+					for (Relationship r : path.relationships()) {
+						if (startBy == null)
+							startBy = r;
+							
+						if (!pf.isInStack(r)) {
+							if (r.isType(AN._)) {
+								if (Utils.haveContext(r.getEndNode())) {
+									res = r;
+									//break;
+								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
+									res = r;
+									//break;
+								}
+							} else if (r.isType(ANY._)) {
+								res = r;
 		
-		if (paths.isEmpty()) return false;
-		
-		Relationship startBy = null;
-		
-		Relationship res = null;
-		List<Relationship> resByHAVE = new FastList<Relationship>();
-		List<Relationship> resByIS = new FastList<Relationship>();
-
-		for (Path path : paths.values()) {
-			for (Relationship r : path.relationships()) {
-				if (startBy == null)
-					startBy = r;
-					
-				if (!pf.isInStack(r)) {
-					if (r.isType(AN._)) {
-						if (Utils.haveContext(r.getEndNode())) {
-							res = r;
-							//break;
-						} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
-							res = r;
-							//break;
+							} else if (r.isType(SHALL._)) {
+								res = r;
+								//break;
+							}
 						}
-					} else if (r.isType(ANY._)) {
-						res = r;
-
-					} else if (r.isType(SHALL._)) {
-						res = r;
-						//break;
+					}
+					if (res != null) {
+						if (startBy != null && startBy.isType(REF._))
+							resByIS.add(res);
+						else
+							resByHAVE.add(res);
+					}
+					startBy = null;
+				}
+		
+				if (!resByHAVE.isEmpty()) {
+					for (Relationship r : resByHAVE) {
+						relaxReference(pf, vector, r);
+					}
+				} else {
+					if (resByIS.isEmpty())
+						return false;
+			
+					for (Relationship r : resByIS) {
+						relaxReference(pf, vector, r);
 					}
 				}
+			} finally{
+				FastTable.recycle(resByHAVE);
+				FastTable.recycle(resByIS);
 			}
-			if (res != null) {
-				if (startBy != null && startBy.isType(REF._))
-					resByIS.add(res);
-				else
-					resByHAVE.add(res);
-			}
-			startBy = null;
+			return true;
+		} finally {
+			FastMap.recycle(paths);
 		}
-
-		if (!resByHAVE.isEmpty()) {
-			for (Relationship r : resByHAVE) {
-				relaxReference(pf, vector, r);
-			}
-		} else {
-			if (resByIS.isEmpty())
-				return false;
-	
-			for (Relationship r : resByIS) {
-				relaxReference(pf, vector, r);
-			}
-		}
-		return true;
 	}
 }

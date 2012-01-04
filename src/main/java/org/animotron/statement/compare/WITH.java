@@ -63,8 +63,8 @@ public class WITH extends Operator implements Predicate {
 		if (debug) System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 
-		QCAVector vector = pf.getVector().answered(ref);
-		QCAVector qVector = vector.question(op);
+		QCAVector aVector = pf.getVector().answered(ref);
+		QCAVector qVector = pf.getVector().question2(op);
 
 		Set<Node> thes = new FastSet<Node>();
 		for (QCAVector v : Utils.getByREF(pf, qVector)) {
@@ -74,7 +74,7 @@ public class WITH extends Operator implements Predicate {
 		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
 		PipedInput<QCAVector> in = out.getInputStream();
 		
-		PFlow pflow = new PFlow(vector);
+		PFlow pflow = new PFlow(qVector);
 		
 		pflow.answerChannel().subscribe(new Subscribable<QCAVector>() {
 			
@@ -95,7 +95,7 @@ public class WITH extends Operator implements Predicate {
 			}
 		});
 
-		GET._.get(pflow, vector, thes, null);
+		GET._.get(pflow, aVector, thes, null);
 		pflow.done();
 		
 		//if (!in.hasNext()) return false;
@@ -123,7 +123,8 @@ public class WITH extends Operator implements Predicate {
 		if (actual.isEmpty()) return false;
 
 		if (debug) System.out.println("Eval expected");
-		in = Evaluator._.execute(vector, op.getEndNode());
+		qVector = pf.getVector().answered(pf.getVector().getClosest());
+		in = Evaluator._.execute(qVector, op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);
 			if (debug) System.out.println("expected "+e);
@@ -132,16 +133,18 @@ public class WITH extends Operator implements Predicate {
 		if (actual.size() >= 1 && expected.size() == 1) {
 			QCAVector g = expected.get(0);
 			
+			System.out.println(g);
+			
 			//XXX: finish
-			List<QCAVector> l = evaluable(g.getAnswer().getEndNode());
+			List<QCAVector> l = evaluable(g.getClosest().getEndNode());
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) {
 				
 				System.out.println("DON'T KNOW WHAT TO DO, get alot of results @WITH");
-//				for (ACQVector r : l) {
-//					System.out.println(""+r+" "+r.getType());
-//				}
+				for (QCAVector r : l) {
+					System.out.println(""+r+" "+r.getClosest().getType());
+				}
 			}
 
 			if (debug) System.out.println("***** expected = "+g.getAnswer().getEndNode());
@@ -182,4 +185,5 @@ public class WITH extends Operator implements Predicate {
 		
 		return list;
 	}
+	
 }

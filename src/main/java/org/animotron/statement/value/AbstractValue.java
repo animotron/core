@@ -18,7 +18,8 @@
  */
 package org.animotron.statement.value;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
+
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.Statement;
@@ -47,7 +48,12 @@ public abstract class AbstractValue extends AbstractStatement {
         if (reference == null)
             return createNode();
         Node child = createNode();
-        if (reference instanceof Iterable) {
+        if (reference instanceof List) {
+        	for (int i = 0, n = ((List)reference).size(); i < n; i++) {
+            	Object[] o = ((List<Object[]>)reference).get(i);
+                child.setProperty(((AbstractValue) o[0]).name(), o[1]);
+            }
+        } else if (reference instanceof Iterable) {
             for (Object[] o : (Iterable<Object[]>) reference) {
                 child.setProperty(((AbstractValue) o[0]).name(), o[1]);
             }
@@ -77,7 +83,7 @@ public abstract class AbstractValue extends AbstractStatement {
     }
 
     public Object reference(Node n) {
-        List<Object[]> ref = new FastList<Object[]>();
+        List<Object[]> ref = new FastTable<Object[]>();
         for (String name : n.getPropertyKeys()) {
             Statement s = Statements.name(name);
             if (s != null) {

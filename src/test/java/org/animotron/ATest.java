@@ -195,6 +195,10 @@ public abstract class ATest {
         if (messagers) System.out.println();
     }
 
+    protected void assertStringResult(String op, String expected) throws IOException, InterruptedException {
+    	assertStringResult(new AnimoExpression(op), expected, true);
+    }
+
     protected void assertStringResult(Relationship op, String expected) throws IOException, InterruptedException {
     	assertStringResult(op, expected, true);
     }

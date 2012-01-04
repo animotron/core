@@ -85,7 +85,11 @@ public class It implements Iterator<Object>, Iterable<Object> {
 
     @Override
     public void remove() {
+    	//XXX: remove
         q.close();
     }
-
+    
+    public void close() {
+        q.close();
+    }
 }

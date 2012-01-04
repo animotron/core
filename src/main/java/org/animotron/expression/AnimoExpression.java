@@ -32,6 +32,7 @@ import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.USE;
 import org.animotron.statement.value.AbstractValue;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
 import java.util.Stack;
@@ -43,7 +44,15 @@ import java.util.Stack;
  */
 public class AnimoExpression extends AbstractExpression {
 
-    private Reader reader;
+    public final static Relationship[] __(String... e) {
+        Relationship[] a = new Relationship[e.length];
+        for (int i = 0; i < e.length; i++) {
+            a[i] = __(new AnimoExpression(e[i]));
+        }
+        return a;
+    }
+
+	private Reader reader;
     private boolean comma = false;
 
     public AnimoExpression(InputStream stream) {

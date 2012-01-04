@@ -18,7 +18,8 @@
  */
 package org.animotron.graph.traverser;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
+
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -30,7 +31,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
-import java.util.List;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -90,11 +90,13 @@ public class AnimoTraverser {
 	}
 
     protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level) throws IOException {
-        List<Object> o = new FastList<Object>();
+    	FastTable<Object> o = FastTable.newInstance();
         try {
+        	Object i = null;
+
             int count = 0;
             while (it.hasNext()) {
-                Object i = it.next();
+                i = it.next();
                 o.add(i);
                 if (i instanceof Relationship) {
                     Relationship r = (Relationship) i;
@@ -115,7 +117,9 @@ public class AnimoTraverser {
             QCAVector prev = null;
             int pos = 0;
             boolean isOne = o.size() - count < 2;
-            for (Object i : o) {
+        	for (int index = 0, size = o.size(); index < size; index++) {
+        		i = o.get(index);
+
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
                 if (i instanceof Relationship) {
                 	prev = new QCAVector((Relationship)i, v, prev);
@@ -126,7 +130,6 @@ public class AnimoTraverser {
                 pos++;
             }
             
-            Object i = null;
             while (it.hasNext()) {
             	i = it.next();
                 if (i instanceof Relationship) {
@@ -136,7 +139,8 @@ public class AnimoTraverser {
                 	build(handler, parent, i, level, isOne, pos++, !it.hasNext());
             }
         } finally {
-            it.remove();
+            FastTable.recycle(o);
+            it.close();
         }
     }
 }

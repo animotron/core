@@ -28,8 +28,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-import javolution.util.FastList;
 import javolution.util.FastSet;
+import javolution.util.FastTable;
 
 import static org.animotron.utils.MessageDigester.longToByteArray;
 
@@ -64,7 +64,7 @@ public class QCAVector {
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
 		this.question = question;
 		if (context != null) {
-			this.context = new FastList<QCAVector>();
+			this.context = new FastTable<QCAVector>();
 			this.context.add(context);
 		}
 		this.answer = answer;
@@ -74,7 +74,7 @@ public class QCAVector {
 	public QCAVector(Relationship question, QCAVector context) {
 		this.question = question;
 
-		this.context = new FastList<QCAVector>();
+		this.context = new FastTable<QCAVector>();
 		this.context.add(context);
 		if (debug) System.out.println(" .... create vector 4 .... ");
 	}
@@ -90,7 +90,7 @@ public class QCAVector {
 		this.question = question;
 		this.answer = answer;
 
-		this.context = new FastList<QCAVector>();
+		this.context = new FastTable<QCAVector>();
 		this.context.add(context);
 		if (debug) System.out.println(" .... create vector 5 .... ");
 	}
@@ -117,7 +117,7 @@ public class QCAVector {
 		this.question = question;
 		this.answer = answer;
 
-		this.context = new FastList<QCAVector>();
+		this.context = new FastTable<QCAVector>();
 		this.context.add(new QCAVector(null, answer));
 		if (debug) System.out.println(" .... create vector 8 .... ");
 	}
@@ -126,7 +126,7 @@ public class QCAVector {
 		this.question = question;
 		//this.answer = answer;
 		
-		this.context = new FastList<QCAVector>();
+		this.context = new FastTable<QCAVector>();
 		this.context.add(context);
 		
 		this.preceding_sibling = precedingSibling;
@@ -369,10 +369,13 @@ public class QCAVector {
 	public QCAVector answered(Relationship createdAnswer, QCAVector context) {
 		//context.removeThis(this);
 		
-		FastList<QCAVector> c = new FastList<QCAVector>();
+		FastTable<QCAVector> c = new FastTable<QCAVector>();
 		c.add(context);
 		if (this.context != null) {
-			c.addAll(this.context);
+			for (QCAVector v : this.context) {
+				if (v == context) continue;
+				c.add(v);
+			}
 		}
 			
 		return new QCAVector(question, createdAnswer, c, preceding_sibling);
@@ -411,7 +414,7 @@ public class QCAVector {
 
 	public void addAnswer(QCAVector i) {
 		if (answers == null)
-			answers = new FastList<QCAVector>();
+			answers = new FastTable<QCAVector>();
 		
 		answers.add(i);
 	}
@@ -425,16 +428,16 @@ public class QCAVector {
 			for (QCAVector c : context)
 				c.recycle();
 			
-			if (context instanceof FastList)
-				FastList.recycle((FastList<QCAVector>) context);
+			if (context instanceof FastTable)
+				FastTable.recycle((FastTable<QCAVector>) context);
 		}
 		
 		if (answers != null) {
 			for (QCAVector c : answers)
 				c.recycle();
 
-			if (answers instanceof FastList)
-				FastList.recycle((FastList<QCAVector>) answers);
+			if (answers instanceof FastTable)
+				FastTable.recycle((FastTable<QCAVector>) answers);
 		}
 	}
 }

@@ -132,8 +132,8 @@ public class AnimoGraph {
 			e.printStackTrace();
         } finally {
 			finishTx(tx);
-            return result;
 		}
+        return result;
 	}
 
 	public static Node getNode(Node parent, RelationshipType type) {

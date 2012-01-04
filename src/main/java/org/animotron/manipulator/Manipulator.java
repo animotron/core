@@ -27,21 +27,18 @@ import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
 import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
-import org.jetlang.fibers.Fiber;
-import org.jetlang.fibers.ThreadFiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
 
-import javolution.util.FastList;
+import javolution.util.FastTable;
 
 import static org.animotron.graph.RelationshipTypes.*;
 
@@ -138,7 +135,7 @@ public abstract class Manipulator {
                             } catch (Exception e){}
         				}
 
-            			if (msg.isType(org.animotron.statement.operator.REF._) || msg.isType(REF)) {
+            			if (msg.isType(REF._)) {
                             s = Statements.name((String) THE._.reference(msg));
                         }
             			
@@ -213,8 +210,10 @@ public abstract class Manipulator {
 		
 		//final CountDownLatch cd;
 		
-		FastList<PFlow> list = FastList.newInstance();
+		FastTable<PFlow> list = FastTable.newInstance();
 		try {
+			PFlow nextPF = null;
+
 			IndexHits<Relationship> q = Order.context(node);
 			try {
 				Iterator<Relationship> it = q.iterator();
@@ -224,7 +223,7 @@ public abstract class Manipulator {
 					Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
 					
 					if (onQuestion != null) {
-						PFlow nextPF = new PFlow(vector.question2(r));
+						nextPF = new PFlow(vector.question2(r));
 						nextPF.questionChannel().subscribe(onQuestion);
 						
 						list.add(nextPF);
@@ -246,14 +245,16 @@ public abstract class Manipulator {
 			onAnswer.setCountDown(list.size());
 			//cd = new CountDownLatch(list.size());
 			
-			for (PFlow nextPF : list) {
+			for (int i = 0, n = list.size(); i < n; i++) {
+				nextPF = list.get(i);
+				
 				nextPF.answerChannel().subscribe(onAnswer);
 				
 				nextPF.questionChannel().publish(nextPF);
 			}
 
 		} finally {
-			FastList.recycle(list);
+			FastTable.recycle(list);
 		}
 	}
 }
