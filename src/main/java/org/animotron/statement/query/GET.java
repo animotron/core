@@ -237,14 +237,13 @@ public class GET extends AbstractQuery implements Shift {
 					while (next != null) {
 						if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
 							//if (debug) System.out.println("checking question");
-							found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
+							//found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
 						} else {
 							visitedREFs.add(next.getQuestion());
 							found = true;
 						}
 						next = next.getPrecedingSibling();
 					}
-	
 				}
 				
 				if (found) return true;
@@ -314,9 +313,9 @@ public class GET extends AbstractQuery implements Shift {
 			for (Relationship r : it) {
 				//if (debug) System.out.println(r);
 				
-//				if (visitedREFs != null && !visitedREFs.contains(r)) {
-//					continue;
-//				}
+				if (visitedREFs != null && !visitedREFs.contains(r)) {
+					continue;
+				}
 	
 				prev = vector.question(r, prev); 
 

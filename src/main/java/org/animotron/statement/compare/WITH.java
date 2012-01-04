@@ -95,6 +95,8 @@ public class WITH extends Operator implements Predicate {
 			}
 		});
 
+		qVector = pf.getVector().answered(pf.getVector().getClosest());
+
 		GET._.get(pflow, aVector, thes, null);
 		pflow.done();
 		
@@ -123,7 +125,6 @@ public class WITH extends Operator implements Predicate {
 		if (actual.isEmpty()) return false;
 
 		if (debug) System.out.println("Eval expected");
-		qVector = pf.getVector().answered(pf.getVector().getClosest());
 		in = Evaluator._.execute(qVector, op.getEndNode());
 		for (QCAVector e : in) {
 			expected.add(e);

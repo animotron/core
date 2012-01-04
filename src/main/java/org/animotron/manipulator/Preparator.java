@@ -55,7 +55,7 @@ public class Preparator extends StatementManipulator {
 			    super.execute(r);
             }
 		}
-        System.out.println("Preparator "+op);
+        //System.out.println("Preparator "+op);
         IndexHits<Relationship> hits = Order.queryDown(op);
         try {
         	for (Relationship r : hits) {
@@ -72,7 +72,7 @@ public class Preparator extends StatementManipulator {
 							}
         				}
         			} catch (Exception e) {
-        				e.printStackTrace();
+        				//e.printStackTrace();
 					}
 				} else if (s instanceof Prepare) {
     			    super.execute(r);
