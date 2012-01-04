@@ -476,8 +476,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (debugUSE) System.out.println(" - "+path);
 		    	for (Path p : trav.traverse(r.getStartNode())) {
 
-		    		System.out.println(path);
-		    		System.out.println(" ** "+p);
+		    		//System.out.println(path);
+		    		//System.out.println(" ** "+p);
 
 		    		directed.clear();
 					directed.add(r.getStartNode());
