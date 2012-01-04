@@ -32,7 +32,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
+
+import javolution.util.FastMap;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -299,5 +302,26 @@ public class PFlow {
 
 	public QCAVector getVector() {
 		return path;
+	}
+	
+	private Map<Object, Object> data = null;
+	
+	private Map<Object, Object> getData() {
+		if (data == null) {
+			data = new FastMap<Object, Object>();
+		}
+		return data;
+	}
+
+	public boolean haveData(Object key) {
+		return getData().containsKey(key);
+	}
+
+	public Object getData(Object key) {
+		return getData().get(key);
+	}
+
+	public void putData(Object key, Object value) {
+		getData().put(key, value);
 	}
 }

@@ -55,13 +55,15 @@ public class ANY extends AbstractQuery implements Reference {
 	private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-			//final Relationship op = pf.getOP();
+            long ts = System.currentTimeMillis();
+
+        	//final Relationship op = pf.getOP();
 			if (debug) System.out.println("ANY "+pf.getVector());
 			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
 			//(new IOException()).printStackTrace();
             
 			for (QCAVector vector : Utils.getByREF(pf)) {
-				Relationship the = vector.getAnswer();
+				Relationship the = vector.getClosest();
 				
 				if (!Utils.results(the, pf)) {
 				
@@ -69,27 +71,29 @@ public class ANY extends AbstractQuery implements Reference {
 					
 					Set<Node>[] lists = getUSEs(pf, node);
 					Set<Node> uses = lists[1];
-					Set<Node> directed = lists[2];
+					Set<Node> directed = lists[0];
 					
 					if (debug) System.out.println(uses);
 					
-//					boolean underUSE = false;
+					boolean underUSE = false;
 					if (directed != null && directed.size() == 1) { 
-//						underUSE = true;
+						underUSE = true;
 						node = directed.iterator().next();
 					}
 					
-//					if (uses.size() == 1) {
-//						node = uses.iterator().next();
-//						uses.clear();
-//					} else {
-//						System.out.println("MORE THEN ONE IN USE");
-//					}
-		
 					if (debug) System.out.println(" node = "+node);
+					
+					int i = 0;
 		
-			        for (Path path : td_IS_leaf.traverse(node)) {
-			        	
+	        		Relationship res = getThe(node);
+					if (underUSE && filtering(pf, res, uses))
+		            	try {
+		            		pf.sendAnswer( res );
+		            		break;
+		            	} catch (Exception e) {}
+
+					for (Path path : td_IS_leaf.traverse(node)) {
+		        		i++;
 			        	Relationship r = path.lastRelationship();
 
 			        	if (debug) System.out.println(path);
@@ -105,14 +109,14 @@ public class ANY extends AbstractQuery implements Reference {
 			        		}
 
 			        		try {
-			        			Relationship res = getThe(r.getStartNode());
+		        				res = getThe(r.getStartNode());
 			        			if (filtering(pf, res, uses)) {
 			        				pf.sendAnswer( res );
 			        				break;
 			        			}
 			        		} catch (Exception e) {
 		        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-		        					Relationship res = p.lastRelationship();
+		        					res = p.lastRelationship();
 				        			if (filtering(pf, res, uses)) {
 				        				pf.sendAnswer( res );
 				        			}
@@ -121,11 +125,11 @@ public class ANY extends AbstractQuery implements Reference {
 			        	} else {
 			    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
 			    			try {
-			    				for (Relationship res : hits) {
+			    				for (Relationship rr : hits) {
 			    					
-			    					if (res.isType(AN._)) {
-			    						if (filtering(pf, res, r.getEndNode(), uses)) {
-					        				pf.sendAnswer( res );
+			    					if (rr.isType(AN._)) {
+			    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+					        				pf.sendAnswer( rr );
 					        				break;
 			    						}
 			    					}
@@ -135,10 +139,12 @@ public class ANY extends AbstractQuery implements Reference {
 			    			}
 			        	}
 			        }
+					if (debug) System.out.println(i);
 		        }
 			}
             pf.done();
-            //System.out.println("ANY end "+pf.getVector());
+            ts = System.currentTimeMillis() - ts;
+            if (debug) System.out.println("ANY "+pf.getOP()+" "+ts);
         }
     };
 }

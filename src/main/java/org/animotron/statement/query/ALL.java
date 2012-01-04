@@ -69,7 +69,7 @@ public class ALL extends AbstractQuery implements Reference {
 
 	            	Set<Node>[] lists = getUSEs(pf, node);
 					Set<Node> uses = lists[1];
-					Set<Node> directed = lists[2];
+					Set<Node> directed = lists[0];
 					
 					//System.out.println(uses);
 					
@@ -79,14 +79,15 @@ public class ALL extends AbstractQuery implements Reference {
 						node = directed.iterator().next();
 					}
 		
-					if (underUSE && filtering(pf, the, uses))
+	        		Relationship res = getThe(node);
+					if (underUSE && filtering(pf, res, uses))
 		            	try {
-		            		pf.sendAnswer( getThe(node) );
+		            		pf.sendAnswer( res );
 		            	} catch (Exception e) {}
 					
 			        for (Path path : td_IS_leaf.traverse(node)) {
 			        	
-			        	System.out.println(path);
+			        	//System.out.println(path);
 
 			        	Relationship r = path.lastRelationship();
 			        	if (!Utils.haveContext(r.getEndNode())) {
@@ -96,13 +97,13 @@ public class ALL extends AbstractQuery implements Reference {
 			        			continue;
 
 		        			try {
-				        		Relationship res = getThe(r.getStartNode());
+				        		res = getThe(r.getStartNode());
 			        			if (filtering(pf, res, uses)) {
 			        				pf.sendAnswer( res );
 			        			}
 		        			} catch (Exception e) {
 		        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-		        					Relationship res = p.lastRelationship();
+		        					res = p.lastRelationship();
 				        			if (filtering(pf, res, uses)) {
 				        				pf.sendAnswer( res );
 				        			}
@@ -111,11 +112,11 @@ public class ALL extends AbstractQuery implements Reference {
 			        	} else {
 			    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
 			    			try {
-			    				for (Relationship res : hits) {
+			    				for (Relationship rr : hits) {
 			    					
-			    					if (res.isType(AN._) || res.isType(VALUE._)) {
-			    						if (filtering(pf, res, r.getEndNode(), uses)) {
-					        				pf.sendAnswer( res );
+			    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
+			    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+					        				pf.sendAnswer( rr );
 			    						}
 			    					}
 			    				}
