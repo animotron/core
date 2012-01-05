@@ -31,7 +31,7 @@ import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
 import java.util.Iterator;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 
 
 /**

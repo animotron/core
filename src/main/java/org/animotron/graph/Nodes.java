@@ -16,30 +16,39 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron.statement.operator;
+package org.animotron.graph;
 
-import org.animotron.statement.link.AbstractLink;
+import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.graph.Properties.NAME;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
- * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Operator extends AbstractLink {
+public class Nodes {
 
-	protected Operator(String... name) { super(name); }
+    public static Node EXTENSION;
+    public static Node MIME_TYPE;
+    public static Node TYPE;
+    public static Node FILE;
+    public static Node NAME;
+    public static Node URI;
 
-    @Override
-    public Object reference(Relationship r) {
-        return super.reference(r);//Order.first(1, r.getEndNode());
+    static {
+        new GraphOperation<Void>() {
+            @Override
+            public Void execute() throws Exception {
+                EXTENSION = THE._("extension");
+                MIME_TYPE = THE._("mime-type");
+                TYPE = THE._("type");
+                FILE = THE._("file");
+                NAME = THE._("name");
+                URI = THE._("uri");
+                return null;
+            }
+        };
     }
-    
-    @Deprecated //??? (replace by Utils.name)
-    protected String name(Node theNode) {
-    	return (String)NAME.get(theNode);
-    }
+
+
 }

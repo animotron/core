@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.operator;
 
-//import static org.animotron.Properties.NAME;
+//import static org.animotron.graph.Properties.NAME;
 //import static org.neo4j.graphdb.Direction.OUTGOING;
 //
 //import org.animotron.graph.RelationshipTypes;

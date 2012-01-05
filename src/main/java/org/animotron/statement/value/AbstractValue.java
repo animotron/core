@@ -31,7 +31,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import static org.animotron.Properties.VALUE;
+import static org.animotron.graph.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.createNode;
 
 /**

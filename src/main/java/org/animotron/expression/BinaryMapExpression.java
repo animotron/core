@@ -31,7 +31,7 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
-import static org.animotron.statement.operator.Utils.*;
+import static org.animotron.graph.Nodes.*;
 
 
 /**

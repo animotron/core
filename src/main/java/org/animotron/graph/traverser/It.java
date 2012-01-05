@@ -25,7 +25,7 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.Iterator;
 
-import static org.animotron.Properties.*;
+import static org.animotron.graph.Properties.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

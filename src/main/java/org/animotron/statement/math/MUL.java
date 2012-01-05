@@ -20,7 +20,7 @@ package org.animotron.statement.math;
 
 import javolution.util.FastList;
 
-import org.animotron.Properties;
+import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;

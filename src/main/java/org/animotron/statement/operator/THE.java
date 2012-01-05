@@ -29,7 +29,7 @@ import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.Properties.NAME;
+import static org.animotron.graph.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
 

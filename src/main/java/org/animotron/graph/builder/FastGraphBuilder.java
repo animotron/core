@@ -33,8 +33,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.animotron.Properties.CONTEXT;
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.CONTEXT;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;

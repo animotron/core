@@ -34,7 +34,7 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import static org.animotron.graph.AnimoGraph.getStorage;
-import static org.animotron.statement.operator.Utils.*;
+import static org.animotron.graph.Nodes.*;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import static org.animotron.utils.MessageDigester.longToHex;
 

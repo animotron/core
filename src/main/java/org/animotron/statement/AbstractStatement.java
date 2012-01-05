@@ -25,9 +25,9 @@ import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.Properties.CONTEXT;
-import static org.animotron.Properties.NAME;
-import static org.animotron.Properties.RID;
+import static org.animotron.graph.Properties.CONTEXT;
+import static org.animotron.graph.Properties.NAME;
+import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**

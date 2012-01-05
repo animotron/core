@@ -28,7 +28,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 
 
 /**

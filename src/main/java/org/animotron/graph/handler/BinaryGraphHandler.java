@@ -18,7 +18,7 @@
  */
 package org.animotron.graph.handler;
 
-import org.animotron.Properties;
+import org.animotron.graph.Properties;
 import org.animotron.expression.BinaryExpression;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.STREAM;

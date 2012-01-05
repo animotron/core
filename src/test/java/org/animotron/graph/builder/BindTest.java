@@ -39,7 +39,7 @@ import org.neo4j.graphdb.Direction;
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.element;
 

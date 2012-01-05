@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import static org.animotron.Properties.NAME;
+import static org.animotron.graph.Properties.NAME;
 
 public class MessageDigester {
 

@@ -21,7 +21,7 @@ package org.animotron.statement.instruction;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
-import org.animotron.Properties;
+import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;

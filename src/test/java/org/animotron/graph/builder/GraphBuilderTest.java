@@ -24,7 +24,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 
 
 /**

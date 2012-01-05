@@ -32,7 +32,7 @@ import org.neo4j.graphdb.index.IndexManager;
 
 import java.io.*;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
 

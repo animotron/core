@@ -24,7 +24,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

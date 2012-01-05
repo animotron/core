@@ -33,7 +33,7 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Stack;
 
-import static org.animotron.Properties.HASH;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
 

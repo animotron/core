@@ -18,7 +18,7 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.Properties;
+import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
@@ -34,7 +34,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -44,8 +43,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.animotron.Properties.CONTEXT;
-import static org.animotron.Properties.RID;
+import static org.animotron.graph.Properties.CONTEXT;
+import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
@@ -57,25 +56,6 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  *
  */
 public class Utils {
-
-    public final static Node EXTENSION;
-    public final static Node FILE;
-    public final static Node NAME;
-    public final static Node URI;
-    
-    static {
-    	Transaction tx = AnimoGraph.beginTx();
-    	try {
-	        EXTENSION = THE._("extension");
-	        FILE = THE._("file");
-	        NAME = THE._("name");
-	        URI = THE._("uri");
-	        
-	        tx.success();
-    	} finally {
-    		AnimoGraph.finishTx(tx);
-    	}
-    }
 
 	public static TraversalDescription td_RESULT =
 		Traversal.description().

@@ -18,7 +18,7 @@
  */
 package org.animotron.graph.index;
 
-import org.animotron.Properties;
+import org.animotron.graph.Properties;
 import org.animotron.statement.operator.REF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

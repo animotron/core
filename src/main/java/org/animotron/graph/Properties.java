@@ -16,7 +16,7 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
-package org.animotron;
+package org.animotron.graph;
 
 import org.neo4j.graphdb.PropertyContainer;
 
@@ -25,7 +25,6 @@ import org.neo4j.graphdb.PropertyContainer;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-//XXX: move to org.animotron.graph ?
 public enum Properties  {
 	
 	NAME, VALUE, HASH, RID, CID, CONTEXT, TYPE, TO_NODE;
