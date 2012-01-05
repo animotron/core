@@ -28,27 +28,11 @@ import org.neo4j.graphdb.Node;
  */
 public class Nodes {
 
-    public static Node EXTENSION;
-    public static Node MIME_TYPE;
-    public static Node TYPE;
-    public static Node FILE;
-    public static Node NAME;
-    public static Node URI;
-
-    static {
-        new GraphOperation<Void>() {
-            @Override
-            public Void execute() throws Exception {
-                EXTENSION = THE._("extension");
-                MIME_TYPE = THE._("mime-type");
-                TYPE = THE._("type");
-                FILE = THE._("file");
-                NAME = THE._("name");
-                URI = THE._("uri");
-                return null;
-            }
-        };
-    }
-
+    public final static Node EXTENSION = THE._("extension");
+    public final static Node MIME_TYPE = THE._("mime-type");
+    public final static Node TYPE = THE._("type");
+    public final static Node FILE = THE._("file");
+    public final static Node NAME = THE._("name");
+    public final static Node URI = THE._("uri");
 
 }
