@@ -73,19 +73,16 @@ public class PREFER extends AbstractQuery implements Reference {
 		            	getUSEs(pf, node, uses, directed);
 						
 						if (uses.size() > 0) {
-							boolean underUSE = false;
-							for (FastSet.Record r = directed.head(), end = directed.tail(); (r = r.getNext()) != end;) {
-								Path path = directed.valueOf(r);
-
-								underUSE = true;
-								if (path.lastRelationship().isType(AN._))
-									node = path.lastRelationship().getStartNode();
-								else
-									node = path.lastRelationship().getEndNode();
-							}
 				
-			        		Relationship res = getThe(node);
-							if (underUSE && filtering(pf, res, uses))
+							boolean underUSE = false;
+							Node n = getClosestIntersection(directed);
+		    				if (n != null) {
+		    					node = n;
+		    					underUSE = true;
+		    				}
+
+							Relationship res;
+							if (underUSE && !node.hasRelationship(Direction.INCOMING, REF._) && filtering(pf, (res = getThe(node)), uses))
 								pf.sendAnswer( res );
 				
 					        for (Path path : td_IS_leaf.traverse(node)) {

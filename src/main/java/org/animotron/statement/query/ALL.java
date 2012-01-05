@@ -18,8 +18,6 @@
  */
 package org.animotron.statement.query;
 
-import java.util.Iterator;
-
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -36,7 +34,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import javolution.util.FastSet;
-import javolution.util.FastTable;
 
 /**
  * Query operator 'ALL'.
@@ -76,46 +73,17 @@ public class ALL extends AbstractQuery implements Reference {
 					try {
 	    				getUSEs(pf, node, uses, directed);
 						
-						System.out.println(uses);
-						
-						FastTable<Relationship> commonPath = FastTable.newInstance();
+						//System.out.println(uses);
 						
 						boolean underUSE = false;
-						try {
-							for (FastSet.Record r = directed.head(), end = directed.tail(); (r = r.getNext()) != end;) {
-								Path path = directed.valueOf(r);
-								
-								if (!commonPath.isEmpty()) {
-									Iterator<Relationship> curIt = path.relationships().iterator();
-									for (int i = 0, size = commonPath.size(); i < size; i++) {
-										if (curIt.hasNext()) {
-											if (commonPath.get(i).equals(curIt.next()))
-												continue;
-											
-											commonPath.removeRange(i, commonPath.size());
-											break;
-										}
-										
-									}
-								} else {
-									for (Relationship rr : path.relationships())
-										commonPath.add(rr);
-								}
-							}
-							if (!commonPath.isEmpty()) {
-								underUSE = true;
-								if (commonPath.getLast().isType(AN._))
-									node = commonPath.getLast().getStartNode();
-								else
-									node = commonPath.getLast().getEndNode();
-							}
-						} finally {
-							FastTable.recycle(commonPath);
-						}
-
+						Node n = getClosestIntersection(directed);
+	    				if (n != null) {
+	    					node = n;
+	    					underUSE = true;
+	    				}
 						
-		        		Relationship res = getThe(node);
-						if (underUSE && !node.hasRelationship(Direction.INCOMING, REF._) && filtering(pf, res, uses))
+		        		Relationship res;
+						if (underUSE && !node.hasRelationship(Direction.INCOMING, REF._) && filtering(pf, (res = getThe(node)), uses))
 			            	try {
 			            		pf.sendAnswer( res );
 			            	} catch (Exception e) {}

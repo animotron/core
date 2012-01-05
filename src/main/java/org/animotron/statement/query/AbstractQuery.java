@@ -19,6 +19,8 @@
 package org.animotron.statement.query;
 
 import javolution.util.FastSet;
+import javolution.util.FastTable;
+
 import org.animotron.Properties;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -36,6 +38,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -263,6 +266,42 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		FastSet.recycle(allUses);
     	}
     }
+	
+	protected Node getClosestIntersection(FastSet<Path> paths) {
+		FastTable<Relationship> commonPath = FastTable.newInstance();
+		
+		try {
+			for (FastSet.Record r = paths.head(), end = paths.tail(); (r = r.getNext()) != end;) {
+				Path path = paths.valueOf(r);
+				
+				if (!commonPath.isEmpty()) {
+					Iterator<Relationship> curIt = path.relationships().iterator();
+					for (int i = 0, size = commonPath.size(); i < size; i++) {
+						if (curIt.hasNext()) {
+							if (commonPath.get(i).equals(curIt.next()))
+								continue;
+							
+							commonPath.removeRange(i, commonPath.size());
+							break;
+						}
+						
+					}
+				} else {
+					for (Relationship rr : path.relationships())
+						commonPath.add(rr);
+				}
+			}
+			if (!commonPath.isEmpty()) {
+				if (commonPath.getLast().isType(AN._))
+					return commonPath.getLast().getStartNode();
+				else
+					return commonPath.getLast().getEndNode();
+			}
+		} finally {
+			FastTable.recycle(commonPath);
+		}
+		return null;
+	}
 
 	protected Relationship getThe(Node node) {
 		return THE._.get((String) Properties.NAME.get(node));
