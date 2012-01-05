@@ -82,7 +82,10 @@ public class PREFER extends AbstractQuery implements Reference {
 		    				}
 
 							Relationship res;
-							if (underUSE && !node.hasRelationship(Direction.INCOMING, REF._) && filtering(pf, (res = getThe(node)), uses))
+							if (underUSE 
+									&& !node.hasRelationship(Direction.INCOMING, REF._) 
+									&& (res = getThe(node)) != null  
+									&& filtering(pf, res, uses))
 								pf.sendAnswer( res );
 				
 					        for (Path path : td_IS_leaf.traverse(node)) {

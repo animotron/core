@@ -83,7 +83,11 @@ public class ALL extends AbstractQuery implements Reference {
 	    				}
 						
 		        		Relationship res;
-						if (underUSE && !node.hasRelationship(Direction.INCOMING, REF._) && filtering(pf, (res = getThe(node)), uses))
+						if (underUSE 
+								&& !node.hasRelationship(Direction.INCOMING, REF._) 
+								&& (res = getThe(node)) != null  
+								&& filtering(pf, res, uses))
+							
 			            	try {
 			            		pf.sendAnswer( res );
 			            	} catch (Exception e) {}

@@ -92,8 +92,8 @@ public class ANY extends AbstractQuery implements Reference {
 						
 						int i = 0;
 			
-		        		Relationship res = getThe(node);
-						if (underUSE && filtering(pf, res, uses))
+		        		Relationship res;
+						if (underUSE && ((res = getThe(node)) != null) && filtering(pf, res, uses))
 			            	try {
 			            		pf.sendAnswer( res );
 			            		break;
