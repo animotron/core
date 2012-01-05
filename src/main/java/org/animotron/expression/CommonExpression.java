@@ -43,19 +43,19 @@ public class CommonExpression extends Expression {
     }
 
 
-    public CommonExpression(File file) throws IOException {
-        this(file, file.getName());
+    public CommonExpression(File file, String uriContext) throws IOException {
+        this(file, file.getName(), uriContext);
     }
-    public CommonExpression(GraphBuilder builder, File file) throws IOException {
-        this(builder, file, file.getName());
+    public CommonExpression(GraphBuilder builder, File file, String uriContext) throws IOException {
+        this(builder, file, file.getName(), uriContext);
     }
 
 
-    public CommonExpression(File file, String path) throws IOException {
-        this(new FileInputStream(file), path, true);
+    public CommonExpression(File file, String path, String uriContext) throws IOException {
+        this(new FileInputStream(file), path, uriContext, true);
     }
-    public CommonExpression(GraphBuilder builder, File file, String path) throws IOException {
-        this(builder, new FileInputStream(file), path, true);
+    public CommonExpression(GraphBuilder builder, File file, String path, String uriContext) throws IOException {
+        this(builder, new FileInputStream(file), path, uriContext, true);
     }
 
     public CommonExpression(InputStream stream) {
@@ -65,18 +65,18 @@ public class CommonExpression extends Expression {
         e = new AnimoExpression(builder, stream);
     }
 
-    public CommonExpression(InputStream stream, String path) {
-    	this(stream, path, true);
+    public CommonExpression(InputStream stream, String path, String uriContext) {
+    	this(stream, path, uriContext, true);
     }
-    public CommonExpression(InputStream stream, String path, boolean closeStream) {
-        e = isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path, closeStream);
+    public CommonExpression(InputStream stream, String path, String uriContext, boolean closeStream) {
+        e = isAnimo(path) ? new AnimoExpression(stream) : new BinaryExpression(stream, path, uriContext, closeStream);
     }
 
-    public CommonExpression(GraphBuilder builder, InputStream stream, String path) {
-    	this(builder, stream, path, true);
+    public CommonExpression(GraphBuilder builder, InputStream stream, String path, String uriContext) {
+    	this(builder, stream, path, uriContext, true);
     }
-    public CommonExpression(GraphBuilder builder, InputStream stream, String path, boolean closeStream) {
-        e = isAnimo(path) ? new AnimoExpression(builder, stream) : new BinaryExpression(builder, stream, path, closeStream);
+    public CommonExpression(GraphBuilder builder, InputStream stream, String path, String uriContext, boolean closeStream) {
+        e = isAnimo(path) ? new AnimoExpression(builder, stream) : new BinaryExpression(builder, stream, path, uriContext, closeStream);
     }
 
 	private static boolean isAnimo(String path) {

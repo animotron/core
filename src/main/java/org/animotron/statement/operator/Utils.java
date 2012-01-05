@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
@@ -42,10 +43,12 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.animotron.Properties.*;
+import static org.animotron.Properties.CONTEXT;
+import static org.animotron.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
@@ -54,7 +57,12 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  */
 public class Utils {
 
-	public static TraversalDescription td_RESULT = 
+    public final static Node EXTENSION = THE._("extension");
+    public final static Node FILE = THE._("file");
+    public final static Node NAME = THE._("name");
+    public final static Node URI = THE._("uri");
+
+	public static TraversalDescription td_RESULT =
 		Traversal.description().
 			breadthFirst().
 			relationships(RESULT, OUTGOING );
@@ -411,6 +419,6 @@ public class Utils {
 	}
 	
     public static String name(Node theNode) {
-    	return (String)NAME.get(theNode);
+    	return (String) Properties.NAME.get(theNode);
     }
 }

@@ -65,7 +65,7 @@ public class StoreBinaryTest extends ATest {
 	public void storeAndSerialize() throws Exception {
         System.out.println("Test binary stream ...");
         
-    	Relationship r = new CommonExpression(new ByteArrayInputStream(TXT.getBytes()), PATH);
+    	Relationship r = new CommonExpression(new ByteArrayInputStream(TXT.getBytes()), PATH, "/binary/");
     	CachedSerializer.ANIMO.serialize(r, System.out);
 
         JExpression s = new JExpression(

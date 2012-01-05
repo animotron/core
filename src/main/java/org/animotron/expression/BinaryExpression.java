@@ -19,7 +19,6 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.AN;
@@ -27,7 +26,6 @@ import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.STREAM;
 import org.animotron.utils.MessageDigester;
-import org.neo4j.graphdb.Node;
 
 import java.io.*;
 import java.security.MessageDigest;
@@ -35,8 +33,8 @@ import java.util.Iterator;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
-import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.AnimoGraph.getStorage;
+import static org.animotron.statement.operator.Utils.*;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import static org.animotron.utils.MessageDigester.longToHex;
 
@@ -47,56 +45,44 @@ import static org.animotron.utils.MessageDigester.longToHex;
  * 
  */
 public class BinaryExpression extends AbstractExpression {
-	
+
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
-    private final static Node EXTENSION = the("extension");
-    private final static Node FILE = the("file");
-    private final static Node NAME = the("name");
-    
-
-    private static Node the(final String name) {
-        return execute(new GraphOperation<Node>() {
-                @Override
-                public Node execute() throws Exception {
-                    return THE._.getOrCreate(name, true).getEndNode();
-                }
-            }
-        );
-    }
 
     private InputStream stream;
     private String path;
     private boolean closeStream = true;
+    private String uriContext;
 
     static {
 		BIN_STORAGE.mkdirs();
 		TMP_STORAGE.mkdirs();
 	}
 
-    public BinaryExpression(InputStream stream, String path) {
-        this(stream, path, true);
+    public BinaryExpression(InputStream stream, String path, String uriContext) {
+        this(stream, path, uriContext, true);
     }
 
-    public BinaryExpression(InputStream stream, String path, boolean closeStream) {
-        this(new FastGraphBuilder(), stream, path, closeStream);
+    public BinaryExpression(InputStream stream, String path, String uriContext, boolean closeStream) {
+        this(new FastGraphBuilder(), stream, path, uriContext, closeStream);
     }
 
-    public BinaryExpression(GraphBuilder builder, InputStream stream, String path) {
-        this(builder, stream, path, true);
+    public BinaryExpression(GraphBuilder builder, InputStream stream, String path, String uriContext) {
+        this(builder, stream, path, uriContext, true);
     }
 
-    public BinaryExpression(GraphBuilder builder, InputStream stream, String path, boolean closeStream) {
+    public BinaryExpression(GraphBuilder builder, InputStream stream, String path, String uriContext, boolean closeStream) {
         super(builder);
         this.stream = stream;
         this.path = path;
+        this.uriContext = uriContext;
         this.closeStream = closeStream;
     }
 
     @Override
     public void build() throws IOException, AnimoException {
-        String txID = UUID.randomUUID().toString();
-        File tmp = new File(TMP_STORAGE, txID);
+        String id = UUID.randomUUID().toString();
+        File tmp = new File(TMP_STORAGE, id);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];
@@ -125,9 +111,14 @@ public class BinaryExpression extends AbstractExpression {
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
-        builder.start(THE._);
+
+        builder.start(THE._, id);
             builder.start(AN._);
                 builder._(REF._, FILE);
+            builder.end();
+            builder.start(AN._);
+                builder._(REF._, URI);
+                builder._(uriContext + id);
             builder.end();
             builder._(STREAM._, hash);
             Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
@@ -171,7 +162,7 @@ public class BinaryExpression extends AbstractExpression {
         return new File(getFolder(hash),  hash);
     }
 
-    private class StringArrayIterator implements Iterable<String>, Iterator<String> {
+    public static class StringArrayIterator implements Iterable<String>, Iterator<String> {
 
         private String[] a;
         private String c = null;

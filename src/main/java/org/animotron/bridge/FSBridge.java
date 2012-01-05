@@ -31,40 +31,16 @@ import static org.animotron.expression.Expression.__;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class FSBridge {
-	
-    public static void load (String path) throws IOException {
-        load(new File(path));
+public class FSBridge extends AbstractFSBridge {
+
+    public static final FSBridge _ = new FSBridge();
+
+    private FSBridge(){}
+
+    @Override
+    protected void load (File file, String path, String uriContext) throws IOException {
+        __(new CommonExpression(file, path, uriContext));
     }
 
-    public static void load (File path) throws IOException {
-        if (!path.exists()) {
-            return;
-        }
-        if (path.isDirectory()) {
-            loadDir(path.getPath(), path);
-        } else {
-            loadFile(path.getParent(), path);
-        }
-    }
-
-    private static void loadDir (String root, File path) throws IOException {
-        for (File file : path.listFiles()) {
-            load(root, file);
-        }
-    }
-
-    private static void loadFile (String root, File file) throws IOException {
-        String path = file.getPath().substring(root.length());
-        __(new CommonExpression(file, path));
-    }
-
-	private static void load (String root, File path) throws IOException {
-		if (path.isDirectory()) {
-            loadDir(root, path);
-		} else {
-            loadFile(root, path);
-		}
-	}
 	
 }
