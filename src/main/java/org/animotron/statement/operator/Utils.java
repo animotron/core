@@ -34,6 +34,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -57,10 +58,24 @@ import static org.neo4j.graphdb.traversal.Evaluation.*;
  */
 public class Utils {
 
-    public final static Node EXTENSION = THE._("extension");
-    public final static Node FILE = THE._("file");
-    public final static Node NAME = THE._("name");
-    public final static Node URI = THE._("uri");
+    public final static Node EXTENSION;
+    public final static Node FILE;
+    public final static Node NAME;
+    public final static Node URI;
+    
+    static {
+    	Transaction tx = AnimoGraph.beginTx();
+    	try {
+	        EXTENSION = THE._("extension");
+	        FILE = THE._("file");
+	        NAME = THE._("name");
+	        URI = THE._("uri");
+	        
+	        tx.success();
+    	} finally {
+    		AnimoGraph.finishTx(tx);
+    	}
+    }
 
 	public static TraversalDescription td_RESULT =
 		Traversal.description().
