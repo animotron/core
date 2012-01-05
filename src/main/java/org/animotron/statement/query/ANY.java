@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.util.Set;
+import javolution.util.FastSet;
 
 /**
  * Query operator 'ANY'.
@@ -69,77 +69,88 @@ public class ANY extends AbstractQuery implements Reference {
 				
 					Node node = the.getEndNode();
 					
-					Set<Node>[] lists = getUSEs(pf, node);
-					Set<Node> uses = lists[1];
-					Set<Node> directed = lists[0];
-					
-					if (debug) System.out.println(uses);
-					
-					boolean underUSE = false;
-					if (directed != null && directed.size() == 1) { 
-						underUSE = true;
-						node = directed.iterator().next();
-					}
-					
-					if (debug) System.out.println(" node = "+node);
-					
-					int i = 0;
-		
-	        		Relationship res = getThe(node);
-					if (underUSE && filtering(pf, res, uses))
-		            	try {
-		            		pf.sendAnswer( res );
-		            		break;
-		            	} catch (Exception e) {}
+    				FastSet<Node> uses = FastSet.newInstance();
+    				FastSet<Path> directed = FastSet.newInstance();
 
-					for (Path path : td_IS_leaf.traverse(node)) {
-		        		i++;
-			        	Relationship r = path.lastRelationship();
+    				try {
+						getUSEs(pf, node, uses, directed);
+						
+						if (debug) System.out.println(uses);
+						
+						boolean underUSE = false;
+						for (FastSet.Record r = directed.head(), end = directed.tail(); (r = r.getNext()) != end;) {
+							Path path = directed.valueOf(r);
 
-			        	if (debug) System.out.println(path);
-			        	if (debug) System.out.println("have context = "+Utils.haveContext(r.getEndNode()));
-
-			        	if (!Utils.haveContext(r.getEndNode())) {
-			        		
-			        		//XXX: need better check, it can be reference from other then AN
-			        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-			        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) { //XXX: sure that StartNode? 
-					        	if (debug) System.out.println("continue");
-			        			continue;
-			        		}
-
-			        		try {
-		        				res = getThe(r.getStartNode());
-			        			if (filtering(pf, res, uses)) {
-			        				pf.sendAnswer( res );
-			        				break;
-			        			}
-			        		} catch (Exception e) {
-		        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-		        					res = p.lastRelationship();
+							underUSE = true;
+							if (path.lastRelationship().isType(AN._))
+								node = path.lastRelationship().getStartNode();
+							else
+								node = path.lastRelationship().getEndNode();
+						}
+						
+						if (debug) System.out.println(" node = "+node);
+						
+						int i = 0;
+			
+		        		Relationship res = getThe(node);
+						if (underUSE && filtering(pf, res, uses))
+			            	try {
+			            		pf.sendAnswer( res );
+			            		break;
+			            	} catch (Exception e) {}
+	
+						for (Path path : td_IS_leaf.traverse(node)) {
+			        		i++;
+				        	Relationship r = path.lastRelationship();
+	
+				        	if (debug) System.out.println(path);
+				        	if (debug) System.out.println("have context = "+Utils.haveContext(r.getEndNode()));
+	
+				        	if (!Utils.haveContext(r.getEndNode())) {
+				        		
+				        		//XXX: need better check, it can be reference from other then AN
+				        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+				        		if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) { //XXX: sure that StartNode? 
+						        	if (debug) System.out.println("continue");
+				        			continue;
+				        		}
+	
+				        		try {
+			        				res = getThe(r.getStartNode());
 				        			if (filtering(pf, res, uses)) {
 				        				pf.sendAnswer( res );
+				        				break;
 				        			}
-		        				}
-							}
-			        	} else {
-			    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
-			    			try {
-			    				for (Relationship rr : hits) {
-			    					
-			    					if (rr.isType(AN._)) {
-			    						if (filtering(pf, rr, r.getEndNode(), uses)) {
-					        				pf.sendAnswer( rr );
-					        				break;
-			    						}
-			    					}
-			    				}
-			    			} finally {
-			    				hits.close();
-			    			}
-			        	}
-			        }
-					if (debug) System.out.println(i);
+				        		} catch (Exception e) {
+			        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
+			        					res = p.lastRelationship();
+					        			if (filtering(pf, res, uses)) {
+					        				pf.sendAnswer( res );
+					        			}
+			        				}
+								}
+				        	} else {
+				    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
+				    			try {
+				    				for (Relationship rr : hits) {
+				    					
+				    					if (rr.isType(AN._)) {
+				    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+						        				pf.sendAnswer( rr );
+						        				break;
+				    						}
+				    					}
+				    				}
+				    			} finally {
+				    				hits.close();
+				    			}
+				        	}
+				        }
+						if (debug) System.out.println(i);
+    				} finally {
+    					FastSet.recycle(uses);
+    					FastSet.recycle(directed);
+    				}
 		        }
 			}
             pf.done();

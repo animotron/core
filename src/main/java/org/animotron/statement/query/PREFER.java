@@ -33,7 +33,7 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.util.Set;
+import javolution.util.FastSet;
 
 /**
  * Query operator 'PREFER'.
@@ -66,60 +66,73 @@ public class PREFER extends AbstractQuery implements Reference {
 	            	Relationship ref = v.getAnswer(); 
 	            	Node node = ref.getEndNode();
 	
-					Set<Node>[] lists = getUSEs(pf, node);
-					Set<Node> uses = lists[1];
-					Set<Node> directed = lists[2];
-					
-					if (uses.size() > 0) {
-						//boolean underUSE = false;
-						if (directed != null && directed.size() == 1) { 
-							//underUSE = true;
-							node = directed.iterator().next();
-						}
-			
-//						if (underUSE && filtering(pf, node, uses))
-//							pf.sendAnswer( getThe(node) );
-			
-				        for (Path path : td_IS_leaf.traverse(node)) {
-				        	
-				        	//System.out.println(path);
+    				FastSet<Node> uses = FastSet.newInstance();
+    				FastSet<Path> directed = FastSet.newInstance();
 
-				        	Relationship r = path.lastRelationship();
-				        	if (!Utils.haveContext(r.getEndNode())) {
-				        		
-				        		//XXX: need better check, it can be reference from other then AN
-				        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-				        			continue;
+    				try {
+		            	getUSEs(pf, node, uses, directed);
+						
+						if (uses.size() > 0) {
+							boolean underUSE = false;
+							for (FastSet.Record r = directed.head(), end = directed.tail(); (r = r.getNext()) != end;) {
+								Path path = directed.valueOf(r);
 
-				        		try {
-				        			Relationship res = getThe(r.getStartNode());
-				        			if (filtering(pf, res, uses)) {
-				        				pf.sendAnswer( res );
-				        			}
-				        		} catch (Exception e) {
-			        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-			        					Relationship res = p.lastRelationship();
+								underUSE = true;
+								if (path.lastRelationship().isType(AN._))
+									node = path.lastRelationship().getStartNode();
+								else
+									node = path.lastRelationship().getEndNode();
+							}
+				
+			        		Relationship res = getThe(node);
+							if (underUSE && filtering(pf, res, uses))
+								pf.sendAnswer( res );
+				
+					        for (Path path : td_IS_leaf.traverse(node)) {
+					        	
+					        	//System.out.println(path);
+	
+					        	Relationship r = path.lastRelationship();
+					        	if (!Utils.haveContext(r.getEndNode())) {
+					        		
+					        		//XXX: need better check, it can be reference from other then AN
+					        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+					        			continue;
+	
+					        		try {
+					        			res = getThe(r.getStartNode());
 					        			if (filtering(pf, res, uses)) {
 					        				pf.sendAnswer( res );
 					        			}
-			        				}
-								}
-				        	} else {
-				    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
-				    			try {
-				    				for (Relationship res : hits) {
-				    					
-				    					if (res.isType(AN._) || res.isType(VALUE._)) {
-				    						if (filtering(pf, res, r.getEndNode(), uses)) {
+					        		} catch (Exception e) {
+				        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
+				        					res = p.lastRelationship();
+						        			if (filtering(pf, res, uses)) {
 						        				pf.sendAnswer( res );
-				    						}
-				    					}
-				    				}
-				    			} finally {
-				    				hits.close();
-				    			}
-				        	}
-				        }					}
+						        			}
+				        				}
+									}
+					        	} else {
+					    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
+					    			try {
+					    				for (Relationship rr : hits) {
+					    					
+					    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
+					    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+							        				pf.sendAnswer( rr );
+					    						}
+					    					}
+					    				}
+					    			} finally {
+					    				hits.close();
+					    			}
+					        	}
+					        }
+						}
+    				} finally {
+    					FastSet.recycle(uses);
+    					FastSet.recycle(directed);
+    				}
 	            }
 			}
             pf.done();

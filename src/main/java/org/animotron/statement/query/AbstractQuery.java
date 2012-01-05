@@ -232,40 +232,36 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		searchForUSE(uses, vector.getContext());
     }
     
-	protected Set<Node>[] getUSEs(PFlow pf, Node theNode) {
+	protected void getUSEs(PFlow pf, Node theNode, final Set<Node> uses, final Set<Path> directed) {
 
-    	final Set<Node> allUses = new FastSet<Node>();
-    	Set<Node> deepestSet = null;//new FastSet<Node>();
-    	
-		searchForUSE(allUses, pf.getVector());
-
-    	if (allUses.isEmpty()) {
-    		return new Set[] {null, allUses, deepestSet};
+    	final FastSet<Node> allUses = FastSet.newInstance();
+    	try {
+			searchForUSE(allUses, pf.getVector());
+	
+	    	if (allUses.isEmpty()) return;
+	    		
+	    	TraversalDescription trav = td.breadthFirst().
+					relationships(AN._, INCOMING).
+					relationships(REF._, INCOMING).
+					relationships(THE._, INCOMING).
+			evaluator(new IntersectionSearcher(){
+				@Override
+				public Evaluation evaluate(Path path) {
+					//System.out.println(" "+path);
+					return _evaluate_(path, allUses, uses, directed);
+				}
+			});
+	    	
+	    	for (Path path : trav.traverse(theNode)) {
+	    		System.out.println(" * use * "+path);
+	    	}
+	
+	    	if (allUses.contains(theNode))
+				uses.add(theNode);
+	    	
+    	} finally {
+    		FastSet.recycle(allUses);
     	}
-    		
-    	final Set<Node> uses = new FastSet<Node>();
-    	final Set<Node> directed = new FastSet<Node>();
-
-    	TraversalDescription trav = td.breadthFirst().
-				relationships(AN._, INCOMING).
-				relationships(REF._, INCOMING).
-				relationships(THE._, INCOMING).
-		evaluator(new IntersectionSearcher(){
-			@Override
-			public Evaluation evaluate(Path path) {
-				//System.out.println(" "+path);
-				return _evaluate_(path, allUses, uses, directed);
-			}
-		});
-    	
-    	for (Path path : trav.traverse(theNode)) {
-    		System.out.println(" * use * "+path);
-    	}
-
-    	if (allUses.contains(theNode))
-			uses.add(theNode);
-    	
-		return new Set[] {directed, uses, deepestSet};
     }
 
 	protected Relationship getThe(Node node) {
@@ -439,7 +435,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 	abstract class IntersectionSearcher implements Evaluator {
 
-		public Evaluation _evaluate_(Path path, final Set<Node> targets, final Set<Node> intersection, final Set<Node> directed) {
+		public Evaluation _evaluate_(Path path, final Set<Node> targets, final Set<Node> intersection, final Set<Path> directed) {
 			if (path.length() < 2)
 				return EXCLUDE_AND_CONTINUE;
 			
@@ -450,8 +446,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (targets.contains(n)) {
 					if (debugUSE) System.out.println("->"+path);
 					intersection.add(n);
-					directed.clear();
-					directed.add(n);
+
+					directed.add(path);//n
 				}
 			
 			} else if (path.length() % 2 == 0) {
@@ -479,8 +475,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		    		//System.out.println(path);
 		    		//System.out.println(" ** "+p);
 
-		    		directed.clear();
-					directed.add(r.getStartNode());
+					directed.add(path);//r.getStartNode()
 		    	}
 
 			} else if (path.length() % 2 == 1)
@@ -490,8 +485,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					Node n = r.getEndNode(); 
 					if (targets.contains(n)) {
 						intersection.add(n);
-						directed.clear();
-						directed.add(n);
+
+						directed.add(path);//n
 					}
 				}
 				
