@@ -19,6 +19,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -29,12 +30,14 @@ import org.junit.Test;
 public class ThisTest extends ATest {
 
     @Test
+    @Ignore //empty this
     public void test_00() throws Exception {
         testAnimo("the file uri id this.");
         assertAnimoResult("get uri file.", "uri \"file\".");
     }
 
     @Test
+    @Ignore //empty this
     public void test_01() throws Exception {
         testAnimo("the file uri id this.");
         testAnimo("the x file.");
@@ -42,6 +45,7 @@ public class ThisTest extends ATest {
     }
 
     @Test
+    @Ignore //empty this
     public void test_02() throws Exception {
         testAnimo("the file uri id this.");
         testAnimo("the x file.");
