@@ -54,7 +54,7 @@ public class WITH extends Operator implements Predicate {
 	
 	private WITH() { super("with"); }
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
@@ -143,7 +143,7 @@ public class WITH extends Operator implements Predicate {
 			QCAVector g = expected.get(0);
 			
 			//XXX: finish
-			List<QCAVector> l = evaluable(g.getClosest().getEndNode());
+			List<QCAVector> l = evaluable(g);
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) {
@@ -168,16 +168,16 @@ public class WITH extends Operator implements Predicate {
 		return false;
 	}
 	
-	private List<QCAVector> evaluable(Node node) throws InterruptedException, IOException {
+	private List<QCAVector> evaluable(QCAVector vector) throws InterruptedException, IOException {
 		List<QCAVector> list = new FastList<QCAVector>();
 		
-		IndexHits<Relationship> q = Order.context(node);
+		IndexHits<Relationship> q = Order.context(vector.getClosest().getEndNode());
 		try {
 			for (Relationship i : q) {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput<QCAVector> in = Evaluator._.execute(i);
+    				PipedInput<QCAVector> in = Evaluator._.execute(vector.question(i));
     				for (QCAVector e : in) {
     					list.add(e);
     					System.out.println("get from Evaluator "+e);

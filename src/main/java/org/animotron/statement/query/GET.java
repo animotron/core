@@ -77,7 +77,7 @@ public class GET extends AbstractQuery implements Shift {
 		@Override
 		public void onMessage(final PFlow pf) {
 
-			if (debug) System.out.println("GET "+Thread.currentThread());
+			//if (debug) System.out.println("GET "+Thread.currentThread());
 
 			final Relationship op = pf.getOP();
 			
@@ -225,7 +225,7 @@ public class GET extends AbstractQuery implements Shift {
 			
 			while (true) {
 				
-				if (debug) System.out.println("nextREFs ");//+Arrays.toString(nextREFs.toArray()));
+				if (debug) System.out.println("["+pf.getOP()+"] nextREFs ");//+Arrays.toString(nextREFs.toArray()));
 	
 				QCAVector v = null;
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
