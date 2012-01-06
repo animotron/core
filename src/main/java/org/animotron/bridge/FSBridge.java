@@ -38,7 +38,7 @@ public class FSBridge extends AbstractFSBridge {
     private FSBridge(){}
 
     @Override
-    protected void load (File file, String path, String uriContext) throws IOException {
+    protected void load(File file, String path, String uriContext) throws IOException {
         __(new CommonExpression(file, path, uriContext));
     }
 

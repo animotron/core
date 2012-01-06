@@ -120,7 +120,7 @@ public class BinaryExpression extends AbstractExpression {
                 builder._(REF._, URI);
                 builder._(uriContext + id);
             builder.end();
-            builder._(STREAM._, hash);
+            builder._(STREAM._, bin.getPath());
             Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
             while (it.hasNext()) {
                 String i = it.next();
@@ -156,10 +156,6 @@ public class BinaryExpression extends AbstractExpression {
 
     private static File getFile(File folder, String hash){
         return new File(folder,  hash);
-    }
-
-    public static File getFile(String hash){
-        return new File(getFolder(hash),  hash);
     }
 
     public static class StringArrayIterator implements Iterable<String>, Iterator<String> {
