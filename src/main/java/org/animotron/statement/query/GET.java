@@ -380,7 +380,7 @@ public class GET extends AbstractQuery implements Shift {
 
 		//search for local 'HAVE'
 		if (ref.isType(REF._)) {
-			if (getByHave(pf, v, null, ref.getStartNode(), thes))
+			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), thes))
 				return true;
 		}
 
@@ -499,7 +499,9 @@ public class GET extends AbstractQuery implements Shift {
 		
 							} else if (r.isType(SHALL._)) {
 								res = r;
-								//break;
+
+							} else if (r.isType(REF._) && path.length() == 1) {
+								res = op;
 							}
 						}
 					}
