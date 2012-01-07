@@ -242,7 +242,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	try {
 			searchForUSE(allUses, pf.getVector());
 			
-			System.out.println("allUses "+allUses);
+			//System.out.println("allUses "+allUses);
 	
 	    	if (allUses.isEmpty()) return;
 	    		
@@ -259,7 +259,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			});
 	    	
 	    	for (Path path : trav.traverse(theNode)) {
-	    		System.out.println(" * use * "+path);
+	    		//System.out.println(" * use * "+path);
 	    	}
 	
 	    	if (allUses.contains(theNode))
@@ -490,7 +490,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(THE._)) {
 				Node n = r.getEndNode(); 
 				if (targets.contains(n)) {
-					if (debugUSE) System.out.println("->"+path);
+					if (debugUSE) 
+						System.out.println("THE->"+path);
+						
 					intersection.add(n);
 
 					directed.add(path);//n
@@ -533,6 +535,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				else {
 					Node n = r.getEndNode(); 
 					if (targets.contains(n)) {
+						//System.out.println("->"+path);
+
 						intersection.add(n);
 
 						directed.add(path);//n

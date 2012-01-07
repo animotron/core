@@ -75,21 +75,20 @@ public class ANY extends AbstractQuery implements Reference {
     				try {
 						getUSEs(pf, node, uses, directed);
 						
-						if (debug) 
+						if (debug) { 
 							System.out.println(uses);
+							System.out.println(directed);
+    					}
 						
 						boolean underUSE = false;
-						for (FastSet.Record r = directed.head(), end = directed.tail(); (r = r.getNext()) != end;) {
-							Path path = directed.valueOf(r);
+						Node n = getClosestIntersection(directed);
+	    				if (n != null) {
+	    					node = n;
+	    					underUSE = true;
+	    				}
 
-							underUSE = true;
-							if (path.lastRelationship().isType(AN._))
-								node = path.lastRelationship().getStartNode();
-							else
-								node = path.lastRelationship().getEndNode();
-						}
-						
-						if (debug) System.out.println(" node = "+node);
+						if (debug) 
+							System.out.println(" node = "+node);
 						
 						int i = 0;
 			

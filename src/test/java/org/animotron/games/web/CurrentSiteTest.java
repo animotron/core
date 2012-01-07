@@ -42,13 +42,6 @@ public class CurrentSiteTest extends ATest {
 
     	JExpression.__(
             new JExpression(
-                _(THE._, "current-site",
-                    _(ANY._, "site",
-                        _(WITH._, "server-name", _(GET._, "host"))
-                    )
-                )
-            ),
-            new JExpression(
                 _(THE._, "test-service",
                     _(AN._, "service"),
                     _(GET._, "server-name"),
@@ -64,7 +57,9 @@ public class CurrentSiteTest extends ATest {
             new JExpression(
                 _(THE._, "rest",
                     _(ANY._, "service",
-                        _(AN._, "current-site")
+                        _(ANY._, "site",
+                            _(WITH._, "server-name", _(GET._, "host"))
+                        )
                     )
                 )
             )
