@@ -48,6 +48,8 @@ public class EACH extends Combinator {
 
 	public static final EACH _ = new EACH();
 
+	private static boolean debug = false; 
+
 	private EACH() { super("each"); }
 
 	@Override
@@ -59,8 +61,8 @@ public class EACH extends Combinator {
 
 		@Override
 		public void onMessage(final PFlow pf) {
-			System.out.println("EACH EACH EACH EACH");
-			System.out.println(pf.getVector());
+			if (debug) System.out.println("EACH EACH EACH EACH");
+			if (debug) System.out.println(pf.getVector());
 			
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
