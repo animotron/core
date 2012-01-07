@@ -18,6 +18,7 @@
  */
 package org.animotron.manipulator;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedInput;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
@@ -131,6 +132,23 @@ public class QCAVector {
 		
 		this.preceding_sibling = precedingSibling;
 		if (debug) System.out.println(" .... create vector 9 .... ");
+	}
+	
+	protected void cyclingDetection(Relationship op) throws AnimoException {
+		int deep = 0; int count = 0;
+		if (context != null)
+			for (QCAVector v : context) {
+				if (deep > 0 && v.haveRelationship(op)) {
+					if (count > 2)
+						throw new AnimoException(op, "cycling detected "+this);
+		            else
+						count++;
+				}
+				deep++;
+			}
+		
+		if (preceding_sibling != null)
+			preceding_sibling.cyclingDetection(op);
 	}
 
 	public Relationship getClosest() {
@@ -313,6 +331,9 @@ public class QCAVector {
 			}
 		}
 		
+		if (preceding_sibling != null)
+			return preceding_sibling.haveRelationship(r);
+		
 		return false;
 	}
 
@@ -405,9 +426,11 @@ public class QCAVector {
 		return new QCAVector(q, this);
 	}
 	
-	public QCAVector question(Relationship q, QCAVector prev) {
+	public QCAVector question(Relationship q, QCAVector prev) throws AnimoException {
 		if (question != null && question.equals(q) && preceding_sibling == prev && answer == null)
 			return this;
+		
+		cyclingDetection(q);
 		
 		return new QCAVector(q, this, prev);
 	}

@@ -57,11 +57,11 @@ public class ANY extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
             long ts = System.currentTimeMillis();
 
-        	//final Relationship op = pf.getOP();
-			if (debug) System.out.println("ANY "+pf.getVector());
-			//System.out.println(pf.getPathHash()[0]+" "+pf.getPFlowPath());
-			//(new IOException()).printStackTrace();
-            
+			if (debug) { 
+				System.out.println("ANY "+pf.getOP()+" "+pf.getVector());
+				Utils.debug(ANY._, pf);
+			}
+				
 			for (QCAVector vector : Utils.getByREF(pf)) {
 				Relationship the = vector.getClosest();
 				
@@ -75,7 +75,8 @@ public class ANY extends AbstractQuery implements Reference {
     				try {
 						getUSEs(pf, node, uses, directed);
 						
-						if (debug) System.out.println(uses);
+						if (debug) 
+							System.out.println(uses);
 						
 						boolean underUSE = false;
 						for (FastSet.Record r = directed.head(), end = directed.tail(); (r = r.getNext()) != end;) {

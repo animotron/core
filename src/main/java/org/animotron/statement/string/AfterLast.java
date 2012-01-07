@@ -70,7 +70,7 @@ public class AfterLast extends Instruction implements Evaluable {
             String source;
 			try {
 				source = CachedSerializer.STRING.serialize(pf.getVector().question2(params[2]));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				pf.sendException(e);
 				return;
 			}

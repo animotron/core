@@ -226,13 +226,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     
     private void searchForUSE(Set<Node> uses, QCAVector vector) {
     	//System.out.println("searchForUSE "+vector);
-    	QCAVector prev = vector.getPrecedingSibling();
+    	QCAVector prev = vector;
+    	while (prev != null) {
+	    	checkVectorForUSE(uses, prev);
+			searchForUSE(uses, prev.getContext());
+			
+	    	prev = prev.getPrecedingSibling();
+    	}
     	
-    	checkVectorForUSE(uses, prev); 
-    	
-    	checkVectorForUSE(uses, vector); 
-
-		searchForUSE(uses, vector.getContext());
     }
     
 	protected void getUSEs(PFlow pf, Node theNode, final Set<Node> uses, final Set<Path> directed) {
@@ -240,6 +241,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	final FastSet<Node> allUses = FastSet.newInstance();
     	try {
 			searchForUSE(allUses, pf.getVector());
+			
+			System.out.println("allUses "+allUses);
 	
 	    	if (allUses.isEmpty()) return;
 	    		
@@ -504,8 +507,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				evaluator(new DownIntersectionSearcher(){
 					@Override
 					public Evaluation evaluate(Path path) {
-						if (path.length() == 1 && path.lastRelationship().equals(r))
-							return EXCLUDE_AND_PRUNE;
+						//XXX: make this work
+//						if (path.length() == 1 && path.lastRelationship().equals(r)) {
+//							System.out.println(" - "+path+" - ");
+//							return EXCLUDE_AND_PRUNE;
+//						}
 						
 						//System.out.println(" - "+path);
 						return _evaluate_(path, targets, intersection);

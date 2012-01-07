@@ -18,6 +18,7 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
@@ -150,7 +151,7 @@ public class Utils {
 		return null;
 	}
 
-	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final QCAVector v, final PipedOutput<QCAVector> out) throws InterruptedException, IOException {
+	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final QCAVector v, final PipedOutput<QCAVector> out) throws InterruptedException, IOException, AnimoException {
 		
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
@@ -231,7 +232,7 @@ public class Utils {
 		}
 	}
 	
-	public static PipedInput<QCAVector> eval(QCAVector vector) throws IOException {
+	public static PipedInput<QCAVector> eval(QCAVector vector) throws IOException, AnimoException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
         
@@ -394,6 +395,20 @@ public class Utils {
 				return res;
 			}
 		});
+	}
+
+	public static void debug(Statement st, PFlow pf) {
+		System.out.print(st.name()+" "+pf.getOP().getId()+" ");
+		for (QCAVector v : Utils.getByREF(pf)) {
+			Node theNode = v.getUnrelaxedClosest().getEndNode();
+			try {
+				System.out.print("'"+name(theNode)+"'");
+			} catch (Exception e) {
+				System.out.print("???");
+			}
+			System.out.print(" ["+theNode+"], ");
+		}
+		System.out.println();
 	}
 
 	public static void debug(Statement st, Relationship op, Set<Node> thes) {

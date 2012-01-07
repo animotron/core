@@ -54,13 +54,13 @@ public class WITH extends Operator implements Predicate {
 	
 	private WITH() { super("with"); }
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		
-		//System.out.println("==================================================");
-		if (debug) System.out.println("WITH op "+op+" ref "+ref);
+		if (debug) 
+			System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 		
 		QCAVector qVector = null;
@@ -69,7 +69,9 @@ public class WITH extends Operator implements Predicate {
 		List<QCAVector> expected = (List<QCAVector>) pf.getData(op);
 
 		if (expected == null) {
-			if (debug) System.out.println("Eval expected");
+			if (debug) 
+				System.out.println("Eval expected");
+			
 			expected = new FastList<QCAVector>();
 			qVector = pf.getVector().answered(pf.getVector().getClosest());
 			in = Evaluator._.execute(qVector, op.getEndNode());
@@ -120,7 +122,9 @@ public class WITH extends Operator implements Predicate {
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
 
-		if (debug) System.out.println("Eval actual");
+		if (debug) 
+			System.out.println("Eval actual");
+		
 		for (QCAVector have : in) {
 			if (debug) System.out.println("actual get "+have);
 			IndexHits<Relationship> hits = Order.context(have.getClosest().getEndNode());

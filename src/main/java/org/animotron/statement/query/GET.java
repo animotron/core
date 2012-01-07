@@ -94,7 +94,7 @@ public class GET extends AbstractQuery implements Shift {
 							for (QCAVector rr : Utils.eval(theNode)) {
 								thes.add(rr.getClosest().getEndNode());
 							}
-						} catch (IOException e) {
+						} catch (Exception e) {
 							pf.sendException(e);
 							return;
 						}
@@ -117,7 +117,10 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) {
 			
-			if (debug) Utils.debug(GET._, op, thes);
+			if (debug) { 
+				Utils.debug(GET._, op, thes);
+				System.out.println(pf.getVector());
+			}
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {
@@ -235,13 +238,19 @@ public class GET extends AbstractQuery implements Shift {
 					
 					QCAVector next = v;
 					while (next != null) {
-						if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
-							//if (debug) System.out.println("checking question");
-							//found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
-						} else {
-							visitedREFs.add(next.getQuestion());
-							found = true;
-						}
+						if (next.getQuestion() != null 
+								&& next.getUnrelaxedAnswer() != null 
+								&& !next.getUnrelaxedAnswer().equals(next.getQuestion()))
+							
+							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
+								//if (debug) System.out.println("checking question");
+								//found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
+							} else {
+								found = true;
+							}
+						
+						visitedREFs.add(next.getQuestion());
+						
 						next = next.getPrecedingSibling();
 					}
 				}
@@ -263,7 +272,7 @@ public class GET extends AbstractQuery implements Shift {
 					QCAVector next = v;
 					while (next != null) {
 						t = next.getUnrelaxedAnswer();
-						if (t != null) {
+						if (t != null && !t.equals(next.getQuestion())) {
 							if (! t.isType(AN._))
 								getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
 							
@@ -313,7 +322,7 @@ public class GET extends AbstractQuery implements Shift {
 			for (Relationship r : it) {
 				//if (debug) System.out.println(r);
 				
-				if (visitedREFs != null && !visitedREFs.contains(r)) {
+				if (visitedREFs != null && visitedREFs.contains(r)) {
 					continue;
 				}
 	
@@ -338,6 +347,7 @@ public class GET extends AbstractQuery implements Shift {
 				} else if (st instanceof Reference) {
 					if (!pf.isInStack(r)) {
 						try {
+							//System.out.println("["+pf.getOP()+"] evaluate "+prev);
 							PipedInput<QCAVector> in = Evaluator._.execute(prev);
 							
 							for (QCAVector v : in) {
@@ -389,12 +399,16 @@ public class GET extends AbstractQuery implements Shift {
 
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
 		if (!op.isType(ANY._)) {
-			if (debug) System.out.println("["+pf.getOP()+"] answered "+op);
+			if (debug) 
+				System.out.println("["+pf.getOP()+"] answered "+op);
+			
 			pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
 			return true;
 		}
 		
-		if (debug) System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
+		if (debug) 
+			System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
+		
 		try {
 			PipedInput<QCAVector> in = Evaluator._.execute(vector.question(op));
 
@@ -406,7 +420,10 @@ public class GET extends AbstractQuery implements Shift {
 			for (QCAVector v : in) {
 				res = v.getAnswer();
 				if (!pf.isInStack(res)) {
-					if (debug) System.out.println("["+pf.getOP()+"] answered "+v.getAnswer());
+					
+					if (debug) 
+						System.out.println("["+pf.getOP()+"] Relaxing answered "+v.getAnswer());
+					
 					pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
 					answered = true;
 				}
