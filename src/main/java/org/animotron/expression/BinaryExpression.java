@@ -118,7 +118,7 @@ public class BinaryExpression extends AbstractExpression {
             builder.end();
             builder.start(AN._);
                 builder._(REF._, URI);
-                builder._(uriContext + id);
+                builder._(uriContext + "/" + id);
             builder.end();
             builder._(STREAM._, bin.getPath());
             Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
