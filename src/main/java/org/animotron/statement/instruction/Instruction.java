@@ -48,7 +48,7 @@ public abstract class Instruction extends AbstractStatement implements Shift {
 		Relationship res = AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {
-				Node sNode = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING).getStartNode();
+				Node sNode = pf.getVector().getQuestion().getEndNode();
 				Relationship res = sNode.createRelationshipTo(r.getEndNode(), RESULT);
 				Properties.RID.set(res, r.getId());
 				//Properties.CID.set(res, pf.getLastContext().getId());
@@ -56,7 +56,6 @@ public abstract class Instruction extends AbstractStatement implements Shift {
 			}
 		});
 
-		//XXX: fix context
 		pf.sendAnswer(pf.getVector().answered(res));
     }
  

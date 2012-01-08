@@ -30,7 +30,10 @@ import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression.*;
+import static org.animotron.expression.AnimoExpression.__;
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.element;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -186,5 +189,26 @@ public class WebFrameworkTest extends ATest {
                 )
             );
         assertAnimoResult(ss, "");
+    }
+
+    @Test
+    public void form_generator() throws Exception {
+        __(
+        		"the firstname (name \"firstname\").",
+        		"the lastname (name \"lastname\").",
+        		"the person (name \"person\") (part (firstname) (lastname)).",
+        		
+        		"the html-form \\form (\\p string get name) (each (get part) (\\input (@name id this part) (string get name))) (\\input @type \"submit\")."
+		);
+    	
+        JExpression test = new JExpression(
+            _(AN._, "html-form",
+                _(AN._, "part",
+            		_(AN._, "person")
+        		)
+            )
+        );
+        assertAnimoResult(test, "html-form \\form (\\p \"person\") (\\input (@name \"person\") \"person\") (\\input @type \"submit\").");
+
     }
 }
