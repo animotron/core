@@ -38,6 +38,7 @@ import java.util.List;
 import static org.animotron.graph.Properties.CONTEXT;
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.RelationshipTypes.TRI;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -115,7 +116,9 @@ public class FastGraphBuilder extends GraphBuilder {
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
-                            destructive(i);
+                            if (!i.isType(TRI)) {
+                                destructive(i);
+                            }
                         }
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
