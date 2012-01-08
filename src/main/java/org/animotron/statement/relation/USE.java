@@ -21,13 +21,15 @@
 package org.animotron.statement.relation;
 
 
+import org.animotron.statement.operator.Operator;
+
 /**
  * Operator 'USE'.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class USE extends Relation {
+public class USE extends Operator {
 	
 	public static final USE _ = new USE();
 	
