@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.*;
 public class WebFrameworkTest extends ATest {
 
     @Test
-    public void test() throws Exception {
+    public void test_00() throws Exception {
 
         __(
             new JExpression(
@@ -51,7 +51,7 @@ public class WebFrameworkTest extends ATest {
             new JExpression(
                 _(THE._, "html",
                     _(AN._, "mime-type", value("value/html")),
-                    _(AN._, "content",
+                    _(AN._, "page",
                         element("html",
                             element("head",
                                 element("title", _(GET._, "title"))
@@ -140,7 +140,7 @@ public class WebFrameworkTest extends ATest {
         );
 
         JExpression s = new JExpression(
-            _(GET._, "content",
+            _(GET._, "page",
                 _(AN._, "rest",
                     _(USE._, "root"),
                     _(AN._, "uri", value("/")),
@@ -150,7 +150,7 @@ public class WebFrameworkTest extends ATest {
         );
 
         assertAnimoResult(s,
-            "content " +
+            "page " +
                 "\\html " +
                     "(\\head \\title title \"Welcome to Animo\") " +
                     "(\\body the theme-concrete-root-layout (root-layout layout) " +
@@ -177,7 +177,7 @@ public class WebFrameworkTest extends ATest {
             "</html>");
         
         JExpression ss = new JExpression(
-                _(GET._, "content",
+                _(GET._, "page",
                     _(AN._, "rest",
                         _(USE._, "favicon.ico"),
                         _(AN._, "uri", value("/favicon.ico")),
