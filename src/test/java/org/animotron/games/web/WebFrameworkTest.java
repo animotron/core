@@ -198,7 +198,20 @@ public class WebFrameworkTest extends ATest {
         		"the lastname (name \"lastname\").",
         		"the person (name \"person\") (part (firstname) (lastname)).",
         		
-        		"the html-form \\form (@method \"POST\") (@action string (\"/\") (id get part) (\"/store\")) (\\p get name) (each (get part) (\\input (@name id this part) (get name))) (\\input @type \"submit\")."
+        		"the html-form " +
+    				"(each " +
+    					"(get part) " +
+    					"(\\form " +
+    						"(@method \"POST\") " +
+    						"(@action " +
+    							"string " +
+    								"(\"/\") " +
+    								"(id this part) " +
+    								"(\"/store\")) " +
+							"(\\p get name) " +
+							"(each (get part) " +
+								"(\\input (@name id this part) (get name))) " +
+							"(\\input @type \"submit\")))."
 		);
     	
         JExpression test = new JExpression(
@@ -208,7 +221,8 @@ public class WebFrameworkTest extends ATest {
         		)
             )
         );
-        assertAnimoResult(test, "html-form \\form (@method \"POST\") (@action \"/person/store\") (\\p name \"person\") (\\input (@name \"person\") (name \"person\")) (\\input @type \"submit\").");
+        assertAnimoResult(test, 
+    		"html-form \\form (@method \"POST\") (@action \"/person/store\") (\\p name \"person\") (\\input (@name \"firstname\") (name \"firstname\")) (\\input (@name \"lastname\") (name \"lastname\")) (\\input @type \"submit\").");
 
         assertXMLResult(test,
         		"<form><p>person</p><input name=\"person\">person</input><input type=\"submit\"/></form>");
