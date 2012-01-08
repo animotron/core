@@ -25,11 +25,9 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.VALUE;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -85,7 +83,7 @@ public class PREFER extends AbstractQuery implements Reference {
 
 							Relationship res;
 							if (underUSE 
-									//&& !node.hasRelationship(Direction.INCOMING, REF._) 
+									&& isLeaf(node) 
 									&& (res = getThe(node)) != null  
 									&& filtering(pf, res, uses))
 								pf.sendAnswer( res );
@@ -98,8 +96,8 @@ public class PREFER extends AbstractQuery implements Reference {
 					        	if (!Utils.haveContext(r.getEndNode())) {
 					        		
 					        		//XXX: need better check, it can be reference from other then AN
-					        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-					        		//	continue;
+					        		if (!isLeaf(r.getStartNode()))
+					        			continue;
 	
 					        		try {
 					        			res = getThe(r.getStartNode());

@@ -31,6 +31,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.relation.USE;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -593,4 +594,12 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
 	};
 
+
+    protected boolean isLeaf(Node node) {
+		for (Relationship r : node.getRelationships(Direction.INCOMING, REF._))
+			if (r.getStartNode().hasRelationship(Direction.INCOMING, AN._))
+				return false;
+		
+		return true;
+	};
 }
