@@ -136,9 +136,9 @@ public class AnimoPath {
 		return new One(st);
 	}
 
-	private One one(RelationshipType rt) {
-		return new One(rt);
-	}
+//	private One one(RelationshipType rt) {
+//		return new One(rt);
+//	}
 
 	private Many many(Statement st) {
 		return new Many(st);

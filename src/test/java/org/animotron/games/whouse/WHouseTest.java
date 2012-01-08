@@ -29,12 +29,15 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
+import static org.animotron.graph.RelationshipTypes.TRI;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -230,17 +233,4 @@ public class WHouseTest extends ATest {
     	assertStringResult(e, "have qty (number 1) (UoM kg)");
 	}
 
-	@Test
-	public void test_02() throws Exception {
-        __(
-            new AnimoExpression("the qty number."),
-            new AnimoExpression("the cost number."),
-            new AnimoExpression("the price / (cost) (qty)."),
-
-            new AnimoExpression("the * invert /.")
-            
-            //new AnimoExpression("the m1 (qty 10) (cost 50).")
-		);
-    	//assertStringResult("get cost m1.", "50");
-	}
 }

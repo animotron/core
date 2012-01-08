@@ -31,6 +31,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Prepare;
+import org.animotron.statement.query.GET;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -43,7 +44,7 @@ import static org.animotron.graph.RelationshipTypes.TRI;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class MUL extends MathOperator implements Prepare {
+public class MUL extends MathOperator {
 	
 	public static final MUL _ = new MUL();
 	
@@ -63,54 +64,4 @@ public class MUL extends MathOperator implements Prepare {
         return a;
     }
 
-	@Override
-	public Subscribable<PFlow> onPrepareQuestion() {
-		return prepare;
-	}
-
-
-    private OnQuestion prepare = new OnQuestion() {
-    	@Override
-    	public void onMessage(final PFlow pf) {
-    		final FastList<Node> thes = FastList.newInstance();
-    		IndexHits<Relationship> hits = Order.context(pf.getOPNode());
-    		try {
-    			for (Relationship r : hits) {
-    				if (!r.isType(AN._)) {
-    					pf.done();
-    					return;
-    				}
-    				
-    				for (QCAVector v : AN.getREFs(pf, new QCAVector(r))) {
-    					thes.add(v.getClosest().getEndNode());
-    				}
-    				
-    				if (thes.size() > 2) {
-    					pf.done();
-    					return;
-    				}
-    			}
-    			
-				if (thes.size() == 2) {
-
-	    			AnimoGraph.execute(new GraphOperation<Void>() {
-	
-						@Override
-						public Void execute() throws Exception {
-							Relationship r = thes.get(0).createRelationshipTo(thes.get(1), TRI);
-							Properties.TYPE.set(r, MUL._.name());
-							Properties.TO_NODE.set(r, pf.getOP().getStartNode().getId());
-							return null;
-						}
-	    				
-	    			});
-				}
-    			
-    		} finally {
-    			hits.close();
-    			FastList.recycle(thes);
-    		}
-    		pf.done();
-    	}
-    };
 }
