@@ -211,7 +211,7 @@ public class WebFrameworkTest extends ATest {
     								"(\"/store\")) " +
 							"(\\p get name) " +
 							"(each (get part) " +
-								"((get name) (\\input (@name id this part) (@name id this part)))) " +
+								"((get name) (\\input (@id id this part) (@name id this part)))) " +
 							"(\\input @type \"submit\")))."
 		);
     	
