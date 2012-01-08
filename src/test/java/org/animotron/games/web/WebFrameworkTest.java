@@ -210,5 +210,7 @@ public class WebFrameworkTest extends ATest {
         );
         assertAnimoResult(test, "html-form \\form (\\p \"person\") (\\input (@name \"person\") \"person\") (\\input @type \"submit\").");
 
+        assertXMLResult(test,
+        		"<form><p>person</p><input name=\"person\">person</input><input type=\"submit\"/></form>");
     }
 }
