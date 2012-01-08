@@ -15,16 +15,16 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-kernel:1.6.M01" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-kernel:1.6.M02" level="project" />
     <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-lucene-index:1.6.M01" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-lucene-index:1.6.M02" level="project" />
     <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:3.1.0" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-graph-algo:1.6.M01" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-udc:1.6.M01" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-graph-matching:1.6.M01" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher:1.6.M01" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-graph-algo:1.6.M02" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-udc:1.6.M02" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-graph-matching:1.6.M02" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher:1.6.M02" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.9.0-1" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j:neo4j-jmx:1.6.M01" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j:neo4j-jmx:1.6.M02" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j.build:neo4j-berkeleydb-je-index:0.2-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.sleepycat:je:4.1.10" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:1.6.2" level="project" />
