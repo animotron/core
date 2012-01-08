@@ -32,7 +32,6 @@ import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.USE;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
 
@@ -194,7 +193,7 @@ public class AnimoExpression extends AbstractExpression {
                 builder._(QNAME._, token);
                 op = null;
                 prefix = false;
-            } else if (op instanceof THE || op instanceof USE) {
+            } else if (op instanceof THE) {
                 builder.start(op, token);
                 op = null;
                 level++;

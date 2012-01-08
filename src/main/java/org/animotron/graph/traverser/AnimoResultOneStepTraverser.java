@@ -30,7 +30,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
-import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -56,12 +55,6 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
             	GraphHandler gh = new AnimoGraphHandler(handler);
                 result(gh, rr, level, isOne);
                 
-			//workaround IS and USE
-			} else if (s instanceof USE) {
-				Relationship r = rr.getClosest();
-				
-				handler.start(s, parent, r, level++, isOne, pos, isLast);
-				handler.end(s, parent, r, --level, isOne, pos, isLast);
             } else {
 				Relationship r = rr.getClosest();
 
