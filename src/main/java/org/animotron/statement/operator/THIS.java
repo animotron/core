@@ -46,7 +46,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 
 	private THIS() { super("this"); }
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
     @Override
 	public OnQuestion onCalcQuestion() {
@@ -65,7 +65,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 				thes.add(theNode.getClosest().getEndNode());
 			}
 
-			Utils.debug(THIS._, op, thes);
+			if (debug) Utils.debug(THIS._, op, thes);
 			
 			if (!Utils.results(pf)) {
 				FastList<QCAVector> list = FastList.newInstance();
