@@ -198,7 +198,7 @@ public class WebFrameworkTest extends ATest {
         		"the lastname (name \"lastname\").",
         		"the person (name \"person\") (part (firstname) (lastname)).",
         		
-        		"the html-form \\form (@method \"POST\") (@action string (\"/\") (id this part) (\"/store\")) (\\p get name) (each (get part) (\\input (@name id this part) (get name))) (\\input @type \"submit\")."
+        		"the html-form \\form (@method \"POST\") (@action string (\"/\") (id get part) (\"/store\")) (\\p get name) (each (get part) (\\input (@name id this part) (get name))) (\\input @type \"submit\")."
 		);
     	
         JExpression test = new JExpression(
