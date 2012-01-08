@@ -60,10 +60,10 @@ public class AllAnyGetTest extends ATest {
 
     @Test
     public void test_031() throws Exception {
-        testAnimo("the john person, male).");
-        assertAnimoResult("any person use male", "the john person, male.");
-        assertAnimoResult("all person use male", "the john person, male.");
-        assertAnimoResult("prefer person use male", "the john person, male.");
+        testAnimo("the john person, male.");
+        assertAnimoResult("any person use male", "the john (person) (male).");
+        assertAnimoResult("all person use male", "the john (person) (male).");
+        assertAnimoResult("prefer person use male", "the john (person) (male).");
     }
 
     @Test
