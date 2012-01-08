@@ -213,6 +213,50 @@ public class WebFrameworkTest extends ATest {
 							"(each (get part) " +
 								"((get name) (\\input (@id id this part) (@name id this part)))) " +
 							"(\\input @type \"submit\")))."
+
+		);
+    	
+        JExpression test = new JExpression(
+            _(AN._, "html-form",
+                _(AN._, "part",
+            		_(AN._, "person")
+        		)
+            )
+        );
+        assertAnimoResult(test, 
+    		"html-form \\form (@id \"person\") (@method \"POST\") (@action \"/person/store\") " +
+        		"(\\p name \"person\") " +
+        		"((name \"firstname\") (\\input (@name \"firstname\"))) " +
+        		"((name \"lastname\") (\\input (@name \"lastname\"))) " +
+        		"(\\input @type \"submit\").");
+
+        assertXMLResult(test,
+        		"<form><p>person</p><input name=\"person\">person</input><input type=\"submit\"/></form>");
+    }
+
+    @Test
+    public void form_generator_02() throws Exception {
+        __(
+        		"the firstname (name \"firstname\").",
+        		"the lastname (name \"lastname\").",
+        		"the person (name \"person\") (part (firstname) (lastname)).",
+        		
+        		"the html-form " +
+    				"(each " +
+    					"(get part) " +
+    					"(\\form " +
+    						"(@id id this part) " +
+    						"(@method \"POST\") " +
+    						"(@action " +
+    							"string " +
+    								"(\"/\") " +
+    								"(id this part) " +
+    								"(\"/store\")) " +
+							"(\\p get name) " +
+							"(each (get part) " +
+								"((get name) (\\input (@id id this part) (@name id this part)))) " +
+							"(\\input @type \"submit\")))."
+
 		);
     	
         JExpression test = new JExpression(
