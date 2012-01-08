@@ -86,7 +86,7 @@ public class ALL extends AbstractQuery implements Reference {
 						
 		        		Relationship res;
 						if (underUSE 
-								&& !node.hasRelationship(Direction.INCOMING, REF._) 
+								//&& !node.hasRelationship(Direction.INCOMING, REF._) 
 								&& (res = getThe(node)) != null  
 								&& filtering(pf, res, uses))
 							
@@ -102,8 +102,8 @@ public class ALL extends AbstractQuery implements Reference {
 				        	if (!Utils.haveContext(r.getEndNode())) {
 				        		
 				        		//XXX: need better check, it can be reference from other then AN
-				        		if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-				        			continue;
+				        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+				        		//	continue;
 	
 			        			try {
 					        		res = getThe(r.getStartNode());
