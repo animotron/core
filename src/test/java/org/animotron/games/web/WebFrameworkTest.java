@@ -202,6 +202,7 @@ public class WebFrameworkTest extends ATest {
     				"(each " +
     					"(get part) " +
     					"(\\form " +
+    						"(@id id this part) " +
     						"(@method \"POST\") " +
     						"(@action " +
     							"string " +
@@ -210,7 +211,7 @@ public class WebFrameworkTest extends ATest {
     								"(\"/store\")) " +
 							"(\\p get name) " +
 							"(each (get part) " +
-								"(\\input (@name id this part) (get name))) " +
+								"((get name) (\\input (@name id this part) (@name id this part)))) " +
 							"(\\input @type \"submit\")))."
 		);
     	
@@ -222,7 +223,11 @@ public class WebFrameworkTest extends ATest {
             )
         );
         assertAnimoResult(test, 
-    		"html-form \\form (@method \"POST\") (@action \"/person/store\") (\\p name \"person\") (\\input (@name \"firstname\") (name \"firstname\")) (\\input (@name \"lastname\") (name \"lastname\")) (\\input @type \"submit\").");
+    		"html-form \\form (@id \"person\") (@method \"POST\") (@action \"/person/store\") " +
+        		"(\\p name \"person\") " +
+        		"((name \"firstname\") (\\input (@name \"firstname\"))) " +
+        		"((name \"lastname\") (\\input (@name \"lastname\"))) " +
+        		"(\\input @type \"submit\").");
 
         assertXMLResult(test,
         		"<form><p>person</p><input name=\"person\">person</input><input type=\"submit\"/></form>");
