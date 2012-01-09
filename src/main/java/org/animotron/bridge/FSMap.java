@@ -40,8 +40,13 @@ public class FSMap extends AbstractFSBridge {
     private FSMap(){}
 
     @Override
-    protected void load(File file, String path, String uriContext) throws IOException {
-        __(new BinaryMapExpression(file, path, uriContext));
+    protected void loadFile(File file) throws IOException {
+        __(
+                new BinaryMapExpression(file) {
+                    @Override
+                    protected void description() {}
+                }
+        );
     }
 
 }

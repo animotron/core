@@ -20,9 +20,10 @@
  */
 package org.animotron.bridge;
 
-import org.animotron.expression.CommonExpression;
+import org.animotron.expression.AnimoExpression;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import static org.animotron.expression.Expression.__;
@@ -40,9 +41,8 @@ public class FSBridge extends AbstractFSBridge {
     private FSBridge(){}
 
     @Override
-    protected void load(File file, String path, String uriContext) throws IOException {
-        __(new CommonExpression(file, path, uriContext));
+    protected void loadFile(File file) throws IOException {
+        __(new AnimoExpression(new FileInputStream(file)));
     }
 
-	
 }

@@ -1,9 +1,0 @@
-the form-generator
-    THE
-		\form
-		    (@id getID)
-			(HAVEs
-				(AGraph)
-				(\input (@id getID) (@value QGraph))
-				(\br))
-			(\input (@type "submit") (@value "save"))

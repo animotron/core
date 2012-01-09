@@ -20,12 +20,8 @@
  */
 package org.animotron.bridge;
 
-import org.animotron.expression.CommonExpression;
+import org.animotron.expression.AnimoExpression;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -37,32 +33,15 @@ import static org.animotron.expression.Expression.__;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class ZipBridge extends AbstractFSBridge{
+public class ZipBridge extends AbstractZipBridge {
 
     public static final ZipBridge _ = new ZipBridge();
 
     private ZipBridge(){}
 
-	static final int BUFFER = 2048;
-
     @Override
-	public void load(File file, String uriContext) throws IOException {
-		if (!file.exists()) {
-			return;
-		}
-		FileInputStream fis = new FileInputStream(file);
-		ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
-
-		ZipEntry entry;
-		while ((entry = zis.getNextEntry()) != null) {
-			System.out.println("Extracting: " + entry);
-			__(new CommonExpression(zis, entry.getName(), uriContext, false));
-		}
-		zis.close();
-	}
-
-    @Override
-    protected void load(File file, String path, String uriContext) throws IOException {
+    protected void loadEntry(ZipInputStream zis, ZipEntry entry) {
+        __(new AnimoExpression(zis));
     }
 
 }

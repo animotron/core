@@ -20,13 +20,16 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.utils.MessageDigester;
+import org.animotron.exception.AnimoException;
+import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.value.STREAM;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.security.MessageDigest;
+import java.io.IOException;
+
+import static org.animotron.graph.Nodes.FILE;
 
 
 /**
@@ -34,36 +37,24 @@ import java.security.MessageDigest;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public abstract class BinaryMapExpression extends AbstractBinaryExpression {
+public abstract class AbstractBinaryExpression extends AbstractExpression {
 
-    private File file;
-    MessageDigest md = MessageDigester.md();
-
-    public BinaryMapExpression(File file) {
-        super(new FastGraphBuilder());
-        this.file = file;
+    public AbstractBinaryExpression(GraphBuilder builder) {
+        super(builder);
     }
 
-    @Override
-    public void build() throws Exception {
-        byte buf[] = new byte[1024 * 4];
-        int len;
-        InputStream stream = new FileInputStream(file);
-        while((len=stream.read(buf))>0) {
-            md.update(buf,0,len);
-        }
-        stream.close();
-        buildExpression();
+    protected final void buildExpression() throws Exception {
+        builder.start(THE._, id());
+            builder.start(AN._);
+                builder._(REF._, FILE);
+            builder.end();
+            builder._(STREAM._, stream());
+            description();
+        builder.end();
     }
 
-    @Override
-    protected String stream() {
-        return file.getPath();
-    }
-
-    @Override
-    protected String id() {
-        return null;
-    }
+    protected abstract void description() throws AnimoException, IOException;
+    protected abstract String stream();
+    protected abstract String id();
 
 }

@@ -21,13 +21,18 @@
 package org.animotron.bridge;
 
 import org.animotron.ATest;
+import org.animotron.exception.AnimoException;
+import org.animotron.expression.BinaryExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
+import static org.animotron.expression.AnimoExpression.__;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -46,7 +51,7 @@ public class BridgeTest extends ATest {
 	@Test
 	public void FSloadAndSerialize() throws Exception {
         System.out.println("Test repository loader ...");
-        FSBridge._.load("src/test/animo/application-animo.animo", "/binary");
+        FSBridge._.load("src/test/animo/application-animo.animo");
         System.out.println("loaded ...");
         check("application-animo");
         System.out.println("done.");
@@ -55,9 +60,26 @@ public class BridgeTest extends ATest {
 	@Test
 	public void ZIPloadAndSerialize() throws Exception {
         System.out.println("Test repository loader ...");
-        ZipBridge._.load("src/test/resources/test.zip", "/binary");
+        new ZipBridge().load("src/test/resources/test.zip");
         System.out.println("loaded ...");
         check("second.txt");
         System.out.println("done.");
 	}
+
+    private class ZipBridge extends AbstractZipBridge {
+
+        @Override
+        protected void loadEntry(ZipInputStream zis, final ZipEntry entry) {
+            __(
+                    new BinaryExpression(zis, false) {
+                        @Override
+                        protected String id () {
+                            return entry.getName();
+                        }
+                        @Override
+                        protected void description() throws AnimoException, IOException {}
+                    }
+            );
+        }
+    }
 }

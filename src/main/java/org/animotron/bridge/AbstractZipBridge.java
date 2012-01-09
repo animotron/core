@@ -18,35 +18,42 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.statement.ml;
+package org.animotron.bridge;
 
-import org.animotron.ATest;
-import org.animotron.bridge.FSBridge;
-import org.animotron.statement.operator.THE;
-import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
-
+import java.io.BufferedInputStream;
 import java.io.File;
-
-import static org.junit.Assert.assertNotNull;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
+ * Repository loader
+ * 
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- *
+ * 
  */
-public class FormGeneratorTest extends ATest {
+public abstract class AbstractZipBridge {
 
-	@Test
-	public void check() throws Exception {
+	static final int BUFFER = 2048;
 
-		FSBridge._.load(new File("src/main/animo/form-generator.animo"), "/binary/");
-        
-        Relationship r = THE._.get("form-generator");
-        
-        assertNotNull(r);
-        
-        assertAnimoResult(r, "the form-generator THE.");
-        
-        //XXX: complete
+    public void load(String path) throws IOException {
+        load(new File(path));
+    }
+
+	public void load(File file) throws IOException {
+		if (!file.exists()) {
+			return;
+		}
+		FileInputStream fis = new FileInputStream(file);
+		ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis));
+		ZipEntry entry;
+		while ((entry = zis.getNextEntry()) != null) {
+            loadEntry(zis, entry);
+		}
+		zis.close();
 	}
+
+    protected abstract void loadEntry(ZipInputStream zis, ZipEntry entry);
+
 }

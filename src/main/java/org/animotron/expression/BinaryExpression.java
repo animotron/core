@@ -20,23 +20,14 @@
  */
 package org.animotron.expression;
 
-import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.value.STREAM;
 import org.animotron.utils.MessageDigester;
 
 import java.io.*;
 import java.security.MessageDigest;
-import java.util.Iterator;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 import static org.animotron.graph.AnimoGraph.getStorage;
-import static org.animotron.graph.Nodes.*;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import static org.animotron.utils.MessageDigester.longToHex;
 
@@ -46,44 +37,32 @@ import static org.animotron.utils.MessageDigester.longToHex;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class BinaryExpression extends AbstractExpression {
+public abstract class BinaryExpression extends AbstractBinaryExpression {
 
 	private final static File BIN_STORAGE = new File(getStorage(), "binany");
 	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
 
     private InputStream stream;
-    private String path;
     private boolean closeStream = true;
-    private String uriContext;
+    private String id;
+    private File bin;
 
     static {
 		BIN_STORAGE.mkdirs();
 		TMP_STORAGE.mkdirs();
 	}
 
-    public BinaryExpression(InputStream stream, String path, String uriContext) {
-        this(stream, path, uriContext, true);
-    }
-
-    public BinaryExpression(InputStream stream, String path, String uriContext, boolean closeStream) {
-        this(new FastGraphBuilder(), stream, path, uriContext, closeStream);
-    }
-
-    public BinaryExpression(GraphBuilder builder, InputStream stream, String path, String uriContext) {
-        this(builder, stream, path, uriContext, true);
-    }
-
-    public BinaryExpression(GraphBuilder builder, InputStream stream, String path, String uriContext, boolean closeStream) {
-        super(builder);
+    public BinaryExpression(InputStream stream, boolean closeStream) {
+        super(new FastGraphBuilder());
         this.stream = stream;
-        this.path = path;
-        this.uriContext = uriContext;
         this.closeStream = closeStream;
     }
 
+
+
     @Override
-    public void build() throws IOException, AnimoException {
-        String id = UUID.randomUUID().toString();
+    public void build() throws Exception {
+        id = UUID.randomUUID().toString();
         File tmp = new File(TMP_STORAGE, id);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
@@ -101,7 +80,7 @@ public class BinaryExpression extends AbstractExpression {
         
         String hash = byteArrayToHex(md.digest()) + longToHex(size);
         File dir = getFolder(hash);
-        File bin = getFile(dir, hash);
+        bin = getFile(dir, hash);
         if (bin.exists()) {
             tmp.delete();
             System.out.println("File \"" + bin.getPath() + "\" already stored");
@@ -113,43 +92,17 @@ public class BinaryExpression extends AbstractExpression {
             }
             System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
+        buildExpression();
+    }
 
-        builder.start(THE._, id);
-            builder.start(AN._);
-                builder._(REF._, FILE);
-            builder.end();
-            builder.start(AN._);
-                builder._(REF._, URI);
-                builder._(uriContext + "/" + id);
-            builder.end();
-            builder._(STREAM._, bin.getPath());
-            Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
-            while (it.hasNext()) {
-                String i = it.next();
-                for (String s : new StringArrayIterator(i.split(Pattern.quote(".")))) {
-                    builder.start(AN._);
-                        builder._(REF._, s);
-                    builder.end();
-                }
-                if (!it.hasNext()) {
-                    Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
-                    if (jt.hasNext()) {
-                        builder.start(AN._);
-                            builder._(REF._, NAME);
-                            builder._(jt.next());
-                        builder.end();
-                    }
-                    if (jt.hasNext()) {
-                        builder.start(AN._);
-                            builder._(REF._, EXTENSION);
-                            do {
-                                builder._(jt.next());
-                            } while (jt.hasNext());
-                        builder.end();
-                    }
-                }
-            }
-        builder.end();
+    @Override
+    protected String stream() {
+        return bin.getPath();
+    }
+
+    @Override
+    protected String id() {
+        return id;
     }
 
     private static File getFolder(String hash) {
@@ -158,53 +111,6 @@ public class BinaryExpression extends AbstractExpression {
 
     private static File getFile(File folder, String hash){
         return new File(folder,  hash);
-    }
-
-    public static class StringArrayIterator implements Iterable<String>, Iterator<String> {
-
-        private String[] a;
-        private String c = null;
-        int i = 0;
-
-        public StringArrayIterator(String[] a) {
-            this.a = a;
-            next();
-        }
-
-        @Override
-        public Iterator<String> iterator() {
-            return this;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return c != null;
-        }
-
-        @Override
-        public String next() {
-            String next = c;
-            c = step();
-            return next;
-        }
-
-        private String step() {
-            if (i < a.length) {
-                String s = a[i]; i++;
-                if (s == null || s.isEmpty()) {
-                   return step();
-                } else {
-                    return s;
-                }
-            } else {
-                return null;
-            }
-        }
-
-        @Override
-        public void remove() {
-        }
-
     }
 
 }

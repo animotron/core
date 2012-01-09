@@ -31,39 +31,31 @@ import java.io.IOException;
  */
 public abstract class AbstractFSBridge {
 
-    public void load (String path, String uriContext) throws IOException {
-        load(new File(path), uriContext);
+    public void load(String path) throws IOException {
+        load(new File(path));
     }
 
-    public void load (File path, String uriContext) throws IOException {
+    public void load(File path) throws IOException {
         if (!path.exists()) {
             return;
         }
         if (path.isDirectory()) {
-            loadDir(path.getPath(), path, uriContext);
+            loadDir(path);
         } else {
-            loadFile(path.getParent(), path, uriContext);
+            loadFile(path);
         }
     }
 
-    private void loadDir (String root, File path, String uriContext) throws IOException {
+    private void loadDir (File path) throws IOException {
         for (File file : path.listFiles()) {
-            load(root, file, uriContext);
+            if (file.isDirectory()) {
+                loadDir(file);
+            } else {
+                loadFile(file);
+            }
         }
     }
 
-    private void loadFile (String root, File file, String uriContext) throws IOException {
-        load(file, file.getPath().substring(root.length()), uriContext);
-    }
+    abstract protected void loadFile(File file) throws IOException;
 
-    abstract protected void load(File file, String path, String uriContext) throws IOException;
-
-	private void load (String root, File path, String uriContext) throws IOException {
-		if (path.isDirectory()) {
-            loadDir(root, path, uriContext);
-		} else {
-            loadFile(root, path, uriContext);
-		}
-	}
-	
 }

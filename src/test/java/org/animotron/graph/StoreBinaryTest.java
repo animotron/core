@@ -21,7 +21,9 @@
 package org.animotron.graph;
 
 import org.animotron.ATest;
-import org.animotron.expression.CommonExpression;
+import org.animotron.exception.AnimoException;
+import org.animotron.expression.BinaryExpression;
+import org.animotron.expression.DefaultDescription;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.compare.WITH;
@@ -32,6 +34,8 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
@@ -67,7 +71,7 @@ public class StoreBinaryTest extends ATest {
 	public void storeAndSerialize() throws Exception {
         System.out.println("Test binary stream ...");
         
-    	Relationship r = new CommonExpression(new ByteArrayInputStream(TXT.getBytes()), PATH, "/binary/");
+    	Relationship r = new TestExpression(new ByteArrayInputStream(TXT.getBytes()), PATH);
     	CachedSerializer.ANIMO.serialize(r, System.out);
 
         JExpression s = new JExpression(
@@ -113,4 +117,18 @@ public class StoreBinaryTest extends ATest {
         System.out.println("done.");
 	}
 
+    private class TestExpression extends BinaryExpression {
+
+        private String path;
+
+        public TestExpression(InputStream stream, String path) {
+            super(stream, true);
+            this.path = path;
+        }
+
+        @Override
+        protected void description() throws AnimoException, IOException {
+            DefaultDescription.create(builder, path);
+        }
+    }
 }
