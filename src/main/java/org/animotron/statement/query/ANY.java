@@ -98,7 +98,7 @@ public class ANY extends AbstractQuery implements Reference {
 						if (underUSE && ((res = getThe(node)) != null) && filtering(pf, res, uses))
 			            	try {
 			            		pf.sendAnswer( res );
-			            		break;
+			            		return;
 			            	} catch (Exception e) {}
 	
 						for (Path path : td_IS_leaf.traverse(node)) {
@@ -121,13 +121,14 @@ public class ANY extends AbstractQuery implements Reference {
 			        				res = getThe(r.getStartNode());
 				        			if (filtering(pf, res, uses)) {
 				        				pf.sendAnswer( res );
-				        				break;
+				        				return;
 				        			}
 				        		} catch (Exception e) {
 			        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
 			        					res = p.lastRelationship();
 					        			if (filtering(pf, res, uses)) {
 					        				pf.sendAnswer( res );
+					        				return;
 					        			}
 			        				}
 								}
@@ -139,7 +140,7 @@ public class ANY extends AbstractQuery implements Reference {
 				    					if (rr.isType(AN._)) {
 				    						if (filtering(pf, rr, r.getEndNode(), uses)) {
 						        				pf.sendAnswer( rr );
-						        				break;
+						        				return;
 				    						}
 				    					}
 				    				}
