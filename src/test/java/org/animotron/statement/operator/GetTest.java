@@ -408,6 +408,7 @@ public class GetTest extends ATest {
 	}
 
 	@Test
+	@Ignore
 	public void test_05() throws Exception {
 		testAnimo("the site host \"localhost\".");
 		
