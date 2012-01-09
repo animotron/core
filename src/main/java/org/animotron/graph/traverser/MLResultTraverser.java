@@ -57,9 +57,9 @@ public class MLResultTraverser extends ResultTraverser {
                     try {
                         if (it.hasNext()) {
                             Object p = it.next();
-                            param[0] = param(p);
+                            param[0] = param(rr, p);
                             if (!(s instanceof ELEMENT)) {
-                                param[1] = param(it);
+                                param[1] = param(rr, it);
                                 if (param[1] == null) {
                                     if (s instanceof NS) {
                                         if (QNAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
@@ -89,17 +89,17 @@ public class MLResultTraverser extends ResultTraverser {
         }
     }
 
-    private String param(It it) throws IOException {
+    private String param(QCAVector rr, It it) throws IOException {
         if (it.hasNext()) {
-            return param(it.next());
+            return param(rr, it.next());
         }
         return null;
     }
 
-    private String param(Object o) throws IOException {
+    private String param(QCAVector rr, Object o) throws IOException {
         return
             o instanceof Relationship
-                ? CachedSerializer.STRING.serialize((Relationship) o)
+                ? CachedSerializer.STRING.serialize(rr.question((Relationship) o))
                 : (String) node.getProperty((String) o);
     }
 
