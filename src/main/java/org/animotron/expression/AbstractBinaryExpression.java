@@ -26,9 +26,10 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.STREAM;
-import org.neo4j.graphdb.Node;
 
 import java.io.IOException;
+
+import static org.animotron.graph.Nodes.FILE;
 
 
 /**
@@ -37,8 +38,6 @@ import java.io.IOException;
  * 
  */
 public abstract class AbstractBinaryExpression extends AbstractExpression {
-
-    private final Node FILE = THE._("file");
 
     public AbstractBinaryExpression(GraphBuilder builder) {
         super(builder);

@@ -30,6 +30,9 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 
+import static org.animotron.graph.Nodes.EXTENSION;
+import static org.animotron.graph.Nodes.NAME;
+
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -51,13 +54,13 @@ public class DefaultDescription {
                 Iterator<String> jt = new StringArrayIterator(i.split(Pattern.quote(".")));
                 if (jt.hasNext()) {
                     builder.start(AN._);
-                    builder._(REF._, "name");
+                    builder._(REF._, NAME);
                     builder._(jt.next());
                     builder.end();
                 }
                 if (jt.hasNext()) {
                     builder.start(AN._);
-                    builder._(REF._, "extension");
+                    builder._(REF._, EXTENSION);
                     do {
                         builder._(jt.next());
                     } while (jt.hasNext());
