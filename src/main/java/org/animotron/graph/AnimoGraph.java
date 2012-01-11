@@ -30,6 +30,7 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +59,27 @@ public class AnimoGraph {
         
         return true;
     }
+
+    private static boolean deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String aChildren : children) {
+                boolean success = deleteDir(new File(dir, aChildren));
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+        return dir.delete();
+    }
+    public static boolean cleanDB() {
+        if (deleteDir(new File(STORAGE))) {
+            graphDb = null;
+            return true;
+        }
+        return false;
+    }
+
 
     public static boolean startDB(String folder) {
     	return startDB(folder, new HashMap<String, String>());
