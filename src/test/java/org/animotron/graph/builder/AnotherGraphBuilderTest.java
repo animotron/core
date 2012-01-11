@@ -33,6 +33,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
 
+import static org.animotron.graph.AnimoGraph.cleanDB;
+import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 
 
@@ -53,7 +55,8 @@ public class AnotherGraphBuilderTest extends ATest {
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
-        cleanDb();
+        cleanDB(DATA_FOLDER);
+        startDB(DATA_FOLDER);
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
@@ -87,9 +90,11 @@ public class AnotherGraphBuilderTest extends ATest {
 
     private void test(String xml) throws Exception {
         test_0(xml);
-        cleanDb();
+        cleanDB(DATA_FOLDER);
+        startDB(DATA_FOLDER);
         test_1(xml);
-        cleanDb();
+        cleanDB(DATA_FOLDER);
+        startDB(DATA_FOLDER);
         test_2(xml);
     }
 
