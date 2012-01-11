@@ -47,11 +47,14 @@ public class AnimoGraph {
 
 	private static String STORAGE;
 
+    private static List<Transaction> activeTx;
+
 	private static Node ROOT;
 
     public static boolean startDB(String folder, Map<String, String> config) {
     	if (graphDb != null)
     		return false;
+        activeTx = new FastList<Transaction>();
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
@@ -136,8 +139,6 @@ public class AnimoGraph {
 		graphDb.shutdown();
         graphDb = null;
 	}
-
-	private static List<Transaction> activeTx = new FastList<Transaction>();
 
 	public static Transaction beginTx() {
 		Transaction tx = graphDb.beginTx();
