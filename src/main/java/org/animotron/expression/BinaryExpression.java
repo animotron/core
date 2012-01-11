@@ -27,7 +27,8 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.util.UUID;
 
-import static org.animotron.graph.AnimoGraph.getStorage;
+import static org.animotron.graph.AnimoGraph.binStorage;
+import static org.animotron.graph.AnimoGraph.tmpStorage;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import static org.animotron.utils.MessageDigester.longToHex;
 
@@ -39,21 +40,10 @@ import static org.animotron.utils.MessageDigester.longToHex;
  */
 public abstract class BinaryExpression extends AbstractBinaryExpression {
 
-	private final static String BIN_STORAGE = "binary";
-	private final static String TMP_STORAGE = "tmp";
-
     private InputStream stream;
     private boolean closeStream = true;
     private String id;
     private File bin;
-
-    private File binStorage(){
-        return new File(getStorage(), BIN_STORAGE);
-    }
-
-    private File tmpStorage(){
-        return new File(getStorage(), TMP_STORAGE);
-    }
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
         super(new FastGraphBuilder());
@@ -61,13 +51,10 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         this.closeStream = closeStream;
     }
 
-
-
     @Override
     public void build() throws Exception {
         id = UUID.randomUUID().toString();
         File tmp = new File(tmpStorage(), id);
-        System.out.println(tmp.getAbsolutePath());
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];

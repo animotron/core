@@ -30,6 +30,7 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +43,9 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class AnimoGraph {
 
+    private final static String BIN_STORAGE = "binary";
+    private final static String TMP_STORAGE = "tmp";
+
 	private static GraphDatabaseService graphDb = null;
 
 	private static String STORAGE;
@@ -49,6 +53,8 @@ public class AnimoGraph {
     private static List<Transaction> activeTx;
 
 	private static Node ROOT;
+    private static File BIN;
+    private static File TMP;
 
     public static boolean startDB(String folder, Map<String, String> config) {
         if (graphDb != null) {
@@ -57,6 +63,8 @@ public class AnimoGraph {
         activeTx = new FastList<Transaction>();
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
+        BIN = new File(STORAGE, BIN_STORAGE); BIN.mkdir();
+        TMP = new File(STORAGE, TMP_STORAGE); TMP.mkdir();
         initDB();
         return true;
     }
@@ -81,6 +89,14 @@ public class AnimoGraph {
 	public static String getStorage() {
 		return STORAGE;
 	}
+
+    public static File binStorage(){
+        return BIN;
+    }
+
+    public static File tmpStorage(){
+        return TMP;
+    }
 
 	public static Node getROOT() {
 		return ROOT;
