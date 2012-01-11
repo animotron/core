@@ -226,13 +226,14 @@ public abstract class ATest {
     }
 
     @Before
-    public static void start() {
+    public void start() {
         cleanDB(DATA_FOLDER);
         startDB(DATA_FOLDER);
     }
 
     @After
-    public static void stop() {
+    public void stop() {
     	shutdownDB();
     }
+
 }
