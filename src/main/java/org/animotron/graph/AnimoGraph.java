@@ -75,8 +75,9 @@ public class AnimoGraph {
     public static boolean cleanDB() {
         if (graphDb != null) {
             shutdownDB();
+            return deleteDir(new File(STORAGE));
         }
-        return deleteDir(new File(STORAGE));
+        return false;
     }
 
 
