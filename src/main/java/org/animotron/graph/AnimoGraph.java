@@ -52,11 +52,9 @@ public class AnimoGraph {
     public static boolean startDB(String folder, Map<String, String> config) {
     	if (graphDb != null)
     		return false;
-    	
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
-        
         return true;
     }
 
@@ -72,10 +70,24 @@ public class AnimoGraph {
         }
         return dir.delete();
     }
+
     public static boolean cleanDB() {
         if (graphDb != null) {
             shutdownDB();
             return deleteDir(new File(STORAGE));
+        }
+        return false;
+    }
+
+    public static boolean cleanDB(String file) {
+        if (file != null) {
+            File f = new File(file);
+            if (STORAGE != null) {
+                if (f.getAbsoluteFile().equals(new File(STORAGE).getAbsoluteFile())) {
+                    shutdownDB();
+                }
+            }
+            return deleteDir(f);
         }
         return false;
     }
@@ -107,6 +119,9 @@ public class AnimoGraph {
 	}
 
 	public static void shutdownDB() {
+        if (graphDb == null) {
+            return;
+        }
 		System.out.println("shotdown");
 		Executor.shutdown();
 		while (!activeTx.isEmpty()) {

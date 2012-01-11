@@ -28,6 +28,7 @@ import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
@@ -223,6 +224,11 @@ public abstract class ATest {
         Assert.assertEquals("", expected, bin);
         System.out.println(bin);
         System.out.println();
+    }
+
+    @BeforeClass
+    public static void clean() {
+        cleanDB(DATA_FOLDER);
     }
 
     @Before
