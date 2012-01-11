@@ -30,7 +30,6 @@ import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,49 +51,12 @@ public class AnimoGraph {
 	private static Node ROOT;
 
     public static boolean startDB(String folder, Map<String, String> config) {
-    	if (graphDb != null)
-    		return false;
         activeTx = new FastList<Transaction>();
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         initDB();
         return true;
     }
-
-    private static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children) {
-                boolean success = deleteDir(new File(dir, aChildren));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
-    }
-
-    public static boolean cleanDB() {
-        if (graphDb != null) {
-            shutdownDB();
-            return deleteDir(new File(STORAGE));
-        }
-        return false;
-    }
-
-    public static boolean cleanDB(String file) {
-        if (file != null) {
-            File f = new File(file);
-            if (STORAGE != null) {
-                if (f.getAbsoluteFile().equals(new File(STORAGE).getAbsoluteFile())) {
-                    shutdownDB();
-                }
-            }
-            return deleteDir(f);
-        }
-        return false;
-    }
-
 
     public static boolean startDB(String folder) {
     	return startDB(folder, new HashMap<String, String>());
@@ -122,9 +84,6 @@ public class AnimoGraph {
 	}
 
 	public static void shutdownDB() {
-        if (graphDb == null) {
-            return;
-        }
 		System.out.println("shotdown");
 		Executor.shutdown();
 		while (!activeTx.isEmpty()) {

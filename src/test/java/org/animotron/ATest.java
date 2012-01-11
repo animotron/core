@@ -28,12 +28,12 @@ import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
 
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.shutdownDB;
+import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 import static org.junit.Assert.assertNotNull;
 
@@ -226,14 +226,18 @@ public abstract class ATest {
         System.out.println();
     }
 
-    @BeforeClass
-    public static void clean() {
-        cleanDB(DATA_FOLDER);
+    private void deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            String[] children = dir.list();
+            for (String aChildren : children) {
+                deleteDir(new File(dir, aChildren));
+            }
+        }
     }
 
     @Before
     public void start() {
-        cleanDB();
+        deleteDir(new File(DATA_FOLDER));
         startDB(DATA_FOLDER);
     }
 
