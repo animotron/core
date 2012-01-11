@@ -39,18 +39,21 @@ import static org.animotron.utils.MessageDigester.longToHex;
  */
 public abstract class BinaryExpression extends AbstractBinaryExpression {
 
-	private final static File BIN_STORAGE = new File(getStorage(), "binany");
-	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
+	private final static String BIN_STORAGE = "binary";
+	private final static String TMP_STORAGE = "tmp";
 
     private InputStream stream;
     private boolean closeStream = true;
     private String id;
     private File bin;
 
-    static {
-		BIN_STORAGE.mkdirs();
-		TMP_STORAGE.mkdirs();
-	}
+    private File binStorage(){
+        return new File(getStorage(), BIN_STORAGE);
+    }
+
+    private File tmpStorage(){
+        return new File(getStorage(), TMP_STORAGE);
+    }
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
         super(new FastGraphBuilder());
@@ -63,7 +66,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     @Override
     public void build() throws Exception {
         id = UUID.randomUUID().toString();
-        File tmp = new File(TMP_STORAGE, id);
+        File tmp = new File(tmpStorage(), id);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];
@@ -105,11 +108,11 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         return id;
     }
 
-    private static File getFolder(String hash) {
-        return new File(new File(BIN_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));
+    private File getFolder(String hash) {
+        return new File(new File(binStorage(), hash.substring(0, 2)), hash.substring(0, 4));
     }
 
-    private static File getFile(File folder, String hash){
+    private File getFile(File folder, String hash){
         return new File(folder,  hash);
     }
 
