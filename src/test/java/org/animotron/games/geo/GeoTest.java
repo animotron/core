@@ -56,7 +56,7 @@ public class GeoTest extends ATest {
     @Test
 	public void test_01() throws Exception {
         byte[] in = (byte[]) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         byte[] out = (byte[]) HASH.get(new StAXExpression(osm()));
         assertEquals(in, out);

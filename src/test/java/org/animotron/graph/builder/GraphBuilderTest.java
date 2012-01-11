@@ -42,7 +42,7 @@ public class GraphBuilderTest extends ATest {
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         e = new AnimoExpression(new StreamGraphBuilder(), animo);
         String outA = CachedSerializer.ANIMO.serialize(e);
@@ -77,10 +77,10 @@ public class GraphBuilderTest extends ATest {
 
     private void test(String animo) throws Exception {
         test_0(animo);
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         test_1(animo);
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         test_2(animo);
     }

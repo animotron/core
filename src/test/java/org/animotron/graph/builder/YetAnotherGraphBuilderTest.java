@@ -66,7 +66,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
         e = the(new AnimoExpression(new FastGraphBuilder(), animo));
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = CachedSerializer.ANIMO.serialize(e);
@@ -101,10 +101,10 @@ public class YetAnotherGraphBuilderTest extends ATest {
 
     private void test(String animo, String xml) throws Exception {
         test_0(animo, xml);
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         test_1(animo, xml);
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         test_2(animo, xml);
     }

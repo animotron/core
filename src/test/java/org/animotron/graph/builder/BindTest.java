@@ -58,7 +58,7 @@ public class BindTest extends ATest {
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, DigestSerializer._.serialize(e));
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
         Expression x = new AnimoExpression(animo);
         String outA = CachedSerializer.ANIMO.serialize(x);

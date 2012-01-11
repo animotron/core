@@ -72,12 +72,11 @@ public class AnimoGraph {
         }
         return dir.delete();
     }
-    public static boolean cleanDB(String folder) {
-        if (deleteDir(new File(folder))) {
-            graphDb = null;
-            return true;
+    public static boolean cleanDB() {
+        if (graphDb != null) {
+            shutdownDB();
         }
-        return false;
+        return deleteDir(new File(STORAGE));
     }
 
 

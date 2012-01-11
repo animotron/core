@@ -227,7 +227,7 @@ public abstract class ATest {
 
     @Before
     public void start() {
-        cleanDB(DATA_FOLDER);
+        cleanDB();
         startDB(DATA_FOLDER);
     }
 
