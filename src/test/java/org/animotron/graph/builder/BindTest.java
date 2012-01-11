@@ -41,7 +41,6 @@ import org.neo4j.graphdb.Direction;
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
 
-import static org.animotron.graph.AnimoGraph.cleanDB;
 import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.expression.JExpression._;

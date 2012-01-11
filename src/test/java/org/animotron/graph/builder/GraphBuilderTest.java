@@ -26,7 +26,6 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
-import static org.animotron.graph.AnimoGraph.cleanDB;
 import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 

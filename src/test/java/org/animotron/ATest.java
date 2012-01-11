@@ -235,9 +235,13 @@ public abstract class ATest {
         }
     }
 
+    public void cleanDB() {
+        deleteDir(new File(DATA_FOLDER));
+    }
+
     @Before
     public void start() {
-        deleteDir(new File(DATA_FOLDER));
+        cleanDB();
         startDB(DATA_FOLDER);
     }
 
