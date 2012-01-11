@@ -51,6 +51,9 @@ public class AnimoGraph {
 	private static Node ROOT;
 
     public static boolean startDB(String folder, Map<String, String> config) {
+        if (graphDb != null) {
+            return false;
+        }
         activeTx = new FastList<Transaction>();
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
@@ -84,6 +87,9 @@ public class AnimoGraph {
 	}
 
 	public static void shutdownDB() {
+        if (graphDb == null) {
+            return;
+        }
 		System.out.println("shotdown");
 		Executor.shutdown();
 		while (!activeTx.isEmpty()) {

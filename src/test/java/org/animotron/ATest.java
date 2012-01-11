@@ -228,14 +228,15 @@ public abstract class ATest {
 
     private void deleteDir(File dir) {
         if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children) {
+            for (String aChildren : dir.list()) {
                 deleteDir(new File(dir, aChildren));
             }
         }
+        dir.delete();
     }
 
     public void cleanDB() {
+        shutdownDB();
         deleteDir(new File(DATA_FOLDER));
     }
 
