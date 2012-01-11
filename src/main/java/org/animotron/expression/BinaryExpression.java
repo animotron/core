@@ -67,6 +67,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     public void build() throws Exception {
         id = UUID.randomUUID().toString();
         File tmp = new File(tmpStorage(), id);
+        System.out.println(tmp.getAbsolutePath());
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];
