@@ -30,7 +30,12 @@ public class ENotFound extends AnimoException {
 
 	private static final long serialVersionUID = 4673983170231016824L;
 
-	public ENotFound(Relationship op, String message) {
-		super(op, message);
-	}
+    public ENotFound(Relationship op) {
+        super(op);
+    }
+
+    public ENotFound(Relationship op, String message) {
+        super(op, message);
+    }
+
 }
