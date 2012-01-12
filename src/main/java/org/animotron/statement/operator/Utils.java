@@ -116,7 +116,7 @@ public class Utils {
 		//System.out.println(node);
 		try {
 			try {
-				Relationship theNode = THE.__((String)THE._.reference(node));
+				Relationship theNode = THE._.get((String)THE._.reference(node));
 
 				if (theNode != null) {
 					out.write(vector.answered(theNode));
@@ -262,27 +262,6 @@ public class Utils {
 		out.close();
 		
 		return in;
-	}
-
-	@Deprecated
-	public static Node getSingleREF(final Node node) {
-		try {
-			try {
-				Node theNode = THE._((String)THE._.reference(node));
-
-				if (theNode != null)
-					return theNode;
-
-			} catch (Exception e) {
-			}
-
-			final Relationship res = Order.first(1, node)[0];
-			
-			return res.getEndNode();
-
-		} catch (IndexOutOfBoundsException e) {
-		}
-		return null;
 	}
 
 	@Deprecated //???

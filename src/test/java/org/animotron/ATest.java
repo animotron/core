@@ -22,20 +22,19 @@ package org.animotron;
 
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
-import org.animotron.exception.AnimoException;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.serializer.*;
+import org.animotron.graph.serializer.BinarySerializer;
+import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.After;
 import org.junit.Before;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexManager;
 
 import java.io.*;
 
+import static org.animotron.graph.AnimoGraph.shutdownDB;
+import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.AnimoGraph.*;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -227,81 +226,29 @@ public abstract class ATest {
         System.out.println();
     }
 
-    public void cleanDb() {
-        execute(new GraphOperation<Void>() {
-            @Override
-            public Void execute() throws AnimoException {
-                removeNodes();
-                return null;
-            }
-        });
-    }
-
-	private void removeNodes() {
-        Node refNode = getROOT();
-        for (Node node : getDb().getAllNodes()) {
-        	boolean delete = true;
-            for (Relationship rel : node.getRelationships()) {
-            	if (rel.getStartNode().equals(refNode)) {
-            		delete = false;
-                } else {
-                    clearIndex(rel);
-            		rel.delete();
-                }
-            }
-            if (delete && !refNode.equals(node)) {
-                clearIndex(node);
-                node.delete();
+    private void deleteDir(File dir) {
+        if (dir.isDirectory()) {
+            for (String aChildren : dir.list()) {
+                deleteDir(new File(dir, aChildren));
             }
         }
+        dir.delete();
     }
 
-    private void clearIndex(Node node) {
-        IndexManager indexManager = getDb().index();
-        for (String ix : indexManager.nodeIndexNames()) {
-            indexManager.forNodes(ix).remove(node);
-        }
-    }
-
-    private void clearIndex(Relationship relationship) {
-        IndexManager indexManager = getDb().index();
-        for (String ix : indexManager.relationshipIndexNames()) {
-            indexManager.forRelationships(ix).remove(relationship);
-        }
+    public void cleanDB() {
+        shutdownDB();
+        deleteDir(new File(DATA_FOLDER));
     }
 
     @Before
-    public void setup() {
-    	//cleanDb();
-        start();
-    }
-
-    @After
-    public void cleanup() {
-        stop();
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir.isDirectory()) {
-            String[] children = dir.list();
-            for (String aChildren : children) {
-                boolean success = deleteDir(new File(dir, aChildren));
-                if (!success) {
-                    return false;
-                }
-            }
-        }
-        return dir.delete();
-    }
-    
-    //@BeforeClass
-    public static void start() {
-    	deleteDir(new File(DATA_FOLDER));
+    public void start() {
+        cleanDB();
         startDB(DATA_FOLDER);
     }
 
-    //@AfterClass
-    public static void stop() {
+    @After
+    public void stop() {
     	shutdownDB();
     }
+
 }

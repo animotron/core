@@ -41,6 +41,7 @@ import org.neo4j.graphdb.Direction;
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
 
+import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.element;
@@ -56,7 +57,8 @@ public class BindTest extends ATest {
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, DigestSerializer._.serialize(e));
-        cleanDb();
+        cleanDB();
+        startDB(DATA_FOLDER);
         Expression x = new AnimoExpression(animo);
         String outA = CachedSerializer.ANIMO.serialize(x);
         byte[] outH = (byte[]) HASH.get(x);

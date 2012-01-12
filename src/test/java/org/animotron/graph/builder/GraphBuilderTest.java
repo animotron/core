@@ -26,6 +26,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
+import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 
 
@@ -40,7 +41,8 @@ public class GraphBuilderTest extends ATest {
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
-        cleanDb();
+        cleanDB();
+        startDB(DATA_FOLDER);
         e = new AnimoExpression(new StreamGraphBuilder(), animo);
         String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
@@ -74,9 +76,11 @@ public class GraphBuilderTest extends ATest {
 
     private void test(String animo) throws Exception {
         test_0(animo);
-        cleanDb();
+        cleanDB();
+        startDB(DATA_FOLDER);
         test_1(animo);
-        cleanDb();
+        cleanDB();
+        startDB(DATA_FOLDER);
         test_2(animo);
     }
 

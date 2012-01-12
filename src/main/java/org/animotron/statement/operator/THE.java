@@ -45,21 +45,21 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	public static final THE _ = new THE();
 
-    public static Node _(String name) {
-        try {
-            return THE._.getOrCreate(name, true).getEndNode();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static Relationship __(String name) {
-        try {
-            return THE._.getOrCreate(name, true);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public static Node _(String name) {
+//        try {
+//            return THE._.getOrCreate(name, true).getEndNode();
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+//
+//    public static Relationship __(String name) {
+//        try {
+//            return THE._.getOrCreate(name, true);
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     private THE() { super("the"); }
 

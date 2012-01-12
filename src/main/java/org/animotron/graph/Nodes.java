@@ -20,38 +20,17 @@
  */
 package org.animotron.graph;
 
-import org.animotron.statement.operator.THE;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Transaction;
-
-
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class Nodes {
 
-    public final static Node EXTENSION;
-    public final static Node MIME_TYPE;
-    public final static Node TYPE;
-    public final static Node FILE;
-    public final static Node NAME;
-    public final static Node URI;
+    public final static String EXTENSION = "extension";
+    public final static String MIME_TYPE = "mime-type";
+    public final static String TYPE = "type";
+    public final static String FILE = "file";
+    public final static String NAME = "name";
+    public final static String URI = "uri";
     
-    static {
-    	Transaction tx = AnimoGraph.beginTx();
-    	try {
-	        EXTENSION = THE._("extension");
-	        MIME_TYPE = THE._("mime-type");
-	        TYPE = THE._("type");
-	        FILE = THE._("file");
-	        NAME = THE._("name");
-	        URI = THE._("uri");
-	        
-	        tx.success();
-    	} finally {
-    		AnimoGraph.finishTx(tx);
-    	}
-    }
-
 }

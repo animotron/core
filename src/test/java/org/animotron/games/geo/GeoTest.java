@@ -30,6 +30,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
+import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
 
 
@@ -54,7 +55,8 @@ public class GeoTest extends ATest {
     @Test
 	public void test_01() throws Exception {
         byte[] in = (byte[]) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        cleanDb();
+        cleanDB();
+        startDB(DATA_FOLDER);
         byte[] out = (byte[]) HASH.get(new StAXExpression(osm()));
         assertEquals(in, out);
 	}

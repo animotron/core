@@ -27,7 +27,8 @@ import java.io.*;
 import java.security.MessageDigest;
 import java.util.UUID;
 
-import static org.animotron.graph.AnimoGraph.getStorage;
+import static org.animotron.graph.AnimoGraph.binStorage;
+import static org.animotron.graph.AnimoGraph.tmpStorage;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import static org.animotron.utils.MessageDigester.longToHex;
 
@@ -39,18 +40,10 @@ import static org.animotron.utils.MessageDigester.longToHex;
  */
 public abstract class BinaryExpression extends AbstractBinaryExpression {
 
-	private final static File BIN_STORAGE = new File(getStorage(), "binany");
-	private final static File TMP_STORAGE = new File(getStorage(), "tmp");
-
     private InputStream stream;
     private boolean closeStream = true;
     private String id;
     private File bin;
-
-    static {
-		BIN_STORAGE.mkdirs();
-		TMP_STORAGE.mkdirs();
-	}
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
         super(new FastGraphBuilder());
@@ -58,12 +51,10 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         this.closeStream = closeStream;
     }
 
-
-
     @Override
     public void build() throws Exception {
         id = UUID.randomUUID().toString();
-        File tmp = new File(TMP_STORAGE, id);
+        File tmp = new File(tmpStorage(), id);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];
@@ -105,11 +96,11 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         return id;
     }
 
-    private static File getFolder(String hash) {
-        return new File(new File(BIN_STORAGE, hash.substring(0, 2)), hash.substring(0, 4));
+    private File getFolder(String hash) {
+        return new File(new File(binStorage(), hash.substring(0, 2)), hash.substring(0, 4));
     }
 
-    private static File getFile(File folder, String hash){
+    private File getFile(File folder, String hash){
         return new File(folder,  hash);
     }
 
