@@ -412,6 +412,17 @@ public class Utils {
 		}
 		System.out.println();
 	}
+	
+	public static void debug(Relationship r) {
+		System.out.print(r.getType()+" ");
+		Node theNode = r.getEndNode();
+		try {
+			System.out.print("'"+name(theNode)+"'");
+		} catch (Exception e) {
+			System.out.print("???");
+		}
+		System.out.println(" ["+theNode+"]");
+	}
 
 	public static void debug(Statement st, Relationship op, Set<Node> thes) {
 		System.out.print(st.name()+" "+op.getId()+" ");
