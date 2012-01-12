@@ -27,10 +27,7 @@ package org.animotron.graph;
 public class Nodes {
 
     public final static String EXTENSION = "extension";
-    public final static String MIME_TYPE = "mime-type";
-    public final static String TYPE = "type";
     public final static String FILE = "file";
     public final static String NAME = "name";
-    public final static String URI = "uri";
-    
+
 }
