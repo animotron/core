@@ -55,7 +55,7 @@ public class ALL extends AbstractQuery implements Reference {
 
     private OnQuestion question = new OnQuestion() {
         @Override
-        public void onMessage(final PFlow pf) {
+        public void act(final PFlow pf) {
 			//System.out.println("ALL **************************");
             
             for (QCAVector theVector : Utils.getByREF(pf, pf.getVector())) {
@@ -140,7 +140,6 @@ public class ALL extends AbstractQuery implements Reference {
 					}
     			}
             }
-            pf.done();
         }
 
     };

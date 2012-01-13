@@ -57,8 +57,9 @@ public class PREFER extends AbstractQuery implements Reference {
     }
 
     private OnQuestion question = new OnQuestion() {
-        @Override
-        public void onMessage(final PFlow pf) {
+        
+    	@Override
+        public void act(final PFlow pf) {
 
         	//if (debug) { 
 				System.out.println("PREFER "+pf.getOP()+" "+pf.getVector());
@@ -154,7 +155,6 @@ public class PREFER extends AbstractQuery implements Reference {
     				}
 	            }
 			}
-            pf.done();
         }
     };
 }

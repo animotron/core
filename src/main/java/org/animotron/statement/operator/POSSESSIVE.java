@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import javolution.util.FastSet;
 import org.animotron.Executor;
+import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -50,7 +51,7 @@ public class POSSESSIVE extends Operator implements Suffix {
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) {
 			final Relationship op = pf.getOP();
 			
 			final Set<Node> thes = new FastSet<Node>(); 
@@ -60,7 +61,7 @@ public class POSSESSIVE extends Operator implements Suffix {
 			}
 			Utils.debug(POSSESSIVE._, op, thes);
 
-			Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
+			Subscribable<QCAVector> onContext = new OnContext(Executor.getFiber()) {
 				@Override
 				public void onMessage(QCAVector vector) {
 					System.out.println("GET ["+op+"] vector "+vector);
@@ -81,11 +82,6 @@ public class POSSESSIVE extends Operator implements Suffix {
 							break;
 						}
 					}
-				}
-
-				@Override
-				public DisposingExecutor getQueue() {
-					return Executor.getFiber();
 				}
 			};
 			pf.answerChannel().subscribe(onContext);

@@ -144,11 +144,14 @@ public class Utils {
 				}
 			}
 
-			out.close();
 			return in;
 
 		} catch (Exception e) {
 			pf.sendException(e);
+		} finally {
+			try {
+				out.close();
+			} catch (IOException e) {}
 		}
 		return null;
 	}

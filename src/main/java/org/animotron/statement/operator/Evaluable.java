@@ -20,8 +20,7 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.manipulator.PFlow;
-import org.jetlang.channels.Subscribable;
+import org.animotron.manipulator.OnQuestion;
 
 
 /**
@@ -31,6 +30,6 @@ import org.jetlang.channels.Subscribable;
  */
 public interface Evaluable {
 	
-	public Subscribable<PFlow> onCalcQuestion();
+	public OnQuestion onCalcQuestion();
 	
 }

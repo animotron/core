@@ -51,15 +51,10 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
     private OnQuestion question = new OnQuestion() {
         @Override
-        public void onMessage(PFlow pf) {
+        public void act(PFlow pf) throws IOException {
             PipedInput<QCAVector> destination = Utils.getByREF(pf);
-            try {
-                execute(destination, Order.context(pf.getOP().getEndNode()));
-            } catch (IOException e) {
-                pf.sendException(e);
-                return;
-            }
-            pf.done();
+
+            execute(destination, Order.context(pf.getOP().getEndNode()));
         }
     };
 

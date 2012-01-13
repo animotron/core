@@ -43,8 +43,7 @@ public class IS extends AbstractQuery {
 
 	private OnQuestion question = new OnQuestion() {
         @Override
-        public void onMessage(final PFlow pf) {
-           pf.done();
+        public void act(final PFlow pf) {
         }
 
     };
