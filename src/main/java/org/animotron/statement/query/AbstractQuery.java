@@ -196,15 +196,15 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         return true;
     }
     
-    private void searchForUSE(Set<Node> uses, final List<QCAVector> vectors) {
+    private void searchForUSE(Set<Node> uses, final List<QCAVector> vectors, FastSet<QCAVector> visitred) {
     	if (vectors == null) return;
     	
 		for (QCAVector vector : vectors) {
-			searchForUSE(uses, vector);
+			searchForUSE(uses, vector, visitred);
 		}
     }
 
-    private void checkVectorForUSE(Set<Node> uses, QCAVector vector) {
+    private void checkVectorForUSE(Set<Node> uses, QCAVector vector, FastSet<QCAVector> visitred) {
     	if (vector == null)
     		return;
 
@@ -224,17 +224,20 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     			//System.out.println(" + "+r.getEndNode());
     		}
 
-		if (vector.getAnswers() != null)
-			for (QCAVector a : vector.getAnswers())
-				checkVectorForUSE(uses, a);
+		searchForUSE(uses, vector.getAnswers(), visitred);
     }
     
-    private void searchForUSE(Set<Node> uses, QCAVector vector) {
-    	//System.out.println("searchForUSE "+vector);
+    private void searchForUSE(Set<Node> uses, QCAVector vector, FastSet<QCAVector> visitred) {
+    	System.out.println("searchForUSE "+vector);
     	QCAVector prev = vector;
     	while (prev != null) {
-	    	checkVectorForUSE(uses, prev);
-			searchForUSE(uses, prev.getContext());
+    		
+    		if (visitred.contains(prev))
+    			break;
+    		visitred.add(prev);
+    		
+	    	checkVectorForUSE(uses, prev, visitred);
+			searchForUSE(uses, prev.getContext(), visitred);
 			
 	    	prev = prev.getPrecedingSibling();
     	}
@@ -243,11 +246,12 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     
 	protected void getUSEs(PFlow pf, Node theNode, final Set<Node> uses, final Set<Path> directed) {
 
+    	final FastSet<QCAVector> visited = FastSet.newInstance();
     	final FastSet<Node> allUses = FastSet.newInstance();
     	try {
-			searchForUSE(allUses, pf.getVector());
+			searchForUSE(allUses, pf.getVector(), visited);
 			
-			//System.out.println("allUses "+allUses);
+			System.out.println("allUses "+allUses);
 	
 	    	if (allUses.isEmpty()) return;
 	    		
@@ -272,6 +276,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	    	
     	} finally {
     		FastSet.recycle(allUses);
+    		FastSet.recycle(visited);
     	}
     }
 	
@@ -528,8 +533,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (debugUSE) System.out.println(" - "+path);
 		    	for (Path p : trav.traverse(r.getStartNode())) {
 
-		    		System.out.println(path);
-		    		System.out.println(" ** "+p);
+		    		//System.out.println(path);
+		    		//System.out.println(" ** "+p);
 
 					directed.add(path);//r.getStartNode()
 		    	}
