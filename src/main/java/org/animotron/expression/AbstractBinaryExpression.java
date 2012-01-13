@@ -45,9 +45,6 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
 
     protected final void buildExpression() throws Exception {
         builder.start(THE._, id());
-            builder.start(AN._);
-                builder._(REF._, FILE);
-            builder.end();
             builder._(STREAM._, stream());
             description();
         builder.end();
