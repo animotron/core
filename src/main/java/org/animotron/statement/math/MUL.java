@@ -20,25 +20,6 @@
  */
 package org.animotron.statement.math;
 
-import javolution.util.FastList;
-
-import org.animotron.graph.Properties;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.index.Order;
-import org.animotron.manipulator.OnQuestion;
-import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Prepare;
-import org.animotron.statement.query.GET;
-import org.jetlang.channels.Subscribable;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
-
-import static org.animotron.graph.RelationshipTypes.TRI;
-
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
