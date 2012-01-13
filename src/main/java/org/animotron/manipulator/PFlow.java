@@ -163,7 +163,7 @@ public class PFlow {
 	}
 
 	public void sendException(Throwable t) {
-		t.printStackTrace();
+		//t.printStackTrace();
 		
 		AnimoException ae;
 		if (t instanceof AnimoException) {
@@ -173,7 +173,7 @@ public class PFlow {
 			ae = new AnimoException(getOP(), t);
 		}
 		stopChannel().publish(ae);
-		done();
+		//done();
 	}
 
 	public void done() {

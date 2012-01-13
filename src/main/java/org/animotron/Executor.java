@@ -45,9 +45,9 @@ public class Executor {
 	}
     
 	public static Fiber getFiber() {
-		//Fiber fiber = fact.create();
+		Fiber fiber = fact.create();
 //		Fiber fiber = new ThreadFiber();
-		//fiber.start();
+		fiber.start();
 		return fiber;
 	}
 
