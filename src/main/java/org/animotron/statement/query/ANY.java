@@ -59,10 +59,10 @@ public class ANY extends AbstractQuery implements Reference {
         public void onMessage(final PFlow pf) {
             long ts = System.currentTimeMillis();
 
-			if (debug) { 
+			//if (debug) { 
 				System.out.println("ANY "+pf.getOP()+" "+pf.getVector());
 				Utils.debug(ANY._, pf);
-			}
+			//}
 			
 			try {
 				for (QCAVector vector : Utils.getByREF(pf)) {
@@ -73,15 +73,16 @@ public class ANY extends AbstractQuery implements Reference {
 						Node node = the.getEndNode();
 						
 	    				FastSet<Node> uses = FastSet.newInstance();
+	    				FastSet<Node> weaks = FastSet.newInstance();
 	    				FastSet<Path> directed = FastSet.newInstance();
 	
 	    				try {
-							getUSEs(pf, node, uses, directed);
+							getUSEs(pf, node, uses, weaks, directed);
 							
-							if (debug) { 
+							//if (debug) { 
 								System.out.println(uses);
 								System.out.println(directed);
-	    					}
+	    					//}
 							
 							boolean underUSE = false;
 							Node n = getClosestIntersection(directed);
@@ -96,7 +97,7 @@ public class ANY extends AbstractQuery implements Reference {
 							int i = 0;
 				
 			        		Relationship res;
-							if (underUSE && ((res = getThe(node)) != null) && filtering(pf, res, uses))
+							if (underUSE && ((res = getThe(node)) != null) && filtering(pf, res, uses, weaks))
 				            	try {
 				            		pf.sendAnswer( res );
 				            		return;
@@ -120,14 +121,14 @@ public class ANY extends AbstractQuery implements Reference {
 		
 					        		try {
 				        				res = getThe(r.getStartNode());
-					        			if (filtering(pf, res, uses)) {
+					        			if (filtering(pf, res, uses, weaks)) {
 					        				pf.sendAnswer( res );
 					        				return;
 					        			}
 					        		} catch (Exception e) {
 				        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
 				        					res = p.lastRelationship();
-						        			if (filtering(pf, res, uses)) {
+						        			if (filtering(pf, res, uses, weaks)) {
 						        				pf.sendAnswer( res );
 						        				return;
 						        			}
@@ -139,7 +140,7 @@ public class ANY extends AbstractQuery implements Reference {
 					    				for (Relationship rr : hits) {
 					    					
 					    					if (rr.isType(AN._)) {
-					    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+					    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
 							        				pf.sendAnswer( rr );
 							        				return;
 					    						}
@@ -153,6 +154,7 @@ public class ANY extends AbstractQuery implements Reference {
 							if (debug) System.out.println(i);
 	    				} finally {
 	    					FastSet.recycle(uses);
+	    					FastSet.recycle(weaks);
 	    					FastSet.recycle(directed);
 	    				}
 			        }

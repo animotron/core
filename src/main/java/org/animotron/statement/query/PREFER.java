@@ -26,6 +26,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
@@ -47,6 +48,8 @@ public class PREFER extends AbstractQuery implements Reference {
 
 	public static final PREFER _ = new PREFER();
 
+	private static boolean debug = false;
+
 	private PREFER() { super("prefer", "~~~"); }
 
     public OnQuestion onCalcQuestion() {
@@ -56,10 +59,12 @@ public class PREFER extends AbstractQuery implements Reference {
     private OnQuestion question = new OnQuestion() {
         @Override
         public void onMessage(final PFlow pf) {
-			//System.out.println("ALL **************************");
+
+        	//if (debug) { 
+				System.out.println("PREFER "+pf.getOP()+" "+pf.getVector());
+				Utils.debug(PREFER._, pf);
+			//}
         	
-        	//final Relationship op = pf.getOP();
-            
 			if (!Utils.results(pf)) {
 	            for (QCAVector v : AN.getREFs(pf, pf.getVector())) {
 	            	
@@ -67,12 +72,25 @@ public class PREFER extends AbstractQuery implements Reference {
 	            	Node node = ref.getEndNode();
 	
     				FastSet<Node> uses = FastSet.newInstance();
+    				FastSet<Node> weaks = FastSet.newInstance();
     				FastSet<Path> directed = FastSet.newInstance();
 
     				try {
-		            	getUSEs(pf, node, uses, directed);
+		            	getUSEs(pf, node, uses, weaks, directed);
+		            	
+		            	if (debug) {
+							System.out.println(uses);
+			            	for (Node n : uses) {
+			            		System.out.println(THE._.reference(n));
+			            	}
+							System.out.println(weaks);
+							System.out.println(directed);
+			            	for (Path n : directed) {
+			            		System.out.println(THE._.reference(n.endNode()));
+			            	}
+		            	}
 						
-						if (uses.size() > 0) {
+						if (!uses.isEmpty() || !weaks.isEmpty()) {
 				
 							boolean underUSE = false;
 							Node n = getClosestIntersection(directed);
@@ -85,7 +103,7 @@ public class PREFER extends AbstractQuery implements Reference {
 							if (underUSE 
 									&& isLeaf(node) 
 									&& (res = getThe(node)) != null  
-									&& filtering(pf, res, uses))
+									&& filtering(pf, res, uses, weaks))
 								pf.sendAnswer( res );
 				
 					        for (Path path : td_IS_leaf.traverse(node)) {
@@ -101,13 +119,13 @@ public class PREFER extends AbstractQuery implements Reference {
 	
 					        		try {
 					        			res = getThe(r.getStartNode());
-					        			if (filtering(pf, res, uses)) {
+					        			if (filtering(pf, res, uses, weaks)) {
 					        				pf.sendAnswer( res );
 					        			}
 					        		} catch (Exception e) {
 				        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
 				        					res = p.lastRelationship();
-						        			if (filtering(pf, res, uses)) {
+						        			if (filtering(pf, res, uses, weaks)) {
 						        				pf.sendAnswer( res );
 						        			}
 				        				}
@@ -118,7 +136,7 @@ public class PREFER extends AbstractQuery implements Reference {
 					    				for (Relationship rr : hits) {
 					    					
 					    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
-					    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+					    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
 							        				pf.sendAnswer( rr );
 					    						}
 					    					}
@@ -131,6 +149,7 @@ public class PREFER extends AbstractQuery implements Reference {
 						}
     				} finally {
     					FastSet.recycle(uses);
+    					FastSet.recycle(weaks);
     					FastSet.recycle(directed);
     				}
 	            }

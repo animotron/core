@@ -68,10 +68,11 @@ public class ALL extends AbstractQuery implements Reference {
     				Node node = the.getEndNode();
 
     				FastSet<Node> uses = FastSet.newInstance();
+    				FastSet<Node> weaks = FastSet.newInstance();
     				FastSet<Path> directed = FastSet.newInstance();
 
 					try {
-	    				getUSEs(pf, node, uses, directed);
+	    				getUSEs(pf, node, uses, weaks, directed);
 						
 						//System.out.println(uses);
 						
@@ -86,7 +87,7 @@ public class ALL extends AbstractQuery implements Reference {
 						if (underUSE 
 								&& isLeaf(node) 
 								&& (res = getThe(node)) != null  
-								&& filtering(pf, res, uses))
+								&& filtering(pf, res, uses, weaks))
 							
 			            	try {
 			            		pf.sendAnswer( res );
@@ -105,13 +106,13 @@ public class ALL extends AbstractQuery implements Reference {
 	
 			        			try {
 					        		res = getThe(r.getStartNode());
-				        			if (filtering(pf, res, uses)) {
+				        			if (filtering(pf, res, uses, weaks)) {
 				        				pf.sendAnswer( res );
 				        			}
 			        			} catch (Exception e) {
 			        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
 			        					res = p.lastRelationship();
-					        			if (filtering(pf, res, uses)) {
+					        			if (filtering(pf, res, uses, weaks)) {
 					        				pf.sendAnswer( res );
 					        			}
 			        				}
@@ -122,7 +123,7 @@ public class ALL extends AbstractQuery implements Reference {
 				    				for (Relationship rr : hits) {
 				    					
 				    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
-				    						if (filtering(pf, rr, r.getEndNode(), uses)) {
+				    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
 						        				pf.sendAnswer( rr );
 				    						}
 				    					}
@@ -134,6 +135,7 @@ public class ALL extends AbstractQuery implements Reference {
 				        }
 					} finally {
 						FastSet.recycle(uses);
+						FastSet.recycle(weaks);
 						FastSet.recycle(directed);
 					}
     			}
