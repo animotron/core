@@ -27,7 +27,6 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Utils;
-import org.jetlang.channels.Subscribable;
 
 import static org.animotron.expression.JExpression.value;
 
@@ -45,29 +44,23 @@ public class ID extends Operator implements Evaluable {
 	private ID() { super("id"); }
 
     @Override
-    public Subscribable<PFlow> onCalcQuestion() {
+    public OnQuestion onCalcQuestion() {
         return question;
     }
 
     private OnQuestion question = new OnQuestion(){
         @Override
-        public void onMessage(final PFlow pf) {
+        public void act(final PFlow pf) {
            for (QCAVector v : Utils.getByREF(pf)) {
-                try {
-                    pf.sendAnswer(pf.getVector().answered(
-	                        new JExpression(
-	                            value(
-	                                Utils.name(v.getClosest().getEndNode())
-	                            )
-	                        )
+                pf.sendAnswer(pf.getVector().answered(
+                        new JExpression(
+                            value(
+                                Utils.name(v.getClosest().getEndNode())
+                            )
                         )
-                    );
-                } catch (Exception e) {
-                    pf.sendException(e);
-                    return;
-                }
+                    )
+                );
             }
-            pf.done();
         }
     };
 

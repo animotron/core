@@ -22,7 +22,6 @@ package org.animotron.manipulator;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -40,7 +39,7 @@ public abstract class StatementManipulator extends Manipulator {
 	 * @param statement
 	 * @param op
 	 */
-	protected abstract Subscribable<PFlow> onQuestion(Statement statement, Relationship op);
+	protected abstract OnQuestion onQuestion(Statement statement, Relationship op);
 
 	/**
 	 * Should manipulator go this direction?
@@ -50,7 +49,7 @@ public abstract class StatementManipulator extends Manipulator {
 	 */
 	protected abstract boolean canGo(Statement statement);
 
-	public final Subscribable<PFlow> onQuestion(final Relationship op) {
+	public final OnQuestion onQuestion(final Relationship op) {
 		if (op != null) {
 			final Statement statement = Statements.relationshipType(op);
 			if (canGo(statement))

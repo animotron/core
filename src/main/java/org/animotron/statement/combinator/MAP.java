@@ -22,7 +22,6 @@ package org.animotron.statement.combinator;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.jetlang.channels.Subscribable;
 
 /**
  * Operation 'MAP'.
@@ -37,17 +36,15 @@ public class MAP extends Combinator {
 	private MAP() { super("map"); }
 
 	@Override
-	public Subscribable<PFlow> onCalcQuestion() {
+	public OnQuestion onCalcQuestion() {
 		return question;
 	}
 
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) {
 			System.out.println("MAP");
-			
-			pf.done();
 		}
 	};
 }

@@ -56,7 +56,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) {
 			
 			Relationship op = pf.getOP();
 			
@@ -85,7 +85,6 @@ public class THIS extends Operator implements Reference, Evaluable {
 					FastList.recycle(list);
 				}
 			}
-			pf.done();
 		}
 	};
 	

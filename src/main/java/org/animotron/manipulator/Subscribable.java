@@ -20,40 +20,31 @@
  */
 package org.animotron.manipulator;
 
-import java.util.concurrent.CountDownLatch;
-
+import org.animotron.Executor;
+import org.jetlang.core.DisposingExecutor;
 import org.jetlang.fibers.Fiber;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public abstract class OnContext extends Subscribable<QCAVector> {
+public abstract class Subscribable<T> implements org.jetlang.channels.Subscribable<T> {
+
+	Fiber fiber;
 	
-	CountDownLatch cd = null;
-	
-	public OnContext(Fiber fiber) {
-		super(fiber);		
-	}
-	
-	public void setCountDown(int number) {
-		cd = new CountDownLatch(number);
-	}
-	
-	@Override
-	public void onMessage(QCAVector vector) {
-		if (vector == null && cd != null) { 
-			cd.countDown();
-			if (cd.getCount() == 0)
-				fiber.dispose();
-		}
+	public Subscribable(Fiber fiber) {
+		if (fiber != null)
+			this.fiber = fiber;
+		else
+			this.fiber = Executor.getFiber();
 	}
 
-	public void isDone() {
-		if (cd != null)
-			try {
-				cd.wait();
-			} catch (InterruptedException e) {
-			}
+	@Override
+	public DisposingExecutor getQueue() {
+		return fiber;
+	}
+
+	public Fiber getFiber() {
+		return fiber;
 	}
 }

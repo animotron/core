@@ -26,6 +26,7 @@ import org.animotron.statement.operator.Utils;
 import org.animotron.utils.MessageDigester;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
+import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -38,6 +39,7 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import javolution.util.FastMap;
+import javolution.util.FastTable;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -132,6 +134,8 @@ public class PFlow {
 	}
 
 	public void sendAnswer(Relationship answer) {
+		System.out.print("answered ");
+		Utils.debug(answer);
 		sendAnswer(answer, RESULT, getPathHash());
 	}
 
@@ -175,6 +179,10 @@ public class PFlow {
 	public void done() {
 		//await();
 		answerChannel().publish(null);
+		
+		//System.out.println("Done "+getVector());
+		
+		//dispose();
 	}
 
 	protected CountDownLatch waitBeforeClosePipe = null;
@@ -326,4 +334,18 @@ public class PFlow {
 	public void putData(Object key, Object value) {
 		getData().put(key, value);
 	}
+	
+	//FastTable<Fiber> queues = new FastTable<Fiber>(); 
+
+//	public void subscribe(Channel channel, Subscribable callback) {
+//		channel.subscribe(callback.getQueue(), callback);
+//        
+//        //queues.add(callback.getFiber());
+//	}
+	
+//	private void dispose() {
+//		for (int i = 0, n = queues.size(); i < n; i++) {
+//			queues.get(i).dispose();
+//		}
+//	}
 }

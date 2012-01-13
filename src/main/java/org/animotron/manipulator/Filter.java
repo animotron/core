@@ -22,7 +22,6 @@ package org.animotron.manipulator;
 
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Predicate;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -41,8 +40,7 @@ public class Filter extends StatementManipulator {
 	}
 
 	@Override
-	protected Subscribable<PFlow> onQuestion(Statement statement,
-			Relationship op) {
+	protected OnQuestion onQuestion(Statement statement, Relationship op) {
 		// TODO Auto-generated method stub
 		return null;
 	}

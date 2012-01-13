@@ -20,9 +20,7 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.manipulator.PFlow;
-import org.jetlang.channels.Subscribable;
-
+import org.animotron.manipulator.OnQuestion;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -31,6 +29,6 @@ import org.jetlang.channels.Subscribable;
  */
 public interface Prepare {
 	
-	public Subscribable<PFlow> onPrepareQuestion();
+	public OnQuestion onPrepareQuestion();
 	
 }

@@ -77,7 +77,7 @@ public class GET extends AbstractQuery implements Shift {
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) {
 
 			//if (debug) System.out.println("GET "+Thread.currentThread());
 
@@ -108,7 +108,6 @@ public class GET extends AbstractQuery implements Shift {
 			} finally {
 				FastSet.recycle(thes);
 				FastSet.recycle(visitedREFs);
-				pf.done();
 			}
 		}
 

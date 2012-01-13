@@ -20,17 +20,9 @@
  */
 package org.animotron.statement.instruction;
 
-import org.animotron.Executor;
-import org.animotron.expression.JExpression;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Q;
-import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Operation 'COUNT'. Count elements.
@@ -45,46 +37,15 @@ public class COUNT extends Instruction implements Evaluable {
 	private COUNT() { super("count"); }
 
 	@Override
-	public Subscribable<PFlow> onCalcQuestion() {
+	public OnQuestion onCalcQuestion() {
 		return question;
 	}
 
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) {
 			//System.out.println("COUNT");
-			
-			Subscribable<QCAVector> onContext = new Subscribable<QCAVector>() {
-				
-				AtomicInteger value = new AtomicInteger(0);
-				
-				@Override
-				public void onMessage(QCAVector context) {
-					if (context == null) {
-						//XXX: optimize
-						JExpression r;
-						try {
-							r = new JExpression(JExpression._(Q._, "N" + value.get()));
-						} catch (Exception e) {
-                            pf.sendException(e);
-                            return;
-                        }
-                        //pf.sendAnswer(r);
-						pf.done();
-						return;
-					}
-					
-			        value.getAndIncrement();
-				}
-
-				@Override
-				public DisposingExecutor getQueue() {
-					return Executor.getFiber();
-				}
-			};
-			
-			pf.answerChannel().subscribe(onContext);
 		}
 	};
 }

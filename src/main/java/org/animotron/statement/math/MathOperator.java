@@ -33,7 +33,6 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -55,7 +54,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	protected MathOperator(String name) { super(name); }
 
     @Override
-    public Subscribable<PFlow> onCalcQuestion() {
+    public OnQuestion onCalcQuestion() {
         return question;
     }
 
@@ -77,7 +76,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     private OnQuestion question = new OnQuestion() {
 
         @Override
-        public void onMessage(final PFlow pf) {
+        public void act(final PFlow pf) throws IOException {
         	if (!Utils.results(pf)) {
 	            IndexHits<Relationship> params = Order.context(pf.getOP().getStartNode());
 	            try {
@@ -99,27 +98,23 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
                 	//Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
                     //XXX: fix context
                     pf.sendAnswer(r);
-	            } catch (IOException e) {
-	                pf.sendException(e);
-	                return;
 	            } finally {
 	                params.close();
 	            }
         	}
-            pf.done();
         }
 
     };
 
 	@Override
-	public Subscribable<PFlow> onPrepareQuestion() {
+	public OnQuestion onPrepareQuestion() {
 		return prepare;
 	}
 
 
     private OnQuestion prepare = new OnQuestion() {
     	@Override
-    	public void onMessage(final PFlow pf) {
+    	public void act(final PFlow pf) {
     		final FastList<Node> thes = FastList.newInstance();
     		IndexHits<Relationship> hits = Order.context(pf.getOPNode());
     		try {
@@ -158,7 +153,6 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     			hits.close();
     			FastList.recycle(thes);
     		}
-    		pf.done();
     	}
     };
 }

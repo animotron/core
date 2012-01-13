@@ -21,6 +21,8 @@
 package org.animotron.io;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,6 +38,34 @@ public class PipedOutput<T> implements Cloneable {
 		try {
 			connect(new PipedInput<T>());
 		} catch (IOException e) {}
+		
+		debug();
+	}
+	
+	public void debug() {
+		//debug(false);
+	}
+
+	public void debug(boolean stack) {
+		System.out.println("PipedOutput "+hash2string(this)+" -> "+hash2string(connection));
+		if (stack) System.out.println(stack2string(new IOException()).substring(0, 150));
+	}
+	
+	private static String hash2string(Object e) {
+		String s = e.toString();
+		return s.substring(s.indexOf("@")+1);
+	}
+	
+	private static String stack2string(Exception e) {
+		try {
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			return sw.toString();
+		} catch(Exception e2) {
+			e2.printStackTrace();
+		}
+		return "";
 	}
 
 	public PipedOutput(PipedInput<T> inStream) throws IOException {
@@ -72,7 +102,9 @@ public class PipedOutput<T> implements Cloneable {
     }
     
     public void close()  throws IOException {
-    	//System.out.println("Closing pipe "+Utils.shortID(this)+" "+Utils.shortID(connection));
+    	//System.out.print("closing ");
+		//debug();
+
     	if (connection != null) {
     		connection.receivedLast();
     	}

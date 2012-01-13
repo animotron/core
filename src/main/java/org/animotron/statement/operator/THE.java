@@ -27,7 +27,6 @@ import org.animotron.graph.index.State;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -109,11 +108,16 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 		return NAME.get(r);
 	}
 
-	private Subscribable<PFlow> prepare = new OnQuestion();
-
 	@Override
-	public Subscribable<PFlow> onPrepareQuestion() {
+	public OnQuestion onPrepareQuestion() {
         return prepare;
 	}
 
+	private OnQuestion prepare = new OnQuestion() {
+		@Override
+		public void act(PFlow pf) {
+			System.out.println("PREPARE THE");
+		}
+		
+	};
 }

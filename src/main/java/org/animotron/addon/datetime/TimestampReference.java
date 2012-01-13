@@ -20,10 +20,10 @@
  */
 package org.animotron.addon.datetime;
 
+import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -62,7 +62,7 @@ public class TimestampReference extends Instruction implements Evaluable {
 	}
 
 	@Override
-	public Subscribable<PFlow> onCalcQuestion() {
+	public OnQuestion onCalcQuestion() {
 		// TODO Auto-generated method stub
 		return null;
 	}

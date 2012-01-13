@@ -33,10 +33,10 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.AbstractValue;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Set;
 
@@ -55,14 +55,14 @@ public class EACH extends Combinator {
 	private EACH() { super("each"); }
 
 	@Override
-	public Subscribable<PFlow> onCalcQuestion() {
+	public OnQuestion onCalcQuestion() {
 		return question;
 	}
 
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) throws IOException {
 			if (debug) System.out.println("EACH EACH EACH EACH");
 			if (debug) System.out.println(pf.getVector());
 			
@@ -85,14 +85,9 @@ public class EACH extends Combinator {
 
 				//process(pf, sets, 1, null);
 
-			} catch (Exception e) {
-				e.printStackTrace();
 			} finally {
 				elements.close();
 			}
-
-
-			pf.done();
 		}
 	};
 

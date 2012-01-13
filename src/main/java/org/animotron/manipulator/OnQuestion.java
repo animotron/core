@@ -20,35 +20,45 @@
  */
 package org.animotron.manipulator;
 
-import org.animotron.Executor;
-import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class OnQuestion implements Subscribable<PFlow> {
+public abstract class OnQuestion extends Subscribable<PFlow> {
 	
-	@Override
-	public void onMessage(final PFlow pf) {
-		
-		System.out.println("Common OnQuestion in use");
-		
-		OnContext onAnswer = new OnContext(Executor.getFiber()) {
-            public void onMessage(QCAVector context) {
-            	super.onMessage(context);
-            	
-            	pf.answerChannel().publish(context);
-            }
-        };
-
-		Evaluator.sendQuestion(onAnswer, pf.getVector(), pf.getVector().getUnrelaxedClosest().getEndNode());
+	public OnQuestion() {
+		super(null);
 	}
 
 	@Override
-	public DisposingExecutor getQueue() {
-		//System.out.println("getQueue");
-		return Executor.getFiber();
+	public final void onMessage(final PFlow pf) {
+		
+		try {
+		
+			act(pf);
+		
+		} catch (Exception e) {
+			pf.sendException(e);
+		
+		} finally {
+			pf.done();
+		}
+		
+//		System.out.println("Common OnQuestion in use");
+//		
+//		OnContext onAnswer = new OnContext(Executor.getFiber()) {
+//            public void onMessage(QCAVector context) {
+//            	super.onMessage(context);
+//            	
+//            	pf.answerChannel().publish(context);
+//            }
+//        };
+//
+//		Evaluator.sendQuestion(onAnswer, pf.getVector(), pf.getVector().getUnrelaxedClosest().getEndNode());
 	}
+	
+	public abstract void act(final PFlow pf) throws IOException;
+
 }

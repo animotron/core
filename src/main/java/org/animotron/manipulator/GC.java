@@ -26,7 +26,6 @@ import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.State;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -57,7 +56,7 @@ public class GC extends Manipulator {
 		}
 		
 		@Override
-		public void onMessage(final PFlow pf) {
+		public void act(final PFlow pf) {
 			AnimoGraph.execute(
 				new GraphOperation<Void>(){
 					@Override
@@ -74,7 +73,7 @@ public class GC extends Manipulator {
 	};
 
 	@Override
-	public Subscribable<PFlow> onQuestion(Relationship op) {
+	public OnQuestion onQuestion(Relationship op) {
 		return question;
 	}
 

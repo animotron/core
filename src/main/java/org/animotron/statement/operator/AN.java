@@ -47,12 +47,11 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 	private OnQuestion question = new OnQuestion() {
 
 		@Override
-		public void onMessage(final PFlow pf) {
-			
+		public void act(final PFlow pf) {
 			byte[] hash = pf.getOpHash();
 
 			if (debug) System.out.println("AN "+Thread.currentThread());
-			//System.out.println("AN "+pf.getVector());
+			System.out.println("AN "+pf.getVector());
 			//pf.sendAnswer(new QCAVector(op,op));
 			
 			if (!Utils.results(pf, hash)) {
@@ -60,7 +59,6 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 					pf.sendAnswer(r);
 				}
 			}
-			pf.done();
 		}
 	};
 	

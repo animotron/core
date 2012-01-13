@@ -158,6 +158,7 @@ public class WITH extends Operator implements Predicate {
 				for (QCAVector r : l) {
 					System.out.println(""+r+" "+r.getClosest().getType());
 				}
+				System.out.println("expected "+g);
 			}
 
 			if (debug) System.out.println("***** expected = "+g.getAnswer().getEndNode());

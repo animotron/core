@@ -25,7 +25,6 @@ import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.Evaluable;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -44,7 +43,7 @@ public class Evaluator extends StatementManipulator {
 	}
 
 	@Override
-	public Subscribable<PFlow> onQuestion(Statement statement, Relationship op) {
+	public OnQuestion onQuestion(Statement statement, Relationship op) {
 		return ((Evaluable) statement).onCalcQuestion();
 	}
 

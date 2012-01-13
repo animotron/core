@@ -42,10 +42,9 @@ public class HAS extends AbstractQuery {
     }
 
 	private OnQuestion question = new OnQuestion() {
-        @Override
-        public void onMessage(final PFlow pf) {
-           pf.done();
-        }
 
+		@Override
+        public void act(final PFlow pf) {
+        }
     };
 }
