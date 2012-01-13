@@ -190,7 +190,7 @@ public abstract class GraphBuilder {
             endGraph();
             tx.success();
             finishTx(tx);
-            System.out.println("Build expression " + exp + " in "+(System.currentTimeMillis() - startTime));
+            //System.out.println("Build expression " + exp + " in "+(System.currentTimeMillis() - startTime));
         } catch (Exception e) {
             finishTx(tx);
             tx = beginTx();
