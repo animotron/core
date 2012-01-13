@@ -383,8 +383,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				shouldHave.remove(sNode);
 				mustHave.remove(sNode);
 				if (mustHave.size() == 0) {
-					if (shouldHave.size() != was)
-					return INCLUDE_AND_PRUNE;
+					if (was == 0 || shouldHave.size() != was)
+						return INCLUDE_AND_PRUNE;
 				}
 
 				return EXCLUDE_AND_CONTINUE;
