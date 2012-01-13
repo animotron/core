@@ -22,6 +22,7 @@ package org.animotron.statement.animo.update;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -34,6 +35,7 @@ import static org.animotron.expression.Expression.__;
 public class UpdateTest extends ATest {
 
     @Test
+    @Ignore
 	public void test_00() throws Exception {
         Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("add a y 2."));
@@ -41,18 +43,21 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
     public void test_001() throws Exception {
         __(new AnimoExpression("the a x z."));
         assertAnimoResult("all x", "z.");
     }
 
     @Test
+    @Ignore
     public void test_002() throws Exception {
         __(new AnimoExpression("the a x 1."));
         assertAnimoResult(new AnimoExpression("all x"), "1.");
     }
 
     @Test
+    @Ignore
 	public void test_01() throws Exception {
         Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("replace (get x a) (y 2)."));
@@ -60,6 +65,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_02() throws Exception {
         Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("set (get x a) (2)."));
@@ -67,6 +73,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_03() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a x 1."),
@@ -80,6 +87,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_04() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a x 1."),
@@ -93,6 +101,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_05() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
@@ -106,6 +115,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_06() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
@@ -119,6 +129,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_07() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
@@ -132,6 +143,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_08() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
@@ -145,6 +157,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_09() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a z (y x 1) (α 3)."),
@@ -158,6 +171,7 @@ public class UpdateTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_10() throws Exception {
         Relationship[] e = __(
             new AnimoExpression("the a z (y x 1) (α 3)."),
@@ -169,5 +183,4 @@ public class UpdateTest extends ATest {
         assertAnimo(e[1], "the b z (y x 1) (α 3).");
         assertAnimo(e[2], "the c z y x 1.");
 	}
-
 }
