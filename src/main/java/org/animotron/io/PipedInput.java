@@ -39,7 +39,7 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
     protected int in = -1;
     protected int out = 0;
     
-    private static final int DEFAULT_PIPE_SIZE = 1024;
+    private static final int DEFAULT_PIPE_SIZE = 8;//1024;
     
     @SuppressWarnings("unchecked")
 	protected T buffer[] = (T[]) new Object[DEFAULT_PIPE_SIZE];
@@ -69,7 +69,7 @@ public class PipedInput<T> implements Cloneable, Iterable<T>, Iterator<T> {
         	/* might be a writer waiting */
         	notifyAll();
         	try {
-        		wait(1000);
+        		wait(100);
         	} catch (InterruptedException ex) {
         		throw new java.io.InterruptedIOException();
         	}
