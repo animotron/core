@@ -70,6 +70,14 @@ public class FastGraphBuilder extends GraphBuilder {
     private Node root;
     private byte[] hash;
 
+    public FastGraphBuilder () {
+        super();
+    }
+
+    public FastGraphBuilder (boolean ignoreNotFound) {
+        super(ignoreNotFound);
+    }
+
     @Override
     protected void fail(Exception e) {
         if (root != null) {
