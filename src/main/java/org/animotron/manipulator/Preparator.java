@@ -92,7 +92,7 @@ public class Preparator extends StatementManipulator {
 	}
 
 	@Override
-	public Subscribable<PFlow> onQuestion(Statement statement, Relationship op) {
+	public OnQuestion onQuestion(Statement statement, Relationship op) {
 		return ((Prepare) statement).onPrepareQuestion();
 	}
 

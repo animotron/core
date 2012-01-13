@@ -32,6 +32,7 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
+import org.jetlang.channels.Channel;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -74,7 +75,7 @@ public abstract class Manipulator {
 		return execute(vector, null, true);
 	}
 
-	public final PipedInput<QCAVector> execute(QCAVector vector, Subscribable<PFlow> sub, final boolean fullEval) throws IOException {
+	public final PipedInput<QCAVector> execute(final QCAVector vector, OnQuestion sub, final boolean fullEval) throws IOException {
         final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
         PipedInput<QCAVector> in = out.getInputStream();
 
@@ -101,14 +102,14 @@ public abstract class Manipulator {
 			throw new IOException(e);
 		}
 		pf.questionChannel().subscribe(sub);
-
 		
         //answers transfer to output
-        Subscribable<QCAVector> onAnswer = new OnContext(Executor.getFiber()) {
+		OnContext onAnswer = new OnContext(Executor.getFiber()) {
             public void onMessage(QCAVector context) {
             	super.onMessage(context);
             	
-            	//System.out.println("get answer "+context);
+            	System.out.println("get answer "+context);
+            	out.debug();
             	try {
             		if (context == null) {
 
@@ -171,10 +172,11 @@ public abstract class Manipulator {
             }
         };
 		
-        pf.answerChannel().subscribe(onAnswer.getQueue(), onAnswer);
+        pf.answerChannel().subscribe(onAnswer); //onAnswer.getQueue(), 
 
         //send question to evaluation
         pf.questionChannel().publish(pf);
+        System.out.println(Thread.currentThread()+" "+pf.getVector());
 		
 		//XXX: what to do with this?
         //reset.await(5, TimeUnit.SECONDS);
@@ -182,8 +184,8 @@ public abstract class Manipulator {
 		return in;
 	}
 	
-	public Subscribable<PFlow> onQuestion(final Relationship op) {
-		return new OnQuestion();
+	public OnQuestion onQuestion(final Relationship op) {
+		return null;//new OnQuestion();
 	}
 
 	public static void sendQuestion(final PipedOutput<QCAVector> out, final QCAVector vector, final Node node) throws IOException {
@@ -209,6 +211,8 @@ public abstract class Manipulator {
 	}
 	
 	public static void sendQuestion(final OnContext onAnswer, final QCAVector vector, final Node node) {
+		
+		//System.out.println("sendQuestion");
 		
 		//final CountDownLatch cd;
 		

@@ -27,7 +27,6 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -50,13 +49,13 @@ public class STRING extends Instruction implements Evaluable {
 
 
 	@Override
-	public Subscribable<PFlow> onCalcQuestion() {
+	public OnQuestion onCalcQuestion() {
 		return question;
 	}
 
     private OnQuestion question = new OnQuestion(){
         @Override
-        public void onMessage(final PFlow pf) {
+        public void act(final PFlow pf) {
 
             //UNDERSTAND: if we have more that 2 params, what to do?
         	
@@ -89,11 +88,8 @@ public class STRING extends Instruction implements Evaluable {
 					pf.sendException(e);
 					return;
 				}
-				
 				answered(pf, r);
             }
-            pf.done();
         }
-
     };
 }
