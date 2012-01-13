@@ -21,6 +21,8 @@
 package org.animotron.graph.traverser;
 
 import javolution.util.FastTable;
+
+import org.animotron.exception.AnimoException;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -90,6 +92,8 @@ public class AnimoTraverser {
 	}
 
     protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level) throws IOException {
+        QCAVector prev = null;
+
     	FastTable<Object> o = FastTable.newInstance();
         try {
         	Object i = null;
@@ -114,7 +118,7 @@ public class AnimoTraverser {
                 n++;
             }
             
-            QCAVector prev = null;
+            prev = null;
             int pos = 0;
             boolean isOne = o.size() - count < 2;
         	for (int index = 0, size = o.size(); index < size; index++) {
@@ -138,6 +142,8 @@ public class AnimoTraverser {
                 } else
                 	build(handler, parent, i, level, isOne, pos++, !it.hasNext());
             }
+        } catch (AnimoException e) {
+        	throw new IOException("on "+v,e);
         } finally {
             FastTable.recycle(o);
             it.close();
