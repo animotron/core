@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 
 import static org.animotron.graph.Nodes.EXTENSION;
+import static org.animotron.graph.Nodes.FILE;
 import static org.animotron.graph.Nodes.NAME;
 
 
@@ -42,6 +43,9 @@ import static org.animotron.graph.Nodes.NAME;
 public class DefaultDescription {
 
     public static void create(GraphBuilder builder, String path) throws AnimoException, IOException {
+        builder.start(AN._);
+            builder._(REF._, FILE);
+        builder.end();
         Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
         while (it.hasNext()) {
             String i = it.next();
