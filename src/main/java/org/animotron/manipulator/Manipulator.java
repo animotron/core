@@ -172,7 +172,7 @@ public abstract class Manipulator {
             }
         };
 		
-        pf.answerChannel().subscribe(onAnswer); //onAnswer.getQueue(), 
+        pf.answerChannel().subscribe(onAnswer.getQueue(), onAnswer); 
 
         //send question to evaluation
         pf.questionChannel().publish(pf);
