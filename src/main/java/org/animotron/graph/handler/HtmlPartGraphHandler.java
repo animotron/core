@@ -98,7 +98,7 @@ public class HtmlPartGraphHandler extends AbstractTextGraphHandler {
                     write(name);
                     write(">");
                 } else {
-                    write(">");
+                    write("/>");
                 }
             } else {
                 write("</");
