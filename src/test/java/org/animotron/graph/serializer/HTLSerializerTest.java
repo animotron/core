@@ -55,7 +55,7 @@ public class HTLSerializerTest extends ATest {
             "<html>" +
                 "<head>" +
                     "<title>Hello World!</title>" +
-                    "<script src=\"/foo/bar.js\"/>" +
+                    "<script src=\"/foo/bar.js\"></script>" +
                     "<script>" +
                         "x = a < b; y = c > d; z = e && f;" +
                     "</script>" +
