@@ -22,7 +22,6 @@ package org.animotron;
 
 import org.jetlang.fibers.Fiber;
 import org.jetlang.fibers.PoolFiberFactory;
-import org.jetlang.fibers.ThreadFiber;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -37,12 +36,12 @@ public class Executor {
 	//private static ExecutorService exec = Executors.newCachedThreadPool();
 	private static ExecutorService exec = Executors.newFixedThreadPool(200);
 	private static PoolFiberFactory fact = new PoolFiberFactory(exec);
-	private static Fiber fiber;
+//	private static Fiber fiber;
 	
-	static {
-		fiber = fact.create();
-		fiber.start();
-	}
+//	static {
+//		fiber = fact.create();
+//		fiber.start();
+//	}
     
 	public static Fiber getFiber() {
 		Fiber fiber = fact.create();
