@@ -87,7 +87,7 @@ public class HtmlPartGraphHandler extends AbstractTextGraphHandler {
         if (statement instanceof ELEMENT) {
             String name = param[0].toString();
             if (starting) {
-                if (
+                if (    // close RAW text and RCDATA elements
                         name.equalsIgnoreCase("script")   ||
                         name.equalsIgnoreCase("style")    ||
                         name.equalsIgnoreCase("textarea") ||
@@ -98,7 +98,28 @@ public class HtmlPartGraphHandler extends AbstractTextGraphHandler {
                     write(name);
                     write(">");
                 } else {
-                    write("/>");
+                    if (    // close void elements
+                            name.equalsIgnoreCase("area")    ||
+                            name.equalsIgnoreCase("base")    ||
+                            name.equalsIgnoreCase("br")      ||
+                            name.equalsIgnoreCase("col")     ||
+                            name.equalsIgnoreCase("command") ||
+                            name.equalsIgnoreCase("embed")   ||
+                            name.equalsIgnoreCase("hr")      ||
+                            name.equalsIgnoreCase("img")     ||
+                            name.equalsIgnoreCase("input")   ||
+                            name.equalsIgnoreCase("keygen")  ||
+                            name.equalsIgnoreCase("link")    ||
+                            name.equalsIgnoreCase("meta")    ||
+                            name.equalsIgnoreCase("param")   ||
+                            name.equalsIgnoreCase("source")  ||
+                            name.equalsIgnoreCase("track")   ||
+                            name.equalsIgnoreCase("wbr")
+                       ) {
+                        write(">");
+                    } else {
+                        write("/>");
+                    }
                 }
             } else {
                 write("</");
