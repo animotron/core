@@ -63,8 +63,8 @@ public class HTLSerializerTest extends ATest {
                 "<body>" +
                     "<h1>Hello World!</h1>" +
                     "<p>Welcome to Animo!</p>" +
-                    "<br/>" +
-                    "<input name=\"test\" value=\"\" checked/>" +
+                    "<br>" +
+                    "<input name=\"test\" value=\"\" checked>" +
                 "</body>" +
             "</html>");
     }
