@@ -84,13 +84,14 @@ public class HtmlPartGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        String name = param[0].toString();
         if (statement instanceof ELEMENT) {
-            if (starting) {
-                write("/>");
-            } else {
+            if (!starting || name.equals("script") || name.equals("style")) {
                 write("</");
-                write(param[0].toString());
+                write(name);
                 write(">");
+            } else {
+                write(" />");
             }
             starting = false;
         }
