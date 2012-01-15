@@ -487,7 +487,7 @@ public class QCAVector {
 		}
 	}
 
-	public boolean haveAnswer() {
+	public boolean hasAnswer() {
 		return (
 			(answers != null) 
 			|| (
