@@ -147,7 +147,7 @@ public class QCAVector {
 		if (context != null)
 			for (QCAVector v : context)
 				if (v.haveRelationship(op))
-					throw new AnimoException(op, "cycling detected "+this);
+					throw new AnimoException(op, "cycling detected for "+op.getId()+" at "+this);
 
 		
 		if (preceding_sibling != null)
@@ -485,5 +485,15 @@ public class QCAVector {
 			if (answers instanceof FastTable)
 				FastTable.recycle((FastTable<QCAVector>) answers);
 		}
+	}
+
+	public boolean haveAnswer() {
+		return (
+			(answers != null) 
+			|| (
+					(getUnrelaxedAnswer() != null) && 
+					(getUnrelaxedAnswer().equals(getQuestion()))
+			)
+		);
 	}
 }
