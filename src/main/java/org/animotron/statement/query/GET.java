@@ -62,7 +62,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -239,13 +239,14 @@ public class GET extends AbstractQuery implements Shift {
 					
 					QCAVector next = v;
 					while (next != null) {
-						if (next.getQuestion() != null 
-								&& next.getUnrelaxedAnswer() != null 
-								&& !next.getUnrelaxedAnswer().equals(next.getQuestion()))
+						if (next.getQuestion() != null && next.haveAnswer())
 							
 							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
-								//if (debug) System.out.println("checking question");
-								//found = found || check(pf, next, next.getQuestion(), thes, visitedREFs);
+								for (QCAVector vv : next.getAnswers()) {
+									if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs))
+										found = true;
+									
+								}
 							} else {
 								found = true;
 							}
