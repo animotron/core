@@ -136,7 +136,8 @@ public class GET extends AbstractQuery implements Shift {
 						if (debug) System.out.println("GET ["+op+"] vector "+vector);
 						
 						if (vector == null) {
-							pf.countDown();
+							if (cd.getCount() == 0)
+								pf.done();
 							return;
 						}
 						

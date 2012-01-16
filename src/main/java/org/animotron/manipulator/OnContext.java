@@ -30,7 +30,7 @@ import org.jetlang.fibers.Fiber;
  */
 public abstract class OnContext extends Subscribable<QCAVector> {
 	
-	CountDownLatch cd = null;
+	protected CountDownLatch cd = null;
 	
 	public OnContext(Fiber fiber) {
 		super(fiber);		
@@ -44,8 +44,8 @@ public abstract class OnContext extends Subscribable<QCAVector> {
 	public void onMessage(QCAVector vector) {
 		if (vector == null && cd != null) { 
 			cd.countDown();
-			if (cd.getCount() == 0)
-				fiber.dispose();
+			//if (cd.getCount() == 0)
+				//fiber.dispose();
 		}
 	}
 

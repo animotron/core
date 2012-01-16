@@ -492,7 +492,7 @@ public class QCAVector {
 			(answers != null) 
 			|| (
 					(getUnrelaxedAnswer() != null) && 
-					(getUnrelaxedAnswer().equals(getQuestion()))
+					(!getUnrelaxedAnswer().equals(getQuestion()))
 			)
 		);
 	}
