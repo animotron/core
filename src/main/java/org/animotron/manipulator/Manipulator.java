@@ -80,18 +80,28 @@ public abstract class Manipulator {
 	public final Pipe execute(final QCAVector vector, OnQuestion sub, final boolean fullEval) throws IOException {
         final Pipe pipe = Pipe.newInstance();
 
-        Relationship op = vector.getClosest();
+        final Relationship op = vector.getClosest();
         if (sub == null) {
 			sub = onQuestion(op);
         }
 		
 		if (sub == null) {
-			if (op instanceof Relationship) {
-				vector.setAnswer(op);
-				pipe.write( vector );
-			} else
-				System.out.println("UNHANDLED op "+op);
-			pipe.close();
+			Executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					if (op instanceof Relationship) {
+						vector.setAnswer(op);
+						try {
+							pipe.write( vector );
+						} catch (IOException e) {
+							//XXX: log
+							e.printStackTrace();
+						}
+					} else
+						System.out.println("UNHANDLED op "+op);
+					pipe.close();
+				}
+			});
 			return pipe;
 		}
 		

@@ -22,6 +22,8 @@ package org.animotron.statement.operator;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
+
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -60,8 +62,10 @@ public class THIS extends Operator implements Reference, Evaluable {
 			
 			Relationship op = pf.getOP();
 			
-			final Set<Node> thes = new FastSet<Node>(); 
-			for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
+			final Set<Node> thes = new FastSet<Node>();
+			Pipe p = AN.getREFs(pf, pf.getVector());
+			QCAVector theNode;
+			while ((theNode = p.take()) != null) {
 				thes.add(theNode.getClosest().getEndNode());
 			}
 

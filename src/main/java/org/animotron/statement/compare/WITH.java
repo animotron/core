@@ -54,7 +54,7 @@ public class WITH extends Operator implements Predicate {
 	
 	private WITH() { super("with"); }
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 
 	@Override
 	public boolean filter(final PFlow pf, Relationship op, final Relationship ref) throws InterruptedException, IOException {
@@ -85,7 +85,9 @@ public class WITH extends Operator implements Predicate {
 		qVector = pf.getVector().question2(op);
 
 		final Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, qVector)) {
+		Pipe p = Utils.getByREF(pf, qVector);
+		QCAVector v;
+		while ((v = p.take()) != null) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
@@ -93,12 +95,14 @@ public class WITH extends Operator implements Predicate {
 		
 		final Pipe pipe = Pipe.newInstance();
 		
-		pflow.answerChannel().subscribe(new OnContext() {
+		OnContext onContext = new OnContext() {
 			@Override
 			public void onMessage(QCAVector vector) {
 				super.onMessage(vector, pipe);
 			}
-		});
+		};
+		onContext.setCountDown(1);
+		pflow.answerChannel().subscribe(onContext);
 
 		Executor.execute(new Runnable() {
 			@Override

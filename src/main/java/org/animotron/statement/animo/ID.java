@@ -21,6 +21,7 @@
 package org.animotron.statement.animo;
 
 import org.animotron.expression.JExpression;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -51,15 +52,16 @@ public class ID extends Operator implements Evaluable {
     private OnQuestion question = new OnQuestion(){
         @Override
         public void act(final PFlow pf) {
-           for (QCAVector v : Utils.getByREF(pf)) {
-                pf.sendAnswer(pf.getVector().answered(
-                        new JExpression(
-                            value(
-                                Utils.name(v.getClosest().getEndNode())
-                            )
+        	Pipe p = Utils.getByREF(pf);
+        	QCAVector v;
+        	while ((v = p.take()) != null) {
+        		pf.sendAnswer(pf.getVector().answered(
+                    new JExpression(
+                        value(
+                            Utils.name(v.getClosest().getEndNode())
                         )
                     )
-                );
+                ));
             }
         }
     };

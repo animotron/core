@@ -48,14 +48,12 @@ public abstract class OnContext extends Subscribable<QCAVector> {
 	
 	@Override
 	public void onMessage(QCAVector vector) {
-		if (vector == null && cd != null) { 
-			cd.countDown();
-			//if (cd.getCount() == 0)
-				//fiber.dispose();
-		}
+		countDown(vector);
 	}
 
 	public void onMessage(QCAVector vector, Pipe pipe) {
+		countDown(vector);
+		
 		if (cd.getCount() == 0)
 			pipe.close();
 		else
@@ -67,6 +65,14 @@ public abstract class OnContext extends Subscribable<QCAVector> {
 			}
 	}
 
+	public void countDown(QCAVector vector) {
+		if (vector == null && cd != null) { 
+			cd.countDown();
+			//if (cd.getCount() == 0)
+				//fiber.dispose();
+		}
+	}
+	
 	public void isDone() {
 		if (cd != null)
 			try {

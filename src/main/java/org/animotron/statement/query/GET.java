@@ -89,7 +89,9 @@ public class GET extends AbstractQuery implements Shift {
 			final FastSet<Node> thes = FastSet.newInstance(); 
 			try {
 				Relationship r = null;
-				for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
+				Pipe p = AN.getREFs(pf, pf.getVector());
+				QCAVector theNode;
+				while ((theNode = p.take()) != null) {
 					r = theNode.getClosest();
 					if (r.isType(AN._)) {
 						try {
@@ -333,7 +335,9 @@ public class GET extends AbstractQuery implements Shift {
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					for (QCAVector v : AN.getREFs(pf, prev)) {
+					Pipe p = AN.getREFs(pf, prev);
+					QCAVector v;
+					while ((v = p.take()) != null) {
 						Relationship t = v.getClosest();
 						
 						prev.addAnswer(v);
