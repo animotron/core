@@ -26,7 +26,6 @@ import org.animotron.statement.operator.Utils;
 import org.animotron.utils.MessageDigester;
 import org.jetlang.channels.Channel;
 import org.jetlang.channels.MemoryChannel;
-import org.jetlang.fibers.Fiber;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -39,7 +38,6 @@ import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import javolution.util.FastMap;
-import javolution.util.FastTable;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -134,8 +132,8 @@ public class PFlow {
 	}
 
 	public void sendAnswer(Relationship answer) {
-		System.out.print("answered ");
-		Utils.debug(answer);
+		//System.out.print("answered ");
+		//Utils.debug(answer);
 		sendAnswer(answer, RESULT, getPathHash());
 	}
 
@@ -294,6 +292,20 @@ public class PFlow {
 
 	}
 	
+	public boolean getFromStack(Relationship r) {
+		boolean debug = false;
+		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
+		//for (QCAVector v : path) {
+			if (path.haveRelationship(r)) {
+				if (debug) System.out.println("FOUND!!!");
+				return true;
+			}
+		//}
+		if (debug) System.out.println("NOT FOUND");
+		return false;
+
+	}
+
 	public void debug() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("DEBUG PFlow ");

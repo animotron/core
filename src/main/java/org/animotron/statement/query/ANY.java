@@ -59,10 +59,10 @@ public class ANY extends AbstractQuery implements Reference {
         public void act(final PFlow pf) {
             long ts = System.currentTimeMillis();
 
-			//if (debug) { 
+			if (debug) { 
 				System.out.println("ANY "+pf.getOP()+" "+pf.getVector());
 				Utils.debug(ANY._, pf);
-			//}
+			}
 			
 			for (QCAVector vector : Utils.getByREF(pf)) {
 				Relationship the = vector.getClosest();
@@ -78,10 +78,10 @@ public class ANY extends AbstractQuery implements Reference {
     				try {
 						getUSEs(pf, node, uses, weaks, directed);
 						
-						//if (debug) { 
+						if (debug) { 
 							System.out.println(uses);
 							System.out.println(directed);
-    					//}
+    					}
 						
 						boolean underUSE = false;
 						Node n = getClosestIntersection(directed);

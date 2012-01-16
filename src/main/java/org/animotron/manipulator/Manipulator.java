@@ -32,7 +32,6 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
-import org.jetlang.channels.Channel;
 import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
