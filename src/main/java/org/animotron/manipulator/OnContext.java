@@ -20,8 +20,10 @@
  */
 package org.animotron.manipulator;
 
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
+import org.animotron.io.Pipe;
 import org.jetlang.fibers.Fiber;
 
 /**
@@ -32,6 +34,10 @@ public abstract class OnContext extends Subscribable<QCAVector> {
 	
 	protected CountDownLatch cd = null;
 	
+	public OnContext() {
+		super(null);
+	}
+
 	public OnContext(Fiber fiber) {
 		super(fiber);		
 	}
@@ -47,6 +53,18 @@ public abstract class OnContext extends Subscribable<QCAVector> {
 			//if (cd.getCount() == 0)
 				//fiber.dispose();
 		}
+	}
+
+	public void onMessage(QCAVector vector, Pipe pipe) {
+		if (cd.getCount() == 0)
+			pipe.close();
+		else
+			try {
+				pipe.write(vector);
+			} catch (IOException e) {
+				//XXX: log
+				e.printStackTrace();
+			}
 	}
 
 	public void isDone() {

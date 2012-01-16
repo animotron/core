@@ -21,7 +21,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.io.PipedOutput;
+import org.animotron.io.Pipe;
 import org.animotron.statement.operator.Utils;
 import org.animotron.utils.MessageDigester;
 import org.jetlang.channels.Channel;
@@ -199,23 +199,15 @@ public class PFlow {
 		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 	
-	public void countDown(PipedOutput<?> out) {
+	public void countDown(Pipe pipe) {
 		if (waitBeforeClosePipe == null) {
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			pipe.close();
 			return;
 		}
 		
 		waitBeforeClosePipe.countDown();
 		if (waitBeforeClosePipe.getCount() == 0)
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			pipe.close();
 		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 

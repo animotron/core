@@ -53,7 +53,7 @@ public class Preparator extends StatementManipulator {
 	public PipedInput<QCAVector> execute(Node op) throws IOException {
         for (Relationship r : op.getRelationships(INCOMING)) {
             if (r.isType(AN._) || r.isType(USE._) || r.isType(REF._)) {
-			    super.execute(r);
+			    //XXX: rewrite super.execute(r);
             }
 		}
         //System.out.println("Preparator "+op);

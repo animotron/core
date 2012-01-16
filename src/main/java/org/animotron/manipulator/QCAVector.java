@@ -23,7 +23,7 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
-import org.animotron.io.PipedInput;
+import org.animotron.io.Pipe;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
@@ -245,17 +245,18 @@ public class QCAVector {
 			b.append(question.getType());
 			b.append("'");
 			
-			try {
-				PipedInput<QCAVector> thes = AN.getREFs(null, new QCAVector(question));
-				for (QCAVector v : thes) {
-					Object name = THE._.reference(v.getClosest());
-					if (name != null) {
-						b.append(" ");
-						b.append(name);
-					}
-				}
-			} catch (Exception e) {
-			}
+//			try {
+//				Pipe thes = AN.getREFs(null, new QCAVector(question));
+//				QCAVector v;
+//				while ((v = thes.take()) != null) {
+//					Object name = THE._.reference(v.getClosest());
+//					if (name != null) {
+//						b.append(" ");
+//						b.append(name);
+//					}
+//				}
+//			} catch (Exception e) {
+//			}
 		}
 		b.append(" {");
 		if (context != null) {

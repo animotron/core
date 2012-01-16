@@ -21,6 +21,7 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.io.PipeIterator;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -103,7 +104,7 @@ public class ResultTraverser extends AnimoTraverser {
 //        if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<QCAVector> in = Evaluator._.execute(rr.question(r));
+            Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(rr.question(r)) );
             iterate(handler, null, rr, in, level, isOne);
 //        }
     }

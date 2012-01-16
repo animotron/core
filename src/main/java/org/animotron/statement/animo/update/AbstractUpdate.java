@@ -22,7 +22,7 @@ package org.animotron.statement.animo.update;
 
 import javolution.util.FastSet;
 import org.animotron.graph.index.Order;
-import org.animotron.io.PipedInput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -52,20 +52,21 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
     private OnQuestion question = new OnQuestion() {
         @Override
         public void act(PFlow pf) throws IOException {
-            PipedInput<QCAVector> destination = Utils.getByREF(pf);
+            Pipe destination = Utils.getByREF(pf);
 
             execute(destination, Order.context(pf.getOP().getEndNode()));
         }
     };
 
-    private void execute(PipedInput<QCAVector> destination, IndexHits<Relationship> it) throws IOException {
+    private void execute(Pipe destination, IndexHits<Relationship> it) throws IOException {
         try {
             Set<Relationship> param = new FastSet<Relationship>();
             for (Relationship r : it) {
                 param.add(r);
             }
             Set<Relationship> d = new FastSet<Relationship>();
-            for (QCAVector v : destination) {
+            QCAVector v;
+            while ((v = destination.take()) != null) {
                 Set<Relationship> the = new FastSet<Relationship>();
                 getThe(v, the);
                 execute(the, v.getClosest(), param);

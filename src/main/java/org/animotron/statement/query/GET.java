@@ -26,7 +26,7 @@ import javolution.util.FastTable;
 
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
-import org.animotron.io.PipedInput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
@@ -350,9 +350,9 @@ public class GET extends AbstractQuery implements Shift {
 //					if (!pf.isInStack(r)) {
 						try {
 							//System.out.println("["+pf.getOP()+"] evaluate "+prev);
-							PipedInput<QCAVector> in = Evaluator._.execute(prev);
-							
-							for (QCAVector v : in) {
+							Pipe in = Evaluator._.execute(prev);
+							QCAVector v;
+							while ((v = in.take()) != null) {
 								prev.addAnswer(v);
 								if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
 									newREFs.add(v);
@@ -412,14 +412,15 @@ public class GET extends AbstractQuery implements Shift {
 			System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
 		
 		try {
-			PipedInput<QCAVector> in = Evaluator._.execute(vector.question(op));
+			Pipe in = Evaluator._.execute(vector.question(op));
 
-			if (!in.hasNext()) return false;
+			//if (!in.hasNext()) return false;
 			
 			boolean answered = false;
 			
 			Relationship res = null;
-			for (QCAVector v : in) {
+			QCAVector v;
+			while ((v = in.take()) != null) {
 				res = v.getAnswer();
 				if (!pf.isInStack(res)) {
 					

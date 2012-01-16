@@ -22,6 +22,7 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.io.PipeIterator;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -80,7 +81,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 //    		i.close();
 //    	}
 //        if (!found) {
-            Iterator<QCAVector> in = Evaluator._.execute(rr.question(r), null, false);
+            Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(rr.question(r), null, false) );
             iterate(handler, null, rr, in, level, isOne);
 //        }
     }
