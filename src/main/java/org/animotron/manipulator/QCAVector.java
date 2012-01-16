@@ -20,6 +20,8 @@
  */
 package org.animotron.manipulator;
 
+import javolution.util.FastSet;
+import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
 import org.animotron.io.PipedInput;
 import org.animotron.statement.operator.AN;
@@ -30,9 +32,6 @@ import org.neo4j.graphdb.Relationship;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
-
-import javolution.util.FastSet;
-import javolution.util.FastTable;
 
 import static org.animotron.utils.MessageDigester.longToByteArray;
 
@@ -487,7 +486,7 @@ public class QCAVector {
 		}
 	}
 
-	public boolean haveAnswer() {
+	public boolean hasAnswer() {
 		return (
 			(answers != null) 
 			|| (

@@ -240,7 +240,7 @@ public class GET extends AbstractQuery implements Shift {
 					
 					QCAVector next = v;
 					while (next != null) {
-						if (next.getQuestion() != null && next.haveAnswer())
+						if (next.getQuestion() != null && next.hasAnswer())
 							
 							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
 								for (QCAVector vv : next.getAnswers()) {
