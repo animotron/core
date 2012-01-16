@@ -162,11 +162,11 @@ public class GET extends AbstractQuery implements Shift {
 							}
 						}
 						
-						vector = vector.getPrecedingSibling();
-						while (vector != null) {
-							refs.add(vector);
-							vector = vector.getPrecedingSibling();
-						}
+//						vector = vector.getPrecedingSibling();
+//						while (vector != null) {
+//							refs.add(vector);
+//							vector = vector.getPrecedingSibling();
+//						}
 						
 						get(pf, refs, thes, visitedREFs);
 					} finally {
@@ -243,11 +243,10 @@ public class GET extends AbstractQuery implements Shift {
 						if (next.getQuestion() != null && next.hasAnswer())
 							
 							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
-								for (QCAVector vv : next.getAnswers()) {
-									if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs))
-										found = true;
-									
-								}
+								if (next.getAnswers() != null)
+									for (QCAVector vv : next.getAnswers())
+										if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs))
+											found = true;
 							} else {
 								found = true;
 							}
@@ -348,7 +347,7 @@ public class GET extends AbstractQuery implements Shift {
 					}
 	
 				} else if (st instanceof Reference) {
-					if (!pf.isInStack(r)) {
+//					if (!pf.isInStack(r)) {
 						try {
 							//System.out.println("["+pf.getOP()+"] evaluate "+prev);
 							PipedInput<QCAVector> in = Evaluator._.execute(prev);
@@ -362,7 +361,7 @@ public class GET extends AbstractQuery implements Shift {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-					}
+//					}
 				}
 			}
 		} catch (Exception e) {
