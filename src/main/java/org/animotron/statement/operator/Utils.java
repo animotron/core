@@ -44,7 +44,6 @@ import org.neo4j.kernel.Traversal;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
 
 import static org.animotron.graph.Properties.CONTEXT;
@@ -171,7 +170,9 @@ public class Utils {
 //					) {
 					pipe.write(e);
 				} else {
-					for (QCAVector rr : eval(e)) {
+					Pipe p = eval(e);
+					QCAVector rr;
+					while ((rr = p.take()) != null) {
 						pipe.write(rr);
 					}
 				}
@@ -225,7 +226,9 @@ public class Utils {
 					if (result.isType(REF._) || result.isType(THE._)) {
 						pipe.write(e);
 					} else {
-						for (QCAVector rr : eval(e)) {
+						Pipe p = eval(e);
+						QCAVector rr;
+						while ((rr = p.take()) != null) {
 							pipe.write(rr);
 						}
 					}
@@ -240,7 +243,7 @@ public class Utils {
 		}
 	}
 	
-	public static Queue<QCAVector> eval(final QCAVector vector) throws IOException, AnimoException, InterruptedException {
+	public static Pipe eval(final QCAVector vector) throws IOException, AnimoException, InterruptedException {
         final Pipe pipe = Pipe.newInstance();
         
         Executor.execute(new Runnable() {

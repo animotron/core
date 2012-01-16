@@ -95,7 +95,9 @@ public class GET extends AbstractQuery implements Shift {
 					r = theNode.getClosest();
 					if (r.isType(AN._)) {
 						try {
-							for (QCAVector rr : Utils.eval(theNode)) {
+							Pipe pp = Utils.eval(theNode);
+							QCAVector rr;
+							while ((rr = pp.take()) != null) {
 								thes.add(rr.getClosest().getEndNode());
 							}
 						} catch (Exception e) {
