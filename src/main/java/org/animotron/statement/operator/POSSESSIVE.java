@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import javolution.util.FastSet;
 import org.animotron.Executor;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -56,7 +57,9 @@ public class POSSESSIVE extends Operator implements Suffix {
 			
 			final Set<Node> thes = new FastSet<Node>(); 
 			
-			for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
+			Pipe p = AN.getREFs(pf, pf.getVector());
+			QCAVector theNode;
+			while ((theNode = p.take()) != null ) {
 				thes.add(theNode.getAnswer().getEndNode());
 			}
 			Utils.debug(POSSESSIVE._, op, thes);

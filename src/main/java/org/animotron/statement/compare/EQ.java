@@ -25,8 +25,7 @@ import javolution.util.FastSet;
 
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.PFlow;
@@ -36,7 +35,6 @@ import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
-import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -63,55 +61,50 @@ public class EQ extends Operator implements Predicate {
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		if (debug) System.out.println("EQ op "+op+" ref "+ref);
 
-		QCAVector vector = pf.getVector().answered(ref);
-		vector = vector.question(op);
+		final QCAVector vector = pf.getVector().answered(ref).question(op);
 
 		//XXX: fix
-		Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, vector)) {
+		final Set<Node> thes = new FastSet<Node>();
+		Pipe p = Utils.getByREF(pf, vector);
+		QCAVector v;
+		while ((v = p.take()) != null) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
-		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
-		PipedInput<QCAVector> in = out.getInputStream();
+		final PFlow pflow = new PFlow(vector);
 		
-		PFlow pflow = new PFlow(vector);
+		final Pipe pipe = Pipe.newInstance();
 		
-		pflow.answerChannel().subscribe(new OnContext(Executor.getFiber()) {
-			
+		OnContext onContext = new OnContext() {
 			@Override
 			public void onMessage(QCAVector vector) {
-				super.onMessage(vector);
-				try {
-					if (vector == null)
-						out.close();
-
-					out.write(vector);
-				} catch (IOException e) {
-				}
+				super.onMessage(vector, pipe);
 			}
-			
+		};
+		onContext.setCountDown(1);
+		pflow.answerChannel().subscribe(onContext);
+		
+		Executor.execute(new Runnable() {
 			@Override
-			public DisposingExecutor getQueue() {
-				return Executor.getFiber();
+			public void run() {
+				GET._.get(pflow, vector, thes, null);
+				pflow.done();
 			}
 		});
 		
-		GET._.get(pflow, vector, thes, null);
-		pflow.done();
-		
-		if (!in.hasNext()) return false;
+		//if (!pipe.hasNext()) return false;
 		
 		List<QCAVector> actual = new FastList<QCAVector>();
-		List<QCAVector> expected = new FastList<QCAVector>();
 
 		if (debug) System.out.println("Eval actual");
-		for (QCAVector have : in) { 
+		QCAVector have;
+		while ((have = pipe.take()) != null) { 
 			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					in = Evaluator._.execute(vector.question(r));
-					for (QCAVector e : in) {
+					Pipe in = Evaluator._.execute(vector.question(r));
+					QCAVector e;
+					while ((e = in.take()) != null) {
 						actual.add(e);
 						if (debug) System.out.println("actual "+e);
 					}
@@ -120,6 +113,8 @@ public class EQ extends Operator implements Predicate {
 				hits.close();
 			}
 		}
+
+		List<QCAVector> expected = new FastList<QCAVector>();
 
 		if (debug) System.out.println("Eval expected");
 		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
@@ -132,8 +127,9 @@ public class EQ extends Operator implements Predicate {
 				}
 				if (r.isType(REF._)) continue;
 				
-				in = Evaluator._.execute(vector.question(r));
-				for (QCAVector e : in) {
+				Pipe in = Evaluator._.execute(vector.question(r));
+				QCAVector e;
+				while ((e = in.take()) != null) {
 					expected.add(e);
 					if (debug) System.out.println("expected "+e);
 				}

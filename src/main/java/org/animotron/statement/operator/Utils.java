@@ -20,14 +20,14 @@
  */
 package org.animotron.statement.operator;
 
+import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -103,66 +103,63 @@ public class Utils {
 	    		});
 
 	
-	public static PipedInput<QCAVector> getByREF(final PFlow pf) {
+	public static Pipe getByREF(final PFlow pf) {
 		return getByREF(pf, pf.getVector());
 	}
 
-	public static PipedInput<QCAVector> getByREF(final PFlow pf, final QCAVector vector) {
-		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
-		PipedInput<QCAVector> in = out.getInputStream();
+	public static Pipe getByREF(final PFlow pf, final QCAVector vector) {
+		final Pipe pipe = Pipe.newInstance(); 
 		
-		Node node = vector.getClosest().getEndNode();
-		
+		final Node node = vector.getClosest().getEndNode();
 		//System.out.println(node);
-		try {
-			try {
-				Relationship theNode = THE._.get((String)THE._.reference(node));
-
-				if (theNode != null) {
-					out.write(vector.answered(theNode));
-					out.close();
-					return in;
-				}
-			} catch (Exception e) {
-			}
-			
-			if (pf != null) {
-				Relationship first = null;
-				IndexHits<Relationship> hits = Order.queryDown(node);
+		
+		Executor.execute(new Runnable() {
+			@Override
+			public void run() {
 				try {
-					for (Relationship res : hits) {
-						if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-							evaluable(pf, vector.question(res), out);
-							if (first == null)
-								first = res;
-						} else
-							break;
+					Relationship theNode = THE._.get((String)THE._.reference(node));
+		
+					if (theNode != null) {
+						pipe.write(vector.answered(theNode));
+						pipe.close();
 					}
+				} catch (Exception e) {
+				}
 					
-				} finally {
-					hits.close();
+				if (pf != null) {
+					Relationship first = null;
+					IndexHits<Relationship> hits = Order.queryDown(node);
+					try {
+						for (Relationship res : hits) {
+							if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
+								evaluable(pf, vector.question(res), pipe);
+								if (first == null)
+									first = res;
+							} else
+								break;
+						}
+						
+					} catch (Exception e) {
+						pf.sendException(e);
+						
+					} finally {
+						hits.close();
+						pipe.close();
+					}
 				}
 			}
+		});
 
-			return in;
-
-		} catch (Exception e) {
-			pf.sendException(e);
-		} finally {
-			try {
-				out.close();
-			} catch (IOException e) {}
-		}
-		return null;
+		return pipe;
 	}
 
-	private static PipedOutput<QCAVector> evaluable(final PFlow pf, final QCAVector v, final PipedOutput<QCAVector> out) throws InterruptedException, IOException, AnimoException {
+	private static Pipe evaluable(final PFlow pf, final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
 		
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			PipedInput<QCAVector> in = Evaluator._.execute(v);
+			Pipe in = Evaluator._.execute(v);
 			for (QCAVector e : in) {
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
@@ -171,32 +168,38 @@ public class Utils {
 //						|| result.isType(org.animotron.statement.operator.REF._)
 //						|| result.isType(THE._)
 //					) {
-					out.write(e);
+					pipe.write(e);
 				} else {
-					for (QCAVector rr : eval(e)) {
-						out.write(rr);
+					Pipe p = eval(e);
+					QCAVector rr;
+					while ((rr = p.take()) != null) {
+						pipe.write(rr);
 					}
 				}
 			}
 			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 		} else {
-			out.write(v.getContext().get(0).answered(r));
+			pipe.write(v.getContext().get(0).answered(r));
 		}
 		
-		return out;
+		return pipe;
 	}
 	
-	public static PipedInput<QCAVector> getTheRelationships(PFlow pf, QCAVector v) throws IOException {
-		PipedOutput<QCAVector> out = new PipedOutput<QCAVector>(); 
-		PipedInput<QCAVector> in = out.getInputStream();
+	public static Pipe getTheRelationships(final PFlow pf, final QCAVector v) throws IOException {
+		final Pipe pipe = Pipe.newInstance(); 
 
-		getTheRelationships(pf, v, out);
-		out.close();
+		Executor.execute( new Runnable() {
+			@Override
+			public void run() {
+				getTheRelationships(pf, v, pipe);
+				pipe.close();
+			}
+		});
 		
-		return in;
+		return pipe;
 	}
 
-	public static void getTheRelationships(PFlow pf, QCAVector v, PipedOutput<QCAVector> out) {
+	public static void getTheRelationships(PFlow pf, QCAVector v, Pipe pipe) {
 		try {
 		
 			Statement s = Statements.relationshipType(v.getClosest());
@@ -208,63 +211,79 @@ public class Utils {
                     s = Statements.name((String) THE._.reference(v.getClosest()));
                     
                 } catch (Exception e) {
-    				out.write(v);//.answered(v.getClosest())
+    				pipe.write(v);//.answered(v.getClosest())
     				return;
                 }
 			}
 
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-				PipedInput<QCAVector> in = Evaluator._.execute(v);
-				for (QCAVector e : in) {
+				Pipe in = Evaluator._.execute(v);
+				QCAVector e;
+				while ((e = in.take()) != null) {
 
 					Relationship result = e.getAnswer();
 					
 					if (result.isType(REF._) || result.isType(THE._)) {
-						out.write(e);
+						pipe.write(e);
 					} else {
-						for (QCAVector rr : eval(e)) {
-							out.write(rr);
+						Pipe p = eval(e);
+						QCAVector rr;
+						while ((rr = p.take()) != null) {
+							pipe.write(rr);
 						}
 					}
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
 			} else {
-				out.write(v);//.answered(v.getClosest())
+				pipe.write(v);//.answered(v.getClosest())
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			pf.sendException(e);
 		}
 	}
 	
-	public static PipedInput<QCAVector> eval(QCAVector vector) throws IOException, AnimoException {
-        final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
-        PipedInput<QCAVector> in = out.getInputStream();
+	public static Pipe eval(final QCAVector vector) throws IOException, AnimoException, InterruptedException {
+        final Pipe pipe = Pipe.newInstance();
         
-        Relationship op = vector.getClosest();
-        
-        QCAVector prev = null;
+        Executor.execute(new Runnable() {
+			@Override
+			public void run() {
+		        Relationship op = vector.getClosest();
+		        
+		        QCAVector prev = null;
 
-		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
-		for (Relationship rr : hits) {
-			if (rr.isType(REF._)) continue;
-			
-			Statement _s = Statements.relationshipType(rr);
-			if (_s instanceof Query || _s instanceof Evaluable) {
-				prev = vector.question(rr, prev);
-				PipedInput<QCAVector> _in = Evaluator._.execute(prev);
-				for (QCAVector ee : _in) {
-					//XXX: ee should be context too???
-					out.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
+				IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
+				try {
+					for (Relationship rr : hits) {
+						if (rr.isType(REF._)) continue;
+						
+						Statement _s = Statements.relationshipType(rr);
+						if (_s instanceof Query || _s instanceof Evaluable) {
+							prev = vector.question(rr, prev);
+							Pipe _in = Evaluator._.execute(prev);
+							for (QCAVector ee : _in) {
+								//XXX: ee should be context too???
+								pipe.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
+							}
+							
+						} else {
+							pipe.write(new QCAVector(op, vector, rr));
+						}
+					}
+				} catch (Exception e) {
+					//XXX: logs
+					e.printStackTrace();
+				} finally {
+					hits.close();
+					pipe.close();
 				}
-				
-			} else {
-				out.write(new QCAVector(op, vector, rr));
 			}
-		}
-		out.close();
+        });
+		//out.close();
 		
-		return in;
+		return pipe;
 	}
 
 	@Deprecated //???

@@ -20,7 +20,7 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.io.PipedInput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -51,18 +51,20 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 			byte[] hash = pf.getOpHash();
 
 			if (debug) System.out.println("AN "+Thread.currentThread());
-			System.out.println("AN "+pf.getVector());
+			//System.out.println("AN "+pf.getVector());
 			//pf.sendAnswer(new QCAVector(op,op));
 			
 			if (!Utils.results(pf, hash)) {
-				for (QCAVector r : getREFs(pf, pf.getVector())) {
+				Pipe pipe = getREFs(pf, pf.getVector());
+				QCAVector r;
+				while ((r = pipe.take()) != null) {
 					pf.sendAnswer(r);
 				}
 			}
 		}
 	};
 	
-	public static PipedInput<QCAVector> getREFs(final PFlow pf, final QCAVector vector) {
+	public static Pipe getREFs(final PFlow pf, final QCAVector vector) {
 		return Utils.getByREF(pf, vector);
 	}
 }

@@ -26,7 +26,7 @@ import javolution.util.FastTable;
 
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
-import org.animotron.io.PipedInput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
@@ -89,11 +89,15 @@ public class GET extends AbstractQuery implements Shift {
 			final FastSet<Node> thes = FastSet.newInstance(); 
 			try {
 				Relationship r = null;
-				for (QCAVector theNode : AN.getREFs(pf, pf.getVector())) {
+				Pipe p = AN.getREFs(pf, pf.getVector());
+				QCAVector theNode;
+				while ((theNode = p.take()) != null) {
 					r = theNode.getClosest();
 					if (r.isType(AN._)) {
 						try {
-							for (QCAVector rr : Utils.eval(theNode)) {
+							Pipe pp = Utils.eval(theNode);
+							QCAVector rr;
+							while ((rr = pp.take()) != null) {
 								thes.add(rr.getClosest().getEndNode());
 							}
 						} catch (Exception e) {
@@ -333,7 +337,9 @@ public class GET extends AbstractQuery implements Shift {
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
 					//System.out.println(r);
-					for (QCAVector v : AN.getREFs(pf, prev)) {
+					Pipe p = AN.getREFs(pf, prev);
+					QCAVector v;
+					while ((v = p.take()) != null) {
 						Relationship t = v.getClosest();
 						
 						prev.addAnswer(v);
@@ -350,9 +356,9 @@ public class GET extends AbstractQuery implements Shift {
 //					if (!pf.isInStack(r)) {
 						try {
 							//System.out.println("["+pf.getOP()+"] evaluate "+prev);
-							PipedInput<QCAVector> in = Evaluator._.execute(prev);
-							
-							for (QCAVector v : in) {
+							Pipe in = Evaluator._.execute(prev);
+							QCAVector v;
+							while ((v = in.take()) != null) {
 								prev.addAnswer(v);
 								if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
 									newREFs.add(v);
@@ -412,14 +418,15 @@ public class GET extends AbstractQuery implements Shift {
 			System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
 		
 		try {
-			PipedInput<QCAVector> in = Evaluator._.execute(vector.question(op));
+			Pipe in = Evaluator._.execute(vector.question(op));
 
-			if (!in.hasNext()) return false;
+			//if (!in.hasNext()) return false;
 			
 			boolean answered = false;
 			
 			Relationship res = null;
-			for (QCAVector v : in) {
+			QCAVector v;
+			while ((v = in.take()) != null) {
 				res = v.getAnswer();
 				if (!pf.isInStack(res)) {
 					

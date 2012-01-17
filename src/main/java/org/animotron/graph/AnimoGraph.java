@@ -128,8 +128,14 @@ public class AnimoGraph {
 	}
 
 	public static void finishTx(Transaction tx) {
-		tx.finish();
-		activeTx.remove(tx);
+		try {
+			tx.finish();
+		} catch (Exception e) {
+			//XXX: log
+			e.printStackTrace();
+		} finally {
+			activeTx.remove(tx);
+		}
 	}
 
 //	public static boolean isTransactionActive(Transaction tx) {

@@ -25,6 +25,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.Properties;
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -82,7 +83,9 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	            try {
 	                Number x = null;
 	                for (Relationship param : params) {
-	                	for (QCAVector r : Utils.getTheRelationships(pf, pf.getVector().question(param))) {
+	                	Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question(param));
+	                	QCAVector r;
+	                	while ((r = pipe.take()) != null) {
 		                	if (x == null) {
 		                		if (params.hasNext())
 		                			x = param(r);
@@ -124,7 +127,9 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     					return;
     				}
     				
-    				for (QCAVector v : AN.getREFs(pf, new QCAVector(r))) {
+    				Pipe p = AN.getREFs(pf, new QCAVector(r));
+    				QCAVector v;
+    				while ((v = p.take()) != null) {
     					thes.add(v.getClosest().getEndNode());
     				}
     				

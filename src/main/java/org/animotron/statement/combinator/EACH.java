@@ -23,6 +23,7 @@ package org.animotron.statement.combinator;
 import javolution.util.FastSet;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -63,19 +64,24 @@ public class EACH extends Combinator {
 
 		@Override
 		public void act(final PFlow pf) throws IOException {
-			if (debug) System.out.println("EACH EACH EACH EACH");
-			if (debug) System.out.println(pf.getVector());
+			//if (debug) { 
+				System.out.println("EACH EACH EACH EACH");
+				System.out.println(pf.getVector());
+			//}
 			
 			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
 			try {
 				Set<QCAVector> set = new FastSet<QCAVector>();
 				while (elements.hasNext()) {
 					Relationship element = elements.next();
-					if (elements.hasNext())
-						for (QCAVector r : Utils.getTheRelationships(pf, pf.getVector().question2(element))) {
+					if (elements.hasNext()) {
+						Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question2(element));
+					
+						QCAVector r;
+						while ((r = pipe.take()) != null)
 							set.add(r);
-						}
-					else {
+
+					} else {
 						for (QCAVector r : set) {
 							QCAVector rr = new QCAVector(pf.getOP(), r, element);
 							pf.sendAnswer(rr);

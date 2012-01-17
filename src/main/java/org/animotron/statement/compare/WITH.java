@@ -25,17 +25,15 @@ import javolution.util.FastSet;
 
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.query.GET;
-import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -56,17 +54,16 @@ public class WITH extends Operator implements Predicate {
 	
 	private WITH() { super("with"); }
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 
 	@Override
-	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
+	public boolean filter(final PFlow pf, Relationship op, final Relationship ref) throws InterruptedException, IOException {
 		
 		if (debug) 
 			System.out.println("WITH op "+op+" ref "+ref);
 		//XXX: fix
 		
 		QCAVector qVector = null;
-		PipedInput<QCAVector> in = null;
 
 		List<QCAVector> expected = (List<QCAVector>) pf.getData(op);
 
@@ -76,49 +73,45 @@ public class WITH extends Operator implements Predicate {
 			
 			expected = new FastList<QCAVector>();
 			qVector = pf.getVector().answered(pf.getVector().getClosest());
-			in = Evaluator._.execute(qVector, op.getEndNode());
-			for (QCAVector e : in) {
+			Pipe in = Evaluator._.execute(qVector, op.getEndNode());
+			QCAVector e;
+			while ((e = in.take()) != null) {
 				expected.add(e);
 				if (debug) System.out.println("expected "+e);
 			}
 			pf.putData(op, expected);
 		}
-		
 
 		qVector = pf.getVector().question2(op);
 
-		Set<Node> thes = new FastSet<Node>();
-		for (QCAVector v : Utils.getByREF(pf, qVector)) {
+		final Set<Node> thes = new FastSet<Node>();
+		Pipe p = Utils.getByREF(pf, qVector);
+		QCAVector v;
+		while ((v = p.take()) != null) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
-		final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
-		in = out.getInputStream();
+		final PFlow pflow = new PFlow(qVector);
 		
-		PFlow pflow = new PFlow(qVector);
+		final Pipe pipe = Pipe.newInstance();
 		
-		pflow.answerChannel().subscribe(new Subscribable<QCAVector>() {
-			
+		OnContext onContext = new OnContext() {
 			@Override
-			public void onMessage(QCAVector message) {
-				try {
-					if (message == null)
-						out.close();
-					
-					out.write(message);
-				} catch (IOException e) {
-				}
+			public void onMessage(QCAVector vector) {
+				super.onMessage(vector, pipe);
 			}
-			
+		};
+		onContext.setCountDown(1);
+		pflow.answerChannel().subscribe(onContext);
+
+		Executor.execute(new Runnable() {
 			@Override
-			public DisposingExecutor getQueue() {
-				return Executor.getFiber();
+			public void run() {
+				QCAVector aVector = pf.getVector().answered(ref);
+				GET._.get(pflow, aVector, thes, null);
+				pflow.done();
 			}
 		});
-
-		QCAVector aVector = pf.getVector().answered(ref);
-		GET._.get(pflow, aVector, thes, null);
-		pflow.done();
 		
 		//if (!in.hasNext()) return false;
 		
@@ -127,13 +120,15 @@ public class WITH extends Operator implements Predicate {
 		if (debug) 
 			System.out.println("Eval actual");
 		
-		for (QCAVector have : in) {
+		QCAVector have;
+		while ((have = pipe.take()) != null) {
 			if (debug) System.out.println("actual get "+have);
 			IndexHits<Relationship> hits = Order.context(have.getClosest().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					in = Evaluator._.execute(have.question(r));
-					for (QCAVector e : in) {
+					Pipe in = Evaluator._.execute(have.question(r));
+					QCAVector e;
+					while ((e = in.take()) != null) {
 						actual.add(e);
 						if (debug) System.out.println("actual "+e);
 					}
@@ -184,8 +179,9 @@ public class WITH extends Operator implements Predicate {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				PipedInput<QCAVector> in = Evaluator._.execute(vector.question(i));
-    				for (QCAVector e : in) {
+    				Pipe in = Evaluator._.execute(vector.question(i));
+    				QCAVector e;
+    				while ((e = in.take()) != null) {
     					list.add(e);
     					System.out.println("get from Evaluator "+e);
     				}

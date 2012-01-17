@@ -21,6 +21,7 @@
 package org.animotron.statement.query;
 
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -64,7 +65,9 @@ public class ANY extends AbstractQuery implements Reference {
 				Utils.debug(ANY._, pf);
 			}
 			
-			for (QCAVector vector : Utils.getByREF(pf)) {
+			Pipe p = Utils.getByREF(pf);
+			QCAVector vector;
+			while ((vector = p.take()) != null) {
 				Relationship the = vector.getClosest();
 				
 				if (!Utils.results(the, pf)) {
@@ -125,8 +128,8 @@ public class ANY extends AbstractQuery implements Reference {
 				        				return;
 				        			}
 				        		} catch (Exception e) {
-			        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-			        					res = p.lastRelationship();
+			        				for (Path pp : Utils.td_THE.traverse(r.getStartNode())) {
+			        					res = pp.lastRelationship();
 					        			if (filtering(pf, res, uses, weaks)) {
 					        				pf.sendAnswer( res );
 					        				return;

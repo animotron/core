@@ -21,7 +21,7 @@
 package org.animotron.manipulator;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.io.PipedOutput;
+import org.animotron.io.Pipe;
 import org.animotron.statement.operator.Utils;
 import org.animotron.utils.MessageDigester;
 import org.jetlang.channels.Channel;
@@ -55,25 +55,6 @@ public class PFlow {
 	
 	public PFlow(Relationship op) {
 		path = new QCAVector(op);
-	}
-
-	@Deprecated //use one with vector
-	public PFlow(PFlow parent, Relationship op) throws AnimoException {
-		path = parent.path;
-		path = path.question(op);
-		
-		cyclingDetection(op);
-	}
-
-	public PFlow(PFlow parent, Node opNode) {
-		System.out.println("WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG");
-
-		path = parent.path;
-	}
-	
-	public PFlow(PFlow parent, QCAVector vector) {
-		path = vector;
-		path.addContext(parent.getVector().getContext());
 	}
 
 	public PFlow(QCAVector vector) {
@@ -199,23 +180,15 @@ public class PFlow {
 		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 	
-	public void countDown(PipedOutput<?> out) {
+	public void countDown(Pipe pipe) {
 		if (waitBeforeClosePipe == null) {
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			pipe.close();
 			return;
 		}
 		
 		waitBeforeClosePipe.countDown();
 		if (waitBeforeClosePipe.getCount() == 0)
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			pipe.close();
 		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 

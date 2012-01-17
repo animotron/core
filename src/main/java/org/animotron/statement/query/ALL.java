@@ -21,6 +21,7 @@
 package org.animotron.statement.query;
 
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -58,7 +59,10 @@ public class ALL extends AbstractQuery implements Reference {
         public void act(final PFlow pf) {
 			//System.out.println("ALL **************************");
             
-            for (QCAVector theVector : Utils.getByREF(pf, pf.getVector())) {
+        	Pipe pipe = Utils.getByREF(pf, pf.getVector());
+        	QCAVector theVector;
+        	
+            while ((theVector = pipe.take()) != null) {
             	
             	Relationship the = theVector.getAnswer();
 

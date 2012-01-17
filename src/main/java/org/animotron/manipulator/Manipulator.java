@@ -23,8 +23,7 @@ package org.animotron.manipulator;
 import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Order;
-import org.animotron.io.PipedInput;
-import org.animotron.io.PipedOutput;
+import org.animotron.io.Pipe;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -57,40 +56,53 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public PipedInput<QCAVector> execute(QCAVector vector, Node node) throws IOException {
-        final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
-        PipedInput<QCAVector> in = out.getInputStream();
+	public Pipe execute(final QCAVector vector, final Node node) {
+        final Pipe pipe = Pipe.newInstance();
 		
-        sendQuestion(out, vector, node);
+        Executor.execute(new Runnable() {
+			@Override
+			public void run() {
+		        sendQuestion(pipe, vector, node);
+			}
+		});
         
-        return in;
+        return pipe;
 	}
 
-	public final PipedInput<QCAVector> execute(Relationship op) throws IOException {
+	public final Pipe execute(Relationship op) throws IOException {
 		return execute(new QCAVector(op), null, true);
 	}
 	
-	public final PipedInput<QCAVector> execute(QCAVector vector) throws IOException {
+	public final Pipe execute(QCAVector vector) throws IOException {
 		return execute(vector, null, true);
 	}
 
-	public final PipedInput<QCAVector> execute(final QCAVector vector, OnQuestion sub, final boolean fullEval) throws IOException {
-        final PipedOutput<QCAVector> out = new PipedOutput<QCAVector>();
-        PipedInput<QCAVector> in = out.getInputStream();
+	public final Pipe execute(final QCAVector vector, OnQuestion sub, final boolean fullEval) throws IOException {
+        final Pipe pipe = Pipe.newInstance();
 
-        Relationship op = vector.getClosest();
+        final Relationship op = vector.getClosest();
         if (sub == null) {
 			sub = onQuestion(op);
         }
 		
 		if (sub == null) {
-			if (op instanceof Relationship) {
-				vector.setAnswer(op);
-				out.write( vector );
-			} else
-				System.out.println("UNHANDLED op "+op);
-			out.close();
-			return in;
+			Executor.execute(new Runnable() {
+				@Override
+				public void run() {
+					if (op instanceof Relationship) {
+						vector.setAnswer(op);
+						try {
+							pipe.write( vector );
+						} catch (IOException e) {
+							//XXX: log
+							e.printStackTrace();
+						}
+					} else
+						System.out.println("UNHANDLED op "+op);
+					pipe.close();
+				}
+			});
+			return pipe;
 		}
 		
 		final PFlow pf = new PFlow(vector);
@@ -100,19 +112,19 @@ public abstract class Manipulator {
 			e.printStackTrace();
 			throw new IOException(e);
 		}
-		pf.questionChannel().subscribe(sub);
+		pf.questionChannel().subscribe(sub.getQueue(), sub);
 		
         //answers transfer to output
-		OnContext onAnswer = new OnContext(Executor.getFiber()) {
+		OnContext onAnswer = new OnContext() {
             public void onMessage(QCAVector context) {
             	super.onMessage(context);
             	
-            	System.out.println("get answer "+context);
-            	out.debug();
+            	//System.out.println("get answer "+context);
+            	//out.debug();
             	try {
             		if (context == null) {
 
-            			pf.countDown(out);
+            			pf.countDown(pipe);
 
             		} else if (context.getAnswer() != null) {
 //            			int addedContexts = 0;
@@ -124,11 +136,11 @@ public abstract class Manipulator {
         					Statement qS = Statements.relationshipType(context.getQuestion());
 
         					if (qS instanceof Shift) {
-                				out.write(context);
+                				pipe.write(context);
                 				return;
         					
         					} else if (!fullEval) {
-                				out.write(context);
+                				pipe.write(context);
                 				return;
                 			}
                 			
@@ -143,23 +155,25 @@ public abstract class Manipulator {
             			
 
                         if (s != null && s instanceof Evaluable) {
-                        	PipedInput<QCAVector> in = execute(context, ((Evaluable) s).onCalcQuestion(), fullEval);
-                            for (QCAVector v : in) {
-                            	out.write(v);
+                        	Pipe in = execute(context, ((Evaluable) s).onCalcQuestion(), fullEval);
+                        	QCAVector v;
+                            while ((v = in.take()) != null) {
+                            	pipe.write(v);
                             }
                         } else if (s == null){
                             s = Statements.relationshipType(msg);
                             Statement qS = Statements.relationshipType(context.getQuestion());
                             if (s instanceof Evaluable && !(qS instanceof Shift)) {
-                                PipedInput<QCAVector> in = Evaluator._.execute(context);
-                                for (QCAVector v : in) {
-                                    out.write(v);
+                                Pipe in = Evaluator._.execute(context);
+                                QCAVector v;
+                                while ((v = in.take()) != null) {
+                                    pipe.write(v);
                                 }
                             } else {
-                                out.write(context);
+                                pipe.write(context);
                             }
                         } else {
-                            out.write(context);
+                        	pipe.write(context);
                         }
                     } else {
                         //what to do if msg is null?
@@ -175,38 +189,39 @@ public abstract class Manipulator {
 
         //send question to evaluation
         pf.questionChannel().publish(pf);
-        System.out.println(Thread.currentThread()+" "+pf.getVector());
+        //System.out.println(Thread.currentThread()+" "+pf.getVector());
 		
 		//XXX: what to do with this?
         //reset.await(5, TimeUnit.SECONDS);
 		
-		return in;
+		return pipe;
 	}
 	
 	public OnQuestion onQuestion(final Relationship op) {
 		return null;//new OnQuestion();
 	}
 
-	public static void sendQuestion(final PipedOutput<QCAVector> out, final QCAVector vector, final Node node) throws IOException {
+	//XXX: private
+	public static void sendQuestion(final Pipe pipe, final QCAVector vector, final Node node) {
 		OnContext onAnswer = new OnContext(Executor.getFiber()) {
             public void onMessage(QCAVector context) {
             	super.onMessage(context);
             	
             	try {
             		if (context != null)
-            			out.write(context);
+            			pipe.write(context);
 
 	        		if (cd != null && cd.getCount() == 0)
-	        			out.close();
+	        			pipe.close();
+	        		
             	} catch (IOException e) {
+            		//XXX: what to do?
 					e.printStackTrace();
 				}
-
             }
         };
 
 		sendQuestion(onAnswer, vector, node);
-		
 	}
 	
 	public static void sendQuestion(final OnContext onAnswer, final QCAVector vector, final Node node) {
