@@ -23,6 +23,7 @@ package org.animotron.statement.compare;
 import javolution.util.FastList;
 import javolution.util.FastSet;
 
+import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -60,18 +61,17 @@ public class EQ extends Operator implements Predicate {
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
 		if (debug) System.out.println("EQ op "+op+" ref "+ref);
 
-		QCAVector vector = pf.getVector().answered(ref);
-		vector = vector.question(op);
+		final QCAVector vector = pf.getVector().answered(ref).question(op);
 
 		//XXX: fix
-		Set<Node> thes = new FastSet<Node>();
+		final Set<Node> thes = new FastSet<Node>();
 		Pipe p = Utils.getByREF(pf, vector);
 		QCAVector v;
 		while ((v = p.take()) != null) {
 			thes.add(v.getAnswer().getEndNode());
 		}
 
-		PFlow pflow = new PFlow(vector);
+		final PFlow pflow = new PFlow(vector);
 		
 		final Pipe pipe = Pipe.newInstance();
 		
@@ -84,8 +84,13 @@ public class EQ extends Operator implements Predicate {
 		onContext.setCountDown(1);
 		pflow.answerChannel().subscribe(onContext);
 		
-		GET._.get(pflow, vector, thes, null);
-		pflow.done();
+		Executor.execute(new Runnable() {
+			@Override
+			public void run() {
+				GET._.get(pflow, vector, thes, null);
+				pflow.done();
+			}
+		});
 		
 		//if (!pipe.hasNext()) return false;
 		
