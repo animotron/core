@@ -44,9 +44,4 @@ public abstract class BinaryMapExpression extends AbstractBinaryExpression {
         return file.getPath();
     }
 
-    @Override
-    protected String id() {
-        return null;
-    }
-
 }

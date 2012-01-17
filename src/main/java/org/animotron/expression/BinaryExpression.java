@@ -42,7 +42,6 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
 
     private InputStream stream;
     private boolean closeStream = true;
-    private String id;
     private File bin;
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
@@ -53,8 +52,8 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
 
     @Override
     public void build() throws Exception {
-        id = UUID.randomUUID().toString();
-        File tmp = new File(tmpStorage(), id);
+        String uuid = UUID.randomUUID().toString();
+        File tmp = new File(tmpStorage(), uuid);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
         byte buf[] = new byte[1024 * 4];
@@ -86,11 +85,6 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     @Override
     protected String stream() {
         return bin.getPath();
-    }
-
-    @Override
-    protected String id() {
-        return id;
     }
 
     private File getFolder(String hash) {
