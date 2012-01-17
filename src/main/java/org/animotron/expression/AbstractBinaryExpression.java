@@ -22,14 +22,10 @@ package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.STREAM;
 
 import java.io.IOException;
-
-import static org.animotron.graph.Nodes.FILE;
 
 
 /**
@@ -43,7 +39,8 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
         super(builder);
     }
 
-    protected final void buildExpression() throws Exception {
+    @Override
+    public void build() throws Exception {
         builder.start(THE._, id());
             builder._(STREAM._, stream());
             description();

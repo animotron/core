@@ -68,22 +68,19 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         }
         out.close();
         if (closeStream) stream.close();
-        
         String hash = byteArrayToHex(md.digest()) + longToHex(size);
         File dir = getFolder(hash);
         bin = getFile(dir, hash);
         if (bin.exists()) {
             tmp.delete();
-            System.out.println("File \"" + bin.getPath() + "\" already stored");
         } else {
             dir.mkdirs();
             if (!tmp.renameTo(bin)) {
                 tmp.delete();
                 throw new IOException("transaction can not be finished");
             }
-            System.out.println("Store the file \"" + bin.getPath() + "\"");
         }
-        buildExpression();
+        super.build();
     }
 
     @Override

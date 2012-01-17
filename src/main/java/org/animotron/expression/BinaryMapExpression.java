@@ -21,12 +21,8 @@
 package org.animotron.expression;
 
 import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.utils.MessageDigester;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.security.MessageDigest;
 
 
 /**
@@ -37,23 +33,10 @@ import java.security.MessageDigest;
 public abstract class BinaryMapExpression extends AbstractBinaryExpression {
 
     private File file;
-    MessageDigest md = MessageDigester.md();
 
     public BinaryMapExpression(File file) {
         super(new FastGraphBuilder());
         this.file = file;
-    }
-
-    @Override
-    public void build() throws Exception {
-        byte buf[] = new byte[1024 * 4];
-        int len;
-        InputStream stream = new FileInputStream(file);
-        while((len=stream.read(buf))>0) {
-            md.update(buf,0,len);
-        }
-        stream.close();
-        buildExpression();
     }
 
     @Override
