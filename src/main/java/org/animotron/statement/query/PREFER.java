@@ -62,10 +62,10 @@ public class PREFER extends AbstractQuery implements Reference {
     	@Override
         public void act(final PFlow pf) {
 
-        	//if (debug) { 
+        	if (debug) { 
 				System.out.println("PREFER "+pf.getOP()+" "+pf.getVector());
 				Utils.debug(PREFER._, pf);
-			//}
+			}
         	
 			if (!Utils.results(pf)) {
 				Pipe p = AN.getREFs(pf, pf.getVector());
