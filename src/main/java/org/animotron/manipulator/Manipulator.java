@@ -156,7 +156,8 @@ public abstract class Manipulator {
 
                         if (s != null && s instanceof Evaluable) {
                         	Pipe in = execute(context, ((Evaluable) s).onCalcQuestion(), fullEval);
-                            for (QCAVector v : in) {
+                        	QCAVector v;
+                            while ((v = in.take()) != null) {
                             	pipe.write(v);
                             }
                         } else if (s == null){
@@ -164,7 +165,8 @@ public abstract class Manipulator {
                             Statement qS = Statements.relationshipType(context.getQuestion());
                             if (s instanceof Evaluable && !(qS instanceof Shift)) {
                                 Pipe in = Evaluator._.execute(context);
-                                for (QCAVector v : in) {
+                                QCAVector v;
+                                while ((v = in.take()) != null) {
                                     pipe.write(v);
                                 }
                             } else {

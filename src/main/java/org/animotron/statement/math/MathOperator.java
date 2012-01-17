@@ -83,7 +83,9 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	            try {
 	                Number x = null;
 	                for (Relationship param : params) {
-	                	for (QCAVector r : Utils.getTheRelationships(pf, pf.getVector().question(param))) {
+	                	Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question(param));
+	                	QCAVector r;
+	                	while ((r = pipe.take()) != null) {
 		                	if (x == null) {
 		                		if (params.hasNext())
 		                			x = param(r);
