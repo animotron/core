@@ -219,7 +219,8 @@ public class Utils {
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
 				Pipe in = Evaluator._.execute(v);
-				for (QCAVector e : in) {
+				QCAVector e;
+				while ((e = in.take()) != null) {
 
 					Relationship result = e.getAnswer();
 					
