@@ -439,7 +439,7 @@ public class QCAVector {
 		
 		if (answer == null) {
 			QCAVector v = new QCAVector(q, context);
-			v.setPrecedingSibling(this);
+			//v.setPrecedingSibling(this);
 			return v;
 		}
 		
