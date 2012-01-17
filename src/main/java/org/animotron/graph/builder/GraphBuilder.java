@@ -35,10 +35,10 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Stack;
 
-import static org.animotron.graph.Properties.CREATED;
-import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.animotron.graph.Properties.CREATED;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.Properties.MODIFIED;
 
 /**
@@ -190,7 +190,9 @@ public abstract class GraphBuilder {
             exp.build();
             endGraph();
             long timestamp = System.currentTimeMillis();
-            CREATED.set(relationship(), timestamp);
+            if (!CREATED.has(relationship())) {
+                CREATED.set(relationship(), timestamp);
+            }
             MODIFIED.set(relationship(), timestamp);
             tx.success();
             finishTx(tx);
