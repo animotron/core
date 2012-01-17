@@ -35,9 +35,11 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Stack;
 
+import static org.animotron.graph.Properties.CREATED;
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.animotron.graph.Properties.MODIFIED;
 
 /**
  * Animo graph builder, it do optimization/compression and
@@ -187,6 +189,9 @@ public abstract class GraphBuilder {
             startGraph();
             exp.build();
             endGraph();
+            long timestamp = System.currentTimeMillis();
+            CREATED.set(relationship(), timestamp);
+            MODIFIED.set(relationship(), timestamp);
             tx.success();
             finishTx(tx);
         } catch (Exception e) {
