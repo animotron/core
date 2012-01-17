@@ -43,6 +43,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     private InputStream stream;
     private boolean closeStream = true;
     private File bin;
+    private MessageDigest md;
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
         super(new FastGraphBuilder());
@@ -59,7 +60,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         byte buf[] = new byte[1024 * 4];
         int len;
         long size = 0;
-        MessageDigest md = MessageDigester.md();
+        md = MessageDigester.md();
         while((len=stream.read(buf))>0) {
             out.write(buf,0,len);
             md.update(buf,0,len);
@@ -85,6 +86,10 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     @Override
     protected String stream() {
         return bin.getPath();
+    }
+    
+    protected String hash() {
+        return byteArrayToHex(md.digest());
     }
 
     private File getFolder(String hash) {
