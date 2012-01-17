@@ -57,25 +57,6 @@ public class PFlow {
 		path = new QCAVector(op);
 	}
 
-	@Deprecated //use one with vector
-	public PFlow(PFlow parent, Relationship op) throws AnimoException {
-		path = parent.path;
-		path = path.question(op);
-		
-		cyclingDetection(op);
-	}
-
-	public PFlow(PFlow parent, Node opNode) {
-		System.out.println("WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG");
-
-		path = parent.path;
-	}
-	
-	public PFlow(PFlow parent, QCAVector vector) {
-		path = vector;
-		path.addContext(parent.getVector().getContext());
-	}
-
 	public PFlow(QCAVector vector) {
 		path = vector;
 	}

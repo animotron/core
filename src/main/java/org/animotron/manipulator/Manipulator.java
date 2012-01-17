@@ -115,7 +115,7 @@ public abstract class Manipulator {
 		pf.questionChannel().subscribe(sub.getQueue(), sub);
 		
         //answers transfer to output
-		OnContext onAnswer = new OnContext(Executor.getFiber()) {
+		OnContext onAnswer = new OnContext() {
             public void onMessage(QCAVector context) {
             	super.onMessage(context);
             	
