@@ -75,23 +75,14 @@ public class EQ extends Operator implements Predicate {
 		
 		final Pipe pipe = Pipe.newInstance();
 		
-		pflow.answerChannel().subscribe(new OnContext() {
-			
+		OnContext onContext = new OnContext() {
 			@Override
 			public void onMessage(QCAVector vector) {
-				super.onMessage(vector);
-				
-				if (cd.getCount() == 0)
-					pipe.close();
-				else
-					try {
-						pipe.write(vector);
-					} catch (IOException e) {
-						//XXX: log
-						e.printStackTrace();
-					}
+				super.onMessage(vector, pipe);
 			}
-		});
+		};
+		onContext.setCountDown(1);
+		pflow.answerChannel().subscribe(onContext);
 		
 		GET._.get(pflow, vector, thes, null);
 		pflow.done();
