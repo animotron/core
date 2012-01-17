@@ -51,14 +51,13 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 			byte[] hash = pf.getOpHash();
 
 			if (debug) System.out.println("AN "+Thread.currentThread());
-			System.out.println("AN "+pf.getVector());
+			//System.out.println("AN "+pf.getVector());
 			//pf.sendAnswer(new QCAVector(op,op));
 			
 			if (!Utils.results(pf, hash)) {
 				Pipe pipe = getREFs(pf, pf.getVector());
 				QCAVector r;
 				while ((r = pipe.take()) != null) {
-					System.out.println(r);
 					pf.sendAnswer(r);
 				}
 			}
