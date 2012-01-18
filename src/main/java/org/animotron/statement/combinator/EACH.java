@@ -57,42 +57,44 @@ public class EACH extends Combinator {
 
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return new OnQuestion() {
+		return new Calc();
+	}
 	
-			@Override
-			public void act(final PFlow pf) throws IOException {
-				if (debug) { 
-					System.out.println("EACH EACH EACH EACH");
-					System.out.println(pf.getVector());
-				}
-				
-				IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
-				try {
-					Set<QCAVector> set = new FastSet<QCAVector>();
-					while (elements.hasNext()) {
-						Relationship element = elements.next();
-						if (elements.hasNext()) {
-							Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question2(element));
-						
-							QCAVector r;
-							while ((r = pipe.take()) != null)
-								set.add(r);
+	class Calc extends OnQuestion {
 	
-						} else {
-							for (QCAVector r : set) {
-								QCAVector rr = new QCAVector(pf.getOP(), r, element);
-								pf.sendAnswer(rr);
-							}
+		@Override
+		public void act(final PFlow pf) throws IOException {
+			if (debug) { 
+				System.out.println("EACH EACH EACH EACH");
+				System.out.println(pf.getVector());
+			}
+			
+			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
+			try {
+				Set<QCAVector> set = new FastSet<QCAVector>();
+				while (elements.hasNext()) {
+					Relationship element = elements.next();
+					if (elements.hasNext()) {
+						Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question2(element));
+					
+						QCAVector r;
+						while ((r = pipe.take()) != null)
+							set.add(r);
+
+					} else {
+						for (QCAVector r : set) {
+							QCAVector rr = new QCAVector(pf.getOP(), r, element);
+							pf.sendAnswer(rr);
 						}
 					}
-	
-					//process(pf, sets, 1, null);
-	
-				} finally {
-					elements.close();
 				}
+
+				//process(pf, sets, 1, null);
+
+			} finally {
+				elements.close();
 			}
-		};
+		}
 	}
 
 	@SuppressWarnings("unused")

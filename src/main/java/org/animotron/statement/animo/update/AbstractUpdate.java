@@ -46,14 +46,16 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
     protected abstract void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException;
 
     public OnQuestion onCalcQuestion() {
-        return new OnQuestion() {
-	        @Override
-	        public void act(PFlow pf) throws IOException {
-	            Pipe destination = Utils.getByREF(pf);
-	
-	            execute(destination, Order.context(pf.getOP().getEndNode()));
-	        }
-	    };
+        return new Calc();
+    }
+    
+    class Calc extends OnQuestion {
+        @Override
+        public void act(PFlow pf) throws IOException {
+            Pipe destination = Utils.getByREF(pf);
+
+            execute(destination, Order.context(pf.getOP().getEndNode()));
+        }
     }
 
     private void execute(Pipe destination, IndexHits<Relationship> it) throws IOException {

@@ -41,25 +41,27 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 	
     @Override
 	public OnQuestion onCalcQuestion() {
-		return new OnQuestion() {
+		return new Calc();
+    }
+    
+    class Calc extends OnQuestion {
 	
-			@Override
-			public void act(final PFlow pf) {
-				byte[] hash = pf.getOpHash();
-	
-				if (debug) System.out.println("AN "+Thread.currentThread());
-				//System.out.println("AN "+pf.getVector());
-				//pf.sendAnswer(new QCAVector(op,op));
-				
-				if (!Utils.results(pf, hash)) {
-					Pipe pipe = getREFs(pf, pf.getVector());
-					QCAVector r;
-					while ((r = pipe.take()) != null) {
-						pf.sendAnswer(r);
-					}
+		@Override
+		public void act(final PFlow pf) {
+			byte[] hash = pf.getOpHash();
+
+			if (debug) System.out.println("AN "+Thread.currentThread());
+			//System.out.println("AN "+pf.getVector());
+			//pf.sendAnswer(new QCAVector(op,op));
+			
+			if (!Utils.results(pf, hash)) {
+				Pipe pipe = getREFs(pf, pf.getVector());
+				QCAVector r;
+				while ((r = pipe.take()) != null) {
+					pf.sendAnswer(r);
 				}
 			}
-		};
+		}
     }
 	
 	public static Pipe getREFs(final PFlow pf, final QCAVector vector) {

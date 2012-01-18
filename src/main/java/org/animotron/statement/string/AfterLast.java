@@ -46,51 +46,52 @@ public class AfterLast extends Instruction implements Evaluable {
 
 	private AfterLast() { super("after-last"); }
 
-
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return new OnQuestion(){
-	        @Override
-	        public void act(final PFlow pf) {
+		return new Calc();
+	}
 	
-	            //UNDERSTAND: if we have more that 2 params, what to do?
-	
-	            Relationship[] params = Order.first(3, pf.getOP().getStartNode());
-	
-	            //pattern
-	            String pattern;
+	class Calc extends OnQuestion {
+        @Override
+        public void act(final PFlow pf) {
+
+            //UNDERSTAND: if we have more that 2 params, what to do?
+
+            Relationship[] params = Order.first(3, pf.getOP().getStartNode());
+
+            //pattern
+            String pattern;
+			try {
+				pattern = STRING.serialize(params[1]);
+			} catch (IOException e) {
+				pf.sendException(e);
+				return;
+			}
+            String source;
+			try {
+				source = STRING.serialize(pf.getVector().question2(params[2]));
+			} catch (Exception e) {
+				pf.sendException(e);
+				return;
+			}
+            
+            int index = source.lastIndexOf(pattern);
+            if (index != -1) {
+
+	            Relationship r;
 				try {
-					pattern = STRING.serialize(params[1]);
-				} catch (IOException e) {
-					pf.sendException(e);
-					return;
-				}
-	            String source;
-				try {
-					source = STRING.serialize(pf.getVector().question2(params[2]));
+					r = new JExpression(
+					    value(
+                                source.substring(index + 1)
+                        )
+					);
 				} catch (Exception e) {
 					pf.sendException(e);
 					return;
 				}
-	            
-	            int index = source.lastIndexOf(pattern);
-	            if (index != -1) {
-	
-		            Relationship r;
-					try {
-						r = new JExpression(
-						    value(
-	                                source.substring(index + 1)
-	                        )
-						);
-					} catch (Exception e) {
-						pf.sendException(e);
-						return;
-					}
-					
-					answered(pf, r);
-	            }
-	        }
-	    };
+				
+				answered(pf, r);
+            }
+        }
 	}
 }
