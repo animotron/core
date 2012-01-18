@@ -40,9 +40,9 @@ public class Executor {
 	private static PoolFiberFactory fact;
 	
 	public static void init() {
-		tasksExec = Executors.newFixedThreadPool(200);
+		tasksExec = Executors.newCachedThreadPool();//200
 
-		exec = Executors.newFixedThreadPool(200);
+		exec = Executors.newCachedThreadPool();//200
 		fact = new PoolFiberFactory(exec);
 	}
 //	private static Fiber fiber;
@@ -60,7 +60,7 @@ public class Executor {
 	}
 
     public static void execute (Runnable r) {
-    	tasksExec.execute(r);
+    	tasksExec.submit(r);
     }
 	
 	public static void shutdown() {
@@ -68,4 +68,6 @@ public class Executor {
 		tasksExec.shutdown();
 	}
 	
+	public void debug() {
+	}
 }

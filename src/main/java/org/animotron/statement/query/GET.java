@@ -88,6 +88,7 @@ public class GET extends AbstractQuery implements Shift {
 					Pipe p = AN.getREFs(pf, pf.getVector());
 					QCAVector theNode;
 					while ((theNode = p.take()) != null) {
+						//System.out.println(theNode);
 						r = theNode.getClosest();
 						if (r.isType(AN._)) {
 							try {
@@ -246,9 +247,10 @@ public class GET extends AbstractQuery implements Shift {
 							
 							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
 								if (next.getAnswers() != null)
-									for (QCAVector vv : next.getAnswers())
+									for (QCAVector vv : next.getAnswers()) {
 										if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs))
 											found = true;
+									}
 							} else {
 								found = true;
 							}

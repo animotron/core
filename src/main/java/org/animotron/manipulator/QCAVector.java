@@ -23,9 +23,6 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
-import org.animotron.io.Pipe;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Relationship;
 
