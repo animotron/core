@@ -54,11 +54,6 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 
 	protected MathOperator(String name) { super(name); }
 
-    @Override
-    public OnQuestion onCalcQuestion() {
-        return question;
-    }
-
     protected abstract Number execute (Number a, Number b);
     protected abstract Number execute (Number a);
 
@@ -72,6 +67,11 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     	Number b = param(vector);
     	if (b == null) return a;
     	return execute(a, b);
+    }
+
+    @Override
+    public OnQuestion onCalcQuestion() {
+        return question;
     }
 
     private OnQuestion question = new OnQuestion() {

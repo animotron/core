@@ -62,13 +62,13 @@ public abstract class AbstractSerializer {
     }
 
     public final String serialize(Relationship r) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
+        StringBuilder out = new StringBuilder(256);
         traverser.traverse(handler(out), r);
         return out.toString();
     }
 
     public final String serialize(QCAVector v) throws IOException {
-        StringBuilder out = new StringBuilder(1024);
+        StringBuilder out = new StringBuilder(256);
         traverser.traverse(handler(out), v);
         return out.toString();
     }
