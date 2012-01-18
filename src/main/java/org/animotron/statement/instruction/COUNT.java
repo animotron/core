@@ -38,14 +38,12 @@ public class COUNT extends Instruction implements Evaluable {
 
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return question;
+		return new OnQuestion() {
+	
+			@Override
+			public void act(final PFlow pf) {
+				//System.out.println("COUNT");
+			}
+		};
 	}
-
-	private OnQuestion question = new OnQuestion() {
-
-		@Override
-		public void act(final PFlow pf) {
-			//System.out.println("COUNT");
-		}
-	};
 }

@@ -37,14 +37,12 @@ public class MAP extends Combinator {
 
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return question;
+		return new OnQuestion() {
+	
+			@Override
+			public void act(final PFlow pf) {
+				System.out.println("MAP");
+			}
+		};
 	}
-
-	private OnQuestion question = new OnQuestion() {
-
-		@Override
-		public void act(final PFlow pf) {
-			System.out.println("MAP");
-		}
-	};
 }

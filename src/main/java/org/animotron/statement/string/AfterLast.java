@@ -49,50 +49,48 @@ public class AfterLast extends Instruction implements Evaluable {
 
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return question;
-	}
-
-    private OnQuestion question = new OnQuestion(){
-        @Override
-        public void act(final PFlow pf) {
-
-            //UNDERSTAND: if we have more that 2 params, what to do?
-
-            Relationship[] params = Order.first(3, pf.getOP().getStartNode());
-
-            //pattern
-            String pattern;
-			try {
-				pattern = STRING.serialize(params[1]);
-			} catch (IOException e) {
-				pf.sendException(e);
-				return;
-			}
-            String source;
-			try {
-				source = STRING.serialize(pf.getVector().question2(params[2]));
-			} catch (Exception e) {
-				pf.sendException(e);
-				return;
-			}
-            
-            int index = source.lastIndexOf(pattern);
-            if (index != -1) {
-
-	            Relationship r;
+		return new OnQuestion(){
+	        @Override
+	        public void act(final PFlow pf) {
+	
+	            //UNDERSTAND: if we have more that 2 params, what to do?
+	
+	            Relationship[] params = Order.first(3, pf.getOP().getStartNode());
+	
+	            //pattern
+	            String pattern;
 				try {
-					r = new JExpression(
-					    value(
-                                source.substring(index + 1)
-                        )
-					);
+					pattern = STRING.serialize(params[1]);
+				} catch (IOException e) {
+					pf.sendException(e);
+					return;
+				}
+	            String source;
+				try {
+					source = STRING.serialize(pf.getVector().question2(params[2]));
 				} catch (Exception e) {
 					pf.sendException(e);
 					return;
 				}
-				
-				answered(pf, r);
-            }
-        }
-    };
+	            
+	            int index = source.lastIndexOf(pattern);
+	            if (index != -1) {
+	
+		            Relationship r;
+					try {
+						r = new JExpression(
+						    value(
+	                                source.substring(index + 1)
+	                        )
+						);
+					} catch (Exception e) {
+						pf.sendException(e);
+						return;
+					}
+					
+					answered(pf, r);
+	            }
+	        }
+	    };
+	}
 }

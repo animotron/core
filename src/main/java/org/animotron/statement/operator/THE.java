@@ -110,14 +110,12 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	@Override
 	public OnQuestion onPrepareQuestion() {
-        return prepare;
+        return new OnQuestion() {
+			@Override
+			public void act(PFlow pf) {
+				System.out.println("PREPARE THE");
+			}
+			
+		};
 	}
-
-	private OnQuestion prepare = new OnQuestion() {
-		@Override
-		public void act(PFlow pf) {
-			System.out.println("PREPARE THE");
-		}
-		
-	};
 }

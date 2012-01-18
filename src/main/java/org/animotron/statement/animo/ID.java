@@ -46,24 +46,22 @@ public class ID extends Operator implements Evaluable {
 
     @Override
     public OnQuestion onCalcQuestion() {
-        return question;
+        return new OnQuestion(){
+
+        	@Override
+	        public void act(final PFlow pf) {
+	        	Pipe p = Utils.getByREF(pf);
+	        	QCAVector v;
+	        	while ((v = p.take()) != null) {
+	        		pf.sendAnswer(pf.getVector().answered(
+	                    new JExpression(
+	                        value(
+	                            Utils.name(v.getClosest().getEndNode())
+	                        )
+	                    )
+	                ));
+	            }
+	        }
+	    };
     }
-
-    private OnQuestion question = new OnQuestion(){
-        @Override
-        public void act(final PFlow pf) {
-        	Pipe p = Utils.getByREF(pf);
-        	QCAVector v;
-        	while ((v = p.take()) != null) {
-        		pf.sendAnswer(pf.getVector().answered(
-                    new JExpression(
-                        value(
-                            Utils.name(v.getClosest().getEndNode())
-                        )
-                    )
-                ));
-            }
-        }
-    };
-
 }

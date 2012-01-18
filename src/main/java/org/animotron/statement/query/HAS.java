@@ -38,13 +38,11 @@ public class HAS extends AbstractQuery {
 	private HAS() { super("?has"); }
 
 	public OnQuestion onCalcQuestion() {
-        return question;
-    }
-
-	private OnQuestion question = new OnQuestion() {
-
-		@Override
-        public void act(final PFlow pf) {
-        }
-    };
+        return new OnQuestion() {
+	
+			@Override
+	        public void act(final PFlow pf) {
+	        }
+	    };
+	}
 }

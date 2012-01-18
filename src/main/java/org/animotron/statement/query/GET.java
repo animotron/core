@@ -24,7 +24,6 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 
-import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -71,117 +70,115 @@ public class GET extends AbstractQuery implements Shift {
     }
 
     public OnQuestion onCalcQuestion() {
-		return question;
-	}
+		return new OnQuestion() {
 	
-	private OnQuestion question = new OnQuestion() {
-
-		@Override
-		public void act(final PFlow pf) {
-
-			//if (debug) System.out.println("GET "+Thread.currentThread());
-
-			final Relationship op = pf.getOP();
-			
-			final Node node = op.getEndNode();
-			
-			final FastSet<Relationship> visitedREFs = FastSet.newInstance();
-			final FastSet<Node> thes = FastSet.newInstance(); 
-			try {
-				Relationship r = null;
-				Pipe p = AN.getREFs(pf, pf.getVector());
-				QCAVector theNode;
-				while ((theNode = p.take()) != null) {
-					r = theNode.getClosest();
-					if (r.isType(AN._)) {
-						try {
-							Pipe pp = Utils.eval(theNode);
-							QCAVector rr;
-							while ((rr = pp.take()) != null) {
-								thes.add(rr.getClosest().getEndNode());
+			@Override
+			public void act(final PFlow pf) {
+	
+				//if (debug) System.out.println("GET "+Thread.currentThread());
+	
+				final Relationship op = pf.getOP();
+				
+				final Node node = op.getEndNode();
+				
+				final FastSet<Relationship> visitedREFs = FastSet.newInstance();
+				final FastSet<Node> thes = FastSet.newInstance(); 
+				try {
+					Relationship r = null;
+					Pipe p = AN.getREFs(pf, pf.getVector());
+					QCAVector theNode;
+					while ((theNode = p.take()) != null) {
+						r = theNode.getClosest();
+						if (r.isType(AN._)) {
+							try {
+								Pipe pp = Utils.eval(theNode);
+								QCAVector rr;
+								while ((rr = pp.take()) != null) {
+									thes.add(rr.getClosest().getEndNode());
+								}
+							} catch (Exception e) {
+								pf.sendException(e);
+								return;
 							}
-						} catch (Exception e) {
-							pf.sendException(e);
-							return;
-						}
-					} else
-						thes.add(r.getEndNode());
+						} else
+							thes.add(r.getEndNode());
+					}
+		
+					evalGet(pf, op, node, thes, visitedREFs);
+				} finally {
+					FastSet.recycle(thes);
+					FastSet.recycle(visitedREFs);
+				}
+			}
+	
+			private void evalGet(
+					final PFlow pf, 
+					final Relationship op, 
+					final Node node, 
+					final Set<Node> thes, 
+					final Set<Relationship> visitedREFs) {
+				
+				if (debug) { 
+					Utils.debug(GET._, op, thes);
+					System.out.println(pf.getVector());
 				}
 	
-				evalGet(pf, op, node, thes, visitedREFs);
-			} finally {
-				FastSet.recycle(thes);
-				FastSet.recycle(visitedREFs);
-			}
-		}
-
-		private void evalGet(
-				final PFlow pf, 
-				final Relationship op, 
-				final Node node, 
-				final Set<Node> thes, 
-				final Set<Relationship> visitedREFs) {
-			
-			if (debug) { 
-				Utils.debug(GET._, op, thes);
-				System.out.println(pf.getVector());
-			}
-
-			//check, maybe, result was already calculated
-			if (!Utils.results(pf)) {
-				//no pre-calculated result, calculate it
-				
-				OnContext onContext = new OnContext() {
-					@Override
-					public void onMessage(QCAVector vector) {
-						super.onMessage(vector);
-						
-						if (debug) System.out.println("GET on context "+Thread.currentThread());
-						if (debug) System.out.println("GET ["+op+"] vector "+vector);
-						
-						if (vector == null) {
-							if (cd.getCount() == 0)
-								pf.done();
-							return;
-						}
-						
-						get(pf, vector, thes, visitedREFs);
-					}
-				};
-				//pf.answerChannel().subscribe(onContext);
-				
-				if (Utils.haveContext(pf)) {
-					Evaluator.sendQuestion(onContext, pf.getVector(), node);
-					onContext.isDone();
-				} else {
+				//check, maybe, result was already calculated
+				if (!Utils.results(pf)) {
+					//no pre-calculated result, calculate it
 					
-					if (debug) System.out.println("\nGET ["+op+"] empty ");
-
-					FastSet<QCAVector> refs = FastSet.newInstance();
-					try {
-						QCAVector vector = pf.getVector();
-						if (vector.getContext() != null) {
-						
-							for (QCAVector v : vector.getContext()) {
-								refs.add(v);
+					OnContext onContext = new OnContext() {
+						@Override
+						public void onMessage(QCAVector vector) {
+							super.onMessage(vector);
+							
+							if (debug) System.out.println("GET on context "+Thread.currentThread());
+							if (debug) System.out.println("GET ["+op+"] vector "+vector);
+							
+							if (vector == null) {
+								if (cd.getCount() == 0)
+									pf.done();
+								return;
 							}
+							
+							get(pf, vector, thes, visitedREFs);
 						}
+					};
+					//pf.answerChannel().subscribe(onContext);
+					
+					if (Utils.haveContext(pf)) {
+						Evaluator.sendQuestion(onContext, pf.getVector(), node);
+						onContext.isDone();
+					} else {
 						
-//						vector = vector.getPrecedingSibling();
-//						while (vector != null) {
-//							refs.add(vector);
-//							vector = vector.getPrecedingSibling();
-//						}
-						
-						get(pf, refs, thes, visitedREFs);
-					} finally {
-						FastSet.recycle(refs);
+						if (debug) System.out.println("\nGET ["+op+"] empty ");
+	
+						FastSet<QCAVector> refs = FastSet.newInstance();
+						try {
+							QCAVector vector = pf.getVector();
+							if (vector.getContext() != null) {
+							
+								for (QCAVector v : vector.getContext()) {
+									refs.add(v);
+								}
+							}
+							
+	//						vector = vector.getPrecedingSibling();
+	//						while (vector != null) {
+	//							refs.add(vector);
+	//							vector = vector.getPrecedingSibling();
+	//						}
+							
+							get(pf, refs, thes, visitedREFs);
+						} finally {
+							FastSet.recycle(refs);
+						}
 					}
 				}
-			}
+			};
+	
 		};
-
-	};
+    }
 	
 	public boolean get(PFlow pf, QCAVector vector, final Set<Node> thes, Set<Relationship> visitedREFs) {
 		FastSet<QCAVector> refs = FastSet.newInstance();

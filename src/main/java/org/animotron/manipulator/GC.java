@@ -41,42 +41,39 @@ public class GC extends Manipulator {
 	
 	private GC () {}
 
-	private OnQuestion question = new OnQuestion() {
-		
-		private void garbage(PFlow pf) {
-			Node node = pf.getOPNode();
-			if (!node.hasRelationship(INCOMING)) {
-				super.onMessage(pf);
-                for (Relationship r : node.getRelationships()) {
-                    r.delete();
-                }
-                Cache.removeNode(node);
-				node.delete();
-			}
-		}
-		
-		@Override
-		public void act(final PFlow pf) {
-			AnimoGraph.execute(
-				new GraphOperation<Void>(){
-					@Override
-					public Void execute() {
-						garbage(pf);
-						return null;
-					}
-					
-				}
-			);
-
-		}
-
-	};
 
 	@Override
 	public OnQuestion onQuestion(Relationship op) {
-		return question;
+		return new OnQuestion() {
+			
+			private void garbage(PFlow pf) {
+				Node node = pf.getOPNode();
+				if (!node.hasRelationship(INCOMING)) {
+					super.onMessage(pf);
+	                for (Relationship r : node.getRelationships()) {
+	                    r.delete();
+	                }
+	                Cache.removeNode(node);
+					node.delete();
+				}
+			}
+			
+			@Override
+			public void act(final PFlow pf) {
+				AnimoGraph.execute(
+					new GraphOperation<Void>(){
+						@Override
+						public Void execute() {
+							garbage(pf);
+							return null;
+						}
+						
+					}
+				);
+			}
+		};
 	}
-
+	
 	@Override
 	public Marker marker() {
 		return GCMarker._;

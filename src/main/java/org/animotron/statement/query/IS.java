@@ -38,13 +38,10 @@ public class IS extends AbstractQuery {
 	private IS() { super("?is"); }
 
 	public OnQuestion onCalcQuestion() {
-        return question;
-    }
-
-	private OnQuestion question = new OnQuestion() {
-        @Override
-        public void act(final PFlow pf) {
-        }
-
-    };
+        return new OnQuestion() {
+	        @Override
+	        public void act(final PFlow pf) {
+	        }
+	    };
+	}
 }

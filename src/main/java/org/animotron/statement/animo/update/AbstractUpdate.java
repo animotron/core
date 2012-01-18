@@ -46,17 +46,15 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
     protected abstract void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException;
 
     public OnQuestion onCalcQuestion() {
-        return question;
+        return new OnQuestion() {
+	        @Override
+	        public void act(PFlow pf) throws IOException {
+	            Pipe destination = Utils.getByREF(pf);
+	
+	            execute(destination, Order.context(pf.getOP().getEndNode()));
+	        }
+	    };
     }
-
-    private OnQuestion question = new OnQuestion() {
-        @Override
-        public void act(PFlow pf) throws IOException {
-            Pipe destination = Utils.getByREF(pf);
-
-            execute(destination, Order.context(pf.getOP().getEndNode()));
-        }
-    };
 
     private void execute(Pipe destination, IndexHits<Relationship> it) throws IOException {
         try {
@@ -64,7 +62,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             for (Relationship r : it) {
                 param.add(r);
             }
-            Set<Relationship> d = new FastSet<Relationship>();
+            //Set<Relationship> d = new FastSet<Relationship>();
             QCAVector v;
             while ((v = destination.take()) != null) {
                 Set<Relationship> the = new FastSet<Relationship>();

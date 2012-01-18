@@ -71,93 +71,87 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 
     @Override
     public OnQuestion onCalcQuestion() {
-        return question;
+        return new OnQuestion() {
+	
+	        @Override
+	        public void act(final PFlow pf) throws IOException {
+	        	if (!Utils.results(pf)) {
+		            IndexHits<Relationship> params = Order.context(pf.getOP().getStartNode());
+		            try {
+		                Number x = null;
+		                for (Relationship param : params) {
+		                	Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question(param));
+		                	QCAVector r;
+		                	while ((r = pipe.take()) != null) {
+			                	if (x == null) {
+			                		if (params.hasNext())
+			                			x = param(r);
+			                		else
+			                			x = execute(r);
+			                			
+			                	} else {
+			                		x = execute(x, r);
+	                            }
+		                	}
+		                }
+	                    Relationship r = new JExpression(value(x));
+	                	//Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
+	                    //XXX: fix context
+	                    pf.sendAnswer(r);
+		            } finally {
+		                params.close();
+		            }
+	        	}
+	        }
+	    };
     }
-
-    private OnQuestion question = new OnQuestion() {
-
-        @Override
-        public void act(final PFlow pf) throws IOException {
-        	if (!Utils.results(pf)) {
-	            IndexHits<Relationship> params = Order.context(pf.getOP().getStartNode());
-	            try {
-	                Number x = null;
-	                for (Relationship param : params) {
-	                	Pipe pipe = Utils.getTheRelationships(pf, pf.getVector().question(param));
-	                	QCAVector r;
-	                	while ((r = pipe.take()) != null) {
-		                	if (x == null) {
-		                		if (params.hasNext())
-		                			x = param(r);
-		                		else
-		                			x = execute(r);
-		                			
-		                	} else {
-		                		x = execute(x, r);
-                            }
-	                	}
-	                }
-                    Relationship r = new JExpression(value(x));
-                	//Relationship op = pf.getOP().getStartNode().getSingleRelationship(AN._, INCOMING);
-                    //XXX: fix context
-                    pf.sendAnswer(r);
-	            } finally {
-	                params.close();
-	            }
-        	}
-        }
-
-    };
 
 	@Override
 	public OnQuestion onPrepareQuestion() {
-		return prepare;
-	}
-
-
-    private OnQuestion prepare = new OnQuestion() {
-    	@Override
-    	public void act(final PFlow pf) {
-    		final FastList<Node> thes = FastList.newInstance();
-    		IndexHits<Relationship> hits = Order.context(pf.getOPNode());
-    		try {
-    			for (Relationship r : hits) {
-    				if (!r.isType(GET._)) {
-    					pf.done();
-    					return;
-    				}
-    				
-    				Pipe p = AN.getREFs(pf, new QCAVector(r));
-    				QCAVector v;
-    				while ((v = p.take()) != null) {
-    					thes.add(v.getClosest().getEndNode());
-    				}
-    				
-    				if (thes.size() > 2) {
-    					pf.done();
-    					return;
-    				}
-    			}
-    			
-				if (thes.size() == 2) {
-
-	    			AnimoGraph.execute(new GraphOperation<Void>() {
-	
-						@Override
-						public Void execute() throws Exception {
-							Relationship r = thes.get(0).createRelationshipTo(thes.get(1), TRI);
-							Properties.TYPE.set(r, name());
-							Properties.TO_NODE.set(r, pf.getOP().getStartNode().getId());
-							return null;
-						}
+		return new OnQuestion() {
+	    	@Override
+	    	public void act(final PFlow pf) {
+	    		final FastList<Node> thes = FastList.newInstance();
+	    		IndexHits<Relationship> hits = Order.context(pf.getOPNode());
+	    		try {
+	    			for (Relationship r : hits) {
+	    				if (!r.isType(GET._)) {
+	    					pf.done();
+	    					return;
+	    				}
 	    				
-	    			});
-				}
-    			
-    		} finally {
-    			hits.close();
-    			FastList.recycle(thes);
-    		}
-    	}
-    };
+	    				Pipe p = AN.getREFs(pf, new QCAVector(r));
+	    				QCAVector v;
+	    				while ((v = p.take()) != null) {
+	    					thes.add(v.getClosest().getEndNode());
+	    				}
+	    				
+	    				if (thes.size() > 2) {
+	    					pf.done();
+	    					return;
+	    				}
+	    			}
+	    			
+					if (thes.size() == 2) {
+	
+		    			AnimoGraph.execute(new GraphOperation<Void>() {
+		
+							@Override
+							public Void execute() throws Exception {
+								Relationship r = thes.get(0).createRelationshipTo(thes.get(1), TRI);
+								Properties.TYPE.set(r, name());
+								Properties.TO_NODE.set(r, pf.getOP().getStartNode().getId());
+								return null;
+							}
+		    				
+		    			});
+					}
+	    			
+	    		} finally {
+	    			hits.close();
+	    			FastList.recycle(thes);
+	    		}
+	    	}
+	    };
+	}
 }

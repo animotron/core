@@ -29,7 +29,6 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Suffix;
 import org.jetlang.channels.Subscribable;
-import org.jetlang.core.DisposingExecutor;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -46,64 +45,62 @@ public class POSSESSIVE extends Operator implements Suffix {
 	private POSSESSIVE() { super("'s"); }
 	
 	public OnQuestion onCalcQuestion() {
-		return question;
-	}
+		return new OnQuestion() {
 	
-	private OnQuestion question = new OnQuestion() {
-
-		@Override
-		public void act(final PFlow pf) {
-			final Relationship op = pf.getOP();
-			
-			final Set<Node> thes = new FastSet<Node>(); 
-			
-			Pipe p = AN.getREFs(pf, pf.getVector());
-			QCAVector theNode;
-			while ((theNode = p.take()) != null ) {
-				thes.add(theNode.getAnswer().getEndNode());
-			}
-			Utils.debug(POSSESSIVE._, op, thes);
-
-			Subscribable<QCAVector> onContext = new OnContext(Executor.getFiber()) {
-				@Override
-				public void onMessage(QCAVector vector) {
-					System.out.println("GET ["+op+"] vector "+vector);
-					
-					if (vector == null) {
-						pf.countDown();
-						return;
-					}
-
-					//System.out.println("checkSuffixes checkSuffixes checkSuffixes "+res);
-					
-					Node node = vector.getAnswer().getEndNode();
-					
-					for (Relationship r : Utils.td_eval_IS.traverse(node).relationships()) {
-						//System.out.println(r);
-						if (thes.contains(r.getEndNode())) {
-							pf.sendAnswer(r);
-							break;
+			@Override
+			public void act(final PFlow pf) {
+				final Relationship op = pf.getOP();
+				
+				final Set<Node> thes = new FastSet<Node>(); 
+				
+				Pipe p = AN.getREFs(pf, pf.getVector());
+				QCAVector theNode;
+				while ((theNode = p.take()) != null ) {
+					thes.add(theNode.getAnswer().getEndNode());
+				}
+				Utils.debug(POSSESSIVE._, op, thes);
+	
+				Subscribable<QCAVector> onContext = new OnContext(Executor.getFiber()) {
+					@Override
+					public void onMessage(QCAVector vector) {
+						System.out.println("GET ["+op+"] vector "+vector);
+						
+						if (vector == null) {
+							pf.countDown();
+							return;
+						}
+	
+						//System.out.println("checkSuffixes checkSuffixes checkSuffixes "+res);
+						
+						Node node = vector.getAnswer().getEndNode();
+						
+						for (Relationship r : Utils.td_eval_IS.traverse(node).relationships()) {
+							//System.out.println(r);
+							if (thes.contains(r.getEndNode())) {
+								pf.sendAnswer(r);
+								break;
+							}
 						}
 					}
+				};
+				pf.answerChannel().subscribe(onContext);
+	
+				if (Utils.haveContext(pf)) {
+					super.onMessage(pf);
+				} else {
+					
+	//				for (QCAVector vector : pf.getPFlowPath()) {
+	//					//System.out.println("CHECK PFLOW "+vector);
+	//					Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
+	//					if (rSet != null) {
+	//						for (QCAVector v : rSet) {
+	//							pf.sendAnswer(v, AN._);
+	//						}
+	//						break;
+	//					}
+	//				}
 				}
-			};
-			pf.answerChannel().subscribe(onContext);
-
-			if (Utils.haveContext(pf)) {
-				super.onMessage(pf);
-			} else {
-				
-//				for (QCAVector vector : pf.getPFlowPath()) {
-//					//System.out.println("CHECK PFLOW "+vector);
-//					Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
-//					if (rSet != null) {
-//						for (QCAVector v : rSet) {
-//							pf.sendAnswer(v, AN._);
-//						}
-//						break;
-//					}
-//				}
 			}
-		}
-	};
+		};
+	}
 }
