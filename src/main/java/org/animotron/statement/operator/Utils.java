@@ -264,7 +264,8 @@ public class Utils {
 						if (_s instanceof Query || _s instanceof Evaluable) {
 							prev = vector.question(rr, prev);
 							Pipe _in = Evaluator._.execute(prev);
-							for (QCAVector ee : _in) {
+							QCAVector ee;
+							while ((ee = _in.take()) != null) {
 								//XXX: ee should be context too???
 								pipe.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
 							}
