@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
-            <version>1.6.M02</version>
+            <version>1.5</version>
             <type>pom</type>
         </dependency>
 
@@ -166,6 +166,20 @@
 				<configuration>
 					<source>1.6</source>
 					<target>1.6</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>pertest</forkMode>
+					<argLine>-Xms512m -Xmx1024m</argLine> <testFailureIgnore>false</testFailureIgnore>
+					<skip>false</skip>
+					<!-- 
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					-->
 				</configuration>
 			</plugin>
 		</plugins>
