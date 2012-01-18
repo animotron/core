@@ -22,7 +22,6 @@ package org.animotron.statement.string;
 
 import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
-import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
@@ -32,6 +31,7 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 
 import static org.animotron.expression.JExpression.value;
+import static org.animotron.graph.serializer.CachedSerializer.STRING;
 
 /**
  * VALUE instruction 'after-last'.
@@ -63,14 +63,14 @@ public class AfterLast extends Instruction implements Evaluable {
             //pattern
             String pattern;
 			try {
-				pattern = CachedSerializer.STRING.serialize(params[1]);
+				pattern = STRING.serialize(params[1]);
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;
 			}
             String source;
 			try {
-				source = CachedSerializer.STRING.serialize(pf.getVector().question2(params[2]));
+				source = STRING.serialize(pf.getVector().question2(params[2]));
 			} catch (Exception e) {
 				pf.sendException(e);
 				return;
