@@ -172,9 +172,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<forkMode>pertest</forkMode>
+					<!--<forkMode>pertest</forkMode>-->
 					<argLine>-Xms512m -Xmx1024m</argLine> <testFailureIgnore>false</testFailureIgnore>
-					<skip>false</skip>
+					<!--<skip>false</skip>-->
 					<!-- 
 					<includes>
 						<include>**/*.java</include>
