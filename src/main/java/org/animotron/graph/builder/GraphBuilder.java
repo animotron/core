@@ -93,7 +93,7 @@ public abstract class GraphBuilder {
 
     public abstract Relationship relationship();
 
-    protected abstract void fail(Exception e);
+    protected abstract void fail(Throwable e);
 
     protected abstract void startGraph();
 
@@ -179,7 +179,7 @@ public abstract class GraphBuilder {
         return stack.peek();
     }
 
-    public final void build(AbstractExpression exp) throws Exception {
+    public final void build(AbstractExpression exp) throws Throwable {
         order = 0;
         catcher = Manipulators.getCatcher();
         tx = beginTx();
@@ -188,7 +188,7 @@ public abstract class GraphBuilder {
             stack = new Stack<Object[]>();
             startGraph();
             exp.build();
-            endGraph();
+        	endGraph();
             long timestamp = System.currentTimeMillis();
             if (!CREATED.has(relationship())) {
                 CREATED.set(relationship(), timestamp);
@@ -196,7 +196,9 @@ public abstract class GraphBuilder {
             MODIFIED.set(relationship(), timestamp);
             tx.success();
             finishTx(tx);
-        } catch (Exception e) {
+        } catch (Throwable e) {
+        	e.printStackTrace();
+        	
             finishTx(tx);
             tx = beginTx();
             try {

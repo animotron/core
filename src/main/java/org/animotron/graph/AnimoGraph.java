@@ -21,6 +21,7 @@
 package org.animotron.graph;
 
 import javolution.util.FastList;
+
 import org.animotron.Executor;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
@@ -51,6 +52,7 @@ public class AnimoGraph {
 	private static String STORAGE;
 
     private static List<Transaction> activeTx;
+    //private static Map<Transaction, Exception> debugActiveTx;
 
 	private static Node ROOT;
     private static File BIN;
@@ -61,6 +63,7 @@ public class AnimoGraph {
             return false;
         }
         activeTx = new FastList<Transaction>();
+        //debugActiveTx = new FastMap<Transaction, Exception>();
     	STORAGE = folder;
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         BIN = new File(STORAGE, BIN_STORAGE); BIN.mkdir();
@@ -110,11 +113,12 @@ public class AnimoGraph {
 		Executor.shutdown();
 		while (!activeTx.isEmpty()) {
 			System.out.println("Active transactions "+activeTx.size());
-//			if (countTx > 0) {
-//				for (Entry<Transaction, Exception> e : activeTx.entrySet()) {
-//					e.getValue().printStackTrace();
-//				}
+			
+//			for (Entry<Transaction, Exception> e : debugActiveTx.entrySet()) {
+//				System.out.println(e.getKey());
+//				e.getValue().printStackTrace();
 //			}
+
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
 		graphDb.shutdown();
@@ -124,6 +128,7 @@ public class AnimoGraph {
 	public static Transaction beginTx() {
 		Transaction tx = graphDb.beginTx();
 		activeTx.add(tx);
+		//debugActiveTx.put(tx, new IOException());
 		return tx;
 	}
 
@@ -135,6 +140,7 @@ public class AnimoGraph {
 			e.printStackTrace();
 		} finally {
 			activeTx.remove(tx);
+			//debugActiveTx.remove(tx);
 		}
 	}
 

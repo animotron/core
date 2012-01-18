@@ -45,7 +45,8 @@ public abstract class AbstractExpression extends Expression {
             try {
                 builder.build(this);
                 relationship = builder.relationship();
-            } catch (Exception e) {
+            } catch (Throwable e) {
+            	e.printStackTrace();
                 throw new RuntimeException(e);
             }
 
