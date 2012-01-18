@@ -145,12 +145,23 @@ public abstract class Manipulator {
                 			}
                 			
                             try {
-                                s = Statements.name((String) THE._.reference(msg));
+                				Object obj = THE._.reference(msg);
+                				if (obj != null && obj instanceof String )
+                					s = Statements.name((String) obj);
+                				else
+                					//XXX: log
+                					System.out.println("WARNING: REF but no name");
+                				
                             } catch (Exception e){}
         				}
 
             			if (msg.isType(REF._)) {
-                            s = Statements.name((String) THE._.reference(msg));
+            				Object obj = THE._.reference(msg);
+            				if (obj != null && obj instanceof String )
+            					s = Statements.name((String) obj);
+            				else
+            					//XXX: log
+            					System.out.println("WARNING: REF but no name");
                         }
             			
 
