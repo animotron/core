@@ -24,6 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.statement.operator.THE;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -37,6 +38,7 @@ import static org.animotron.graph.RelationshipTypes.TRI;
 public class FormulaTest extends ATest {
 
 	@Test
+	@Ignore
 	public void test_01() throws Exception {
         __(
             new AnimoExpression("the qty / (get cost) (get price)."),
