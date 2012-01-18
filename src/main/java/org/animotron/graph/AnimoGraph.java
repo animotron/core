@@ -62,9 +62,15 @@ public class AnimoGraph {
         if (graphDb != null) {
             return false;
         }
+        
+        System.gc();
+        
         activeTx = new FastList<Transaction>();
         //debugActiveTx = new FastMap<Transaction, Exception>();
     	STORAGE = folder;
+    	
+    	Executor.init();
+    	
         graphDb = new EmbeddedGraphDatabase(STORAGE, config);
         BIN = new File(STORAGE, BIN_STORAGE); BIN.mkdir();
         TMP = new File(STORAGE, TMP_STORAGE); TMP.mkdir();
