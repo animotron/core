@@ -131,7 +131,7 @@ public class GET extends AbstractQuery implements Shift {
 			if (!Utils.results(pf)) {
 				//no pre-calculated result, calculate it
 				
-				OnContext onContext = new OnContext(Executor.getFiber()) {
+				OnContext onContext = new OnContext() {
 					@Override
 					public void onMessage(QCAVector vector) {
 						super.onMessage(vector);
@@ -152,6 +152,7 @@ public class GET extends AbstractQuery implements Shift {
 				
 				if (Utils.haveContext(pf)) {
 					Evaluator.sendQuestion(onContext, pf.getVector(), node);
+					onContext.isDone();
 				} else {
 					
 					if (debug) System.out.println("\nGET ["+op+"] empty ");

@@ -112,7 +112,7 @@ public abstract class Manipulator {
 			e.printStackTrace();
 			throw new IOException(e);
 		}
-		pf.questionChannel().subscribe(sub.getQueue(), sub);
+		pf.questionChannel().subscribe(Executor.getFiber(), sub);
 		
         //answers transfer to output
 		OnContext onAnswer = new OnContext() {

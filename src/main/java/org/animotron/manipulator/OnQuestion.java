@@ -22,6 +22,10 @@ package org.animotron.manipulator;
 
 import java.io.IOException;
 
+import org.animotron.Executor;
+import org.jetlang.core.DisposingExecutor;
+import org.jetlang.fibers.Fiber;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
@@ -29,7 +33,7 @@ import java.io.IOException;
 public abstract class OnQuestion extends Subscribable<PFlow> {
 	
 	public OnQuestion() {
-		super(null);
+		super();
 	}
 
 	@Override
@@ -61,4 +65,15 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 	
 	public abstract void act(final PFlow pf) throws IOException;
 
+	@Override
+	public DisposingExecutor getQueue() {
+		System.out.println("WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG");
+		return Executor.getFiber();
+	}
+
+	public Fiber getFiber() {
+		System.out.println("WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG WRONG");
+		return Executor.getFiber();
+	}
+	
 }

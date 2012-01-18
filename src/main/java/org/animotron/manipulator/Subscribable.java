@@ -32,6 +32,10 @@ public abstract class Subscribable<T> implements org.jetlang.channels.Subscribab
 
 	Fiber fiber;
 	
+	protected Subscribable() {
+		fiber = null;
+	}
+
 	public Subscribable(Fiber fiber) {
 		if (fiber != null)
 			this.fiber = fiber;
