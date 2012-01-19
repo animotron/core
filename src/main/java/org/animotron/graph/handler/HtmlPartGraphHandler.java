@@ -88,31 +88,31 @@ public class HtmlPartGraphHandler extends AbstractTextGraphHandler {
             String name = param[0].toString();
             if (starting) {
                 starting = false;
-                if (    // close void elements
-                        name.equalsIgnoreCase("area")    ||
-                        name.equalsIgnoreCase("base")    ||
-                        name.equalsIgnoreCase("br")      ||
-                        name.equalsIgnoreCase("col")     ||
-                        name.equalsIgnoreCase("command") ||
-                        name.equalsIgnoreCase("embed")   ||
-                        name.equalsIgnoreCase("hr")      ||
-                        name.equalsIgnoreCase("img")     ||
-                        name.equalsIgnoreCase("input")   ||
-                        name.equalsIgnoreCase("keygen")  ||
-                        name.equalsIgnoreCase("link")    ||
-                        name.equalsIgnoreCase("meta")    ||
-                        name.equalsIgnoreCase("param")   ||
-                        name.equalsIgnoreCase("source")  ||
-                        name.equalsIgnoreCase("track")   ||
-                        name.equalsIgnoreCase("wbr")
-                   ) {
-                    write(">");
-                    return;
-                } else if (name.contains(":")) {
+                if (name.contains(":")) {
                     write("/>");
                     return;
                 } else {
-                    close();
+                    write(">");
+                    if (    // close void elements
+                            name.equalsIgnoreCase("area")    ||
+                            name.equalsIgnoreCase("base")    ||
+                            name.equalsIgnoreCase("br")      ||
+                            name.equalsIgnoreCase("col")     ||
+                            name.equalsIgnoreCase("command") ||
+                            name.equalsIgnoreCase("embed")   ||
+                            name.equalsIgnoreCase("hr")      ||
+                            name.equalsIgnoreCase("img")     ||
+                            name.equalsIgnoreCase("input")   ||
+                            name.equalsIgnoreCase("keygen")  ||
+                            name.equalsIgnoreCase("link")    ||
+                            name.equalsIgnoreCase("meta")    ||
+                            name.equalsIgnoreCase("param")   ||
+                            name.equalsIgnoreCase("source")  ||
+                            name.equalsIgnoreCase("track")   ||
+                            name.equalsIgnoreCase("wbr")
+                            ) {
+                        return;
+                    }
                 }
             }
             write("</");
