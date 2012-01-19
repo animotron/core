@@ -66,7 +66,6 @@ public class Pipe extends SynchronousQueue<QCAVector> implements Reusable {
 	public void close() {
 		try {
 			put(EOP);
-			FastList.newInstance();
 		} catch (InterruptedException e) {
 			//XXX: log
 			e.printStackTrace();

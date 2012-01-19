@@ -73,11 +73,12 @@ public abstract class OnContext extends Subscribable<QCAVector> {
 		}
 	}
 	
-	public void isDone() {
+	public void isDone() throws IOException {
 		if (cd != null)
 			try {
-				cd.wait();
+				cd.await();
 			} catch (InterruptedException e) {
+				throw new IOException(e);
 			}
 	}
 }

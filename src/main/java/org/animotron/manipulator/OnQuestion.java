@@ -37,8 +37,10 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 	@Override
 	public final void onMessage(final PFlow pf) {
 		
+		//System.out.println("start "+Thread.currentThread());
 		try {
 		
+			pf.waitBeforeClosePipe(1);
 			act(pf);
 		
 		} catch (Exception e) {
@@ -46,6 +48,7 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 		
 		} finally {
 			pf.done();
+			//System.out.println("done "+Thread.currentThread());
 		}
 		
 //		System.out.println("Common OnQuestion in use");
@@ -62,4 +65,8 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 	}
 	
 	public abstract void act(final PFlow pf) throws IOException;
+
+	public boolean needAnswer() {
+		return true;
+	}
 }

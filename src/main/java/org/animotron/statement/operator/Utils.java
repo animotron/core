@@ -132,7 +132,7 @@ public class Utils {
 					try {
 						for (Relationship res : hits) {
 							if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-								evaluable(pf, vector.question(res), pipe);
+								evaluable(vector.question(res), pipe);
 								if (first == null)
 									first = res;
 							} else
@@ -153,7 +153,7 @@ public class Utils {
 		return pipe;
 	}
 
-	private static Pipe evaluable(final PFlow pf, final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
+	private static Pipe evaluable(final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
 		
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
