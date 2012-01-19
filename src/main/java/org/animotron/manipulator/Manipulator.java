@@ -111,7 +111,7 @@ public abstract class Manipulator {
 			e.printStackTrace();
 			throw new IOException(e);
 		}
-		System.out.println(sub.getClass());
+		//System.out.println(sub.getClass());
 		pf.questionChannel().subscribe(sub.getFiber(), sub);
 		
         //answers transfer to output

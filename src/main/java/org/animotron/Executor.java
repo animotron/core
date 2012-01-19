@@ -55,7 +55,7 @@ public class Executor {
 	}
 
 	public static Fiber getFiber() {
-		System.out.println("Active threads "+exec.getActiveCount());
+		//System.out.println("Active threads "+exec.getActiveCount());
 		//(new IOException()).printStackTrace();
 		
 		Fiber fiber = fact.create();
