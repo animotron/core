@@ -122,6 +122,7 @@ public class Utils {
 					if (theNode != null) {
 						pipe.write(vector.answered(theNode));
 						pipe.close();
+						return;
 					}
 				} catch (Exception e) {
 				}
@@ -151,6 +152,14 @@ public class Utils {
 		});
 
 		return pipe;
+	}
+	
+	public static void getTHEbag(final PFlow pf, final QCAVector vector, final Set<Node> thes) {
+		Pipe p = Utils.getByREF(pf, vector);
+		QCAVector v;
+		while ((v = p.take()) != null) {
+			thes.add(v.getAnswer().getEndNode());
+		}
 	}
 
 	private static Pipe evaluable(final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
@@ -404,14 +413,20 @@ public class Utils {
 
 	public static void debug(Statement st, PFlow pf) {
 		System.out.print(st.name()+" "+pf.getOP().getId()+" ");
-		for (QCAVector v : Utils.getByREF(pf)) {
-			Node theNode = v.getUnrelaxedClosest().getEndNode();
-			try {
-				System.out.print("'"+name(theNode)+"'");
-			} catch (Exception e) {
-				System.out.print("???");
+		Pipe pipe = Utils.getByREF(pf);
+		try {
+			QCAVector v;
+			while ((v = pipe.take()) != null) {
+				Node theNode = v.getUnrelaxedClosest().getEndNode();
+				try {
+					System.out.print("'"+name(theNode)+"'");
+				} catch (Exception e) {
+					System.out.print("???");
+				}
+				System.out.print(" ["+theNode+"], ");
 			}
-			System.out.print(" ["+theNode+"], ");
+		} finally {
+			Pipe.recycle(pipe);
 		}
 		System.out.println();
 	}
