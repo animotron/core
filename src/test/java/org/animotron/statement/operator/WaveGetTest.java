@@ -58,4 +58,13 @@ public class WaveGetTest extends ATest {
         assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
     }
 
+    @Test
+    public void test_004() throws Exception {
+        testAnimo("the a (x) (foo 1).");
+        testAnimo("the y get foo.");
+        testAnimo("the z y any x.");
+        assertAnimoResult("z", "z y foo 1.");
+    }
+
+
 }
