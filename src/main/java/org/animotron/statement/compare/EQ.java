@@ -65,11 +65,7 @@ public class EQ extends Operator implements Predicate {
 
 		//XXX: fix
 		final Set<Node> thes = new FastSet<Node>();
-		Pipe p = Utils.getByREF(pf, vector);
-		QCAVector v;
-		while ((v = p.take()) != null) {
-			thes.add(v.getAnswer().getEndNode());
-		}
+		Utils.getTHEbag(pf, vector, thes);
 
 		final PFlow pflow = new PFlow(vector);
 		

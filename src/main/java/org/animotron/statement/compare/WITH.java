@@ -85,11 +85,7 @@ public class WITH extends Operator implements Predicate {
 		qVector = pf.getVector().question2(op);
 
 		final Set<Node> thes = new FastSet<Node>();
-		Pipe p = Utils.getByREF(pf, qVector);
-		QCAVector v;
-		while ((v = p.take()) != null) {
-			thes.add(v.getAnswer().getEndNode());
-		}
+		Utils.getTHEbag(pf, qVector, thes);
 
 		final PFlow pflow = new PFlow(qVector);
 		
