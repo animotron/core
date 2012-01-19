@@ -111,7 +111,7 @@ public abstract class Manipulator {
 			e.printStackTrace();
 			throw new IOException(e);
 		}
-		//System.out.println(sub.getClass());
+		System.out.println(sub.getClass());
 		pf.questionChannel().subscribe(sub.getFiber(), sub);
 		
         //answers transfer to output
@@ -216,7 +216,7 @@ public abstract class Manipulator {
 
 	//XXX: private
 	public static void sendQuestion(final Pipe pipe, final QCAVector vector, final Node node) {
-		OnContext onAnswer = new OnContext(Executor.getFiber()) {
+		OnContext onAnswer = new OnContext() {
             public void onMessage(QCAVector context) {
             	super.onMessage(context);
             	
@@ -270,8 +270,8 @@ public abstract class Manipulator {
 			}
 			
 			if (list.isEmpty()) {
-				onAnswer.setCountDown(0);
-				//onAnswer.onMessage(null);				
+				onAnswer.setCountDown(1);
+				onAnswer.onMessage(null);				
 				return;
 			}
 	
