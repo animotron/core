@@ -50,44 +50,46 @@ public class STRING extends Instruction implements Evaluable {
 
 	@Override
 	public OnQuestion onCalcQuestion() {
-		return new OnQuestion(){
-	        @Override
-	        public void act(final PFlow pf) {
+		return new Calc();
+	}
 	
-	            //UNDERSTAND: if we have more that 2 params, what to do?
-	        	
-	        	StringBuilder sb = new StringBuilder(); 
-	        	
-	            IndexHits<Relationship> hits = Order.context(pf.getOP().getStartNode());
-	            try {
-	            	for (Relationship r : hits) {
-	            		try {
-							sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(r)));
-						} catch (IOException e) {
-							pf.sendException(e);
-							return;
-						}
-	            	}
-	            } finally {
-	            	hits.close();
-	            }
-	            
-	            if (sb.length() > 0) {
-	
-		            Relationship r;
-					try {
-						r = new JExpression(
-						    value(
-	                            sb.toString()
-	                        )
-						);
-					} catch (Exception e) {
+	class Calc extends OnQuestion {
+        @Override
+        public void act(final PFlow pf) {
+
+            //UNDERSTAND: if we have more that 2 params, what to do?
+        	
+        	StringBuilder sb = new StringBuilder(); 
+        	
+            IndexHits<Relationship> hits = Order.context(pf.getOP().getStartNode());
+            try {
+            	for (Relationship r : hits) {
+            		try {
+						sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(r)));
+					} catch (IOException e) {
 						pf.sendException(e);
 						return;
 					}
-					answered(pf, r);
-	            }
-	        }
-	    };
+            	}
+            } finally {
+            	hits.close();
+            }
+            
+            if (sb.length() > 0) {
+
+	            Relationship r;
+				try {
+					r = new JExpression(
+					    value(
+                            sb.toString()
+                        )
+					);
+				} catch (Exception e) {
+					pf.sendException(e);
+					return;
+				}
+				answered(pf, r);
+            }
+        }
 	}
 }

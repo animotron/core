@@ -52,116 +52,118 @@ public class ANY extends AbstractQuery implements Reference {
 	private static boolean debug = false;
 
 	public OnQuestion onCalcQuestion() {
-        return new OnQuestion() {
-	        @Override
-	        public void act(final PFlow pf) {
-	            long ts = System.currentTimeMillis();
+        return new Calc();
+	}
 	
-				if (debug) { 
-					System.out.println("ANY "+pf.getOP()+" "+pf.getVector());
-					Utils.debug(ANY._, pf);
-				}
+	class Calc extends OnQuestion {
+        @Override
+        public void act(final PFlow pf) {
+            long ts = System.currentTimeMillis();
+
+			if (debug) { 
+				System.out.println("ANY "+pf.getOP()+" "+pf.getVector());
+				Utils.debug(ANY._, pf);
+			}
+			
+			Pipe p = Utils.getByREF(pf);
+			QCAVector vector;
+			while ((vector = p.take()) != null) {
+				Relationship the = vector.getClosest();
 				
-				Pipe p = Utils.getByREF(pf);
-				QCAVector vector;
-				while ((vector = p.take()) != null) {
-					Relationship the = vector.getClosest();
+				if (!Utils.results(the, pf)) {
+				
+					Node node = the.getEndNode();
 					
-					if (!Utils.results(the, pf)) {
-					
-						Node node = the.getEndNode();
+    				FastSet<Node> uses = FastSet.newInstance();
+    				FastSet<Node> weaks = FastSet.newInstance();
+    				FastSet<Path> directed = FastSet.newInstance();
+
+    				try {
+						getUSEs(pf, node, uses, weaks, directed);
 						
-	    				FastSet<Node> uses = FastSet.newInstance();
-	    				FastSet<Node> weaks = FastSet.newInstance();
-	    				FastSet<Path> directed = FastSet.newInstance();
+						if (debug) { 
+							System.out.println(uses);
+							System.out.println(directed);
+    					}
+						
+						boolean underUSE = false;
+						Node n = getClosestIntersection(directed);
+	    				if (n != null) {
+	    					node = n;
+	    					underUSE = true;
+	    				}
+
+						if (debug) 
+							System.out.println(" node = "+node);
+						
+						int i = 0;
+			
+		        		Relationship res;
+						if (underUSE && ((res = getThe(node)) != null) && filtering(pf, res, uses, weaks))
+			            	try {
+			            		pf.sendAnswer( res );
+			            		return;
+			            	} catch (Exception e) {}
 	
-	    				try {
-							getUSEs(pf, node, uses, weaks, directed);
-							
-							if (debug) { 
-								System.out.println(uses);
-								System.out.println(directed);
-	    					}
-							
-							boolean underUSE = false;
-							Node n = getClosestIntersection(directed);
-		    				if (n != null) {
-		    					node = n;
-		    					underUSE = true;
-		    				}
+						for (Path path : td_IS_leaf.traverse(node)) {
+			        		i++;
+				        	Relationship r = path.lastRelationship();
 	
-							if (debug) 
-								System.out.println(" node = "+node);
-							
-							int i = 0;
-				
-			        		Relationship res;
-							if (underUSE && ((res = getThe(node)) != null) && filtering(pf, res, uses, weaks))
-				            	try {
-				            		pf.sendAnswer( res );
-				            		return;
-				            	} catch (Exception e) {}
-		
-							for (Path path : td_IS_leaf.traverse(node)) {
-				        		i++;
-					        	Relationship r = path.lastRelationship();
-		
-					        	if (debug) System.out.println(path);
-					        	if (debug) System.out.println("have context = "+Utils.haveContext(r.getEndNode()));
-		
-					        	if (!Utils.haveContext(r.getEndNode())) {
-					        		
-					        		//XXX: need better check, it can be reference from other then AN
-					        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
-					        		//if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) { //XXX: sure that StartNode? 
-							        //	if (debug) System.out.println("continue");
-					        		//	continue;
-					        		//}
-		
-					        		try {
-				        				res = getThe(r.getStartNode());
+				        	if (debug) System.out.println(path);
+				        	if (debug) System.out.println("have context = "+Utils.haveContext(r.getEndNode()));
+	
+				        	if (!Utils.haveContext(r.getEndNode())) {
+				        		
+				        		//XXX: need better check, it can be reference from other then AN
+				        		//if (r.getStartNode().hasRelationship(Direction.INCOMING, REF._))
+				        		//if (THE_by_REF.traverse(r.getStartNode()).iterator().hasNext()) { //XXX: sure that StartNode? 
+						        //	if (debug) System.out.println("continue");
+				        		//	continue;
+				        		//}
+	
+				        		try {
+			        				res = getThe(r.getStartNode());
+				        			if (filtering(pf, res, uses, weaks)) {
+				        				pf.sendAnswer( res );
+				        				return;
+				        			}
+				        		} catch (Exception e) {
+			        				for (Path pp : Utils.td_THE.traverse(r.getStartNode())) {
+			        					res = pp.lastRelationship();
 					        			if (filtering(pf, res, uses, weaks)) {
 					        				pf.sendAnswer( res );
 					        				return;
 					        			}
-					        		} catch (Exception e) {
-				        				for (Path pp : Utils.td_THE.traverse(r.getStartNode())) {
-				        					res = pp.lastRelationship();
-						        			if (filtering(pf, res, uses, weaks)) {
-						        				pf.sendAnswer( res );
+			        				}
+								}
+				        	} else {
+				    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
+				    			try {
+				    				for (Relationship rr : hits) {
+				    					
+				    					if (rr.isType(AN._)) {
+				    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
+						        				pf.sendAnswer( rr );
 						        				return;
-						        			}
-				        				}
-									}
-					        	} else {
-					    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
-					    			try {
-					    				for (Relationship rr : hits) {
-					    					
-					    					if (rr.isType(AN._)) {
-					    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
-							        				pf.sendAnswer( rr );
-							        				return;
-					    						}
-					    					}
-					    				}
-					    			} finally {
-					    				hits.close();
-					    			}
-					        	}
-					        }
-							if (debug) System.out.println(i);
-	    				} finally {
-	    					FastSet.recycle(uses);
-	    					FastSet.recycle(weaks);
-	    					FastSet.recycle(directed);
-	    				}
-			        }
-				}
-	
-	            ts = System.currentTimeMillis() - ts;
-	            if (debug) System.out.println("ANY "+pf.getOP()+" "+ts);
-	        }
-	    };
-	}
+				    						}
+				    					}
+				    				}
+				    			} finally {
+				    				hits.close();
+				    			}
+				        	}
+				        }
+						if (debug) System.out.println(i);
+    				} finally {
+    					FastSet.recycle(uses);
+    					FastSet.recycle(weaks);
+    					FastSet.recycle(directed);
+    				}
+		        }
+			}
+
+            ts = System.currentTimeMillis() - ts;
+            if (debug) System.out.println("ANY "+pf.getOP()+" "+ts);
+        }
+    }
 }

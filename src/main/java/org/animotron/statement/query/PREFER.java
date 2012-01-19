@@ -54,108 +54,110 @@ public class PREFER extends AbstractQuery implements Reference {
 	private PREFER() { super("prefer", "~~~"); }
 
     public OnQuestion onCalcQuestion() {
-        return new OnQuestion() {
+        return new Calc();
+    }
+    
+    class Calc extends OnQuestion {
 	        
-	    	@Override
-	        public void act(final PFlow pf) {
+    	@Override
+        public void act(final PFlow pf) {
+
+        	if (debug) { 
+				System.out.println("PREFER "+pf.getOP()+" "+pf.getVector());
+				Utils.debug(PREFER._, pf);
+			}
+        	
+			if (!Utils.results(pf)) {
+				Pipe p = AN.getREFs(pf, pf.getVector());
+				QCAVector v;
+	            while ((v = p.take()) != null) {
+	            	
+	            	Relationship ref = v.getAnswer(); 
+	            	Node node = ref.getEndNode();
 	
-	        	if (debug) { 
-					System.out.println("PREFER "+pf.getOP()+" "+pf.getVector());
-					Utils.debug(PREFER._, pf);
-				}
-	        	
-				if (!Utils.results(pf)) {
-					Pipe p = AN.getREFs(pf, pf.getVector());
-					QCAVector v;
-		            while ((v = p.take()) != null) {
+    				FastSet<Node> uses = FastSet.newInstance();
+    				FastSet<Node> weaks = FastSet.newInstance();
+    				FastSet<Path> directed = FastSet.newInstance();
+
+    				try {
+		            	getUSEs(pf, node, uses, weaks, directed);
 		            	
-		            	Relationship ref = v.getAnswer(); 
-		            	Node node = ref.getEndNode();
-		
-	    				FastSet<Node> uses = FastSet.newInstance();
-	    				FastSet<Node> weaks = FastSet.newInstance();
-	    				FastSet<Path> directed = FastSet.newInstance();
-	
-	    				try {
-			            	getUSEs(pf, node, uses, weaks, directed);
-			            	
-			            	if (debug) {
-								System.out.println(uses);
-				            	for (Node n : uses) {
-				            		System.out.println(THE._.reference(n));
-				            	}
-								System.out.println(weaks);
-								System.out.println(directed);
-				            	for (Path n : directed) {
-				            		System.out.println(THE._.reference(n.endNode()));
-				            	}
+		            	if (debug) {
+							System.out.println(uses);
+			            	for (Node n : uses) {
+			            		System.out.println(THE._.reference(n));
 			            	}
-							
-							if (!uses.isEmpty() || !weaks.isEmpty()) {
-					
-								boolean underUSE = false;
-								Node n = getClosestIntersection(directed);
-			    				if (n != null) {
-			    					node = n;
-			    					underUSE = true;
-			    				}
+							System.out.println(weaks);
+							System.out.println(directed);
+			            	for (Path n : directed) {
+			            		System.out.println(THE._.reference(n.endNode()));
+			            	}
+		            	}
+						
+						if (!uses.isEmpty() || !weaks.isEmpty()) {
+				
+							boolean underUSE = false;
+							Node n = getClosestIntersection(directed);
+		    				if (n != null) {
+		    					node = n;
+		    					underUSE = true;
+		    				}
+
+							Relationship res;
+							if (underUSE 
+									&& isLeaf(node) 
+									&& (res = getThe(node)) != null  
+									&& filtering(pf, res, uses, weaks))
+								pf.sendAnswer( res );
+				
+					        for (Path path : td_IS_leaf.traverse(node)) {
+					        	
+					        	//System.out.println(path);
 	
-								Relationship res;
-								if (underUSE 
-										&& isLeaf(node) 
-										&& (res = getThe(node)) != null  
-										&& filtering(pf, res, uses, weaks))
-									pf.sendAnswer( res );
-					
-						        for (Path path : td_IS_leaf.traverse(node)) {
-						        	
-						        	//System.out.println(path);
-		
-						        	Relationship r = path.lastRelationship();
-						        	if (!Utils.haveContext(r.getEndNode())) {
-						        		
-						        		//XXX: need better check, it can be reference from other then AN
-						        		if (!isLeaf(r.getStartNode()))
-						        			continue;
-		
-						        		try {
-						        			res = getThe(r.getStartNode());
+					        	Relationship r = path.lastRelationship();
+					        	if (!Utils.haveContext(r.getEndNode())) {
+					        		
+					        		//XXX: need better check, it can be reference from other then AN
+					        		if (!isLeaf(r.getStartNode()))
+					        			continue;
+	
+					        		try {
+					        			res = getThe(r.getStartNode());
+					        			if (filtering(pf, res, uses, weaks)) {
+					        				pf.sendAnswer( res );
+					        			}
+					        		} catch (Exception e) {
+				        				for (Path pp : Utils.td_THE.traverse(r.getStartNode())) {
+				        					res = pp.lastRelationship();
 						        			if (filtering(pf, res, uses, weaks)) {
 						        				pf.sendAnswer( res );
 						        			}
-						        		} catch (Exception e) {
-					        				for (Path pp : Utils.td_THE.traverse(r.getStartNode())) {
-					        					res = pp.lastRelationship();
-							        			if (filtering(pf, res, uses, weaks)) {
-							        				pf.sendAnswer( res );
-							        			}
-					        				}
-										}
-						        	} else {
-						    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
-						    			try {
-						    				for (Relationship rr : hits) {
-						    					
-						    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
-						    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
-								        				pf.sendAnswer( rr );
-						    						}
-						    					}
-						    				}
-						    			} finally {
-						    				hits.close();
-						    			}
-						        	}
-						        }
-							}
-	    				} finally {
-	    					FastSet.recycle(uses);
-	    					FastSet.recycle(weaks);
-	    					FastSet.recycle(directed);
-	    				}
-		            }
-				}
-	        }
-	    };
+				        				}
+									}
+					        	} else {
+					    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
+					    			try {
+					    				for (Relationship rr : hits) {
+					    					
+					    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
+					    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
+							        				pf.sendAnswer( rr );
+					    						}
+					    					}
+					    				}
+					    			} finally {
+					    				hits.close();
+					    			}
+					        	}
+					        }
+						}
+    				} finally {
+    					FastSet.recycle(uses);
+    					FastSet.recycle(weaks);
+    					FastSet.recycle(directed);
+    				}
+	            }
+			}
+        }
     }
 }

@@ -20,49 +20,60 @@
  */
 package org.animotron.statement.animo;
 
-import org.animotron.expression.JExpression;
+import java.io.IOException;
+
+import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.Utils;
-
-import static org.animotron.expression.JExpression.value;
+import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 /**
- * Return object's NAME.
- *
+ * Operation 'ORDERED'.
+ * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- *
  */
-public class ID extends Operator implements Evaluable {
-
-	public static final ID _ = new ID();
-
-	private ID() { super("id"); }
-
+public class ORDERED extends Instruction implements Evaluable {
+	
+	public static final ORDERED _ = new ORDERED();
+	
+	private static boolean debug = false;
+	
+	private ORDERED() { super("ordered"); }
+	
     @Override
-    public OnQuestion onCalcQuestion() {
-        return new Calc();
+	public OnQuestion onCalcQuestion() {
+		return new Calc();
     }
     
     class Calc extends OnQuestion {
-    	@Override
-        public void act(final PFlow pf) {
-        	Pipe p = Utils.getByREF(pf);
-        	QCAVector v;
-        	while ((v = p.take()) != null) {
-        		pf.sendAnswer(pf.getVector().answered(
-                    new JExpression(
-                        value(
-                            Utils.name(v.getClosest().getEndNode())
-                        )
-                    )
-                ));
-            }
-        }
+		@Override
+		public void act(final PFlow pf) {
+			//System.out.println("ORDERED "+pf.getOP().getType());
+			
+			IndexHits<Relationship> hits = Order.queryDown(pf.getVector().getQuestion().getEndNode());
+			try {
+				for (Relationship r : hits) {
+
+                    Pipe in = Evaluator._.execute(new QCAVector(r, pf.getVector().getContext()));
+                    QCAVector v;
+                    while ((v = in.take()) != null) {
+    					pf.sendAnswer(v);
+                    }
+
+				}
+			} catch (IOException e) {
+				pf.sendException(e);
+				return;
+			} finally {
+				hits.close();
+			}
+		}
     }
 }

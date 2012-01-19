@@ -52,42 +52,44 @@ public class THIS extends Operator implements Reference, Evaluable {
 	
     @Override
 	public OnQuestion onCalcQuestion() {
-		return new OnQuestion() {
+		return new Calc();
+    }
+    
+    class Calc extends OnQuestion {
 	
-			@Override
-			public void act(final PFlow pf) {
-				
-				Relationship op = pf.getOP();
-				
-				final Set<Node> thes = new FastSet<Node>();
-				Pipe p = AN.getREFs(pf, pf.getVector());
-				QCAVector theNode;
-				while ((theNode = p.take()) != null) {
-					thes.add(theNode.getClosest().getEndNode());
-				}
-	
-				if (debug) Utils.debug(THIS._, op, thes);
-				
-				if (!Utils.results(pf)) {
-					FastList<QCAVector> list = FastList.newInstance();
-					try {
-						if (pf.getVector().getContext() != null)
-							list.addAll( pf.getVector().getContext() );
-						
-						QCAVector next = pf.getVector().getPrecedingSibling();
-						while (next != null) {
-							list.add(next);
-							next = next.getPrecedingSibling();
-						}
-						
-						search(pf, thes, list);
-						
-					} finally {
-						FastList.recycle(list);
+		@Override
+		public void act(final PFlow pf) {
+			
+			Relationship op = pf.getOP();
+			
+			final Set<Node> thes = new FastSet<Node>();
+			Pipe p = AN.getREFs(pf, pf.getVector());
+			QCAVector theNode;
+			while ((theNode = p.take()) != null) {
+				thes.add(theNode.getClosest().getEndNode());
+			}
+
+			if (debug) Utils.debug(THIS._, op, thes);
+			
+			if (!Utils.results(pf)) {
+				FastList<QCAVector> list = FastList.newInstance();
+				try {
+					if (pf.getVector().getContext() != null)
+						list.addAll( pf.getVector().getContext() );
+					
+					QCAVector next = pf.getVector().getPrecedingSibling();
+					while (next != null) {
+						list.add(next);
+						next = next.getPrecedingSibling();
 					}
+					
+					search(pf, thes, list);
+					
+				} finally {
+					FastList.recycle(list);
 				}
 			}
-		};
+		}
     }
 	
 	private boolean search(final PFlow pf, final Set<Node> thes, List<QCAVector> cs) {
