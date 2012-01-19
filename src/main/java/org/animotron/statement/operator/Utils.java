@@ -162,6 +162,14 @@ public class Utils {
 		}
 	}
 
+	public static void getTHELikeBag(final PFlow pf, final QCAVector vector, final Set<Relationship> thes) {
+		Pipe p = Utils.getByREF(pf, vector);
+		QCAVector v;
+		while ((v = p.take()) != null) {
+			thes.add(v.getClosest());
+		}
+	}
+
 	private static Pipe evaluable(final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
 		
 		Relationship r = v.getClosest();
