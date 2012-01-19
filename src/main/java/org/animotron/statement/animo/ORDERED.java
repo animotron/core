@@ -20,9 +20,14 @@
  */
 package org.animotron.statement.animo;
 
+import java.io.IOException;
+
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
 import org.neo4j.graphdb.Relationship;
@@ -50,11 +55,22 @@ public class ORDERED extends Instruction implements Evaluable {
     class Calc extends OnQuestion {
 		@Override
 		public void act(final PFlow pf) {
-			IndexHits<Relationship> hits = Order.queryDown(pf.getOPNode());
+			//System.out.println("ORDERED "+pf.getOP().getType());
+			
+			IndexHits<Relationship> hits = Order.queryDown(pf.getVector().getQuestion().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					pf.sendAnswer(r);
+
+                    Pipe in = Evaluator._.execute(new QCAVector(r, pf.getVector().getContext()));
+                    QCAVector v;
+                    while ((v = in.take()) != null) {
+    					pf.sendAnswer(v);
+                    }
+
 				}
+			} catch (IOException e) {
+				pf.sendException(e);
+				return;
 			} finally {
 				hits.close();
 			}
