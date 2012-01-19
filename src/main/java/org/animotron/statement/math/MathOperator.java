@@ -114,14 +114,17 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	}
 	
 	class Prepare extends OnQuestion {
-    	@Override
+		public boolean needAnswer() {
+			return false;
+		}
+
+		@Override
     	public void act(final PFlow pf) {
     		final FastList<Node> thes = FastList.newInstance();
     		IndexHits<Relationship> hits = Order.context(pf.getOPNode());
     		try {
     			for (Relationship r : hits) {
     				if (!r.isType(GET._)) {
-    					pf.done();
     					return;
     				}
     				
@@ -132,7 +135,6 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
     				}
     				
     				if (thes.size() > 2) {
-    					pf.done();
     					return;
     				}
     			}

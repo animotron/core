@@ -76,7 +76,7 @@ public class GET extends AbstractQuery implements Shift {
     class Calc extends OnQuestion {
 	
 		@Override
-		public void act(final PFlow pf) {
+		public void act(final PFlow pf) throws IOException {
 
 			//if (debug) System.out.println("GET "+Thread.currentThread());
 
@@ -120,12 +120,12 @@ public class GET extends AbstractQuery implements Shift {
 				final Relationship op, 
 				final Node node, 
 				final Set<Node> thes, 
-				final Set<Relationship> visitedREFs) {
+				final Set<Relationship> visitedREFs) throws IOException {
 			
-			//if (debug) { 
+			if (debug) { 
 				Utils.debug(GET._, op, thes);
 			//	System.out.println(pf.getVector());
-			//}
+			}
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {
@@ -136,13 +136,12 @@ public class GET extends AbstractQuery implements Shift {
 					public void onMessage(QCAVector vector) {
 						super.onMessage(vector);
 						
-						if (debug) System.out.println("GET on context "+Thread.currentThread());
-						if (debug) System.out.println("GET ["+op+"] vector "+vector);
-						
-						if (vector == null) {
-							if (cd.getCount() == 0)
-								pf.done();
+						if (vector == null)
 							return;
+						
+						if (debug) { 
+							System.out.println("GET on context "+Thread.currentThread());
+							System.out.println("GET ["+op+"] vector "+vector);
 						}
 						
 						get(pf, vector, thes, visitedREFs);

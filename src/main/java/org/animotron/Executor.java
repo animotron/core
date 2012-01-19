@@ -23,8 +23,9 @@ package org.animotron;
 import org.jetlang.fibers.Fiber;
 import org.jetlang.fibers.PoolFiberFactory;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -33,24 +34,31 @@ import java.util.concurrent.Executors;
 //XXX: move to org.animotron.manipulator ?
 public class Executor {
 	
-	//private static ExecutorService exec = Executors.newCachedThreadPool();
-	private static ExecutorService exec;
+	private static int N_THREADS = 400;
+	//private static int CAPACITY = 20;
+	
+	private static ThreadPoolExecutor exec;
 	private static PoolFiberFactory fact;
 	
 	public static void init() {
-		exec = Executors.newFixedThreadPool(400);
+		//if (exec != null) return;
+		//exec = Executors.newFixedThreadPool(400);
+		
+		exec = new ThreadPoolExecutor(N_THREADS, N_THREADS,
+	        3L, TimeUnit.MINUTES,
+	        new SynchronousQueue<Runnable>());//new LinkedBlockingQueue<Runnable>(CAPACITY)
+		
+		exec.setRejectedExecutionHandler(
+				new ThreadPoolExecutor.CallerRunsPolicy());
+	
 		fact = new PoolFiberFactory(exec);
 	}
-//	private static Fiber fiber;
-	
-//	static {
-//		fiber = fact.create();
-//		fiber.start();
-//	}
-    
+
 	public static Fiber getFiber() {
+		System.out.println("Active threads "+exec.getActiveCount());
+		//(new IOException()).printStackTrace();
+		
 		Fiber fiber = fact.create();
-//		Fiber fiber = new ThreadFiber();
 		fiber.start();
 		return fiber;
 	}
@@ -61,15 +69,20 @@ public class Executor {
 	
 	public static void shutdown() {
 		exec.shutdown();
-//		try {
-//			while (!exec.isTerminated())
-//				Thread.sleep(100);
-//			
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-	}
-	
-	public void debug() {
+		try {
+			int i = 2;
+			while (!exec.isTerminated()) {
+				System.out.println("Active threads "+exec.getActiveCount());
+				
+				Thread.sleep(100);
+				i--;
+				
+				if (i == 0)
+					System.out.println(exec.shutdownNow());
+			}
+		
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 }

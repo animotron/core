@@ -173,19 +173,11 @@ public class PFlow {
 	}
 
 	public void countDown() {
-		if (waitBeforeClosePipe == null)
-			waitBeforeClosePipe(1);
-		
 		waitBeforeClosePipe.countDown();
 		//System.out.println("countDown "+waitBeforeClosePipe.getCount()+" "+this);
 	}
 	
 	public void countDown(Pipe pipe) {
-		if (waitBeforeClosePipe == null) {
-			pipe.close();
-			return;
-		}
-		
 		waitBeforeClosePipe.countDown();
 		if (waitBeforeClosePipe.getCount() == 0)
 			pipe.close();

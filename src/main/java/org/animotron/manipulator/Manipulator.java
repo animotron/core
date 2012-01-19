@@ -31,7 +31,6 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.THE;
-import org.jetlang.channels.Subscribable;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -112,91 +111,94 @@ public abstract class Manipulator {
 			e.printStackTrace();
 			throw new IOException(e);
 		}
+		//System.out.println(sub.getClass());
 		pf.questionChannel().subscribe(sub.getFiber(), sub);
 		
         //answers transfer to output
-		OnContext onAnswer = new OnContext() {
-            public void onMessage(QCAVector context) {
-            	super.onMessage(context);
-            	
-            	//System.out.println("get answer "+context);
-            	//out.debug();
-            	try {
-            		if (context == null) {
-
-            			pf.countDown(pipe);
-
-            		} else if (context.getAnswer() != null) {
-//            			int addedContexts = 0;
-                        Statement s = null;
-                        
-                        Relationship msg = context.getAnswer();
-
-        				if (context.getUnrelaxedAnswer().isType(RESULT)) {
-        					Statement qS = Statements.relationshipType(context.getQuestion());
-
-        					if (qS instanceof Shift) {
-                				pipe.write(context);
-                				return;
-        					
-        					} else if (!fullEval) {
-                				pipe.write(context);
-                				return;
-                			}
-                			
-                            try {
-                				Object obj = THE._.reference(msg);
-                				if (obj != null && obj instanceof String )
-                					s = Statements.name((String) obj);
-                				else
-                					//XXX: log
-                					System.out.println("WARNING: REF but no name");
-                				
-                            } catch (Exception e){}
-        				}
-
-            			if (msg.isType(REF._)) {
-            				Object obj = THE._.reference(msg);
-            				if (obj != null && obj instanceof String )
-            					s = Statements.name((String) obj);
-            				else
-            					//XXX: log
-            					System.out.println("WARNING: REF but no name");
-                        }
-            			
-
-                        if (s != null && s instanceof Evaluable) {
-                        	Pipe in = execute(context, ((Evaluable) s).onCalcQuestion(), fullEval);
-                        	QCAVector v;
-                            while ((v = in.take()) != null) {
-                            	pipe.write(v);
-                            }
-                        } else if (s == null){
-                            s = Statements.relationshipType(msg);
-                            Statement qS = Statements.relationshipType(context.getQuestion());
-                            if (s instanceof Evaluable && !(qS instanceof Shift)) {
-                                Pipe in = Evaluator._.execute(context);
-                                QCAVector v;
-                                while ((v = in.take()) != null) {
-                                    pipe.write(v);
-                                }
-                            } else {
-                                pipe.write(context);
-                            }
-                        } else {
-                        	pipe.write(context);
-                        }
-                    } else {
-                        //what to do if msg is null?
-                    	//ignore -- XXX: log warning
-                    }
-				} catch (IOException e) {
-					pf.sendException(e);
-				}
-            }
-        };
-		
-        pf.answerChannel().subscribe(onAnswer.getQueue(), onAnswer); 
+		if (sub.needAnswer()) {
+			OnContext onAnswer = new OnContext() {
+	            public void onMessage(QCAVector context) {
+	            	super.onMessage(context);
+	            	
+	            	//System.out.println("get answer ["+vector+"] "+context);
+	            	//out.debug();
+	            	try {
+	            		if (context == null) {
+	
+	            			pf.countDown(pipe);
+	
+	            		} else if (context.getAnswer() != null) {
+	//            			int addedContexts = 0;
+	                        Statement s = null;
+	                        
+	                        Relationship msg = context.getAnswer();
+	
+	        				if (context.getUnrelaxedAnswer().isType(RESULT)) {
+	        					Statement qS = Statements.relationshipType(context.getQuestion());
+	
+	        					if (qS instanceof Shift) {
+	                				pipe.write(context);
+	                				return;
+	        					
+	        					} else if (!fullEval) {
+	                				pipe.write(context);
+	                				return;
+	                			}
+	                			
+	                            try {
+	                				Object obj = THE._.reference(msg);
+	                				if (obj != null && obj instanceof String )
+	                					s = Statements.name((String) obj);
+	                				else
+	                					//XXX: log
+	                					System.out.println("WARNING: REF but no name");
+	                				
+	                            } catch (Exception e){}
+	        				}
+	
+	            			if (msg.isType(REF._)) {
+	            				Object obj = THE._.reference(msg);
+	            				if (obj != null && obj instanceof String )
+	            					s = Statements.name((String) obj);
+	            				else
+	            					//XXX: log
+	            					System.out.println("WARNING: REF but no name");
+	                        }
+	            			
+	
+	                        if (s != null && s instanceof Evaluable) {
+	                        	Pipe in = execute(context, ((Evaluable) s).onCalcQuestion(), fullEval);
+	                        	QCAVector v;
+	                            while ((v = in.take()) != null) {
+	                            	pipe.write(v);
+	                            }
+	                        } else if (s == null){
+	                            s = Statements.relationshipType(msg);
+	                            Statement qS = Statements.relationshipType(context.getQuestion());
+	                            if (s instanceof Evaluable && !(qS instanceof Shift)) {
+	                                Pipe in = Evaluator._.execute(context);
+	                                QCAVector v;
+	                                while ((v = in.take()) != null) {
+	                                    pipe.write(v);
+	                                }
+	                            } else {
+	                                pipe.write(context);
+	                            }
+	                        } else {
+	                        	pipe.write(context);
+	                        }
+	                    } else {
+	                        //what to do if msg is null?
+	                    	//ignore -- XXX: log warning
+	                    }
+					} catch (IOException e) {
+						pf.sendException(e);
+					}
+	            }
+	        };
+			
+	        pf.answerChannel().subscribe(onAnswer.getQueue(), onAnswer);
+		}
 
         //send question to evaluation
         pf.questionChannel().publish(pf);
@@ -251,11 +253,11 @@ public abstract class Manipulator {
 				while (it.hasNext()) {
 					Relationship r = it.next();
 					
-					Subscribable<PFlow> onQuestion = Evaluator._.onQuestion(r);
+					OnQuestion onQuestion = Evaluator._.onQuestion(r);
 					
 					if (onQuestion != null) {
 						nextPF = new PFlow(vector.question2(r));
-						nextPF.questionChannel().subscribe(onQuestion);
+						nextPF.questionChannel().subscribe(onQuestion.getFiber(), onQuestion);
 						
 						list.add(nextPF);
 						
@@ -268,8 +270,8 @@ public abstract class Manipulator {
 			}
 			
 			if (list.isEmpty()) {
-				onAnswer.setCountDown(1);
-				onAnswer.onMessage(null);				
+				onAnswer.setCountDown(0);
+				//onAnswer.onMessage(null);				
 				return;
 			}
 	
@@ -279,7 +281,7 @@ public abstract class Manipulator {
 			for (int i = 0, n = list.size(); i < n; i++) {
 				nextPF = list.get(i);
 				
-				nextPF.answerChannel().subscribe(onAnswer);
+				nextPF.answerChannel().subscribe(onAnswer.getFiber(), onAnswer);
 				
 				nextPF.questionChannel().publish(nextPF);
 			}
