@@ -34,15 +34,11 @@ import java.util.concurrent.Executors;
 public class Executor {
 	
 	//private static ExecutorService exec = Executors.newCachedThreadPool();
-	private static ExecutorService tasksExec;
-
 	private static ExecutorService exec;
 	private static PoolFiberFactory fact;
 	
 	public static void init() {
-		tasksExec = Executors.newCachedThreadPool();//200
-
-		exec = Executors.newCachedThreadPool();//200
+		exec = Executors.newFixedThreadPool(400);
 		fact = new PoolFiberFactory(exec);
 	}
 //	private static Fiber fiber;
@@ -60,12 +56,18 @@ public class Executor {
 	}
 
     public static void execute (Runnable r) {
-    	tasksExec.submit(r);
+    	exec.submit(r);
     }
 	
 	public static void shutdown() {
 		exec.shutdown();
-		tasksExec.shutdown();
+//		try {
+//			while (!exec.isTerminated())
+//				Thread.sleep(100);
+//			
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public void debug() {
