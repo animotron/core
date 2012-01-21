@@ -46,7 +46,7 @@ public class DefaultDescription {
         builder.start(AN._);
             builder._(REF._, FILE);
         builder.end();
-        Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote(File.separator)));
+        Iterator<String> it = new StringArrayIterator(path.split(Pattern.quote("/")));
         while (it.hasNext()) {
             String i = it.next();
             for (String s : new StringArrayIterator(i.split(Pattern.quote(".")))) {
