@@ -24,6 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
@@ -273,5 +274,21 @@ public class MathTest extends ATest {
             "the d (z) (x 4)"
         );
     	assertStringResult("+ get x all z", "10");
+	}
+
+    @Test
+	public void test_34() throws Exception {
+    	assertStringResult("+ 1,2", "3");
+    	assertStringResult("* 6,2", "12");
+	}
+
+    @Test
+    @Ignore
+	public void test_35() throws Exception {
+        __(
+            "the a 2",
+            "the b 3"
+        );
+    	assertStringResult("+ a,b", "5");
 	}
 }
