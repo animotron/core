@@ -48,26 +48,7 @@ public class MessageDigester {
         }
     }
 
-    public static String md5( String message, boolean base64) {
-        MessageDigest md5 = null;
-        String digest = message;
-        try {
-            md5 = MessageDigest.getInstance( "MD5" );
-            md5.update( message.getBytes() );
-            byte[] digestData = md5.digest();
-
-           digest = byteArrayToHex( digestData );
-
-        } catch ( NoSuchAlgorithmException e ) {
-            LOG.warn( "MD5 not supported. Using plain string as password!" );
-        } catch ( Exception e ) {
-            LOG.warn( "Digest creation failed. Using plain string as password!" );
-        }
-        return digest;
-    }
-
-    public static String calculate(String message, String algorithm, boolean base64)
-    throws IllegalArgumentException {
+    public static String calculate(String message, String algorithm) throws IllegalArgumentException {
 
         // Can throw a  NoSuchAlgorithmException
         MessageDigest  md = null;
@@ -80,7 +61,6 @@ public class MessageDigester {
             throw new IllegalArgumentException(error);
         }
 
-
         // Calculate hash
         md.update( message.getBytes() );
         byte[] digestData = md.digest();
@@ -92,7 +72,6 @@ public class MessageDigester {
         return  digest;
     }
 
-
     private static void byteToHex( StringBuilder buf, byte b ) {
         int n = b;
         if ( n < 0 ) {
@@ -103,7 +82,6 @@ public class MessageDigester {
         buf.append( hex[d1] );
         buf.append( hex[d2] );
     }
-
 
     public static String byteArrayToHex( byte[] b ) {
         StringBuilder buf = new StringBuilder( b.length * 2 );
@@ -124,18 +102,6 @@ public class MessageDigester {
 
     public static String longToHex( long b ) {
         return byteArrayToHex(longToByteArray(b));
-    }
-
-
-    /**
-     *  The main program for the MD5 class
-     *
-     *@param  args  The command line arguments
-     */
-    public static void main( String[] args ) {
-        System.out.println( "input: " + args[0] );
-        System.out.println( "MD5:   " + MessageDigester.md5( args[0], false ) );
-        System.out.println( "MD5 (base64):   " + MessageDigester.md5( args[0], true ) );
     }
 
     public static final MessageDigest cloneMD(MessageDigest md) {
