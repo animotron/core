@@ -27,6 +27,7 @@ import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.value.STREAM;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -63,7 +64,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         	if (reference != null)
         		write(reference.toString());
         	
-        } else if (statement instanceof VALUE) {
+        } else if (statement instanceof VALUE || statement instanceof STREAM) {
         	if (reference != null)
 	            if (reference instanceof String) {
 	                write("\"");
