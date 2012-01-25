@@ -471,4 +471,24 @@ public class Utils {
     public static String name(Node theNode) {
     	return (String) Properties.NAME.get(theNode);
     }
+
+
+	public static TraversalDescription THES = 
+			Traversal.description().
+				breadthFirst().
+	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
+	    			@Override
+	    			public Evaluation evaluate(Path path) {
+	    				if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+	    				if (path.lastRelationship().isType(THE._))
+	    					return INCLUDE_AND_PRUNE;
+	    				
+	    				if (path.endNode().getId() == 0)
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+	    				return EXCLUDE_AND_CONTINUE;
+	    			}
+	            });
 }
