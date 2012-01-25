@@ -20,6 +20,7 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.manipulator.Controller;
 import org.animotron.statement.Statement;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
@@ -38,6 +39,10 @@ public class DigestGraphHandler implements GraphHandler {
 
     private MessageDigest md;
     private Stack<MessageDigest> stack;
+    
+    public Controller getController() {
+    	return null;
+    }
 
     @Override
     public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {

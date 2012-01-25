@@ -70,7 +70,7 @@ public class Manipulators {
 		
 		private void creative() throws IOException {
 			for (int i = 0, n = creative.size(); i < n; i++) {
-				Preparator._.execute(creative.get(i));
+				Preparator._.execute((Controller)null, creative.get(i));
 			}
 		}
 		

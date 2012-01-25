@@ -51,14 +51,23 @@ public class PFlow {
 	private Channel<PFlow> qChannel = null;
 	private Channel<Throwable> sChannel = null;
 	
+	private Controller controller;
 	private QCAVector path;
 	
-	public PFlow(Relationship op) {
+	public PFlow(Controller controller, Relationship op) {
 		path = new QCAVector(op);
+		
+		this.controller = controller;
 	}
 
-	public PFlow(QCAVector vector) {
+	public PFlow(Controller controller, QCAVector vector) {
 		path = vector;
+
+		this.controller = controller;
+	}
+	
+	public Controller getController() {
+		return controller;
 	}
 
 	public Channel<PFlow> questionChannel() {

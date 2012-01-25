@@ -21,6 +21,7 @@
 package org.animotron.graph.handler;
 
 import org.animotron.graph.Properties;
+import org.animotron.manipulator.Controller;
 import org.animotron.statement.Statement;
 import org.animotron.statement.value.STREAM;
 import org.neo4j.graphdb.Node;
@@ -38,6 +39,10 @@ public class BinaryGraphHandler implements GraphHandler {
 
     public BinaryGraphHandler(OutputStream out) {
         this.out = out;
+    }
+    
+    public Controller getController() {
+    	return null;
     }
 
     protected void write(Node n, OutputStream out) throws IOException {

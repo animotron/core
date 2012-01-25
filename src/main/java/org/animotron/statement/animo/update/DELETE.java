@@ -40,7 +40,7 @@ public class DELETE extends AbstractUpdate {
     protected void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException {
         for (Relationship r: the) {
             if (r.getEndNode().equals(destination.getEndNode())) {
-                GC._.execute(r);
+                GC._.execute(null, r);
             } else {
                 //TODO: implement
             }

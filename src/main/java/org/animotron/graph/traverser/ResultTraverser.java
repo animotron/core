@@ -104,7 +104,7 @@ public class ResultTraverser extends AnimoTraverser {
 //        if (!found) {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
-            Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(rr.question(r)) );
+            Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(handler.getController(), rr.question(r)) );
             iterate(handler, null, rr, in, level, isOne);
 //        }
     }

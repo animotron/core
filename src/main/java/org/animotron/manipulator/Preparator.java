@@ -50,7 +50,7 @@ public class Preparator extends StatementManipulator {
 	
 	private Preparator() {};
 	
-	public PipedInput<QCAVector> execute(Node op) throws IOException {
+	public PipedInput<QCAVector> execute(final Controller controller, final Node op) throws IOException {
         for (Relationship r : op.getRelationships(INCOMING)) {
             if (r.isType(AN._) || r.isType(USE._) || r.isType(REF._)) {
 			    //XXX: rewrite super.execute(r);
@@ -69,14 +69,15 @@ public class Preparator extends StatementManipulator {
 	                        s = Statements.name(name);
 	        			    
 	                        if (s instanceof Prepare) {
-	                            super.execute(new QCAVector(r), onQuestion(s, r), true);
+	                            super.execute(controller, new QCAVector(r), onQuestion(s, r), true);
 							}
         				}
         			} catch (Exception e) {
+        				//XXX: log
         				//e.printStackTrace();
 					}
 				} else if (s instanceof Prepare) {
-    			    super.execute(r);
+    			    super.execute(controller, r);
 				}
         	}
         } finally {

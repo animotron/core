@@ -67,7 +67,7 @@ public class EQ extends Operator implements Predicate {
 		final Set<Node> thes = new FastSet<Node>();
 		Utils.getTHEbag(pf, vector, thes);
 
-		final PFlow pflow = new PFlow(vector);
+		final PFlow pflow = new PFlow(pf.getController(), vector);
 		
 		final Pipe pipe = Pipe.newInstance();
 		
@@ -98,7 +98,7 @@ public class EQ extends Operator implements Predicate {
 			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					Pipe in = Evaluator._.execute(vector.question(r));
+					Pipe in = Evaluator._.execute(pf.getController(), vector.question(r));
 					QCAVector e;
 					while ((e = in.take()) != null) {
 						actual.add(e);
@@ -123,7 +123,7 @@ public class EQ extends Operator implements Predicate {
 				}
 				if (r.isType(REF._)) continue;
 				
-				Pipe in = Evaluator._.execute(vector.question(r));
+				Pipe in = Evaluator._.execute(pf.getController(), vector.question(r));
 				QCAVector e;
 				while ((e = in.take()) != null) {
 					expected.add(e);

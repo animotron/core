@@ -37,6 +37,9 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 	@Override
 	public final void onMessage(final PFlow pf) {
 		
+		if (pf.getController() != null)
+			pf.getController().startStatement(pf.getOP());
+		
 		//System.out.println("start "+Thread.currentThread());
 		try {
 		
@@ -48,6 +51,10 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 		
 		} finally {
 			pf.done();
+
+			if (pf.getController() != null)
+				pf.getController().endStatement(pf.getOP());
+
 			//System.out.println("done "+Thread.currentThread());
 		}
 		

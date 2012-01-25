@@ -20,6 +20,8 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.manipulator.Controller;
+import org.animotron.manipulator.Profiler;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.value.VALUE;
@@ -37,9 +39,15 @@ public class StAXGraphHandler implements GraphHandler {
 	
 	private XMLStreamWriter writer;
 
+    private Controller controller = new Profiler();
+	
 	public StAXGraphHandler(XMLStreamWriter writer) {
 		this.writer = writer;
 	}
+	
+    public Controller getController() {
+    	return controller;
+    }
 	
 	@Override
 	public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
@@ -107,6 +115,7 @@ public class StAXGraphHandler implements GraphHandler {
 
     @Override
 	public void startGraph() throws IOException {
+		controller.start();
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
@@ -120,6 +129,8 @@ public class StAXGraphHandler implements GraphHandler {
 			writer.writeEndDocument();
 		} catch (XMLStreamException e) {
             throw new IOException(e);
+		} finally {
+			controller.end();
 		}
 	}
 

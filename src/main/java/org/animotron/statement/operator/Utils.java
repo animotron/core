@@ -28,6 +28,7 @@ import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.io.Pipe;
+import org.animotron.manipulator.Controller;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -133,7 +134,7 @@ public class Utils {
 					try {
 						for (Relationship res : hits) {
 							if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-								evaluable(vector.question(res), pipe);
+								evaluable(pf.getController(), vector.question(res), pipe);
 								if (first == null)
 									first = res;
 							} else
@@ -170,13 +171,13 @@ public class Utils {
 		}
 	}
 
-	private static Pipe evaluable(final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
+	private static Pipe evaluable(final Controller controller, final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
 		
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
 			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-			Pipe in = Evaluator._.execute(v);
+			Pipe in = Evaluator._.execute(controller, v);
 			QCAVector e;
 			while ((e = in.take()) != null) {
 				
@@ -188,7 +189,7 @@ public class Utils {
 //					) {
 					pipe.write(e);
 				} else {
-					Pipe p = eval(e);
+					Pipe p = eval(controller, e);
 					QCAVector rr;
 					while ((rr = p.take()) != null) {
 						pipe.write(rr);
@@ -236,7 +237,7 @@ public class Utils {
 
 			if (s instanceof Query || s instanceof Evaluable) {
 				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-				Pipe in = Evaluator._.execute(v);
+				Pipe in = Evaluator._.execute(pf.getController(), v);
 				QCAVector e;
 				while ((e = in.take()) != null) {
 
@@ -245,7 +246,7 @@ public class Utils {
 					if (result.isType(REF._) || result.isType(THE._)) {
 						pipe.write(e);
 					} else {
-						Pipe p = eval(e);
+						Pipe p = eval(pf.getController(), e);
 						QCAVector rr;
 						while ((rr = p.take()) != null) {
 							pipe.write(rr);
@@ -262,7 +263,7 @@ public class Utils {
 		}
 	}
 	
-	public static Pipe eval(final QCAVector vector) throws IOException, AnimoException, InterruptedException {
+	public static Pipe eval(final Controller controller, final QCAVector vector) throws IOException, AnimoException, InterruptedException {
         final Pipe pipe = Pipe.newInstance();
         
         Executor.execute(new Runnable() {
@@ -280,7 +281,7 @@ public class Utils {
 						Statement _s = Statements.relationshipType(rr);
 						if (_s instanceof Query || _s instanceof Evaluable) {
 							prev = vector.question(rr, prev);
-							Pipe _in = Evaluator._.execute(prev);
+							Pipe _in = Evaluator._.execute(controller, prev);
 							QCAVector ee;
 							while ((ee = _in.take()) != null) {
 								//XXX: ee should be context too???

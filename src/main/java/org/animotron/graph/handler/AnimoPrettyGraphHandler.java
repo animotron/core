@@ -59,6 +59,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
 
     @Override
     public void startGraph() {
+        super.startGraph();
         stack = new Stack<Object[]>();
         list = new LinkedList<Object[]>();
     }
@@ -92,6 +93,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
             write(o, 0);
             write("\n");
         }
+    	super.endGraph();
     }
 
     Statement ps = null;

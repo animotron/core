@@ -61,7 +61,7 @@ public class ORDERED extends Instruction implements Evaluable {
 			try {
 				for (Relationship r : hits) {
 
-                    Pipe in = Evaluator._.execute(new QCAVector(r, pf.getVector().getContext()));
+                    Pipe in = Evaluator._.execute(pf.getController(), new QCAVector(r, pf.getVector().getContext()));
                     QCAVector v;
                     while ((v = in.take()) != null) {
     					pf.sendAnswer(v);

@@ -55,28 +55,28 @@ public abstract class Manipulator {
 		return null;
 	}
 	
-	public Pipe execute(final QCAVector vector, final Node node) {
+	public Pipe execute(final Controller controller, final QCAVector vector, final Node node) {
         final Pipe pipe = Pipe.newInstance();
 		
         Executor.execute(new Runnable() {
 			@Override
 			public void run() {
-		        sendQuestion(pipe, vector, node);
+		        sendQuestion(controller, pipe, vector, node);
 			}
 		});
         
         return pipe;
 	}
 
-	public final Pipe execute(Relationship op) throws IOException {
-		return execute(new QCAVector(op), null, true);
+	public final Pipe execute(final Controller controller, final Relationship op) throws IOException {
+		return execute(controller, new QCAVector(op), null, true);
 	}
 	
-	public final Pipe execute(QCAVector vector) throws IOException {
-		return execute(vector, null, true);
+	public final Pipe execute(final Controller controller, final QCAVector vector) throws IOException {
+		return execute(controller, vector, null, true);
 	}
 
-	public final Pipe execute(final QCAVector vector, OnQuestion sub, final boolean fullEval) throws IOException {
+	public final Pipe execute(final Controller controller, final QCAVector vector, OnQuestion sub, final boolean fullEval) throws IOException {
         final Pipe pipe = Pipe.newInstance();
 
         final Relationship op = vector.getClosest();
@@ -104,7 +104,7 @@ public abstract class Manipulator {
 			return pipe;
 		}
 		
-		final PFlow pf = new PFlow(vector);
+		final PFlow pf = new PFlow(controller, vector);
 		try {
 			pf.cyclingDetection();
 		} catch (AnimoException e) {
@@ -167,7 +167,7 @@ public abstract class Manipulator {
 	            			
 	
 	                        if (s != null && s instanceof Evaluable) {
-	                        	Pipe in = execute(context, ((Evaluable) s).onCalcQuestion(), fullEval);
+	                        	Pipe in = execute(controller, context, ((Evaluable) s).onCalcQuestion(), fullEval);
 	                        	QCAVector v;
 	                            while ((v = in.take()) != null) {
 	                            	pipe.write(v);
@@ -176,7 +176,7 @@ public abstract class Manipulator {
 	                            s = Statements.relationshipType(msg);
 	                            Statement qS = Statements.relationshipType(context.getQuestion());
 	                            if (s instanceof Evaluable && !(qS instanceof Shift)) {
-	                                Pipe in = Evaluator._.execute(context);
+	                                Pipe in = Evaluator._.execute(controller, context);
 	                                QCAVector v;
 	                                while ((v = in.take()) != null) {
 	                                    pipe.write(v);
@@ -215,7 +215,7 @@ public abstract class Manipulator {
 	}
 
 	//XXX: private
-	public static void sendQuestion(final Pipe pipe, final QCAVector vector, final Node node) {
+	public static void sendQuestion(final Controller controller, final Pipe pipe, final QCAVector vector, final Node node) {
 		OnContext onAnswer = new OnContext() {
             public void onMessage(QCAVector context) {
             	super.onMessage(context);
@@ -234,10 +234,10 @@ public abstract class Manipulator {
             }
         };
 
-		sendQuestion(onAnswer, vector, node);
+		sendQuestion(controller, onAnswer, vector, node);
 	}
 	
-	public static void sendQuestion(final OnContext onAnswer, final QCAVector vector, final Node node) {
+	public static void sendQuestion(final Controller controller, final OnContext onAnswer, final QCAVector vector, final Node node) {
 		
 		//System.out.println("sendQuestion");
 		
@@ -256,7 +256,7 @@ public abstract class Manipulator {
 					OnQuestion onQuestion = Evaluator._.onQuestion(r);
 					
 					if (onQuestion != null) {
-						nextPF = new PFlow(vector.question2(r));
+						nextPF = new PFlow(controller, vector.question2(r));
 						nextPF.questionChannel().subscribe(onQuestion.getFiber(), onQuestion);
 						
 						list.add(nextPF);

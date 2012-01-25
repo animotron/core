@@ -20,6 +20,7 @@
  */
 package org.animotron.graph.handler;
 
+import org.animotron.manipulator.Controller;
 import org.animotron.statement.Statement;
 import org.neo4j.graphdb.Relationship;
 
@@ -49,6 +50,8 @@ public interface GraphHandler {
 	public void startGraph() throws IOException;
 
 	public void endGraph() throws IOException;
+	
+	public Controller getController(); 
 
 	@Deprecated //XXX: find better way 
 	public boolean isStepMade();

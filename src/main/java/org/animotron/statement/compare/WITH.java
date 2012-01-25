@@ -26,6 +26,7 @@ import javolution.util.FastSet;
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
+import org.animotron.manipulator.Controller;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.PFlow;
@@ -73,7 +74,7 @@ public class WITH extends Operator implements Predicate {
 			
 			expected = new FastList<QCAVector>();
 			qVector = pf.getVector().answered(pf.getVector().getClosest());
-			Pipe in = Evaluator._.execute(qVector, op.getEndNode());
+			Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
 			QCAVector e;
 			while ((e = in.take()) != null) {
 				expected.add(e);
@@ -87,7 +88,7 @@ public class WITH extends Operator implements Predicate {
 		final Set<Node> thes = new FastSet<Node>();
 		Utils.getTHEbag(pf, qVector, thes);
 
-		final PFlow pflow = new PFlow(qVector);
+		final PFlow pflow = new PFlow(pf.getController(), qVector);
 		
 		final Pipe pipe = Pipe.newInstance();
 		
@@ -122,7 +123,7 @@ public class WITH extends Operator implements Predicate {
 			IndexHits<Relationship> hits = Order.context(have.getClosest().getEndNode());
 			try {
 				for (Relationship r : hits) {
-					Pipe in = Evaluator._.execute(have.question(r));
+					Pipe in = Evaluator._.execute(pf.getController(), have.question(r));
 					QCAVector e;
 					while ((e = in.take()) != null) {
 						actual.add(e);
@@ -140,7 +141,7 @@ public class WITH extends Operator implements Predicate {
 			QCAVector g = expected.get(0);
 			
 			//XXX: finish
-			List<QCAVector> l = evaluable(g);
+			List<QCAVector> l = evaluable(pf.getController(), g);
 			if (l.size() == 1)
 				g = l.get(0);
 			else if (l.size() > 1) {
@@ -166,7 +167,7 @@ public class WITH extends Operator implements Predicate {
 		return false;
 	}
 	
-	private List<QCAVector> evaluable(QCAVector vector) throws InterruptedException, IOException {
+	private List<QCAVector> evaluable(final Controller controller, final QCAVector vector) throws InterruptedException, IOException {
 		List<QCAVector> list = new FastList<QCAVector>();
 		
 		IndexHits<Relationship> q = Order.context(vector.getClosest().getEndNode());
@@ -175,7 +176,7 @@ public class WITH extends Operator implements Predicate {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
     				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
-    				Pipe in = Evaluator._.execute(vector.question(i));
+    				Pipe in = Evaluator._.execute(controller, vector.question(i));
     				QCAVector e;
     				while ((e = in.take()) != null) {
     					list.add(e);

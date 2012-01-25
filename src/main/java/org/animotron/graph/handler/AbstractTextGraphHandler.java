@@ -23,6 +23,9 @@ package org.animotron.graph.handler;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.animotron.manipulator.Controller;
+import org.animotron.manipulator.Profiler;
+
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
@@ -30,6 +33,8 @@ import java.io.OutputStream;
 public abstract class AbstractTextGraphHandler implements GraphHandler {
 
     private Handler out;
+    
+    protected Controller controller = new Profiler();
 
     public AbstractTextGraphHandler(GraphHandler gh) {
     	if (gh instanceof AbstractTextGraphHandler) {
@@ -45,6 +50,10 @@ public abstract class AbstractTextGraphHandler implements GraphHandler {
 
     public AbstractTextGraphHandler(StringBuilder builder) {
         out = new StringHandler(builder);
+    }
+    
+    public Controller getController() {
+    	return controller;
     }
 
 	private boolean stepMade = false;
