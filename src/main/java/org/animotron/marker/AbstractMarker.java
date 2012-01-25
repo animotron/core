@@ -29,7 +29,6 @@ import org.neo4j.graphdb.Node;
  */
 public abstract class AbstractMarker implements Marker {
 
-	private Node root;
 	private Node node;
 	private State state;
 	
@@ -37,11 +36,6 @@ public abstract class AbstractMarker implements Marker {
 		this.state = state;
 	}
 
-	@Override
-	public Node root() {
-		return root;
-	}
-	
 	@Override
 	public void mark(Node node) {
         this.node = node;

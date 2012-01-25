@@ -187,7 +187,7 @@ public class InMemoryRelationship implements Relationship {
 	 */
 	@Override
 	public boolean isType(RelationshipType type) {
-		return type.equals(type);
+		return this.type.equals(type);
 	}
 	 
 	public String toString() {

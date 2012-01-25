@@ -29,7 +29,6 @@ import org.neo4j.graphdb.Node;
  */
 public interface Marker {
 
-	public Node root();
 	public void mark(Node node);
 	public void drop();
 	public Manipulator manipulator();

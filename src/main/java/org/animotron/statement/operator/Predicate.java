@@ -24,6 +24,7 @@ import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -32,5 +33,7 @@ import java.io.IOException;
 public interface Predicate {
 	
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException;
+	
+	public Set<Relationship> getExpected(final PFlow pf, final Relationship op) throws InterruptedException, IOException;
 
 }

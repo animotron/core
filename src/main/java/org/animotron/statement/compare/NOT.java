@@ -20,6 +20,9 @@
  */
 package org.animotron.statement.compare;
 
+import java.io.IOException;
+import java.util.Set;
+
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
@@ -39,5 +42,11 @@ public class NOT extends Operator implements Predicate {
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Set<Relationship> getExpected(PFlow pf, Relationship op) throws InterruptedException, IOException {
+		//XXX: code
+		return null;
 	}
 }

@@ -20,10 +20,18 @@
  */
 package org.animotron.statement.query;
 
+import static org.neo4j.graphdb.Direction.OUTGOING;
+
+import java.util.Arrays;
+import java.util.Set;
+
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.Statement;
+import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
@@ -85,6 +93,19 @@ public class ANY extends AbstractQuery implements Reference {
 								System.out.println(uses);
 								System.out.println(directed);
 	    					}
+							
+							Set<Relationship> list = getExpected(pf);
+							if (list !=null && !list.isEmpty()) {
+								System.out.println("after predicate "+Arrays.toString(list.toArray()));
+								for (Relationship r : list) {
+									if (setFiltering(r.getEndNode(), uses, weaks))
+										//System.out.print("answered ");
+										//Utils.debug(r);
+				        				pf.sendAnswer( r );
+				        				return;
+								}
+								return;
+							}
 							
 							boolean underUSE = false;
 							Node n = getClosestIntersection(directed);
@@ -168,5 +189,26 @@ public class ANY extends AbstractQuery implements Reference {
 				FastSet.recycle(thes);
 			}
         }
+
+		private Set<Relationship> getExpected(PFlow pf) {
+			Set<Relationship> thes = null;
+			
+	        for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
+	            Statement st = Statements.relationshipType(r);
+	            if (st instanceof Predicate) {
+	                try {
+	                	if (thes == null)
+	                		thes = ((Predicate) st).getExpected(pf, r);
+	                	else
+	                		thes.addAll( ((Predicate) st).getExpected(pf, r) );
+
+	                } catch (Exception e) {
+	                    //XXX: report
+	                    e.printStackTrace();
+	                }
+	            }
+	        }
+	        return thes;
+		}
     }
 }

@@ -171,6 +171,26 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     }
 
     protected boolean filtering(final PFlow pf, final Relationship ref, final Node toCheckByUSE, final Set<Node> uses, final Set<Node> weaks) {
+    	if (!setFiltering(toCheckByUSE, uses, weaks))
+    		return false;
+    	
+        for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
+            Statement st = Statements.relationshipType(r);
+            if (st instanceof Predicate) {
+                try {
+                    if (!((Predicate) st).filter(pf, r, ref))
+                        return false;
+                } catch (Exception e) {
+                    //XXX: report
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    protected boolean setFiltering(final Node toCheckByUSE, final Set<Node> uses, final Set<Node> weaks) {
     	if (!uses.isEmpty() || !weaks.isEmpty()) {
     		//check intersection
     		FastSet<Node> uSet = FastSet.newInstance();
@@ -190,21 +210,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     			FastSet.recycle(wSet);
     		}
     	}
-    	
-        for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
-            Statement st = Statements.relationshipType(r);
-            if (st instanceof Predicate) {
-                try {
-                    if (!((Predicate) st).filter(pf, r, ref))
-                        return false;
-                } catch (Exception e) {
-                    //XXX: report
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-        }
-        return true;
+    	return true;
     }
     
     private void searchForUSE(final Set<Node> uses, final Set<Node> weaks, final List<QCAVector> vectors, final Set<QCAVector> visitred) {
