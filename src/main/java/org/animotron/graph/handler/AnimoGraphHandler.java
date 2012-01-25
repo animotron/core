@@ -171,11 +171,13 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     @Override
     public void startGraph() {
-    	controller.start();
+        if (controller != null)
+    	    controller.start();
     }
 
     @Override
     public void endGraph() throws IOException {
-    	controller.end();
+        if (controller != null)
+        	controller.end();
     }
 }

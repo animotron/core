@@ -115,7 +115,8 @@ public class StAXGraphHandler implements GraphHandler {
 
     @Override
 	public void startGraph() throws IOException {
-		controller.start();
+        if (controller != null)
+    		controller.start();
 		try {
 			writer.writeStartDocument();
 		} catch (XMLStreamException e) {
@@ -130,7 +131,8 @@ public class StAXGraphHandler implements GraphHandler {
 		} catch (XMLStreamException e) {
             throw new IOException(e);
 		} finally {
-			controller.end();
+            if (controller != null)
+    			controller.end();
 		}
 	}
 
