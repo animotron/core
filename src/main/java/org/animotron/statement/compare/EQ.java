@@ -146,4 +146,10 @@ public class EQ extends Operator implements Predicate {
 
 		return false;
 	}
+
+	@Override
+	public Set<Relationship> getExpected(PFlow pf, Relationship op) throws InterruptedException, IOException {
+		//XXX: code
+		return null;
+	}
 }

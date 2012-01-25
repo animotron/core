@@ -20,6 +20,8 @@
  */
 package org.animotron.statement.compare;
 
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 import javolution.util.FastList;
 import javolution.util.FastSet;
 
@@ -66,22 +68,7 @@ public class WITH extends Operator implements Predicate {
 		
 		QCAVector qVector = null;
 
-		List<QCAVector> expected = (List<QCAVector>) pf.getData(op);
-
-		if (expected == null) {
-			if (debug) 
-				System.out.println("Eval expected");
-			
-			expected = new FastList<QCAVector>();
-			qVector = pf.getVector().answered(pf.getVector().getClosest());
-			Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
-			QCAVector e;
-			while ((e = in.take()) != null) {
-				expected.add(e);
-				if (debug) System.out.println("expected "+e);
-			}
-			pf.putData(op, expected);
-		}
+		List<QCAVector> expected = getExpecting(pf, op);
 
 		qVector = pf.getVector().question2(op);
 
@@ -166,7 +153,61 @@ public class WITH extends Operator implements Predicate {
 
 		return false;
 	}
+
+	public Set<Relationship> getExpected(final PFlow pf, final Relationship op) throws InterruptedException, IOException {
+		
+		Set<Relationship> thes = new FastSet<Relationship>();
+		
+		final long ref = op.getEndNode().getSingleRelationship(REF._, OUTGOING).getEndNode().getId();
+		
+		QCAVector qVector = pf.getVector().answered(pf.getVector().getClosest());
+		Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
+		QCAVector e;
+		while ((e = in.take()) != null) {
+			
+			final Relationship r = e.getClosest();
+
+			for (Relationship rr : r.getEndNode().getRelationships(r.getType(), INCOMING)) {
+				
+				if (rr.getStartNode().getSingleRelationship(REF._, OUTGOING).getEndNode().getId() == ref) {
+					
+					for (Relationship rrr : rr.getStartNode().getRelationships(AN._, INCOMING)) {
+						
+						for (Relationship the : rrr.getStartNode().getRelationships(THE._, INCOMING)) {
+							thes.add( the );
+						}
+					}
+				}
+			}
+		}
+		
+		return thes;
+	}
 	
+	
+	public List<QCAVector> getExpecting(final PFlow pf, final Relationship op) throws InterruptedException, IOException {
+		
+		List<QCAVector> expected = (List<QCAVector>) pf.getData(op);
+
+		if (expected == null) {
+			if (debug) 
+				System.out.println("Eval expected");
+			
+			expected = new FastList<QCAVector>();
+			
+			QCAVector qVector = pf.getVector().answered(pf.getVector().getClosest());
+			Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
+			QCAVector e;
+			while ((e = in.take()) != null) {
+				expected.add(e);
+				if (debug) System.out.println("expected "+e);
+			}
+			pf.putData(op, expected);
+		}
+		
+		return expected;
+	}
+
 	private List<QCAVector> evaluable(final Controller controller, final QCAVector vector) throws InterruptedException, IOException {
 		List<QCAVector> list = new FastList<QCAVector>();
 		

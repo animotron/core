@@ -122,8 +122,10 @@ public class PFlow {
 	}
 
 	public void sendAnswer(Relationship answer) {
-		//System.out.print("answered ");
-		//Utils.debug(answer);
+		//if (getOP().getId() == 7786) {
+		//	System.out.print("answered ");
+		//	Utils.debug(answer);
+		//}
 		sendAnswer(answer, RESULT, getPathHash());
 	}
 

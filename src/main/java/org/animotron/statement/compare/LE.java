@@ -20,6 +20,9 @@
  */
 package org.animotron.statement.compare;
 
+import java.io.IOException;
+import java.util.Set;
+
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
@@ -43,4 +46,9 @@ public class LE extends Operator implements Predicate {
 		return false;
 	}
 	
+	@Override
+	public Set<Relationship> getExpected(PFlow pf, Relationship op) throws InterruptedException, IOException {
+		//XXX: code
+		return null;
+	}
 }
