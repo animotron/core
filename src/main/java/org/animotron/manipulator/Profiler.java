@@ -76,9 +76,9 @@ public class Profiler implements Controller {
 		Collections.sort(prs);
 		
 		for (int i = 0, n = prs.size(); i < n; i++) {
-			prs.get(i).debug();
+			prs.get(i).debug(this);
 		}
-		System.out.println("Total time: "+runningTime);
+		System.out.println("["+hashCode()+"] Total time: "+runningTime);
 	}
 
 	class Profilling implements Comparable<Profilling> {
@@ -118,8 +118,8 @@ public class Profiler implements Controller {
 			return ((Long)timeInCalls).compareTo(o.timeInCalls);
 		}
 		
-		public void debug() {
-			System.out.println("OP "+op+" ["+op.getType()+"] "+numberOfCalls+" "+timeInCalls);
+		public void debug(Profiler profiler) {
+			System.out.println("["+profiler.hashCode()+"] OP "+op+" ["+op.getType()+"] "+numberOfCalls+" "+timeInCalls);
 		}
 	}
 }
