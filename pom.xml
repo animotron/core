@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.animotron</groupId>
 	<artifactId>core</artifactId>
-	<version>0.0.8-SNAPSHOT</version>
+	<version>0.0.9-SNAPSHOT</version>
 	<name>Animo core</name>
 	
 	<organization>
@@ -27,14 +27,14 @@
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
-            <version>1.6.M02</version>
+            <version>1.6</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>org.neo4j.build</groupId>
             <artifactId>neo4j-berkeleydb-je-index</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>0.3-SNAPSHOT</version>
         </dependency>
 
 		<!--
