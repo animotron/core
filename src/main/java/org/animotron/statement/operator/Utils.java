@@ -482,8 +482,11 @@ public class Utils {
 
                         if (path.length() == 0)
                             return Evaluation.EXCLUDE_AND_CONTINUE;
-
+                        
 	    				if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+	    					return EXCLUDE_AND_PRUNE;
+	    				
+	    				if (Statements.relationshipType(path.lastRelationship()) == null)
 	    					return EXCLUDE_AND_PRUNE;
 
 	    				if (path.lastRelationship().isType(THE._))
