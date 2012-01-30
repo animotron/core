@@ -240,11 +240,10 @@ public class WHouseTest extends ATest {
             		"(lang-en \"stock-keeping unit\") " +
     				"(lang-ru \"единица учета запасов\") " +
 				") " +
-				"(part " +
-					"(name)" +
-					"(qty)" +
-					"(price)" +
-					"(cost)" +
+				"(name)" +
+				"(qty)" +
+				"(price)" +
+				"(cost)." +
 			").",
 			
 			"the qty" +
@@ -263,5 +262,27 @@ public class WHouseTest extends ATest {
 				"(number, currency)"
 		);
     	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" value=\"\"/></label>");
+    	
+    	__(
+			"the recept1 " +
+			"(receive)" +
+			"(D2012-01-29)" +
+			"(party & issue companyA) "+
+			"(party & receive whouse) "+
+			"(paper (qty 10,kg) (cost 50,USD)) "+
+			"(pen (qty 3,box10) (cost 15,USD)). "
+		);
+    	assertAnimoResult("get price whouse,paper", "/ (5,USD) (kg).");
+    	assertAnimoResult("get qty whouse,paper,D2012-01-30", "(10,kg).");
+
+    	__(
+			"the issue1 " +
+			"(issue)" +
+			"(D2012-01-30)" +
+			"(party & issue whouse) "+
+			"(paper (qty 1,kg))."
+		);
+    	assertAnimoResult("get price whouse,paper", "/ (5,USD) (kg).");
+    	assertAnimoResult("get qty whouse,paper,D2012-01-31", "(9,kg).");
 	}
 }
