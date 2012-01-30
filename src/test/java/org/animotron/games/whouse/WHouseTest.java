@@ -34,7 +34,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.expression.Expression.__;
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
 import static org.animotron.graph.RelationshipTypes.TRI;
@@ -222,15 +222,48 @@ public class WHouseTest extends ATest {
 	@Ignore
 	public void test_01() throws Exception {
         __(
-            new AnimoExpression("the kilo number 1000."), //* 1000
-            new AnimoExpression("the UoM."),
-            new AnimoExpression("the gram."),
-            new AnimoExpression("the kg (kilo, gram)."), //the base unit of mass in the International System of Units
+            "the kilo number 1000.", //* 1000
+            "the UoM.",
+            "the gram.",
+            "the kg (kilo, gram).", //the base unit of mass in the International System of Units
 
-            new AnimoExpression("the measument1 qty (number 1000) (UoM gram).")
+            "the measument1 qty (number 1000) (UoM gram)."
         );
         Expression e = new AnimoExpression("get qty (measument1) (UoM kg)."); //???
     	assertStringResult(e, "have qty (number 1) (UoM kg)");
 	}
 
+	public void test_02() throws Exception {
+        __(
+            "the SKU " +
+        		"(word " +
+            		"(lang-en \"stock-keeping unit\") " +
+    				"(lang-ru \"единица учета запасов\") " +
+				") " +
+				"(part " +
+					"(name)" +
+					"(qty)" +
+					"(price)" +
+					"(cost)" +
+			").",
+			
+			"the qty" +
+        		"(word " +
+        			"(lang-en \"quantity\") " +
+        			"(lang-ru \"количество\") " +
+				") " +
+				"(/ (get cost) (get price))" +
+				"(number)" +
+				"(UoM).",
+
+			"the price" +
+				"(/ (get cost) (get qty))",
+				
+			"the cost" +
+				"(* (get qty) (get price))" +
+				"(number)" +
+				"(currency)"
+		);
+    	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" value=\"\"/></label>");
+	}
 }
