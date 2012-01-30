@@ -264,8 +264,7 @@ public class WHouseTest extends ATest {
     	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" value=\"\"/></label>");
     	
     	__(
-			"the recept1 " +
-			"(receive)" +
+			"the receptForWhouse " +
 			"(D2012-01-29)" +
 			"(party & issue companyA) "+
 			"(party & receive whouse) "+
@@ -276,8 +275,7 @@ public class WHouseTest extends ATest {
     	assertAnimoResult("get qty whouse,paper,D2012-01-30", "(10,kg).");
 
     	__(
-			"the issue1 " +
-			"(issue)" +
+			"the issueForWhouse " +
 			"(D2012-01-30)" +
 			"(party & issue whouse) "+
 			"(paper (qty 1,kg))."
