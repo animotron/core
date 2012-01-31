@@ -104,12 +104,12 @@ public class AnimoExpression extends AbstractExpression {
                 char ch = buff[i];
                 if (ch == '\"') {
                     if (!text) {
-                        newToken(); number = true;
+                        newToken();
                         text = true;
                     } else if (prev == '\\') {
                         s.append(ch);
                     } else {
-                        newToken(); number = true;
+                        newToken();
                         text = false;
                     }
                 } else {
@@ -132,15 +132,15 @@ public class AnimoExpression extends AbstractExpression {
 	                            case ' '  :
 	                            case '.'  : //workaround
 	                            case '\t' :
-	                            case '\n' : newToken(); number = true;
+	                            case '\n' : newToken();
 	                                        break;
-	                            case ','  : newToken(); number = true;
+	                            case ','  : newToken();
 	                                        comma = true;
 	                                        break;
-	                            case '('  : newToken(); number = true;
+	                            case '('  : newToken();
 	                                        startList();
 	                                        break;
-	                            case ')'  : newToken(); number = true;
+	                            case ')'  : newToken();
 	                                        endList();
 	                                        break;
 	                            default   : s.append(ch);
@@ -151,7 +151,7 @@ public class AnimoExpression extends AbstractExpression {
                 }
                 prev = prev == '\\' ? '\0' : ch;
             }
-            lastToken(); number = true;
+            lastToken();
         }
         endList();
     }
@@ -164,7 +164,8 @@ public class AnimoExpression extends AbstractExpression {
             op = st;
             link = false;
             prefix = true;
-            s = new StringBuilder();  number = true;
+            s = new StringBuilder();
+            number = true;
         }
     }
 
@@ -175,6 +176,7 @@ public class AnimoExpression extends AbstractExpression {
         } else {
             prefix = false;
         }
+        number = true;
     }
 
     private void lastToken() throws AnimoException, IOException {
@@ -183,6 +185,7 @@ public class AnimoExpression extends AbstractExpression {
         } else {
             prefix = false;
         }
+        number = true;
     }
 
     private void token() throws AnimoException, IOException {
