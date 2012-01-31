@@ -87,14 +87,13 @@ public class AnimoExpression extends AbstractExpression {
     private int level = 0;
     private boolean prefix = false;
     boolean link = false;
+    boolean number = true;
+    boolean text = false;
 
     @Override
     public void build() throws IOException, AnimoException {
         int len;
         char[] buff = new char[4 * 1024];
-
-        boolean text = false;
-        boolean number = true;
 
         char prev = '\0';
 
@@ -105,12 +104,12 @@ public class AnimoExpression extends AbstractExpression {
                 char ch = buff[i];
                 if (ch == '\"') {
                     if (!text) {
-                        newToken(s, text); number = true;
+                        newToken(); number = true;
                         text = true;
                     } else if (prev == '\\') {
                         s.append(ch);
                     } else {
-                        newToken(s, text); number = true;
+                        newToken(); number = true;
                         text = false;
                     }
                 } else {
@@ -124,68 +123,71 @@ public class AnimoExpression extends AbstractExpression {
                                 if (prev == '.') {
                                     s.append('.');
                                 }
-                    		    s.append(ch);
+                                s.append(ch);
+                                processPrefix();
                             }
                     	} else {
                     		number = false;
-                    		
 	                        switch (ch) {
 	                            case ' '  :
 	                            case '.'  : //workaround
 	                            case '\t' :
-	                            case '\n' : newToken(s, text); number = true;
+	                            case '\n' : newToken(); number = true;
 	                                        break;
-	                            case ','  : newToken(s, text); number = true;
+	                            case ','  : newToken(); number = true;
 	                                        comma = true;
 	                                        break;
-	                            case '('  : newToken(s, text); number = true;
+	                            case '('  : newToken(); number = true;
 	                                        startList();
 	                                        break;
-	                            case ')'  : newToken(s, text); number = true;
+	                            case ')'  : newToken(); number = true;
 	                                        endList();
 	                                        break;
 	                            default   : s.append(ch);
-	                                        Statement st = Statements.name(s.toString());
-	                                        if (st instanceof Prefix) {
-	                                            builder.start(st);
-	                                            level++;
-	                                            op = st;
-	                                            link = false;
-	                                            prefix = true;
-	                                            s = new StringBuilder();  number = true;
-	                                        }
+                                            processPrefix();
 	                        }
                     	}
                     }
                 }
                 prev = prev == '\\' ? '\0' : ch;
             }
-            lastToken(s, text); number = true;
+            lastToken(); number = true;
         }
         endList();
     }
 
-    private void newToken(StringBuilder s, boolean text) throws AnimoException, IOException {
+    private void processPrefix() throws AnimoException, IOException {
+        Statement st = Statements.name(s.toString());
+        if (st instanceof Prefix) {
+            builder.start(st);
+            level++;
+            op = st;
+            link = false;
+            prefix = true;
+            s = new StringBuilder();  number = true;
+        }
+    }
+
+    private void newToken() throws AnimoException, IOException {
         if (s.length() > 0) {
-            token(s.toString(), text);
-            this.s = new StringBuilder();
+            token();
+            s = new StringBuilder();
         } else {
             prefix = false;
         }
     }
 
-    private void lastToken(StringBuilder s, boolean text) throws AnimoException, IOException {
+    private void lastToken() throws AnimoException, IOException {
         if (s.length() > 0) {
-            token(s.toString(), text);
+            token();
         } else {
             prefix = false;
         }
     }
 
-    private void token(String token, boolean text) throws AnimoException, IOException {
-
+    private void token() throws AnimoException, IOException {
+        String token = s.toString();
     	if (token.length() == 1 && ".".equals(token)) return; //XXX:start new graph
-
     	if (text) {
             builder._(token);
         } else {
