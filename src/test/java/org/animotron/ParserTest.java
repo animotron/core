@@ -475,4 +475,19 @@ public class ParserTest extends ATest {
     	testAnimo("\\a ($a \"a\") (@a \"a\") \"a\".");
     }
 
+    @Test
+    public void test_89() throws Exception {
+        testAnimo("the a.b.c.");
+    }
+
+    @Test
+    public void test_90() throws Exception {
+        testAnimo("the a.b.c..", "the a.b.c.");
+    }
+
+    @Test
+    public void test_91() throws Exception {
+        testAnimo("the get a.b.c any x.y.z.");
+    }
+
 }
