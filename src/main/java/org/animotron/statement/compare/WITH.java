@@ -162,22 +162,25 @@ public class WITH extends Operator implements Predicate {
 		
 		QCAVector qVector = pf.getVector().answered(pf.getVector().getClosest());
 		Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
-		QCAVector e;
-		while ((e = in.take()) != null) {
+		QCAVector v;
+		while ((v = in.take()) != null) {
 			
-			final Relationship r = e.getClosest();
+			final Relationship r = v.getClosest();
 
 			for (Relationship rr : r.getEndNode().getRelationships(r.getType(), INCOMING)) {
 				
-				if (rr.getStartNode().getSingleRelationship(REF._, OUTGOING).getEndNode().getId() == ref) {
-					
-					for (Relationship rrr : rr.getStartNode().getRelationships(AN._, INCOMING)) {
+				try {
+					Relationship rf = rr.getStartNode().getSingleRelationship(REF._, OUTGOING);
+					if (rf != null && rf.getEndNode().getId() == ref) {
 						
-						for (Relationship the : rrr.getStartNode().getRelationships(THE._, INCOMING)) {
-							thes.add( the );
+						for (Relationship rrr : rr.getStartNode().getRelationships(AN._, INCOMING)) {
+							
+							for (Relationship the : rrr.getStartNode().getRelationships(THE._, INCOMING)) {
+								thes.add( the );
+							}
 						}
 					}
-				}
+				} catch (Exception ex) {};
 			}
 		}
 		
