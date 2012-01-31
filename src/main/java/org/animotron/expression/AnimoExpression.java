@@ -119,7 +119,7 @@ public class AnimoExpression extends AbstractExpression {
                             s.append(ch);
                         }
                     } else {
-                    	if ((ch != ' ' && ch != '\t' && ch != '\n') || (ch == '.' && number)) {
+                    	if ((ch != ' ' && ch != '\t' && ch != '\n' && ch != ',' && ch != '(' && ch != ')') || (ch == '.' && number)) {
                             if (ch != '.') {
                                 if (prev == '.') {
                                     s.append('.');
