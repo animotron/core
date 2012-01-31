@@ -66,7 +66,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         	
         } else if (statement instanceof STREAM) {
             write(statement.name());
-            write("\"");
+            write(" \"");
             write(reference.toString());
             write("\"");
         } else if (statement instanceof VALUE) {
