@@ -490,4 +490,24 @@ public class ParserTest extends ATest {
         testAnimo("the get a.b.c any x.y.z.");
     }
 
+    @Test
+    public void test_92() throws Exception {
+        testAnimo("the get (a.x) (b.y) (c.z).");
+    }
+
+    @Test
+    public void test_93() throws Exception {
+        testAnimo("the get (a.x)(b.y)(c.z)", "the get (a.x) (b.y) (c.z).");
+    }
+
+    @Test
+    public void test_94() throws Exception {
+        testAnimo("the get a.x, b.y, c.z.");
+    }
+
+    @Test
+    public void test_95() throws Exception {
+        testAnimo("the get a.x,b.y,c.z", "the get a.x, b.y, c.z.");
+    }
+
 }
