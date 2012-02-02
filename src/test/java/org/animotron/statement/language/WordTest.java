@@ -38,8 +38,8 @@ public class WordTest extends ATest {
 	@Test
 	public void test_01() throws Exception {
         __(
-            new AnimoExpression("the test1 word \"test1\"."),
-            new AnimoExpression("the test2 word \"test2\".")
+            "the test1 word \"test1\".",
+            "the test2 word \"test2\"."
 		);
         
         Thread.sleep(1000);
@@ -71,7 +71,7 @@ public class WordTest extends ATest {
         	hits.close();
         }
 
-        hits = WORD._.search("test");
+        hits = WORD._.search("test*");
         try {
         	Assert.assertEquals(true, hits.hasNext());
         	
@@ -87,5 +87,21 @@ public class WordTest extends ATest {
         } finally {
         	hits.close();
         }
+	}
+
+	@Test
+	public void test_02() throws Exception {
+        __(
+            "the test1 (test) (word \"test1\").",
+            "the test2 (test) (word \"test2\").",
+            "the pest3 (test) (word \"pest3\")."
+		);
+        
+        Thread.sleep(1000);
+        
+        //assertAnimoResult("any test search \"test1\"", "the test1 (test).");
+        //assertAnimoResult("any test search \"test2\"", "the test2 (test).");
+
+        assertAnimoResult("all test search \"test*\"", "the test1 (test). the test2 (test).");
 	}
 }

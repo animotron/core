@@ -27,6 +27,7 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -59,23 +60,9 @@ public class STRING extends Instruction implements Evaluable {
 
             //UNDERSTAND: if we have more that 2 params, what to do?
         	
-        	StringBuilder sb = new StringBuilder(); 
+        	StringBuilder sb = eval(pf, pf.getOP().getStartNode()); 
         	
-            IndexHits<Relationship> hits = Order.context(pf.getOP().getStartNode());
-            try {
-            	for (Relationship r : hits) {
-            		try {
-						sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(r)));
-					} catch (IOException e) {
-						pf.sendException(e);
-						return;
-					}
-            	}
-            } finally {
-            	hits.close();
-            }
-            
-            if (sb.length() > 0) {
+            if (sb != null && sb.length() > 0) {
 
 	            Relationship r;
 				try {
@@ -91,5 +78,24 @@ public class STRING extends Instruction implements Evaluable {
 				answered(pf, r);
             }
         }
+	}
+	
+	public static StringBuilder eval(PFlow pf, Node node) {
+    	StringBuilder sb = new StringBuilder(); 
+    	
+        IndexHits<Relationship> hits = Order.context(node);
+        try {
+        	for (Relationship r : hits) {
+        		try {
+					sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(r)));
+				} catch (IOException e) {
+					pf.sendException(e);
+					return null;
+				}
+        	}
+        } finally {
+        	hits.close();
+        }
+        return sb;
 	}
 }

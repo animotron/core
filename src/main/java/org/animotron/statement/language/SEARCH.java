@@ -20,6 +20,11 @@
  */
 package org.animotron.statement.language;
 
+import java.io.IOException;
+import java.util.Set;
+
+import javolution.util.FastSet;
+
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
@@ -27,82 +32,54 @@ import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Prepare;
+import org.animotron.statement.operator.Utils;
+import org.animotron.statement.string.STRING;
 import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 
 /**
- * 'WORD' instruction.
+ * 'SEARCH' instruction.
  *
  *  @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class WORD extends Instruction implements Evaluable, Prepare {
+public class SEARCH extends Operator implements Predicate {
 
-	public static final WORD _ = new WORD();
+	public static final SEARCH _ = new SEARCH();
 	
-	RelationshipIndex words;
-	
-	private static final String NAME = "word"; 
+	private SEARCH() { super("search"); }
 
-	private WORD() { 
-		super(NAME);
+
+	@Override
+	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+
+	@Override
+	public Set<Relationship> getExpected(PFlow pf, Relationship op) throws InterruptedException, IOException {
+		Set<Relationship> set = new FastSet<Relationship>();
 		
-		IndexManager index = AnimoGraph.getDb().index();
-		words = index.forRelationships( NAME );
-	}
-
-
-	@Override
-	public OnQuestion onCalcQuestion() {
-		return new Calc();
-	}
-	
-	class Calc extends OnQuestion {
-        @Override
-        public void act(final PFlow pf) {
-        	;
-        }
-	}
-
-	@Override
-	public OnQuestion onPrepareQuestion() {
-		return new Prepare();
-	}
-	
-	class Prepare extends OnQuestion {
-		public boolean needAnswer() {
-			return false;
-		}
-
-		@Override
-    	public void act(final PFlow pf) {
-			AnimoGraph.execute(new GraphOperation<Void>() {
-
-				@Override
-				public Void execute() throws Exception {
-					IndexHits<Relationship> hits = Order.queryDown(pf.getOPNode());
-					try {
-						for (Relationship r : hits) {
-							if (r.isType(VALUE._)) {
-								words.add(r, NAME, VALUE._.reference(r));
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-					} finally {
-						hits.close();
+		StringBuilder sb = STRING.eval(pf, op.getEndNode());
+		if (sb != null && sb.length() > 0) {
+			IndexHits<Relationship> hits = WORD._.search(sb.toString());
+			try {
+				for (Relationship r : hits) {
+					for (Path path : Utils.THES.traverse(r.getStartNode())) {
+						set.add(path.lastRelationship());
 					}
-					return null;
 				}
-			});
+			} finally {
+				hits.close();
+			}
 		}
-	}
-
-	public IndexHits<Relationship> search(String word) {
-		//System.out.println(words.get(NAME, word).getSingle());
-		return words.query(NAME, word);
+		return set;
 	}
 }

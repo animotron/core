@@ -660,4 +660,25 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		
 		return true;
 	};
+
+	protected Set<Relationship> getExpected(PFlow pf) {
+		Set<Relationship> thes = null;
+		
+        for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
+            Statement st = Statements.relationshipType(r);
+            if (st instanceof Predicate) {
+                try {
+                	if (thes == null)
+                		thes = ((Predicate) st).getExpected(pf, r);
+                	else
+                		thes.addAll( ((Predicate) st).getExpected(pf, r) );
+
+                } catch (Exception e) {
+                    //XXX: report
+                    e.printStackTrace();
+                }
+            }
+        }
+        return thes;
+	}
 }
