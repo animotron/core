@@ -99,8 +99,8 @@ public class WordTest extends ATest {
         
         Thread.sleep(1000);
         
-        //assertAnimoResult("any test search \"test1\"", "the test1 (test).");
-        //assertAnimoResult("any test search \"test2\"", "the test2 (test).");
+        assertAnimoResult("any test search \"test1\"", "the test1 (test).");
+        assertAnimoResult("any test search \"test2\"", "the test2 (test).");
 
         assertAnimoResult("all test search \"test*\"", "the test1 (test). the test2 (test).");
 	}
