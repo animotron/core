@@ -20,6 +20,9 @@
  */
 package org.animotron.statement.query;
 
+import java.util.Arrays;
+import java.util.Set;
+
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
@@ -80,7 +83,19 @@ public class ALL extends AbstractQuery implements Reference {
 						
 						//System.out.println(uses);
 						
-						boolean underUSE = false;
+						Set<Relationship> list = getExpected(pf);
+						if (list !=null && !list.isEmpty()) {
+							System.out.println("after predicate "+Arrays.toString(list.toArray()));
+							for (Relationship r : list) {
+								if (setFiltering(r.getEndNode(), uses, weaks))
+									//System.out.print("answered ");
+									//Utils.debug(r);
+			        				pf.sendAnswer( r );
+							}
+							return;
+						}
+
+	    				boolean underUSE = false;
 						Node n = getClosestIntersection(directed);
 	    				if (n != null) {
 	    					node = n;
