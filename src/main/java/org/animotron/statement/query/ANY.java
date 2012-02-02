@@ -20,18 +20,13 @@
  */
 package org.animotron.statement.query;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
-
 import java.util.Arrays;
 import java.util.Set;
 
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
