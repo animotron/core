@@ -83,7 +83,7 @@ public class STRING extends Instruction implements Evaluable {
 	public static StringBuilder eval(PFlow pf, Node node) {
     	StringBuilder sb = new StringBuilder(); 
     	
-        IndexHits<Relationship> hits = Order.context(node);
+        IndexHits<Relationship> hits = Order.queryDown(node);
         try {
         	for (Relationship r : hits) {
         		try {
