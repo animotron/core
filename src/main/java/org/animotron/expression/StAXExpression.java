@@ -22,14 +22,12 @@ package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.graph.builder.StreamGraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamReader;
 import java.io.IOException;
@@ -39,17 +37,14 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXExpression extends AbstractExpression {
-	
-	private XMLStreamReader reader;
+public class StAXExpression extends AbstractStAXExpression {
 	
     public StAXExpression(XMLStreamReader reader) {
-        this(new StreamGraphBuilder(), reader);
+        super(reader);
     }
 
     public StAXExpression(GraphBuilder builder, XMLStreamReader reader) {
-        super(builder);
-        this.reader = reader;
+        super(builder, reader);
     }
 
     @Override
@@ -66,10 +61,8 @@ public class StAXExpression extends AbstractExpression {
                 case XMLStreamConstants.PROCESSING_INSTRUCTION :
                     String target = reader.getPITarget();
                     String data = reader.getPIData();
-
                     //builder.start(PI._, _(name(target), value(data)));
                     //builder.end();
-                    
                     //XXX: target can't be null/empty ?
                     build(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
                     break;
@@ -102,8 +95,7 @@ public class StAXExpression extends AbstractExpression {
         builder._(s, reference);
     }
 
-
-    private void startElement() throws AnimoException, IOException {
+    protected void startElement() throws AnimoException, IOException {
         builder.start(ELEMENT._, _(name(qname(reader.getName()))));
         for (int i = 0; i < reader.getNamespaceCount(); i++) {
             String namespace = reader.getNamespaceURI(i);
@@ -113,31 +105,6 @@ public class StAXExpression extends AbstractExpression {
         for (int i = 0; i < reader.getAttributeCount(); i++) {
             build(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(AbstractValue.value(reader.getAttributeValue(i)))));
         }
-    }
-
-    private String qname(QName qname) {
-        if (qname.getPrefix().isEmpty())
-            return qname.getLocalPart();
-        StringBuilder s = new StringBuilder();
-        s.append(qname.getPrefix()); s.append(":"); s.append(qname.getLocalPart());
-        return s.toString();
-    }
-
-    private Object[][] _(Object[]... o) {
-        return o;
-    }
-
-    private Object[] _(Statement s, Object o) {
-        Object[] a = {s, o};
-        return a;
-    }
-
-    private Object[] name(String name) {
-        return _(QNAME._, name);
-    }
-
-    private Object[] value(Object value) {
-        return _(VALUE._, value);
     }
 
 }
