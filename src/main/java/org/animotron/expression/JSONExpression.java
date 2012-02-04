@@ -21,11 +21,13 @@
 package org.animotron.expression;
 
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.THE;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
+
+import static org.codehaus.jackson.JsonToken.FIELD_NAME;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -44,20 +46,46 @@ public class JSONExpression extends AbstractJSONExpression {
 
     @Override
     public void build() throws Exception {
-        JsonToken token;
+        int l = 0;
+        JsonToken token, prev = null;
+        builder.start(THE._);
         while((token = parser.nextToken()) != null) {
             switch (token) {
-                case START_ARRAY  : builder.start(LINK._);
-                                    break;
-                case START_OBJECT : builder.start(AN._);
-                                    builder._(REF._, parser.getCurrentName());
-                                    break;
-                case END_ARRAY    :
-                case END_OBJECT   : builder.end();
-                                    break;
-                default           : builder._(parser.getText());
+                case START_OBJECT           :
+                case START_ARRAY            : prev = token;
+                                              break;
+                case FIELD_NAME             : if (prev == FIELD_NAME) {
+                                                builder.end();
+                                                l--;
+                                              }
+                                              builder.start(AN._);
+                                              builder._(REF._, parser.getCurrentName());
+                                              prev = token;
+                                              l++;
+                                              break;
+                case END_OBJECT             :
+                case END_ARRAY              : if (prev == FIELD_NAME) {
+                                                builder.end();
+                                                l--;
+                                              }
+                                              prev = token;
+                                              break;
+                case VALUE_NUMBER_FLOAT     : builder._(parser.getDoubleValue());
+                                              break;
+                case VALUE_NUMBER_INT       : builder._(parser.getLongValue());
+                                              break;
+                case VALUE_STRING           : builder._(parser.getText());
+                                              break;
+                case VALUE_FALSE            :
+                case VALUE_TRUE             : builder._(parser.getBooleanValue());
+                                              break;
+                default                     :
             }
         }
+        for (int i = 0; i < l; i++) {
+            builder.end();
+        }
+        builder.end();
     }
 
 }
