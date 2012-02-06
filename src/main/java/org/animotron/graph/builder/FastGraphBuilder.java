@@ -114,7 +114,6 @@ public class FastGraphBuilder extends GraphBuilder {
                     build(it.next());
                     step();
                 }
-                long timestamp = System.currentTimeMillis();
                 if (statement instanceof THE) {
                     relationship = Cache.getRelationship(reference);
                     if (relationship == null) {
@@ -143,7 +142,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
-                MODIFIED.set(relationship, timestamp);
+                MODIFIED.set(relationship, System.currentTimeMillis());
             }
         }
 	}

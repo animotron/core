@@ -78,8 +78,9 @@ public class Manipulators {
             if (creative != null)
                 Preparator._.execute(null, creative);
         }
+
         private void modified() throws IOException {
-            if (creative != null)
+            if (modified != null)
                 CachedSerializer.drop(modified);
         }
 
