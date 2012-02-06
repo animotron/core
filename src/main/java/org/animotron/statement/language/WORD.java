@@ -49,7 +49,9 @@ public class WORD extends Instruction implements Evaluable, Prepare {
 
 	private WORD() { 
 		super(NAME);
-		
+	}
+	
+	public void init() {
 		IndexManager index = AnimoGraph.getDb().index();
 		words = index.forRelationships( NAME );
 	}

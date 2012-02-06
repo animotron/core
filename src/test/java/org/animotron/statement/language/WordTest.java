@@ -87,6 +87,8 @@ public class WordTest extends ATest {
         } finally {
         	hits.close();
         }
+
+        Thread.sleep(1000);
 	}
 
 	@Test
