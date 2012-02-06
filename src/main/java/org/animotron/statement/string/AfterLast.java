@@ -62,7 +62,7 @@ public class AfterLast extends Instruction implements Evaluable {
             //pattern
             String pattern;
 			try {
-				pattern = STRING.serialize(params[1]);
+				pattern = STRING.serialize(pf.getVector().question2(params[1]));
 			} catch (IOException e) {
 				pf.sendException(e);
 				return;
