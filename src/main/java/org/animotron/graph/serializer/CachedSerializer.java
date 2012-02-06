@@ -31,7 +31,9 @@ import org.neo4j.graphdb.Relationship;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
 
+import static org.animotron.graph.Properties.CACHE;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
 /**
@@ -193,6 +195,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(r, os);
+                cache(r, cache, key);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -209,6 +212,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(v, os);
+                cache(v, cache, key);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -225,6 +229,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(r, os);
+                cache(r, cache, key);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -241,6 +246,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(v, os);
+                cache(v, cache, key);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -258,6 +264,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(r, os);
+                cache(r, cache, key);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -276,6 +283,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(v, os);
+                cache(v, cache, key);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -284,4 +292,56 @@ public abstract class CachedSerializer extends AbstractSerializer {
             return out.toString();
         }
     }
+
+    private void cache(QCAVector v, Cache cache, String key) {
+        cache(v.getClosest(), cache, key);
+    }
+
+    private void cache(Relationship r, Cache cache, String key) {
+        String entity = entity(key, cache);
+        if (CACHE.has(r)) {
+            String[] e = (String[]) CACHE.get(r);
+            String[] e1 = new String[e.length + 1];
+            for (int i = 0; i < e.length; i++) {
+                if (e[i] == entity) {
+                    return;
+                }
+                e1[i] = e[i];
+            }
+            e1[e.length] = entity;
+            CACHE.set(r, e1);
+        } else {
+            String[] e = new String[] {entity};
+            CACHE.set(r, e);
+        }
+    }
+    
+    public static String entity(String key, Cache cache) {
+        return key +"@" + cache.getClass().getName();
+    }
+
+    public static void drop(String entity) throws IOException {
+        String[] token = entity.split("@");
+        try {
+            Class<?> clazz = Class.forName(token[1]);
+            Field field = clazz.getField("_");
+            Cache cache = (Cache) field.get(clazz);
+            cache.drop(token[0]);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void drop(Relationship r) throws IOException {
+        if (CACHE.has(r)) {
+            for (String i : (String[]) CACHE.get(r)) {
+                drop(i);
+            }
+        }
+    }
+
 }

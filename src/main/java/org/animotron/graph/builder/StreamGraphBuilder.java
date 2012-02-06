@@ -92,6 +92,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             }
             CREATED.set(relationship, timestamp);
             MODIFIED.set(relationship, timestamp);
+            dropCache(relationship);
         }
         destructive(root);
 	}

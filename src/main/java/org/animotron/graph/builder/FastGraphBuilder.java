@@ -145,6 +145,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 r.delete();
                 root.delete();
                 MODIFIED.set(relationship, timestamp);
+                dropCache(relationship);
             }
         }
 	}

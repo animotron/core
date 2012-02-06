@@ -23,6 +23,7 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.index.Order;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
@@ -37,9 +38,7 @@ import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.beginTx;
 import static org.animotron.graph.AnimoGraph.finishTx;
-import static org.animotron.graph.Properties.CREATED;
 import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.Properties.MODIFIED;
 
 /**
  * Animo graph builder, it do optimization/compression and
@@ -228,6 +227,10 @@ public abstract class GraphBuilder {
 
     protected final void destructive(Node n) {
         catcher.destructive(n);
+    }
+
+    protected final void dropCache(Relationship r) throws IOException {
+        CachedSerializer.drop(r);
     }
 
 }
