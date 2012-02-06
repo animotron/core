@@ -189,11 +189,6 @@ public abstract class GraphBuilder {
             startGraph();
             exp.build();
         	endGraph();
-            long timestamp = System.currentTimeMillis();
-            if (!CREATED.has(relationship())) {
-                CREATED.set(relationship(), timestamp);
-            }
-            MODIFIED.set(relationship(), timestamp);
             tx.success();
             finishTx(tx);
         } catch (Throwable e) {

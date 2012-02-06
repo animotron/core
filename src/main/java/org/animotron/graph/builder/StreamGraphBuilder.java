@@ -31,10 +31,8 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 import java.security.MessageDigest;
 
-import static org.animotron.graph.Properties.CONTEXT;
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.utils.MessageDigester.*;
 
 /**
@@ -82,6 +80,7 @@ public class StreamGraphBuilder extends GraphBuilder {
     public void endGraph() throws AnimoException {
         relationship = Cache.getRelationship(hash);
         if (relationship == null) {
+            long timestamp = System.currentTimeMillis();
             relationship = copy(getROOT(), r);
             Cache.putRelationship(relationship, hash);
             HASH.set(relationship, hash);
@@ -91,6 +90,8 @@ public class StreamGraphBuilder extends GraphBuilder {
                     NAME.set(node, byteArrayToHex(hash));
                 }
             }
+            CREATED.set(relationship, timestamp);
+            MODIFIED.set(relationship, timestamp);
         }
         destructive(root);
 	}

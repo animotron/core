@@ -35,9 +35,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.animotron.graph.Properties.CONTEXT;
-import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.TRI;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
@@ -115,12 +114,14 @@ public class FastGraphBuilder extends GraphBuilder {
                     build(it.next());
                     step();
                 }
+                long timestamp = System.currentTimeMillis();
                 if (statement instanceof THE) {
                     relationship = Cache.getRelationship(reference);
                     if (relationship == null) {
-                        relationship = getROOT().createRelationshipTo(end, r.getType());
+                        relationship = getROOT().createRelationshipTo(end, THE._);
                         Cache.putRelationship(relationship, reference);
                         State.TOP.add(end);
+                        CREATED.set(relationship, timestamp);
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
@@ -137,11 +138,13 @@ public class FastGraphBuilder extends GraphBuilder {
                     creative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
+                    CREATED.set(relationship, timestamp);
                 }
                 Cache.putRelationship(relationship, hash);
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
+                MODIFIED.set(relationship, timestamp);
             }
         }
 	}
