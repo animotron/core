@@ -23,7 +23,6 @@ package org.animotron.graph.builder;
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.index.Order;
-import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
@@ -221,16 +220,16 @@ public abstract class GraphBuilder {
         catcher.creative(r);
     }
 
+    protected final void modified(Relationship r) {
+        catcher.modified(r);
+    }
+
     protected final void destructive(Relationship r) {
         catcher.destructive(r);
     }
 
     protected final void destructive(Node n) {
         catcher.destructive(n);
-    }
-
-    protected final void dropCache(Relationship r) throws IOException {
-        CachedSerializer.drop(r);
     }
 
 }

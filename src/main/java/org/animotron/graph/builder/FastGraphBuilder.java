@@ -121,7 +121,6 @@ public class FastGraphBuilder extends GraphBuilder {
                         relationship = getROOT().createRelationshipTo(end, THE._);
                         Cache.putRelationship(relationship, reference);
                         State.TOP.add(end);
-                        CREATED.set(relationship, timestamp);
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
@@ -134,18 +133,17 @@ public class FastGraphBuilder extends GraphBuilder {
                             order(copy(start, i), order++);
                             i.delete();
                         }
+                        modified(relationship);
                     }
                     creative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
-                    CREATED.set(relationship, timestamp);
                 }
                 Cache.putRelationship(relationship, hash);
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
                 MODIFIED.set(relationship, timestamp);
-                dropCache(relationship);
             }
         }
 	}

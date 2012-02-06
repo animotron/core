@@ -90,9 +90,8 @@ public class StreamGraphBuilder extends GraphBuilder {
                     NAME.set(node, byteArrayToHex(hash));
                 }
             }
-            CREATED.set(relationship, timestamp);
             MODIFIED.set(relationship, timestamp);
-            dropCache(relationship);
+            modified(relationship);
         }
         destructive(root);
 	}

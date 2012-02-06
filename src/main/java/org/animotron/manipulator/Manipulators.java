@@ -21,7 +21,7 @@
 package org.animotron.manipulator;
 
 import javolution.util.FastTable;
-
+import org.animotron.graph.serializer.CachedSerializer;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -41,18 +41,23 @@ public class Manipulators {
 	
 	public class Catcher {
 		
-		FastTable<Node> creative = new FastTable<Node>();
 		FastTable<Node> destructive = new FastTable<Node>();
+        Relationship modified = null;
+        Node creative = null;
 
 		public Catcher() {}
 		
         public void creative(Node node) {
-            creative.add(node);
+            creative = node;
         }
 
 		public void creative(Relationship r) {
 			creative(r.getEndNode());
 		}
+
+        public void modified(Relationship r) {
+            modified = r;
+        }
 
         public void destructive(Node node) {
             destructive.add(node);
@@ -65,22 +70,26 @@ public class Manipulators {
 
 		public void push() throws IOException {
 			creative();
+            modified();
 			destructive();
 		}
-		
-		private void creative() throws IOException {
-			for (int i = 0, n = creative.size(); i < n; i++) {
-				Preparator._.execute((Controller)null, creative.get(i));
-			}
-		}
-		
-		private void destructive() throws IOException {
+
+        private void creative() throws IOException {
+            if (creative != null)
+                Preparator._.execute(null, creative);
+        }
+        private void modified() throws IOException {
+            if (creative != null)
+                CachedSerializer.drop(modified);
+        }
+
+        private void destructive() throws IOException {
 			//for (Node n : destructive) {
 				//XXX: GC._.execute(n);
 			//}
 		}
-		
-	}
+
+    }
 	
 	public static Catcher getCatcher() {
 		return _.new Catcher();

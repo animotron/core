@@ -317,7 +317,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
     }
     
     public static String entity(String key, Cache cache) {
-        return key +"@" + cache.getClass().getName();
+        return key + "@" + cache.getClass().getName();
     }
 
     public static void drop(String entity) throws IOException {
