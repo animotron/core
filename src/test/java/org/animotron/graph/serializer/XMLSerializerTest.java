@@ -25,6 +25,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.THE;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -52,6 +53,7 @@ public class XMLSerializerTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_01() throws Exception {
         test("\\ get element-name element-name \"b\"", "<b/>");
         test("the a \\ get element-name element-name \"b\"", "<b/>");
