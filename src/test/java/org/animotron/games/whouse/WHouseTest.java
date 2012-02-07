@@ -262,9 +262,8 @@ public class WHouseTest extends ATest {
             		"(lang-en \"ware house receive\") " +
     				"(lang-ru \"складской приход\") " +
 				") " +
-				"(receive-party, issue-party, (goods, qty, price, cost))." +
-			").",
-		
+				"(receive-party, issue-party, (goods, qty, price, cost)).",
+
 			"the receiptsForWhouse " +
 			"(D2012-01-29)" +
 			"(issue companyA) "+
