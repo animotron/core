@@ -240,10 +240,7 @@ public class WHouseTest extends ATest {
             		"(lang-en \"stock-keeping unit\") " +
     				"(lang-ru \"единица учета запасов\") " +
 				") " +
-				"(name)" +
-				"(qty)" +
-				"(price)" +
-				"(cost)." +
+				"(goods, qty, price, cost)." +
 			").",
 			
 			"the qty" +
