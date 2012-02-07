@@ -1,11 +1,11 @@
 package org.animotron.statement.animo;
 
-import static org.animotron.expression.AnimoExpression.__;
+import org.animotron.ATest;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import org.animotron.ATest;
-import org.junit.Test;
+import static org.animotron.expression.AnimoExpression.__;
 
 public class WhatISTest extends ATest {
 
@@ -15,4 +15,19 @@ public class WhatISTest extends ATest {
         
         assertAnimoResult("what-is a", "x.");
 	}
+
+    @Test
+    public void test_01() throws IOException {
+        __("the a (x) (y).");
+
+        assertAnimoResult("what-is a", "x. y.");
+    }
+
+    @Test
+    public void test_02() throws IOException {
+        __("the a (x) (y) (z).");
+
+        assertAnimoResult("what-is a use y", "y.");
+    }
+
 }
