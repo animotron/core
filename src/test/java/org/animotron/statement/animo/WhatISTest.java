@@ -34,7 +34,7 @@ public class WhatISTest extends ATest {
     public void test_03() throws IOException {
         __("the a x.", "the b y.", "the c b a.");
 
-        assertAnimoResult("what-is get b a", "y.");
+        assertAnimoResult("what-is get b c", "y.");
     }
 
     @Test
