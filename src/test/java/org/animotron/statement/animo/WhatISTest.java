@@ -1,6 +1,7 @@
 package org.animotron.statement.animo;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,12 +24,12 @@ public class WhatISTest extends ATest {
         assertAnimoResult("what-is a", "x. y.");
     }
 
-    @Test
-    public void test_02() throws IOException {
-        __("the a (x) (y) (z).");
-
-        assertAnimoResult("what-is a use y", "y.");
-    }
+//    @Test
+//    public void test_02() throws IOException {
+//        __("the a (x) (y) (z).");
+//
+//        assertAnimoResult("what-is a use y", "y.");
+//    }
 
     @Test
     public void test_03() throws IOException {
