@@ -29,15 +29,12 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
-import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
-import static org.animotron.graph.RelationshipTypes.TRI;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -240,9 +237,8 @@ public class WHouseTest extends ATest {
             		"(lang-en \"stock-keeping unit\") " +
     				"(lang-ru \"единица учета запасов\") " +
 				") " +
-				"(goods, qty, price, cost)." +
-			").",
-			
+				"(goods, qty, price, cost).",
+
 			"the qty" +
         		"(word " +
         			"(lang-en \"quantity\") " +
