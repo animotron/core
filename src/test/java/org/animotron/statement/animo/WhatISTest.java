@@ -44,4 +44,18 @@ public class WhatISTest extends ATest {
         assertAnimoResult("each (get part c) (what-is this part)", "x. y.");
     }
 
+    @Test
+    public void test_05() throws IOException {
+        __("the foo what-is b.");
+
+        assertAnimoResult("get what-is foo", "what-is b.");
+    }
+
+    @Test
+    public void test_06() throws IOException {
+        __("the foo bar.", "the a bar x.");
+
+        assertAnimoResult("get (what-is foo) (a)", "bar x.");
+    }
+
 }
