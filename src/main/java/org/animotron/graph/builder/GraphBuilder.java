@@ -210,8 +210,6 @@ public abstract class GraphBuilder {
         if (order % (10000) == 0) {
             tx.success();
             finishTx(tx);
-            catcher.push();
-            catcher = Manipulators.getCatcher();
             tx = beginTx();
         }
     }
