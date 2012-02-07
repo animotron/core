@@ -218,9 +218,14 @@ public class AnimoExpression extends AbstractExpression {
                     s = null;
                     level++;
                 } else if (s instanceof Instruction) {
-                    builder.start(AN._);
-                    builder._(REF._, token);
-                    level++;
+                    if ((op instanceof Operator)) {
+                        s =  REF._;
+                        builder._(s, token);
+                    } else {
+                        builder.start(AN._);
+                        builder._(REF._, token);
+                        level++;
+                    }
                 } else if (s == null) {
                     Object o = AbstractValue.value(token);
                     if (o instanceof String) {
