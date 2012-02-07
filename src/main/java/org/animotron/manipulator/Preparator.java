@@ -68,7 +68,7 @@ public class Preparator extends StatementManipulator {
         				if (name != null) {
 	                        s = Statements.name(name);
 	        			    
-	                        if (s instanceof Prepare) {
+	                        if (canGo(s)) {
 	                            super.execute(controller, new QCAVector(r), onQuestion(s, r), true);
 							}
         				}
@@ -76,8 +76,8 @@ public class Preparator extends StatementManipulator {
         				//XXX: log
         				//e.printStackTrace();
 					}
-				} else if (s instanceof Prepare) {
-    			    super.execute(controller, r);
+				} else if (canGo(s)) {
+                    super.execute(controller, new QCAVector(r), onQuestion(s, r), false);
 				}
         	}
         } finally {
