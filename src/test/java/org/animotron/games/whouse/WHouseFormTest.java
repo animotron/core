@@ -87,7 +87,7 @@ public class WHouseFormTest extends ATest {
             "the generate-form " +
                 "each (get part get prizm) " +
                     "(ptrn (this part) " +
-                        "(?is table) (\\table) " +
+                        "((?is table) (\\table)) " +
                         "(\\input))."
         );
 
