@@ -248,11 +248,11 @@ public class WHouseTest extends ATest {
 				"(number, UoM).",
 
 			"the price" +
-				"(/ (get cost) (get qty))",
+				"(/ (get cost) (get qty)).",
 				
 			"the cost" +
 				"(* (get qty) (get price))" +
-				"(number, currency)"
+				"(number, currency)."
 		);
     	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" value=\"\"/></label>");
     	
