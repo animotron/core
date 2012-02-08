@@ -39,9 +39,8 @@ public class WHouseFormTest extends ATest {
             		"(lang-en \"stock-keeping unit\") " +
     				"(lang-ru \"единица учета запасов\") " +
 				") " +
-				"(goods, qty, price, cost)." +
-			").",
-			
+				"(goods, qty, price, cost).",
+
 			"the qty" +
         		"(word " +
         			"(lang-en \"quantity\") " +
@@ -51,11 +50,11 @@ public class WHouseFormTest extends ATest {
 				"(number, UoM).",
 
 			"the price" +
-				"(/ (get cost) (get qty))",
+				"(/ (get cost) (get qty)).",
 				
 			"the cost" +
 				"(* (get qty) (get price))" +
-				"(number, currency)",
+				"(number, currency).",
 
             "the whouse-receive " +
         		"(word " +
