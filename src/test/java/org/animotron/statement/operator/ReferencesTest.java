@@ -20,7 +20,11 @@
  */
 package org.animotron.statement.operator;
 
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.value;
+
 import org.animotron.ATest;
+import org.animotron.expression.JExpression;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -29,7 +33,22 @@ import org.junit.Test;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class AllAnyGetTest extends ATest {
+public class ReferencesTest extends ATest {
+
+    @Test
+    public void test() throws Exception {
+
+        JExpression A = new JExpression(
+            _(THE._, "A", _(AN._, "B", _(AN._, "C")))
+        );
+        //assertAnimoResultOneStep(A, "the A the B.");
+        assertAnimoResultOneStep(A, "the A B.");
+
+        JExpression.__(new JExpression(
+            _(THE._, "B", _(AN._, "C", value("y")))
+        ));
+        assertAnimoResultOneStep(A, "the A B C \"y\".");
+    }
 
     @Test
     public void test_000() throws Exception {
@@ -105,4 +124,12 @@ public class AllAnyGetTest extends ATest {
         assertAnimoResult("get sex john", "sex male sex.");
     }
 
+	@Test
+    public void test_100() throws Exception {
+        testAnimo("the xxx-site (site) (name \"XXX\").");
+        testAnimo("the xxx-layout (layout) (get name).");
+        testAnimo("the html-page any layout.");
+        testAnimo("the xxx (any site) (html-page).");
+        assertStringResult("xxx", "XXX");
+    }
 }

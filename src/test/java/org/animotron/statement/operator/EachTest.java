@@ -107,7 +107,6 @@ public class EachTest extends ATest {
                         "(\\c3 \\b3 \\a1) " +
                         "(\\c3 \\b3 \\a2) " +
                         "(\\c3 \\b3 \\a3)."
-
        );
     }
 }

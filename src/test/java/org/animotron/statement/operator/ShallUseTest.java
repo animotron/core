@@ -28,6 +28,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -39,19 +40,19 @@ public class ShallUseTest extends ATest {
 	@Test
 	public void test_0() throws Exception {
         
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "X", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "Y", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "X", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "Y", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"))
+            )
         );
 
         JExpression D = new JExpression(
@@ -64,19 +65,19 @@ public class ShallUseTest extends ATest {
     @Test
     public void test_1() throws Exception {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "X", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "Y", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(USE._, "X"))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "X", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "Y", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(USE._, "X"))
+            )
         );
 
         JExpression D = new JExpression(
@@ -89,22 +90,22 @@ public class ShallUseTest extends ATest {
     @Test
     public void test_2() throws Exception {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "X", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "Y", _(AN._, "A"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"))
-                ),
-                new JExpression(
-                        _(THE._, "U", _(USE._, "X"))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "X", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "Y", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(SHALL._, "X", value("χ")), _(SHALL._, "Υ", value("υ")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"))
+            ),
+            new JExpression(
+                    _(THE._, "U", _(USE._, "X"))
+            )
         );
         JExpression D = new JExpression(
             _(THE._, "D", _(GET._, "A", _(AN._, "C", _(AN._, "U"))))

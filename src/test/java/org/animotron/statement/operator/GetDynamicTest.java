@@ -28,6 +28,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -40,7 +41,7 @@ public class GetDynamicTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(AN._, "Z", value("A")))
             ),
@@ -58,7 +59,7 @@ public class GetDynamicTest extends ATest {
 	@Test
 	public void getOnManyANbyIS() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "ZZ", _(AN._, "Z"))
             ),
@@ -80,7 +81,7 @@ public class GetDynamicTest extends ATest {
     @Ignore
     public void get_via_is() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "B", _(AN._, "A"))
             ),
@@ -250,5 +251,4 @@ public class GetDynamicTest extends ATest {
 
         testAnimoResult("get b x.", "b c.");
     }
-
 }

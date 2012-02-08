@@ -43,7 +43,7 @@ public class GetTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(AN._, "Z", value("A")))
             ),
@@ -66,7 +66,7 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_param() throws Exception {
 
-    	JExpression.__(new JExpression(
+    	__(new JExpression(
             _(THE._, "A", element("B" , _(GET._, "C")))
         ));
     	JExpression test = new JExpression(
@@ -74,7 +74,7 @@ public class GetTest extends ATest {
 		);
     	assertAnimoResult(test, "A \\B C \".\".");
 
-    	JExpression.__(new JExpression(
+    	__(new JExpression(
             _(THE._, "A1", _(GET._, "B1"))
         ));
 
@@ -87,7 +87,7 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(AN._, "B", _(GET._, "C")))
             ),
@@ -105,7 +105,7 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_an() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", element("B", _(GET._, "C")))
             ),
@@ -123,7 +123,7 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Exception {
 
-    	JExpression.__(
+    	__(
             new JExpression(
                 _(THE._, "A", element("B", _(GET._, "C")))
             ),
@@ -146,7 +146,7 @@ public class GetTest extends ATest {
     @Ignore
     public void checkSHALLonISandSELF() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A",
                     _(AN._, "A1", value("some.path")),
@@ -210,7 +210,7 @@ public class GetTest extends ATest {
     @Ignore
     public void checkHAVEonISandSELF() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A",
                     _(AN._, "A1", value("some.path")),
@@ -271,7 +271,7 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_with_stack() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(GET._, "X"))
             ),
@@ -292,7 +292,7 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_more_an_with_stack() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
             ),
@@ -314,7 +314,7 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_one_more_an_with_stack() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
             ),
@@ -335,7 +335,7 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_an_an() throws Exception {
 
-        JExpression.__(
+        __(
             new JExpression(
                 _(THE._, "A", _(AN._, "Y", _(GET._, "X")))
             ),
@@ -490,5 +490,4 @@ public class GetTest extends ATest {
         assertAnimoResult("get c x", "b, c 1.");
         assertAnimoResult("get b x", "b, c 1.");
     }
-
 }

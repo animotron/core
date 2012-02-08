@@ -28,6 +28,7 @@ import org.animotron.statement.query.ANY;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -40,16 +41,16 @@ public class AnyTest extends ATest {
     @Test
     public void testANY() throws Exception {
         
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(AN._, "value"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "value"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
+            )
         );
 
         JExpression test = new JExpression(
@@ -66,22 +67,22 @@ public class AnyTest extends ATest {
     @Test
     public void testANYwithWITH() throws Exception {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(AN._, "value"))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
-                ),
-                new JExpression(
-                        _(THE._, "B1", _(AN._, "B"), _(AN._, "value", value("B")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
-                ),
-                new JExpression(
-                        _(THE._, "C1", _(AN._, "C"), _(AN._, "value", value("C")))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "value"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
+            ),
+            new JExpression(
+                    _(THE._, "B1", _(AN._, "B"), _(AN._, "value", value("B")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
+            ),
+            new JExpression(
+                    _(THE._, "C1", _(AN._, "C"), _(AN._, "value", value("C")))
+            )
         );
 
         JExpression test = new JExpression(
@@ -98,25 +99,25 @@ public class AnyTest extends ATest {
 	@Test
 	public void ANYwithEQ() throws Exception {
 
-		JExpression.__(
-                new JExpression(
-                        _(THE._, "value-plain",
-                                _(AN._, "mime-type"),
-                                _(AN._, "value"),
-                                _(AN._, "type", value("value/plain")),
-                                _(AN._, "reference", value("Plain value")),
-                                _(AN._, "extension", value("txt"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "application-atom",
-                                _(AN._, "mime-type"),
-                                _(AN._, "application"),
-                                _(AN._, "type", value("application/atom+xml")),
-                                _(AN._, "reference", value("Atom Feed Document")),
-                                _(AN._, "extension", value("atom"))
-                        )
+		__(
+            new JExpression(
+                _(THE._, "value-plain",
+                    _(AN._, "mime-type"),
+                    _(AN._, "value"),
+                    _(AN._, "type", value("value/plain")),
+                    _(AN._, "reference", value("Plain value")),
+                    _(AN._, "extension", value("txt"))
                 )
+            ),
+            new JExpression(
+                _(THE._, "application-atom",
+                    _(AN._, "mime-type"),
+                    _(AN._, "application"),
+                    _(AN._, "type", value("application/atom+xml")),
+                    _(AN._, "reference", value("Atom Feed Document")),
+                    _(AN._, "extension", value("atom"))
+                )
+            )
         );
 
 		JExpression test = new JExpression(

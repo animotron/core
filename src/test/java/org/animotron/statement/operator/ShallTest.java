@@ -27,6 +27,7 @@ import org.animotron.statement.relation.SHALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -38,16 +39,16 @@ public class ShallTest extends ATest {
 	@Test
 	public void test() throws Exception {
         
-    	JExpression.__(
-                new JExpression(
-                        _(THE._, "A")
-                ),
-                new JExpression(
-                        _(THE._, "B", _(SHALL._, "A", value(".")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"))
-                )
+    	__(
+            new JExpression(
+                    _(THE._, "A")
+            ),
+            new JExpression(
+                    _(THE._, "B", _(SHALL._, "A", value(".")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"))
+            )
         );
 
     	JExpression D = new JExpression(

@@ -65,6 +65,4 @@ public class WaveGetTest extends ATest {
         testAnimo("the z y any x.");
         assertAnimoResult("z", "z y foo 1.");
     }
-
-
 }

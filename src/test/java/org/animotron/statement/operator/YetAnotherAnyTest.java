@@ -28,6 +28,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -40,16 +41,16 @@ public class YetAnotherAnyTest extends ATest {
     @Test
     public void deep_any() throws Exception {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")))
+            )
         );
 
         JExpression test = new JExpression(
@@ -75,16 +76,16 @@ public class YetAnotherAnyTest extends ATest {
     //TODO is all select a closest not leaf by a predicate?
     public void one_more_deep_any() throws Exception {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
-                ),
-                new JExpression(
-                        _(THE._, "B", _(AN._, "A"), _(AN._, "X", value("β")))
-                ),
-                new JExpression(
-                        _(THE._, "C", _(AN._, "B"), _(AN._, "X", value("γ")))
-                )
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"), _(AN._, "X", value("β")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(AN._, "X", value("γ")))
+            )
         );
 
         JExpression test = new JExpression(
