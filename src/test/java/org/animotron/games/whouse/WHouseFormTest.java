@@ -21,6 +21,7 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
+import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 
@@ -30,16 +31,16 @@ import static org.animotron.expression.AnimoExpression.__;
  */
 public class WHouseFormTest extends ATest {
 
-	public void test_00() throws Exception {
+	@Test
+    public void test_00() throws Exception {
         __(
             "the SKU " +
         		"(word " +
             		"(lang-en \"stock-keeping unit\") " +
     				"(lang-ru \"единица учета запасов\") " +
 				") " +
-				"(goods, qty, price, cost)." +
-			").",
-			
+				"(goods, qty, price, cost).",
+
 			"the qty" +
         		"(word " +
         			"(lang-en \"quantity\") " +
@@ -49,38 +50,28 @@ public class WHouseFormTest extends ATest {
 				"(number, UoM).",
 
 			"the price" +
-				"(/ (get cost) (get qty))",
+				"(/ (get cost) (get qty)).",
 				
 			"the cost" +
 				"(* (get qty) (get price))" +
-				"(number, currency)"
-		);
-    	__(
+				"(number, currency).",
+
             "the whouse-receive " +
         		"(word " +
             		"(lang-en \"ware house receive\") " +
     				"(lang-ru \"складской приход\") " +
 				") " +
-				"(receive-party, issue-party, (goods, qty, price, cost))." +
-			").",
-		
+				"(receive-party, issue-party, (goods, qty, price, cost)).",
+
 			"the receiptsForWhouse " +
 			"(D2012-01-29)" +
 			"(issue companyA) "+
 			"(receive whouse) "+
 			"(paper (qty 10,kg) (cost 50,USD)) "+
 			"(pen (qty 3,box10) (cost 15,USD)). "
-		);
-    	assertAnimoResult("get price whouse,paper", "/ (5,USD) (kg).");
-    	assertAnimoResult("get qty whouse,paper,D2012-01-30", "(10,kg).");
 
-    	__(
-			"the issueForWhouse " +
-			"(D2012-01-30)" +
-			"(issue whouse) "+
-			"(paper (qty 1,kg))."
 		);
-    	assertAnimoResult("get price whouse,paper", "/ (5,USD) (kg).");
-    	assertAnimoResult("get qty whouse,paper,D2012-01-31", "(9,kg).");
+
+
 	}
 }
