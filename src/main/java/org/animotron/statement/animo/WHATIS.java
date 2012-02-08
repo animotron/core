@@ -23,19 +23,11 @@ package org.animotron.statement.animo;
 import javolution.util.FastSet;
 
 import org.animotron.graph.index.Order;
-import org.animotron.io.Pipe;
-import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.AbstractQuery;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -45,7 +37,7 @@ import org.neo4j.graphdb.index.IndexHits;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class WHATIS extends Instruction implements Evaluable {
+public class WHATIS extends AbstractQuery implements Reference {
 	
 	public static final WHATIS _ = new WHATIS();
 	
@@ -60,29 +52,27 @@ public class WHATIS extends Instruction implements Evaluable {
         @Override
         public void act(final PFlow pf) {
         	
-        	Pipe pipe = Evaluator._.execute(pf.getController(), pf.getVector(), pf.getOP().getStartNode());
-    		QCAVector v;
-    		while ((v = pipe.take()) != null) {
-            	IndexHits<Relationship> hits = Order.queryDown(v.getClosest().getEndNode());
-            	try {
-                	for (Relationship rr : hits) {
-	        			if (!isLeaf(rr.getStartNode())) {
-	        				pf.sendAnswer( rr );
-	        			}
-                	}
-            	} finally {
-            		hits.close();
-            	}
+			FastSet<Relationship> thes = FastSet.newInstance();
+			try {
+				Utils.getTHELikeBag(pf, pf.getVector(), thes);
+				
+				for (FastSet.Record rc = thes.head(), end = thes.tail(); (rc = rc.getNext()) != end;) {
+					Relationship the = thes.valueOf(rc);
+
+	    			IndexHits<Relationship> hits = Order.queryDown(the.getEndNode());
+	            	try {
+	                	for (Relationship rr : hits) {
+		        			if (!Utils.haveContext(rr.getEndNode())) {
+		        				pf.sendAnswer( rr );
+		        			}
+	                	}
+	            	} finally {
+	            		hits.close();
+	            	}
+				}
+			} finally {
+				FastSet.recycle(thes);
     		}
         }
     }
-    
-    protected boolean isLeaf(Node node) {
-		for (Relationship r : node.getRelationships(Direction.INCOMING, REF._))
-			if (r.getStartNode().hasRelationship(Direction.INCOMING, AN._))
-				return false;
-		
-		return true;
-	};
-
 }
