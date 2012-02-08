@@ -87,11 +87,11 @@ public class WHouseFormTest extends ATest {
             "the generate-form " +
                 "each (get part get prizm) " +
                     "(ptrn (this part) " +
-                        "(?is table any widget-table) " +
-                        "(any widget-input)" +
+                        "(?is table any widget-table object this part) " +
+                        "(any widget-input object this part)" +
                     ").",
 
-            "the html-input (widget-input) (\\input (@id id this part))."
+            "the html-input (widget-input) (\\input (@id id get object))."
         );
 
         assertAnimoResult("generate-form prizm whouse-issue", "");
