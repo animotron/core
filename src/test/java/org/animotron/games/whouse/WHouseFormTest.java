@@ -72,6 +72,27 @@ public class WHouseFormTest extends ATest {
 
 		);
 
-
 	}
+
+    @Test
+    public void test_01() throws Exception {
+        __(
+            "the whouse-issue " +
+                "(word " +
+                "(lang-en \"warehouse issue document\") " +
+                "(lang-ru \"приходный складской документ\") " +
+                ") " +
+                "(part (issue-party) (whouse-party) (table part (goods) (qty) (price) (cost))).",
+
+            "the generate-form " +
+                "each (get part get prizm) " +
+                    "(ptrn (this part) " +
+                        "(?is table) (\\table)) " +
+                        "(\\input)."
+        );
+
+        assertAnimoResult("generate-form prizm whouse-issue", "");
+
+    }
+
 }
