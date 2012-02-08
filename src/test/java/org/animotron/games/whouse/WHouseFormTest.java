@@ -55,23 +55,22 @@ public class WHouseFormTest extends ATest {
 				
 			"the cost" +
 				"(* (get qty) (get price))" +
-				"(number, currency)"
-		);
-    	__(
+				"(number, currency)",
+
             "the whouse-receive " +
         		"(word " +
             		"(lang-en \"ware house receive\") " +
     				"(lang-ru \"складской приход\") " +
 				") " +
-				"(receive-party, issue-party, (goods, qty, price, cost))." +
-			").",
-		
+				"(receive-party, issue-party, (goods, qty, price, cost)).",
+
 			"the receiptsForWhouse " +
 			"(D2012-01-29)" +
 			"(issue companyA) "+
 			"(receive whouse) "+
 			"(paper (qty 10,kg) (cost 50,USD)) "+
 			"(pen (qty 3,box10) (cost 15,USD)). "
+
 		);
 
 
