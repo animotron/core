@@ -88,7 +88,8 @@ public class WHouseFormTest extends ATest {
                 "each (get part get prizm) " +
                     "(ptrn (this part) " +
                         "(?is table \\table) " +
-                        "(\\input)."
+                        "(\\input)" +
+                    ")."
         );
 
         assertAnimoResult("generate-form prizm whouse-issue", "");
