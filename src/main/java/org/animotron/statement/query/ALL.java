@@ -86,9 +86,11 @@ public class ALL extends AbstractQuery implements Reference {
 								System.out.println("after predicate "+Arrays.toString(list.toArray()));
 								for (Relationship r : list) {
 									if (setFiltering(r.getEndNode(), uses, weaks))
-										//System.out.print("answered ");
-										//Utils.debug(r);
-				        				pf.sendAnswer( r );
+										if (isLeaf(r.getEndNode())) {
+											//System.out.print("answered ");
+											//Utils.debug(r);
+					        				pf.sendAnswer( r );
+										}
 								}
 								continue;
 							}
