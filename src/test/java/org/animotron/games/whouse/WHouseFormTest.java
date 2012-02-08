@@ -21,6 +21,7 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
+import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 
@@ -30,7 +31,8 @@ import static org.animotron.expression.AnimoExpression.__;
  */
 public class WHouseFormTest extends ATest {
 
-	public void test_00() throws Exception {
+	@Test
+    public void test_00() throws Exception {
         __(
             "the SKU " +
         		"(word " +
@@ -71,16 +73,7 @@ public class WHouseFormTest extends ATest {
 			"(paper (qty 10,kg) (cost 50,USD)) "+
 			"(pen (qty 3,box10) (cost 15,USD)). "
 		);
-    	assertAnimoResult("get price whouse,paper", "/ (5,USD) (kg).");
-    	assertAnimoResult("get qty whouse,paper,D2012-01-30", "(10,kg).");
 
-    	__(
-			"the issueForWhouse " +
-			"(D2012-01-30)" +
-			"(issue whouse) "+
-			"(paper (qty 1,kg))."
-		);
-    	assertAnimoResult("get price whouse,paper", "/ (5,USD) (kg).");
-    	assertAnimoResult("get qty whouse,paper,D2012-01-31", "(9,kg).");
+
 	}
 }
