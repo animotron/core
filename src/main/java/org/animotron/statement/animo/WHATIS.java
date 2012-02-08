@@ -20,14 +20,24 @@
  */
 package org.animotron.statement.animo;
 
+import java.io.IOException;
+
 import javolution.util.FastSet;
 
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.AbstractQuery;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -52,26 +62,65 @@ public class WHATIS extends AbstractQuery implements Reference {
         @Override
         public void act(final PFlow pf) {
         	
-			FastSet<Relationship> thes = FastSet.newInstance();
+        	System.out.println("WHATIS "+pf.getVector());
+        	
+			FastSet<QCAVector> thes = FastSet.newInstance();
 			try {
-				Utils.getTHELikeBag(pf, pf.getVector(), thes);
+				Utils.getTHEBag(pf, pf.getVector(), thes);
 				
 				for (FastSet.Record rc = thes.head(), end = thes.tail(); (rc = rc.getNext()) != end;) {
-					Relationship the = thes.valueOf(rc);
-
-	    			IndexHits<Relationship> hits = Order.queryDown(the.getEndNode());
-	            	try {
-	                	for (Relationship rr : hits) {
-		        			if (!Utils.haveContext(rr.getEndNode())) {
-		        				pf.sendAnswer( rr );
-		        			}
-	                	}
-	            	} finally {
-	            		hits.close();
-	            	}
+					QCAVector vector = thes.valueOf(rc);
+					Relationship the = vector.getClosest();
+					
+					if (the.isType(REF._) || the.isType(THE._)) {
+						downIS(pf, the.getEndNode());
+						
+						upIS(pf, vector, the);
+					} else {
+			    		//discover down IS topology
+						discoverDownIS(pf, vector, the);
+			    		
+						upIS(pf, vector, the);
+					}
 				}
 			} finally {
 				FastSet.recycle(thes);
+    		}
+        }
+        
+        private void downIS(PFlow pf, Node node) {
+			IndexHits<Relationship> hits = Order.queryDown(node);
+        	try {
+            	for (Relationship rr : hits) {
+        			if (!Utils.haveContext(rr.getEndNode())) {
+        				pf.sendAnswer( rr );
+        			}
+            	}
+        	} finally {
+        		hits.close();
+        	}
+        }
+
+        private void upIS(PFlow pf, QCAVector vector, Relationship the) {
+    		//discover up IS topology
+    		for (Relationship r : the.getStartNode().getRelationships(AN._, Direction.INCOMING)) {
+        		for (Relationship rr : r.getStartNode().getRelationships(AN._, Direction.INCOMING)) {
+        			discoverDownIS(pf, vector, rr);
+        		}
+    		}
+        }
+
+        private void discoverDownIS(PFlow pf, QCAVector vector, Relationship the) {
+			Pipe pipe;
+			try {
+				pipe = Evaluator._.execute(pf.getController(), vector.question2(the));
+			} catch (IOException e) {
+				pf.sendException(e);
+				return;
+			}
+    		QCAVector v;
+    		while ((v = pipe.take()) != null) {
+				downIS(pf, v.getClosest().getEndNode());
     		}
         }
     }

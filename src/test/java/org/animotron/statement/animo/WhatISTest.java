@@ -1,7 +1,6 @@
 package org.animotron.statement.animo;
 
 import org.animotron.ATest;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,6 +35,8 @@ public class WhatISTest extends ATest {
         __("the a x.", "the b y.", "the c b a.");
 
         assertAnimoResult("what-is get b c", "y.");
+
+        assertAnimoResult("each (get b c) (what-is this b)", "x. y.");
     }
 
     @Test
@@ -45,12 +46,12 @@ public class WhatISTest extends ATest {
         assertAnimoResult("each (get part c) (what-is this part)", "x. y.");
     }
 
-    @Test
-    public void test_05() throws IOException {
-        __("the foo what-is b.");
-
-        assertAnimoResult("get what-is foo", "what-is b.");
-    }
+//    @Test
+//    public void test_05() throws IOException {
+//        __("the foo what-is b.");
+//
+//        assertAnimoResult("get what-is foo", "what-is b.");
+//    }
 
     @Test
     public void test_06() throws IOException {
