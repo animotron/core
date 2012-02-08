@@ -24,6 +24,7 @@ import javolution.util.FastSet;
 import javolution.util.FastTable;
 
 import org.animotron.graph.Properties;
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
@@ -36,6 +37,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.graphdb.traversal.TraversalDescription;
@@ -173,20 +175,25 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     protected boolean filtering(final PFlow pf, final Relationship ref, final Node toCheckByUSE, final Set<Node> uses, final Set<Node> weaks) {
     	if (!setFiltering(toCheckByUSE, uses, weaks))
     		return false;
-    	
-        for (Relationship r : pf.getOPNode().getRelationships(OUTGOING)) {
-            Statement st = Statements.relationshipType(r);
-            if (st instanceof Predicate) {
-                try {
-                    if (!((Predicate) st).filter(pf, r, ref))
-                        return false;
-                } catch (Exception e) {
-                    //XXX: report
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-        }
+
+    	IndexHits<Relationship> hits = Order.queryDown(pf.getOPNode());
+    	try {
+	        for (Relationship r : hits) {
+	            Statement st = Statements.relationshipType(r);
+	            if (st instanceof Predicate) {
+	                try {
+	                    if (!((Predicate) st).filter(pf, r, ref))
+	                        return false;
+	                } catch (Exception e) {
+	                    //XXX: report
+	                    e.printStackTrace();
+	                    return false;
+	                }
+	            }
+	        }
+    	} finally {
+    		hits.close();
+    	}
         return true;
     }
 
