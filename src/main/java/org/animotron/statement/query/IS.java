@@ -20,30 +20,57 @@
  */
 package org.animotron.statement.query;
 
-import org.animotron.manipulator.OnQuestion;
+import java.io.IOException;
+import java.util.Set;
+
+import javolution.util.FastSet;
+
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.Predicate;
+import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Relationship;
 
 /**
- * Query operator 'IS'.
+ * Predicate '?IS'.
  * 
  * Return "true" if object is of given type/class
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class IS extends AbstractQuery {
+public class IS extends Operator implements Predicate {
 
 	public static final IS _ = new IS();
 
 	private IS() { super("?is"); }
 
-	public OnQuestion onCalcQuestion() {
-        return new Calc();
+	@Override
+	public boolean filter(PFlow pf, Relationship op, Relationship ref) throws InterruptedException, IOException {
+
+		System.out.println("?is");
+		System.out.println(ref);
+
+		FastSet<Relationship> thes = FastSet.newInstance();
+		try {
+			Utils.getTHELikeBag(pf, pf.getVector().question(op), thes);
+			
+			for (FastSet.Record rc = thes.head(), end = thes.tail(); (rc = rc.getNext()) != end;) {
+				Relationship the = thes.valueOf(rc);
+				
+				System.out.println(the);
+				
+				if (the.getEndNode().equals(ref.getEndNode()))
+					return true;
+			}
+		} finally {
+			FastSet.recycle(thes);
+		}
+		return false;
 	}
-	
-	class Calc extends OnQuestion {
-        @Override
-        public void act(final PFlow pf) {
-        }
-    }
+
+	@Override
+	public Set<Relationship> getExpected(PFlow pf, Relationship op) throws InterruptedException, IOException {
+		return null;
+	}
 }

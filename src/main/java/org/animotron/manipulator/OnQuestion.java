@@ -71,7 +71,7 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 //		Evaluator.sendQuestion(onAnswer, pf.getVector(), pf.getVector().getUnrelaxedClosest().getEndNode());
 	}
 	
-	public abstract void act(final PFlow pf) throws IOException;
+	public abstract void act(final PFlow pf) throws Exception;
 
 	public boolean needAnswer() {
 		return true;
