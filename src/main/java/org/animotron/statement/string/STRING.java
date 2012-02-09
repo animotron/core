@@ -25,8 +25,7 @@ import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.instruction.DetermInstruction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -42,7 +41,7 @@ import static org.animotron.expression.JExpression.value;
  *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class STRING extends Instruction implements Evaluable {
+public class STRING extends DetermInstruction {
 
 	public static final STRING _ = new STRING();
 
@@ -80,24 +79,57 @@ public class STRING extends Instruction implements Evaluable {
         }
 	}
 	
-	public static StringBuilder eval(PFlow pf, Node node) {
-		return eval(new StringBuilder(), pf, node);
+	public StringBuilder eval(PFlow pf, Node node) {
+        StringBuilder s = new StringBuilder();
+        eval(s, pf, node);
+        return s;
 	}
 
-	public static StringBuilder eval(StringBuilder sb, PFlow pf, Node node) {
+	public void eval(StringBuilder sb, PFlow pf, Node node) {
         IndexHits<Relationship> hits = Order.queryDown(node);
         try {
-        	for (Relationship r : hits) {
-        		try {
-					sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(r)));
-				} catch (IOException e) {
-					pf.sendException(e);
-					return null;
-				}
-        	}
+            for (Relationship r : hits) {
+                _eval(sb, pf, r);
+            }
+        } catch (IOException e) {
+            pf.sendException(e);
         } finally {
         	hits.close();
         }
-        return sb;
 	}
+
+    public StringBuilder eval(PFlow pf, Relationship[] hits) {
+        StringBuilder s = new StringBuilder();
+        eval(s, pf, hits);
+        return s;
+    }
+
+    public void eval(StringBuilder sb, PFlow pf, Relationship[] hits) {
+        try {
+            for (Relationship r : hits) {
+                _eval(sb, pf, r);
+            }
+        } catch (IOException e) {
+            pf.sendException(e);
+        }
+    }
+
+    public StringBuilder eval(PFlow pf, Relationship hit) {
+        StringBuilder s = new StringBuilder();
+        eval(s, pf, hit);
+        return s;
+    }
+
+    public void eval(StringBuilder sb, PFlow pf, Relationship hit) {
+        try {
+            _eval(sb, pf, hit);
+        } catch (IOException e) {
+            pf.sendException(e);
+        }
+    }
+
+    private void _eval(StringBuilder sb, PFlow pf, Relationship hit) throws IOException {
+        sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(hit)));
+    }
+
 }

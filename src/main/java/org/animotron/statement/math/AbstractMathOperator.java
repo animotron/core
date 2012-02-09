@@ -22,8 +22,7 @@ package org.animotron.statement.math;
 
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.instruction.DetermInstruction;
 import org.animotron.statement.value.AbstractValue;
 
 import java.io.IOException;
@@ -33,7 +32,7 @@ import java.io.IOException;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class AbstractMathOperator extends Instruction implements Evaluable{
+public abstract class AbstractMathOperator extends DetermInstruction {
 
 	protected AbstractMathOperator(String... name) { super(name); }
 

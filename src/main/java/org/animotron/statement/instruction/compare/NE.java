@@ -20,7 +20,7 @@
  */
 package org.animotron.statement.instruction.compare;
 
-import org.animotron.statement.instruction.Instruction;
+import org.animotron.statement.AbstractStatement;
 
 /**
  * 'Not equal' instruction.
@@ -28,7 +28,7 @@ import org.animotron.statement.instruction.Instruction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class NE extends Instruction {
+public class NE extends AbstractStatement {
 	
 	public static final NE _ = new NE();
 	

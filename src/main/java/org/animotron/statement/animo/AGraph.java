@@ -20,7 +20,7 @@
  */
 package org.animotron.statement.animo;
 
-import org.animotron.statement.instruction.Instruction;
+import org.animotron.statement.AbstractStatement;
 
 /**
  * Return answer graph.
@@ -28,7 +28,8 @@ import org.animotron.statement.instruction.Instruction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class AGraph extends Instruction {
+@Deprecated
+public class AGraph extends AbstractStatement {
 	
 	public static final AGraph _ = new AGraph();
 	

@@ -26,7 +26,7 @@ import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.SHALL;
-import org.animotron.statement.string.AfterLast;
+import org.animotron.statement.string.AFTER_LAST;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -155,7 +155,7 @@ public class GetTest extends ATest {
                         _(GET._, "A1")),
 
                     _(SHALL._, "B1",
-                        _(AfterLast._,
+                        _(AFTER_LAST._,
                             value("."),
                             _(GET._, "A1")))
                 )),
@@ -219,7 +219,7 @@ public class GetTest extends ATest {
                         _(GET._, "A1")),
 
                     _(SHALL._, "B1",
-                        _(AfterLast._,
+                        _(AFTER_LAST._,
                             value("."),
                             _(GET._, "A1")))
                 )),

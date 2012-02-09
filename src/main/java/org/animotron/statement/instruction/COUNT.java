@@ -22,7 +22,6 @@ package org.animotron.statement.instruction;
 
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.operator.Evaluable;
 
 /**
  * Operation 'COUNT'. Count elements.
@@ -30,7 +29,7 @@ import org.animotron.statement.operator.Evaluable;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class COUNT extends Instruction implements Evaluable {
+public class COUNT extends DetermInstruction {
 
 	public static final COUNT _ = new COUNT();
 

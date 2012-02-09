@@ -20,29 +20,18 @@
  */
 package org.animotron.statement.language;
 
-import java.io.IOException;
-import java.util.Set;
-
 import javolution.util.FastSet;
-
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.index.Order;
-import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
-import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.string.STRING;
-import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * 'SEARCH' instruction.
@@ -67,7 +56,7 @@ public class SEARCH extends Operator implements Predicate {
 	public Set<Relationship> getExpected(PFlow pf, Relationship op) throws InterruptedException, IOException {
 		Set<Relationship> set = new FastSet<Relationship>();
 		
-		StringBuilder sb = STRING.eval(pf, op.getEndNode());
+		StringBuilder sb = STRING._.eval(pf, op.getEndNode());
 		if (sb != null && sb.length() > 0) {
 			IndexHits<Relationship> hits = WORD._.search(sb.toString());
 			try {

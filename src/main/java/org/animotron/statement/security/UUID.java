@@ -24,25 +24,24 @@ import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.instruction.DetermInstruction;
+import org.animotron.statement.instruction.NonDetermInstruction;
 import org.animotron.statement.string.STRING;
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.JExpression.value;
 
 /**
- * Security instruction 'sha-512'.
+ * Security instruction 'uuid'.
  *
- * Return the sha-512 hash.
+ * Return the uuid.
  *
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class SHA512 extends DetermInstruction {
+public class UUID extends NonDetermInstruction {
 
-	public static final SHA512 _ = new SHA512();
+	public static final UUID _ = new UUID();
 
-	private SHA512() { super("SHA-512"); }
+	private UUID() { super("uuid"); }
 
 	@Override
 	public OnQuestion onCalcQuestion() {
@@ -54,10 +53,10 @@ public class SHA512 extends DetermInstruction {
         public void act(final PFlow pf) {
 			try {
                 Relationship[] params = Order.first(1, pf.getOP().getStartNode());
-                //source
-                String message = STRING._.eval(pf, params).toString();
-                message = MessageDigester.calculate(message, "SHA-512");
-                answered(pf, new JExpression(value(message)));
+                java.util.UUID uuid = params.length > 0
+                        ? java.util.UUID.fromString(STRING._.eval(pf, params).toString())
+                        : java.util.UUID.randomUUID();
+                answered(pf, new JExpression(value(uuid.toString())));
 			} catch (Exception e) {
 				pf.sendException(e);
 			}

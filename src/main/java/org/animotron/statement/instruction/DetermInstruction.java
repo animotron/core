@@ -20,23 +20,39 @@
  */
 package org.animotron.statement.instruction;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
+import org.animotron.graph.Properties;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Shift;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Instruction extends AbstractStatement implements Shift, Evaluable {
+public abstract class DetermInstruction extends Instruction {
 
-    public Instruction(String... name) {
+    public DetermInstruction(String... name) {
         super(name);
     }
 
-    protected abstract void answered(final PFlow pf, final Relationship r);
+    @Override
+    protected void answered(final PFlow pf, final Relationship r) {
+        Relationship res = AnimoGraph.execute(new GraphOperation<Relationship>() {
+            @Override
+            public Relationship execute() {
+                Node sNode = pf.getVector().getQuestion().getEndNode();
+                Relationship res = sNode.createRelationshipTo(r.getEndNode(), RESULT);
+                Properties.RID.set(res, r.getId());
+                //Properties.CID.set(res, pf.getLastContext().getId());
+                return res;
+            }
+        });
+        pf.sendAnswer(pf.getVector().answered(res));
+    }
 
 }

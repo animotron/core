@@ -25,7 +25,7 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.string.AfterLast;
+import org.animotron.statement.string.AFTER_LAST;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class ConnectionTest extends ATest {
                     _(AN._, "path"),
 
                     _(AN._, "extension",
-                        _(AfterLast._,
+                        _(AFTER_LAST._,
                             value("."),
                             _(GET._, "path"))),
 
@@ -128,7 +128,7 @@ public class ConnectionTest extends ATest {
                         _(GET._, "path1")),
 
                     _(AN._, "extension1",
-                        _(AfterLast._,
+                        _(AFTER_LAST._,
                             value("."),
                             _(GET._, "path1"))),
 
@@ -201,7 +201,7 @@ public class ConnectionTest extends ATest {
                     _(AN._, "path"),
 
                     _(AN._, "extension",
-                        _(AfterLast._,
+                        _(AFTER_LAST._,
                             value("."),
                             _(GET._, "path"))),
 

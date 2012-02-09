@@ -45,7 +45,7 @@ public class AfterLastTest extends ATest {
         ));
     	
     	JExpression C = new JExpression(
-			_(THE._, "C", _(AfterLast._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
+			_(THE._, "C", _(AFTER_LAST._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
 		);
     	
         assertAnimoResult(C, "the C \"z\".");

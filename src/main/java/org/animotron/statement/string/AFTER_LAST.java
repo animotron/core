@@ -24,14 +24,10 @@ import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.instruction.DetermInstruction;
 import org.neo4j.graphdb.Relationship;
 
-import java.io.IOException;
-
 import static org.animotron.expression.JExpression.value;
-import static org.animotron.graph.serializer.CachedSerializer.STRING;
 
 /**
  * VALUE instruction 'after-last'.
@@ -40,11 +36,11 @@ import static org.animotron.graph.serializer.CachedSerializer.STRING;
  *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class AfterLast extends Instruction implements Evaluable {
+public class AFTER_LAST extends DetermInstruction {
 
-	public static final AfterLast _ = new AfterLast();
+	public static final AFTER_LAST _ = new AFTER_LAST();
 
-	private AfterLast() { super("after-last"); }
+	private AFTER_LAST() { super("after-last"); }
 
 	@Override
 	public OnQuestion onCalcQuestion() {
@@ -54,44 +50,19 @@ public class AfterLast extends Instruction implements Evaluable {
 	class Calc extends OnQuestion {
         @Override
         public void act(final PFlow pf) {
-
-            //UNDERSTAND: if we have more that 2 params, what to do?
-
-            Relationship[] params = Order.first(3, pf.getOP().getStartNode());
-
-            //pattern
-            String pattern;
-			try {
-				pattern = STRING.serialize(pf.getVector().question2(params[1]));
-			} catch (IOException e) {
-				pf.sendException(e);
-				return;
-			}
-            String source;
-			try {
-				source = STRING.serialize(pf.getVector().question2(params[2]));
-			} catch (Exception e) {
-				pf.sendException(e);
-				return;
-			}
-            
-            int index = source.lastIndexOf(pattern);
-            if (index != -1) {
-
-	            Relationship r;
-				try {
-					r = new JExpression(
-					    value(
-                                source.substring(index + 1)
-                        )
-					);
-				} catch (Exception e) {
-					pf.sendException(e);
-					return;
-				}
-				
-				answered(pf, r);
+            try {
+                //UNDERSTAND: if we have more that 2 params, what to do?
+                Relationship[] params = Order.first(3, pf.getOP().getStartNode());
+                String pattern = STRING._.eval(pf, params[1]).toString();
+                String source = STRING._.eval(pf, params[2]).toString();
+                int index = source.lastIndexOf(pattern);
+                if (index != -1) {
+                    answered(pf, new JExpression(value(source.substring(index + 1))));
+                }
+            } catch (Exception e) {
+                pf.sendException(e);
             }
         }
 	}
+
 }

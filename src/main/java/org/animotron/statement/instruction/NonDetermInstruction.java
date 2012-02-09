@@ -21,9 +21,6 @@
 package org.animotron.statement.instruction;
 
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Shift;
 import org.neo4j.graphdb.Relationship;
 
 /**
@@ -31,12 +28,15 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class Instruction extends AbstractStatement implements Shift, Evaluable {
+public abstract class NonDetermInstruction extends Instruction {
 
-    public Instruction(String... name) {
+    public NonDetermInstruction(String... name) {
         super(name);
     }
 
-    protected abstract void answered(final PFlow pf, final Relationship r);
+    @Override
+    protected void answered(final PFlow pf, final Relationship r) {
+        pf.sendAnswer(pf.getVector().answered(r));
+    }
 
 }

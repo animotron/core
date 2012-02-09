@@ -20,7 +20,7 @@
  */
 package org.animotron.statement.animo;
 
-import org.animotron.statement.instruction.Instruction;
+import org.animotron.statement.AbstractStatement;
 
 /**
  * Return question graph.
@@ -28,7 +28,8 @@ import org.animotron.statement.instruction.Instruction;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class QGraph extends Instruction {
+@Deprecated
+public class QGraph extends AbstractStatement {
 	
 	public static final QGraph _ = new QGraph();
 	

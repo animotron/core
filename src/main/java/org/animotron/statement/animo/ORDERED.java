@@ -20,18 +20,17 @@
  */
 package org.animotron.statement.animo;
 
-import java.io.IOException;
-
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.instruction.DetermInstruction;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
 
 /**
  * Operation 'ORDERED'.
@@ -39,7 +38,7 @@ import org.neo4j.graphdb.index.IndexHits;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ORDERED extends Instruction implements Evaluable {
+public class ORDERED extends DetermInstruction {
 	
 	public static final ORDERED _ = new ORDERED();
 	

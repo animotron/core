@@ -20,25 +20,15 @@
  */
 package org.animotron.statement.language;
 
-import static org.animotron.expression.JExpression.value;
-
-import java.util.Arrays;
-
 import javolution.util.FastSet;
-
 import org.animotron.Executor;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.OnContext;
-import org.animotron.manipulator.OnQuestion;
-import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.Evaluable;
+import org.animotron.manipulator.*;
+import org.animotron.statement.instruction.DetermInstruction;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
@@ -50,12 +40,14 @@ import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.graphdb.index.RelationshipIndex;
 
+import static org.animotron.expression.JExpression.value;
+
 /**
  * 'WORD' instruction.
  *
  *  @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class WORD extends Instruction implements Evaluable, Prepare {
+public class WORD extends DetermInstruction implements Prepare {
 
 	public static final WORD _ = new WORD();
 	
@@ -122,7 +114,7 @@ public class WORD extends Instruction implements Evaluable, Prepare {
         		StringBuilder sb = new StringBuilder(); 
         		
         		while ((v = pipe.take()) != null) {
-        			STRING.eval(sb, pf, v.getClosest().getEndNode());
+        			STRING._.eval(sb, pf, v.getClosest().getEndNode());
         		}
         		
                 if (sb.length() > 0) {
