@@ -92,8 +92,11 @@ public class WITH extends Operator implements Predicate {
 			@Override
 			public void run() {
 				QCAVector aVector = pf.getVector().answered(ref);
-				GET._.get(pflow, aVector, thes, null);
-				pflow.done();
+				try {
+					GET._.get(pflow, aVector, thes, null);
+				} finally {
+					pflow.done();
+				}
 			}
 		});
 		

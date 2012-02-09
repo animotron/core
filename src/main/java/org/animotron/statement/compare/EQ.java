@@ -83,8 +83,11 @@ public class EQ extends Operator implements Predicate {
 		Executor.execute(new Runnable() {
 			@Override
 			public void run() {
-				GET._.get(pflow, vector, thes, null);
-				pflow.done();
+				try {
+					GET._.get(pflow, vector, thes, null);
+				} finally {
+					pflow.done();
+				}
 			}
 		});
 		
