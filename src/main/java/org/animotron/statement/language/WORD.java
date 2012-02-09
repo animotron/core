@@ -20,15 +20,31 @@
  */
 package org.animotron.statement.language;
 
+import static org.animotron.expression.JExpression.value;
+
+import java.util.Arrays;
+
+import javolution.util.FastSet;
+
+import org.animotron.Executor;
+import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
+import org.animotron.io.Pipe;
+import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Prepare;
+import org.animotron.statement.operator.Utils;
+import org.animotron.statement.query.GET;
+import org.animotron.statement.string.STRING;
 import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
@@ -65,7 +81,69 @@ public class WORD extends Instruction implements Evaluable, Prepare {
 	class Calc extends OnQuestion {
         @Override
         public void act(final PFlow pf) {
-        	;
+        	
+        	final FastSet<Node> thes = FastSet.newInstance();
+        	final FastSet<QCAVector> REFs = FastSet.newInstance();
+			try {
+				Utils.getTHEbag(pf, pf.getVector(), thes);
+				
+				Pipe in = Evaluator._.execute(pf.getController(), pf.getVector(), pf.getOP().getStartNode());
+        		QCAVector v;
+        		while ((v = in.take()) != null) {
+        			REFs.add(new QCAVector(v.getQuestion(), v.getAnswer()));
+        		}
+
+        		final PFlow pflow = new PFlow(pf.getController(), new QCAVector(pf.getVector().getQuestion()));
+        		
+        		final Pipe pipe = Pipe.newInstance();
+
+        		OnContext onContext = new OnContext() {
+        			@Override
+        			public void onMessage(QCAVector vector) {
+        				super.onMessage(vector, pipe);
+        			}
+        		};
+        		onContext.setCountDown(1);
+        		pflow.answerChannel().subscribe(onContext);
+
+        		Executor.execute(new Runnable() {
+        			@Override
+        			public void run() {
+        	        	final FastSet<Relationship> visitedREFs = FastSet.newInstance();
+        				try {
+        					GET._.get(pflow, REFs, thes, visitedREFs);
+        				} finally {
+        					FastSet.recycle(visitedREFs);
+        					pflow.done();
+        				}
+        			}
+        		});
+        		
+        		StringBuilder sb = new StringBuilder(); 
+        		
+        		while ((v = pipe.take()) != null) {
+        			STRING.eval(sb, pf, v.getClosest().getEndNode());
+        		}
+        		
+                if (sb.length() > 0) {
+
+    	            Relationship r;
+    				try {
+    					r = new JExpression(
+    					    value(
+                                sb.toString()
+                            )
+    					);
+    				} catch (Exception e) {
+    					pf.sendException(e);
+    					return;
+    				}
+    				answered(pf, r);
+                }
+			} finally {
+				FastSet.recycle(thes);
+				FastSet.recycle(REFs);
+			}
         }
 	}
 

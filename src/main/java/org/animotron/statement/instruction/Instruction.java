@@ -21,14 +21,12 @@
 package org.animotron.statement.instruction;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.INCOMING;
 
 import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Shift;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

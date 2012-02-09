@@ -81,8 +81,10 @@ public class STRING extends Instruction implements Evaluable {
 	}
 	
 	public static StringBuilder eval(PFlow pf, Node node) {
-    	StringBuilder sb = new StringBuilder(); 
-    	
+		return eval(new StringBuilder(), pf, node);
+	}
+
+	public static StringBuilder eval(StringBuilder sb, PFlow pf, Node node) {
         IndexHits<Relationship> hits = Order.queryDown(node);
         try {
         	for (Relationship r : hits) {

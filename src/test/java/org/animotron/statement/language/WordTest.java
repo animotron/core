@@ -106,4 +106,13 @@ public class WordTest extends ATest {
 
         assertAnimoResult("all test search \"test*\"", "the test1 (test). the test2 (test).");
 	}
+
+	@Test
+	public void test_10() throws Exception {
+        __(
+            "the test1 (word \"test1\")."
+		);
+        
+        assertAnimoResult("word test1", "\"test1\".");
+	}
 }
