@@ -81,17 +81,16 @@ public class WHouseFormTest extends ATest {
                 "(word \"warehouse issue document\") " +
                 "(part (issue-party) (whouse-party) (table column (goods) (qty) (price) (cost))).",
 
-            "the goods word \"goods\"",
-            "the qty word \"quantity\"",
-            "the price word \"price\"",
-            "the cost word \"cost\"",
+            "the goods word \"goods\".",
+            "the qty word \"quantity\".",
+            "the price word \"price\".",
+            "the cost word \"cost\".",
 
             "the generate-form " +
                 "each (get part get prizm) " +
-                    "(ptrn (this part) " +
-                        "(?is table any widget-table) " +
-                        "(any widget-input)" +
-                    ").",
+                    "(any ptrn (this part) " +
+                        "(?is table widget-table) " +
+                        "(widget-input)).",
 
                 "the html-input (widget-input) (\\input (@id id this part)).",
 
