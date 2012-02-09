@@ -77,25 +77,25 @@ public class WHouseFormTest extends ATest {
     @Test
     public void test_01() throws Exception {
         __(
-            "the whouse-issue " +
-                "(word \"warehouse issue document\") " +
-                "(part (issue-party) (whouse-party) (table column (goods) (qty) (price) (cost))).",
+                "the whouse-issue " +
+                        "(word \"warehouse issue document\") " +
+                        "(part (issue-party) (whouse-party) (table column (goods) (qty) (price) (cost))).",
 
-            "the goods word \"goods\".",
-            "the qty word \"quantity\".",
-            "the price word \"price\".",
-            "the cost word \"cost\".",
+                "the goods word \"goods\".",
+                "the qty word \"quantity\".",
+                "the price word \"price\".",
+                "the cost word \"cost\".",
 
-            "the generate-form " +
-                "each (get part get prizm) " +
-                    "(any ptrn (this part) " +
+                "the generate-form " +
+                        "each (get part get prizm) " +
+                        "(any ptrn (this part) " +
                         "(?is table widget-table) " +
                         "(widget-input)).",
 
                 "the html-input (widget-input) (\\input (@id id this part)).",
 
                 "the html-table (widget-table) " +
-                    "(\\table " +
+                        "(\\table " +
                         "(\\tr each (get column this part) (\\th word this column)) " +
                         "(\\tr each (get column this part) (\\td \\input @id id this column)))."
         );
@@ -103,22 +103,122 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
                 "generate-form prizm whouse-issue",
                 "generate-form " +
-                    "(the html-input (widget-input) " +
+                        "(the html-input (widget-input) " +
                         "(\\input @id \"issue-party\")) " +
-                    "(the html-input (widget-input) " +
+                        "(the html-input (widget-input) " +
                         "(\\input @id \"whouse-party\")) " +
-                    "(the html-table (widget-table) " +
+                        "(the html-table (widget-table) " +
                         "(\\table " +
-                            "(\\tr " +
-                                "(\\th \"goods\") " +
-                                "(\\th \"quantity\") " +
-                                "(\\th \"price\") " +
-                                "(\\th \"cost\")) " +
-                            "(\\tr " +
-                                "(\\td \\input @id \"goods\") " +
-                                "(\\td \\input @id \"qty\") " +
-                                "(\\td \\input @id \"price\") " +
-                                "(\\td \\input @id \"cost\"))))."
+                        "(\\tr " +
+                        "(\\th \"goods\") " +
+                        "(\\th \"quantity\") " +
+                        "(\\th \"price\") " +
+                        "(\\th \"cost\")) " +
+                        "(\\tr " +
+                        "(\\td \\input @id \"goods\") " +
+                        "(\\td \\input @id \"qty\") " +
+                        "(\\td \\input @id \"price\") " +
+                        "(\\td \\input @id \"cost\"))))."
+        );
+
+    }
+
+    @Test
+    public void test_02() throws Exception {
+        __(
+                "the whouse-issue " +
+                        "(word \"warehouse issue document\") " +
+                        "(part (issue-party) (whouse-party) (table row SKU part (goods) (qty) (price) (cost))).",
+
+                "the goods word \"goods\".",
+                "the qty word \"quantity\".",
+                "the price word \"price\".",
+                "the cost word \"cost\".",
+
+                "the generate-form " +
+                        "each (get part get prizm) " +
+                        "(any ptrn (this part) " +
+                        "(?is table widget-table) " +
+                        "(widget-input)).",
+
+                "the html-input (widget-input) (\\input (@id id this part)).",
+
+                "the html-table (widget-table) " +
+                        "(\\table " +
+                        "(\\tr each (get part get row this part) (\\th word this part)) " +
+                        "(\\tr each (get part get row this part) (\\td \\input @id id this part)))."
+        );
+
+        assertAnimoResult(
+                "generate-form prizm whouse-issue",
+                "generate-form " +
+                        "(the html-input (widget-input) " +
+                        "(\\input @id \"issue-party\")) " +
+                        "(the html-input (widget-input) " +
+                        "(\\input @id \"whouse-party\")) " +
+                        "(the html-table (widget-table) " +
+                        "(\\table " +
+                        "(\\tr " +
+                        "(\\th \"goods\") " +
+                        "(\\th \"quantity\") " +
+                        "(\\th \"price\") " +
+                        "(\\th \"cost\")) " +
+                        "(\\tr " +
+                        "(\\td \\input @id \"goods\") " +
+                        "(\\td \\input @id \"qty\") " +
+                        "(\\td \\input @id \"price\") " +
+                        "(\\td \\input @id \"cost\"))))."
+        );
+
+    }
+
+    @Test
+    public void test_03() throws Exception {
+        __(
+                "the whouse-issue " +
+                        "(word \"warehouse issue document\") " +
+                        "(part (issue-party) (whouse-party) (table row SKU)).",
+
+                "the SKU part (goods) (qty) (price) (cost).",
+
+                "the goods word \"goods\".",
+                "the qty word \"quantity\".",
+                "the price word \"price\".",
+                "the cost word \"cost\".",
+
+                "the generate-form " +
+                        "each (get part get prizm) " +
+                        "(any ptrn (this part) " +
+                        "(?is table widget-table) " +
+                        "(widget-input)).",
+
+                "the html-input (widget-input) (\\input (@id id this part)).",
+
+                "the html-table (widget-table) " +
+                        "(\\table " +
+                        "(\\tr each (get part get row this part) (\\th word this part)) " +
+                        "(\\tr each (get part get row this part) (\\td \\input @id id this part)))."
+        );
+
+        assertAnimoResult(
+                "generate-form prizm whouse-issue",
+                "generate-form " +
+                        "(the html-input (widget-input) " +
+                        "(\\input @id \"issue-party\")) " +
+                        "(the html-input (widget-input) " +
+                        "(\\input @id \"whouse-party\")) " +
+                        "(the html-table (widget-table) " +
+                        "(\\table " +
+                        "(\\tr " +
+                        "(\\th \"goods\") " +
+                        "(\\th \"quantity\") " +
+                        "(\\th \"price\") " +
+                        "(\\th \"cost\")) " +
+                        "(\\tr " +
+                        "(\\td \\input @id \"goods\") " +
+                        "(\\td \\input @id \"qty\") " +
+                        "(\\td \\input @id \"price\") " +
+                        "(\\td \\input @id \"cost\"))))."
         );
 
     }
