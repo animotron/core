@@ -82,7 +82,7 @@ public class WHouseFormTest extends ATest {
                 "(lang-en \"warehouse issue document\") " +
                 "(lang-ru \"приходный складской документ\") " +
                 ") " +
-                "(part (issue-party) (whouse-party) (table part (goods) (qty) (price) (cost))).",
+                "(part (issue-party) (whouse-party) (table column (goods) (qty) (price) (cost))).",
 
             "the generate-form " +
                 "each (get part get prizm) " +
@@ -94,10 +94,15 @@ public class WHouseFormTest extends ATest {
                 "the html-input (widget-input) (\\input (@id id this part)).",
 
                 "the html-table (widget-table) " +
-                    "(\\table \\tr each (get part this part) (\\td \\input @id id this part))."
+                    "(\\table " +
+                        "(\\tr each (get column this part) (\\th word what-is this column))" +
+                        "(\\tr each (get column this part) (\\td \\input @id id this part)))."
         );
 
-        assertAnimoResult("generate-form prizm whouse-issue", "");
+        assertAnimoResult(
+                "generate-form prizm whouse-issue",
+                ""
+        );
 
     }
 
