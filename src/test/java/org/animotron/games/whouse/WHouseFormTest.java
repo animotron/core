@@ -78,11 +78,13 @@ public class WHouseFormTest extends ATest {
     public void test_01() throws Exception {
         __(
             "the whouse-issue " +
-                "(word " +
-                "(lang-en \"warehouse issue document\") " +
-                "(lang-ru \"приходный складской документ\") " +
-                ") " +
+                "(word \"warehouse issue document\") " +
                 "(part (issue-party) (whouse-party) (table column (goods) (qty) (price) (cost))).",
+
+            "the goods word \"goods\"",
+            "the qty word \"quantity\"",
+            "the price word \"price\"",
+            "the cost word \"cost\"",
 
             "the generate-form " +
                 "each (get part get prizm) " +
@@ -95,13 +97,29 @@ public class WHouseFormTest extends ATest {
 
                 "the html-table (widget-table) " +
                     "(\\table " +
-                        "(\\tr each (get column this part) (\\th word what-is this column))" +
-                        "(\\tr each (get column this part) (\\td \\input @id id this part)))."
+                        "(\\tr each (get column this part) (\\th word this column)) " +
+                        "(\\tr each (get column this part) (\\td \\input @id id this column)))."
         );
 
         assertAnimoResult(
                 "generate-form prizm whouse-issue",
-                ""
+                "generate-form " +
+                    "(the html-input (widget-input) " +
+                        "(\\input @id \"issue-party\")) " +
+                    "(the html-input (widget-input) " +
+                        "(\\input @id \"whouse-party\")) " +
+                    "(the html-table (widget-table) " +
+                        "(\\table " +
+                            "(\\tr " +
+                                "(\\th \"goods\") " +
+                                "(\\th \"quantity\") " +
+                                "(\\th \"price\") " +
+                                "(\\th \"cost\")) " +
+                            "(\\tr " +
+                                "(\\td \\input @id \"goods\") " +
+                                "(\\td \\input @id \"qty\") " +
+                                "(\\td \\input @id \"price\") " +
+                                "(\\td \\input @id \"cost\"))))."
         );
 
     }
