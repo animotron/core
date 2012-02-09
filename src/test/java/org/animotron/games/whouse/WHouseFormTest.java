@@ -96,12 +96,12 @@ public class WHouseFormTest extends ATest {
                                     "(?is table widget-table) " +
                                     "(widget-input))).",
 
-                "the html-input (widget-input) (\\input (@sid (id this prizm) \" \" (id this part))).",
+                "the html-input (widget-input) (\\input (@id uuid) (@name id this part) (@data-prizm id this pizm)).",
 
                 "the html-table (widget-table) " +
-                        "(\\table " +
+                    "(\\table " +
                         "(\\tr each (get part get row this part) (\\th word this part)) " +
-                        "(\\tr each (get part get row this part) (\\td \\input @id id this part)))."
+                        "(\\tr each (get part get row this part) (\\td html-input)))."
         );
 
         assertAnimoResult(
