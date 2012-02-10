@@ -26,7 +26,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.combinator.EACH;
 import org.animotron.statement.combinator.MAP;
-import org.animotron.statement.instruction.DetermInstruction;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.AN;
@@ -77,9 +77,9 @@ public class JExpression extends AbstractExpression {
         if (e.length == 1 && e[0] instanceof Relationship) {
             builder.bind((Relationship) e[0]);
         } else {
-            if (e[0] instanceof DetermInstruction) {
+            if (e[0] instanceof Instruction) {
                 builder.start(AN._);
-                builder._(REF._, ((DetermInstruction) e[0]).name());
+                builder._(REF._, ((Instruction) e[0]).name());
             } else if (e[0] instanceof Operator) {
                 builder.start((Operator) e[0]);
                 if (e[1] instanceof Object[]) {

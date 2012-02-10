@@ -26,7 +26,7 @@ import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.instruction.DetermInstruction;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.MLOperator;
@@ -217,7 +217,7 @@ public class AnimoExpression extends AbstractExpression {
                     builder.start(s);
                     s = null;
                     level++;
-                } else if (s instanceof DetermInstruction) {
+                } else if (s instanceof Instruction) {
                     builder.start(AN._);
                     builder._(REF._, token);
                     level++;

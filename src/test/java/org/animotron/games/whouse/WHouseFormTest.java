@@ -84,6 +84,8 @@ public class WHouseFormTest extends ATest {
                 "the SKU part (goods) (qty) (price) (cost).",
 
                 "the date word \"date\".",
+                "the whouse-party word \"warehouse\".",
+                "the issue-party word \"issue\".",
                 "the goods word \"goods\".",
                 "the qty word \"quantity\".",
                 "the price word \"price\".",
@@ -96,7 +98,9 @@ public class WHouseFormTest extends ATest {
                                     "(?is table widget-table) " +
                                     "(widget-input))).",
 
-                "the html-input (widget-input) (\\input (@id uuid) (@name id this part) (@data-prizm id this pizm)).",
+                "the html-input \\input (@id uuid) (@name id this part) (@data-prizm id this pizm).",
+
+                "the html-label-input (widget-input) (\\label (word this part) (html-input)).",
 
                 "the html-table (widget-table) " +
                     "(\\table " +
