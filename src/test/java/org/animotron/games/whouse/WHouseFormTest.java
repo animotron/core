@@ -95,13 +95,13 @@ public class WHouseFormTest extends ATest {
 
                 "the html-form " +
                     "(form-widget)" +
-                        "\\form (@id uuid) (@name id this prizm)" +
+                        "\\form (@id \"uuid\") (@name id this prizm)" +
                             "(each (get part) " +
                                 "(ptrn (this part) " +
                                     "(?is table html-table) " +
                                     "(html-label-input))).",
 
-                "the html-input \\input (@id uuid) (@name id this part).",
+                "the html-input \\input (@id \"uuid\") (@name id this part).",
 
                 "the html-label-input \\label (word this part) (html-input).",
 
@@ -114,22 +114,23 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
                 "generate-form prizm whouse-issue",
                 "generate-form " +
-                        "(the html-input (widget-input) " +
-                        "(\\input @id \"issue-party\")) " +
-                        "(the html-input (widget-input) " +
-                        "(\\input @id \"whouse-party\")) " +
-                        "(the html-table (widget-table) " +
-                        "(\\table " +
-                        "(\\tr " +
-                        "(\\th \"goods\") " +
-                        "(\\th \"quantity\") " +
-                        "(\\th \"price\") " +
-                        "(\\th \"cost\")) " +
-                        "(\\tr " +
-                        "(\\td \\input @id \"goods\") " +
-                        "(\\td \\input @id \"qty\") " +
-                        "(\\td \\input @id \"price\") " +
-                        "(\\td \\input @id \"cost\"))))."
+                    "the html-form " +
+                        "(form-widget) " +
+                        "(\\form (@id \"uuid\") (@name \"whouse-issue\") " +
+                            "(html-label-input " +
+                                "\\label \"date\" (html-input \\input (@id \"uuid\") (@name \"date\"))) " +
+                            "(html-label-input " +
+                                "\\label \"issue\" (html-input \\input (@id \"uuid\") (@name \"issue-party\"))) " +
+                            "(html-label-input " +
+                                "\\label \"warehouse\" (html-input \\input (@id \"uuid\") (@name \"whouse-party\"))) " +
+                            "(html-table " +
+                                "\\table " +
+                                    "(\\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
+                                    "(\\tr " +
+                                        "(\\td html-input \\input (@id \"uuid\") (@name \"goods\")) " +
+                                        "(\\td html-input \\input (@id \"uuid\") (@name \"qty\")) " +
+                                        "(\\td html-input \\input (@id \"uuid\") (@name \"price\")) " +
+                                        "(\\td html-input \\input (@id \"uuid\") (@name \"cost\")))))."
         );
 
     }
