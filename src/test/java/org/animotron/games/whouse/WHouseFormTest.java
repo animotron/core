@@ -105,7 +105,7 @@ public class WHouseFormTest extends ATest {
 
                 "the html-label-input \\label (word this part) (html-input).",
 
-                "the html-table" +
+                "the html-table " +
                     "\\table " +
                         "(\\tr each (get row this part) (\\th word this part)) " +
                         "(\\tr each (get row this part) (\\td html-input))."
