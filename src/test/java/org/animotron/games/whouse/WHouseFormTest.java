@@ -107,8 +107,8 @@ public class WHouseFormTest extends ATest {
 
                 "the html-table " +
                     "\\table " +
-                        "(\\tr each (get row this part) (\\th word this part)) " +
-                        "(\\tr each (get row this part) (\\td html-input))."
+                        "(\\tr each (get part get row this part) (\\th word this part)) " +
+                        "(\\tr each (get part get row this part) (\\td html-input))."
         );
 
         assertAnimoResult(
