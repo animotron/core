@@ -91,21 +91,24 @@ public class WHouseFormTest extends ATest {
                 "the price word \"price\".",
                 "the cost word \"cost\".",
 
-                "the generate-form " +
-                        "each (get prizm) " +
+                "the generate-form each (get prizm) (any form-widget).",
+
+                "the html-form " +
+                    "(form-widget)" +
+                        "\\form (@id uuid) (@name id this prizm)" +
                             "(each (get part) " +
-                                "(any ptrn (this part) " +
-                                    "(?is table widget-table) " +
-                                    "(widget-input))).",
+                                "(ptrn (this part) " +
+                                    "(?is table html-table) " +
+                                    "(html-label-input))).",
 
-                "the html-input \\input (@id uuid) (@name id this part) (@data-prizm id this pizm).",
+                "the html-input \\input (@id uuid) (@name id this part).",
 
-                "the html-label-input (widget-input) (\\label (word this part) (html-input)).",
+                "the html-label-input \\label (word this part) (html-input).",
 
-                "the html-table (widget-table) " +
-                    "(\\table " +
+                "the html-table" +
+                    "\\table " +
                         "(\\tr each (get part get row this part) (\\th word this part)) " +
-                        "(\\tr each (get part get row this part) (\\td html-input)))."
+                        "(\\tr each (get part get row this part) (\\td html-input))."
         );
 
         assertAnimoResult(
