@@ -132,6 +132,37 @@ public class WHouseFormTest extends ATest {
                                         "(\\td html-input \\input (@id \"uuid\") (@name \"price\")) " +
                                         "(\\td html-input \\input (@id \"uuid\") (@name \"cost\")))))."
         );
+        
+        __(
+    		"the companyA (party) (word \"Company A & Co.\")",
+    		"the centralWhouse (party) (word \"Central warehouse\")",
+
+    		"the book (goods).",
+    		"the ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
+
+    		"the pcs (UoM) (word \"pcs\")",
+
+    		"the EUR (currency) (word \"EUR\")",
+    		"the USD (currency) (word \"USD\")",
+
+    		"the docA (whouse-issue) " +
+                "(date D2012-02-11) " +
+                "(issue-party companyA) " +
+                "(whouse-party centralWhouse) " +
+                "(SKU" +
+                	"(uuidA " +
+                		"(goods ISBN:0-387-97061-4) " +
+                		"(qty (number 1) (UoM pcs)) " +
+                		"(price (number 35) (currency EUR) (UoM pcs)) " +
+                		"(cost (number 35) (currency EUR)))" +
+                	"(uuidB " +
+                		"(goods ISBN:0-387-97061-4) " +
+                		"(qty (number 1) (UoM pcs)) " +
+                		"(price (number 60) (currency USD) (UoM pcs)) " +
+                		"(cost (number 60) (currency USD)))" +
+                ")" +
+            ")."
+		);
 
     }
 
