@@ -531,13 +531,4 @@ public class GetTest extends ATest {
         assertAnimoResult("get bar x", "bar y.");
     }
 
-    @Test
-    public void test_19() throws Exception {
-        testAnimo("the x1 (foo) 1.");
-        testAnimo("the x2 (foo) 2.");
-        testAnimo("the y1 (z) (x1).");
-        testAnimo("the y2 (z) (x2).");
-        assertAnimoResult("any z with foo x2", "the y2 (z) (x2).");
-    }
-
 }
