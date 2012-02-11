@@ -512,4 +512,17 @@ public class GetTest extends ATest {
         assertAnimoResult("x get b a", "x b c.");
     }
 
+    @Test
+    public void test_16() throws Exception {
+        testAnimo("the x (foo) (bar).");
+        testAnimo("the y x.");
+        assertAnimoResult("get foo y", "x.");
+    }
+
+    @Test
+    public void test_17() throws Exception {
+        testAnimo("the x bar.");
+        assertAnimoResult("get bar x", "bar.");
+    }
+
 }
