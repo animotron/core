@@ -64,7 +64,7 @@ public class JSONExpression extends AbstractJSONExpression {
                 case START_OBJECT           :
                 case START_ARRAY            : prev = token;
                                               break;
-                case FIELD_NAME             : if (prev == FIELD_NAME || prev == END_OBJECT || prev == END_ARRAY) {
+                case FIELD_NAME             : if (l > 0 && (prev == FIELD_NAME || prev == END_OBJECT || prev == END_ARRAY)) {
                                                 builder.end();
                                                 l--;
                                               }
@@ -74,7 +74,7 @@ public class JSONExpression extends AbstractJSONExpression {
                                               l++;
                                               break;
                 case END_OBJECT             :
-                case END_ARRAY              : if (prev == FIELD_NAME || prev == END_OBJECT || prev == END_ARRAY) {
+                case END_ARRAY              : if (l > 0 && (prev == FIELD_NAME || prev == END_OBJECT || prev == END_ARRAY)) {
                                                 builder.end();
                                                 l--;
                                               }
