@@ -115,8 +115,10 @@ public class WHouseFormTest extends ATest {
                 "the html-table " +
                     "each (get row this part) "+
                         "(\\table (@name id this row) " +
-                            "(\\tr each (get part this row) (\\th word this part)) " +
-                            "(\\tr (@name \"uuid\") (each (get part this row) (\\td html-input))))."
+                            "(html-table-head) (html-table-row)).",
+
+                "the html-table-head \\tr each (get part this row) (\\th word this part).",
+                "the html-table-row \\tr (@name \"uuid\") (each (get part this row) (\\td html-input))."
         );
 
         assertAnimoResult(
@@ -126,19 +128,19 @@ public class WHouseFormTest extends ATest {
                         "(form-widget) " +
                         "(\\form (@name \"whouse-issue\") " +
                             "(html-label-input " +
-                                "\\label \"date\" (html-input \\input (@name \"date\"))) " +
+                                "\\label \"date\" (html-input \\input @name \"date\")) " +
                             "(html-label-input " +
-                                "\\label \"issue\" (html-input \\input (@name \"issue-party\"))) " +
+                                "\\label \"issue\" (html-input \\input @name \"issue-party\")) " +
                             "(html-label-input " +
-                                "\\label \"warehouse\" (html-input \\input (@name \"whouse-party\"))) " +
+                                "\\label \"warehouse\" (html-input \\input @name \"whouse-party\")) " +
                             "(html-table " +
-                                "\\table (@name \"SKU\")" +
-                                    "(\\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
-                                    "(\\tr (@name \"uuid\") " +
-                                        "(\\td html-input \\input (@name \"goods\")) " +
-                                        "(\\td html-input \\input (@name \"qty\")) " +
-                                        "(\\td html-input \\input (@name \"price\")) " +
-                                        "(\\td html-input \\input (@name \"cost\")))))."
+                                "\\table (@name \"SKU\") " +
+                                    "(html-table-head \\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
+                                    "(html-table-row \\tr (@name \"uuid\") " +
+                                        "(\\td html-input \\input @name \"goods\") " +
+                                        "(\\td html-input \\input @name \"qty\") " +
+                                        "(\\td html-input \\input @name \"price\") " +
+                                        "(\\td html-input \\input @name \"cost\"))))."
         );
         
     }
