@@ -99,6 +99,7 @@ public class WHouseFormTest extends ATest {
                 "the cost word \"cost\".",
 
                 "the generate-form each (get prizm) (any form-widget).",
+                "the generate-table-row each (get row get prizm) (any table-row-widget).",
 
                 "the html-form " +
                     "(form-widget)" +
@@ -118,7 +119,7 @@ public class WHouseFormTest extends ATest {
                             "(html-table-head) (html-table-row)).",
 
                 "the html-table-head \\tr each (get part this row) (\\th word this part).",
-                "the html-table-row \\tr (@name \"uuid\") (each (get part this row) (\\td html-input))."
+                "the html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input)))."
         );
 
         assertAnimoResult(
@@ -136,13 +137,25 @@ public class WHouseFormTest extends ATest {
                             "(html-table " +
                                 "\\table (@name \"SKU\") " +
                                     "(html-table-head \\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
-                                    "(html-table-row \\tr (@name \"uuid\") " +
-                                        "(\\td html-input \\input @name \"goods\") " +
-                                        "(\\td html-input \\input @name \"qty\") " +
-                                        "(\\td html-input \\input @name \"price\") " +
-                                        "(\\td html-input \\input @name \"cost\"))))."
+                                    "(html-table-row (table-row-widget) " +
+                                        "(\\tr (@name \"uuid\") " +
+                                            "(\\td html-input \\input @name \"goods\") " +
+                                            "(\\td html-input \\input @name \"qty\") " +
+                                            "(\\td html-input \\input @name \"price\") " +
+                                            "(\\td html-input \\input @name \"cost\")))))."
         );
-        
+
+        assertAnimoResult(
+                "generate-table-row prizm whouse-issue",
+                "generate-table-row " +
+                    "the html-table-row (table-row-widget) " +
+                        "(\\tr (@name \"uuid\") " +
+                            "(\\td html-input \\input @name \"goods\") " +
+                            "(\\td html-input \\input @name \"qty\") " +
+                            "(\\td html-input \\input @name \"price\") " +
+                            "(\\td html-input \\input @name \"cost\"))."
+        );
+
     }
 
     @Test
