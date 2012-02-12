@@ -98,12 +98,12 @@ public class WHouseFormTest extends ATest {
                 "the price word \"price\".",
                 "the cost word \"cost\".",
 
-                "the generate-form each (get prizm) (any form-widget).",
-                "the generate-table-row each (get row get prizm) (any table-row-widget).",
+                "the generate-form each (get prism) (any form-widget).",
+                "the generate-table-row each (get row get prism) (any table-row-widget).",
 
                 "the html-form " +
                     "(form-widget)" +
-                        "\\form (@name id this prizm)" +
+                        "\\form (@name id this prism)" +
                             "(each (get part) " +
                                 "(ptrn (this part) " +
                                     "(?is table html-table) " +
@@ -123,7 +123,7 @@ public class WHouseFormTest extends ATest {
         );
 
         assertAnimoResult(
-                "generate-form prizm whouse-issue",
+                "generate-form prism whouse-issue",
                 "generate-form " +
                     "the html-form " +
                         "(form-widget) " +
@@ -146,7 +146,7 @@ public class WHouseFormTest extends ATest {
         );
 
         assertAnimoResult(
-                "generate-table-row prizm whouse-issue",
+                "generate-table-row prism whouse-issue",
                 "generate-table-row " +
                     "the html-table-row (table-row-widget) " +
                         "(\\tr (@name \"uuid\") " +
