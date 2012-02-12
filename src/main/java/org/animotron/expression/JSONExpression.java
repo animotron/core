@@ -27,6 +27,8 @@ import org.animotron.statement.operator.THE;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 
+import static org.codehaus.jackson.JsonToken.END_ARRAY;
+import static org.codehaus.jackson.JsonToken.END_OBJECT;
 import static org.codehaus.jackson.JsonToken.FIELD_NAME;
 
 /**
@@ -62,7 +64,7 @@ public class JSONExpression extends AbstractJSONExpression {
                 case START_OBJECT           :
                 case START_ARRAY            : prev = token;
                                               break;
-                case FIELD_NAME             : if (prev == FIELD_NAME) {
+                case FIELD_NAME             : if (prev == FIELD_NAME || prev == END_OBJECT || prev == END_ARRAY) {
                                                 builder.end();
                                                 l--;
                                               }
@@ -72,7 +74,7 @@ public class JSONExpression extends AbstractJSONExpression {
                                               l++;
                                               break;
                 case END_OBJECT             :
-                case END_ARRAY              : if (prev == FIELD_NAME) {
+                case END_ARRAY              : if (prev == FIELD_NAME || prev == END_OBJECT || prev == END_ARRAY) {
                                                 builder.end();
                                                 l--;
                                               }

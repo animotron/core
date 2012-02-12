@@ -113,4 +113,9 @@ public class JSONTest extends ATest {
         test("{\"foo\" : null, \"bar\" : null}", "foo bar.");
     }
 
+    @Test
+    public void test_10() throws Exception {
+        test("{\"foo\" : null, \"bar\" : null, \"x\" : null}", "foo bar x.");
+    }
+
 }

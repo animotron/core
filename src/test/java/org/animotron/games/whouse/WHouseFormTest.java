@@ -164,7 +164,7 @@ public class WHouseFormTest extends ATest {
             "{" +
                 "\"whouse-issue\" : null, " +
                 "\"date\" : \"D2012-02-11\", " +
-                "\"issure-party\" : {\"companyA\" : null}, " +
+                "\"issue-party\" : {\"companyA\" : null}, " +
                 "\"whouse-party\" : {\"centralWhouse\" : null}, " +
                 "\"SKU\" : {" +
                     "\"uuidA\" : {" +
@@ -186,22 +186,20 @@ public class WHouseFormTest extends ATest {
         assertAnimo(
                 doc,
                 "the docA (whouse-issue) " +
-                        "(date D2012-02-11) " +
+                        "(date \"D2012-02-11\") " +
                         "(issue-party companyA) " +
                         "(whouse-party centralWhouse) " +
-                        "(SKU" +
+                        "(SKU " +
                         "(uuidA " +
                         "(goods ISBN:0-387-97061-4) " +
                         "(qty (number 1) (UoM pcs)) " +
                         "(price (number 35) (currency EUR) (UoM pcs)) " +
-                        "(cost (number 35) (currency EUR)))" +
+                        "(cost (number 35) (currency EUR))) " +
                         "(uuidB " +
                         "(goods ISBN:0-387-97061-4) " +
                         "(qty (number 1) (UoM pcs)) " +
                         "(price (number 60) (currency USD) (UoM pcs)) " +
-                        "(cost (number 60) (currency USD)))" +
-                        ")" +
-                        ")."
+                        "(cost (number 60) (currency USD))))."
         );
 
     }
