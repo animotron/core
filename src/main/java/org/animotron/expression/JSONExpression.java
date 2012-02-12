@@ -40,15 +40,23 @@ public class JSONExpression extends AbstractJSONExpression {
         super(parser);
     }
 
+    public JSONExpression(JsonParser parser, String name) {
+        super(parser, name);
+    }
+
     public JSONExpression(GraphBuilder builder, JsonParser parser) {
         super(builder, parser);
+    }
+
+    public JSONExpression(GraphBuilder builder, JsonParser parser, String name) {
+        super(builder, parser, name);
     }
 
     @Override
     public void build() throws Exception {
         int l = 0;
         JsonToken token, prev = null;
-        builder.start(THE._);
+        builder.start(THE._, name);
         while((token = parser.nextToken()) != null) {
             switch (token) {
                 case START_OBJECT           :

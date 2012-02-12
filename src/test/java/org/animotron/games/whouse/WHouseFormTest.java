@@ -21,7 +21,12 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
+import org.animotron.expression.Expression;
+import org.animotron.expression.JSONExpression;
+import org.codehaus.jackson.JsonFactory;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.animotron.expression.AnimoExpression.__;
 
@@ -30,6 +35,8 @@ import static org.animotron.expression.AnimoExpression.__;
  *
  */
 public class WHouseFormTest extends ATest {
+
+    private static final JsonFactory FACTORY = new JsonFactory();
 
 	@Test
     public void test_00() throws Exception {
@@ -95,20 +102,21 @@ public class WHouseFormTest extends ATest {
 
                 "the html-form " +
                     "(form-widget)" +
-                        "\\form (@id \"uuid\") (@name id this prizm)" +
+                        "\\form (@name id this prizm)" +
                             "(each (get part) " +
                                 "(ptrn (this part) " +
                                     "(?is table html-table) " +
                                     "(html-label-input))).",
 
-                "the html-input \\input (@id \"uuid\") (@name id this part).",
+                "the html-input \\input (@name id this part).",
 
                 "the html-label-input \\label (word this part) (html-input).",
 
                 "the html-table " +
-                    "\\table " +
-                        "(\\tr each (get part get row this part) (\\th word this part)) " +
-                        "(\\tr each (get part get row this part) (\\td html-input))."
+                    "each (get row this part) "+
+                        "(\\table (@name id this row) " +
+                            "(\\tr each (get part this row) (\\th word this part)) " +
+                            "(\\tr (@name \"uuid\") (each (get part this row) (\\td html-input))))."
         );
 
         assertAnimoResult(
@@ -116,23 +124,28 @@ public class WHouseFormTest extends ATest {
                 "generate-form " +
                     "the html-form " +
                         "(form-widget) " +
-                        "(\\form (@id \"uuid\") (@name \"whouse-issue\") " +
+                        "(\\form (@name \"whouse-issue\") " +
                             "(html-label-input " +
-                                "\\label \"date\" (html-input \\input (@id \"uuid\") (@name \"date\"))) " +
+                                "\\label \"date\" (html-input \\input (@name \"date\"))) " +
                             "(html-label-input " +
-                                "\\label \"issue\" (html-input \\input (@id \"uuid\") (@name \"issue-party\"))) " +
+                                "\\label \"issue\" (html-input \\input (@name \"issue-party\"))) " +
                             "(html-label-input " +
-                                "\\label \"warehouse\" (html-input \\input (@id \"uuid\") (@name \"whouse-party\"))) " +
+                                "\\label \"warehouse\" (html-input \\input (@name \"whouse-party\"))) " +
                             "(html-table " +
-                                "\\table " +
+                                "\\table (@name \"SKU\")" +
                                     "(\\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
-                                    "(\\tr " +
-                                        "(\\td html-input \\input (@id \"uuid\") (@name \"goods\")) " +
-                                        "(\\td html-input \\input (@id \"uuid\") (@name \"qty\")) " +
-                                        "(\\td html-input \\input (@id \"uuid\") (@name \"price\")) " +
-                                        "(\\td html-input \\input (@id \"uuid\") (@name \"cost\")))))."
+                                    "(\\tr (@name \"uuid\") " +
+                                        "(\\td html-input \\input (@name \"goods\")) " +
+                                        "(\\td html-input \\input (@name \"qty\")) " +
+                                        "(\\td html-input \\input (@name \"price\")) " +
+                                        "(\\td html-input \\input (@name \"cost\")))))."
         );
         
+    }
+
+    @Test
+    public void test_02 () throws IOException {
+
         __(
                 "the companyA (party) (word \"Company A & Co.\")",
                 "the centralWhouse (party) (word \"Central warehouse\")",
@@ -143,8 +156,35 @@ public class WHouseFormTest extends ATest {
                 "the pcs (UoM) (word \"pcs\")",
 
                 "the EUR (currency) (word \"EUR\")",
-                "the USD (currency) (word \"USD\")",
+                "the USD (currency) (word \"USD\")"
 
+        );
+
+        Expression doc = new JSONExpression(FACTORY.createJsonParser(
+            "{" +
+                "\"whouse-issue\" : null, " +
+                "\"date\" : \"D2012-02-11\", " +
+                "\"issure-party\" : {\"companyA\" : null}, " +
+                "\"whouse-party\" : {\"centralWhouse\" : null}, " +
+                "\"SKU\" : {" +
+                    "\"uuidA\" : {" +
+                        "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
+                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"price\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}}" +
+                    "}, " +
+                    "\"uuidB\" : {" +
+                        "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
+                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"price\" : {\"number\" : 60, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"cost\" : {\"number\" : 60, \"currency\" : {\"USD\" : null}}" +
+                    "}" +
+                "}" +
+            "}"
+        ), "docA");
+
+        assertAnimo(
+                doc,
                 "the docA (whouse-issue) " +
                         "(date D2012-02-11) " +
                         "(issue-party companyA) " +

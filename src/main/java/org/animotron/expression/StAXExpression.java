@@ -38,18 +38,26 @@ import java.io.IOException;
  * 
  */
 public class StAXExpression extends AbstractStAXExpression {
-	
+
     public StAXExpression(XMLStreamReader reader) {
         super(reader);
+    }
+
+    public StAXExpression(XMLStreamReader reader, String name) {
+        super(reader, name);
     }
 
     public StAXExpression(GraphBuilder builder, XMLStreamReader reader) {
         super(builder, reader);
     }
 
+    public StAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) {
+        super(builder, reader, name);
+    }
+
     @Override
     public void build() throws Exception {
-        builder.start(THE._);
+        builder.start(THE._, name);
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
                 case XMLStreamConstants.START_ELEMENT :

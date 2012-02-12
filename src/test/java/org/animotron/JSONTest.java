@@ -108,4 +108,9 @@ public class JSONTest extends ATest {
         test("[1, {\"foo\" : [{\"bar\" : 2}, 3]}]", "1 foo (bar 2) 3.");
     }
 
+    @Test
+    public void test_09() throws Exception {
+        test("{\"foo\" : null, \"bar\" : null}", "foo bar.");
+    }
+
 }
