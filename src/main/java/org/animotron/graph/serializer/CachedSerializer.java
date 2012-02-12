@@ -23,6 +23,8 @@ package org.animotron.graph.serializer;
 import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.cache.Cache;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.*;
 import org.animotron.graph.traverser.*;
 import org.neo4j.graphdb.Relationship;
@@ -235,23 +237,30 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-    private void cache(Relationship r, Cache cache, String key) {
-        String entity = entity(key, cache);
-        if (CACHE.has(r)) {
-            String[] e = (String[]) CACHE.get(r);
-            String[] e1 = new String[e.length + 1];
-            for (int i = 0; i < e.length; i++) {
-                if (e[i] == entity) {
-                    return;
+    private void cache(final Relationship r, final Cache cache, final String key) {
+        AnimoGraph.execute(new GraphOperation<Void>() {
+            @Override
+            public Void execute() throws Exception {
+                String entity;
+                entity = entity(key, cache);
+                if (CACHE.has(r)) {
+                    String[] e = (String[]) CACHE.get(r);
+                    String[] e1 = new String[e.length + 1];
+                    for (int i = 0; i < e.length; i++) {
+                        if (e[i] == entity) {
+                            return null;
+                        }
+                        e1[i] = e[i];
+                    }
+                    e1[e.length] = entity;
+                    CACHE.set(r, e1);
+                } else {
+                    String[] e = new String[] {entity};
+                    CACHE.set(r, e);
                 }
-                e1[i] = e[i];
+                return null;
             }
-            e1[e.length] = entity;
-            CACHE.set(r, e1);
-        } else {
-            String[] e = new String[] {entity};
-            CACHE.set(r, e);
-        }
+        });
     }
     
     public static String entity(String key, Cache cache) {
@@ -274,12 +283,24 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-    public static void drop(Relationship r) throws IOException {
-        if (CACHE.has(r)) {
-            for (String i : (String[]) CACHE.get(r)) {
-                drop(i);
+    public static void drop(final Relationship r) {
+        AnimoGraph.execute(new GraphOperation<Void>() {
+            @Override
+            public Void execute() throws IOException {
+                if (CACHE.has(r)) {
+                    try {
+                        for (String i : (String[]) CACHE.get(r)) {
+                            drop(i);
+                        }
+                    } catch (IOException e) {
+                        throw e;
+                    } finally {
+                        CACHE.remove(r);
+                    }
+                }
+                return null;
             }
-        }
+        });
     }
 
 }

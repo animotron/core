@@ -34,13 +34,17 @@ public enum Properties  {
 	public Object get(PropertyContainer container) {
 		return container.getProperty(name());
 	}
-	
-	public void set(PropertyContainer container, Object value) {
-		if (value != null) 
-			container.setProperty(name(), value);
-	}
-	
-	public boolean has(PropertyContainer container) {
+
+    public void set(PropertyContainer container, Object value) {
+        if (value != null)
+            container.setProperty(name(), value);
+    }
+
+    public void remove(PropertyContainer container) {
+        container.removeProperty(name());
+    }
+
+    public boolean has(PropertyContainer container) {
 		return container.hasProperty(name());
 	}
     
