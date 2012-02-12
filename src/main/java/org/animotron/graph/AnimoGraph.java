@@ -21,7 +21,7 @@
 package org.animotron.graph;
 
 import javolution.util.FastList;
-
+import javolution.util.FastMap;
 import org.animotron.Executor;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
@@ -33,6 +33,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +54,7 @@ public class AnimoGraph {
 	private static String STORAGE;
 
     private static List<Transaction> activeTx;
-    //private static Map<Transaction, Exception> debugActiveTx;
+    private static Map<Transaction, Exception> debugActiveTx;
 
 	private static Node ROOT;
     private static File BIN;
@@ -67,7 +68,7 @@ public class AnimoGraph {
         System.gc();
         
         activeTx = new FastList<Transaction>();
-        //debugActiveTx = new FastMap<Transaction, Exception>();
+        debugActiveTx = new FastMap<Transaction, Exception>();
     	STORAGE = folder;
     	
     	Executor.init();
@@ -123,10 +124,10 @@ public class AnimoGraph {
 		while (!activeTx.isEmpty()) {
 			System.out.println("Active transactions "+activeTx.size());
 			
-//			for (Entry<Transaction, Exception> e : debugActiveTx.entrySet()) {
-//				System.out.println(e.getKey());
-//				e.getValue().printStackTrace();
-//			}
+			for (Map.Entry<Transaction, Exception> e : debugActiveTx.entrySet()) {
+				System.out.println(e.getKey());
+				e.getValue().printStackTrace();
+			}
 
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
 		}
@@ -137,7 +138,7 @@ public class AnimoGraph {
 	public static Transaction beginTx() {
 		Transaction tx = graphDb.beginTx();
 		activeTx.add(tx);
-		//debugActiveTx.put(tx, new IOException());
+		debugActiveTx.put(tx, new IOException());
 		return tx;
 	}
 
@@ -149,7 +150,7 @@ public class AnimoGraph {
 			e.printStackTrace();
 		} finally {
 			activeTx.remove(tx);
-			//debugActiveTx.remove(tx);
+			debugActiveTx.remove(tx);
 		}
 	}
 

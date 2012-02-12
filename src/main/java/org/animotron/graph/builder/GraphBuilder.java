@@ -191,7 +191,6 @@ public abstract class GraphBuilder {
             finishTx(tx);
         } catch (Throwable e) {
         	e.printStackTrace();
-        	
             finishTx(tx);
             tx = beginTx();
             try {
