@@ -174,7 +174,7 @@ public class WHouseFormTest extends ATest {
                         "\"cost\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}}" +
                     "}, " +
                     "\"uuidB\" : {" +
-                        "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
+                        "\"goods\" : {\"ISBN:0-387-97061-3\" : null}, " +
                         "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
                         "\"price\" : {\"number\" : 60, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
                         "\"cost\" : {\"number\" : 60, \"currency\" : {\"USD\" : null}}" +
@@ -186,21 +186,25 @@ public class WHouseFormTest extends ATest {
         assertAnimo(
                 doc,
                 "the docA (whouse-issue) " +
-                        "(date \"D2012-02-11\") " +
-                        "(issue-party companyA) " +
-                        "(whouse-party centralWhouse) " +
-                        "(SKU " +
+                    "(date \"D2012-02-11\") " +
+                    "(issue-party companyA) " +
+                    "(whouse-party centralWhouse) " +
+                    "(SKU " +
                         "(uuidA " +
-                        "(goods ISBN:0-387-97061-4) " +
-                        "(qty (number 1) (UoM pcs)) " +
-                        "(price (number 35) (currency EUR) (UoM pcs)) " +
-                        "(cost (number 35) (currency EUR))) " +
+                        	"(goods ISBN:0-387-97061-4) " +
+                        	"(qty (number 1) (UoM pcs)) " +
+                        	"(price (number 35) (currency EUR) (UoM pcs)) " +
+                        	"(cost (number 35) (currency EUR))) " +
                         "(uuidB " +
-                        "(goods ISBN:0-387-97061-4) " +
-                        "(qty (number 1) (UoM pcs)) " +
-                        "(price (number 60) (currency USD) (UoM pcs)) " +
-                        "(cost (number 60) (currency USD))))."
+                        	"(goods ISBN:0-387-97061-3) " +
+                        	"(qty (number 1) (UoM pcs)) " +
+                        	"(price (number 60) (currency USD) (UoM pcs)) " +
+                        	"(cost (number 60) (currency USD))))."
         );
+        
+        assertAnimoResult(
+    		"get goods all centralWhouse,whouse-issue with date \"D2012-02-11\"", 
+    		"goods ISBN:0-387-97061-4 (book goods). goods ISBN:0-387-97061-4 (book goods). goods ISBN:0-387-97061-3.");
 
     }
 
