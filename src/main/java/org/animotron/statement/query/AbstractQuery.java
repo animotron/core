@@ -677,8 +677,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 try {
                 	if (thes == null)
                 		thes = ((Predicate) st).getExpected(pf, r);
-                	else
-                		thes.addAll( ((Predicate) st).getExpected(pf, r) );
+                	else {
+                		Set<Relationship> set = ((Predicate) st).getExpected(pf, r);
+                		if (set != null)
+                			thes.addAll( set );
+                	}
 
                 } catch (Exception e) {
                     //XXX: report

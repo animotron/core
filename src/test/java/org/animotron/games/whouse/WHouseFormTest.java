@@ -230,6 +230,29 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
     		"get SKU all centralWhouse,event with date \"D2012-02-11\"", 
     		"SKU (uuidA) (uuidB).");
+        
+        __(
+    		"the person party.",
+    		"the personA person.",
+    		
+            "the docB " +
+                	"(event) " +
+                    "(date \"D2012-02-12\") " +
+                    "(issue-party centralWhouse) " +
+                    "(receive-party personA) " +
+                    "(SKU " +
+                        "(uuidA " +
+                        	"(goods ISBN:0-387-97061-4) " +
+                        	"(qty (number 1) (UoM pcs)) " +
+                        	"(price (number 35) (currency EUR) (UoM pcs)) " +
+                        	"(cost (number 35) (currency EUR)))" +
+                	")."
+		);
+
+        assertAnimoResult(
+    		"get SKU all centralWhouse,event between date (\"D2012-02-11\") (\"D2012-02-12\") ", 
+    		"SKU (uuidA) (uuidB). SKU uuidA.");
+        
     }
 
 }
