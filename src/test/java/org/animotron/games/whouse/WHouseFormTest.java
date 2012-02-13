@@ -159,10 +159,10 @@ public class WHouseFormTest extends ATest {
 
                 "the html-label-input \\label (word this part) (html-input).",
 
-//                "the html-table " +
-//                    "each (get row this part) "+
-//                        "(\\table (@name id this row) " +
-//                            "(html-table-head) (html-table-row)).",
+                "the html-table " +
+                    "each (get row this part) "+
+                        "(\\table (@name id this row) " +
+                            "(html-table-head) (html-table-row)).",
 
                 "the html-table-head \\tr each (get part this row) (\\th word this part).",
 

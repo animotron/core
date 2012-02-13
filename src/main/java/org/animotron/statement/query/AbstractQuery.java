@@ -662,8 +662,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
     protected boolean isLeaf(Node node) {
 		for (Relationship r : node.getRelationships(Direction.INCOMING, REF._))
-			if (r.getStartNode().hasRelationship(Direction.INCOMING, AN._))
-				return false;
+			for (Relationship rr : r.getStartNode().getRelationships(Direction.INCOMING, AN._))
+				if (rr.getStartNode().hasRelationship(Direction.INCOMING, THE._))
+					return false;
 		
 		return true;
 	};
