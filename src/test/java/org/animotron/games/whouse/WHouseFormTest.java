@@ -21,6 +21,8 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
+import org.animotron.expression.Expression;
+import org.animotron.expression.JSONExpression;
 import org.codehaus.jackson.JsonFactory;
 import org.junit.Test;
 
@@ -37,97 +39,97 @@ public class WHouseFormTest extends ATest {
     @Test
     public void test_00() throws Exception {
 
-//        __(
-//                "the companyA (party) (word \"Company A & Co.\")",
-//                "the centralWhouse (party) (word \"Central warehouse\")",
-//
-//                "the book (goods).",
-//                "the ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
-//                "the ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\")",
-//
-//                "the pcs (UoM) (word \"pcs\")",
-//
-//                "the EUR (currency) (word \"EUR\")",
-//                "the USD (currency) (word \"USD\")"
-//
-//        );
-//
-//        Expression doc = new JSONExpression(FACTORY.createJsonParser(
-//            "{" +
-//                "\"event\" : null, " +
-//                "\"date\" : \"D2012-02-11\", " +
-//                "\"issue-party\" : {\"companyA\" : null}, " +
-//                "\"receive-party\" : {\"centralWhouse\" : null}, " +
-//                "\"SKU\" : {" +
-//                    "\"uuidA\" : {" +
-//                        "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
-//                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
-//                        "\"price\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
-//                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}}" +
-//                    "}, " +
-//                    "\"uuidB\" : {" +
-//                        "\"goods\" : {\"ISBN:3-540-11157-3\" : null}, " +
-//                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
-//                        "\"price\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
-//                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}}" +
-//                    "}" +
-//                "}" +
-//            "}"
-//        ), "docA");
-//
-//        assertAnimo(
-//                doc,
-//                "the docA " +
-//                	"(event) " +
-//                    "(date \"D2012-02-11\") " +
-//                    "(issue-party companyA) " +
-//                    "(receive-party centralWhouse) " +
-//                    "(SKU " +
-//                        "(uuidA " +
-//                        	"(goods ISBN:0-387-97061-4) " +
-//                        	"(qty (number 1) (UoM pcs)) " +
-//                        	"(price (number 35) (currency EUR) (UoM pcs)) " +
-//                        	"(cost (number 35) (currency EUR))) " +
-//                        "(uuidB " +
-//                        	"(goods ISBN:3-540-11157-3) " +
-//                        	"(qty (number 1) (UoM pcs)) " +
-//                        	"(price (number 35) (currency USD) (UoM pcs)) " +
-//                        	"(cost (number 35) (currency USD))))."
-//        );
-//
-//        assertAnimoResult(
-//    		"all centralWhouse with date \"D2012-02-11\"",
-//    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
-//
-//        assertAnimoResult(
-//    		"all centralWhouse,event with date \"D2012-02-11\"",
-//    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
-//
-//        assertAnimoResult(
-//    		"get SKU all centralWhouse,event with date \"D2012-02-11\"",
-//    		"SKU (uuidA) (uuidB).");
-//
-//        __(
-//    		"the person party.",
-//    		"the personA person.",
-//
-//            "the docB " +
-//                	"(event) " +
-//                    "(date \"D2012-02-12\") " +
-//                    "(issue-party centralWhouse) " +
-//                    "(receive-party personA) " +
-//                    "(SKU " +
-//                        "(uuidA " +
-//                        	"(goods ISBN:0-387-97061-4) " +
-//                        	"(qty (number 1) (UoM pcs)) " +
-//                        	"(price (number 35) (currency EUR) (UoM pcs)) " +
-//                        	"(cost (number 35) (currency EUR)))" +
-//                	")."
-//		);
-//
-//        assertAnimoResult(
-//    		"get SKU all centralWhouse,event between date (\"D2012-02-11\") (\"D2012-02-12\") ",
-//    		"SKU (uuidA) (uuidB). SKU uuidA.");
+        __(
+                "the companyA (party) (word \"Company A & Co.\")",
+                "the centralWhouse (party) (word \"Central warehouse\")",
+
+                "the book (goods).",
+                "the ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
+                "the ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\")",
+
+                "the pcs (UoM) (word \"pcs\")",
+
+                "the EUR (currency) (word \"EUR\")",
+                "the USD (currency) (word \"USD\")"
+
+        );
+
+        Expression doc = new JSONExpression(FACTORY.createJsonParser(
+            "{" +
+                "\"event\" : null, " +
+                "\"date\" : \"D2012-02-11\", " +
+                "\"issue-party\" : {\"companyA\" : null}, " +
+                "\"receive-party\" : {\"centralWhouse\" : null}, " +
+                "\"SKU\" : {" +
+                    "\"uuidA\" : {" +
+                        "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
+                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"price\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}}" +
+                    "}, " +
+                    "\"uuidB\" : {" +
+                        "\"goods\" : {\"ISBN:3-540-11157-3\" : null}, " +
+                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"price\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}}" +
+                    "}" +
+                "}" +
+            "}"
+        ), "docA");
+
+        assertAnimo(
+                doc,
+                "the docA " +
+                	"(event) " +
+                    "(date \"D2012-02-11\") " +
+                    "(issue-party companyA) " +
+                    "(receive-party centralWhouse) " +
+                    "(SKU " +
+                        "(uuidA " +
+                        	"(goods ISBN:0-387-97061-4) " +
+                        	"(qty (number 1) (UoM pcs)) " +
+                        	"(price (number 35) (currency EUR) (UoM pcs)) " +
+                        	"(cost (number 35) (currency EUR))) " +
+                        "(uuidB " +
+                        	"(goods ISBN:3-540-11157-3) " +
+                        	"(qty (number 1) (UoM pcs)) " +
+                        	"(price (number 35) (currency USD) (UoM pcs)) " +
+                        	"(cost (number 35) (currency USD))))."
+        );
+
+        assertAnimoResult(
+    		"all centralWhouse with date \"D2012-02-11\"",
+    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
+
+        assertAnimoResult(
+    		"all centralWhouse,event with date \"D2012-02-11\"",
+    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
+
+        assertAnimoResult(
+    		"get SKU all centralWhouse,event with date \"D2012-02-11\"",
+    		"SKU (uuidA) (uuidB).");
+
+        __(
+    		"the person party.",
+    		"the personA person.",
+
+            "the docB " +
+                	"(event) " +
+                    "(date \"D2012-02-12\") " +
+                    "(issue-party centralWhouse) " +
+                    "(receive-party personA) " +
+                    "(SKU " +
+                        "(uuidA " +
+                        	"(goods ISBN:0-387-97061-4) " +
+                        	"(qty (number 1) (UoM pcs)) " +
+                        	"(price (number 35) (currency EUR) (UoM pcs)) " +
+                        	"(cost (number 35) (currency EUR)))" +
+                	")."
+		);
+
+        assertAnimoResult(
+    		"get SKU all centralWhouse,event between date (\"D2012-02-11\") (\"D2012-02-12\") ",
+    		"SKU (uuidA) (uuidB). SKU uuidA.");
 
         __(
                 "the whouse-issue " +
@@ -170,28 +172,28 @@ public class WHouseFormTest extends ATest {
 
         );
 
-//        assertAnimoResult(
-//                "generate-form prism whouse-issue",
-//                "generate-form " +
-//                    "the html-form " +
-//                        "(form-widget) " +
-//                        "(\\form (@name \"whouse-issue\") " +
-//                            "(html-label-input " +
-//                                "\\label \"date\" (html-input \\input @name \"date\")) " +
-//                            "(html-label-input " +
-//                                "\\label \"issue\" (html-input \\input @name \"issue-party\")) " +
-//                            "(html-label-input " +
-//                                "\\label \"warehouse\" (html-input \\input @name \"whouse-party\")) " +
-//                            "(html-table " +
-//                                "\\table (@name \"SKU\") " +
-//                                    "(html-table-head \\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
-//                                    "(html-table-row (table-row-widget) " +
-//                                        "(\\tr (@name \"uuid\") " +
-//                                            "(\\td html-input \\input @name \"goods\") " +
-//                                            "(\\td html-input \\input @name \"qty\") " +
-//                                            "(\\td html-input \\input @name \"price\") " +
-//                                            "(\\td html-input \\input @name \"cost\")))))."
-//        );
+        assertAnimoResult(
+                "generate-form prism whouse-issue",
+                "generate-form " +
+                    "the html-form " +
+                        "(form-widget) " +
+                        "(\\form (@name \"whouse-issue\") " +
+                            "(html-label-input " +
+                                "\\label \"date\" (html-input \\input @name \"date\")) " +
+                            "(html-label-input " +
+                                "\\label \"issue\" (html-input \\input @name \"issue-party\")) " +
+                            "(html-label-input " +
+                                "\\label \"warehouse\" (html-input \\input @name \"whouse-party\")) " +
+                            "(html-table " +
+                                "\\table (@name \"SKU\") " +
+                                    "(html-table-head \\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
+                                    "(html-table-row (table-row-widget) " +
+                                        "(\\tr (@name \"uuid\") " +
+                                            "(\\td html-input \\input @name \"goods\") " +
+                                            "(\\td html-input \\input @name \"qty\") " +
+                                            "(\\td html-input \\input @name \"price\") " +
+                                            "(\\td html-input \\input @name \"cost\")))))."
+        );
 
         assertAnimoResult(
                 "generate-table-row prism whouse-issue",
