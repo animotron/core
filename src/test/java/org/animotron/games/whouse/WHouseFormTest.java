@@ -26,8 +26,6 @@ import org.animotron.expression.JSONExpression;
 import org.codehaus.jackson.JsonFactory;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.animotron.expression.AnimoExpression.__;
 
 /**
@@ -38,128 +36,8 @@ public class WHouseFormTest extends ATest {
 
     private static final JsonFactory FACTORY = new JsonFactory();
 
-	@Test
+    @Test
     public void test_00() throws Exception {
-        __(
-            "the SKU " +
-        		"(word " +
-            		"(lang-en \"stock-keeping unit\") " +
-    				"(lang-ru \"единица учета запасов\") " +
-				") " +
-				"(goods, qty, price, cost).",
-
-			"the qty" +
-        		"(word " +
-        			"(lang-en \"quantity\") " +
-        			"(lang-ru \"количество\") " +
-				") " +
-				"(/ (get cost) (get price))" +
-				"(number, UoM).",
-
-			"the price" +
-				"(/ (get cost) (get qty)).",
-				
-			"the cost" +
-				"(* (get qty) (get price))" +
-				"(number, currency).",
-
-            "the whouse-receive " +
-        		"(word " +
-            		"(lang-en \"ware house receive\") " +
-    				"(lang-ru \"складской приход\") " +
-				") " +
-				"(receive-party, issue-party, (goods, qty, price, cost)).",
-
-			"the receiptsForWhouse " +
-			"(D2012-01-29)" +
-			"(issue companyA) "+
-			"(receive whouse) "+
-			"(paper (qty 10,kg) (cost 50,USD)) "+
-			"(pen (qty 3,box10) (cost 15,USD)). "
-
-		);
-
-	}
-
-    @Test
-    public void test_01() throws Exception {
-        __(
-                "the whouse-issue " +
-                    "(word \"warehouse issue document\") " +
-                    "(part (date) (issue-party) (whouse-party) (table row SKU)).",
-
-                "the SKU part (goods) (qty) (price) (cost).",
-
-                "the date word \"date\".",
-                "the whouse-party word \"warehouse\".",
-                "the issue-party word \"issue\".",
-                "the goods word \"goods\".",
-                "the qty word \"quantity\".",
-                "the price word \"price\".",
-                "the cost word \"cost\".",
-
-                "the generate-form each (get prism) (any form-widget).",
-                "the generate-table-row each (get row get prism) (any table-row-widget).",
-
-                "the html-form " +
-                    "(form-widget)" +
-                        "\\form (@name id this prism)" +
-                            "(each (get part) " +
-                                "(ptrn (this part) " +
-                                    "(?is table html-table) " +
-                                    "(html-label-input))).",
-
-                "the html-input \\input (@name id this part).",
-
-                "the html-label-input \\label (word this part) (html-input).",
-
-                "the html-table " +
-                    "each (get row this part) "+
-                        "(\\table (@name id this row) " +
-                            "(html-table-head) (html-table-row)).",
-
-                "the html-table-head \\tr each (get part this row) (\\th word this part).",
-                "the html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input)))."
-        );
-
-        assertAnimoResult(
-                "generate-form prism whouse-issue",
-                "generate-form " +
-                    "the html-form " +
-                        "(form-widget) " +
-                        "(\\form (@name \"whouse-issue\") " +
-                            "(html-label-input " +
-                                "\\label \"date\" (html-input \\input @name \"date\")) " +
-                            "(html-label-input " +
-                                "\\label \"issue\" (html-input \\input @name \"issue-party\")) " +
-                            "(html-label-input " +
-                                "\\label \"warehouse\" (html-input \\input @name \"whouse-party\")) " +
-                            "(html-table " +
-                                "\\table (@name \"SKU\") " +
-                                    "(html-table-head \\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
-                                    "(html-table-row (table-row-widget) " +
-                                        "(\\tr (@name \"uuid\") " +
-                                            "(\\td html-input \\input @name \"goods\") " +
-                                            "(\\td html-input \\input @name \"qty\") " +
-                                            "(\\td html-input \\input @name \"price\") " +
-                                            "(\\td html-input \\input @name \"cost\")))))."
-        );
-
-        assertAnimoResult(
-                "generate-table-row prism whouse-issue",
-                "generate-table-row " +
-                    "the html-table-row (table-row-widget) " +
-                        "(\\tr (@name \"uuid\") " +
-                            "(\\td html-input \\input @name \"goods\") " +
-                            "(\\td html-input \\input @name \"qty\") " +
-                            "(\\td html-input \\input @name \"price\") " +
-                            "(\\td html-input \\input @name \"cost\"))."
-        );
-
-    }
-
-    @Test
-    public void test_02 () throws IOException {
 
         __(
                 "the companyA (party) (word \"Company A & Co.\")",
@@ -218,23 +96,23 @@ public class WHouseFormTest extends ATest {
                         	"(price (number 35) (currency USD) (UoM pcs)) " +
                         	"(cost (number 35) (currency USD))))."
         );
-        
+
         assertAnimoResult(
-    		"all centralWhouse with date \"D2012-02-11\"", 
+    		"all centralWhouse with date \"D2012-02-11\"",
     		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
-    		"all centralWhouse,event with date \"D2012-02-11\"", 
+    		"all centralWhouse,event with date \"D2012-02-11\"",
     		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
-    		"get SKU all centralWhouse,event with date \"D2012-02-11\"", 
+    		"get SKU all centralWhouse,event with date \"D2012-02-11\"",
     		"SKU (uuidA) (uuidB).");
-        
+
         __(
     		"the person party.",
     		"the personA person.",
-    		
+
             "the docB " +
                 	"(event) " +
                     "(date \"D2012-02-12\") " +
@@ -250,9 +128,84 @@ public class WHouseFormTest extends ATest {
 		);
 
         assertAnimoResult(
-    		"get SKU all centralWhouse,event between date (\"D2012-02-11\") (\"D2012-02-12\") ", 
+    		"get SKU all centralWhouse,event between date (\"D2012-02-11\") (\"D2012-02-12\") ",
     		"SKU (uuidA) (uuidB). SKU uuidA.");
-        
+
+        __(
+                "the whouse-issue " +
+                    "(word \"warehouse issue document\") " +
+                    "(part (date) (issue-party) (whouse-party) (table row SKU)).",
+
+                "the SKU part (goods) (qty) (price) (cost).",
+
+                "the date word \"date\".",
+                "the whouse-party word \"warehouse\".",
+                "the issue-party word \"issue\".",
+                "the goods word \"goods\".",
+                "the qty word \"quantity\".",
+                "the price word \"price\".",
+                "the cost word \"cost\".",
+
+                "the generate-form each (get prism) (any form-widget).",
+                "the generate-table-row each (get row get prism) (any table-row-widget).",
+
+                "the html-form " +
+                    "(form-widget)" +
+                        "\\form (@name id this prism)" +
+                            "(each (get part) " +
+                                "(ptrn (this part) " +
+                                    "(?is table html-table) " +
+                                    "(html-label-input))).",
+
+                "the html-input \\input (@name id this part).",
+
+                "the html-label-input \\label (word this part) (html-input).",
+
+                "the html-table " +
+                    "each (get row this part) "+
+                        "(\\table (@name id this row) " +
+                            "(html-table-head) (html-table-row)).",
+
+                "the html-table-head \\tr each (get part this row) (\\th word this part).",
+
+                "the html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input)))."
+
+        );
+
+        assertAnimoResult(
+                "generate-form prism whouse-issue",
+                "generate-form " +
+                    "the html-form " +
+                        "(form-widget) " +
+                        "(\\form (@name \"whouse-issue\") " +
+                            "(html-label-input " +
+                                "\\label \"date\" (html-input \\input @name \"date\")) " +
+                            "(html-label-input " +
+                                "\\label \"issue\" (html-input \\input @name \"issue-party\")) " +
+                            "(html-label-input " +
+                                "\\label \"warehouse\" (html-input \\input @name \"whouse-party\")) " +
+                            "(html-table " +
+                                "\\table (@name \"SKU\") " +
+                                    "(html-table-head \\tr (\\th \"goods\") (\\th \"quantity\") (\\th \"price\") (\\th \"cost\")) " +
+                                    "(html-table-row (table-row-widget) " +
+                                        "(\\tr (@name \"uuid\") " +
+                                            "(\\td html-input \\input @name \"goods\") " +
+                                            "(\\td html-input \\input @name \"qty\") " +
+                                            "(\\td html-input \\input @name \"price\") " +
+                                            "(\\td html-input \\input @name \"cost\")))))."
+        );
+
+        assertAnimoResult(
+                "generate-table-row prism whouse-issue",
+                "generate-table-row " +
+                    "the html-table-row (table-row-widget) " +
+                        "(\\tr (@name \"uuid\") " +
+                            "(\\td html-input \\input @name \"goods\") " +
+                            "(\\td html-input \\input @name \"qty\") " +
+                            "(\\td html-input \\input @name \"price\") " +
+                            "(\\td html-input \\input @name \"cost\"))."
+        );
+
     }
 
 }
