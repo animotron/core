@@ -152,6 +152,7 @@ public class WHouseFormTest extends ATest {
 
                 "the book (goods).",
                 "the ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
+                "the ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\")",
 
                 "the pcs (UoM) (word \"pcs\")",
 
@@ -162,10 +163,10 @@ public class WHouseFormTest extends ATest {
 
         Expression doc = new JSONExpression(FACTORY.createJsonParser(
             "{" +
-                "\"whouse-issue\" : null, " +
+                "\"event\" : null, " +
                 "\"date\" : \"D2012-02-11\", " +
                 "\"issue-party\" : {\"companyA\" : null}, " +
-                "\"whouse-party\" : {\"centralWhouse\" : null}, " +
+                "\"receive-party\" : {\"centralWhouse\" : null}, " +
                 "\"SKU\" : {" +
                     "\"uuidA\" : {" +
                         "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
@@ -174,10 +175,10 @@ public class WHouseFormTest extends ATest {
                         "\"cost\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}}" +
                     "}, " +
                     "\"uuidB\" : {" +
-                        "\"goods\" : {\"ISBN:0-387-97061-3\" : null}, " +
+                        "\"goods\" : {\"ISBN:3-540-11157-3\" : null}, " +
                         "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
-                        "\"price\" : {\"number\" : 60, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
-                        "\"cost\" : {\"number\" : 60, \"currency\" : {\"USD\" : null}}" +
+                        "\"price\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
+                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}}" +
                     "}" +
                 "}" +
             "}"
@@ -185,10 +186,11 @@ public class WHouseFormTest extends ATest {
 
         assertAnimo(
                 doc,
-                "the docA (whouse-issue) " +
+                "the docA " +
+                	"(event) " +
                     "(date \"D2012-02-11\") " +
                     "(issue-party companyA) " +
-                    "(whouse-party centralWhouse) " +
+                    "(receive-party centralWhouse) " +
                     "(SKU " +
                         "(uuidA " +
                         	"(goods ISBN:0-387-97061-4) " +
@@ -196,16 +198,23 @@ public class WHouseFormTest extends ATest {
                         	"(price (number 35) (currency EUR) (UoM pcs)) " +
                         	"(cost (number 35) (currency EUR))) " +
                         "(uuidB " +
-                        	"(goods ISBN:0-387-97061-3) " +
+                        	"(goods ISBN:3-540-11157-3) " +
                         	"(qty (number 1) (UoM pcs)) " +
-                        	"(price (number 60) (currency USD) (UoM pcs)) " +
-                        	"(cost (number 60) (currency USD))))."
+                        	"(price (number 35) (currency USD) (UoM pcs)) " +
+                        	"(cost (number 35) (currency USD))))."
         );
         
         assertAnimoResult(
-    		"get goods all centralWhouse,whouse-issue with date \"D2012-02-11\"", 
-    		"goods ISBN:0-387-97061-4 (book goods). goods ISBN:0-387-97061-4 (book goods). goods ISBN:0-387-97061-3.");
+    		"all centralWhouse with date \"D2012-02-11\"", 
+    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
 
+        assertAnimoResult(
+    		"all centralWhouse,event with date \"D2012-02-11\"", 
+    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
+
+        assertAnimoResult(
+    		"get SKU all centralWhouse,event with date \"D2012-02-11\"", 
+    		"SKU (uuidA) (uuidB).");
     }
 
 }
