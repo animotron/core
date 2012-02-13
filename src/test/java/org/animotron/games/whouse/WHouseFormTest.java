@@ -151,11 +151,11 @@ public class WHouseFormTest extends ATest {
 
                 "the html-form " +
                     "(form-widget)" +
-                        "\\form (@name id this prism)" +
-                            "(each (get part) " +
-                                "(ptrn (this part) " +
-                                    "(?is table html-table) " +
-                                    "(html-label-input))).",
+                    "(\\form (@name id this prism)" +
+                        "(each (get part) " +
+                            "(ptrn (this part) " +
+                                "(?is table html-table) " +
+                                "(html-label-input)))).",
 
                 "the html-input \\input (@name id this part).",
 
