@@ -55,4 +55,34 @@ public class JSONSerializerTest extends ATest {
         test("the a 1 2", "[1,2]");
     }
 
+    @Test
+    public void test_04() throws Exception {
+        test("((\\a) (\\b))", "[{\"a\":null},{\"b\":null}]");
+    }
+
+    @Test
+    public void test_05() throws Exception {
+        test("\\a \\b 1", "{\"a\":{\"b\":1}}");
+    }
+
+    @Test
+    public void test_06() throws Exception {
+        test("\\a (\\b 1) \"true\" (\\c 2)", "{\"a\":[{\"b\":1},true,{\"c\":2}]}");
+    }
+
+    @Test
+    public void test_07() throws Exception {
+        test("\\a (@b 1) \"true\" (\\c 2)", "{\"a\":[{\"b\":1},true,{\"c\":2}]}");
+    }
+
+    @Test
+    public void test_08() throws Exception {
+        test("\\a (\\b 1) \"true\" (@c 2)", "{\"a\":[{\"b\":1},true,{\"c\":2}]}");
+    }
+
+    @Test
+    public void test_09() throws Exception {
+        test("\\a 1 \"true\" (@c 2)", "{\"a\":[1,true,{\"c\":2}]}");
+    }
+
 }

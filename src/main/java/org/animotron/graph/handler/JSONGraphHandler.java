@@ -65,7 +65,9 @@ public class JSONGraphHandler implements GraphHandler {
             if (!isOne && pos == 0) {
                 generator.writeStartArray();
             }
+            generator.writeStartObject();
             generator.writeObjectField(param[0].toString(), AbstractValue.value(param[1]));
+            generator.writeEndObject();
         } else if (statement instanceof ELEMENT) {
             if (!isOne && pos == 0) {
                 generator.writeStartArray();
@@ -82,7 +84,9 @@ public class JSONGraphHandler implements GraphHandler {
             if (isNull) {
                 generator.writeNull();
             }
-            generator.writeEndObject();
+            if (generator.getOutputContext().inObject()) {
+                generator.writeEndObject();
+            }
             if (!isOne && isLast) {
                 generator.writeEndArray();
             }
