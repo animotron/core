@@ -27,6 +27,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,13 +36,15 @@ import java.io.OutputStream;
  */
 public abstract class AbstractSerializer {
 
-    private AnimoTraverser traverser;
+    protected final AnimoTraverser traverser;
 
     protected AbstractSerializer(AnimoTraverser traverser) {
         this.traverser = traverser;
     }
 
     protected abstract GraphHandler handler(OutputStream out) throws IOException;
+
+    protected abstract GraphHandler handler(Writer out) throws IOException;
 
     protected abstract GraphHandler handler(StringBuilder out);
 
@@ -61,15 +64,24 @@ public abstract class AbstractSerializer {
         traverser.traverse(handler(out), v);
     }
 
-    public final String serialize(Relationship r) throws IOException {
+    public final void serialize(Relationship r, Writer out) throws IOException {
+        traverser.traverse(handler(out), r);
+    }
+
+    public final void serialize(QCAVector v, Writer out) throws IOException {
+        traverser.traverse(handler(out), v);
+    }
+
+    public String serialize(Relationship r) throws IOException {
         StringBuilder out = new StringBuilder(256);
         traverser.traverse(handler(out), r);
         return out.toString();
     }
 
-    public final String serialize(QCAVector v) throws IOException {
+    public String serialize(QCAVector v) throws IOException {
         StringBuilder out = new StringBuilder(256);
         traverser.traverse(handler(out), v);
         return out.toString();
     }
+
 }

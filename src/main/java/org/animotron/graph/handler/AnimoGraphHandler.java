@@ -34,6 +34,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -53,6 +54,10 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
 
     public AnimoGraphHandler(StringBuilder builder) {
         super(builder);
+    }
+
+    public AnimoGraphHandler(Writer out) {
+        super(out);
     }
 
     protected void write(Statement statement, Relationship r) throws IOException {
@@ -186,4 +191,5 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         if (controller != null)
         	controller.end();
     }
+
 }

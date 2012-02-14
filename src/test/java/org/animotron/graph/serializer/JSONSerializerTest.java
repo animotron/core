@@ -18,36 +18,26 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.graph.handler;
+package org.animotron.graph.serializer;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Writer;
+import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
+import org.junit.Test;
+
 
 /**
- * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
- * 
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class HtmlGraphHandler extends HtmlPartGraphHandler {
+public class JSONSerializerTest extends ATest {
 
-    public HtmlGraphHandler(GraphHandler gh) {
-        super(gh);
+    private void test(String in, String out) throws Exception {
+        assertJSONResult(new AnimoExpression(in), out);
     }
 
-    public HtmlGraphHandler(OutputStream out) {
-        super(out);
+    @Test
+    public void test_00() throws Exception {
+        test("\\b", "<b/>");
     }
-    public HtmlGraphHandler(StringBuilder out) {
-        super(out);
-    }
-
-    public HtmlGraphHandler(Writer out) {
-        super(out);
-    }
-
-    @Override
-    public void startGraph() throws IOException {
-        write("<!DOCTYPE html>");
-	}
 
 }

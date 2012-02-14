@@ -32,6 +32,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
@@ -55,6 +56,10 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
 
     public AnimoPrettyGraphHandler(StringBuilder builder) {
         super(builder);
+    }
+
+    public AnimoPrettyGraphHandler(Writer out) {
+        super(out);
     }
 
     @Override

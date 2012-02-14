@@ -23,26 +23,27 @@ package org.animotron.graph.handler;
 import org.animotron.manipulator.Controller;
 import org.animotron.manipulator.Profiler;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.*;
+import org.animotron.statement.ml.ATTRIBUTE;
+import org.animotron.statement.ml.ELEMENT;
+import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
+import org.codehaus.jackson.JsonGenerator;
 import org.neo4j.graphdb.Relationship;
 
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
 import java.io.IOException;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class StAXGraphHandler implements GraphHandler {
-	
-	private XMLStreamWriter writer;
+public class JSONGraphHandler implements GraphHandler {
+
+	private JsonGenerator generator;
 
     private Controller controller = new Profiler();
-	
-	public StAXGraphHandler(XMLStreamWriter writer) {
-		this.writer = writer;
+
+	public JSONGraphHandler(JsonGenerator generator) {
+		this.generator = generator;
 	}
 	
     public Controller getController() {
@@ -59,53 +60,24 @@ public class StAXGraphHandler implements GraphHandler {
 
     @Override
     public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        try {
-            if (statement instanceof ATTRIBUTE) {
-                writer.writeAttribute(param[0].toString(), param[1].toString());
-            } else if (statement instanceof ENTITY){
-                writer.writeEntityRef(param[0].toString());
-            } else if (statement instanceof ELEMENT) {
-                writer.writeStartElement(param[0].toString());
-            } else if (statement instanceof PI) {
-                if (param[1] == null) {
-                    writer.writeProcessingInstruction (param[0].toString());
-                } else {
-                    writer.writeProcessingInstruction (param[0].toString(), param[1].toString());
-                }
-            } else if (statement instanceof NS) {
-                writer.writeNamespace(param[0].toString(), param[1].toString());
-            }
-        } catch (XMLStreamException e) {
-            throw new IOException(e);
+        if (statement instanceof ATTRIBUTE) {
+            generator.writeObjectField(param[0].toString(), AbstractValue.value(param[1]));
+        } else if (statement instanceof ELEMENT) {
+            generator.writeObjectFieldStart(param[0].toString());
         }
     }
 
     @Override
     public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        try {
-            if (statement instanceof ELEMENT) {
-                writer.writeEndElement();
-            }
-        } catch (XMLStreamException e) {
-            throw new IOException(e);
+        if (statement instanceof ELEMENT) {
+            generator.writeEndObject();
         }
     }
 
     @Override
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        try {
-            if (statement instanceof COMMENT){
-                writer.writeComment(param.toString());
-            } else if (statement instanceof CDATA){
-                writer.writeCData(param.toString());
-            } else if (statement instanceof DTD){
-                writer.writeDTD(param.toString());
-            } else if (statement instanceof VALUE) {
-                writer.writeCharacters(param.toString());
-            }
-
-        } catch (XMLStreamException e) {
-            throw new IOException(e);
+        if (statement instanceof VALUE) {
+            generator.writeObject(AbstractValue.value(param));
         }
     }
 
@@ -117,27 +89,18 @@ public class StAXGraphHandler implements GraphHandler {
 	public void startGraph() throws IOException {
         if (controller != null)
     		controller.start();
-		try {
-			writer.writeStartDocument();
-		} catch (XMLStreamException e) {
-            throw new IOException(e);
-		}
+        generator.writeStartObject();
 	}
 
 	@Override
 	public void endGraph() throws IOException {
-		try {
-			writer.writeEndDocument();
-		} catch (XMLStreamException e) {
-            throw new IOException(e);
-		} finally {
-            if (controller != null)
-    			controller.end();
-		}
+        generator.writeEndObject();
+        if (controller != null)
+            controller.end();
 	}
 
 	private boolean stepMade = false;
-	
+
 	public void stepMade() {
 		stepMade = true;
 	}

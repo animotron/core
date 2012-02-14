@@ -29,6 +29,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
@@ -45,6 +46,10 @@ public class HtmlPartGraphHandler extends AbstractTextGraphHandler {
     }
 
     public HtmlPartGraphHandler(StringBuilder out) {
+        super(out);
+    }
+
+    public HtmlPartGraphHandler(Writer out) {
         super(out);
     }
 

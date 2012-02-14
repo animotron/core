@@ -73,12 +73,10 @@ public abstract class ATest {
 
 	protected void toConsole(InputStream stream) throws IOException {
 		if (stream == null) return;
-		
-		char[] buffer = new char[1024]; 
+		char[] buffer = new char[1024];
 		try { 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
-
-			int n; 
+			int n;
 			while ((n = reader.read(buffer)) != -1) {
 				for (int i = 0; i < n; i++) {
 					System.out.print(buffer[i]);
@@ -97,24 +95,21 @@ public abstract class ATest {
 
 	protected void assertEquals(InputStream stream, String expecteds) throws IOException {
 		if (stream == null) return;
-		
-		StringBuilder b = new StringBuilder(expecteds.length()); 
-		
-		char[] buffer = new char[1024]; 
-		try { 
-			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8")); 
+		StringBuilder b = new StringBuilder(expecteds.length());
+		char[] buffer = new char[1024];
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
 
-			int n; 
+			int n;
 			while ((n = reader.read(buffer)) != -1) {
 				for (int i = 0; i < n; i++) {
 					System.out.print(buffer[i]);
 					b.append(buffer[i]);
 				}
-			} 
-		} finally { 
-			stream.close(); 
+			}
+		} finally {
+			stream.close();
 		}
-		
 		Assert.assertEquals("check evaluation result", expecteds, b.toString());
 	}
 
@@ -124,12 +119,10 @@ public abstract class ATest {
 
     protected void assertAnimo(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
-
         System.out.println("Animo serializer...");
         String result = pretty ? CachedSerializer.PRETTY_ANIMO.serialize(op) : CachedSerializer.ANIMO.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
-
         System.out.println();
     }
 
@@ -147,12 +140,10 @@ public abstract class ATest {
 
     protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
-
         System.out.println("Animo result serializer...");
         String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(op) : CachedSerializer.ANIMO_RESULT.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
-
         System.out.println();
     }
     
@@ -173,11 +164,14 @@ public abstract class ATest {
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
         System.out.println("XML Result serializer...");
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream(in);
-        CachedSerializer.XML.serialize(op, out);
-        out.close();
-        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
+        Assert.assertEquals("", CachedSerializer.XML.serialize(op), "<?xml version='1.0' encoding='UTF-8'?>"+expected);
+        System.out.println();
+    }
+
+    protected void assertJSONResult(Relationship op, String expected) throws IOException {
+        assertNotNull(op);
+        System.out.println("JSON Result serializer...");
+        Assert.assertEquals("", CachedSerializer.JSON.serialize(op), expected);
         System.out.println();
     }
 
@@ -187,12 +181,10 @@ public abstract class ATest {
 
     protected void assertHtmlResult(Relationship op, String expected, boolean messagers) throws IOException {
         assertNotNull(op);
-
         if (messagers) System.out.println("HTML result serializer...");
         String result = CachedSerializer.HTML.serialize(op);
         if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
-
         if (messagers) System.out.println();
     }
 
@@ -206,12 +198,10 @@ public abstract class ATest {
 
     protected void assertStringResult(Relationship op, String expected, boolean messagers) throws IOException, InterruptedException {
         assertNotNull(op);
-
         if (messagers) System.out.println("VALUE result serializer...");
         String result = CachedSerializer.STRING.serialize(op);
         if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
-
         if (messagers) System.out.println();
     }
 

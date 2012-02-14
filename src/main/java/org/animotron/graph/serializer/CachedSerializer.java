@@ -27,11 +27,15 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.*;
 import org.animotron.graph.traverser.*;
+import org.animotron.manipulator.QCAVector;
+import org.codehaus.jackson.JsonFactory;
 import org.neo4j.graphdb.Relationship;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.lang.reflect.Field;
 
 import static org.animotron.graph.Properties.CACHE;
@@ -49,28 +53,35 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		protected GraphHandler handler(StringBuilder out) {
 	        return new TextGraphHandler(out);
 		}
-		
+        @Override
+        protected GraphHandler handler(Writer out) throws IOException {
+            return new TextGraphHandler(out);
+        }
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 	        return new TextGraphHandler(out);
 		}
-	};
+    };
 	
 	public static CachedSerializer XML = new CachedSerializer(MLResultTraverser._, ".xml") {
-		
-	    public final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
+	    private final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 		{
 	        WriterConfig conf = OUTPUT_FACTORY.getConfig();
 	        conf.doSupportNamespaces(true);
 	        conf.enableAutomaticNamespaces(false);
 		}
-		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 	        throw new UnsupportedOperationException();
 		}
-		
+        @Override
+        protected GraphHandler handler(Writer out) throws IOException {
+	        try {
+	            return new StAXGraphHandler(OUTPUT_FACTORY.createXMLStreamWriter(out));
+	        } catch (XMLStreamException e) {
+	            throw new IOException(e);
+	        }
+        }
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 	        try {
@@ -79,6 +90,46 @@ public abstract class CachedSerializer extends AbstractSerializer {
 	            throw new IOException(e);
 	        }
 		}
+        @Override
+        public String serialize(Relationship r) throws IOException {
+            StringWriter out = new StringWriter(256);
+            traverser.traverse(handler(out), r);
+            return out.toString();
+        }
+        @Override
+        public String serialize(QCAVector v) throws IOException {
+            StringWriter out = new StringWriter(256);
+            traverser.traverse(handler(out), v);
+            return out.toString();
+        }
+    };
+
+	public static CachedSerializer JSON = new CachedSerializer(MLResultTraverser._, ".json") {
+	    private final JsonFactory OUTPUT_FACTORY = new JsonFactory();
+		@Override
+		protected GraphHandler handler(StringBuilder out) {
+	        throw new UnsupportedOperationException();
+		}
+		@Override
+		protected GraphHandler handler(Writer out) throws IOException {
+            return new JSONGraphHandler(OUTPUT_FACTORY.createJsonGenerator(out));
+		}
+		@Override
+		protected GraphHandler handler(OutputStream out) throws IOException {
+            return new JSONGraphHandler(OUTPUT_FACTORY.createJsonGenerator(out));
+		}
+        @Override
+        public String serialize(Relationship r) throws IOException {
+            StringWriter out = new StringWriter(256);
+            traverser.traverse(handler(out), r);
+            return out.toString();
+        }
+        @Override
+        public String serialize(QCAVector v) throws IOException {
+            StringWriter out = new StringWriter(256);
+            traverser.traverse(handler(out), v);
+            return out.toString();
+        }
 	};
 
     public static CachedSerializer HTML = new CachedSerializer(MLResultTraverser._, ".html") {
@@ -86,7 +137,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
         protected GraphHandler handler(StringBuilder out) {
             return new HtmlGraphHandler(out);
         }
-
+        @Override
+        protected GraphHandler handler(Writer out) throws IOException {
+            return new HtmlGraphHandler(out);
+        }
         @Override
         protected GraphHandler handler(OutputStream out) throws IOException {
             return new HtmlGraphHandler(out);
@@ -98,7 +152,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
         protected GraphHandler handler(StringBuilder out) {
             return new HtmlPartGraphHandler(out);
         }
-
+        @Override
+        protected GraphHandler handler(Writer out) {
+            return new HtmlPartGraphHandler(out);
+        }
         @Override
         protected GraphHandler handler(OutputStream out) throws IOException {
             return new HtmlPartGraphHandler(out);
@@ -106,12 +163,14 @@ public abstract class CachedSerializer extends AbstractSerializer {
     };
 
     public static CachedSerializer PRETTY_ANIMO_RESULT = new CachedSerializer(AnimoResultTraverser._, "-res-pretty.animo") {
-		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 	        return new AnimoPrettyGraphHandler(out);
 		}
-		
+		@Override
+		protected GraphHandler handler(Writer out) {
+	        return new AnimoPrettyGraphHandler(out);
+		}
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 	        return new AnimoPrettyGraphHandler(out);
@@ -119,12 +178,14 @@ public abstract class CachedSerializer extends AbstractSerializer {
 	};
 	
 	public static CachedSerializer PRETTY_ANIMO = new CachedSerializer(AnimoTraverser._, "-src-pretty.animo") {
-		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoPrettyGraphHandler(out);
 		}
-		
+		@Override
+		protected GraphHandler handler(Writer out) {
+			return new AnimoPrettyGraphHandler(out);
+		}
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 			return new AnimoPrettyGraphHandler(out);
@@ -132,12 +193,14 @@ public abstract class CachedSerializer extends AbstractSerializer {
 	};
 
 	public static CachedSerializer ANIMO_RESULT = new CachedSerializer(AnimoResultTraverser._, "-res.animo") {
-		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoGraphHandler(out);
 		}
-		
+		@Override
+		protected GraphHandler handler(Writer out) {
+			return new AnimoGraphHandler(out);
+		}
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 			return new AnimoGraphHandler(out);
@@ -145,12 +208,14 @@ public abstract class CachedSerializer extends AbstractSerializer {
 	};
 	
 	public static CachedSerializer ANIMO = new CachedSerializer(AnimoTraverser._, "-src.animo") {
-		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoGraphHandler(out);
 		}
-		
+		@Override
+		protected GraphHandler handler(Writer out) {
+			return new AnimoGraphHandler(out);
+		}
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 			return new AnimoGraphHandler(out);
@@ -158,12 +223,14 @@ public abstract class CachedSerializer extends AbstractSerializer {
 	};
 
 	public static CachedSerializer ANIMO_RESULT_ONE_STEP = new CachedSerializer(new AnimoResultOneStepTraverser(), "-1step-res.animo") {
-		
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoGraphHandler(out);
 		}
-		
+		@Override
+		protected GraphHandler handler(Writer out) {
+			return new AnimoGraphHandler(out);
+		}
 		@Override
 		protected GraphHandler handler(OutputStream out) throws IOException {
 			return new AnimoGraphHandler(out);
