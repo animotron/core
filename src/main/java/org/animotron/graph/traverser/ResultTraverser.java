@@ -61,7 +61,7 @@ public class ResultTraverser extends AnimoTraverser {
     	
 		Statement s = Statements.relationshipType(r);
 	        
-        process(handler, s, parent, rr, level, isOne, pos, false);
+        process(handler, s, parent, rr, level, isOne, pos, isLast);
     }
     
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {

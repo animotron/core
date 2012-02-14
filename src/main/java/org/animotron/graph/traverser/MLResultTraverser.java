@@ -39,7 +39,7 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class MLResultTraverser extends ResultTraverser {
+public class MLResultTraverser extends AnimoResultTraverser {
 
     public static MLResultTraverser _ = new MLResultTraverser();
 

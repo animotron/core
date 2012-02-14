@@ -57,19 +57,22 @@ public class JSONGraphHandler implements GraphHandler {
 
 	@Override
 	public void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        if (isLast && generator.getOutputContext().inArray()) {
+            generator.writeEndArray();
+        }
 	}
 
     @Override
     public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof ATTRIBUTE) {
-            if (!isOne && pos == 0) {
+            if (!isOne && !generator.getOutputContext().inArray()) {
                 generator.writeStartArray();
             }
             generator.writeStartObject();
             generator.writeObjectField(param[0].toString(), AbstractValue.value(param[1]));
             generator.writeEndObject();
         } else if (statement instanceof ELEMENT) {
-            if (!isOne && pos == 0) {
+            if (!isOne && !generator.getOutputContext().inArray()) {
                 generator.writeStartArray();
             }
             generator.writeStartObject();
@@ -83,32 +86,33 @@ public class JSONGraphHandler implements GraphHandler {
         if (statement instanceof ELEMENT) {
             if (isNull) {
                 generator.writeNull();
+                isNull = false;
             }
             if (generator.getOutputContext().inObject()) {
                 generator.writeEndObject();
             }
-            if (!isOne && isLast) {
-                generator.writeEndArray();
-            }
+        }
+        if (isLast && generator.getOutputContext().inArray()) {
+            generator.writeEndArray();
         }
     }
 
     @Override
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof VALUE) {
-            if (!isOne && pos == 0) {
+            if (!isOne && !generator.getOutputContext().inArray()) {
                 generator.writeStartArray();
             }
             generator.writeObject(AbstractValue.value(param));
-            if (!isOne && isLast) {
-                generator.writeEndArray();
-            }
             isNull = false;
         }
     }
 
     @Override
     public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+        if (isLast && generator.getOutputContext().inArray()) {
+            generator.writeEndArray();
+        }
     }
 
     @Override
