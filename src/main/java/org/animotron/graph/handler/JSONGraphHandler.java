@@ -92,6 +92,9 @@ public class JSONGraphHandler implements GraphHandler {
     @Override
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof VALUE) {
+            if (!isOne && pos == 0) {
+                generator.writeStartArray();
+            }
             generator.writeObject(AbstractValue.value(param));
             if (!isOne && isLast) {
                 generator.writeEndArray();

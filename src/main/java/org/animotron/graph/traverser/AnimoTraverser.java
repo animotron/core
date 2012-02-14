@@ -127,11 +127,10 @@ public class AnimoTraverser {
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
                 if (i instanceof Relationship) {
                 	prev = new QCAVector((Relationship)i, v, prev);
-                	build(handler, parent, prev, level, isOne, pos, isLast);
+                	build(handler, parent, prev, level, isOne, pos++, isLast);
                 } else {
-                	build(handler, parent, i, level, isOne, pos, isLast);
+                	build(handler, parent, i, level, isOne, pos++, isLast);
                 }
-                pos++;
             }
             
             while (it.hasNext()) {
