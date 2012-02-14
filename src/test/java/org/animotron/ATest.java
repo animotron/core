@@ -164,14 +164,14 @@ public abstract class ATest {
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
         System.out.println("XML Result serializer...");
-        Assert.assertEquals("", CachedSerializer.XML.serialize(op), "<?xml version='1.0' encoding='UTF-8'?>"+expected);
+        Assert.assertEquals("", "<?xml version='1.0' encoding='UTF-8'?>" + expected, CachedSerializer.XML.serialize(op));
         System.out.println();
     }
 
     protected void assertJSONResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);
         System.out.println("JSON Result serializer...");
-        Assert.assertEquals("", CachedSerializer.JSON.serialize(op), expected);
+        Assert.assertEquals("", expected, CachedSerializer.JSON.serialize(op));
         System.out.println();
     }
 
