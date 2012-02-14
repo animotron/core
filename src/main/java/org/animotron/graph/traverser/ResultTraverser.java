@@ -71,7 +71,7 @@ public class ResultTraverser extends AnimoTraverser {
         			|| (s instanceof Evaluable && !(qS instanceof Shift))
     			) {
                 
-        		result(handler, rr, level, isOne);
+        		result(handler, rr, level, isOne, pos, isLast);
 			
         	} else {
 				Relationship r = rr.getClosest();
@@ -90,7 +90,7 @@ public class ResultTraverser extends AnimoTraverser {
         }
     }
 
-    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne) throws IOException {
+    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     	Relationship r = rr.getClosest();
     	
     	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
@@ -105,7 +105,7 @@ public class ResultTraverser extends AnimoTraverser {
             //UNDERSTAND: calculate current r!
             //System.out.println("READER Execute r = "+r);
             Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(handler.getController(), rr.question(r)) );
-            iterate(handler, null, rr, in, level, isOne);
+            iterate(handler, null, rr, in, level, isOne, pos, isLast);
 //        }
     }
     
@@ -117,14 +117,13 @@ public class ResultTraverser extends AnimoTraverser {
 //        }
 //    }
 
-    protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne) throws IOException {
+    protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
 
         QCAVector prev = null;
         
         QCAVector i = null;
-        int pos = 0;
         while (it.hasNext()) {
         	i = it.next();
         	rr.addAnswer(i);
@@ -132,16 +131,16 @@ public class ResultTraverser extends AnimoTraverser {
         	prev = i;
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, parent, i, level, false, pos++, true);
+                    build(handler, parent, i, level, false, pos++, isLast);
                 	i = it.next();
                 	i.setPrecedingSibling(prev);
                 	prev = i;
-                    build(handler, parent, i, level, false, pos++, !it.hasNext());
+                    build(handler, parent, i, level, false, pos++, isLast && !it.hasNext());
                 } else {
-                    build(handler, parent, i, level, true, pos++, !it.hasNext());
+                    build(handler, parent, i, level, isOne, pos++, isLast && !it.hasNext());
                 }
             } else {
-                build(handler, parent, i, level, false, pos++, !it.hasNext());
+                build(handler, parent, i, level, false, pos++, isLast && !it.hasNext());
             }
             isFirst = false;
             found = true;

@@ -50,7 +50,7 @@ public class AnimoResultTraverser extends ResultTraverser {
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
         			|| (s instanceof Evaluable && !(qS instanceof Shift))  
             	) {
-                result(handler, rr, level, isOne);
+                result(handler, rr, level, isOne, pos, isLast);
                 
             } else {
 				Relationship r = rr.getClosest();

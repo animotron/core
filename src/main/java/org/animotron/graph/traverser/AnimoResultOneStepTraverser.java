@@ -54,7 +54,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     			&& !handler.isStepMade() ) {
 
             	GraphHandler gh = new AnimoGraphHandler(handler);
-                result(gh, rr, level, isOne);
+                result(gh, rr, level, isOne, pos, isLast);
                 
             } else {
 				Relationship r = rr.getClosest();
@@ -69,7 +69,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
         }
     }
     
-    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne) throws IOException {
+    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     	Relationship r = rr.getClosest();
     	
     	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
@@ -82,7 +82,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 //    	}
 //        if (!found) {
             Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(handler.getController(), rr.question(r), null, false) );
-            iterate(handler, null, rr, in, level, isOne);
+            iterate(handler, null, rr, in, level, isOne, pos, isLast);
 //        }
     }
 }
