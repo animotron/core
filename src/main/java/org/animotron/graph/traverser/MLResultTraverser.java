@@ -78,7 +78,7 @@ public class MLResultTraverser extends ResultTraverser {
                     } finally {
                         it.remove();
                     }
-                } else if (!(s instanceof VALUE) || (s instanceof VALUE && level > 0)) {
+                } else if (!(s instanceof VALUE) || (s instanceof VALUE)) {
                     String param = CachedSerializer.STRING.serialize(rr);
                     handler.start(s, parent, param, level++, isOne, pos, isLast);
                     handler.end(s, parent, param, --level, isOne, pos, isLast);

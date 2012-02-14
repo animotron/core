@@ -62,8 +62,14 @@ public class JSONGraphHandler implements GraphHandler {
     @Override
     public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof ATTRIBUTE) {
+            if (!isOne && pos == 0) {
+                generator.writeStartArray();
+            }
             generator.writeObjectField(param[0].toString(), AbstractValue.value(param[1]));
         } else if (statement instanceof ELEMENT) {
+            if (!isOne && pos == 0) {
+                generator.writeStartArray();
+            }
             generator.writeStartObject();
             generator.writeFieldName(param[0].toString());
             isNull = true;
@@ -77,6 +83,9 @@ public class JSONGraphHandler implements GraphHandler {
                 generator.writeNull();
             }
             generator.writeEndObject();
+            if (!isOne && isLast) {
+                generator.writeEndArray();
+            }
         }
     }
 
@@ -84,6 +93,9 @@ public class JSONGraphHandler implements GraphHandler {
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof VALUE) {
             generator.writeObject(AbstractValue.value(param));
+            if (!isOne && isLast) {
+                generator.writeEndArray();
+            }
             isNull = false;
         }
     }

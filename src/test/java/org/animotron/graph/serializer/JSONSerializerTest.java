@@ -37,6 +37,11 @@ public class JSONSerializerTest extends ATest {
 
     @Test
     public void test_00() throws Exception {
+        test("the a 1", "1");
+    }
+
+    @Test
+    public void test_01() throws Exception {
         test("\\b", "{\"b\":null}");
     }
 
