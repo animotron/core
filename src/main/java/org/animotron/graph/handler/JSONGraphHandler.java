@@ -41,8 +41,9 @@ public class JSONGraphHandler implements GraphHandler {
 	private JsonGenerator generator;
 
     private Controller controller = new Profiler();
+    private boolean isNull = true;
 
-	public JSONGraphHandler(JsonGenerator generator) {
+    public JSONGraphHandler(JsonGenerator generator) {
 		this.generator = generator;
 	}
 	
@@ -63,13 +64,18 @@ public class JSONGraphHandler implements GraphHandler {
         if (statement instanceof ATTRIBUTE) {
             generator.writeObjectField(param[0].toString(), AbstractValue.value(param[1]));
         } else if (statement instanceof ELEMENT) {
-            generator.writeObjectFieldStart(param[0].toString());
+            generator.writeStartObject();
+            generator.writeFieldName(param[0].toString());
+            isNull = true;
         }
     }
 
     @Override
     public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof ELEMENT) {
+            if (isNull) {
+                generator.writeNull();
+            }
             generator.writeEndObject();
         }
     }
@@ -78,6 +84,7 @@ public class JSONGraphHandler implements GraphHandler {
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (statement instanceof VALUE) {
             generator.writeObject(AbstractValue.value(param));
+            isNull = false;
         }
     }
 
@@ -89,12 +96,11 @@ public class JSONGraphHandler implements GraphHandler {
 	public void startGraph() throws IOException {
         if (controller != null)
     		controller.start();
-        generator.writeStartObject();
 	}
 
 	@Override
 	public void endGraph() throws IOException {
-        generator.writeEndObject();
+        generator.close();
         if (controller != null)
             controller.end();
 	}
