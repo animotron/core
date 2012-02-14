@@ -26,6 +26,7 @@ import org.animotron.graph.traverser.ResultTraverser;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.Writer;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,6 +41,11 @@ public class BinarySerializer extends AbstractSerializer {
     @Override
     protected GraphHandler handler(OutputStream out) throws IOException {
         return new BinaryGraphHandler(out);
+    }
+
+    @Override
+    protected GraphHandler handler(Writer out) throws IOException {
+        throw new UnsupportedOperationException();
     }
 
     @Override
