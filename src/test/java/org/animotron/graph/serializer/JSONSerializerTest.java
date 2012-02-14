@@ -52,7 +52,7 @@ public class JSONSerializerTest extends ATest {
 
     @Test
     public void test_03() throws Exception {
-        test("the a 1 2", "[1, 2]");
+        test("the a 1 2", "[1,2]");
     }
 
 }
