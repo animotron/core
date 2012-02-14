@@ -47,7 +47,6 @@ public class MLResultTraverser extends AnimoResultTraverser {
 
     @Override
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-
         if (s != null) {
             if (s instanceof MLOperator || s instanceof VALUE) {
                 if (s instanceof Prefix) {
