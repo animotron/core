@@ -545,4 +545,32 @@ public class GetTest extends ATest {
         assertAnimoResult("each (get a y) (this a)", "2. x.");
     }
 
+    @Test
+    public void test_21() throws Exception {
+        testAnimo("the x a 1.");
+        testAnimo("the y a 2 (b x).");
+        assertAnimoResult("get a y", "a 2 (b).");
+    }
+
+    @Test
+    public void test_22() throws Exception {
+        testAnimo("the x a 1.");
+        testAnimo("the y a 2 (b x).");
+        assertAnimoResult("each (get a y) (this a)", "2. b.");
+    }
+
+    @Test
+    public void test_23() throws Exception {
+        testAnimo("the x a z.");
+        testAnimo("the y a 2 (b c x).");
+        assertAnimoResult("get a y", "a 2 (b).");
+    }
+
+    @Test
+    public void test_24() throws Exception {
+        testAnimo("the x a z.");
+        testAnimo("the y a 2 (b c x).");
+        assertAnimoResult("each (get a y) (this a)", "2. b.");
+    }
+
 }
