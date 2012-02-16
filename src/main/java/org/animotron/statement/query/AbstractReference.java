@@ -69,7 +69,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 			try {
 				getUSEs(pf, node, uses, weaks, directed);
 				
-				if (forceUSE && (uses.isEmpty() || weaks.isEmpty())) {
+				if (forceUSE && !(!uses.isEmpty() || !weaks.isEmpty())) {
 					return;
 				}
 
