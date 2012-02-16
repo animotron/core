@@ -170,18 +170,18 @@ public class WHouseFormTest extends ATest {
 
                 "the html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input))).",
 
-                "the fill-form each (get object) " +
+                "the fill-form " +
                     "(each (get prism) " +
                         "(each (get part this prism) " +
                             "(ptrn (this part) " +
-                                "(?is table fill-table) " +
+                                "(?is table fill-form prism get row this part) " +
                                 "(fill-input)))).",
 
                 "the fill-input \\input " +
-                    "(@name id this part) " +
-                    "(each (get (this part) (this object)) " +
-                        "(@id id this this part)" +
-                        "(@value word this this part))."
+                    "(@name id this part) " //+
+//                    "(each (get (this part) (this object)) " +
+//                        "(@id id this this part)" +
+//                        "(@value word this this part))."
 
         );
 
