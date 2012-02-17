@@ -25,7 +25,6 @@ import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.CachedSerializer;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.stream.XMLInputFactory;
