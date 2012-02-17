@@ -118,9 +118,7 @@ public class AnotherGraphBuilderTest extends ATest {
 	}
 
     @Test
-    @Ignore
 	public void test_04() throws Exception {
-        test("<?stylesheet=\"path\"?><a/>");
+        test("<?stylesheet path=\"path\"?><a/>");
 	}
-
 }
