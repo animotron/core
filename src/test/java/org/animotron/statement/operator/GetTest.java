@@ -573,4 +573,10 @@ public class GetTest extends ATest {
         assertAnimoResult("each (get a y) (this a)", "2. b.");
     }
 
+    @Test
+    public void test_25() throws Exception {
+        testAnimo("the x \\a y z.");
+        assertAnimoResult("get y x", "");
+    }
+
 }
