@@ -89,6 +89,7 @@ public class AnimoExpression extends AbstractExpression {
     boolean link = false;
     boolean number = true;
     boolean text = false;
+    int para = 0;
 
     @Override
     public void build() throws IOException, AnimoException {
@@ -106,11 +107,13 @@ public class AnimoExpression extends AbstractExpression {
                     if (!text) {
                         newToken();
                         text = true;
+                        para++;
                     } else if (prev == '\\') {
                         s.append(ch);
                     } else {
                         newToken();
                         text = false;
+                        para--;
                     }
                 } else {
                     if (text) {
@@ -139,9 +142,11 @@ public class AnimoExpression extends AbstractExpression {
 	                                        break;
 	                            case '('  : newToken();
 	                                        startList();
+                                            para++;
 	                                        break;
 	                            case ')'  : newToken();
 	                                        endList();
+                                            para--;
 	                                        break;
 	                            default   : s.append(ch);
                                             processPrefix();
@@ -154,6 +159,9 @@ public class AnimoExpression extends AbstractExpression {
             lastToken();
         }
         endList();
+        if (para != 0) {
+            throw new AnimoException((Relationship) null);
+        }
     }
 
     private void processPrefix() throws AnimoException, IOException {
