@@ -579,4 +579,26 @@ public class GetTest extends ATest {
         assertAnimoResult("get y x", "");
     }
 
+    @Test
+    public void test_26() throws Exception {
+        testAnimo("the x y z.");
+        testAnimo("the z \\bar.");
+        assertAnimoResult("the foo an (get y x)", "the foo y z \\bar.");
+    }
+
+    @Test
+    public void test_27() throws Exception {
+        testAnimo("the x y z.");
+        testAnimo("the z \\bar.");
+        assertAnimoResult("the foo (x) (an (get y))", "the foo (x y) (y z \\bar).");
+    }
+
+    @Test
+    public void test_28() throws Exception {
+        testAnimo("the x y z.");
+        testAnimo("the z get bar.");
+        testAnimo("the a bar 0.");
+        assertAnimoResult("the foo (a) (x) (an (get y))", "the foo (a bar) (x y) (y z bar 0).");
+    }
+
 }
