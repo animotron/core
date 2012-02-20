@@ -605,7 +605,24 @@ public class GetTest extends ATest {
     public void test_29() throws Exception {
         testAnimo("the foo bar.");
         testAnimo("the x y foo.");
+        assertAnimoResult("get foo x", "y foo bar.");
         assertAnimoResult("get bar x", "y foo bar.");
+        assertAnimoResult("get foo get y x", "foo.");
+        assertAnimoResult("get bar get y x", "foo.");
+    }
+
+    @Test
+    public void test_29_() throws Exception {
+        testAnimo("the bar 1.");
+        testAnimo("the x y foo bar.");
+        assertAnimoResult("get foo x", "y foo bar 1.");
+    }
+
+    @Test
+    public void test_29__() throws Exception {
+        testAnimo("the bar 1.");
+        testAnimo("the x y foo bar.");
+        assertAnimoResult("get foo get y x", "foo bar 1.");
     }
 
     @Test
