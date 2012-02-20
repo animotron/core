@@ -623,4 +623,49 @@ public class GetTest extends ATest {
         assertAnimoResult("get bar x", "y foo1 (bar z) 1.");
     }
 
+    @Test
+    public void test_32() throws Exception {
+        testAnimo("the bar z.");
+        testAnimo("the foo1 (bar) 1.");
+        testAnimo("the foo2 (bar) 2.");
+        testAnimo("the x y (foo3) (foo1).");
+        assertAnimoResult("get bar x", "y (foo3) (foo1 (bar z) 1).");
+    }
+
+    @Test
+    public void test_33() throws Exception {
+        testAnimo("the bar z.");
+        testAnimo("the foo1 (bar) 1.");
+        testAnimo("the foo2 (bar) 2.");
+        assertAnimoResult("get bar get y x", "foo1.");
+    }
+
+    @Test
+    public void test_34() throws Exception {
+        testAnimo("the bar z.");
+        testAnimo("the foo1 (bar) (get a).");
+        testAnimo("the foo2 (bar) 2.");
+        assertAnimoResult("foo1 a 1", "foo1 (bar z) (a 1).");
+        assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (a 1).");
+        assertAnimoResult("an (get bar get y x) (a 1)", "foo1 a 1.");
+    }
+
+    @Test
+    public void test_35() throws Exception {
+        testAnimo("the bar z.");
+        testAnimo("the foo1 (bar) 1.");
+        testAnimo("the foo2 (bar) 2.");
+        testAnimo("the x y foo3, foo1.");
+        assertAnimoResult("get bar x", "y (foo3) (foo1 (bar z) 1).");
+    }
+
+    @Test
+    public void test_36() throws Exception {
+        testAnimo("the bar z.");
+        testAnimo("the foo1 (bar) 1.");
+        testAnimo("the foo2 (bar) 2.");
+        testAnimo("the x y foo3, foo1.");
+        assertAnimoResult("get bar get y x", "foo3, foo1.");
+    }
+
 }
