@@ -55,12 +55,12 @@ public class GetTest extends ATest {
     	JExpression test = new JExpression(
 			_(THE._, "d", _(GET._, "Z", _(AN._, "A"), _(AN._, "B")))
 		);
-    	assertAnimoResultOneStep(test, "the d (Z \"A\") (Z \"B\").");
+    	assertAnimoResultOneStep(test, "the d", " (Z \"A\")", " (Z \"B\")", ".");
 
     	test = new JExpression(
 			_(GET._, "Z", _(AN._, "A"), _(AN._, "B"))
 		);
-    	assertAnimoResultOneStep(test, "Z \"A\". Z \"B\".");
+    	assertAnimoResultOneStep(test, "Z \"A\".", "Z \"B\".");
 	}
 
 	@Test
