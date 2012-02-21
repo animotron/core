@@ -715,4 +715,12 @@ public class GetTest extends ATest {
         assertAnimoResult("get bar get y x", "foo3, foo1.");
     }
 
+    @Test
+    public void test_37() throws Exception {
+        testAnimo("the x a b.");
+        testAnimo("the y (x) (a c).");
+        assertAnimoResult("get b get a y", "a b.");
+        assertAnimoResult("get a y", "a c.");
+    }
+
 }
