@@ -615,7 +615,8 @@ public class GetTest extends ATest {
     public void test_29_() throws Exception {
         testAnimo("the bar 1.");
         testAnimo("the x y foo bar.");
-        assertAnimoResult("get foo x", "y foo bar 1.");
+        assertAnimoResult("get foo x", "y foo bar 1."); 
+        //XXX: answer "foo bar 1." is correct, because you asking for 'foo', so it position on that level
     }
 
     @Test
@@ -671,6 +672,7 @@ public class GetTest extends ATest {
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
         assertAnimoResult("get bar get y x", "foo1.");
+        //XXX: answer '' correct because get y x return ''
     }
 
     @Test
