@@ -147,6 +147,23 @@ public abstract class ATest {
         System.out.println();
     }
     
+    protected void assertAnimoResult(Relationship op, String... expected) throws IOException {
+    	assertNotNull(op);
+        System.out.println("Animo result serializer...");
+        String result = CachedSerializer.ANIMO_RESULT.serialize(op);
+        System.out.println(result);
+        
+        for (int i = 0; i < expected.length; i++ ) {
+        	String expect = expected[i];
+        	if (!result.contains(expect))
+        		Assert.fail("Result do not contain '"+expect+"'");
+        	
+        	result = result. replace(expect, "");
+        }
+        if (!result.trim().isEmpty())
+    		Assert.fail("Result contain unmatched part '"+result+"'");
+    }
+    
     protected void assertAnimoResultOneStep(String op, String expected) throws IOException {
     	assertAnimoResultOneStep(new AnimoExpression(op), expected);
     }

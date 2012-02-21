@@ -371,7 +371,7 @@ public class GetTest extends ATest {
                 new AnimoExpression("the c (x 3)")
         );
         Expression e = new AnimoExpression("get x (a) (b) (c)");
-        assertAnimoResult(e, "x 1. x 2. x 3.");
+        assertAnimoResult(e, "x 1.", "x 2.", "x 3.");
 	}
 
     @Test
@@ -393,17 +393,17 @@ public class GetTest extends ATest {
 		
 		assertAnimoResult(
             new AnimoExpression("get name (user1) (item1)."),
-            "name \"user1\". name \"item1\"."
+            "name \"user1\".", "name \"item1\"."
         );
 
 		assertAnimoResult(
             new AnimoExpression("get name (user1, item1)."),
-            "name \"user1\". name \"item1\"."
+            "name \"user1\".", "name \"item1\"."
         );
 
 		assertAnimoResult(
             new AnimoExpression("get name user1,item1."),
-            "name \"user1\". name \"item1\"."
+            "name \"user1\".", "name \"item1\"."
         );
 	}
 
