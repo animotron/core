@@ -122,10 +122,10 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) throws IOException {
 			
-			if (debug) { 
+			//if (debug) { 
 				Utils.debug(GET._, op, thes);
 			//	System.out.println(pf.getVector());
-			}
+			//}
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {
@@ -504,6 +504,9 @@ public class GET extends AbstractQuery implements Shift {
 			
 			Relationship startBy = null;
 			
+			int ANs = 0;
+			if (vector.getQuestion().isType(AN._) || op.isType(RESULT)) ANs++;
+			
 			Relationship res = null;
 			FastTable<Relationship> resByHAVE = FastTable.newInstance();
 			FastTable<Relationship> resByIS = FastTable.newInstance();
@@ -516,6 +519,8 @@ public class GET extends AbstractQuery implements Shift {
 						if (!pf.isInStack(r)) {
 							if (r.isType(AN._)) {
 								res = r;
+								ANs++;
+								
 //								if (Utils.haveContext(r.getEndNode())) {
 //									res = r;
 //									//break;
@@ -523,21 +528,25 @@ public class GET extends AbstractQuery implements Shift {
 //									res = r;
 //									//break;
 //								}
-							} else if (r.isType(ANY._)) {
-								res = r;
-		
-							} else if (r.isType(SHALL._)) {
-								res = r;
-
-							} else if (r.isType(REF._) && path.length() == 1) {
-								res = op;
-							
-							} else if (r.isType(REF._)) {
-								break;
+							} else {
+								if (ANs > 1) break;
+								ANs = 0;
+									
+								if (r.isType(ANY._)) {
+									res = r;
+			
+								} else if (r.isType(SHALL._)) {
+									res = r;
+	
+								} else if (r.isType(REF._) && path.length() == 1) {
+									res = op;
+								}
 							}
 							
 						}
 					}
+					//if (prevRes != null) res = prevRes;
+					
 					if (res != null) {
 						if (startBy != null && startBy.isType(REF._))
 							resByIS.add(res);
