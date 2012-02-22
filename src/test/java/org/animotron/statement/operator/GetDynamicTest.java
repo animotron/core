@@ -74,7 +74,7 @@ public class GetDynamicTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (Z \"A\") (ZZ \"B\").");
+        assertAnimoResult(d, "the d", " (Z \"A\")", " (ZZ \"B\")", ".");
 	}
 
 	@Test
@@ -122,6 +122,7 @@ public class GetDynamicTest extends ATest {
     	testAnimo("the z (k) (a z1).");
     	testAnimo("the b (k) (z1 \"z1\").");
 
+    	testAnimoResult("get a z.", "a z1.");
     	testAnimoResult("get (get a z) (all k).", "z1 \"z1\".");
     }
 
@@ -147,8 +148,8 @@ public class GetDynamicTest extends ATest {
         testAnimo("the z a z1.");
         testAnimo("the x b z1.");
 
-        testAnimoResult("get (get a z) (z).", "a z1.");
-        testAnimoResult("get (get a z) (x).", "b z1.");
+        testAnimoResult("get (get a z) (z).", "z1.");
+        testAnimoResult("get (get a z) (x).", "z1.");
     }
 
     @Test
@@ -156,7 +157,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("the x y z.");
 
         testAnimoResult("get y x.", "y z.");
-        testAnimoResult("get z x.", "y z.");
+        testAnimoResult("get z x.", "z.");
         testAnimoResult("all y.", "z.");
     }
 
