@@ -133,8 +133,13 @@ public class Utils {
 					IndexHits<Relationship> hits = Order.queryDown(node);
 					try {
 						for (Relationship res : hits) {
-							if (res.isType(org.animotron.statement.operator.REF._) || first == null) {
-								evaluable(pf.getController(), vector.question(res), pipe);
+							if (res.isType(org.animotron.statement.operator.REF._)) {
+								pipe.put(vector.answered(res));
+								if (first == null)
+									first = res;
+								
+							} else if (first == null) {
+								evaluable(pf.getController(), vector.question2(res), pipe);
 								if (first == null)
 									first = res;
 							} else
