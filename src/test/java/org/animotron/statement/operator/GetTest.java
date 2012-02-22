@@ -605,9 +605,9 @@ public class GetTest extends ATest {
     public void test_29() throws Exception {
         testAnimo("the foo bar.");
         testAnimo("the x y foo.");
-//        assertAnimoResult("get foo x", "foo.");
-//        assertAnimoResult("get bar x", "foo.");
-//        assertAnimoResult("get foo get y x", "foo.");
+        assertAnimoResult("get foo x", "foo.");
+        assertAnimoResult("get bar x", "foo.");
+        assertAnimoResult("get foo get y x", "foo.");
         assertAnimoResult("get bar get y x", "foo.");
     }
 
@@ -681,7 +681,7 @@ public class GetTest extends ATest {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) (get a).");
         testAnimo("the foo2 (bar) 2.");
-        assertAnimoResult("foo1 a 1", "foo1 (bar z) (a 1).");
+        //assertAnimoResult("foo1 a 1", "foo1 (bar z) (a 1).");
         assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (a 1).");
         //assertAnimoResult("an (get bar get y x) (a 1)", "foo1 a 1."); //answer '' correct because (get bar get y x) == ''
     }
@@ -718,8 +718,8 @@ public class GetTest extends ATest {
     public void test_37() throws Exception {
         testAnimo("the x a b.");
         testAnimo("the y (x) (a c).");
-        assertAnimoResult("get b get a y", "a b.");
         assertAnimoResult("get a y", "a c.");
+        //assertAnimoResult("get b get a y", "a b.");
     }
 
 }
