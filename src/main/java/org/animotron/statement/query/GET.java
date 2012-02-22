@@ -505,7 +505,7 @@ public class GET extends AbstractQuery implements Shift {
 			Relationship startBy = null;
 			
 			int ANs = 0;
-			if (vector.getQuestion().isType(AN._) || op.isType(RESULT)) ANs++;
+			if (op.isType(RESULT)) ANs++;
 			
 			Relationship res = null;
 			FastTable<Relationship> resByHAVE = FastTable.newInstance();
