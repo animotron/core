@@ -172,7 +172,7 @@ public class GET extends AbstractQuery implements Shift {
 //							vector = vector.getPrecedingSibling();
 //						}
 						
-						get(pf, refs, thes, visitedREFs);
+						get(pf, refs, thes, visitedREFs, false);
 					} finally {
 						FastSet.recycle(refs);
 					}
@@ -187,13 +187,20 @@ public class GET extends AbstractQuery implements Shift {
 		try {
 			refs.add(vector);
 			
-			return get(pf, refs, thes, visitedREFs);
+			return get(pf, refs, thes, visitedREFs, true);
 		} finally {
 			FastSet.recycle(refs);
 		}
 	}
 
-	private boolean check(final PFlow pf, final QCAVector v, final Relationship toCheck, final Set<Node> thes, final Set<Relationship> visitedREFs) {
+	private boolean check(
+			final PFlow pf, 
+			final QCAVector v, 
+			final Relationship toCheck, 
+			final Set<Node> thes, 
+			final Set<Relationship> visitedREFs,
+			final boolean onContext) {
+		
 		if (toCheck == null) return false;
 		
 		if (visitedREFs.contains(toCheck)) return false;
@@ -201,7 +208,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		visitedREFs.add(toCheck);
 		
-		if (searchForHAVE(pf, toCheck, v, thes))
+		if (searchForHAVE(pf, toCheck, v, thes, onContext))
 			return true;
 
 		//if (!pf.isInStack(have[i])) {
@@ -214,7 +221,8 @@ public class GET extends AbstractQuery implements Shift {
 			final PFlow pf,
 			final Set<QCAVector> REFs, 
 			final Set<Node> thes, 
-			Set<Relationship> visitedREFs) {
+			Set<Relationship> visitedREFs,
+			final boolean onContext) {
 		
 		//System.out.println("GET context = "+ref);
 		
@@ -246,10 +254,10 @@ public class GET extends AbstractQuery implements Shift {
 					while (next != null) {
 						if (next.getQuestion() != null && next.hasAnswer())
 							
-							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs)) {
+							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs, onContext)) {
 								if (next.getAnswers() != null)
 									for (QCAVector vv : next.getAnswers()) {
-										if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs))
+										if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs, onContext))
 											found = true;
 									}
 							} else {
@@ -382,7 +390,8 @@ public class GET extends AbstractQuery implements Shift {
 			final PFlow pf, 
 			final Relationship ref,
 			final QCAVector v,
-			final Set<Node> thes) {
+			final Set<Node> thes,
+			final boolean onContext) {
 		
 //		if ((ref.isType(REF._) || ref.isType(THE._)) && thes.contains(ref.getEndNode())) {
 //			if (!pf.isInStack(ref)) {
@@ -394,12 +403,12 @@ public class GET extends AbstractQuery implements Shift {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, ref.getEndNode(), thes))
+		if (getByHave(pf, v, ref, ref.getEndNode(), thes, onContext))
 			return true;
 
 		//search for local 'HAVE'
 		if (ref.isType(REF._)) {
-			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), thes))
+			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), thes, onContext))
 				return true;
 		}
 
@@ -455,7 +464,7 @@ public class GET extends AbstractQuery implements Shift {
 			relationships(REF._, OUTGOING).
 			relationships(SHALL._, OUTGOING);
 	
-	private boolean getByHave(final PFlow pf, QCAVector vector, Relationship op, final Node context, final Set<Node> thes) {
+	private boolean getByHave(final PFlow pf, QCAVector vector, Relationship op, final Node context, final Set<Node> thes, final boolean onContext) {
 		if (context == null) return false;
 		
 		TraversalDescription trav = prepared.
@@ -504,6 +513,7 @@ public class GET extends AbstractQuery implements Shift {
 			
 			Relationship startBy = null;
 			
+			int refs = 0;
 			int ANs = 0;
 			if (op.isType(RESULT)) ANs++;
 			
@@ -540,6 +550,11 @@ public class GET extends AbstractQuery implements Shift {
 	
 								} else if (r.isType(REF._) && path.length() == 1) {
 									res = op;
+								} else if (r.isType(REF._)) {
+									if (onContext) break;
+									else if (refs > 1) break;
+									
+									refs++;
 								}
 							}
 							

@@ -103,7 +103,7 @@ public class WORD extends DetermInstruction implements Prepare {
         			public void run() {
         	        	final FastSet<Relationship> visitedREFs = FastSet.newInstance();
         				try {
-        					GET._.get(pflow, REFs, thes, visitedREFs);
+        					GET._.get(pflow, REFs, thes, visitedREFs, true);
         				} finally {
         					FastSet.recycle(visitedREFs);
         					pflow.done();
