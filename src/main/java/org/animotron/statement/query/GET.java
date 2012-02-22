@@ -471,7 +471,8 @@ public class GET extends AbstractQuery implements Shift {
 		try {
 	
 			for (Path path : trav.traverse(context)) {
-				if (debug) System.out.println("["+pf.getOP()+"] * "+path);
+				//if (debug) 
+					System.out.println("["+pf.getOP()+"] * "+path);
 				
 				if (path.length() == 1) {
 					if (op == null) {
@@ -514,13 +515,14 @@ public class GET extends AbstractQuery implements Shift {
 							
 						if (!pf.isInStack(r)) {
 							if (r.isType(AN._)) {
-								if (Utils.haveContext(r.getEndNode())) {
-									res = r;
-									//break;
-								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
-									res = r;
-									//break;
-								}
+								res = r;
+//								if (Utils.haveContext(r.getEndNode())) {
+//									res = r;
+//									//break;
+//								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
+//									res = r;
+//									//break;
+//								}
 							} else if (r.isType(ANY._)) {
 								res = r;
 		
@@ -529,7 +531,11 @@ public class GET extends AbstractQuery implements Shift {
 
 							} else if (r.isType(REF._) && path.length() == 1) {
 								res = op;
+							
+							} else if (r.isType(REF._)) {
+								break;
 							}
+							
 						}
 					}
 					if (res != null) {

@@ -236,6 +236,7 @@ public class QCAVector {
 				b.append(" cycling detected "+question);
 				return;
 			}
+			visited.add(question);
 				
 			b.append(question.getId());
 			b.append(" '");
