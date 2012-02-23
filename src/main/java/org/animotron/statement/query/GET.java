@@ -518,6 +518,8 @@ public class GET extends AbstractQuery implements Shift {
 			if (op.isType(RESULT)) ANs++;
 			
 			Relationship res = null;
+			Relationship prevRes = null;
+			Relationship prevPrevRes = null;
 			FastTable<Relationship> resByHAVE = FastTable.newInstance();
 			FastTable<Relationship> resByIS = FastTable.newInstance();
 			try {
@@ -553,17 +555,22 @@ public class GET extends AbstractQuery implements Shift {
 								} else if (r.isType(REF._)) {
 									//ignore if pseudo IS
 									if (Utils.haveContext(r.getStartNode())) {
+										prevRes = null;
+										
 										if (onContext) break;
 										else if (refs > 1) break;
 										
 										refs++;
+									} else {
+										prevPrevRes = prevRes;
+										prevRes = res;
 									}
 								}
 							}
 							
 						}
 					}
-					//if (prevRes != null) res = prevRes;
+					if (prevPrevRes != null) res = prevPrevRes;
 					
 					if (res != null) {
 						if (startBy != null && startBy.isType(REF._))
