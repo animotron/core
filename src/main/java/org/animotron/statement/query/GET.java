@@ -45,6 +45,7 @@ import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -524,50 +525,62 @@ public class GET extends AbstractQuery implements Shift {
 			FastTable<Relationship> resByIS = FastTable.newInstance();
 			try {
 				for (Path path : paths.values()) {
-					for (Relationship r : path.relationships()) {
-						if (startBy == null)
-							startBy = r;
-							
-						if (!pf.isInStack(r)) {
-							if (r.isType(AN._)) {
-								res = r;
-								ANs++;
+					res = null; prevRes = null; prevPrevRes = null;
+
+					if (path.length() == 1 && path.lastRelationship().isType(REF._)) {
+						res = op;
+
+					} else {
+						Iterator<Relationship> it = path.relationships().iterator();
+						for (Relationship r = null; it.hasNext(); ) {
+							r = it.next();
+							if (startBy == null)
+								startBy = r;
 								
-//								if (Utils.haveContext(r.getEndNode())) {
-//									res = r;
-//									//break;
-//								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
-//									res = r;
-//									//break;
-//								}
-							} else {
-								if (ANs > 1) break;
-								ANs = 0;
+							if (!pf.isInStack(r)) {
+								if (r.isType(AN._)) {
+									res = r;
+									ANs++;
 									
-								if (r.isType(ANY._)) {
-									res = r;
-			
-								} else if (r.isType(SHALL._)) {
-									res = r;
-	
-								} else if (r.isType(REF._) && path.length() == 1) {
-									res = op;
-								} else if (r.isType(REF._)) {
-									//ignore if pseudo IS
-									if (Utils.haveContext(r.getStartNode())) {
-										prevRes = null;
+	//								if (Utils.haveContext(r.getEndNode())) {
+	//									res = r;
+	//									//break;
+	//								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
+	//									res = r;
+	//									//break;
+	//								}
+								} else {
+									if (ANs > 1) break;
+									ANs = 0;
 										
-										if (onContext) break;
-										else if (refs > 1) break;
-										
-										refs++;
-									} else {
-										prevPrevRes = prevRes;
-										prevRes = res;
+									if (r.isType(ANY._)) {
+										if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
+											res = r;
+										} else {
+											res = null;
+										}
+										break;
+				
+									} else if (r.isType(SHALL._)) {
+										res = r;
+		
+									} else if (r.isType(REF._)) {
+										//ignore if pseudo IS
+										if (Utils.haveContext(r.getStartNode())) {
+											prevRes = null;
+											
+											if (onContext) break;
+											else if (refs > 1) break;
+											
+											refs++;
+										} else {
+											prevPrevRes = prevRes;
+											prevRes = res;
+										}
 									}
 								}
+								
 							}
-							
 						}
 					}
 					if (prevPrevRes != null) res = prevPrevRes;
