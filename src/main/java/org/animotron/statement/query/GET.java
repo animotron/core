@@ -516,7 +516,7 @@ public class GET extends AbstractQuery implements Shift {
 			
 			int refs = 0;
 			int ANs = 0;
-			if (op.isType(RESULT)) ANs++;
+			//if (op.isType(RESULT)) ANs++;
 			
 			Relationship res = null;
 			Relationship prevRes = null;
