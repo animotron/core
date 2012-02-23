@@ -53,7 +53,7 @@ public class GetDynamicTest extends ATest {
     	JExpression d = new JExpression(
 			_(THE._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "the d (Z \"A\") (Z \"B\").");
+        assertAnimoResult(d, "the d", " (Z \"A\")", " (Z \"B\")", ".");
 	}
 
 	@Test

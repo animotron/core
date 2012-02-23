@@ -551,10 +551,13 @@ public class GET extends AbstractQuery implements Shift {
 								} else if (r.isType(REF._) && path.length() == 1) {
 									res = op;
 								} else if (r.isType(REF._)) {
-									if (onContext) break;
-									else if (refs > 1) break;
-									
-									refs++;
+									//ignore if pseudo IS
+									if (Utils.haveContext(r.getStartNode())) {
+										if (onContext) break;
+										else if (refs > 1) break;
+										
+										refs++;
+									}
 								}
 							}
 							
