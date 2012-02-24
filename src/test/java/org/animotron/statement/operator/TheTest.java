@@ -69,13 +69,20 @@ public class TheTest extends ATest {
 	}
 
 	@Test
+ 	public void testREV_00() throws Exception {
+        testAnimo("the e 1.");
+        testAnimo("the e 2.");
+        testAnimo("the e 1.");
+	}
+
+	@Test
  	public void testREV_01() throws Exception {
 		Expression e;
 		
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"правильное имя\").");
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 		
-        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"правильное имя\").");
+        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 	}
 	
@@ -83,13 +90,13 @@ public class TheTest extends ATest {
  	public void testREV_02() throws Exception {
 		Expression e;
 		
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"правильное имя\").");
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 		
-        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"правильное имя\").");
+        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"правильное имя\").");
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 	}
 }
