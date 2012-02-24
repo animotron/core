@@ -20,13 +20,17 @@
  */
 package org.animotron.statement.operator;
 
+import junit.framework.Assert;
 import org.animotron.ATest;
+import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.graph.Properties.UUID;
+import static org.animotron.graph.RelationshipTypes.REV;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -46,23 +50,22 @@ public class TheTest extends ATest {
     }
 
 	@Test
-    @Ignore
-	public void getFromPFlow() throws Exception {
-        System.out.println("Test the 'THE' ...");
-        
-    	JExpression A = new JExpression(
-			_(THE._, "A", _(AN._, "B", _(THE._, "C", _(AN._, "D", value(".")))))
-		);
-    	
-    	new JExpression(
-			_(THE._, "C", _(AN._, "D", value(".")))
-		);
-        
-    	JExpression E = new JExpression(
-			_(THE._, "E", _(AN._, "C"))
-		);
-        	
-        assertAnimoResult(A, "the A B the C D \".\".");
-        assertAnimoResult(E, "the E the C D \".\".");
+ 	public void testREV() throws Exception {
+        Expression e;
+        e = testAnimo("the e 1.");
+        String uuid1 = (String) UUID.get(e);
+        e = testAnimo("the e 2.");
+        String uuid2 = (String) UUID.get(e);
+        Relationship rev1 = e.getEndNode().getSingleRelationship(REV, OUTGOING);
+        Assert.assertNotNull(rev1);
+        Assert.assertEquals("", UUID.get(rev1), uuid1);
+        e = testAnimo("the e 3.");
+        String uuid3 = (String) UUID.get(e);
+        Relationship rev2 = e.getEndNode().getSingleRelationship(REV, OUTGOING).getEndNode().getSingleRelationship(REV, OUTGOING);
+        Assert.assertNotNull(rev2);
+        Assert.assertEquals("", UUID.get(rev2), uuid1);
+        Assert.assertFalse(uuid1.equals(uuid2));
+        Assert.assertFalse(uuid2.equals(uuid3));
 	}
+
 }

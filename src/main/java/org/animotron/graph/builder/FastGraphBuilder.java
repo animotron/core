@@ -22,7 +22,6 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
-import org.animotron.graph.index.State;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
 import org.animotron.utils.MessageDigester;
@@ -120,7 +119,6 @@ public class FastGraphBuilder extends GraphBuilder {
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, THE._);
                         Cache.putRelationship(relationship, reference);
-                        State.TOP.add(end);
                     } else {
                         Node rn = createNode();
                         Node start = relationship.getEndNode();
@@ -136,7 +134,7 @@ public class FastGraphBuilder extends GraphBuilder {
                             rr.delete();
                         }
                         rr = start.createRelationshipTo(rn, REV);
-                        UUID.set(rr, UUID.get(relationship));
+                        copyProperties(relationship, rr);
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
                             order(copy(start, i), order++);

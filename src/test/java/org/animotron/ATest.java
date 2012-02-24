@@ -48,14 +48,15 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-	protected void testAnimo(String exp) throws Exception {
-        testAnimo(exp, exp);
+	protected AnimoExpression testAnimo(String exp) throws Exception {
+        return testAnimo(exp, exp);
     }
 
-	protected void testAnimo(String in, String out) throws Exception {
+	protected AnimoExpression testAnimo(String in, String out) throws Exception {
         AnimoExpression expression = new AnimoExpression(in);
         assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out);
+        return expression;
     }
 
 	protected void testAnimoResult(String exp, String res) throws Exception {
