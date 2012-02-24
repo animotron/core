@@ -89,11 +89,10 @@ public class AnimoGraph {
         IndexManager INDEX = graphDb.index();
         Cache.RELATIONSHIP.init(INDEX);
         Cache.NODE.init(INDEX);
-        Order.init(INDEX);
+        Order._.init(INDEX);
         State.init(INDEX);
         Result.init(INDEX);
-        
-        WORD._.init();
+        WORD._.init(INDEX);
     }
 
 	public static GraphDatabaseService getDb() {

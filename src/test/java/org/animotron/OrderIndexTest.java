@@ -56,7 +56,7 @@ public class OrderIndexTest extends ATest {
 		}
 		
 		System.out.println("reading ...");
-		IndexHits<Relationship> q = Order.queryDown(getROOT());
+		IndexHits<Relationship> q = Order._.queryDown(getROOT());
 		try {
 			int i = 1;
 			for (Relationship r : q ) {
@@ -79,7 +79,7 @@ public class OrderIndexTest extends ATest {
 			Node child = createNode();
 			child.setProperty("NAME-P", i);
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
-			Order.order(r, i);
+			Order._.put(r, i);
 		}
 
 		return null;

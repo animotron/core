@@ -57,7 +57,7 @@ public class Preparator extends StatementManipulator {
             }
 		}
         //System.out.println("Preparator "+op);
-        IndexHits<Relationship> hits = Order.queryDown(op);
+        IndexHits<Relationship> hits = Order._.queryDown(op);
         try {
         	for (Relationship r : hits) {
         		Statement s = Statements.relationshipType(r);

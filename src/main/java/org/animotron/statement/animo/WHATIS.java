@@ -20,26 +20,21 @@
  */
 package org.animotron.statement.animo;
 
-import java.io.IOException;
-
 import javolution.util.FastSet;
-
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Reference;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.Utils;
+import org.animotron.statement.operator.*;
 import org.animotron.statement.query.AbstractQuery;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
 
 /**
  * Return IS relations of object.
@@ -89,7 +84,7 @@ public class WHATIS extends AbstractQuery implements Reference {
         }
         
         private void downIS(PFlow pf, Node node) {
-			IndexHits<Relationship> hits = Order.queryDown(node);
+			IndexHits<Relationship> hits = Order._.queryDown(node);
         	try {
             	for (Relationship rr : hits) {
         			if (!Utils.haveContext(rr.getEndNode())) {

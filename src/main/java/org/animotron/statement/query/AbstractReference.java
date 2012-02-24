@@ -20,11 +20,7 @@
  */
 package org.animotron.statement.query;
 
-import java.util.Arrays;
-import java.util.Set;
-
 import javolution.util.FastSet;
-
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
@@ -35,6 +31,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.util.Arrays;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -141,7 +140,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 	        				}
 						}
 		        	} else {
-		    			IndexHits<Relationship> hits = Order.context(r.getEndNode());
+		    			IndexHits<Relationship> hits = Order._.context(r.getEndNode());
 		    			try {
 		    				for (Relationship rr : hits) {
 		    					

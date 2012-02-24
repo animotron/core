@@ -176,7 +176,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	if (!setFiltering(toCheckByUSE, uses, weaks))
     		return false;
 
-    	IndexHits<Relationship> hits = Order.context(pf.getOPNode());
+    	IndexHits<Relationship> hits = Order._.context(pf.getOPNode());
     	try {
 	        for (Relationship r : hits) {
 	            Statement st = Statements.relationshipType(r);

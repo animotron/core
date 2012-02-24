@@ -54,7 +54,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         public void act(PFlow pf) throws IOException {
             Pipe destination = Utils.getByREF(pf);
 
-            execute(destination, Order.context(pf.getOP().getEndNode()));
+            execute(destination, Order._.context(pf.getOP().getEndNode()));
         }
     }
 

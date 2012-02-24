@@ -20,19 +20,12 @@
  */
 package org.animotron.statement.compare;
 
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.animotron.Executor;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
-import org.animotron.manipulator.Controller;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.OnContext;
-import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
+import org.animotron.manipulator.*;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
@@ -44,6 +37,9 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Compare operator 'WITH'.
@@ -112,7 +108,7 @@ public class WITH extends Operator implements Predicate {
 			if (debug) System.out.println("actual get "+have);
 			Relationship h = have.getClosest();
 			if (Utils.haveContext(h.getEndNode())) {
-				IndexHits<Relationship> hits = Order.context(h.getEndNode());
+				IndexHits<Relationship> hits = Order._.context(h.getEndNode());
 				try {
 					for (Relationship r : hits) {
 						Pipe in = Evaluator._.execute(pf.getController(), have.question(r));
@@ -232,7 +228,7 @@ public class WITH extends Operator implements Predicate {
 			return list;
 		}
 		
-		IndexHits<Relationship> q = Order.context(vector.getClosest().getEndNode());
+		IndexHits<Relationship> q = Order._.context(vector.getClosest().getEndNode());
 		try {
 			for (Relationship i : q) {
 				Statement s = Statements.relationshipType(i);

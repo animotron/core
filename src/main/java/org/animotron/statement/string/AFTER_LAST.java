@@ -52,7 +52,7 @@ public class AFTER_LAST extends DetermInstruction {
         public void act(final PFlow pf) {
             try {
                 //UNDERSTAND: if we have more that 2 params, what to do?
-                Relationship[] params = Order.first(3, pf.getOP().getStartNode());
+                Relationship[] params = Order._.first(3, pf.getOP().getStartNode());
                 String pattern = STRING._.eval(pf, params[1]).toString();
                 String source = STRING._.eval(pf, params[2]).toString();
                 int index = source.lastIndexOf(pattern);

@@ -333,7 +333,7 @@ public class GET extends AbstractQuery implements Shift {
 	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
 		QCAVector prev = null;
-		IndexHits<Relationship> it = Order.context(node);
+		IndexHits<Relationship> it = Order._.context(node);
 		try {
 			for (Relationship r : it) {
 				//if (debug) System.out.println(r);

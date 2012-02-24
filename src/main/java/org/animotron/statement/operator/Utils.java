@@ -130,7 +130,7 @@ public class Utils {
 					
 				if (pf != null) {
 					Relationship first = null;
-					IndexHits<Relationship> hits = Order.queryDown(node);
+					IndexHits<Relationship> hits = Order._.queryDown(node);
 					try {
 						for (Relationship res : hits) {
 							if (res.isType(org.animotron.statement.operator.REF._)) {
@@ -286,7 +286,7 @@ public class Utils {
 		        
 		        QCAVector prev = null;
 
-				IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
+				IndexHits<Relationship> hits = Order._.queryDown(op.getEndNode());
 				try {
 					for (Relationship rr : hits) {
 						if (rr.isType(REF._)) continue;
@@ -321,7 +321,7 @@ public class Utils {
 
 	@Deprecated //???
 	public static Relationship getByREF(final Relationship r) {
-		final Relationship res = Order.first(1, r.getEndNode())[0];
+		final Relationship res = Order._.first(1, r.getEndNode())[0];
 		
 		return res;
 	}

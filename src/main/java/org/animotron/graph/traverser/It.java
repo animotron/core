@@ -48,7 +48,7 @@ public class It implements Iterator<Object>, Iterable<Object> {
 
     public It(Node n) {
         p = n.getPropertyKeys().iterator();
-        q = Order.queryDown(n);
+        q = Order._.queryDown(n);
         r = q.iterator();
         next();
     }

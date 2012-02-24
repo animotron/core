@@ -59,8 +59,7 @@ public class WORD extends DetermInstruction implements Prepare {
 		super(NAME);
 	}
 	
-	public void init() {
-		IndexManager index = AnimoGraph.getDb().index();
+	public void init(IndexManager index) {
 		words = index.forRelationships( NAME );
 	}
 
@@ -155,7 +154,7 @@ public class WORD extends DetermInstruction implements Prepare {
 
 				@Override
 				public Void execute() throws Exception {
-					IndexHits<Relationship> hits = Order.queryDown(pf.getOPNode());
+					IndexHits<Relationship> hits = Order._.queryDown(pf.getOPNode());
 					try {
 						for (Relationship r : hits) {
 							if (r.isType(VALUE._)) {

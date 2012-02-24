@@ -85,7 +85,7 @@ public abstract class GraphBuilder {
 
     protected final void order(Relationship r, int order){
         if (order > 0) {
-            Order.order(r, order);
+            Order._.put(r, order);
         }
     }
 

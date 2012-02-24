@@ -20,6 +20,7 @@
  */
 package org.animotron.manipulator;
 
+import javolution.util.FastTable;
 import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Order;
@@ -38,9 +39,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.Iterator;
 
-import javolution.util.FastTable;
-
-import static org.animotron.graph.RelationshipTypes.*;
+import static org.animotron.graph.RelationshipTypes.RESULT;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -247,7 +246,7 @@ public abstract class Manipulator {
 		try {
 			PFlow nextPF = null;
 
-			IndexHits<Relationship> q = Order.context(node);
+			IndexHits<Relationship> q = Order._.context(node);
 			try {
 				Iterator<Relationship> it = q.iterator();
 				while (it.hasNext()) {

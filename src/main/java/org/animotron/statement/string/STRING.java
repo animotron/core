@@ -86,7 +86,7 @@ public class STRING extends DetermInstruction {
 	}
 
 	public void eval(StringBuilder sb, PFlow pf, Node node) {
-        IndexHits<Relationship> hits = Order.queryDown(node);
+        IndexHits<Relationship> hits = Order._.queryDown(node);
         try {
             for (Relationship r : hits) {
                 _eval(sb, pf, r);

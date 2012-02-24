@@ -98,7 +98,7 @@ public class EQ extends Operator implements Predicate {
 		if (debug) System.out.println("Eval actual");
 		QCAVector have;
 		while ((have = pipe.take()) != null) { 
-			IndexHits<Relationship> hits = Order.context(have.getAnswer().getEndNode());
+			IndexHits<Relationship> hits = Order._.context(have.getAnswer().getEndNode());
 			try {
 				for (Relationship r : hits) {
 					Pipe in = Evaluator._.execute(pf.getController(), vector.question(r));
@@ -116,7 +116,7 @@ public class EQ extends Operator implements Predicate {
 		List<QCAVector> expected = new FastList<QCAVector>();
 
 		if (debug) System.out.println("Eval expected");
-		IndexHits<Relationship> hits = Order.queryDown(op.getEndNode());
+		IndexHits<Relationship> hits = Order._.queryDown(op.getEndNode());
 		try {
 			boolean first = true;
 			for (Relationship r : hits) {

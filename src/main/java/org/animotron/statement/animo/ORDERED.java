@@ -56,7 +56,7 @@ public class ORDERED extends DetermInstruction {
 		public void act(final PFlow pf) {
 			//System.out.println("ORDERED "+pf.getOP().getType());
 			
-			IndexHits<Relationship> hits = Order.queryDown(pf.getVector().getQuestion().getEndNode());
+			IndexHits<Relationship> hits = Order._.queryDown(pf.getVector().getQuestion().getEndNode());
 			try {
 				for (Relationship r : hits) {
 

@@ -26,7 +26,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
 import org.neo4j.index.lucene.QueryContext;
 
 /**
@@ -34,10 +33,12 @@ import org.neo4j.index.lucene.QueryContext;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Order {
+public class Order extends AbstractRelationshipIndex {
 	
-	public static final String NAME = "order";
-	
+	public static Order _ = new Order("order");
+
+    private Order(String name) {super(name);}
+
 //	private static final QueryContext SORT;
 //	static {
 //		QueryContext q = new QueryContext( "*" );
@@ -46,10 +47,9 @@ public class Order {
 //        SORT = q.sort( new Sort( sortFields ) );
 //	}
 
-	private static RelationshipIndex INDEX;
-
-	public static void init(IndexManager indexManager) {
-		INDEX = indexManager.forRelationships(NAME);
+    @Override
+	public void init(IndexManager indexManager) {
+		INDEX = indexManager.forRelationships(name);
 	}
 
 	private static QueryContext sort( String key, String... additionalKeys ) {
@@ -66,22 +66,14 @@ public class Order {
         return q.sort( new Sort( sortFields ) );
     }
 
-    public static void order(Relationship r, int value) {
-        INDEX.add(r, NAME, value);
-        //r.setProperty(NAME, value);
-    }
-	
-    public static void unorder(Relationship r) {
-        INDEX.remove(r, NAME);
-    }
 
-    public static IndexHits<Relationship> queryDown(Node node) {
-        return INDEX.query(NAME, sort(NAME), node, null);
+    public  IndexHits<Relationship> queryDown(Node node) {
+        return INDEX.query(name, sort(name), node, null);
     }
 
     @Deprecated //not safe to use
-    public static IndexHits<Relationship> queryUp(Node node) {
-        return INDEX.query(NAME, sort(NAME), null, node);
+    public IndexHits<Relationship> queryUp(Node node) {
+        return INDEX.query(name, sort(name), null, node);
     }
 
 //	public static Relationship position(long position, Node startNode) {
@@ -94,7 +86,7 @@ public class Order {
 //		return null;
 //	}
 
-	public static Relationship[] first(int qty, Node node) {
+	public Relationship[] first(int qty, Node node) {
 		IndexHits<Relationship> q = queryDown(node);
 		try {
 			Relationship[] res = new Relationship[qty];
@@ -108,7 +100,7 @@ public class Order {
 		}
 	}
 
-    public static IndexHits<Relationship> context(Node node) {
-        return new ContextHits(node, INDEX.query(NAME, sort(NAME), node, null));
+    public IndexHits<Relationship> context(Node node) {
+        return new ContextHits(node, INDEX.query(name, sort(name), node, null));
     }
 }

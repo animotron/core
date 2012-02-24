@@ -52,7 +52,7 @@ public class UUID extends NonDetermInstruction {
         @Override
         public void act(final PFlow pf) {
 			try {
-                Relationship[] params = Order.first(1, pf.getOP().getStartNode());
+                Relationship[] params = Order._.first(1, pf.getOP().getStartNode());
                 java.util.UUID uuid = params.length > 1
                         ? java.util.UUID.fromString(STRING._.eval(pf, params).toString())
                         : java.util.UUID.randomUUID();

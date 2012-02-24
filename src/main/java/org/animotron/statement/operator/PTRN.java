@@ -20,10 +20,7 @@
  */
 package org.animotron.statement.operator;
 
-import java.io.IOException;
-
 import javolution.util.FastSet;
-
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -34,6 +31,8 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
 
 
 /**
@@ -75,7 +74,7 @@ public class PTRN extends Operator implements Evaluable {
         }
 
         private boolean filtering(final PFlow pf, final Relationship ref, final QCAVector answered) throws IOException, InterruptedException {
-        	IndexHits<Relationship> hits = Order.context(pf.getOPNode());
+        	IndexHits<Relationship> hits = Order._.context(pf.getOPNode());
         	try {
     	        for (Relationship r : hits) {
     	            Statement st = Statements.relationshipType(r);
@@ -97,7 +96,7 @@ public class PTRN extends Operator implements Evaluable {
         }
         
         private void evalOther(final PFlow pf, final Relationship ref, final QCAVector answered) throws IOException {
-        	IndexHits<Relationship> hits = Order.context(pf.getOPNode());
+        	IndexHits<Relationship> hits = Order._.context(pf.getOPNode());
         	try {
     	        for (Relationship r : hits) {
     	            Statement st = Statements.relationshipType(r);

@@ -53,7 +53,7 @@ public class SHA512 extends DetermInstruction {
         @Override
         public void act(final PFlow pf) {
 			try {
-                Relationship[] params = Order.first(1, pf.getOP().getStartNode());
+                Relationship[] params = Order._.first(1, pf.getOP().getStartNode());
                 //source
                 String message = STRING._.eval(pf, params).toString();
                 message = MessageDigester.calculate(message, "SHA-512");

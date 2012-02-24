@@ -69,7 +69,7 @@ public class EACH extends Combinator {
 				System.out.println(pf.getVector());
 			}
 			
-			IndexHits<Relationship> elements = Order.queryDown(pf.getOPNode());
+			IndexHits<Relationship> elements = Order._.queryDown(pf.getOPNode());
 			try {
 				Set<QCAVector> set = new FastSet<QCAVector>();
 				while (elements.hasNext()) {
@@ -107,7 +107,7 @@ public class EACH extends Combinator {
                 Statement s = Statements.relationshipType(res[i]);
                 if (s instanceof AbstractValue) {
                     // TODO analyze more complex expressions
-                    IndexHits<Relationship> subelements = Order.queryDown(res[i].getEndNode());
+                    IndexHits<Relationship> subelements = Order._.queryDown(res[i].getEndNode());
                     Object[][] bind = new Object[subelements.size() + 1][];
                     try {
                         int n = 0;
@@ -139,7 +139,7 @@ public class EACH extends Combinator {
 		Relationship rship = sets.get( sets.size()-pos );
 
 		if (rship.isType(LINK._)) {
-			IndexHits<Relationship> subelements = Order.queryDown(rship.getEndNode());
+			IndexHits<Relationship> subelements = Order._.queryDown(rship.getEndNode());
 			try {
 				for (Relationship r : subelements) {
 					rs[pos-1] = r;

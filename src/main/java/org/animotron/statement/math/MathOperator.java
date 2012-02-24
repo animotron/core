@@ -20,6 +20,7 @@
  */
 package org.animotron.statement.math;
 
+import javolution.util.FastList;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
@@ -39,8 +40,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
-
-import javolution.util.FastList;
 
 import static org.animotron.expression.JExpression.value;
 import static org.animotron.graph.RelationshipTypes.TRI;
@@ -79,7 +78,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
         @Override
         public void act(final PFlow pf) throws IOException {
         	if (!Utils.results(pf)) {
-	            IndexHits<Relationship> params = Order.context(pf.getOP().getStartNode());
+	            IndexHits<Relationship> params = Order._.context(pf.getOP().getStartNode());
 	            try {
 	                Number x = null;
 	                for (Relationship param : params) {
@@ -121,7 +120,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 		@Override
     	public void act(final PFlow pf) {
     		final FastList<Node> thes = FastList.newInstance();
-    		IndexHits<Relationship> hits = Order.context(pf.getOPNode());
+    		IndexHits<Relationship> hits = Order._.context(pf.getOPNode());
     		try {
     			for (Relationship r : hits) {
     				if (!r.isType(GET._)) {
