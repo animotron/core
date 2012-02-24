@@ -65,7 +65,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     private THE() { super("the"); }
 
 	public Relationship get(String name) {
-        return Cache.getRelationship(name);
+        return Cache.RELATIONSHIP.get(name);
 	}
 
 	private Relationship create(String name) throws AnimoException {
@@ -74,7 +74,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         MODIFIED.set(r, System.currentTimeMillis());
         UUID.set(r, java.util.UUID.randomUUID().toString());
         Node node = r.getEndNode();
-        Cache.putRelationship(r, name);
+        Cache.RELATIONSHIP.put(r, name);
         State.TOP.add(node);
         return r;
 	}
@@ -94,7 +94,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
-        Cache.putNode(node, reference);
+        Cache.NODE.put(node, reference);
         NAME.set(node, reference);
         return node;
     }

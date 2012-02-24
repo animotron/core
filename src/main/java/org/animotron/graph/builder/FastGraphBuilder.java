@@ -37,7 +37,6 @@ import java.util.List;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.Properties.*;
-import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.graph.RelationshipTypes.TRI;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
@@ -101,11 +100,11 @@ public class FastGraphBuilder extends GraphBuilder {
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[1];
-            relationship = Cache.getRelationship(hash);
+            relationship = Cache.RELATIONSHIP.get(hash);
             if (relationship == null) {
                 Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
                 root = createNode();
-                o[6] = Cache.getNode(hash) != null;
+                o[6] = Cache.NODE.get(hash) != null;
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 Node end = r.getEndNode();
                 o[3] = r;
@@ -116,28 +115,17 @@ public class FastGraphBuilder extends GraphBuilder {
                     step();
                 }
                 if (statement instanceof THE) {
-                    relationship = Cache.getRelationship(reference);
+                    relationship = Cache.RELATIONSHIP.get(reference);
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, THE._);
-                        Cache.putRelationship(relationship, reference);
+                        Cache.RELATIONSHIP.put(relationship, reference);
                     } else {
-                        Node rn = createNode();
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
-                            if (!i.isType(TRI) && !i.isType(REV)) {
-                                copy(rn, i);
+                            if (!i.isType(TRI)) {
                                 i.delete();
                             }
                         }
-                        Relationship rr = start.getSingleRelationship(REV, OUTGOING);
-                        if (rr != null) {
-                            copy(rn, rr);
-                            rr.delete();
-                        }
-                        rr = start.createRelationshipTo(rn, REV);
-                        copyProperties(relationship, rr);
-                        //Cache.removeRelationship(relationship, HASH.get(rr));
-                        Cache.putRelationship(rr, HASH.get(rr));
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
                             order(copy(start, i), order++);
@@ -150,31 +138,10 @@ public class FastGraphBuilder extends GraphBuilder {
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                 }
-                Cache.putRelationship(relationship, hash);
+                Cache.RELATIONSHIP.put(relationship, hash);
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
-                MODIFIED.set(relationship, System.currentTimeMillis());
-            } else if (statement instanceof THE) {
-                Relationship rr = relationship;
-                relationship = Cache.getRelationship(o[2]);
-                Node rn = createNode();
-                Node start = relationship.getEndNode();
-                for (Relationship i : start.getRelationships(OUTGOING)) {
-                    if (!i.isType(TRI) && !i.isType(REV)) {
-                        copy(rn, i);
-                        i.delete();
-                    }
-                }
-                int order = 1;
-                for (Relationship i : rr.getEndNode().getRelationships(OUTGOING)) {
-                    order(copy(start, i), order++);
-                }
-                copy(rn, rr);
-                rr.delete();
-                rr = start.createRelationshipTo(rn, REV);
-                copyProperties(relationship, rr);
-                HASH.set(relationship, hash);
                 MODIFIED.set(relationship, System.currentTimeMillis());
             }
         }
@@ -243,7 +210,7 @@ public class FastGraphBuilder extends GraphBuilder {
             Object reference = item[2];
             byte[] hash = (byte[]) item[8];
             Node parent = (Node) p[4];
-            item[6] = Cache.getNode(hash) != null;
+            item[6] = Cache.NODE.get(hash) != null;
             r = statement.build(parent, reference, hash, true, ignoreNotFound);
             item[3] = r;
             item[4] = r.getEndNode();

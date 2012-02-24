@@ -53,7 +53,7 @@ public class GC extends Manipulator {
 	                for (Relationship r : node.getRelationships()) {
 	                    r.delete();
 	                }
-	                Cache.removeNode(node);
+	                Cache.NODE.remove(node);
 					node.delete();
 				}
 			}

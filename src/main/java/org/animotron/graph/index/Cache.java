@@ -21,10 +21,7 @@
 package org.animotron.graph.index;
 
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.Index;
-import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
@@ -35,95 +32,23 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
  */
 public class Cache {
 
-	public static final String NAME = "stream";
+	public static final String NAME = "cache";
 
-    private static CacheIndex<Node> NCACHE;
-    private static CacheIndex<Relationship> RCACHE;
+    public static AbstractIndex<Node> NODE;
+    public static AbstractIndex<Relationship> RELATIONSHIP;
 
 	public static void init (IndexManager indexManager) {
-        NCACHE = new CacheIndex<Node>(indexManager) {
+        NODE = new AbstractIndex<Node>(indexManager, NAME) {
+            @Override
             public void init(IndexManager indexManager) {
                 INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-//                INDEX = indexManager.forNodes(NAME);
             }
         };
-        RCACHE = new CacheIndex<Relationship>(indexManager) {
+        RELATIONSHIP = new AbstractIndex<Relationship>(indexManager, NAME) {
             public void init(IndexManager indexManager) {
                 INDEX = indexManager.forRelationships(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-//                INDEX = indexManager.forRelationships(NAME);
             }
         };
 	}
-
-    public static Node getNode(Object value) {
-        return NCACHE.get(value);
-    }
-
-    public static Relationship getRelationship(Object value) {
-        return RCACHE.get(value);
-    }
-
-    public static void removeNode(Node n, Object value) {
-        NCACHE.remove(n, value);
-    }
-
-    public static void removeNode(Node n) {
-        NCACHE.remove(n);
-    }
-
-    public static void putNode(Node n, Object value) {
-        NCACHE.put(n, value);
-    }
-
-    public static void putRelationship(Relationship r, Object value) {
-        RCACHE.put(r, value);
-    }
-
-    public static void removeRelationship(Relationship r, Object value) {
-        RCACHE.remove(r, value);
-    }
-
-    public static void removeRelationship(Relationship r) {
-        RCACHE.remove(r);
-    }
-
-    private abstract static class CacheIndex<T extends PropertyContainer> {
-
-        protected Index<T> INDEX;
-
-        public CacheIndex(IndexManager indexManager){
-            init(indexManager);
-        }
-
-        public abstract void init(IndexManager indexManager);
-
-        public T get(Object value) {
-            IndexHits<T> q = INDEX.get(NAME, value);
-            T c = null;
-            try {
-                //c = q.next();
-                // XXX: workaround
-                while (q.hasNext()) {
-                    c = q.next();
-                }
-            } finally {
-                q.close();
-                return c;
-            }
-        }
-
-        public void put(T c, Object value) {
-            INDEX.add(c, NAME, value);
-        }
-
-        public void remove(T c, Object value) {
-            INDEX.remove(c, NAME, value);
-        }
-
-        public void remove(T c) {
-            INDEX.remove(c, NAME);
-        }
-
-    }
 
 }

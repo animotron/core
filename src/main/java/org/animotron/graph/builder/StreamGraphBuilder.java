@@ -78,11 +78,11 @@ public class StreamGraphBuilder extends GraphBuilder {
 
     @Override
     public void endGraph() throws AnimoException {
-        relationship = Cache.getRelationship(hash);
+        relationship = Cache.RELATIONSHIP.get(hash);
         if (relationship == null) {
             long timestamp = System.currentTimeMillis();
             relationship = copy(getROOT(), r);
-            Cache.putRelationship(relationship, hash);
+            Cache.RELATIONSHIP.put(relationship, hash);
             HASH.set(relationship, hash);
             if (relationship.isType(THE._)) {
                 Node node = relationship.getEndNode();
@@ -129,9 +129,9 @@ public class StreamGraphBuilder extends GraphBuilder {
         if (!(Boolean) item[2]) {
             updateMD(md, (Statement) item[4]);
             hash = md.digest();
-            Node node = Cache.getNode(hash);
+            Node node = Cache.NODE.get(hash);
             if (node == null) {
-                Cache.putNode(r.getEndNode(), hash);
+                Cache.NODE.put(r.getEndNode(), hash);
             } else {
                 Relationship old = r;
                 r = copy(old, node);
