@@ -69,6 +69,13 @@ public class TheTest extends ATest {
 	}
 
 	@Test
+ 	public void testREV_00() throws Exception {
+        testAnimo("the e 1.");
+        testAnimo("the e 2.");
+        testAnimo("the e 1.");
+	}
+
+	@Test
  	public void testREV_01() throws Exception {
 		Expression e;
 		

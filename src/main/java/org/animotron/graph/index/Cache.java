@@ -101,7 +101,11 @@ public class Cache {
             IndexHits<T> q = INDEX.get(NAME, value);
             T c = null;
             try {
-                c = q.next();
+                //c = q.next();
+                // XXX: workaround
+                while (q.hasNext()) {
+                    c = q.next();
+                }
             } finally {
                 q.close();
                 return c;

@@ -35,6 +35,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.graph.RelationshipTypes.TRI;
@@ -123,7 +124,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         Node rn = createNode();
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
-                            if (!i.isType(TRI)) {
+                            if (!i.isType(TRI) && !i.isType(REV)) {
                                 copy(rn, i);
                                 i.delete();
                             }
@@ -135,6 +136,8 @@ public class FastGraphBuilder extends GraphBuilder {
                         }
                         rr = start.createRelationshipTo(rn, REV);
                         copyProperties(relationship, rr);
+                        //Cache.removeRelationship(relationship, HASH.get(rr));
+                        Cache.putRelationship(rr, HASH.get(rr));
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
                             order(copy(start, i), order++);
@@ -151,6 +154,27 @@ public class FastGraphBuilder extends GraphBuilder {
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
+                MODIFIED.set(relationship, System.currentTimeMillis());
+            } else if (statement instanceof THE) {
+                Relationship rr = relationship;
+                relationship = Cache.getRelationship(o[2]);
+                Node rn = createNode();
+                Node start = relationship.getEndNode();
+                for (Relationship i : start.getRelationships(OUTGOING)) {
+                    if (!i.isType(TRI) && !i.isType(REV)) {
+                        copy(rn, i);
+                        i.delete();
+                    }
+                }
+                int order = 1;
+                for (Relationship i : rr.getEndNode().getRelationships(OUTGOING)) {
+                    order(copy(start, i), order++);
+                }
+                copy(rn, rr);
+                rr.delete();
+                rr = start.createRelationshipTo(rn, REV);
+                copyProperties(relationship, rr);
+                HASH.set(relationship, hash);
                 MODIFIED.set(relationship, System.currentTimeMillis());
             }
         }
