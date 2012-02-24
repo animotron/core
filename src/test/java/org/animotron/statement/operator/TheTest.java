@@ -79,4 +79,17 @@ public class TheTest extends ATest {
         System.out.println(UUID.get(e));
 	}
 	
+	@Test
+ 	public void testREV_02() throws Exception {
+		Expression e;
+		
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+        System.out.println(UUID.get(e));
+		
+        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
+        System.out.println(UUID.get(e));
+
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+        System.out.println(UUID.get(e));
+	}
 }
