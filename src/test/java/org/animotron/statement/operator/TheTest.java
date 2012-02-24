@@ -68,4 +68,15 @@ public class TheTest extends ATest {
         Assert.assertFalse(uuid2.equals(uuid3));
 	}
 
+	@Test
+ 	public void testREV_01() throws Exception {
+		Expression e;
+		
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\")).");
+        System.out.println(UUID.get(e));
+		
+        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
+        System.out.println(UUID.get(e));
+	}
+	
 }
