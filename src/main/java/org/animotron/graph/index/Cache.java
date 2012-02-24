@@ -37,14 +37,14 @@ public class Cache {
     public static AbstractIndex<Node> NODE = new AbstractIndex<Node>(NAME) {
         @Override
         public void init(IndexManager manager) {
-            INDEX = manager.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+            init(manager.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         }
     };
 
     public static AbstractIndex<Relationship> RELATIONSHIP= new AbstractIndex<Relationship>(NAME) {
         @Override
         public void init(IndexManager manager) {
-            INDEX = manager.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+            init(manager.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         }
     };
 

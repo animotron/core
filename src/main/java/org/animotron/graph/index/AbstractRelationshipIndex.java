@@ -30,10 +30,19 @@ import org.neo4j.graphdb.index.RelationshipIndex;
 */
 public abstract class AbstractRelationshipIndex extends AbstractIndex<Relationship>{
 
-    protected RelationshipIndex INDEX;
+    private RelationshipIndex index;
 
     public AbstractRelationshipIndex(String name){
         super(name);
+    }
+
+    protected void init(RelationshipIndex index) {
+        this.index = index;
+    }
+
+    @Override
+    protected RelationshipIndex index() {
+        return index;
     }
 
 }

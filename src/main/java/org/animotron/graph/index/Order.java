@@ -49,7 +49,7 @@ public class Order extends AbstractRelationshipIndex {
 
     @Override
 	public void init(IndexManager indexManager) {
-		INDEX = indexManager.forRelationships(name);
+		init(indexManager.forRelationships(name));
 	}
 
 	private static QueryContext sort( String key, String... additionalKeys ) {
@@ -68,12 +68,12 @@ public class Order extends AbstractRelationshipIndex {
 
 
     public  IndexHits<Relationship> queryDown(Node node) {
-        return INDEX.query(name, sort(name), node, null);
+        return index().query(name, sort(name), node, null);
     }
 
     @Deprecated //not safe to use
     public IndexHits<Relationship> queryUp(Node node) {
-        return INDEX.query(name, sort(name), null, node);
+        return index().query(name, sort(name), null, node);
     }
 
 //	public static Relationship position(long position, Node startNode) {
@@ -101,6 +101,6 @@ public class Order extends AbstractRelationshipIndex {
 	}
 
     public IndexHits<Relationship> context(Node node) {
-        return new ContextHits(node, INDEX.query(name, sort(name), node, null));
+        return new ContextHits(node, index().query(name, sort(name), node, null));
     }
 }

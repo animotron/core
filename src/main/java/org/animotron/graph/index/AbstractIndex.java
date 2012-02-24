@@ -31,18 +31,25 @@ import org.neo4j.graphdb.index.IndexManager;
  *
  */
 public abstract class AbstractIndex<T extends PropertyContainer> {
-
-    protected Index<T> INDEX;
     protected final String name;
+    private Index<T> index;
 
     public AbstractIndex(String name){
         this.name = name;
     }
 
+    protected Index<T> index() {
+        return index;
+    };
+
+    protected void init(Index<T> index) {
+        this.index = index;
+    };
+
     public abstract void init(IndexManager manager);
 
     public T get(Object value) {
-        IndexHits<T> q = INDEX.get(name, value);
+        IndexHits<T> q = index().get(name, value);
         T c = null;
         try {
             c = q.next();
@@ -53,15 +60,15 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
     }
 
     public void put(T c, Object value) {
-        INDEX.add(c, name, value);
+        index().add(c, name, value);
     }
 
     public void remove(T c, Object value) {
-        INDEX.remove(c, name, value);
+        index().remove(c, name, value);
     }
 
     public void remove(T c) {
-        INDEX.remove(c, name);
+        index().remove(c, name);
     }
 
 }
