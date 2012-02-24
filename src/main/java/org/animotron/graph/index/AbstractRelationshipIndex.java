@@ -57,4 +57,7 @@ public abstract class AbstractRelationshipIndex extends AbstractIndex<Relationsh
         return index().get(name, valueOrNull, startOrNull, endOrNull);
     }
 
+    public IndexHits<Relationship> query(Object query) {
+        return index().query(name, query);
+    }
 }

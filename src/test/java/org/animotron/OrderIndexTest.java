@@ -79,7 +79,7 @@ public class OrderIndexTest extends ATest {
 			Node child = createNode();
 			child.setProperty("NAME-P", i);
 			Relationship r = parent.createRelationshipTo(child, RT.CHILD);
-			Order._.put(r, i);
+			Order._.add(r, i);
 		}
 
 		return null;

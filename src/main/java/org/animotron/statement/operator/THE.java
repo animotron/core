@@ -74,7 +74,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         MODIFIED.set(r, System.currentTimeMillis());
         UUID.set(r, java.util.UUID.randomUUID().toString());
         Node node = r.getEndNode();
-        Cache.RELATIONSHIP.put(r, name);
+        Cache.RELATIONSHIP.add(r, name);
         State.TOP.add(node);
         return r;
 	}
@@ -94,7 +94,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
-        Cache.NODE.put(node, reference);
+        Cache.NODE.add(node, reference);
         NAME.set(node, reference);
         return node;
     }

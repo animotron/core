@@ -63,7 +63,7 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
         return index().get(name, value);
     }
 
-    public void put(T c, Object value) {
+    public void add(T c, Object value) {
         index().add(c, name, value);
     }
 

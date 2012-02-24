@@ -21,7 +21,6 @@
 package org.animotron.graph.index;
 
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
@@ -36,31 +35,32 @@ public enum State {
     GC      (0),
     TOP     (1),
     PREPARE (2),
-    CALC    (3);
-	
-	private static final String NAME = "state";
-	
-	private static Index<Node> INDEX;
+    CALC    (3),
+    REV     (4);
+
+	public static final AbstractIndex<Node> _ = new AbstractIndex<Node>("state") {
+        @Override
+        public void init(IndexManager index) {
+            init(index.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
+        }
+    };
+
     private int id;
 
     private State(int id) {
          this.id = id;
     }
 
-    public static void init(IndexManager indexManager) {
-        INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-	}
-
     public void add(Node n) {
-        INDEX.add(n, NAME, id);
+        _.add(n, id);
     }
 	
     public void remove(Node n) {
-        INDEX.remove(n, NAME, id);
+        _.remove(n, id);
     }
 
-    public IndexHits<Node> get() {
-        return INDEX.get(NAME, id);
+    public IndexHits<Node> getHits() {
+        return _.getHits(id);
     }
 
 }

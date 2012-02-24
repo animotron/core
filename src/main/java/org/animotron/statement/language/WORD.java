@@ -25,6 +25,7 @@ import org.animotron.Executor;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
+import org.animotron.graph.index.AbstractRelationshipIndex;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.*;
@@ -38,7 +39,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
 
 import static org.animotron.expression.JExpression.value;
 
@@ -51,16 +51,19 @@ public class WORD extends DetermInstruction implements Prepare {
 
 	public static final WORD _ = new WORD();
 	
-	RelationshipIndex words;
-	
-	private static final String NAME = "word"; 
+	private static final String NAME = "word";
 
-	private WORD() { 
-		super(NAME);
-	}
+	private WORD() {super(NAME);}
+
+	private AbstractRelationshipIndex words = new AbstractRelationshipIndex(NAME) {
+        @Override
+        public void init(IndexManager index) {
+            init(index.forRelationships(name));
+        }
+    };
 	
 	public void init(IndexManager index) {
-		words = index.forRelationships( NAME );
+		words.init(index);
 	}
 
 
@@ -158,7 +161,7 @@ public class WORD extends DetermInstruction implements Prepare {
 					try {
 						for (Relationship r : hits) {
 							if (r.isType(VALUE._)) {
-								words.add(r, NAME, VALUE._.reference(r));
+								words.add(r, VALUE._.reference(r));
 							}
 						}
 					} catch (Exception e) {
@@ -174,6 +177,6 @@ public class WORD extends DetermInstruction implements Prepare {
 
 	public IndexHits<Relationship> search(String word) {
 		//System.out.println(words.get(NAME, word).getSingle());
-		return words.query(NAME, word);
+		return words.query(word);
 	}
 }

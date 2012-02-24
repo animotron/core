@@ -118,7 +118,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     relationship = Cache.RELATIONSHIP.get(reference);
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, THE._);
-                        Cache.RELATIONSHIP.put(relationship, reference);
+                        Cache.RELATIONSHIP.add(relationship, reference);
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
@@ -138,7 +138,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                 }
-                Cache.RELATIONSHIP.put(relationship, hash);
+                Cache.RELATIONSHIP.add(relationship, hash);
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();

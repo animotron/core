@@ -96,7 +96,7 @@ public abstract class AbstractStatement implements Statement {
             Node child = Cache.NODE.get(hash);
             if (child == null) {
                 child = createChild(reference, false, ignoreNotFound);
-                Cache.NODE.put(child, hash);
+                Cache.NODE.add(child, hash);
             }
             return child;
         } else {

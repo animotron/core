@@ -403,7 +403,7 @@ public class Utils {
 				//check if it exist
 				Relationship res = Result._.getIfExist(node, r, rType);
 				if (res != null) {
-					Result._.put(res, hash);
+					Result._.add(res, hash);
 					
 					//for debug
 					//CID.set(res, context.getId());
@@ -426,7 +426,7 @@ public class Utils {
 //						}
 //					}
 //				}
-				Result._.put(res, hash);
+				Result._.add(res, hash);
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;
 			}

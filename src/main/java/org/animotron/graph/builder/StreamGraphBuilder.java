@@ -82,7 +82,7 @@ public class StreamGraphBuilder extends GraphBuilder {
         if (relationship == null) {
             long timestamp = System.currentTimeMillis();
             relationship = copy(getROOT(), r);
-            Cache.RELATIONSHIP.put(relationship, hash);
+            Cache.RELATIONSHIP.add(relationship, hash);
             HASH.set(relationship, hash);
             if (relationship.isType(THE._)) {
                 Node node = relationship.getEndNode();
@@ -131,7 +131,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             hash = md.digest();
             Node node = Cache.NODE.get(hash);
             if (node == null) {
-                Cache.NODE.put(r.getEndNode(), hash);
+                Cache.NODE.add(r.getEndNode(), hash);
             } else {
                 Relationship old = r;
                 r = copy(old, node);

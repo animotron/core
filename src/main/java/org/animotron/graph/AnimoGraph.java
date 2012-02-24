@@ -90,7 +90,7 @@ public class AnimoGraph {
         Cache.RELATIONSHIP.init(INDEX);
         Cache.NODE.init(INDEX);
         Order._.init(INDEX);
-        State.init(INDEX);
+        State._.init(INDEX);
         Result._.init(INDEX);
         WORD._.init(INDEX);
     }
