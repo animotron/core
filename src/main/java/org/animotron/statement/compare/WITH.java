@@ -110,18 +110,28 @@ public class WITH extends Operator implements Predicate {
 		QCAVector have;
 		while ((have = pipe.take()) != null) {
 			if (debug) System.out.println("actual get "+have);
-			IndexHits<Relationship> hits = Order.context(have.getClosest().getEndNode());
-			try {
-				for (Relationship r : hits) {
-					Pipe in = Evaluator._.execute(pf.getController(), have.question(r));
-					QCAVector e;
-					while ((e = in.take()) != null) {
-						actual.add(e);
-						if (debug) System.out.println("actual "+e);
+			Relationship h = have.getClosest();
+			if (Utils.haveContext(h.getEndNode())) {
+				IndexHits<Relationship> hits = Order.context(h.getEndNode());
+				try {
+					for (Relationship r : hits) {
+						Pipe in = Evaluator._.execute(pf.getController(), have.question(r));
+						QCAVector e;
+						while ((e = in.take()) != null) {
+							actual.add(e);
+							if (debug) System.out.println("actual "+e);
+						}
 					}
+				} finally {
+					hits.close();
 				}
-			} finally {
-				hits.close();
+			} else if (h.isType(AN._)) {
+				Pipe in = AN._.getREFs(pf, have);
+				QCAVector e;
+				while ((e = in.take()) != null) {
+					actual.add(e);
+					if (debug) System.out.println("actual "+e);
+				}
 			}
 		}
 		
@@ -216,6 +226,11 @@ public class WITH extends Operator implements Predicate {
 
 	private List<QCAVector> evaluable(final Controller controller, final QCAVector vector) throws InterruptedException, IOException {
 		List<QCAVector> list = new FastList<QCAVector>();
+		
+		if (vector.getClosest().isType(REF._)) {
+			list.add(vector);
+			return list;
+		}
 		
 		IndexHits<Relationship> q = Order.context(vector.getClosest().getEndNode());
 		try {
