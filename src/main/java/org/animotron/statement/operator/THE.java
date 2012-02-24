@@ -30,9 +30,11 @@ import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import static org.animotron.graph.Properties.MODIFIED;
 import static org.animotron.graph.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
+import static org.animotron.graph.Properties.UUID;
 
 /**
  * Operator 'THE'.
@@ -69,6 +71,8 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 	private Relationship create(String name) throws AnimoException {
         Relationship r;
         r = build(getROOT(), name, null, false, true);
+        MODIFIED.set(r, System.currentTimeMillis());
+        UUID.set(r, java.util.UUID.randomUUID().toString());
         Node node = r.getEndNode();
         Cache.putRelationship(r, name);
         State.TOP.add(node);

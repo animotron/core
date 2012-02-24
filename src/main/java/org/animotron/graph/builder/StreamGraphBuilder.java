@@ -73,8 +73,6 @@ public class StreamGraphBuilder extends GraphBuilder {
 
     @Override
     public void fail(Throwable e) {
-        modified(null);
-        creative(null);
         destructive(root);
     }
 

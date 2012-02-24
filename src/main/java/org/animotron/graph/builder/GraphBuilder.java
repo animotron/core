@@ -194,6 +194,8 @@ public abstract class GraphBuilder {
             finishTx(tx);
             tx = beginTx();
             try {
+                creative(null);
+                modified(null);
                 fail(e);
             } finally {
                 finishTx(tx);

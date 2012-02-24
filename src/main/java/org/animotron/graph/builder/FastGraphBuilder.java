@@ -37,6 +37,7 @@ import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.graph.RelationshipTypes.TRI;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
@@ -79,8 +80,6 @@ public class FastGraphBuilder extends GraphBuilder {
 
     @Override
     protected void fail(Throwable e) {
-        //modified(null);
-        //creative(null);
         if (root != null) {
             destructive(root);
         }
@@ -123,12 +122,21 @@ public class FastGraphBuilder extends GraphBuilder {
                         Cache.putRelationship(relationship, reference);
                         State.TOP.add(end);
                     } else {
+                        Node rn = createNode();
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
                             if (!i.isType(TRI)) {
-                                destructive(i);
+                                copy(rn, i);
+                                i.delete();
                             }
                         }
+                        Relationship rr = start.getSingleRelationship(REV, OUTGOING);
+                        if (rr != null) {
+                            copy(rn, rr);
+                            rr.delete();
+                        }
+                        rr = start.createRelationshipTo(rn, REV);
+                        UUID.set(rr, UUID.get(relationship));
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
                             order(copy(start, i), order++);
@@ -137,6 +145,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         modified(relationship);
                     }
                     creative(relationship);
+                    UUID.set(relationship, java.util.UUID.randomUUID().toString());
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                 }
