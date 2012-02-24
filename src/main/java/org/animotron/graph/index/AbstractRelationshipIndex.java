@@ -39,7 +39,11 @@ public abstract class AbstractRelationshipIndex extends AbstractIndex<Relationsh
 
     @Override
     protected void init(Index<Relationship> index) {
-        this.index = (RelationshipIndex) index;
+        throw new UnsupportedOperationException();
+    }
+
+    protected void init(RelationshipIndex index) {
+        this.index = index;
     }
 
     @Override
