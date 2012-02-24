@@ -72,10 +72,10 @@ public class TheTest extends ATest {
  	public void testREV_01() throws Exception {
 		Expression e;
 		
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\")).");
+		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 		
-        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\")).");
+        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 	}
 	
