@@ -132,16 +132,16 @@ public class AnyTest extends ATest {
 		testAnimo("the x2 2.");
 		testAnimo("the y1 (z) (foo x1).");
 		testAnimo("the y2 (z) (foo x2).");
-		assertAnimoResult("any z with foo x2", "the y2 (z) (x2).");		
+		assertAnimoResult("any z with foo x2", "the y2 (z) (foo).");		
 	}
 
 	@Test
 	public void test_02() throws Exception {
-		testAnimo("the x1 (foo) (1).");
-		testAnimo("the x2 (foo) (2).");
+		testAnimo("the x1 (foo) 1.");
+		testAnimo("the x2 (foo) 2.");
 		testAnimo("the y1 (z) (x1).");
 		testAnimo("the y2 (z) (x2).");
-		assertAnimoResult("get foo y1", "the x1 (foo) 1.");		
-		assertAnimoResult("any z with foo x2", "the y2 (z) (x2).");		
+		assertAnimoResult("get foo y1", "x1.");		
+		assertAnimoResult("any z with foo x2", "the y2 (z) (x2 (foo) 2).");		
 	}
 }

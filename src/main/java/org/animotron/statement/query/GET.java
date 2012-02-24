@@ -516,7 +516,7 @@ public class GET extends AbstractQuery implements Shift {
 			
 			int refs = 0;
 			int ANs = 0;
-			if (op.isType(RESULT)) ANs++;
+			//if (op.isType(RESULT)) ANs++;
 			
 			Relationship res = null;
 			Relationship prevRes = null;
@@ -550,7 +550,16 @@ public class GET extends AbstractQuery implements Shift {
 	//									//break;
 	//								}
 								} else {
-									if (ANs > 1) break;
+									if (ANs > 1) {
+										//check is it pseudo HAVE or IS topology. on HAVE return it else last of top 
+										if (r.isType(REF._) && it.hasNext()) {
+
+											r = it.next();
+											if (r.isType(AN._) && Utils.haveContext(r.getEndNode()))
+												res = r;
+										}
+										break;
+									}
 									ANs = 0;
 										
 									if (r.isType(ANY._)) {
@@ -565,7 +574,7 @@ public class GET extends AbstractQuery implements Shift {
 										res = r;
 		
 									} else if (r.isType(REF._)) {
-										//ignore if pseudo IS
+										//ignore pseudo IS
 										if (Utils.haveContext(r.getStartNode())) {
 											prevRes = null;
 											
