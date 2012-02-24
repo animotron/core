@@ -34,21 +34,18 @@ public class Cache {
 
 	public static final String NAME = "cache";
 
-    public static AbstractIndex<Node> NODE;
-    public static AbstractIndex<Relationship> RELATIONSHIP;
+    public static AbstractIndex<Node> NODE = new AbstractIndex<Node>(NAME) {
+        @Override
+        public void init(IndexManager manager) {
+            manager.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+        }
+    };
 
-	public static void init (IndexManager indexManager) {
-        NODE = new AbstractIndex<Node>(indexManager, NAME) {
-            @Override
-            public void init(IndexManager indexManager) {
-                INDEX = indexManager.forNodes(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-            }
-        };
-        RELATIONSHIP = new AbstractIndex<Relationship>(indexManager, NAME) {
-            public void init(IndexManager indexManager) {
-                INDEX = indexManager.forRelationships(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-            }
-        };
-	}
+    public static AbstractIndex<Relationship> RELATIONSHIP= new AbstractIndex<Relationship>(NAME) {
+        @Override
+        public void init(IndexManager manager) {
+            manager.forRelationships(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+        }
+    };
 
 }

@@ -33,24 +33,19 @@ import org.neo4j.graphdb.index.IndexManager;
 public abstract class AbstractIndex<T extends PropertyContainer> {
 
     protected Index<T> INDEX;
-    private String name;
+    protected final String name;
 
-    public AbstractIndex(IndexManager indexManager, String name){
+    public AbstractIndex(String name){
         this.name = name;
-        init(indexManager);
     }
 
-    public abstract void init(IndexManager indexManager);
+    public abstract void init(IndexManager manager);
 
     public T get(Object value) {
         IndexHits<T> q = INDEX.get(name, value);
         T c = null;
         try {
-            //c = q.next();
-            // XXX: workaround
-            while (q.hasNext()) {
-                c = q.next();
-            }
+            c = q.next();
         } finally {
             q.close();
             return c;

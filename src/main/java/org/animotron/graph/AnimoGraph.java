@@ -87,7 +87,8 @@ public class AnimoGraph {
     public static void initDB() {
         ROOT = graphDb.getReferenceNode();
         IndexManager INDEX = graphDb.index();
-        Cache.init(INDEX);
+        Cache.RELATIONSHIP.init(INDEX);
+        Cache.NODE.init(INDEX);
         Order.init(INDEX);
         State.init(INDEX);
         Result.init(INDEX);
