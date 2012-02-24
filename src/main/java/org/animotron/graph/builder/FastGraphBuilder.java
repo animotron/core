@@ -144,8 +144,8 @@ public class FastGraphBuilder extends GraphBuilder {
                         }
                         modified(relationship);
                     }
-                    creative(relationship);
                     UUID.set(relationship, java.util.UUID.randomUUID().toString());
+                    creative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                 }
