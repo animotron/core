@@ -21,6 +21,7 @@
 package org.animotron.graph.index;
 
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.RelationshipIndex;
 
 /**
@@ -36,8 +37,9 @@ public abstract class AbstractRelationshipIndex extends AbstractIndex<Relationsh
         super(name);
     }
 
-    protected void init(RelationshipIndex index) {
-        this.index = index;
+    @Override
+    protected void init(Index<Relationship> index) {
+        this.index = (RelationshipIndex) index;
     }
 
     @Override
