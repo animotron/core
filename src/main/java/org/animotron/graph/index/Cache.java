@@ -32,19 +32,19 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
  */
 public class Cache {
 
-	public static final String NAME = "cache";
+	private static final String NAME = "cache";
 
     public static AbstractIndex<Node> NODE = new AbstractIndex<Node>(NAME) {
         @Override
         public void init(IndexManager manager) {
-            manager.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+            INDEX = manager.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
         }
     };
 
     public static AbstractIndex<Relationship> RELATIONSHIP= new AbstractIndex<Relationship>(NAME) {
         @Override
         public void init(IndexManager manager) {
-            manager.forRelationships(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
+            INDEX = manager.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
         }
     };
 
