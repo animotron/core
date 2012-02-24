@@ -26,42 +26,33 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
-import org.neo4j.graphdb.index.RelationshipIndex;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Result {
+public class Result extends AbstractRelationshipIndex {
 	
-	public static final String NAME = "result";
-	
-	private static RelationshipIndex INDEX;
-
-	public static void init(IndexManager indexManager) {
-        //INDEX = indexManager.forRelationships(NAME, BerkeleyDbIndexImplementation.DEFAULT_CONFIG);
-        INDEX = indexManager.forRelationships(NAME);
+    public static Result _ = new Result("result");
+    
+    private Result(String name){super(name);}
+    
+	public void init(IndexManager index) {
+        //init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
+        init(index.forRelationships(name));
 	}
 
-    public static void add(Relationship r, byte[] value) {
-        INDEX.add(r, NAME, MessageDigester.byteArrayToHex(value));
-    }
-	
-//    public static ResultHits get(byte[] value) {
-//    	IndexHits<Relationship> hits = INDEX.get(NAME, MessageDigester.byteArrayToHex(value));
-//        return new ResultHits( hits );
+//    public ResultHits getHits(byte[] value) {
+//        return new ResultHits(getHits(MessageDigester.byteArrayToHex(value)));
 //    }
 
-    public static ResultHits get(byte[] value, Relationship op) {
-        return new ResultHits(
-    		op,
-    		INDEX.get(NAME, MessageDigester.byteArrayToHex(value), op.getEndNode(), null)
-		);
+    public ResultHits getHits(byte[] value, Relationship op) {
+        return new ResultHits(op, getHits(MessageDigester.byteArrayToHex(value), op.getEndNode(), null));
     }
 
-    public static Relationship getIfExist(Node sNode, Relationship result, RelationshipType type) {
-        IndexHits<Relationship> hits = INDEX.get(NAME, null, sNode, result.getEndNode());
+    public Relationship getIfExist(Node sNode, Relationship result, RelationshipType type) {
+        IndexHits<Relationship> hits = getHits(null, sNode, result.getEndNode());
         try {
         	for (Relationship r : hits) {
         		if (r.isType(type)) {

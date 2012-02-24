@@ -48,8 +48,8 @@ public class Order extends AbstractRelationshipIndex {
 //	}
 
     @Override
-	public void init(IndexManager indexManager) {
-		init(indexManager.forRelationships(name));
+	public void init(IndexManager index) {
+		init(index.forRelationships(name));
 	}
 
 	private static QueryContext sort( String key, String... additionalKeys ) {

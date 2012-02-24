@@ -46,7 +46,7 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
         this.index = index;
     };
 
-    public abstract void init(IndexManager manager);
+    public abstract void init(IndexManager index);
 
     public T get(Object value) {
         IndexHits<T> q = index().get(name, value);
@@ -57,6 +57,10 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
             q.close();
             return c;
         }
+    }
+
+    public IndexHits<T> getHits(Object value) {
+        return index().get(name, value);
     }
 
     public void put(T c, Object value) {

@@ -20,8 +20,10 @@
  */
 package org.animotron.graph.index;
 
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.Index;
+import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.RelationshipIndex;
 
 /**
@@ -49,6 +51,10 @@ public abstract class AbstractRelationshipIndex extends AbstractIndex<Relationsh
     @Override
     protected RelationshipIndex index() {
         return index;
+    }
+
+    public IndexHits<Relationship> getHits(Object valueOrNull, Node startOrNull, Node endOrNull) {
+        return index().get(name, valueOrNull, startOrNull, endOrNull);
     }
 
 }

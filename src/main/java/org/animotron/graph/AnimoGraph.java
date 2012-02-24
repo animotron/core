@@ -91,7 +91,7 @@ public class AnimoGraph {
         Cache.NODE.init(INDEX);
         Order._.init(INDEX);
         State.init(INDEX);
-        Result.init(INDEX);
+        Result._.init(INDEX);
         WORD._.init(INDEX);
     }
 

@@ -401,9 +401,9 @@ public class Utils {
 			@Override
 			public Relationship execute() {
 				//check if it exist
-				Relationship res = Result.getIfExist(node, r, rType);
+				Relationship res = Result._.getIfExist(node, r, rType);
 				if (res != null) {
-					Result.add(res, hash);
+					Result._.put(res, hash);
 					
 					//for debug
 					//CID.set(res, context.getId());
@@ -426,7 +426,7 @@ public class Utils {
 //						}
 //					}
 //				}
-				Result.add(res, hash);
+				Result._.put(res, hash);
 				//System.out.println("add to index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
 				return res;
 			}
