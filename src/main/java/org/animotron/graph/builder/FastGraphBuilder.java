@@ -102,7 +102,7 @@ public class FastGraphBuilder extends GraphBuilder {
             if (relationship == null) {
                 Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
                 root = createNode();
-                //o[6] = false;
+                o[6] = false;
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 Node end = r.getEndNode();
                 o[3] = r;
