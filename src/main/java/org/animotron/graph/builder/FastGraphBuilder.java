@@ -100,11 +100,11 @@ public class FastGraphBuilder extends GraphBuilder {
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[1];
-            relationship = Cache.RELATIONSHIP.get(hash);
-            if (relationship == null) {
+            Node  n = Cache.NODE.get(hash);
+            if (n == null) {
                 Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
                 root = createNode();
-                o[6] = Cache.NODE.get(hash) != null;
+                o[6] = false;
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 Node end = r.getEndNode();
                 o[3] = r;
@@ -120,10 +120,15 @@ public class FastGraphBuilder extends GraphBuilder {
                         relationship = getROOT().createRelationshipTo(end, THE._);
                         THE._.addRevision(relationship, reference);
                     } else {
+                        Node rn = createNode();
                         Node start = relationship.getEndNode();
+                        copyProperties(start, rn);
+                        copy(relationship, rn);
                         for (Relationship i : start.getRelationships(OUTGOING)) {
                             if (i.isType(TRI)) {
                                 preparative(i);
+                            } else {
+                                copy(rn, i);
                             }
                             i.delete();
                         }
@@ -132,18 +137,33 @@ public class FastGraphBuilder extends GraphBuilder {
                             order(copy(start, i), order++);
                             i.delete();
                         }
+                        Cache.NODE.remove(start, HASH.get(relationship));
+                        Cache.NODE.add(rn, hash);
                         modified(relationship);
                     }
                     preparative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
+                    Cache.RELATIONSHIP.add(relationship, hash);
                 }
-                Cache.RELATIONSHIP.add(relationship, hash);
                 HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
-                MODIFIED.set(relationship, System.currentTimeMillis());
+            } else if (statement instanceof THE) {
+                Node start = createNode();
+                copyProperties(n, start);
+                relationship = getROOT().createRelationshipTo(start, THE._);
+                THE._.addRevision(relationship, o[2]);
+                HASH.set(relationship, hash);
+                int order = 1;
+                for (Relationship i : n.getRelationships(OUTGOING)) {
+                    order(copy(start, i), order++);
+                }
+            } else {
+                relationship = Cache.RELATIONSHIP.get(hash);
+                return;
             }
+            MODIFIED.set(relationship, System.currentTimeMillis());
         }
 	}
 

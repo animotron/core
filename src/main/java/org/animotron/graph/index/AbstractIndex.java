@@ -49,7 +49,7 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
     public abstract void init(IndexManager index);
 
     public T get(Object value) {
-        IndexHits<T> q = index().get(name, value);
+        IndexHits<T> q = getHits(value);
         T c = null;
         try {
             c = q.next();

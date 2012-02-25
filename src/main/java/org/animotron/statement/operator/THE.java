@@ -24,7 +24,6 @@ import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.index.AbstractIndex;
 import org.animotron.graph.index.Cache;
-import org.animotron.graph.index.State;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
@@ -33,12 +32,11 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
+import org.neo4j.index.bdbje.Query;
 
-import static org.animotron.graph.Properties.MODIFIED;
-import static org.animotron.graph.Properties.NAME;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
-import static org.animotron.graph.Properties.UUID;
+import static org.animotron.graph.Properties.*;
 
 /**
  * Operator 'THE'.
@@ -75,6 +73,10 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         public void init(IndexManager index) {
             init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         }
+        @Override
+        public IndexHits<Relationship> getHits(Object value) {
+            return index().query(name, new Query(value));
+        }
     };
 
 	public void init(IndexManager index) {
@@ -94,13 +96,11 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         return the.getHits(name);
 	}
 
-	private Relationship create(String name) throws AnimoException {
+	public Relationship create(String name) throws AnimoException {
         Relationship r;
         r = build(getROOT(), name, null, false, true);
         MODIFIED.set(r, System.currentTimeMillis());
-        Node node = r.getEndNode();
         addRevision(r, name);
-        State.TOP.add(node);
         return r;
 	}
 
