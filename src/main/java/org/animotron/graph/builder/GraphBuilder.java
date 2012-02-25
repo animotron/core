@@ -194,7 +194,7 @@ public abstract class GraphBuilder {
             finishTx(tx);
             tx = beginTx();
             try {
-                creative(null);
+                preparative(null);
                 modified(null);
                 fail(e);
             } finally {
@@ -215,8 +215,8 @@ public abstract class GraphBuilder {
         }
     }
 
-    protected final void creative(Relationship r) {
-        catcher.creative(r);
+    protected final void preparative(Relationship r) {
+        catcher.preparative(r);
     }
 
     protected final void modified(Relationship r) {

@@ -122,9 +122,10 @@ public class FastGraphBuilder extends GraphBuilder {
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
-                            if (!i.isType(TRI)) {
-                                i.delete();
+                            if (i.isType(TRI)) {
+                                preparative(i);
                             }
+                            i.delete();
                         }
                         int order = 1;
                         for (Relationship i : end.getRelationships(OUTGOING)) {
@@ -133,7 +134,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         }
                         modified(relationship);
                     }
-                    creative(relationship);
+                    preparative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                 }

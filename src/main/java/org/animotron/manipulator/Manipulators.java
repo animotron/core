@@ -41,18 +41,19 @@ public class Manipulators {
 	
 	public class Catcher {
 		
+		FastTable<Node> preparative = new FastTable<Node>();
 		FastTable<Node> destructive = new FastTable<Node>();
         Relationship modified = null;
         Node creative = null;
 
 		public Catcher() {}
 		
-        public void creative(Node node) {
-            creative = node;
+        public void preparative(Node node) {
+            preparative.add(node);
         }
 
-		public void creative(Relationship r) {
-			creative(r.getEndNode());
+		public void preparative(Relationship r) {
+			preparative(r.getEndNode());
 		}
 
         public void modified(Relationship r) {
@@ -69,12 +70,12 @@ public class Manipulators {
         }
 
 		public void push() throws IOException {
-			creative();
+			preparative();
             modified();
 			destructive();
 		}
 
-        private void creative() throws IOException {
+        private void preparative() throws IOException {
             if (creative != null)
                 Preparator._.execute(null, creative);
         }
