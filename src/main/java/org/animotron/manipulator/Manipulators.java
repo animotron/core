@@ -44,7 +44,6 @@ public class Manipulators {
 		FastTable<Node> preparative = new FastTable<Node>();
 		FastTable<Node> destructive = new FastTable<Node>();
         Relationship modified = null;
-        Node creative = null;
 
 		public Catcher() {}
 		
@@ -76,8 +75,9 @@ public class Manipulators {
 		}
 
         private void preparative() throws IOException {
-            if (creative != null)
-                Preparator._.execute(null, creative);
+			for (Node n : preparative) {
+				Preparator._.execute(null, n);
+			}
         }
 
         private void modified() throws IOException {
