@@ -144,15 +144,17 @@ public class FastGraphBuilder extends GraphBuilder {
                 r.delete();
                 root.delete();
             } else if (statement instanceof THE) {
-//                Node n = relationship.getEndNode();
-//                long arid = (Long) ARID.get(n);
-//                Node rn = getDb().getNodeById(arid);
-//                Relationship rr = n.createRelationshipTo(end, REV);
-//                MODIFIED.set(rr, System.currentTimeMillis());
-//                UUID.set(rr, java.util.UUID.randomUUID().toString());
-//                HASH.set(rr, hash);
-//                ARID.set(relationship, rr.getId());
-//                ARID.set(n, end.getId());
+                Node end = relationship.getEndNode();
+                relationship = THE._.get(o[2].toString());
+                Node n = relationship.getEndNode();
+                long arid = (Long) ARID.get(n);
+                Node rn = getDb().getNodeById(arid);
+                Relationship rr = rn.createRelationshipTo(end, REV);
+                MODIFIED.set(rr, System.currentTimeMillis());
+                UUID.set(rr, java.util.UUID.randomUUID().toString());
+                HASH.set(rr, hash);
+                ARID.set(relationship, rr.getId());
+                ARID.set(n, end.getId());
             }
         }
 	}
