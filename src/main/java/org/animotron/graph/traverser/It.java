@@ -73,7 +73,7 @@ public class It implements Iterator<Object>, Iterable<Object> {
     private Object step() {
         if (p.hasNext()) {
             String o = p.next();
-            if (VALUE.equals(o) || NAME.equals(o) || CONTEXT.equals(o) || MODIFIED.equals(o) || CACHE.equals(o) || UUID.equals(o)) {
+            if (VALUE.equals(o) || NAME.equals(o) || CONTEXT.equals(o) || MODIFIED.equals(o) || CACHE.equals(o) || UUID.equals(o) || ARID.equals(o)) {
                 return step();
             } else {
                 return o;

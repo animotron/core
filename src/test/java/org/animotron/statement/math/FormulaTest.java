@@ -49,7 +49,7 @@ public class FormulaTest extends ATest {
 		);
         
         int count = 0;
-        Relationship qty = THE._.getActual("qty");
+        Relationship qty = THE._.get("qty");
         
         System.out.println("qty");
         for (Relationship r : qty.getEndNode().getRelationships(TRI)) {
@@ -72,7 +72,7 @@ public class FormulaTest extends ATest {
         Assert.assertEquals(2, count);
         
         count = 0;
-        Relationship cost = THE._.getActual("cost");
+        Relationship cost = THE._.get("cost");
         
         System.out.println("cost");
         for (Relationship r : cost.getEndNode().getRelationships(TRI)) {

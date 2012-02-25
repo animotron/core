@@ -35,8 +35,7 @@ public enum State {
     GC      (0),
     TOP     (1),
     PREPARE (2),
-    CALC    (3),
-    REV     (4);
+    CALC    (3);
 
 	public static final AbstractIndex<Node> _ = new AbstractIndex<Node>("state") {
         @Override

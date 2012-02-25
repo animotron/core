@@ -35,12 +35,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.Properties.*;
-import static org.animotron.graph.RelationshipTypes.TRI;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -100,11 +98,11 @@ public class FastGraphBuilder extends GraphBuilder {
         if (it.hasNext()) {
             Object[] o = it.next();
             Statement statement = (Statement) o[1];
-            Node  n = Cache.NODE.get(hash);
-            if (n == null) {
+            relationship = Cache.RELATIONSHIP.get(hash);
+            if (relationship == null) {
                 Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
                 root = createNode();
-                o[6] = false;
+                o[6] = Cache.NODE.get(hash) != null;
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
                 Node end = r.getEndNode();
                 o[3] = r;
@@ -115,55 +113,47 @@ public class FastGraphBuilder extends GraphBuilder {
                     step();
                 }
                 if (statement instanceof THE) {
-                    relationship = THE._.getActual(reference);
+                    relationship = THE._.get(reference);
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, THE._);
-                        THE._.addRevision(relationship, reference);
+                        MODIFIED.set(relationship, System.currentTimeMillis());
+                        UUID.set(relationship, java.util.UUID.randomUUID().toString());
+                        HASH.set(relationship, hash);
+                        ARID.set(relationship, relationship.getId());
+                        ARID.set(end, end.getId());
+                        THE._.add(relationship, reference);
+                        Cache.RELATIONSHIP.add(relationship, hash);
                     } else {
-                        Node rn = createNode();
-                        Node start = relationship.getEndNode();
-                        copyProperties(start, rn);
-                        copy(relationship, rn);
-                        for (Relationship i : start.getRelationships(OUTGOING)) {
-                            if (i.isType(TRI)) {
-                                preparative(i);
-                            } else {
-                                copy(rn, i);
-                            }
-                            i.delete();
-                        }
-                        int order = 1;
-                        for (Relationship i : end.getRelationships(OUTGOING)) {
-                            order(copy(start, i), order++);
-                            i.delete();
-                        }
-                        Cache.NODE.remove(start, HASH.get(relationship));
-                        Cache.NODE.add(rn, hash);
-                        modified(relationship);
+                        Node n = relationship.getEndNode();
+                        long arid = (Long) ARID.get(n);
+                        Node rn = getDb().getNodeById(arid);
+                        Relationship rr = rn.createRelationshipTo(end, REV);
+                        MODIFIED.set(rr, System.currentTimeMillis());
+                        UUID.set(rr, java.util.UUID.randomUUID().toString());
+                        HASH.set(rr, hash);
+                        ARID.set(relationship, rr.getId());
+                        ARID.set(n, end.getId());
                     }
                     preparative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                     Cache.RELATIONSHIP.add(relationship, hash);
+                    MODIFIED.set(relationship, System.currentTimeMillis());
+                    HASH.set(relationship, hash);
                 }
-                HASH.set(relationship, hash);
                 r.delete();
                 root.delete();
             } else if (statement instanceof THE) {
-                Node start = createNode();
-                copyProperties(n, start);
-                relationship = getROOT().createRelationshipTo(start, THE._);
-                THE._.addRevision(relationship, o[2]);
-                HASH.set(relationship, hash);
-                int order = 1;
-                for (Relationship i : n.getRelationships(OUTGOING)) {
-                    order(copy(start, i), order++);
-                }
-            } else {
-                relationship = Cache.RELATIONSHIP.get(hash);
-                return;
+//                Node n = relationship.getEndNode();
+//                long arid = (Long) ARID.get(n);
+//                Node rn = getDb().getNodeById(arid);
+//                Relationship rr = n.createRelationshipTo(end, REV);
+//                MODIFIED.set(rr, System.currentTimeMillis());
+//                UUID.set(rr, java.util.UUID.randomUUID().toString());
+//                HASH.set(rr, hash);
+//                ARID.set(relationship, rr.getId());
+//                ARID.set(n, end.getId());
             }
-            MODIFIED.set(relationship, System.currentTimeMillis());
         }
 	}
 

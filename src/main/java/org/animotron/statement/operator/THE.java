@@ -29,10 +29,8 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
-import org.neo4j.index.bdbje.Query;
 
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getROOT;
@@ -73,39 +71,33 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         public void init(IndexManager index) {
             init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         }
-        @Override
-        public IndexHits<Relationship> getHits(Object value) {
-            return index().query(name, new Query(value));
-        }
     };
 
 	public void init(IndexManager index) {
         the.init(index);
 	}
 
-	public void addRevision(Relationship r, Object name) {
-        UUID.set(r, java.util.UUID.randomUUID().toString());
+	public void add(Relationship r, Object name) {
         the.add(r, name);
 	}
 
-	public Relationship getActual(Object name) {
+	public Relationship get(Object name) {
         return the.get(name);
 	}
 
-	public IndexHits<Relationship> getHistory(String name) {
-        return the.getHits(name);
-	}
-
-	public Relationship create(String name) throws AnimoException {
-        Relationship r;
-        r = build(getROOT(), name, null, false, true);
+	private Relationship create(String name) throws AnimoException {
+        Relationship r = build(getROOT(), name, null, false, true);
+        Node n = r.getEndNode();
         MODIFIED.set(r, System.currentTimeMillis());
-        addRevision(r, name);
+        UUID.set(r, java.util.UUID.randomUUID().toString());
+        ARID.set(r, r.getId());
+        ARID.set(n, n.getId());
+        add(r, name);
         return r;
 	}
 
 	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws AnimoException {
-		Relationship r = getActual(name);
+		Relationship r = get(name);
 		if (r == null) {
             if (ignoreNotFound) {
                 r = create(name);

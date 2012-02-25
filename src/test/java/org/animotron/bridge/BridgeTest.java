@@ -42,7 +42,7 @@ import static org.junit.Assert.assertNotNull;
 public class BridgeTest extends ATest {
 	
 	private void check(String the) throws IOException {
-        Relationship r = THE._.getActual(the);
+        Relationship r = THE._.get(the);
         assertNotNull(r);
         CachedSerializer.ANIMO.serialize(r, System.out);
         System.out.println();
