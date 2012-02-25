@@ -115,10 +115,10 @@ public class FastGraphBuilder extends GraphBuilder {
                     step();
                 }
                 if (statement instanceof THE) {
-                    relationship = Cache.RELATIONSHIP.get(reference);
+                    relationship = THE._.getActual(reference);
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, THE._);
-                        Cache.RELATIONSHIP.add(relationship, reference);
+                        THE._.addRevision(relationship, reference);
                     } else {
                         Node start = relationship.getEndNode();
                         for (Relationship i : start.getRelationships(OUTGOING)) {
@@ -133,7 +133,6 @@ public class FastGraphBuilder extends GraphBuilder {
                         }
                         modified(relationship);
                     }
-                    UUID.set(relationship, java.util.UUID.randomUUID().toString());
                     creative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());

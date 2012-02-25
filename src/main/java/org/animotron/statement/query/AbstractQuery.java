@@ -349,7 +349,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 	protected Relationship getThe(Node node) {
 		try {
-			return THE._.get((String) Properties.NAME.get(node));
+			return THE._.getActual((String) Properties.NAME.get(node));
 		} catch (Exception e) {
 			return null;
 		}

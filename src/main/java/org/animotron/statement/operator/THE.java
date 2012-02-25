@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
+import org.animotron.graph.index.AbstractIndex;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.State;
 import org.animotron.manipulator.OnQuestion;
@@ -29,6 +30,9 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.Properties.MODIFIED;
 import static org.animotron.graph.Properties.NAME;
@@ -61,26 +65,47 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 //            throw new RuntimeException(e);
 //        }
 //    }
+    
+    private static final String name = "the";
 
-    private THE() { super("the"); }
+    private THE() { super(name); }
+    
+    private AbstractIndex<Relationship> the = new AbstractIndex<Relationship>(name) {
+        @Override
+        public void init(IndexManager index) {
+            init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
+        }
+    };
 
-	public Relationship get(String name) {
-        return Cache.RELATIONSHIP.get(name);
+	public void init(IndexManager index) {
+        the.init(index);
+	}
+
+	public void addRevision(Relationship r, Object name) {
+        UUID.set(r, java.util.UUID.randomUUID().toString());
+        the.add(r, name);
+	}
+
+	public Relationship getActual(Object name) {
+        return the.get(name);
+	}
+
+	public IndexHits<Relationship> getHistory(String name) {
+        return the.getHits(name);
 	}
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r;
         r = build(getROOT(), name, null, false, true);
         MODIFIED.set(r, System.currentTimeMillis());
-        UUID.set(r, java.util.UUID.randomUUID().toString());
         Node node = r.getEndNode();
-        Cache.RELATIONSHIP.add(r, name);
+        addRevision(r, name);
         State.TOP.add(node);
         return r;
 	}
 
 	public Relationship getOrCreate(String name, boolean ignoreNotFound) throws AnimoException {
-		Relationship r = get(name);
+		Relationship r = getActual(name);
 		if (r == null) {
             if (ignoreNotFound) {
                 r = create(name);

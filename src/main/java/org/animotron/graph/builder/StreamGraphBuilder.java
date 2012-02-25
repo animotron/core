@@ -89,6 +89,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                 if (!NAME.has(node)) {
                     NAME.set(node, byteArrayToHex(hash));
                 }
+                THE._.addRevision(r, NAME.get(node));
             }
             MODIFIED.set(relationship, timestamp);
             modified(relationship);

@@ -118,7 +118,7 @@ public class Utils {
 			@Override
 			public void run() {
 				try {
-					Relationship theNode = THE._.get((String)THE._.reference(node));
+					Relationship theNode = THE._.getActual((String) THE._.reference(node));
 		
 					if (theNode != null) {
 						pipe.write(vector.answered(theNode));
