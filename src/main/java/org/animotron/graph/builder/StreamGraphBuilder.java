@@ -33,25 +33,26 @@ import java.security.MessageDigest;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.utils.MessageDigester.*;
 
 /**
- * Animo graph builder, it do optimization/compression and 
+ * Animo graph builder, it do optimization/compression and
  * inform listeners on store/delete events.
- * 
+ *
  * Direct graph as input from top element to bottom processing strategy.
- * 
+ *
  * Methods to use:
- * 
+ *
  * startGraph()
  * endGraph()
- * 
+ *
  * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
- * 
+ *
  * relationship()
- * 
+ *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
@@ -78,23 +79,65 @@ public class StreamGraphBuilder extends GraphBuilder {
 
     @Override
     public void endGraph() throws AnimoException {
+        Object reference;
         relationship = Cache.RELATIONSHIP.get(hash);
         if (relationship == null) {
-            long timestamp = System.currentTimeMillis();
-            relationship = copy(getROOT(), r);
-            Cache.RELATIONSHIP.add(relationship, hash);
-            HASH.set(relationship, hash);
-            if (relationship.isType(THE._)) {
-                Node node = relationship.getEndNode();
-                if (!NAME.has(node)) {
-                    NAME.set(node, byteArrayToHex(hash));
+            if (r.isType(THE._)) {
+                Node end = r.getEndNode();
+                if (!NAME.has(end)) {
+                    reference = byteArrayToHex(hash);
+                    NAME.set(end, reference);
+                } else {
+                    reference = NAME.get(end);
                 }
-                THE._.add(r, NAME.get(node));
+                relationship = THE._.get(reference);
+                if (relationship == null) {
+                    relationship = getROOT().createRelationshipTo(end, THE._);
+                    MODIFIED.set(relationship, System.currentTimeMillis());
+                    UUID.set(relationship, java.util.UUID.randomUUID().toString());
+                    HASH.set(relationship, hash);
+                    ARID.set(relationship, relationship.getId());
+                    ARID.set(end, end.getId());
+                    THE._.add(relationship, reference);
+                    Cache.RELATIONSHIP.add(relationship, hash);
+                } else {
+                    Node n = relationship.getEndNode();
+                    long arid = (Long) ARID.get(n);
+                    Node rn = getDb().getNodeById(arid);
+                    Relationship rr = rn.createRelationshipTo(end, REV);
+                    MODIFIED.set(rr, System.currentTimeMillis());
+                    UUID.set(rr, java.util.UUID.randomUUID().toString());
+                    HASH.set(rr, hash);
+                    ARID.set(relationship, rr.getId());
+                    ARID.set(n, end.getId());
+                }
+                r.delete();
+            } else {
+                relationship = copy(getROOT(), r);
+                MODIFIED.set(relationship, System.currentTimeMillis());
+                HASH.set(relationship, hash);
+                Cache.RELATIONSHIP.add(relationship, hash);
             }
-            MODIFIED.set(relationship, timestamp);
-            modified(relationship);
+        } else if (relationship.isType(THE._)) {
+            Node end = relationship.getEndNode();
+            relationship = THE._.get(NAME.get(r.getEndNode()));
+            Node n = relationship.getEndNode();
+            long arid = (Long) ARID.get(n);
+            Node rn = getDb().getNodeById(arid);
+            Relationship rr = rn.createRelationshipTo(end, REV);
+            MODIFIED.set(rr, System.currentTimeMillis());
+            UUID.set(rr, java.util.UUID.randomUUID().toString());
+            HASH.set(rr, hash);
+            ARID.set(relationship, rr.getId());
+            ARID.set(n, end.getId());
+            r.delete();
+        } else {
+            r.delete();
+            destructive(root);
+            return;
         }
-        destructive(root);
+        preparative(relationship);
+        modified(relationship);
 	}
 
 	@Override

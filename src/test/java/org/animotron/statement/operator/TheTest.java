@@ -23,9 +23,9 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
+import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.graph.Properties.UUID;
 
@@ -37,6 +37,7 @@ import static org.animotron.graph.Properties.UUID;
 public class TheTest extends ATest {
 	
     @Test
+    @Ignore
     public void testTHE() throws Exception {
 
         JExpression A = new JExpression(

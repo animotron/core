@@ -134,12 +134,11 @@ public class FastGraphBuilder extends GraphBuilder {
                         ARID.set(relationship, rr.getId());
                         ARID.set(n, end.getId());
                     }
-                    preparative(relationship);
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
-                    Cache.RELATIONSHIP.add(relationship, hash);
                     MODIFIED.set(relationship, System.currentTimeMillis());
                     HASH.set(relationship, hash);
+                    Cache.RELATIONSHIP.add(relationship, hash);
                 }
                 r.delete();
                 root.delete();
@@ -155,7 +154,11 @@ public class FastGraphBuilder extends GraphBuilder {
                 HASH.set(rr, hash);
                 ARID.set(relationship, rr.getId());
                 ARID.set(n, end.getId());
+            } else {
+                return;
             }
+            preparative(relationship);
+            modified(relationship);
         }
 	}
 
