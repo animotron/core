@@ -30,6 +30,8 @@ import org.junit.Test;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+
+import java.io.InputStream;
 import java.io.StringReader;
 
 import static org.animotron.graph.AnimoGraph.startDB;
@@ -119,5 +121,23 @@ public class AnotherGraphBuilderTest extends ATest {
     @Test
 	public void test_04() throws Exception {
         test("<?stylesheet path=\"path\"?><a/>");
+	}
+
+    @Test
+	public void test_05() throws Exception {
+    	InputStream res = getClass().getResourceAsStream("test.xml");
+
+    	StAXExpression e = 
+    			new StAXExpression(
+    					new FastGraphBuilder(), 
+    					FACTORY.createXMLStreamReader(res));
+    	
+        System.out.println("Serializing...");
+        
+        String inA = CachedSerializer.ANIMO.serialize(e);
+        
+        System.out.println("Printing out ...");
+        
+        System.out.println(inA.trim());
 	}
 }

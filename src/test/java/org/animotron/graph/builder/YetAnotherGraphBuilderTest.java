@@ -29,7 +29,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.operator.THE;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.stream.XMLInputFactory;
