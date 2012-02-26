@@ -67,10 +67,10 @@ public class TheTest extends ATest {
 
 	@Test
  	public void testREV_00() throws Exception {
-        __("the e 1.");
-        __("the e 2.");
-        __("the e 3.");
-        __("the e 1.");
+        testAnimo("the e 1.");
+        testAnimo("the e 2.");
+        testAnimo("the e 3.");
+        testAnimo("the e 1.");
 	}
 
 	@Test
