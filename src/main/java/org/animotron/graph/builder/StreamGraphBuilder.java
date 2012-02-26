@@ -111,13 +111,13 @@ public class StreamGraphBuilder extends GraphBuilder {
                     ARID.set(relationship, rr.getId());
                     ARID.set(n, end.getId());
                 }
-                r.delete();
             } else {
                 relationship = copy(getROOT(), r);
                 MODIFIED.set(relationship, System.currentTimeMillis());
                 HASH.set(relationship, hash);
                 Cache.RELATIONSHIP.add(relationship, hash);
             }
+            r.delete();
         } else if (relationship.isType(THE._)) {
             Node end = relationship.getEndNode();
             relationship = THE._.get(NAME.get(r.getEndNode()));
@@ -131,6 +131,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             ARID.set(relationship, rr.getId());
             ARID.set(n, end.getId());
             r.delete();
+            destructive(root);
         } else {
             r.delete();
             destructive(root);
