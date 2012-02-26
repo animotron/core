@@ -45,4 +45,8 @@ public class REF extends AbstractStatement implements Reference {
         return THE._.reference(r);
     }
 
+    public Node getActualRevision(Relationship r) {
+        return THE._.getActualRevision(r.getEndNode());
+    }
+
 }

@@ -33,6 +33,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.Properties.*;
 
@@ -72,6 +73,14 @@ public class THE extends AbstractStatement implements Prepare, Definition {
             init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         }
     };
+    
+    public Node getActualRevision(Node node) {
+        return getDb().getNodeById((Long)ARID.get(node));
+    }
+
+    public Relationship getActualRevision(Relationship relationship) {
+        return getDb().getRelationshipById((Long)ARID.get(relationship));
+    }
 
 	public void init(IndexManager index) {
         the.init(index);
