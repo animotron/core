@@ -58,8 +58,14 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
-                    node = (s instanceof THE ? THE._.getActualRevision(r) : r).getEndNode();
-                    iterate(handler, rr, s, new It(node), level);
+                	if (s instanceof REF)
+                		node = THE._.getActualRevision(r.getEndNode());
+                	else if (s instanceof THE)
+                		node = THE._.getActualRevision(r).getEndNode();
+                	else
+                		node = r.getEndNode();
+
+                	iterate(handler, rr, s, new It(node), level);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
@@ -69,17 +75,10 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     	Relationship r = rr.getClosest();
     	
-    	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-//    	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
-//    	boolean found;
-//    	try {
-//	        found = iterate(handler, pflow, i, level, isOne);
-//    	} finally {
-//    		i.close();
-//    	}
-//        if (!found) {
-            Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(handler.getController(), rr.question(r), null, false) );
-            iterate(handler, null, rr, in, level, isOne, pos, isLast);
-//        }
+        Iterator<QCAVector> in = 
+        		new PipeIterator( 
+        				Evaluator._.execute(handler.getController(), rr.question(r), null, false) );
+        
+        iterate(handler, null, rr, in, level, isOne, pos, isLast);
     }
 }

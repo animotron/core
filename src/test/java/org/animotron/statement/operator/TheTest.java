@@ -98,4 +98,14 @@ public class TheTest extends ATest {
 		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 	}
+
+	@Test
+ 	public void testREV_10() throws Exception {
+        testAnimo("the e 1.");
+        testAnimo("the e 2.");
+        assertAnimoResultOneStep("e", "e 2."); //UNDERSTAND: is it correct, missing THE at beginning?
+
+        testAnimo("the e 1.");
+        assertAnimoResultOneStep("e", "e 1."); //UNDERSTAND: is it correct, missing THE at beginning?
+	}
 }

@@ -90,30 +90,13 @@ public class ResultTraverser extends AnimoTraverser {
     protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     	Relationship r = rr.getClosest();
     	
-    	//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-//    	IndexHits<QCAVector> i = Result.get(pflow.getPathHash(), r);
-//    	boolean found;
-//    	try {
-//	        found = iterate(handler, pflow, null, rr, i, level, isOne);
-//    	} finally {
-//    		i.close();
-//    	}
-//        if (!found) {
-            //UNDERSTAND: calculate current r!
-            //System.out.println("READER Execute r = "+r);
-            Iterator<QCAVector> in = new PipeIterator( Evaluator._.execute(handler.getController(), rr.question(r)) );
-            iterate(handler, null, rr, in, level, isOne, pos, isLast);
-//        }
+        Iterator<QCAVector> in = 
+        		new PipeIterator( 
+        				Evaluator._.execute(handler.getController(), rr.question(r)) );
+        
+        iterate(handler, null, rr, in, level, isOne, pos, isLast);
     }
     
-//    private Relationship getOp(Object obj) {
-//        if (obj.getClass().isArray()) {
-//            return ((Relationship[])obj)[0];
-//        } else {
-//        	return (Relationship)obj;
-//        }
-//    }
-
     protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
