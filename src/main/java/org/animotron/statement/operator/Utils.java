@@ -22,9 +22,9 @@ package org.animotron.statement.operator;
 
 import org.animotron.Executor;
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.Properties;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
+import org.animotron.graph.Properties;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.io.Pipe;
@@ -48,10 +48,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import static org.animotron.graph.Properties.CONTEXT;
-import static org.animotron.graph.Properties.FREEZE;
-import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -552,10 +550,9 @@ public class Utils {
         while (it.hasNext()) {
             boolean f = true;
             Relationship i = it.next().lastRelationship();
-            for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
-                if (!j.isType(RESULT)) {
-                    f = f && FREEZE.has(j);                    
-                }
+            Iterator<Relationship> in = i.getEndNode().getRelationships(REF._, INCOMING).iterator(); 
+            while (in.hasNext() && f) {
+                f = f && FREEZE.has(in.next());
             }
             if (f) {
                 FREEZE.set(i, true);
