@@ -37,6 +37,8 @@ import java.util.List;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.REV;
+import static org.animotron.statement.operator.Utils.freeze;
+import static org.animotron.statement.operator.Utils.unfreeze;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
 
@@ -124,6 +126,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         THE._.add(relationship, reference);
                         Cache.RELATIONSHIP.add(relationship, hash);
                     } else {
+                        freeze(THE._.getActualRevision(relationship));
                         Node n = relationship.getEndNode();
                         long arid = (Long) ARID.get(n);
                         Node rn = getDb().getNodeById(arid);
@@ -145,6 +148,7 @@ public class FastGraphBuilder extends GraphBuilder {
             } else if (statement instanceof THE) {
                 Node end = relationship.getEndNode();
                 relationship = THE._.get(o[2].toString());
+                freeze(THE._.getActualRevision(relationship));
                 Node n = relationship.getEndNode();
                 long arid = (Long) ARID.get(n);
                 Node rn = getDb().getNodeById(arid);
@@ -154,6 +158,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 HASH.set(rr, hash);
                 ARID.set(relationship, rr.getId());
                 ARID.set(n, end.getId());
+                unfreeze(relationship);
             } else {
                 return;
             }

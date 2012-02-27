@@ -34,6 +34,8 @@ import java.security.MessageDigest;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.REV;
+import static org.animotron.statement.operator.Utils.freeze;
+import static org.animotron.statement.operator.Utils.unfreeze;
 import static org.animotron.utils.MessageDigester.*;
 
 /**
@@ -101,6 +103,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                     THE._.add(relationship, reference);
                     Cache.RELATIONSHIP.add(relationship, hash);
                 } else {
+                    freeze(THE._.getActualRevision(relationship));
                     Node n = relationship.getEndNode();
                     long arid = (Long) ARID.get(n);
                     Node rn = getDb().getNodeById(arid);
@@ -121,6 +124,7 @@ public class StreamGraphBuilder extends GraphBuilder {
         } else if (relationship.isType(THE._)) {
             Node end = relationship.getEndNode();
             relationship = THE._.get(NAME.get(r.getEndNode()));
+            freeze(THE._.getActualRevision(relationship));
             Node n = relationship.getEndNode();
             long arid = (Long) ARID.get(n);
             Node rn = getDb().getNodeById(arid);
@@ -130,6 +134,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             HASH.set(rr, hash);
             ARID.set(relationship, rr.getId());
             ARID.set(n, end.getId());
+            unfreeze(relationship);
             r.delete();
             destructive(root);
         } else {

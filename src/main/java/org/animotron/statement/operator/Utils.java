@@ -48,6 +48,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.animotron.graph.Properties.CONTEXT;
+import static org.animotron.graph.Properties.FREEZE;
 import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -485,8 +486,7 @@ public class Utils {
     	return (String) Properties.NAME.get(theNode);
     }
 
-
-	public static TraversalDescription THES = 
+	public static TraversalDescription THES =
 			Traversal.description().
 				breadthFirst().
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
@@ -512,4 +512,32 @@ public class Utils {
 
 	    			}
 	            });
+
+    public static void unfreeze(Relationship r) {
+        IndexHits<Relationship> hits = Order._.queryDown(r.getEndNode());
+        while (hits.hasNext()) {
+            unfreeze(hits.next());
+        }
+        try {
+            FREEZE.remove(r);
+        } catch (Exception e) {}
+    }
+
+    public static void freeze(Relationship r) {
+        FREEZE.set(r, true);
+        IndexHits<Relationship> hits = Order._.queryDown(r.getEndNode());
+        while (hits.hasNext()) {
+            boolean f = true;
+            Relationship i = hits.next();
+            for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
+                if (!j.isType(RESULT)) {
+                    f = f && FREEZE.has(j);                    
+                }
+            }
+            if (f) {
+                freeze(i);
+            }
+        }
+    }
+
 }
