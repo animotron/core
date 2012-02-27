@@ -522,7 +522,9 @@ public class Utils {
 
     public static void unfreeze(Relationship r) {
         if (FREEZE.has(r)) {
-            unfreeze(r.getEndNode());
+            if (!r.isType(REF._)) {
+                unfreeze(r.getEndNode());
+            }
             FREEZE.remove(r);
         }
     }
@@ -545,7 +547,9 @@ public class Utils {
     
     public static void freeze(Relationship r) {
         FREEZE.set(r, true);
-        freeze(r.getEndNode());
+        if (!r.isType(REF._)) {
+            freeze(r.getEndNode());
+        }
     }
 
 }
