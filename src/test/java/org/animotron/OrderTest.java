@@ -47,7 +47,7 @@ public class OrderTest extends ATest {
         Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     Node node = createNode();
                     node.createRelationshipTo(createNode(), Rel.A);
                     node.createRelationshipTo(createNode(), Rel.B);
@@ -70,7 +70,7 @@ public class OrderTest extends ATest {
         Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     Node start = createNode();
                     Node end = createNode();
                     start.createRelationshipTo(end, Rel.A);
@@ -94,7 +94,7 @@ public class OrderTest extends ATest {
         Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     Node start = createNode();
                     Node end = createNode();
                     start.createRelationshipTo(end, Rel.A);
@@ -118,7 +118,7 @@ public class OrderTest extends ATest {
         final Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     return createNode();
                 }
             }
@@ -127,7 +127,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     node.createRelationshipTo(createNode(), Rel.A);
                     node.createRelationshipTo(createNode(), Rel.B);
                     node.createRelationshipTo(createNode(), Rel.C);
@@ -149,7 +149,7 @@ public class OrderTest extends ATest {
         final Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     return createNode();
                 }
             }
@@ -158,7 +158,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     node.createRelationshipTo(createNode(), Rel.A);
                     return null;
                 }
@@ -168,7 +168,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     node.createRelationshipTo(createNode(), Rel.B);
                     return null;
                 }
@@ -178,7 +178,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     node.createRelationshipTo(createNode(), Rel.C);
                     return null;
                 }
@@ -198,7 +198,7 @@ public class OrderTest extends ATest {
         final Node start = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     return createNode();
                 }
             }
@@ -207,7 +207,7 @@ public class OrderTest extends ATest {
         final Node end = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     return createNode();
                 }
             }
@@ -216,7 +216,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     start.createRelationshipTo(end, Rel.A);
                     start.createRelationshipTo(end, Rel.B);
                     start.createRelationshipTo(end, Rel.C);
@@ -243,7 +243,7 @@ public class OrderTest extends ATest {
         final Node start = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     return createNode();
                 }
             }
@@ -252,7 +252,7 @@ public class OrderTest extends ATest {
         final Node end = AnimoGraph.execute(
             new GraphOperation<Node>() {
                 @Override
-                public Node execute() throws Exception {
+                public Node execute() throws Throwable {
                     return createNode();
                 }
             }
@@ -261,7 +261,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     start.createRelationshipTo(end, Rel.A);
                     return null;
                 }
@@ -271,7 +271,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     start.createRelationshipTo(end, Rel.B);
                    return null;
                 }
@@ -281,7 +281,7 @@ public class OrderTest extends ATest {
         AnimoGraph.execute(
             new GraphOperation<Void>() {
                 @Override
-                public Void execute() throws Exception {
+                public Void execute() throws Throwable {
                     start.createRelationshipTo(end, Rel.C);
                     return null;
                 }

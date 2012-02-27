@@ -38,7 +38,7 @@ import static org.animotron.expression.JExpression.value;
 public class AnimoSerializerTest extends ATest {
 	
 	@Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
@@ -49,7 +49,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
@@ -60,7 +60,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X",
@@ -72,7 +72,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
@@ -83,7 +83,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_04() throws Exception {
+    public void test_04() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X",
@@ -95,7 +95,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_05() throws Exception {
+    public void test_05() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B",
@@ -109,7 +109,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B",
@@ -124,7 +124,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B",
@@ -139,7 +139,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
@@ -155,7 +155,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
@@ -175,7 +175,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_0A() throws Exception {
+    public void test_0A() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "X"),
@@ -205,7 +205,7 @@ public class AnimoSerializerTest extends ATest {
 	}
 
     @Test
-    public void test_0B() throws Exception {
+    public void test_0B() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 value("bla"), value("bla")
@@ -215,7 +215,7 @@ public class AnimoSerializerTest extends ATest {
     }
 	
     @Test
-    public void test_0C() throws Exception {
+    public void test_0C() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B"),
@@ -227,7 +227,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_0D() throws Exception {
+    public void test_0D() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 value("B", value("C"))
@@ -237,7 +237,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_0E() throws Exception {
+    public void test_0E() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B"), _(AN._, "C"))
@@ -247,7 +247,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_0F() throws Exception {
+    public void test_0F() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B", _(AN._, "C")))
@@ -257,7 +257,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B"), _(AN._, "C")),
@@ -268,7 +268,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(AN._, "B")
@@ -278,7 +278,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(AN._, "B"))
@@ -288,7 +288,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_13() throws Exception {
+    public void test_13() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(_(AN._, "B")))
@@ -298,7 +298,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_14() throws Exception {
+    public void test_14() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(_(_(AN._, "B"))))
@@ -308,7 +308,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_15() throws Exception {
+    public void test_15() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(AN._, "B"))
@@ -318,7 +318,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_16() throws Exception {
+    public void test_16() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(LINK._, _(AN._, "B")))
@@ -328,7 +328,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_17() throws Exception {
+    public void test_17() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(LINK._, _(LINK._, _(AN._, "B"))))
@@ -338,7 +338,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_18() throws Exception {
+    public void test_18() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(_(LINK._, _(AN._, "B")))
@@ -348,7 +348,7 @@ public class AnimoSerializerTest extends ATest {
     }
 
     @Test
-    public void test_19() throws Exception {
+    public void test_19() throws Throwable {
         JExpression A = new JExpression(
             _(THE._, "A",
                 _(LINK._, _(_(AN._, "B")))

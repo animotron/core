@@ -41,7 +41,7 @@ public class DescriptionLogicTest extends ATest {
 
 	@Test
     @Ignore
-	public void famaly() throws Exception {
+	public void famaly() throws Throwable {
 		//TODO: Person ≡ Female ⊔ Male?
 		
 		//Woman ≡ Person ⊓ Female
@@ -132,12 +132,12 @@ public class DescriptionLogicTest extends ATest {
 		
 	}
 
-	public void famaly_02() throws Exception {
+	public void famaly_02() throws Throwable {
 		testAnimo("the joe (father john) (child john) (son john) (parent john).");
 		testAnimo("the john (father joe) (child joe) (son joe) (parent joe).");
 	}
 
-	public void famaly_03() throws Exception {
+	public void famaly_03() throws Throwable {
 		testAnimo("the parent child.");
 		testAnimo("the child parent.");
 

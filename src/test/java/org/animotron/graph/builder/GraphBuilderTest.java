@@ -36,7 +36,7 @@ import static org.animotron.graph.Properties.HASH;
  */
 public class GraphBuilderTest extends ATest {
 
-    private void test_0(String animo) throws Exception {
+    private void test_0(String animo) throws Throwable {
         AnimoExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = CachedSerializer.ANIMO.serialize(e);
@@ -50,7 +50,7 @@ public class GraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_1(String animo) throws Exception {
+    private void test_1(String animo) throws Throwable {
         AnimoExpression e;
         e = new AnimoExpression(new StreamGraphBuilder(), animo);
         String outA = CachedSerializer.ANIMO.serialize(e);
@@ -62,7 +62,7 @@ public class GraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_2(String animo) throws Exception {
+    private void test_2(String animo) throws Throwable {
         AnimoExpression e;
         e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = CachedSerializer.ANIMO.serialize(e);
@@ -74,7 +74,7 @@ public class GraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test(String animo) throws Exception {
+    private void test(String animo) throws Throwable {
         test_0(animo);
         cleanDB();
         startDB(DATA_FOLDER);
@@ -85,27 +85,27 @@ public class GraphBuilderTest extends ATest {
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         test("\\a.");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         test("\\x:a $x \"x-namespace\".");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         test("\\a $ \"x-namespace\".");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         test("\\a @b \"c\".");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("(??stylesheet \"path\")) (\\a).");
 	}
 }

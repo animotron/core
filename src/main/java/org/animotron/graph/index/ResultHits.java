@@ -69,7 +69,7 @@ public class ResultHits extends AbstractIndexHits<QCAVector> implements IndexHit
 			
 			c = AnimoGraph.getDb().getRelationshipById(id);
 			
-		} catch (Exception e) {
+		} catch (Throwable t) {
 		}
 		if (c == null)
 			return new QCAVector(op, r);

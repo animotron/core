@@ -125,7 +125,7 @@ public class Utils {
 						pipe.close();
 						return;
 					}
-				} catch (Exception e) {
+				} catch (Throwable t) {
 				}
 					
 				if (pf != null) {
@@ -146,8 +146,8 @@ public class Utils {
 								break;
 						}
 						
-					} catch (Exception e) {
-						pf.sendException(e);
+					} catch (Throwable t) {
+						pf.sendException(t);
 						
 					} finally {
 						hits.close();
@@ -242,7 +242,7 @@ public class Utils {
 //                	}
                     s = Statements.name((String) THE._.reference(v.getClosest()));
                     
-                } catch (Exception e) {
+                } catch (Throwable t) {
     				pipe.write(v);//.answered(v.getClosest())
     				return;
                 }
@@ -270,9 +270,9 @@ public class Utils {
 			} else {
 				pipe.write(v);//.answered(v.getClosest())
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			pf.sendException(e);
+		} catch (Throwable t) {
+			t.printStackTrace();
+			pf.sendException(t);
 		}
 	}
 	
@@ -305,9 +305,9 @@ public class Utils {
 							pipe.write(new QCAVector(op, vector, rr));
 						}
 					}
-				} catch (Exception e) {
+				} catch (Throwable t) {
 					//XXX: logs
-					e.printStackTrace();
+					t.printStackTrace();
 				} finally {
 					hits.close();
 					pipe.close();
@@ -369,7 +369,7 @@ public class Utils {
 	        	r = getDb().getRelationshipById(
 	                (Long)r.getProperty(RID.name())
 	            );
-			} catch (Exception ex) {
+			} catch (Throwable t) {
 				break;
 			}
 		}
@@ -379,7 +379,7 @@ public class Utils {
 	public static long relaxedId(Relationship relation) {
 		try {
             return (Long)relation.getProperty(RID.name());
-		} catch (Exception ex) {
+		} catch (Throwable t) {
 		}
 		return -1;
 	}
@@ -422,7 +422,7 @@ public class Utils {
 //					for (QCAVector c : context) {
 //						try {
 //							CID.set(res, c.mashup());
-//						} catch (Exception e) {
+//						} catch (Throwable t) {
 //						}
 //					}
 //				}
@@ -442,7 +442,7 @@ public class Utils {
 				Node theNode = v.getUnrelaxedClosest().getEndNode();
 				try {
 					System.out.print("'"+name(theNode)+"'");
-				} catch (Exception e) {
+				} catch (Throwable t) {
 					System.out.print("???");
 				}
 				System.out.print(" ["+theNode+"], ");
@@ -458,7 +458,7 @@ public class Utils {
 		Node theNode = r.getEndNode();
 		try {
 			System.out.print("'"+name(theNode)+"'");
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			System.out.print("???");
 		}
 		System.out.println(" ["+theNode+"]");
@@ -472,7 +472,7 @@ public class Utils {
 			for (Node theNode : thes) {
 				try {
 					System.out.print("'"+name(theNode)+"'");
-				} catch (Exception e) {
+				} catch (Throwable t) {
 					System.out.print("???");
 				}
 				System.out.print(" ["+theNode+"], ");

@@ -38,7 +38,7 @@ public class TheTest extends ATest {
 	
     @Test
     @Ignore
-    public void testTHE() throws Exception {
+    public void testTHE() throws Throwable {
 
         JExpression A = new JExpression(
             _(THE._, "A", _(THE._, "B", _(THE._, "C")))
@@ -48,7 +48,7 @@ public class TheTest extends ATest {
     }
 
 	@Test
- 	public void testREV() throws Exception {
+ 	public void testREV() throws Throwable {
 //        Expression e;
 //        e = testAnimo("the e 1.");
 //        String uuid1 = (String) UUID.get(e);
@@ -67,7 +67,7 @@ public class TheTest extends ATest {
 	}
 
 	@Test
- 	public void testREV_00() throws Exception {
+ 	public void testREV_00() throws Throwable {
         testAnimo("the e 1.");
         testAnimo("the e 2.");
         testAnimo("the e 3.");
@@ -75,7 +75,7 @@ public class TheTest extends ATest {
 	}
 
 	@Test
- 	public void testREV_01() throws Exception {
+ 	public void testREV_01() throws Throwable {
 		Expression e;
 		
 		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
@@ -86,7 +86,7 @@ public class TheTest extends ATest {
 	}
 	
 	@Test
- 	public void testREV_02() throws Exception {
+ 	public void testREV_02() throws Throwable {
 		Expression e;
 		
 		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
@@ -100,7 +100,7 @@ public class TheTest extends ATest {
 	}
 
 	@Test
- 	public void testREV_10() throws Exception {
+ 	public void testREV_10() throws Throwable {
         testAnimo("the e 1.");
         testAnimo("the e 2.");
         assertAnimoResultOneStep("e", "e 2."); //UNDERSTAND: is it correct, missing THE at beginning?

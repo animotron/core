@@ -41,7 +41,7 @@ public class YetAnotherAllTest extends ATest {
     @Test
     @Ignore
     //TODO is all select a closest not leaf by a predicate?
-    public void deep_all() throws Exception {
+    public void deep_all() throws Throwable {
 
     	__(
             new JExpression(
@@ -75,7 +75,7 @@ public class YetAnotherAllTest extends ATest {
     @Test
     @Ignore
     //TODO is all select a closest not leaf by a predicate?
-    public void one_more_deep_all() throws Exception {
+    public void one_more_deep_all() throws Throwable {
 
         __(
             new JExpression(

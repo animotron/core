@@ -56,7 +56,7 @@ public class StAXExpression extends AbstractStAXExpression {
     }
 
     @Override
-    public void build() throws Exception {
+    public void build() throws Throwable {
         builder.start(THE._, name);
         while (reader.hasNext()) {
             switch (reader.getEventType()) {

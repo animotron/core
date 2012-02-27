@@ -189,7 +189,7 @@ public class WITH extends Operator implements Predicate {
 							}
 						}
 					}
-				} catch (Exception ex) {};
+				} catch (Throwable t) {};
 			}
 		}
 		

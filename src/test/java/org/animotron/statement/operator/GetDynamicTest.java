@@ -39,7 +39,7 @@ import static org.animotron.expression.JExpression.value;
 public class GetDynamicTest extends ATest {
 	
 	@Test
-	public void getOnManyAN() throws Exception {
+	public void getOnManyAN() throws Throwable {
 
         __(
             new JExpression(
@@ -57,7 +57,7 @@ public class GetDynamicTest extends ATest {
 	}
 
 	@Test
-	public void getOnManyANbyIS() throws Exception {
+	public void getOnManyANbyIS() throws Throwable {
 
         __(
             new JExpression(
@@ -79,7 +79,7 @@ public class GetDynamicTest extends ATest {
 
 	@Test
     @Ignore
-    public void get_via_is() throws Exception {
+    public void get_via_is() throws Throwable {
 
         __(
             new JExpression(
@@ -110,7 +110,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
     	testAnimo("the z a z1.");
     	testAnimo("the b z1 \"z1\".");
 
@@ -118,7 +118,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
     	testAnimo("the z (k) (a z1).");
     	testAnimo("the b (k) (z1 \"z1\").");
 
@@ -127,7 +127,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
     	testAnimo("the z (k) (a z1).");
     	testAnimo("the b (k) (z1 \"z1\").");
 
@@ -135,7 +135,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
     	testAnimo("the z (k) (a z1).");
     	testAnimo("the b (z) (z1 \"z1\").");
     	testAnimo("the c (z) (z1 \"2z1\").");
@@ -144,7 +144,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_04() throws Exception {
+    public void test_04() throws Throwable {
         testAnimo("the z a z1.");
         testAnimo("the x b z1.");
 
@@ -153,7 +153,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_05() throws Exception {
+    public void test_05() throws Throwable {
         testAnimo("the x y z.");
 
         testAnimoResult("get y x.", "y z.");
@@ -162,7 +162,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
@@ -170,7 +170,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
@@ -178,7 +178,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         testAnimo("the y a.");
         testAnimo("the x y.");
 
@@ -186,7 +186,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         testAnimo("the a b.");
         testAnimo("the y a.");
         testAnimo("the x y z.");
@@ -195,7 +195,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
         testAnimo("the a b.");
         testAnimo("the y a.");
         testAnimo("the x y.");
@@ -204,7 +204,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
@@ -212,7 +212,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
         testAnimo("the y a.");
         testAnimo("the x y z.");
 
@@ -220,7 +220,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_13() throws Exception {
+    public void test_13() throws Throwable {
         testAnimo("the y a.");
         testAnimo("the x y.");
 
@@ -228,7 +228,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_14() throws Exception {
+    public void test_14() throws Throwable {
         testAnimo("the a b.");
         testAnimo("the y a.");
         testAnimo("the x y z.");
@@ -237,7 +237,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_15() throws Exception {
+    public void test_15() throws Throwable {
         testAnimo("the a b.");
         testAnimo("the y a.");
         testAnimo("the x y.");
@@ -246,7 +246,7 @@ public class GetDynamicTest extends ATest {
     }
 
     @Test
-    public void test_16() throws Exception {
+    public void test_16() throws Throwable {
         testAnimo("the a b c.");
         testAnimo("the x a.");
 

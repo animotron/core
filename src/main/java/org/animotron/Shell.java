@@ -20,14 +20,14 @@
  */
 package org.animotron;
 
-import static org.animotron.graph.AnimoGraph.startDB;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.graph.serializer.CachedSerializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
-import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.serializer.CachedSerializer;
+import static org.animotron.graph.AnimoGraph.startDB;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -52,8 +52,8 @@ public class Shell {
 			writer.flush();
 	        try {
 	        	argument = in.readLine();
-	        } catch (Exception e) {
-	        	e.printStackTrace();
+	        } catch (Throwable t) {
+	        	t.printStackTrace();
 	        	return;
 			}
 			
@@ -65,9 +65,9 @@ public class Shell {
 				String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(expression) : CachedSerializer.ANIMO_RESULT.serialize(expression);
 				writer.write(result);
 				writer.flush();
-			} catch (Exception e) {
-				e.printStackTrace();
-				error.write(e.getMessage());
+			} catch (Throwable t) {
+				t.printStackTrace();
+				error.write(t.getMessage());
 				error.flush();
 			}
 		}

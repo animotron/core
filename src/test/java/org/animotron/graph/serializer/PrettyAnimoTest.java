@@ -33,69 +33,69 @@ import static org.animotron.graph.Properties.HASH;
  */
 public class PrettyAnimoTest extends ATest {
 
-    private void test(String exp) throws Exception {
+    private void test(String exp) throws Throwable {
         test(exp, exp);
     }
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out + "\n", true);
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         test("the a.");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         test("the a\n    b.");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         test("the a\n    b \"test\".");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         test("the a (b) (c)", "the a\n    (b)\n    (c).");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("the a\n    (b\n        (any x)\n        (all y))\n    (c).");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         test("the a\n    b\n        (any x)\n        (all y).");
 	}
 
 
     @Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
         test("the a\n    b\n        (any x α)\n        (all y β).");
 	}
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         test("the a @b (get c)", "the a\n    @b\n        get c.");
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         test("the a\n    \\b \\c @d e.");
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         test("the a\n    \\b \\c\n        @d\n            (e)\n            (f).");
     }
 
     @Test
-    public void test_0A() throws Exception {
+    public void test_0A() throws Throwable {
         test(
             "the rest\n" +
             "    content\n" +

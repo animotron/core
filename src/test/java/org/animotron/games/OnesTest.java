@@ -32,7 +32,7 @@ public class OnesTest extends ATest {
 
 	@Test
 	@Ignore
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
 		testAnimoResult("* 1 1.", "1.");
 
 		testAnimoResult("/ 1 1.", "1.");
@@ -40,7 +40,7 @@ public class OnesTest extends ATest {
 	
 	@Test
 	@Ignore
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
 		//x=1+ 1/(1+1/x)
 
 		testAnimoResult("the x + (1) (/ + 1 (x)).", "1.42857.");

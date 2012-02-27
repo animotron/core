@@ -37,7 +37,7 @@ import static org.animotron.expression.JExpression.value;
  */
 public class MathTest extends ATest {
 
-	public void test_performace() throws Exception {
+	public void test_performace() throws Throwable {
         Expression e = new JExpression(
             _(SUM._, value(1), value(2), value(3), value(4))
         );
@@ -50,7 +50,7 @@ public class MathTest extends ATest {
         }
 	}
 	@Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         Expression e = new JExpression(
             _(SUM._, value(1), value(2), value(3), value(4))
         );
@@ -58,7 +58,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         Expression e = new JExpression(
             _(MUL._, value(2), value(2))
         );
@@ -66,7 +66,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         Expression e = new JExpression(
             _(MUL._, value(2), value(2.0))
         );
@@ -74,7 +74,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         Expression e = new JExpression(
             _(MUL._, value(2.0), value(2))
         );
@@ -82,7 +82,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         Expression e = new JExpression(
             _(MUL._, value(2.0), value(2.0))
         );
@@ -90,7 +90,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         Expression e = new JExpression(
             _(DIV._, value(4.0), value(2.0))
         );
@@ -98,7 +98,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
         Expression e = new JExpression(
             _(DIV._, value(4), value(2))
         );
@@ -106,7 +106,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_07() throws Exception {
+	public void test_07() throws Throwable {
         Expression e = new JExpression(
             _(SUB._, value(1), value(2), value(3.0), value(4))
         );
@@ -114,7 +114,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_08() throws Exception {
+	public void test_08() throws Throwable {
         Expression e = new JExpression(
             _(SUM._, value("1"), value("2"), value("3.0"), value("4"))
         );
@@ -122,25 +122,25 @@ public class MathTest extends ATest {
 	}
     
     @Test
-	public void test_09() throws Exception {
+	public void test_09() throws Throwable {
     	Expression test = new AnimoExpression("- 5 * 6 7"); //5-6*7
     	assertStringResult(test, "-37");
     }
 
     @Test
-	public void test_10() throws Exception {
+	public void test_10() throws Throwable {
         Expression e = new AnimoExpression("+ 1 2 3 4");
     	assertStringResult(e, "10");
 	}
 
     @Test
-	public void test_11() throws Exception {
+	public void test_11() throws Throwable {
         Expression e = new AnimoExpression("* 2 2");
     	assertStringResult(e, "4");
 	}
 
     @Test
-	public void test_12() throws Exception {
+	public void test_12() throws Throwable {
         Expression e = new AnimoExpression("* 2 2.0");
         
     	assertAnimo(e, "* 2 2.0.");
@@ -148,7 +148,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_13() throws Exception {
+	public void test_13() throws Throwable {
         Expression e = new AnimoExpression("* 2.0 2");
 
     	assertAnimo(e, "* 2.0 2.");
@@ -156,7 +156,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_14() throws Exception {
+	public void test_14() throws Throwable {
         Expression e = new AnimoExpression("* 2.0 2.0");
 
         assertAnimo(e, "* 2.0 2.0.");
@@ -164,7 +164,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_15() throws Exception {
+	public void test_15() throws Throwable {
         Expression e = new AnimoExpression("/ 4.0 2.0");
 
         assertAnimo(e, "/ 4.0 2.0.");
@@ -172,12 +172,12 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_16() throws Exception {
+	public void test_16() throws Throwable {
     	assertStringResult("/ 4 2", "2.0");
 	}
 
     @Test
-	public void test_17() throws Exception {
+	public void test_17() throws Throwable {
         Expression e = new AnimoExpression("- 1 2 3.0 4");
 
         assertAnimo(e, "- 1 2 3.0 4.");
@@ -185,7 +185,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_18() throws Exception {
+	public void test_18() throws Throwable {
         __(
             "the a (x 1) (y 2) (z 3)"
         );
@@ -193,7 +193,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_19() throws Exception {
+	public void test_19() throws Throwable {
         __(
             "the a (x 1) (y 2) (z 3)",
             "the b + (get x) (get y) (get z)"
@@ -202,37 +202,37 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_20() throws Exception {
+	public void test_20() throws Throwable {
     	assertStringResult("+ \"1\" \"2\" \"3\" \"4\"", "10");
 	}
 
     @Test
-	public void test_21() throws Exception {
+	public void test_21() throws Throwable {
     	assertStringResult("+ 1 \"2\" \"3.0\" 4", "10.0");
 	}
 
     @Test
-	public void test_22() throws Exception {
+	public void test_22() throws Throwable {
     	assertStringResult("+ -1", "-1");
 	}
 
     @Test
-	public void test_23() throws Exception {
+	public void test_23() throws Throwable {
     	assertStringResult("- -1", "1");
 	}
 
     @Test
-	public void test_24() throws Exception {
+	public void test_24() throws Throwable {
     	assertStringResult("/ 2", "0.5");
 	}
 
     @Test
-	public void test_25() throws Exception {
+	public void test_25() throws Throwable {
     	assertStringResult("/  5 2", "2.5");
 	}
 
     @Test
-	public void test_30() throws Exception {
+	public void test_30() throws Throwable {
         __(
             "the a 1",
             "the b 2",
@@ -244,7 +244,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_31() throws Exception {
+	public void test_31() throws Throwable {
         __(
             "the a (z) (1)",
             "the b (z) (2)",
@@ -255,7 +255,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_32() throws Exception {
+	public void test_32() throws Throwable {
         __(
             "the a x 1",
             "the b x 2",
@@ -266,7 +266,7 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_33() throws Exception {
+	public void test_33() throws Throwable {
         __(
             "the a (z) (x 1)",
             "the b (z) (x 2)",
@@ -277,14 +277,14 @@ public class MathTest extends ATest {
 	}
 
     @Test
-	public void test_34() throws Exception {
+	public void test_34() throws Throwable {
     	assertStringResult("+ 1,2", "3");
     	assertStringResult("* 6,2", "12");
 	}
 
     @Test
     @Ignore
-	public void test_35() throws Exception {
+	public void test_35() throws Throwable {
         __(
             "the a 2",
             "the b 3"

@@ -30,7 +30,7 @@ import java.util.List;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class AnimoException extends Exception {
+public class AnimoException extends Throwable {
 	
 	private static final long serialVersionUID = 2923211415661487122L;
 
@@ -52,8 +52,8 @@ public class AnimoException extends Exception {
 		this.op = op;
 	}
 
-	public AnimoException(Exception e) {
-		super(e);
+	public AnimoException(Throwable t) {
+		super(t);
 	}
 
 	public void addToStack(Relationship op) {

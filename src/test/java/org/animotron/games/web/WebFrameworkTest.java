@@ -44,7 +44,7 @@ import static org.animotron.expression.JExpression.value;
 public class WebFrameworkTest extends ATest {
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
 
         __(
             new JExpression(
@@ -193,7 +193,7 @@ public class WebFrameworkTest extends ATest {
     }
 
     @Test
-    public void form_generator() throws Exception {
+    public void form_generator() throws Throwable {
         __(
         		"the firstname (name \"firstname\").",
         		"the lastname (name \"lastname\").",
@@ -241,7 +241,7 @@ public class WebFrameworkTest extends ATest {
 
     @Test
     @Ignore
-    public void form_generator_02() throws Exception {
+    public void form_generator_02() throws Throwable {
         __(
         		"the firstname (name \"firstname\").",
         		"the lastname (name \"lastname\").",

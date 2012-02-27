@@ -38,7 +38,7 @@ public class PreferTest extends ATest {
 
 
     @Test
-    public void test_0() throws Exception {
+    public void test_0() throws Throwable {
 
         __(
             new JExpression(
@@ -57,7 +57,7 @@ public class PreferTest extends ATest {
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
 
         __(
             new JExpression(
@@ -76,7 +76,7 @@ public class PreferTest extends ATest {
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
 
         __(
             new JExpression(
@@ -95,7 +95,7 @@ public class PreferTest extends ATest {
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
 
         __(
             new JExpression(

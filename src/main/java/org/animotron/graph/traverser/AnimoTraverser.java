@@ -73,7 +73,7 @@ public class AnimoTraverser {
 	            String reference = (String) node.getProperty(name);
 	            handler.start(statement, parent, reference, level, isOne, pos, isLast);
 	            handler.end(statement, parent, reference, level, isOne, pos, isLast);
-            } catch (Exception e) {
+            } catch (Throwable t) {
 			}
         }
     }

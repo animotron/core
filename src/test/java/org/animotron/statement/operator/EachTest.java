@@ -35,7 +35,7 @@ import static org.animotron.expression.JExpression.*;
 public class EachTest extends ATest {
 
     @Test
-    public void test() throws Exception {
+    public void test() throws Throwable {
         testAnimo("the a (s) (x 1).");
         testAnimo("the b (s) (x 2).");
         testAnimo("the c (s) (x 3).");
@@ -45,7 +45,7 @@ public class EachTest extends ATest {
 
     @Test
     @Ignore
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
 
         JExpression s = new JExpression(
                 element("ul", each(_(_(AN._, "A"), _(AN._, "B"), _(AN._, "C")), element("li")))
@@ -56,7 +56,7 @@ public class EachTest extends ATest {
 
     @Test
     @Ignore
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
 
         JExpression s = new JExpression(
             element("x",

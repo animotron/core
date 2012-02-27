@@ -44,8 +44,8 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 			pf.waitBeforeClosePipe(1);
 			act(pf);
 		
-		} catch (Exception e) {
-			pf.sendException(e);
+		} catch (Throwable t) {
+			pf.sendException(t);
 		
 		} finally {
 			pf.done();
@@ -69,7 +69,7 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 //		Evaluator.sendQuestion(onAnswer, pf.getVector(), pf.getVector().getUnrelaxedClosest().getEndNode());
 	}
 	
-	public abstract void act(final PFlow pf) throws Exception;
+	public abstract void act(final PFlow pf) throws Throwable;
 
 	public boolean needAnswer() {
 		return true;

@@ -37,7 +37,7 @@ import static org.animotron.expression.JExpression.value;
 public class AfterLastTest extends ATest {
 	
 	@Test
-	public void testAfterLast() throws Exception {
+	public void testAfterLast() throws Throwable {
         System.out.println("Test 'AfterLast' ...");
         
     	JExpression.__(new JExpression(

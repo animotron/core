@@ -31,7 +31,7 @@ import org.junit.Test;
 public class DocumentTest extends ATest {
 
 	@Test
-	public void test() throws Exception {
+	public void test() throws Throwable {
 		
 		testAnimo("the D2011-11-01 name \"1 November 2011\".");
 		testAnimo("the D2011-11-02 name \"2 November 2011\".");

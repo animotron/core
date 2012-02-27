@@ -101,8 +101,8 @@ public class GET extends AbstractQuery implements Shift {
 							while ((rr = pp.take()) != null) {
 								thes.add(rr.getClosest().getEndNode());
 							}
-						} catch (Exception e) {
-							pf.sendException(e);
+						} catch (Throwable t) {
+							pf.sendException(t);
 							return;
 						}
 					} else
@@ -380,8 +380,8 @@ public class GET extends AbstractQuery implements Shift {
 //					}
 				}
 			}
-		} catch (Exception e) {
-			pf.sendException(e);
+		} catch (Throwable t) {
+			pf.sendException(t);
 		} finally {
 			it.close();
 		}

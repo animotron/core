@@ -54,7 +54,7 @@ public class PTRN extends Operator implements Evaluable {
 	
     class Calc extends OnQuestion {
         @Override
-        public void act(final PFlow pf) throws Exception {
+        public void act(final PFlow pf) throws Throwable {
         	System.out.println("ptrn");
 
         	FastSet<Relationship> thes = FastSet.newInstance();

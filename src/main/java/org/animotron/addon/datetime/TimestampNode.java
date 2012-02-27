@@ -70,9 +70,9 @@ public class TimestampNode implements Node {
 				
 			} catch (IllegalArgumentException e) {
 				throw e;
-			} catch (Exception e) {
+			} catch (Throwable t) {
 				//should not happen
-				throw new IllegalArgumentException(e);
+				throw new IllegalArgumentException(t);
 			}
 		
 		throw new IllegalArgumentException("unknown instance '"+name+"'");

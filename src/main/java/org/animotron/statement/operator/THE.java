@@ -50,7 +50,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 //    public static Node _(String name) {
 //        try {
 //            return THE._.getOrCreate(name, true).getEndNode();
-//        } catch (Exception e) {
+//        } catch (Throwable t) {
 //            throw new RuntimeException(e);
 //        }
 //    }
@@ -58,7 +58,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 //    public static Relationship __(String name) {
 //        try {
 //            return THE._.getOrCreate(name, true);
-//        } catch (Exception e) {
+//        } catch (Throwable t) {
 //            throw new RuntimeException(e);
 //        }
 //    }
@@ -129,7 +129,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 	public Object reference(Relationship r) {
 		try {
 			return NAME.get(r.getEndNode());
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			return null;
 		}
 	}

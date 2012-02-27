@@ -40,7 +40,7 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
     }
 
     @Override
-    public void build() throws Exception {
+    public void build() throws Throwable {
         builder.start(THE._, id());
             builder._(STREAM._, stream());
             description();

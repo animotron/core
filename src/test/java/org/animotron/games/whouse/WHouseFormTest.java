@@ -35,7 +35,7 @@ public class WHouseFormTest extends ATest {
     private static final JsonFactory FACTORY = new JsonFactory();
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
 
 //        __(
 //                "the companyA (party) (word \"Company A & Co.\")",

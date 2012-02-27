@@ -33,78 +33,78 @@ import static org.animotron.graph.Properties.HASH;
  */
 public class AnotherPrettyAnimoTest extends ATest {
 
-    private void test(String exp) throws Exception {
+    private void test(String exp) throws Throwable {
         test(exp, exp);
     }
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out + "\n", true);
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         test("the a get b c.", "the a\n    get b c.");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         test("the a get an b an c", "the a\n    get an b c.");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         test("the a get an b c", "the a\n    get an b c.");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         test("the a get (b) (c)", "the a\n    get b c.");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("the a\n    an\n        (all b)\n        (all c).");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         test("the a\n    b.");
 	}
 
     @Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
         test("an a b c", "a\n    b c.");
 	}
 
     @Test
-	public void test_07() throws Exception {
+	public void test_07() throws Throwable {
         test("a b c.", "a\n    b c.");
 	}
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
     	test("get (get a) (an b)", "get\n    (get a)\n    (b).");
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
     	test("all a,b ((c,d) (e))", "all a, b\n    ((c, d)\n        (e)).");
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
 		test("all a,b an c,d e", "all a, b\n    c, d e.");
     }
 
     @Test
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
 		test("all a, b\n    c, d e.");
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
 		test("all a, b\n    c, d\n        (e)\n        (f).");
     }
 

@@ -37,7 +37,7 @@ public abstract class AbstractExpression extends Expression {
         this.builder = builder;
     }
 
-    public abstract void build() throws Exception;
+    public abstract void build() throws Throwable;
 
     @Override
     protected final Relationship relationship() {
@@ -45,11 +45,9 @@ public abstract class AbstractExpression extends Expression {
             try {
                 builder.build(this);
                 relationship = builder.relationship();
-            } catch (Throwable e) {
-            	e.printStackTrace();
-                throw new RuntimeException(e);
+            } catch (Throwable t) {
+                throw new RuntimeException(t);
             }
-
         }
         return relationship;
     }

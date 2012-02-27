@@ -55,7 +55,7 @@ public class AnimoGraph {
 	private static String STORAGE;
 
     private static List<Transaction> activeTx;
-    private static Map<Transaction, Exception> debugActiveTx;
+    private static Map<Transaction, Throwable> debugActiveTx;
 
 	private static Node ROOT;
     private static File BIN;
@@ -69,7 +69,7 @@ public class AnimoGraph {
         System.gc();
         
         activeTx = new FastList<Transaction>();
-        debugActiveTx = new FastMap<Transaction, Exception>();
+        debugActiveTx = new FastMap<Transaction, Throwable>();
     	STORAGE = folder;
     	
     	Executor.init();
@@ -126,7 +126,7 @@ public class AnimoGraph {
 		while (!activeTx.isEmpty()) {
 			System.out.println("Active transactions "+activeTx.size());
 			
-			for (Map.Entry<Transaction, Exception> e : debugActiveTx.entrySet()) {
+			for (Map.Entry<Transaction, Throwable> e : debugActiveTx.entrySet()) {
 				System.out.println(e.getKey());
 				e.getValue().printStackTrace();
 			}
@@ -147,9 +147,9 @@ public class AnimoGraph {
 	public static void finishTx(Transaction tx) {
 		try {
 			tx.finish();
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			//XXX: log
-			e.printStackTrace();
+			t.printStackTrace();
 		} finally {
 			activeTx.remove(tx);
 			debugActiveTx.remove(tx);
@@ -173,8 +173,8 @@ public class AnimoGraph {
 		try {
 			result = operation.execute();
 			tx.success();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Throwable t) {
+			t.printStackTrace();
         } finally {
 			finishTx(tx);
 		}

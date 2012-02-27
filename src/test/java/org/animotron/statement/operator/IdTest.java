@@ -32,17 +32,17 @@ import org.junit.Test;
 public class IdTest extends ATest {
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         assertAnimoResult("id a", "\"a\".");
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         assertAnimoResult("id a, b", "\"a\". \"b\".");
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         testAnimo("the a (x) (y 1).");
         testAnimo("the b (x) (y 2).");
         testAnimo("the c (x) (y 3).");
@@ -51,13 +51,13 @@ public class IdTest extends ATest {
 
     @Test
     @Ignore
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
         testAnimo("the a (x) (y 1).");
         assertAnimoResult("id get y a", "\"y\".");
     }
 
     @Test
-    public void test_04() throws Exception {
+    public void test_04() throws Throwable {
         testAnimo("the a (x) (y 1).");
         testAnimo("the b (x) (y 2).");
         testAnimo("the c (x) (y 3).");
@@ -65,7 +65,7 @@ public class IdTest extends ATest {
     }
 
     @Test
-    public void test_05() throws Exception {
+    public void test_05() throws Throwable {
         testAnimo("the a (x) (y 1).");
         testAnimo("the b (x) (y 2).");
         testAnimo("the c (x) (y 3).");
@@ -74,7 +74,7 @@ public class IdTest extends ATest {
 
     @Test
     @Ignore
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
         testAnimo("the a (x) (y id this).");
         testAnimo("the b (x) (y id this).");
         testAnimo("the c (x) (y id this).");
@@ -84,7 +84,7 @@ public class IdTest extends ATest {
 
     @Test
     @Ignore
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         testAnimo("the x y id this.");
         testAnimo("the a x.");
         testAnimo("the b x.");

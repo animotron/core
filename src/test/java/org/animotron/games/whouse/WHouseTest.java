@@ -44,7 +44,7 @@ public class WHouseTest extends ATest {
 
 	@Test
     @Ignore
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
 		
 		//party: person & organization
 		// + receipt or issue
@@ -217,7 +217,7 @@ public class WHouseTest extends ATest {
 
 	@Test
 	@Ignore
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         __(
             "the kilo number 1000.", //* 1000
             "the UoM.",
@@ -230,7 +230,7 @@ public class WHouseTest extends ATest {
     	assertStringResult(e, "have qty (number 1) (UoM kg)");
 	}
 
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         __(
             "the SKU " +
         		"(word " +

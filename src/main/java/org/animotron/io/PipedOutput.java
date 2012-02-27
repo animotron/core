@@ -56,14 +56,14 @@ public class PipedOutput<T> implements Cloneable {
 		return s.substring(s.indexOf("@")+1);
 	}
 	
-	private static String stack2string(Exception e) {
+	private static String stack2string(Throwable t) {
 		try {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
+			t.printStackTrace(pw);
 			return sw.toString();
-		} catch(Exception e2) {
-			e2.printStackTrace();
+		} catch(Throwable t2) {
+			t2.printStackTrace();
 		}
 		return "";
 	}

@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.element;
 public class AnyUseTest extends ATest {
 
     @Test
-    public void simple_any_Use() throws Exception {
+    public void simple_any_Use() throws Throwable {
 
         __(
             new JExpression(
@@ -71,7 +71,7 @@ public class AnyUseTest extends ATest {
 
     @Test
     @Ignore
-    public void simple_any_Use_1() throws Exception {
+    public void simple_any_Use_1() throws Throwable {
 
         __(
             new JExpression(
@@ -106,7 +106,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void complex_any_Use() throws Exception {
+    public void complex_any_Use() throws Throwable {
 
         __(
             new JExpression(
@@ -144,7 +144,7 @@ public class AnyUseTest extends ATest {
 
     @Test
     @Ignore
-    public void complex_any_Use_1() throws Exception {
+    public void complex_any_Use_1() throws Throwable {
 
         __(
             new JExpression(
@@ -186,7 +186,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
-    public void useUnderAny() throws Exception {
+    public void useUnderAny() throws Throwable {
 		testAnimo("the resource-B resource.");
 		testAnimo("the resource-A resource.");
 

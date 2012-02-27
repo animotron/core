@@ -57,8 +57,8 @@ public class UUID extends NonDetermInstruction {
                         ? java.util.UUID.fromString(STRING._.eval(pf, params).toString())
                         : java.util.UUID.randomUUID();
                 answered(pf, new JExpression(value(uuid.toString())));
-			} catch (Exception e) {
-				pf.sendException(e);
+			} catch (Throwable t) {
+				pf.sendException(t);
 			}
         }
 	}

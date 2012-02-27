@@ -48,22 +48,22 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-	protected AnimoExpression testAnimo(String exp) throws Exception {
+	protected AnimoExpression testAnimo(String exp) throws Throwable {
         return testAnimo(exp, exp);
     }
 
-	protected AnimoExpression testAnimo(String in, String out) throws Exception {
+	protected AnimoExpression testAnimo(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out);
         return expression;
     }
 
-	protected void testAnimoResult(String exp, String res) throws Exception {
+	protected void testAnimoResult(String exp, String res) throws Throwable {
 		testAnimoResult(exp, exp, res);
     }
 
-	protected void testAnimoResult(String in, String out, String res) throws Exception {
+	protected void testAnimoResult(String in, String out, String res) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out);

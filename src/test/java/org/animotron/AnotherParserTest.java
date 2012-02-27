@@ -29,67 +29,67 @@ import org.junit.Test;
 public class AnotherParserTest extends ATest {
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         testAnimo("the a get b c.");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         testAnimo("the a get an b an c", "the a get an b c.");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         testAnimo("the a get an b c", "the a get an b c.");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         testAnimo("the a get (b) (c)", "the a get b c.");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         testAnimo("the a an (all b) (all c).");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         testAnimo("the a b.");
 	}
 
     @Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
         testAnimo("an a b c", "a b c.");
 	}
 
     @Test
-	public void test_07() throws Exception {
+	public void test_07() throws Throwable {
         testAnimo("a b c.");
 	}
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
     	testAnimo("get (get a) (an b)", "get (get a) (b).");
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
     	testAnimo("all a,b ((c, d) (e))", "all a, b ((c, d) (e)).");
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
 		testAnimo("all a, b an c,d e", "all a, b c, d e.");
     }
 
     @Test
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
 		testAnimo("all a, b c, d e.");
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
 		testAnimo("all a, b c, d (e) (f).");
     }
 

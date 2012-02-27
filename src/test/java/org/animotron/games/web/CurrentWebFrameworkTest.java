@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.*;
 public class CurrentWebFrameworkTest extends ATest {
 
     @Test
-    public void test() throws Exception {
+    public void test() throws Throwable {
 
         __(
             new JExpression(

@@ -184,9 +184,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	                try {
 	                    if (!((Predicate) st).filter(pf, r, ref))
 	                        return false;
-	                } catch (Exception e) {
+	                } catch (Throwable t) {
 	                    //XXX: report
-	                    e.printStackTrace();
+	                    t.printStackTrace();
 	                    return false;
 	                }
 	            }
@@ -350,7 +350,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected Relationship getThe(Node node) {
 		try {
 			return THE._.get((String) Properties.NAME.get(node));
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			return null;
 		}
 	}
@@ -684,9 +684,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 			thes.addAll( set );
                 	}
 
-                } catch (Exception e) {
+                } catch (Throwable t) {
                     //XXX: report
-                    e.printStackTrace();
+                    t.printStackTrace();
                 }
             }
         }

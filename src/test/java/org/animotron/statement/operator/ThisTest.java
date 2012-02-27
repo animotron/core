@@ -33,14 +33,14 @@ public class ThisTest extends ATest {
 
     @Test
     @Ignore //empty this
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         testAnimo("the file uri id this.");
         assertAnimoResult("get uri file.", "uri \"file\".");
     }
 
     @Test
     @Ignore //empty this
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         testAnimo("the file uri id this.");
         testAnimo("the x file.");
         assertAnimoResult("get uri x.", "uri \"x\".");
@@ -48,7 +48,7 @@ public class ThisTest extends ATest {
 
     @Test
     @Ignore //empty this
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         testAnimo("the file uri id this.");
         testAnimo("the x file.");
         testAnimo("the y file.");

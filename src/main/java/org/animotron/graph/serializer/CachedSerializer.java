@@ -307,7 +307,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
     private void cache(final Relationship r, final Cache cache, final String key) {
         AnimoGraph.execute(new GraphOperation<Void>() {
             @Override
-            public Void execute() throws Exception {
+            public Void execute() throws Throwable {
                 String entity;
                 entity = entity(key, cache);
                 if (CACHE.has(r)) {

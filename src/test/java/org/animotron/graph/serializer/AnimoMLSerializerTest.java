@@ -43,45 +43,45 @@ public class AnimoMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
     	test("the a \\b", "the a \\b.");
     }
 
     @Test
     @Ignore
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
     	test("the a \\ get element-name element-name \"b\"", "the a \\ element-name \"b\".");
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         __(new JExpression(_(THE._, "b", value("c"))));
         test("the a \\ b", "the a \\ b \"c\".");
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
         __(new JExpression(_(THE._, "b", value("c"))));
         test("the a \\ an b", "the a \\ b \"c\".");
     }
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
     	test("the a \\ \"b\"", "the a \\ \"b\".");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
     	test("the a \\b @c \"d\"", "the a \\b @c \"d\".");
 	}
 
     @Test
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
     	test("the a \\b (@c \"d\") (\"e\")", "the a \\b (@c \"d\") \"e\".");
     }
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         __(
                 new JExpression(_(THE._, "b", value("b"))),
                 new JExpression(_(THE._, "c", value("c"))),
@@ -92,7 +92,7 @@ public class AnimoMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         __(
                 new JExpression(_(THE._, "b", value("b"))),
                 new JExpression(_(THE._, "c", value("c"))),
@@ -103,7 +103,7 @@ public class AnimoMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         __(
                 new JExpression(_(THE._, "b", value("b"))),
                 new JExpression(_(THE._, "c", value("c"))),

@@ -36,7 +36,7 @@ import static org.animotron.expression.AnimoExpression.__;
 public class WordTest extends ATest {
 
 	@Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         __(
             "the test1 word \"test1\".",
             "the test2 word \"test2\"."
@@ -92,7 +92,7 @@ public class WordTest extends ATest {
 	}
 
 	@Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         __(
             "the test1 (test) (word \"test1\").",
             "the test2 (test) (word \"test2\").",
@@ -108,7 +108,7 @@ public class WordTest extends ATest {
 	}
 
 	@Test
-	public void test_10() throws Exception {
+	public void test_10() throws Throwable {
         __(
             "the test1 (word \"test1\")."
 		);

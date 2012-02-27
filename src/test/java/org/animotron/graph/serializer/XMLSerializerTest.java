@@ -40,59 +40,59 @@ import static org.animotron.expression.JExpression.*;
  */
 public class XMLSerializerTest extends ATest {
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertXMLResult(expression, out);
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         test("\\b", "<b/>");
         test("the a \\b", "<b/>");
     }
 
     @Test
     @Ignore
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         test("\\ get element-name element-name \"b\"", "<b/>");
         test("the a \\ get element-name element-name \"b\"", "<b/>");
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         __(new JExpression(_(THE._, "b", value("c"))));
         test("\\ b", "<c/>");
         test("the a \\ b", "<c/>");
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
         __(new JExpression(_(THE._, "b", value("c"))));
         test("\\ an b", "<c/>");
         test("the a \\ an b", "<c/>");
     }
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("\\ \"b\"", "<b/>");
         test("the a \\ \"b\"", "<b/>");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         test("\\b @c \"d\"", "<b c=\"d\"/>");
         test("the a \\b @c \"d\"", "<b c=\"d\"/>");
 	}
 
     @Test
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
         test("\\b (@c \"d\") (\"e\")", "<b c=\"d\">e</b>");
         test("the a \\b (@c \"d\") (\"e\")", "<b c=\"d\">e</b>");
     }
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         __(
                 new JExpression(_(THE._, "b", value("b"))),
                 new JExpression(_(THE._, "c", value("c"))),
@@ -104,7 +104,7 @@ public class XMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         __(
                 new JExpression(_(THE._, "b", value("b"))),
                 new JExpression(_(THE._, "c", value("c"))),
@@ -116,7 +116,7 @@ public class XMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         __(
                 new JExpression(_(THE._, "b", value("b"))),
                 new JExpression(_(THE._, "c", value("c"))),
@@ -128,33 +128,33 @@ public class XMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_0A() throws Exception {
+    public void test_0A() throws Throwable {
         test("the a (??stylesheet) \\root", "<?stylesheet?><root/>");
     }
 
     @Test
-    public void test_0B() throws Exception {
+    public void test_0B() throws Throwable {
         test("the a (??stylesheet \"path\") \\root", "<?stylesheet path?><root/>");
     }
 
     @Test
-    public void test_0C() throws Exception {
+    public void test_0C() throws Throwable {
         __(new JExpression(_(THE._, "b", value("path"))));
         test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 
     @Test
-    public void test_0D() throws Exception {
+    public void test_0D() throws Throwable {
         test("the a \\x:root $x \"x-namespace\"", "<x:root xmlns:x=\"x-namespace\"/>");
     }
 
     @Test
-    public void test_0E() throws Exception {
+    public void test_0E() throws Throwable {
         test("the a \\x:root $ (\"x\") (\"x-namespace\")", "<x:root xmlns:x=\"x-namespace\"/>");
     }
 
     @Test
-    public void test_0F() throws Exception {
+    public void test_0F() throws Throwable {
         try {
             test("the a \\x:root $x", "<x:root xmlns:x=\"\"/>");
         } catch (IOException e) {
@@ -163,23 +163,23 @@ public class XMLSerializerTest extends ATest {
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
         test("the a \\root $ \"x-namespace\"", "<root xmlns=\"x-namespace\"/>");
     }
 
     @Test
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
         //TODO implement startDTD()/endDTD()
         test("the a (!! \"<!DOCTYPE html>\") (\\html)", "<!DOCTYPE html><html/>");
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
         test("the a \\html &#amp", "<html>&amp;</html>");
     }
 
     @Test
-    public void test_13() throws Exception {
+    public void test_13() throws Throwable {
         test("the a \\html @x \"&\"", "<html x=\"&amp;\"/>");
     }
 

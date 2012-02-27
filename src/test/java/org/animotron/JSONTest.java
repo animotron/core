@@ -45,7 +45,7 @@ public class JSONTest extends ATest {
         return s.substring(0, s.length() - 1);
     }
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         JsonParser jp = FACTORY.createJsonParser(in);
         Expression e = new JSONExpression(jp);
         StringBuilder s = new StringBuilder();
@@ -64,57 +64,57 @@ public class JSONTest extends ATest {
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         test("\"foo\"", "\"foo\".");
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         test("[\"foo\"]", "\"foo\".");
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         test("[\"foo\", \"bar\"]", "\"foo\" \"bar\".");
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
         test("{\"foo\" : 1}", "foo 1.");
     }
 
     @Test
-    public void test_04() throws Exception {
+    public void test_04() throws Throwable {
         test("{\"foo\" : [1, 2]}", "foo 1 2.");
     }
 
     @Test
-    public void test_05() throws Exception {
+    public void test_05() throws Throwable {
         test("{\"foo\" : 1, \"bar\" : 2}", "foo 1 bar 2.");
     }
 
     @Test
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
         test("{\"foo\" : {\"bar\" : 2} }", "foo bar 2.");
     }
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         test("{\"foo\" : [{\"bar\" : 2}, 3]}", "foo (bar 2) 3.");
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         test("[1, {\"foo\" : [{\"bar\" : 2}, 3]}]", "1 foo (bar 2) 3.");
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         test("{\"foo\" : null, \"bar\" : null}", "foo bar.");
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
         test("{\"foo\" : null, \"bar\" : null, \"x\" : null}", "foo bar x.");
     }
 

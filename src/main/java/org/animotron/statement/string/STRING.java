@@ -70,8 +70,8 @@ public class STRING extends DetermInstruction {
                             sb.toString()
                         )
 					);
-				} catch (Exception e) {
-					pf.sendException(e);
+				} catch (Throwable t) {
+					pf.sendException(t);
 					return;
 				}
 				answered(pf, r);

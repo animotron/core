@@ -143,7 +143,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
 	    			AnimoGraph.execute(new GraphOperation<Void>() {
 	
 						@Override
-						public Void execute() throws Exception {
+						public Void execute() throws Throwable {
 							Relationship r = thes.get(0).createRelationshipTo(thes.get(1), TRI);
 							Properties.TYPE.set(r, name());
 							Properties.TO_NODE.set(r, pf.getOP().getStartNode().getId());

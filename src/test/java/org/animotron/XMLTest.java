@@ -48,7 +48,7 @@ public class XMLTest extends ATest {
         return s.substring(0, s.length() - 1);
     }
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         Relationship r = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader(in)));
         assertEquals((byte[]) HASH.get(r), DigestSerializer._.serialize(r));
         StringBuilder s = new StringBuilder();
@@ -67,47 +67,47 @@ public class XMLTest extends ATest {
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         test("<a/>", "\\a.");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         test("<x:a xmlns:x=\"x-namespace\"/>", "\\x:a $x \"x-namespace\".");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         test("<a xmlns=\"x-namespace\"/>", "\\a $ \"x-namespace\".");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         test("<a b=\"c\"/>", "\\a @b \"c\".");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("<?stylesheet path?><a/>", "??stylesheet \"path\" \\a.");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         test("<a><b><x/></b><c><x/></c></a>", "\\a (\\b \\x) (\\c \\x).");
 	}
 
     @Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
         test("<a><b><x/></b><c><x/><y/></c><x><z/></x></a>", "\\a (\\b \\x) (\\c (\\x) (\\y)) (\\x \\z).");
 	}
 
     @Test
-	public void test_07() throws Exception {
+	public void test_07() throws Throwable {
         test("<a a=\"a\">a</a>", "\\a (@a \"a\") \"a\".");
 	}
 
     @Test
-	public void test_08() throws Exception {
+	public void test_08() throws Throwable {
         test("<a xmlns:a=\"a\" a=\"a\">a</a>", "\\a ($a \"a\") (@a \"a\") \"a\".");
 	}
 

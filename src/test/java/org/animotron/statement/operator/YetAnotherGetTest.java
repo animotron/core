@@ -38,7 +38,7 @@ import static org.animotron.expression.JExpression.value;
 public class YetAnotherGetTest extends ATest{
 
     @Test
-    public void get_via_is() throws Exception {
+    public void get_via_is() throws Throwable {
 
         __(
             new JExpression(
@@ -57,7 +57,7 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
-    public void get_shall_via_is() throws Exception {
+    public void get_shall_via_is() throws Throwable {
 
         __(
             new JExpression(
@@ -79,7 +79,7 @@ public class YetAnotherGetTest extends ATest{
     }
 
     @Test
-    public void get_have_via_is() throws Exception {
+    public void get_have_via_is() throws Throwable {
 
         __(
             new JExpression(

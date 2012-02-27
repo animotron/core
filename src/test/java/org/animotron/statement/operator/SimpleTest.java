@@ -37,7 +37,7 @@ import static org.animotron.expression.JExpression.value;
 public class SimpleTest extends ATest {
 	
 	@Test
-	public void an() throws Exception {
+	public void an() throws Throwable {
         
     	__(
             new JExpression(
@@ -55,7 +55,7 @@ public class SimpleTest extends ATest {
 	}
 
 	@Test
-	public void get() throws Exception {
+	public void get() throws Throwable {
         
     	__(
             new JExpression(

@@ -39,7 +39,7 @@ import static org.animotron.expression.JExpression.value;
 public class AnyTest extends ATest {
 	
     @Test
-    public void testANY() throws Exception {
+    public void testANY() throws Throwable {
         
         __(
             new JExpression(
@@ -65,7 +65,7 @@ public class AnyTest extends ATest {
     }
 	
     @Test
-    public void testANYwithWITH() throws Exception {
+    public void testANYwithWITH() throws Throwable {
 
         __(
             new JExpression(
@@ -97,7 +97,7 @@ public class AnyTest extends ATest {
     }
 
 	@Test
-	public void ANYwithEQ() throws Exception {
+	public void ANYwithEQ() throws Throwable {
 
 		__(
             new JExpression(
@@ -127,7 +127,7 @@ public class AnyTest extends ATest {
 	}
 
 	@Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
 		testAnimo("the x1 1.");
 		testAnimo("the x2 2.");
 		testAnimo("the y1 (z) (foo x1).");
@@ -136,7 +136,7 @@ public class AnyTest extends ATest {
 	}
 
 	@Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
 		testAnimo("the x1 (foo) 1.");
 		testAnimo("the x2 (foo) 2.");
 		testAnimo("the y1 (z) (x1).");

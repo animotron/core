@@ -91,7 +91,7 @@ public abstract class GraphBuilder {
 
     public abstract Relationship relationship();
 
-    protected abstract void fail(Throwable e);
+    protected abstract void fail(Throwable t);
 
     protected abstract void startGraph();
 
@@ -189,18 +189,17 @@ public abstract class GraphBuilder {
         	endGraph();
             tx.success();
             finishTx(tx);
-        } catch (Throwable e) {
-        	e.printStackTrace();
+        } catch (Throwable t) {
             finishTx(tx);
             tx = beginTx();
             try {
                 preparative(null);
                 modified(null);
-                fail(e);
+                fail(t);
             } finally {
                 finishTx(tx);
             }
-            throw e;
+            throw t;
         } finally {
             catcher.push();
         }

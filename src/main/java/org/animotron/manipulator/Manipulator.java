@@ -152,7 +152,7 @@ public abstract class Manipulator {
 	                					//XXX: log
 	                					System.out.println("WARNING: REF but no name");
 	                				
-	                            } catch (Exception e){}
+	                            } catch (Throwable t){}
 	        				}
 	
 	            			if (msg.isType(REF._)) {

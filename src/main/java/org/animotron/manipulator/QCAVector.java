@@ -253,7 +253,7 @@ public class QCAVector {
 //						b.append(name);
 //					}
 //				}
-//			} catch (Exception e) {
+//			} catch (Throwable t) {
 //			}
 		}
 		b.append(" {");

@@ -50,7 +50,7 @@ public class AnotherGraphBuilderTest extends ATest {
         return FACTORY.createXMLStreamReader(new StringReader(xml));
     }
 
-    private void test_0(String xml) throws Exception {
+    private void test_0(String xml) throws Throwable {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = CachedSerializer.ANIMO.serialize(e);
@@ -64,7 +64,7 @@ public class AnotherGraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_1(String xml) throws Exception {
+    private void test_1(String xml) throws Throwable {
         StAXExpression e;
         e = new StAXExpression(new StreamGraphBuilder(), r(xml));
         String outA = CachedSerializer.ANIMO.serialize(e);
@@ -76,7 +76,7 @@ public class AnotherGraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_2(String xml) throws Exception {
+    private void test_2(String xml) throws Throwable {
         StAXExpression e;
         e = new StAXExpression(new FastGraphBuilder(), r(xml));
         String inA = CachedSerializer.ANIMO.serialize(e);
@@ -88,7 +88,7 @@ public class AnotherGraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test(String xml) throws Exception {
+    private void test(String xml) throws Throwable {
         test_0(xml);
         cleanDB();
         startDB(DATA_FOLDER);
@@ -99,32 +99,32 @@ public class AnotherGraphBuilderTest extends ATest {
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         test("<a/>");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         test("<x:a xmlns:x=\"x-namespace\"/>");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         test("<a xmlns=\"x-namespace\"/>");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         test("<a b=\"c\"/>");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("<?stylesheet path=\"path\"?><a/>");
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
     	InputStream res = getClass().getResourceAsStream("test.xml");
 
     	StAXExpression e = 

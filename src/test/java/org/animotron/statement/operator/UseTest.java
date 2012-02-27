@@ -38,7 +38,7 @@ import static org.animotron.expression.JExpression.__;
 public class UseTest extends ATest {
 
     @Test
-    public void any_use() throws Exception {
+    public void any_use() throws Throwable {
 
         __(
             new JExpression(
@@ -53,7 +53,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void an_any_use() throws Exception {
+    public void an_any_use() throws Throwable {
 
         __(
             new JExpression(
@@ -71,7 +71,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void all_use() throws Exception {
+    public void all_use() throws Throwable {
 
         __(
             new JExpression(
@@ -89,7 +89,7 @@ public class UseTest extends ATest {
     }
 
     @Test
-    public void an_all_use() throws Exception {
+    public void an_all_use() throws Throwable {
 
         __(
             new JExpression(
@@ -110,7 +110,7 @@ public class UseTest extends ATest {
     }
     
     @Test
-    public void cross_use_case() throws Exception {
+    public void cross_use_case() throws Throwable {
 
         __(
             new JExpression(

@@ -31,35 +31,35 @@ import org.junit.Test;
 public class WaveGetTest extends ATest {
 
     @Test
-    public void test_000() throws Exception {
+    public void test_000() throws Throwable {
         testAnimo("the a (x) (foo 1).");
         testAnimo("the y (a) (get foo).");
         assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
     }
 
     @Test
-    public void test_001() throws Exception {
+    public void test_001() throws Throwable {
         testAnimo("the a (x) (foo 1).");
         testAnimo("the y (any x) (get foo).");
         assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
     }
 
     @Test
-    public void test_002() throws Exception {
+    public void test_002() throws Throwable {
         testAnimo("the a (x) (foo 1).");
         testAnimo("the y (all x) (get foo).");
         assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
     }
 
     @Test
-    public void test_003() throws Exception {
+    public void test_003() throws Throwable {
         testAnimo("the a (x) (foo 1).");
         testAnimo("the y (prefer x use a) (get foo).");
         assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
     }
 
     @Test
-    public void test_004() throws Exception {
+    public void test_004() throws Throwable {
         testAnimo("the a (x) (foo 1).");
         testAnimo("the y get foo.");
         testAnimo("the z y any x.");

@@ -59,7 +59,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
 
-    private void test_0(String animo, String xml) throws Exception {
+    private void test_0(String animo, String xml) throws Throwable {
         Expression e;
         e = the(new AnimoExpression(new FastGraphBuilder(), animo));
         String inA = CachedSerializer.ANIMO.serialize(e);
@@ -73,7 +73,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_1(String animo, String xml) throws Exception {
+    private void test_1(String animo, String xml) throws Throwable {
         Expression e;
         e = the(new AnimoExpression(new FastGraphBuilder(), animo));
         String inA = CachedSerializer.ANIMO.serialize(e);
@@ -85,7 +85,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test_2(String animo, String xml) throws Exception {
+    private void test_2(String animo, String xml) throws Throwable {
         Expression e;
         e = the(new AnimoExpression(new StreamGraphBuilder(), animo));
         String outA = CachedSerializer.ANIMO.serialize(e);
@@ -97,7 +97,7 @@ public class YetAnotherGraphBuilderTest extends ATest {
         Assert.assertEquals(inA, outA);
     }
 
-    private void test(String animo, String xml) throws Exception {
+    private void test(String animo, String xml) throws Throwable {
         test_0(animo, xml);
         cleanDB();
         startDB(DATA_FOLDER);
@@ -108,27 +108,27 @@ public class YetAnotherGraphBuilderTest extends ATest {
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         test("\\a", "<a/>");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         test("\\x:a $x \"x-namespace\"", "<x:a xmlns:x=\"x-namespace\"/>");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         test("\\a $ \"x-namespace\"", "<a xmlns=\"x-namespace\"/>");
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         test("\\a @b \"c\"", "<a b=\"c\"/>");
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         test("(??stylesheet \"path\")) (\\a)", "<?stylesheet \"path\"?><a/>");
 	}
 }

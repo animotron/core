@@ -59,8 +59,8 @@ public class AFTER_LAST extends DetermInstruction {
                 if (index != -1) {
                     answered(pf, new JExpression(value(source.substring(index + 1))));
                 }
-            } catch (Exception e) {
-                pf.sendException(e);
+            } catch (Throwable t) {
+                pf.sendException(t);
             }
         }
 	}

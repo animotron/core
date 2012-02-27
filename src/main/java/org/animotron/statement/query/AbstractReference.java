@@ -111,7 +111,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 	            	try {
 	            		pf.sendAnswer( res );
         				if (returnFirstOnly) return;
-	            	} catch (Exception e) {}
+	            	} catch (Throwable t) {}
 				
 		        for (Path path : td_IS_leaf.traverse(node)) {
 		        	
@@ -130,7 +130,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 		        				pf.sendAnswer( res );
 		        				if (returnFirstOnly) return;
 		        			}
-	        			} catch (Exception e) {
+	        			} catch (Throwable t) {
 	        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
 	        					res = p.lastRelationship();
 			        			if (filtering(pf, res, uses, weaks)) {

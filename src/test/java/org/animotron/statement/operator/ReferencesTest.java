@@ -36,7 +36,7 @@ import org.junit.Test;
 public class ReferencesTest extends ATest {
 
     @Test
-    public void test() throws Exception {
+    public void test() throws Throwable {
 
         JExpression A = new JExpression(
             _(THE._, "A", _(AN._, "B", _(AN._, "C")))
@@ -51,26 +51,26 @@ public class ReferencesTest extends ATest {
     }
 
     @Test
-    public void test_000() throws Exception {
+    public void test_000() throws Throwable {
         testAnimo("the john sex male.");
         assertAnimoResult("all male", "the john sex.");
     }
 
     @Test
-    public void test_010() throws Exception {
+    public void test_010() throws Throwable {
         testAnimo("the john sex male.");
         assertAnimoResult("any male", "the john sex.");
     }
 
     @Test
-    public void test_020() throws Exception {
+    public void test_020() throws Throwable {
         testAnimo("the joe male.");
         assertAnimoResult("all male", "the joe male.");
     }
 
     @Test
     @Ignore //this test for USE, but it was't agreed yet
-    public void test_030() throws Exception {
+    public void test_030() throws Throwable {
         testAnimo("the john (person) (sex male).");
         assertAnimoResult("any person use male", "the john (person) (sex).");
         assertAnimoResult("all person use male", "the john (person) (sex).");
@@ -78,7 +78,7 @@ public class ReferencesTest extends ATest {
     }
 
     @Test
-    public void test_031() throws Exception {
+    public void test_031() throws Throwable {
         testAnimo("the john person, male.");
         assertAnimoResult("any person use male", "the john (person) (male).");
         assertAnimoResult("all person use male", "the john (person) (male).");
@@ -86,7 +86,7 @@ public class ReferencesTest extends ATest {
     }
 
     @Test
-    public void test_032() throws Exception {
+    public void test_032() throws Throwable {
         testAnimo("the john (person) (male).");
         assertAnimoResult("any person use male", "the john (person) (male).");
         assertAnimoResult("all person use male", "the john (person) (male).");
@@ -94,7 +94,7 @@ public class ReferencesTest extends ATest {
     }
 
     @Test
-    public void test_040() throws Exception {
+    public void test_040() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the joe male.");
         testAnimo("the john sex male.");
@@ -103,20 +103,20 @@ public class ReferencesTest extends ATest {
     }
 
     @Test
-    public void test_050() throws Exception {
+    public void test_050() throws Throwable {
         testAnimo("the john sex male.");
         assertAnimoResult("get sex john", "sex male.");
     }
 
     @Test
-    public void test_060() throws Exception {
+    public void test_060() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the joe male.");
         assertAnimoResult("get sex joe", "male.");
     }
 
     @Test
-    public void test_070() throws Exception {
+    public void test_070() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the joe male.");
         testAnimo("the john sex male.");
@@ -125,7 +125,7 @@ public class ReferencesTest extends ATest {
     }
 
 	@Test
-    public void test_100() throws Exception {
+    public void test_100() throws Throwable {
         testAnimo("the xxx-site (site) (name \"XXX\").");
         testAnimo("the xxx-layout (layout) (get name).");
         testAnimo("the html-page any layout.");

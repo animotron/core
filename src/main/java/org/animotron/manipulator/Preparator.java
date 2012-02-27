@@ -72,7 +72,7 @@ public class Preparator extends StatementManipulator {
 	                            super.execute(controller, new QCAVector(r), onQuestion(s, r), true);
 							}
         				}
-        			} catch (Exception e) {
+        			} catch (Throwable t) {
         				//XXX: log
         				//e.printStackTrace();
 					}

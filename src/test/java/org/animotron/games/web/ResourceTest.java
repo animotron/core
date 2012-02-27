@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.value;
 public class ResourceTest extends ATest {
 
     @Test
-    public void test1() throws Exception {
+    public void test1() throws Throwable {
 
         JExpression.__(
                 new JExpression(
@@ -82,7 +82,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test2() throws Exception {
+    public void test2() throws Throwable {
 
         JExpression.__(
                 new JExpression(
@@ -132,7 +132,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test3() throws Exception {
+    public void test3() throws Throwable {
 
         JExpression.__(
                 new JExpression(
@@ -182,7 +182,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test4() throws Exception {
+    public void test4() throws Throwable {
 
         JExpression.__(
                 new JExpression(
@@ -219,7 +219,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test5() throws Exception {
+    public void test5() throws Throwable {
 
         JExpression.__(
                 new JExpression(
@@ -263,7 +263,7 @@ public class ResourceTest extends ATest {
     }
 
     @Test
-    public void test6() throws Exception {
+    public void test6() throws Throwable {
 
         JExpression.__(
                 new JExpression(

@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.value;
 public class Factorial extends ATest {
 
 	//TODO @Test
-	public void factorial() throws Exception {
+	public void factorial() throws Throwable {
 		
     	new JExpression(
 			_(THE._, "factorial", 

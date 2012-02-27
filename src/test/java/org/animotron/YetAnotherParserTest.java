@@ -29,17 +29,17 @@ import org.junit.Test;
 public class YetAnotherParserTest extends ATest {
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         testAnimo("the a + 1 2.");
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         testAnimo("the a + \"1\" 2.");
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         testAnimo("get user's name.");
 	}
 }

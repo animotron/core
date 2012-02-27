@@ -39,7 +39,7 @@ import static org.animotron.expression.JExpression.*;
 public class GetTest extends ATest {
 	
 	@Test
-	public void getOnManyAN() throws Exception {
+	public void getOnManyAN() throws Throwable {
 
         __(
             new JExpression(
@@ -62,7 +62,7 @@ public class GetTest extends ATest {
 	}
 
 	@Test
-	public void getFromPFlow_an_with_param() throws Exception {
+	public void getFromPFlow_an_with_param() throws Throwable {
 
     	__(new JExpression(
             _(THE._, "A", element("B" , _(GET._, "C")))
@@ -83,7 +83,7 @@ public class GetTest extends ATest {
 	}
 	
 	@Test
-	public void getFromPFlow_cross_an_with_param() throws Exception {
+	public void getFromPFlow_cross_an_with_param() throws Throwable {
 
         __(
             new JExpression(
@@ -101,7 +101,7 @@ public class GetTest extends ATest {
 	}
 
 	@Test
-	public void getFromPFlow_an_with_an() throws Exception {
+	public void getFromPFlow_an_with_an() throws Throwable {
 
         __(
             new JExpression(
@@ -119,7 +119,7 @@ public class GetTest extends ATest {
 	}
 	
 	@Test
-	public void getFromPFlow_an_with_more_an() throws Exception {
+	public void getFromPFlow_an_with_more_an() throws Throwable {
 
     	__(
             new JExpression(
@@ -141,7 +141,7 @@ public class GetTest extends ATest {
 	}
 	
     @Test
-    public void getFromPFlow_an_with_stack() throws Exception {
+    public void getFromPFlow_an_with_stack() throws Throwable {
 
         __(
             new JExpression(
@@ -162,7 +162,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void getFromPFlow_more_an_with_stack() throws Exception {
+    public void getFromPFlow_more_an_with_stack() throws Throwable {
 
         __(
             new JExpression(
@@ -184,7 +184,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void getFromPFlow_one_more_an_with_stack() throws Exception {
+    public void getFromPFlow_one_more_an_with_stack() throws Throwable {
 
         __(
             new JExpression(
@@ -205,7 +205,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void getFromPFlow_an_an_an() throws Exception {
+    public void getFromPFlow_an_an_an() throws Throwable {
 
         __(
             new JExpression(
@@ -226,7 +226,7 @@ public class GetTest extends ATest {
     }
     
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         __(
             new AnimoExpression("the a (x 1) (y 2) (z 3)"),
             new AnimoExpression("the b (get x) (get y) (get z)")
@@ -236,7 +236,7 @@ public class GetTest extends ATest {
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         __(
                 new AnimoExpression("the a (x 1)"),
                 new AnimoExpression("the b (x 2)"),
@@ -247,7 +247,7 @@ public class GetTest extends ATest {
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         __(
             new AnimoExpression("the a x 1"),
             new AnimoExpression("the b x 2"),
@@ -258,7 +258,7 @@ public class GetTest extends ATest {
 	}
     
 	@Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
 		testAnimo("the user1 (user) (name \"user1\").");
 
 		testAnimo("the item1 (item) (name \"item1\").");
@@ -281,7 +281,7 @@ public class GetTest extends ATest {
 
 	@Test
 	@Ignore
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
 		testAnimo("the site host \"localhost\".");
 		
 		testAnimo("the resource get host.");
@@ -292,7 +292,7 @@ public class GetTest extends ATest {
 	}
 
 	@Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
 		testAnimo("the file (extension \"txt\") (any mime-type with extension get extension).");
 		
 		testAnimo("the text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
@@ -304,7 +304,7 @@ public class GetTest extends ATest {
 	}
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the john male.");
 
@@ -314,7 +314,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the man male.");
         testAnimo("the john man.");
@@ -323,7 +323,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the john male.");
 
@@ -336,7 +336,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the john person, male.");
 
@@ -346,7 +346,7 @@ public class GetTest extends ATest {
 
     @Test
     @Ignore
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
         testAnimo("the male sex.");
         testAnimo("the john person, male.");
         testAnimo("the man any person.");
@@ -355,7 +355,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
         testAnimo("the x b, c 1.");
         assertAnimoResult("get c, b x", "b, c 1.");
         assertAnimoResult("get c x", "b, c 1.");
@@ -363,109 +363,109 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_13() throws Exception {
+    public void test_13() throws Throwable {
         testAnimo("the a b c.");
         testAnimo("the x get b.");
         assertAnimoResult("x a", "x b c.");
     }
 
     @Test
-    public void test_14() throws Exception {
+    public void test_14() throws Throwable {
         testAnimo("the a b c.");
         testAnimo("the x get b.");
         assertAnimoResult("x b get b a", "x b c.");
     }
 
     @Test
-    public void test_15() throws Exception {
+    public void test_15() throws Throwable {
         testAnimo("the a b c.");
         testAnimo("the x get b.");
         assertAnimoResult("x get b a", "x b c.");
     }
 
     @Test
-    public void test_16() throws Exception {
+    public void test_16() throws Throwable {
         testAnimo("the x (foo) (bar).");
         testAnimo("the y x.");
         assertAnimoResult("get foo y", "x.");
     }
 
     @Test
-    public void test_17() throws Exception {
+    public void test_17() throws Throwable {
         testAnimo("the x bar.");
         assertAnimoResult("get bar x", "bar.");
     }
 
     @Test
-    public void test_18() throws Exception {
+    public void test_18() throws Throwable {
         testAnimo("the x foo z bar y.");
         assertAnimoResult("get bar x", "bar y.");
     }
 
     @Test
-    public void test_19() throws Exception {
+    public void test_19() throws Throwable {
         testAnimo("the x a 1.");
         testAnimo("the y a 2 (x).");
         assertAnimoResult("get a y", "a 2 (x a).");
     }
 
     @Test
-    public void test_20() throws Exception {
+    public void test_20() throws Throwable {
         testAnimo("the x a 1.");
         testAnimo("the y a 2 (x).");
         assertAnimoResult("each (get a y) (this a)", "2. x.");
     }
 
     @Test
-    public void test_21() throws Exception {
+    public void test_21() throws Throwable {
         testAnimo("the x a 1.");
         testAnimo("the y a 2 (b x).");
         assertAnimoResult("get a y", "a 2 (b).");
     }
 
     @Test
-    public void test_22() throws Exception {
+    public void test_22() throws Throwable {
         testAnimo("the x a 1.");
         testAnimo("the y a 2 (b x).");
         assertAnimoResult("each (get a y) (this a)", "2. b.");
     }
 
     @Test
-    public void test_23() throws Exception {
+    public void test_23() throws Throwable {
         testAnimo("the x a z.");
         testAnimo("the y a 2 (b c x).");
         assertAnimoResult("get a y", "a 2 (b).");
     }
 
     @Test
-    public void test_24() throws Exception {
+    public void test_24() throws Throwable {
         testAnimo("the x a z.");
         testAnimo("the y a 2 (b c x).");
         assertAnimoResult("each (get a y) (this a)", "2. b.");
     }
 
     @Test
-    public void test_25() throws Exception {
+    public void test_25() throws Throwable {
         testAnimo("the x \\a y z.");
         assertAnimoResult("get y x", "");
     }
 
     @Test
-    public void test_26() throws Exception {
+    public void test_26() throws Throwable {
         testAnimo("the x y z.");
         testAnimo("the z \\bar.");
         assertAnimoResult("the foo an (get y x)", "the foo y z \\bar.");
     }
 
     @Test
-    public void test_27() throws Exception {
+    public void test_27() throws Throwable {
         testAnimo("the x y z.");
         testAnimo("the z \\bar.");
         assertAnimoResult("the foo (x) (an (get y))", "the foo (x y) (y z \\bar).");
     }
 
     @Test
-    public void test_28() throws Exception {
+    public void test_28() throws Throwable {
         testAnimo("the x y z.");
         testAnimo("the z get bar.");
         testAnimo("the a bar 0.");
@@ -473,7 +473,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_29() throws Exception {
+    public void test_29() throws Throwable {
         testAnimo("the foo bar.");
         testAnimo("the x y foo.");
         assertAnimoResult("get foo x", "foo.");
@@ -483,14 +483,14 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_29_() throws Exception {
+    public void test_29_() throws Throwable {
         testAnimo("the bar 1.");
         testAnimo("the x y foo bar.");
         assertAnimoResult("get foo x", "foo bar 1."); 
     }
 
     @Test
-    public void test_29__() throws Exception {
+    public void test_29__() throws Throwable {
         testAnimo("the bar 1.");
         testAnimo("the x y foo bar.");
         assertAnimoResult("get foo get y x", "foo bar 1.");
@@ -498,7 +498,7 @@ public class GetTest extends ATest {
 
     @Test
     //XXX: this looks very wrong...
-    public void test_30() throws Exception {
+    public void test_30() throws Throwable {
         testAnimo("the x y foo.");
         assertAnimoResult("get foo x", "foo.");
         assertAnimoResult("get foo get y x", "foo.");
@@ -510,7 +510,7 @@ public class GetTest extends ATest {
 
     @Test
     //XXX: this looks veeeeery wrong...
-    public void test_30_() throws Exception {
+    public void test_30_() throws Throwable {
         testAnimo("the x y foo.");
         assertAnimoResult("get foo x", "foo.");
         assertAnimoResult("get foo get y x", "foo.");
@@ -521,7 +521,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_31() throws Exception {
+    public void test_31() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
@@ -530,7 +530,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_32() throws Exception {
+    public void test_32() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
@@ -539,7 +539,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_33() throws Exception {
+    public void test_33() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
@@ -548,7 +548,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_34() throws Exception {
+    public void test_34() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) (get a).");
         testAnimo("the foo2 (bar) 2.");
@@ -558,7 +558,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_34_() throws Exception {
+    public void test_34_() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) (\\p get a).");
         testAnimo("the foo2 (bar) 2.");
@@ -568,7 +568,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_35() throws Exception {
+    public void test_35() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
@@ -577,7 +577,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_36() throws Exception {
+    public void test_36() throws Throwable {
         testAnimo("the bar z.");
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
@@ -586,7 +586,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_37() throws Exception {
+    public void test_37() throws Throwable {
         testAnimo("the x a b.");
         testAnimo("the y (x) (a c).");
         assertAnimoResult("get a y", "a c.");

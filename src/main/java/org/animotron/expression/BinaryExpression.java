@@ -52,7 +52,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     }
 
     @Override
-    public void build() throws Exception {
+    public void build() throws Throwable {
         String uuid = UUID.randomUUID().toString();
         File tmp = new File(tmpStorage(), uuid);
         tmp.createNewFile();

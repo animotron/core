@@ -39,7 +39,7 @@ public class FormulaTest extends ATest {
 
 	@Test
 	@Ignore
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         __(
             new AnimoExpression("the qty / (get cost) (get price)."),
             new AnimoExpression("the cost * (get qty) (get price)."),

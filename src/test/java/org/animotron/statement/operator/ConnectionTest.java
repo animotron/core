@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.value;
 public class ConnectionTest extends ATest {
 	
     @Test
-    public void mimeType_usecase() throws Exception {
+    public void mimeType_usecase() throws Throwable {
         
         __(
 
@@ -113,7 +113,7 @@ public class ConnectionTest extends ATest {
     }
 	
     @Test
-    public void mimeType_one_more_usecase() throws Exception {
+    public void mimeType_one_more_usecase() throws Throwable {
 
         __(
 
@@ -190,7 +190,7 @@ public class ConnectionTest extends ATest {
 
     @Test
     @Ignore
-    public void mimeType_parallel() throws Exception {
+    public void mimeType_parallel() throws Throwable {
 
         __(
             new JExpression(_(THE._, "mime-type")),

@@ -68,7 +68,7 @@ public class StoreBinaryTest extends ATest {
     private static final String PATH = s+"content"+s+"article"+s+"test.txt";
 
 	@Test
-	public void storeAndSerialize() throws Exception {
+	public void storeAndSerialize() throws Throwable {
         System.out.println("Test binary stream ...");
         
     	Relationship r = new TestExpression(new ByteArrayInputStream(TXT.getBytes()), PATH);

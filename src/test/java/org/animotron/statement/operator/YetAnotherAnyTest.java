@@ -39,7 +39,7 @@ import static org.animotron.expression.JExpression.value;
 public class YetAnotherAnyTest extends ATest {
 
     @Test
-    public void deep_any() throws Exception {
+    public void deep_any() throws Throwable {
 
         __(
             new JExpression(
@@ -74,7 +74,7 @@ public class YetAnotherAnyTest extends ATest {
     @Test
     @Ignore
     //TODO is all select a closest not leaf by a predicate?
-    public void one_more_deep_any() throws Exception {
+    public void one_more_deep_any() throws Throwable {
 
         __(
             new JExpression(

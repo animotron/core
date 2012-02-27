@@ -40,7 +40,7 @@ import static org.animotron.expression.JExpression.value;
 public class CurrentSiteTest extends ATest {
 
     @Test
-    public void test() throws Exception {
+    public void test() throws Throwable {
 
     	JExpression.__(
             new JExpression(

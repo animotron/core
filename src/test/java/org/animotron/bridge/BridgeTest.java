@@ -49,7 +49,7 @@ public class BridgeTest extends ATest {
 	}
 	
 	@Test
-	public void FSloadAndSerialize() throws Exception {
+	public void FSloadAndSerialize() throws Throwable {
         System.out.println("Test repository loader ...");
         FSBridge._.load("src/test/animo/application-animo.animo");
         System.out.println("loaded ...");
@@ -58,7 +58,7 @@ public class BridgeTest extends ATest {
 	}
 
 	@Test
-	public void ZIPloadAndSerialize() throws Exception {
+	public void ZIPloadAndSerialize() throws Throwable {
         System.out.println("Test repository loader ...");
         new ZipBridge().load("src/test/resources/test.zip");
         System.out.println("loaded ...");

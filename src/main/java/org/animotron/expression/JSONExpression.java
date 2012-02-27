@@ -55,7 +55,7 @@ public class JSONExpression extends AbstractJSONExpression {
     }
 
     @Override
-    public void build() throws Exception {
+    public void build() throws Throwable {
         int l = 0;
         JsonToken token, prev = null;
         builder.start(THE._, name);

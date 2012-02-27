@@ -128,8 +128,8 @@ public class WORD extends DetermInstruction implements Prepare {
                                 sb.toString()
                             )
     					);
-    				} catch (Exception e) {
-    					pf.sendException(e);
+    				} catch (Throwable t) {
+    					pf.sendException(t);
     					return;
     				}
     				answered(pf, r);
@@ -156,7 +156,7 @@ public class WORD extends DetermInstruction implements Prepare {
 			AnimoGraph.execute(new GraphOperation<Void>() {
 
 				@Override
-				public Void execute() throws Exception {
+				public Void execute() throws Throwable {
 					IndexHits<Relationship> hits = Order._.queryDown(pf.getOPNode());
 					try {
 						for (Relationship r : hits) {
@@ -164,8 +164,8 @@ public class WORD extends DetermInstruction implements Prepare {
 								words.add(r, VALUE._.reference(r));
 							}
 						}
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (Throwable t) {
+						t.printStackTrace();
 					} finally {
 						hits.close();
 					}

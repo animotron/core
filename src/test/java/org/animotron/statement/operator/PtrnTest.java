@@ -34,7 +34,7 @@ public class PtrnTest extends ATest {
 
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
 
         __(
     		"the doc (part (number) (table (goods) (qty)) )"

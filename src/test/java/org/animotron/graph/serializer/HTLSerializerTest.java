@@ -31,13 +31,13 @@ import org.junit.Test;
  */
 public class HTLSerializerTest extends ATest {
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertHtmlResult(expression, out);
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         test(
             "(" +
                 "(!! \"<!doctype html>\") " +

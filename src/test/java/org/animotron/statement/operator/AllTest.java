@@ -39,7 +39,7 @@ import static org.animotron.expression.JExpression.value;
 public class AllTest extends ATest {
 	
     @Test
-    public void testALL() throws Exception {
+    public void testALL() throws Throwable {
 
         __(
             new JExpression(
@@ -60,7 +60,7 @@ public class AllTest extends ATest {
     }
 	
     @Test
-    public void testALLwithoutTHE() throws Exception {
+    public void testALLwithoutTHE() throws Throwable {
 
         __(
             new JExpression(
@@ -82,7 +82,7 @@ public class AllTest extends ATest {
     }
 
     @Test
-    public void testALLwithWITH() throws Exception {
+    public void testALLwithWITH() throws Throwable {
 
         __(
             new JExpression(
@@ -114,7 +114,7 @@ public class AllTest extends ATest {
     }
 
 	@Test
-	public void ALLwithEQ() throws Exception {
+	public void ALLwithEQ() throws Throwable {
 
         __(
             new JExpression(

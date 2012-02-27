@@ -55,9 +55,9 @@ public class Statements {
                 for (String i :statement.names()) {
                     statementsByName.put(i, statement);
                 }
-			} catch (Exception e) {
+			} catch (Throwable t) {
 				//TODO: log
-				e.printStackTrace();
+				t.printStackTrace();
 			}
 		} catch (ClassNotFoundException e) {
 			//should not happen
@@ -108,7 +108,7 @@ public class Statements {
 						}
 						bw.close();
 					    
-					} catch (Exception e) {
+					} catch (Throwable t) {
 					}
 
 			    Statements.ready = true;
@@ -127,7 +127,7 @@ public class Statements {
 				br.close();
 
 			    Statements.ready = true;
-			} catch (Exception e) {
+			} catch (Throwable t) {
 				//e.printStackTrace();
 			}
 		}
@@ -149,7 +149,7 @@ public class Statements {
 		try {
 			field = clazz.getField("_");
 			return (Statement) field.get(clazz);
-		} catch (Exception e) {
+		} catch (Throwable t) {
 			return null; //or RuntimeException?
 		}
 	}

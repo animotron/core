@@ -33,7 +33,7 @@ public class PossessiveCaseTest extends ATest {
 
 	@Test
 	@Ignore
-	public void inContext() throws Exception {
+	public void inContext() throws Throwable {
 		testAnimo("the user1 (user) (name \"user1\").");
 
 		testAnimo("the item1 (item) (name \"item1\").");
@@ -50,7 +50,7 @@ public class PossessiveCaseTest extends ATest {
 
 	@Test
 	@Ignore
-	public void inPFlow() throws Exception {
+	public void inPFlow() throws Throwable {
 		testAnimo("the user1 (user) (name \"user1\").");
 
 		testAnimo("the item1 (item) (name \"item1\").");

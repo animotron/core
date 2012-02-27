@@ -57,7 +57,7 @@ public class JExpression extends AbstractExpression {
     }
 
     @Override
-    public void build() throws Exception {
+    public void build() throws Throwable {
         for(Object[] i : e) {
             build(i);
         }

@@ -58,8 +58,8 @@ public class SHA512 extends DetermInstruction {
                 String message = STRING._.eval(pf, params).toString();
                 message = MessageDigester.calculate(message, "SHA-512");
                 answered(pf, new JExpression(value(message)));
-			} catch (Exception e) {
-				pf.sendException(e);
+			} catch (Throwable t) {
+				pf.sendException(t);
 			}
         }
 	}

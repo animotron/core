@@ -41,12 +41,12 @@ public class UUIDTest extends ATest {
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         test("uuid ");
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         test("uuid \"f0683653-3c4f-476e-9b32-5d070596c890\"");
     }
     

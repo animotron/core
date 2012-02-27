@@ -78,7 +78,7 @@ public class FastGraphBuilder extends GraphBuilder {
     }
 
     @Override
-    protected void fail(Throwable e) {
+    protected void fail(Throwable t) {
         if (root != null) {
             destructive(root);
         }

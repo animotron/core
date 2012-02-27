@@ -31,82 +31,82 @@ import org.junit.Test;
  */
 public class JSONSerializerTest extends ATest {
 
-    private void test(String in, String out) throws Exception {
+    private void test(String in, String out) throws Throwable {
         assertJSONResult(new AnimoExpression(in), out);
     }
 
     @Test
-    public void test_00() throws Exception {
+    public void test_00() throws Throwable {
         test("\"foo\"", "\"foo\"");
     }
 
     @Test
-    public void test_01() throws Exception {
+    public void test_01() throws Throwable {
         test("the a 1", "1");
     }
 
     @Test
-    public void test_02() throws Exception {
+    public void test_02() throws Throwable {
         test("\\b", "{\"b\":null}");
     }
 
     @Test
-    public void test_03() throws Exception {
+    public void test_03() throws Throwable {
         test("the a 1 2", "[1,2]");
     }
 
     @Test
-    public void test_04() throws Exception {
+    public void test_04() throws Throwable {
         test("((\\a) (\\b))", "[{\"a\":null},{\"b\":null}]");
     }
 
     @Test
-    public void test_05() throws Exception {
+    public void test_05() throws Throwable {
         test("\\a \\b 1", "{\"a\":{\"b\":1}}");
     }
 
     @Test
-    public void test_06() throws Exception {
+    public void test_06() throws Throwable {
         test("\\a (\\b 1) \"true\" (\\c 2)", "{\"a\":[{\"b\":1},true,{\"c\":2}]}");
     }
 
     @Test
-    public void test_07() throws Exception {
+    public void test_07() throws Throwable {
         test("\\a (@b 1) \"true\" (\\c 2)", "{\"a\":[{\"b\":1},true,{\"c\":2}]}");
     }
 
     @Test
-    public void test_08() throws Exception {
+    public void test_08() throws Throwable {
         test("\\a (\\b 1) \"true\" (@c 2)", "{\"a\":[{\"b\":1},true,{\"c\":2}]}");
     }
 
     @Test
-    public void test_09() throws Exception {
+    public void test_09() throws Throwable {
         test("\\a 1 \"true\" (@c 2)", "{\"a\":[1,true,{\"c\":2}]}");
     }
 
     @Test
-    public void test_10() throws Exception {
+    public void test_10() throws Throwable {
         test("\\a (b) 1 \"true\" (@c 2)", "{\"a\":[1,true,{\"c\":2}]}");
     }
 
     @Test
-    public void test_11() throws Exception {
+    public void test_11() throws Throwable {
         test("\\a (b) 1 \"true\" (@c 2) (d)", "{\"a\":[1,true,{\"c\":2}]}");
     }
 
     @Test
-    public void test_12() throws Exception {
+    public void test_12() throws Throwable {
         test("\\a (b) 1 \"true\" (\\c 2) (d) (\\d) (e)", "{\"a\":[1,true,{\"c\":2},{\"d\":null}]}");
     }
 
     @Test
-    public void test_13() throws Exception {
+    public void test_13() throws Throwable {
         test("\\a (b) 1 \"true\" (\\c 1 2 3) (d) (\\d) (e) 3", "{\"a\":[1,true,{\"c\":[1,2,3]},{\"d\":null},3]}");
     }
 
     @Test
-    public void test_14() throws Exception {
+    public void test_14() throws Throwable {
         test("\\a 1 \"true\" (\\c 1 2 3 (x)) (\\d) 3", "{\"a\":[1,true,{\"c\":[1,2,3]},{\"d\":null},3]}");
     }
 

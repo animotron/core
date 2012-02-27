@@ -53,7 +53,7 @@ import static org.animotron.expression.JExpression.element;
  */
 public class BindTest extends ATest {
 
-    public void test(Expression e, String animo) throws Exception {
+    public void test(Expression e, String animo) throws Throwable {
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, DigestSerializer._.serialize(e));
@@ -68,7 +68,7 @@ public class BindTest extends ATest {
     }
 
     @Test
-	public void test_00() throws Exception {
+	public void test_00() throws Throwable {
         Expression a = new JExpression(
             _(AN._, "a")
         );
@@ -79,7 +79,7 @@ public class BindTest extends ATest {
 	}
 
     @Test
-	public void test_01() throws Exception {
+	public void test_01() throws Throwable {
         Expression a = new JExpression(
             _(AN._, "a")
         );
@@ -90,7 +90,7 @@ public class BindTest extends ATest {
 	}
 
     @Test
-	public void test_02() throws Exception {
+	public void test_02() throws Throwable {
         Expression a = new JExpression(
             _(AN._, "a")
         );
@@ -101,7 +101,7 @@ public class BindTest extends ATest {
 	}
 
     @Test
-	public void test_03() throws Exception {
+	public void test_03() throws Throwable {
         Expression a = new JExpression(
             _(AN._, "a")
         );
@@ -112,7 +112,7 @@ public class BindTest extends ATest {
 	}
 
     @Test
-	public void test_04() throws Exception {
+	public void test_04() throws Throwable {
         Expression x = new JExpression(
             _(THE._, "x")
         );
@@ -126,7 +126,7 @@ public class BindTest extends ATest {
 	}
 
     @Test
-	public void test_05() throws Exception {
+	public void test_05() throws Throwable {
         Expression a = new JExpression(
             _(ANY._, "a")
         );
@@ -137,7 +137,7 @@ public class BindTest extends ATest {
 	}
 
     @Test
-	public void test_06() throws Exception {
+	public void test_06() throws Throwable {
         Expression a = new JExpression(
             _(ANY._, "a")
         );
@@ -155,7 +155,7 @@ public class BindTest extends ATest {
 
     @Test
     @Ignore
-	public void test_07() throws Exception {
+	public void test_07() throws Throwable {
         Expression x = new JExpression(
             _(THE._, "x")
         );
@@ -168,7 +168,7 @@ public class BindTest extends ATest {
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
 
     @Test
-	public void test_08() throws Exception {
+	public void test_08() throws Throwable {
         Expression a = new AnimoExpression("any a.");
         Expression b = new AnimoExpression("all b.");
         Expression c = new AnimoExpression("the c bla bla bla.");
