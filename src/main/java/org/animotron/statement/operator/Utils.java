@@ -44,6 +44,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -487,69 +488,83 @@ public class Utils {
     }
 
 	public static TraversalDescription THES =
-			Traversal.description().
-				breadthFirst().
-	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
-	    			@Override
-	    			public Evaluation evaluate(Path path) {
+			Traversal.description().depthFirst().
+	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
+                    @Override
+                    public Evaluation evaluate(Path path) {
 
                         if (path.length() == 0)
                             return Evaluation.EXCLUDE_AND_CONTINUE;
-                        
-	    				if (!path.endNode().equals(path.lastRelationship().getStartNode()))
-	    					return EXCLUDE_AND_PRUNE;
-	    				
-	    				if (Statements.relationshipType(path.lastRelationship()) == null)
-	    					return EXCLUDE_AND_PRUNE;
 
-	    				if (path.lastRelationship().isType(THE._))
-	    					return INCLUDE_AND_PRUNE;
+                        if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+                            return EXCLUDE_AND_PRUNE;
 
-	    				if (path.endNode().getId() == 0)
-	    					return EXCLUDE_AND_PRUNE;
-	    				
-	    				return EXCLUDE_AND_CONTINUE;
+                        if (Statements.relationshipType(path.lastRelationship()) == null)
+                            return EXCLUDE_AND_PRUNE;
 
-	    			}
-	            });
+                        if (path.lastRelationship().isType(THE._))
+                            return INCLUDE_AND_PRUNE;
+
+                        if (path.endNode().getId() == 0)
+                            return EXCLUDE_AND_PRUNE;
+
+                        return EXCLUDE_AND_CONTINUE;
+
+                    }
+                });
+
+	public static TraversalDescription REFS =
+			Traversal.description().depthFirst().
+	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
+                    @Override
+                    public Evaluation evaluate(Path path) {
+
+                        if (path.length() == 0)
+                            return Evaluation.EXCLUDE_AND_CONTINUE;
+
+                        if (path.endNode().equals(path.lastRelationship().getStartNode()))
+                            return EXCLUDE_AND_PRUNE;
+
+                        if (path.lastRelationship().isType(REF._))
+                            return INCLUDE_AND_PRUNE;
+
+                        return EXCLUDE_AND_CONTINUE;
+
+                    }
+                });
 
     public static void unfreeze(Node n) {
-        IndexHits<Relationship> hits = Order._.queryDown(n);
-        while (hits.hasNext()) {
-            unfreeze(hits.next());
+        Iterator<Path> it = REFS.traverse(n).iterator();
+        while (it.hasNext()) {
+            Relationship i = it.next().lastRelationship();
+            try {
+                FREEZE.remove(i);
+            } catch (Throwable t) {}
         }
     }
 
     public static void unfreeze(Relationship r) {
-        if (FREEZE.has(r)) {
-            if (!r.isType(REF._)) {
-                unfreeze(r.getEndNode());
-            }
-            FREEZE.remove(r);
-        }
+        unfreeze(r.getEndNode());
     }
 
     public static void freeze(Node n) {
-        IndexHits<Relationship> hits = Order._.queryDown(n);
-        while (hits.hasNext()) {
+        Iterator<Path> it = REFS.traverse(n).iterator();
+        while (it.hasNext()) {
             boolean f = true;
-            Relationship i = hits.next();
+            Relationship i = it.next().lastRelationship();
             for (Relationship j : i.getEndNode().getRelationships(INCOMING)) {
                 if (!j.isType(RESULT)) {
                     f = f && FREEZE.has(j);                    
                 }
             }
             if (f) {
-                freeze(i);
+                FREEZE.set(i, true);
             }
         }
     }
     
     public static void freeze(Relationship r) {
-        FREEZE.set(r, true);
-        if (!r.isType(REF._)) {
-            freeze(r.getEndNode());
-        }
+        freeze(r.getEndNode());
     }
 
 }
