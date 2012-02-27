@@ -516,18 +516,15 @@ public class Utils {
     public static void unfreeze(Node n) {
         IndexHits<Relationship> hits = Order._.queryDown(n);
         while (hits.hasNext()) {
-            Relationship i = hits.next();
-            if (FREEZE.has(i)) {
-                unfreeze(i);
-            }
+            unfreeze(hits.next());
         }
     }
 
     public static void unfreeze(Relationship r) {
-        unfreeze(r.getEndNode());
-        try {
+        if (FREEZE.has(r)) {
+            unfreeze(r.getEndNode());
             FREEZE.remove(r);
-        } catch (Exception e) {}
+        }
     }
 
     public static void freeze(Node n) {
