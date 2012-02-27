@@ -513,19 +513,22 @@ public class Utils {
 	    			}
 	            });
 
-    public static void unfreeze(Relationship r) {
-        IndexHits<Relationship> hits = Order._.queryDown(r.getEndNode());
+    public static void unfreeze(Node n) {
+        IndexHits<Relationship> hits = Order._.queryDown(n);
         while (hits.hasNext()) {
             unfreeze(hits.next());
         }
+    }
+
+    public static void unfreeze(Relationship r) {
         try {
             FREEZE.remove(r);
         } catch (Exception e) {}
+        unfreeze(r.getEndNode());
     }
 
-    public static void freeze(Relationship r) {
-        FREEZE.set(r, true);
-        IndexHits<Relationship> hits = Order._.queryDown(r.getEndNode());
+    public static void freeze(Node n) {
+        IndexHits<Relationship> hits = Order._.queryDown(n);
         while (hits.hasNext()) {
             boolean f = true;
             Relationship i = hits.next();
@@ -538,6 +541,11 @@ public class Utils {
                 freeze(i);
             }
         }
+    }
+    
+    public static void freeze(Relationship r) {
+        FREEZE.set(r, true);
+        freeze(r.getEndNode());
     }
 
 }
