@@ -38,8 +38,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.animotron.graph.Properties.FREEZE;
+import static org.neo4j.graphdb.Direction.*;
 
 /**
  * Compare operator 'WITH'.
@@ -167,7 +167,14 @@ public class WITH extends Operator implements Predicate {
 		
 		Set<Relationship> thes = new FastSet<Relationship>();
 		
-		final long ref = op.getEndNode().getSingleRelationship(REF._, OUTGOING).getEndNode().getId();
+		
+		long ref = -1; 
+		for (Relationship r : op.getEndNode().getRelationships(REF._, OUTGOING))
+			if (!FREEZE.has(r)) {
+				ref = r.getEndNode().getId();
+				break;
+			}
+		if (ref == -1) return null;
 		
 		QCAVector qVector = pf.getVector().answered(pf.getVector().getClosest());
 		Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());

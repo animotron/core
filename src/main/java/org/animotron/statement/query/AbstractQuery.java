@@ -48,6 +48,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static org.animotron.graph.Properties.FREEZE;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -81,10 +82,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     				if (path.length() < 2)
     					return EXCLUDE_AND_CONTINUE;
     				
-    				if (path.length() % 2 == 0 && path.lastRelationship().isType(AN._))
+    				Relationship r = path.lastRelationship();
+    				if (r.isType(REF._) && FREEZE.has(r))
+    					return EXCLUDE_AND_PRUNE;
+
+    				if (path.length() % 2 == 0 && r.isType(AN._))
     					return INCLUDE_AND_CONTINUE;
     				
-    				if (path.length() % 2 == 1 && !path.lastRelationship().isType(REF._))
+    				if (path.length() % 2 == 1 && !r.isType(REF._))
     					return EXCLUDE_AND_PRUNE;
     					
 
@@ -109,10 +114,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				if (path.length() < 2)
         					return EXCLUDE_AND_CONTINUE;
         				
-        				if (path.length() % 2 == 0 && path.lastRelationship().isType(AN._))
+        				Relationship r = path.lastRelationship();
+        				if (r.isType(REF._) && FREEZE.has(r))
+        					return EXCLUDE_AND_PRUNE;
+
+        				if (path.length() % 2 == 0 && r.isType(AN._))
         					return INCLUDE_AND_CONTINUE;
         				
-        				if (path.length() % 2 == 1 && !path.lastRelationship().isType(REF._))
+        				if (path.length() % 2 == 1 && !r.isType(REF._))
         					return EXCLUDE_AND_PRUNE;
         					
 
@@ -134,10 +143,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				if (path.length() < 1)
         					return EXCLUDE_AND_CONTINUE;
         				
-        				if (path.length() % 2 == 0 && !path.lastRelationship().isType(AN._))
+        				Relationship r = path.lastRelationship();
+        				if (r.isType(REF._) && FREEZE.has(r))
         					return EXCLUDE_AND_PRUNE;
         				
-        				if (path.length() % 2 == 1 && path.lastRelationship().isType(REF._))
+        				if (path.length() % 2 == 0 && !r.isType(AN._))
+        					return EXCLUDE_AND_PRUNE;
+        				
+        				if (path.length() % 2 == 1 && r.isType(REF._))
         					return INCLUDE_AND_CONTINUE;
         					
 
@@ -157,10 +170,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				if (path.length() == 0)
         					return EXCLUDE_AND_CONTINUE;
         					
-        				if (path.length() == 1 && path.lastRelationship().isType(REF._))
+        				Relationship r = path.lastRelationship();
+        				if (r.isType(REF._) && FREEZE.has(r))
+        					return EXCLUDE_AND_PRUNE;
+        				
+        				if (path.length() == 1 && r.isType(REF._))
     						return EXCLUDE_AND_CONTINUE;
         					
-        				if (path.length() == 2 && path.lastRelationship().isType(THE._))
+        				if (path.length() == 2 && r.isType(THE._))
     						return INCLUDE_AND_PRUNE;
         				
     					return EXCLUDE_AND_PRUNE;
@@ -231,11 +248,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     private void collectUSEs(final Set<Node> uses, final Set<Node> weaks, final Node node) {
 		for (Relationship r : node.getRelationships(OUTGOING, USE._)) {
 			for (Relationship rr : r.getEndNode().getRelationships(OUTGOING, REF._))
-				uses.add(rr.getEndNode());
+				if (!FREEZE.has(rr))
+					uses.add(rr.getEndNode());
 		}
 		for (Relationship r : node.getRelationships(OUTGOING, WEAK_USE._)) {
 			for (Relationship rr : r.getEndNode().getRelationships(OUTGOING, REF._))
-				weaks.add(rr.getEndNode());
+				if (!FREEZE.has(rr))
+					weaks.add(rr.getEndNode());
 		}
     }
 
@@ -371,6 +390,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					
 					Relationship firstR = firstRelationsip(path);
 					Relationship lastR = path.lastRelationship();
+					if (lastR.isType(REF._) && FREEZE.has(lastR))
+						return EXCLUDE_AND_PRUNE;
+					
 					if (firstR.isType(AN._)) {
 	    				if (path.length() % 2 == 1 && !lastR.isType(AN._))
 	    					return EXCLUDE_AND_PRUNE;
@@ -478,6 +500,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
+			if (r.isType(REF._) && FREEZE.has(r))
+				return EXCLUDE_AND_PRUNE;
 			
 			if (r.isType(SHALL._)) {
 				if (path.length() < 2)
@@ -531,6 +555,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			
 			final Relationship r = path.lastRelationship();
 			
+			if (r.isType(REF._) && FREEZE.has(r))
+				return EXCLUDE_AND_PRUNE;
+
 			if (r.isType(THE._)) {
 				Node n = r.getEndNode(); 
 				if (targets.contains(n)) {
@@ -616,6 +643,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
+			if (r.isType(REF._) && FREEZE.has(r))
+				return EXCLUDE_AND_PRUNE;
+				
 			
 			if (r.isType(THE._)) {
 				Node n = r.getEndNode(); 
@@ -662,9 +692,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
     protected boolean isLeaf(Node node) {
 		for (Relationship r : node.getRelationships(Direction.INCOMING, REF._))
-			for (Relationship rr : r.getStartNode().getRelationships(Direction.INCOMING, AN._))
-				if (rr.getStartNode().hasRelationship(Direction.INCOMING, THE._))
-					return false;
+			if (!FREEZE.has(r))
+				for (Relationship rr : r.getStartNode().getRelationships(Direction.INCOMING, AN._))
+					if (rr.getStartNode().hasRelationship(Direction.INCOMING, THE._))
+						return false;
 		
 		return true;
 	};

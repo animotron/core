@@ -88,11 +88,11 @@ public class Utils {
 	    				if (path.length() == 0)
 	    					return EXCLUDE_AND_CONTINUE;
 	    				
-	    				if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+	    				Relationship r = path.lastRelationship();
+	    				if (!path.endNode().equals(r.getStartNode()))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-	    				if (path.lastRelationship().isType(org.animotron.statement.operator.REF._) 
-	    						|| path.lastRelationship().isType(RESULT))
+	    				if (r.isType(REF._) || r.isType(RESULT))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
 
@@ -133,7 +133,7 @@ public class Utils {
 					IndexHits<Relationship> hits = Order._.queryDown(node);
 					try {
 						for (Relationship res : hits) {
-							if (res.isType(org.animotron.statement.operator.REF._)) {
+							if (res.isType(REF._)) {
 								pipe.put(vector.answered(res));
 								if (first == null)
 									first = res;
@@ -523,8 +523,12 @@ public class Utils {
                         if (path.endNode().equals(path.lastRelationship().getStartNode()))
                             return EXCLUDE_AND_PRUNE;
 
-                        if (path.lastRelationship().isType(REF._))
-                            return INCLUDE_AND_PRUNE;
+                        if (path.lastRelationship().isType(REF._)) {
+                			if (FREEZE.has(path.lastRelationship()))
+                				return EXCLUDE_AND_PRUNE;
+                            
+                        	return INCLUDE_AND_PRUNE;
+                        }
 
                         return EXCLUDE_AND_CONTINUE;
 
