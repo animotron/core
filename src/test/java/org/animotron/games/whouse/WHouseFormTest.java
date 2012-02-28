@@ -21,7 +21,7 @@
 package org.animotron.games.whouse;
 
 import org.animotron.ATest;
-import org.codehaus.jackson.JsonFactory;
+//import org.codehaus.jackson.JsonFactory;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
@@ -32,7 +32,7 @@ import static org.animotron.expression.AnimoExpression.__;
  */
 public class WHouseFormTest extends ATest {
 
-    private static final JsonFactory FACTORY = new JsonFactory();
+//    private static final JsonFactory FACTORY = new JsonFactory();
 
     @Test
     public void test_00() throws Throwable {
@@ -132,17 +132,17 @@ public class WHouseFormTest extends ATest {
         __(
                 "the whouse-issue " +
                     "(word \"warehouse issue document\") " +
-                    "(part (date) (issue-party) (whouse-party) (table row SKU)).",
+                    "(part (date) (issue-party) (receive-party) (table row SKU)).",
 
                 "the SKU part (goods) (qty) (price) (cost).",
 
                 "the date word \"date\".",
-                "the whouse-party word \"warehouse\".",
-                "the issue-party word \"issue\".",
+                "the receice-party (word \"receiver\") (party,receive).",
+                "the issue-party (word \"issuer\") (party,issue).",
                 "the goods word \"goods\".",
-                "the qty word \"quantity\".",
-                "the price word \"price\".",
-                "the cost word \"cost\".",
+                "the qty (word \"quantity\") (part (number) (UoM)).",
+                "the price (word \"price\") (part (number) (currency) (UoM)).",
+                "the cost (word \"cost\") (part (number) (currency)).",
 
 //                "the generate-form each (get prism) (any form-widget).",
 //                "the generate-table-row each (get row get prism) (any table-row-widget).",
