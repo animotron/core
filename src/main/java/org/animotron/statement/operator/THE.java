@@ -82,7 +82,16 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         return getDb().getRelationshipById((Long)ARID.get(relationship));
     }
 
-	public void init(IndexManager index) {
+    public Node getActualEndNode(Relationship r) {
+    	Node n = r.getEndNode();
+
+		if (r.isType(REF._))
+			return getDb().getNodeById((Long)ARID.get(n));
+		
+		return n;
+    }
+
+    public void init(IndexManager index) {
         the.init(index);
 	}
 

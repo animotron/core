@@ -99,7 +99,7 @@ public class GET extends AbstractQuery implements Shift {
 							Pipe pp = Utils.eval(pf.getController(), theNode);
 							QCAVector rr;
 							while ((rr = pp.take()) != null) {
-								thes.add(rr.getClosest().getEndNode());
+								thes.add(rr.getClosestEndNode());
 							}
 						} catch (Throwable t) {
 							pf.sendException(t);
@@ -404,7 +404,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, ref.getEndNode(), thes, onContext))
+		if (getByHave(pf, v, ref, THE._.getActualEndNode(ref), thes, onContext))
 			return true;
 
 		//search for local 'HAVE'

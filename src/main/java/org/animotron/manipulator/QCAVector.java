@@ -23,7 +23,9 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.DataOutputStream;
@@ -154,6 +156,17 @@ public class QCAVector {
 		if (answer != null)	return getAnswer(); 
 		
 		return question;
+	}
+
+	public Node getClosestEndNode() {
+		Relationship r = getClosest();
+		
+		Node n = r.getEndNode();
+		try {
+			return THE._.getActualRevision(n);
+		} catch (Exception e) {
+			return n;
+		}
 	}
 
 	public Relationship getUnrelaxedClosest() {

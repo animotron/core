@@ -26,6 +26,7 @@ import org.animotron.expression.JExpression;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.graph.Properties.UUID;
 
@@ -108,4 +109,26 @@ public class TheTest extends ATest {
         testAnimo("the e 1.");
         assertAnimoResultOneStep("e", "e 1."); //UNDERSTAND: is it correct, missing THE at beginning?
 	}
+
+    @Test
+    public void test_11() throws Throwable {
+
+        __(
+	        "the item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+        );
+
+        assertAnimoResult(
+            "get cost item",
+            "cost 10 (USD)."
+        );
+
+        __(
+	        "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+        );
+
+        assertAnimoResult(
+            "get cost item",
+            "cost 5 (USD)."
+		);
+    }
 }
