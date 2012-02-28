@@ -117,7 +117,8 @@ public class MessageDigester {
         md.update(statement.name().getBytes());
     }
 
-    public static void updateMD(MessageDigest md, Object reference) {
+    @SuppressWarnings("unchecked")
+	public static void updateMD(MessageDigest md, Object reference) {
         if (reference instanceof Iterable) {
             updateMD(md, (Iterable<Object[]>) reference);
         } else if (reference instanceof Object[][]) {

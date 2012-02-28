@@ -206,6 +206,7 @@ public class WITH extends Operator implements Predicate {
 	
 	public List<QCAVector> getExpecting(final PFlow pf, final Relationship op) throws InterruptedException, IOException {
 		
+		@SuppressWarnings("unchecked")
 		List<QCAVector> expected = (List<QCAVector>) pf.getData(op);
 
 		if (expected == null) {

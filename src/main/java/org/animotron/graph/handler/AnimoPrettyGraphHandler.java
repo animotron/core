@@ -69,7 +69,8 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         list = new LinkedList<Object[]>();
     }
 
-    @Override
+	@Override
+    @SuppressWarnings("unchecked")
     public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         Object[] item = {statement, r, level, isOne, new LinkedList<Object[]>(), !isOne, pos, parent};
         if (!stack.empty()) {
@@ -80,6 +81,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         root = stack.pop();
         int size = ((List<Object[]>)root[4]).size();
@@ -102,6 +104,8 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
     }
 
     Statement ps = null;
+
+    @SuppressWarnings("unchecked")
     private void write(Object[] o, int indent) throws IOException {
         Statement statement = (Statement) o[0];
         int level = (Integer) o[2];

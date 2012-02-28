@@ -25,7 +25,7 @@ import java.util.concurrent.SynchronousQueue;
 
 //import javolution.context.ObjectFactory;
 import javolution.lang.Reusable;
-import javolution.util.FastList;
+//import javolution.util.FastList;
 
 import org.animotron.manipulator.QCAVector;
 
