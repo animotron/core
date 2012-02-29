@@ -20,6 +20,7 @@
  */
 package org.animotron.manipulator;
 
+import javolution.util.FastMap;
 import org.animotron.exception.AnimoException;
 import org.animotron.io.Pipe;
 import org.animotron.statement.operator.Utils;
@@ -36,8 +37,6 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
-
-import javolution.util.FastMap;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
@@ -98,7 +97,7 @@ public class PFlow {
 	private void cyclingDetection(Relationship op) throws AnimoException {
 		int deep = 0; int count = 0;
 		//for (QCAVector v : path) {
-			if (deep > 0 && path.haveRelationship(op)) {
+			if (deep > 0 && path.hasRelationship(op)) {
 				if (count > 2)
 					throw new AnimoException(op, "cycling detected "+path);
                 else
@@ -258,7 +257,7 @@ public class PFlow {
 		boolean debug = false;
 		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
 		//for (QCAVector v : path) {
-			if (path.haveRelationship(r)) {
+			if (path.hasRelationship(r)) {
 				if (debug) System.out.println("FOUND!!!");
 				return true;
 			}
@@ -272,7 +271,7 @@ public class PFlow {
 		boolean debug = false;
 		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
 		//for (QCAVector v : path) {
-			if (path.haveRelationship(r)) {
+			if (path.hasRelationship(r)) {
 				if (debug) System.out.println("FOUND!!!");
 				return true;
 			}

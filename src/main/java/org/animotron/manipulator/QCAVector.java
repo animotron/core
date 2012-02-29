@@ -144,7 +144,7 @@ public class QCAVector {
 	protected void cyclingDetection(Relationship op) throws AnimoException {
 		if (context != null)
 			for (QCAVector v : context)
-				if (v.haveRelationship(op))
+				if (v.hasRelationship(op))
 					throw new AnimoException(op, "cycling detected for "+op.getId()+" at "+this);
 
 		
@@ -325,7 +325,7 @@ public class QCAVector {
 		return b.toString();
 	}
 
-	public boolean haveRelationship(Relationship r) {
+	public boolean hasRelationship(Relationship r) {
 		
 		if (r == null)
 			return false;
@@ -334,7 +334,7 @@ public class QCAVector {
 		
 		long id = r.getId();
 		
-		if (debug) System.out.print("haveRelationship "+question+" ("+question.getType()+") ");
+		if (debug) System.out.print("hasRelationship "+question+" ("+question.getType()+") ");
 		if (question != null && question.getId() == id) return true;
 
 		if (debug && answer != null) {
@@ -348,13 +348,13 @@ public class QCAVector {
 		
 		if (context != null) {
 			for (QCAVector c : context) {
-				if (c.haveRelationship(r))
+				if (c.hasRelationship(r))
 					return true;
 			}
 		}
 		
 		if (preceding_sibling != null)
-			return preceding_sibling.haveRelationship(r);
+			return preceding_sibling.hasRelationship(r);
 		
 		return false;
 	}
