@@ -628,4 +628,20 @@ public class GetTest extends ATest {
         assertAnimoResult("x", "x (the a (foo) (b)) (b c).");
     }
 
+    @Test
+    public void test_43() throws Throwable {
+        testAnimo("the a b c.");
+        testAnimo("the c get d.");
+        testAnimo("the x (get b a) (d e).");
+        assertAnimoResult("x", "x (b c d e) (d).");
+    }
+
+    @Test
+    public void test_44() throws Throwable {
+        testAnimo("the a b c.");
+        testAnimo("the c get d.");
+        testAnimo("the x an (get b a) (d e).");
+        assertAnimoResult("x", "x b c d e.");
+    }
+
 }

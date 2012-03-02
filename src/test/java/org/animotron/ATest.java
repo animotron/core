@@ -25,7 +25,6 @@ import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.BinarySerializer;
 import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.After;
 import org.junit.Before;
 import org.neo4j.graphdb.Relationship;
@@ -34,7 +33,6 @@ import java.io.*;
 
 import static org.animotron.graph.AnimoGraph.shutdownDB;
 import static org.animotron.graph.AnimoGraph.startDB;
-import static org.animotron.graph.Properties.HASH;
 import static org.junit.Assert.assertNotNull;
 
 
@@ -54,7 +52,6 @@ public abstract class ATest {
 
 	protected AnimoExpression testAnimo(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out);
         return expression;
     }
@@ -65,7 +62,6 @@ public abstract class ATest {
 
 	protected void testAnimoResult(String in, String out, String res) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertAnimo(expression, out);
 
         assertAnimoResult(expression, res);
