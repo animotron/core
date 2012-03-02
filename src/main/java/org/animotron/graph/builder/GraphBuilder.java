@@ -193,8 +193,7 @@ public abstract class GraphBuilder {
             finishTx(tx);
             tx = beginTx();
             try {
-                preparative(null);
-                modified(null);
+                catcher.clear();
                 fail(t);
             } finally {
                 finishTx(tx);

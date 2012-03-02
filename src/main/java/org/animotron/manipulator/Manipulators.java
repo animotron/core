@@ -51,6 +51,12 @@ public class Manipulators {
             preparative.add(node);
         }
 
+        //TODO refacor catcher
+		public void clear() {
+			modified = null;
+            preparative.clear();
+		}
+
 		public void preparative(Relationship r) {
 			preparative(r.getEndNode());
 		}
