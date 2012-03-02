@@ -617,8 +617,8 @@ public class GetTest extends ATest {
     @Test
     public void test_41() throws Throwable {
         testAnimo("the a (foo) (b c).");
-        testAnimo("the x (any foo) (get b this foo).");
-        assertAnimoResult("x", "x (the a (foo) (b)) (b c).");
+        testAnimo("the x (a) (get b this a).");
+        assertAnimoResult("any a", "the x (a (foo) (b)) (b c).");
     }
 
     @Test
