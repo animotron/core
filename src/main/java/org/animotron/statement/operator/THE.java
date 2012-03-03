@@ -99,6 +99,10 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         the.add(r, name);
 	}
 
+	public Node get(Node n) {
+        return getDb().getNodeById((Long)THEID.get(n));
+	}
+
 	public Relationship get(Object name) {
         return the.get(name);
 	}

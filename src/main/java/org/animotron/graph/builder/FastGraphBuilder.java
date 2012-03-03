@@ -123,6 +123,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         HASH.set(relationship, hash);
                         ARID.set(relationship, relationship.getId());
                         ARID.set(end, end.getId());
+                        THEID.set(end, end.getId());
                         THE._.add(relationship, reference);
                         Cache.RELATIONSHIP.add(relationship, hash);
                     } else {
@@ -136,6 +137,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         HASH.set(rr, hash);
                         ARID.set(relationship, rr.getId());
                         ARID.set(n, end.getId());
+                        THEID.set(end, n.getId());
                     }
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
