@@ -24,6 +24,8 @@ import org.animotron.ATest;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.animotron.expression.AnimoExpression.__; 
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -56,4 +58,11 @@ public class ThisTest extends ATest {
         assertAnimoResult("get uri y.", "uri \"y\".");
     }
 
+    @Test
+    public void test_10() throws Throwable {
+        __(
+    		"the rainbow each (this) (\\p id this)."
+		);
+        assertAnimoResult("rainbow (red) (green).", "rainbow (\\p \"red\") (\\p \"green\").");
+    }
 }
