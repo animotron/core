@@ -234,4 +234,15 @@ public class WHouseFormTest extends ATest {
 
     }
 
+    @Test
+    public void test_01() throws Throwable {
+    	__(
+			"the form part field.",
+			"the generator " +
+				"\\form " +
+					"(@id id this generator) " +
+					"(each (get part this generator) (\\input @name id this part))"
+		);
+        assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
+    }
 }
