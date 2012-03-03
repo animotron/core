@@ -92,10 +92,6 @@ public class Utils {
 	    				if (!path.endNode().equals(r.getStartNode()))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-	    				if (r.isType(REF._) || r.isType(RESULT))
-	    					return EXCLUDE_AND_PRUNE;
-	    				
-
     					if (path.lastRelationship().isType(THE._))
 	    					return INCLUDE_AND_CONTINUE;
 	    				

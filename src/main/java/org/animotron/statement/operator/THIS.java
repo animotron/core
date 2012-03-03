@@ -71,7 +71,8 @@ public class THIS extends Operator implements Reference, Evaluable {
 				thes.add(theNode.getClosest().getEndNode());
 			}
 
-			if (debug) Utils.debug(THIS._, op, thes);
+			//if (debug) 
+				Utils.debug(THIS._, op, thes);
 			
 			if (!Utils.results(pf)) {
 				FastList<QCAVector> list = FastList.newInstance();
@@ -106,30 +107,57 @@ public class THIS extends Operator implements Reference, Evaluable {
 					while (next != null) {
 						Relationship toCheck = next.getQuestion();
 						if (toCheck.isType(THIS._)) {
-							Node n = Utils.getByREF(toCheck).getEndNode();
-							if (thes.contains( n )) {
-								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
-								return true;
+							if (thes.isEmpty()) {
+								if (next.getUnrelaxedAnswer() != null) {
+									pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
+									return true;
+								}
+							} else {
+								Node n = Utils.getByREF(toCheck).getEndNode();
+								if (thes.contains( n )) {
+									pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
+									return true;
+								}
 							}
 						} else if (toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
-							Node n = Utils.getByREF(toCheck).getEndNode();
-							if (debug) System.out.println(n);
-							if (thes.contains( n )) {
-								if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
-								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
-								return true;
+							if (thes.isEmpty()) {
+								
+							} else {
+								Node n = Utils.getByREF(toCheck).getEndNode();
+								
+								if (debug) System.out.println(n);
+								
+								if (thes.contains( n )) {
+									if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
+									pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext())); //, next.getContext()
+									return true;
+								}
 							}
 						} else if (toCheck.isType(AN._)) {
-							Node n = Utils.getByREF(toCheck).getEndNode();
-							if (thes.contains( n )) {
-								IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
-								try {
-									for (Relationship r : hits) {
-										pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+							if (thes.isEmpty()) {
+								if (next.getUnrelaxedAnswer() != null) {
+									IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
+									try {
+										for (Relationship r : hits) {
+											pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+										}
+										return true;
+									} finally {
+										hits.close();
 									}
-									return true;
-								} finally {
-									hits.close();
+								}
+							} else {
+								Node n = Utils.getByREF(toCheck).getEndNode();
+								if (thes.contains( n )) {
+									IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
+									try {
+										for (Relationship r : hits) {
+											pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+										}
+										return true;
+									} finally {
+										hits.close();
+									}
 								}
 							}
 						}
