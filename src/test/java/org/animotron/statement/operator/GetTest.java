@@ -646,4 +646,17 @@ public class GetTest extends ATest {
         assertAnimoResult("x", "x b c d e.");
     }
 
+    @Test
+    public void test_45() throws Throwable {
+        testAnimo("the a get b.");
+        assertAnimoResult("a b", "a b.");
+    }
+
+    @Test
+    public void test_46() throws Throwable {
+        testAnimo("the c b.");
+        testAnimo("the a get b.");
+        assertAnimoResult("a c", "a c.");
+    }
+
 }
