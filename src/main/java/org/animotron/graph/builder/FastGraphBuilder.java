@@ -123,7 +123,6 @@ public class FastGraphBuilder extends GraphBuilder {
                         HASH.set(relationship, hash);
                         ARID.set(relationship, relationship.getId());
                         ARID.set(end, end.getId());
-                        THEID.set(end, end.getId());
                         THE._.add(relationship, reference);
                         Cache.RELATIONSHIP.add(relationship, hash);
                     } else {
