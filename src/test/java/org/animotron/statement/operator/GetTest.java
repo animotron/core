@@ -663,7 +663,7 @@ public class GetTest extends ATest {
     public void test_47() throws Throwable {
         testAnimo("the c b.");
         testAnimo("the a each (get b) (this b).");
-        assertAnimoResult("a c", "a c.");
+        assertAnimoResult("a (b) (c)", "a (b) (c).");
     }
 
 }
