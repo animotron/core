@@ -243,6 +243,14 @@ public class WHouseFormTest extends ATest {
 					"(@id id this generator) " +
 					"(each (get part this generator) (\\input @name id this part))"
 		);
-        assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
+        assertAnimoResult("generator form", "generator (\\form (@id \"form\") (\\input @name \"field\")).");
+        
+    	__(
+			"the form2 part (field1) (field2)."
+		);
+        assertAnimoResult(
+    		"generator form2", 
+    		"generator (\\form (@id \"form2\") (\\input @name \"field1\") (\\input @name \"field2\")).");
+
     }
 }
