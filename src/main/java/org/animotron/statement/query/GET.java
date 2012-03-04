@@ -123,10 +123,10 @@ public class GET extends AbstractQuery implements Shift {
 				final Set<Node> thes, 
 				final Set<Relationship> visitedREFs) throws IOException {
 			
-			//if (debug) { 
+			if (debug) { 
 				Utils.debug(GET._, op, thes);
 			//	System.out.println(pf.getVector());
-			//}
+			}
 
 			//check, maybe, result was already calculated
 			if (!Utils.results(pf)) {
@@ -417,7 +417,7 @@ public class GET extends AbstractQuery implements Shift {
 	}
 
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
-		if (!op.isType(ANY._)) {
+		if (!(op.isType(ANY._) || op.isType(GET._))) {
 			if (debug) 
 				System.out.println("["+pf.getOP()+"] answered "+op);
 			
@@ -463,6 +463,7 @@ public class GET extends AbstractQuery implements Shift {
 			relationships(ANY._, OUTGOING).
 			relationships(AN._, OUTGOING).
 			relationships(REF._, OUTGOING).
+			relationships(GET._, OUTGOING).
 			relationships(SHALL._, OUTGOING);
 	
 	private boolean getByHave(final PFlow pf, QCAVector vector, Relationship op, final Node context, final Set<Node> thes, final boolean onContext) {
@@ -481,7 +482,7 @@ public class GET extends AbstractQuery implements Shift {
 		try {
 	
 			for (Path path : trav.traverse(context)) {
-				//if (debug) 
+				if (debug) 
 					System.out.println("["+pf.getOP()+"] * "+path);
 				
 				if (path.length() == 1) {
@@ -499,7 +500,11 @@ public class GET extends AbstractQuery implements Shift {
 				
 				if (path.length() == 2) {
 					//UNDERSTAND: should we check context
-					if (relaxReference(pf, vector, path.relationships().iterator().next()))
+					Relationship r = path.relationships().iterator().next();
+					if (pf.getVector().getQuestion().getId() == r.getId())
+						continue;
+					
+					if (relaxReference(pf, vector, r))
 						return true;
 				}
 	
@@ -541,19 +546,10 @@ public class GET extends AbstractQuery implements Shift {
 								if (r.isType(AN._)) {
 									res = r;
 									ANs++;
-									
-	//								if (Utils.haveContext(r.getEndNode())) {
-	//									res = r;
-	//									//break;
-	//								} else if (res == null && (startBy.isType(REF._) || (op != null && (op.isType(REF._) || op.isType(RESULT))))) {
-	//									res = r;
-	//									//break;
-	//								}
 								} else {
 									if (ANs > 1) {
 										//check is it pseudo HAVE or IS topology. on HAVE return it else last of top 
 										if (r.isType(REF._) && it.hasNext()) {
-
 											r = it.next();
 											if (r.isType(AN._) && Utils.haveContext(r.getEndNode()))
 												res = r;
@@ -570,6 +566,12 @@ public class GET extends AbstractQuery implements Shift {
 										}
 										break;
 				
+									} else if (r.isType(GET._)) {
+										if (it.hasNext())
+											if (it.next().isType(REF._) && !it.hasNext())
+												res = r;
+										break;
+		
 									} else if (r.isType(SHALL._)) {
 										res = r;
 		
