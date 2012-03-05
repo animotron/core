@@ -78,8 +78,12 @@ public class GC extends Manipulator {
 	public Marker marker() {
 		return GCMarker._;
 	}
-	
-	private static class GCMarker extends AbstractMarker {
+
+    public void execute(Controller c, Node n) {
+        //TODO
+    }
+
+    private static class GCMarker extends AbstractMarker {
 
 		private static final Marker _ = new GCMarker(); 
 		private GCMarker() {super(State.GC);}

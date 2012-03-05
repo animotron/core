@@ -92,9 +92,9 @@ public class Manipulators {
         }
 
         private void destructive() throws IOException {
-			//for (Node n : destructive) {
-				//XXX: GC._.execute(n);
-			//}
+			for (Node n : destructive) {
+				GC._.execute(null, n);
+			}
 		}
 
     }
