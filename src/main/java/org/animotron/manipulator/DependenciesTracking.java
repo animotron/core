@@ -20,11 +20,11 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.traversal.Evaluation.*;
 import static org.neo4j.graphdb.Direction.*;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.State;
 import org.animotron.graph.serializer.CachedSerializer;
@@ -37,10 +37,8 @@ import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
-import org.neo4j.graphdb.traversal.Evaluation;
-import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.kernel.Traversal;
 
 import java.io.IOException;
 
@@ -58,8 +56,17 @@ public class DependenciesTracking extends StatementManipulator {
 //		System.out.println("DependenciesTracking");
 		Node current = THE._.getActualEndNode(op);
 		
-		for (Relationship r : current.getRelationships(REV, INCOMING)) {
-			walker(r.getStartNode());
+		Transaction tx = AnimoGraph.beginTx();
+		try {
+			for (Relationship r : current.getRelationships(REV, INCOMING)) {
+				walker(r.getStartNode());
+			}
+			tx.success();
+		} catch (Exception e) {
+			tx.failure();
+			e.printStackTrace();
+		} finally {
+			AnimoGraph.finishTx(tx);
 		}
         return null;
 	}
@@ -71,6 +78,7 @@ public class DependenciesTracking extends StatementManipulator {
 				System.out.println(path);
 				CachedSerializer.drop(path.lastRelationship());
 			}
+			r.delete();
 		}
 
 		IndexHits<Relationship> hits = Order._.queryDown(n);
