@@ -87,8 +87,10 @@ public class Manipulators {
         }
 
         private void modified() throws IOException {
-            if (modified != null)
+            if (modified != null) {
                 CachedSerializer.drop(modified);
+                DependenciesTracking._.execute(null, modified);
+            }
         }
 
         private void destructive() throws IOException {

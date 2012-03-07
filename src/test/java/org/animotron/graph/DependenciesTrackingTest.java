@@ -37,7 +37,7 @@ import static org.junit.Assert.assertNotNull;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class DependencyTrackingTest extends ATest {
+public class DependenciesTrackingTest extends ATest {
 
     @Test
     public void test_00() throws Throwable {
