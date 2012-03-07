@@ -507,6 +507,32 @@ public class Utils {
                     }
                 });
 
+	public static TraversalDescription THEs =
+			Traversal.description().depthFirst().
+	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
+                    @Override
+                    public Evaluation evaluate(Path path) {
+
+                        if (path.length() == 0)
+                            return Evaluation.EXCLUDE_AND_CONTINUE;
+
+                        if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+                            return EXCLUDE_AND_PRUNE;
+
+                        if (Statements.relationshipType(path.lastRelationship()) == null)
+                            return EXCLUDE_AND_PRUNE;
+
+                        if (path.lastRelationship().isType(THE._))
+                            return INCLUDE_AND_PRUNE;
+
+                        if (path.endNode().getId() == 0)
+                            return INCLUDE_AND_PRUNE;
+
+                        return EXCLUDE_AND_CONTINUE;
+
+                    }
+                });
+
 	public static TraversalDescription REFS =
 			Traversal.description().depthFirst().
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {

@@ -20,20 +20,20 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_CONTINUE;
-import static org.neo4j.graphdb.traversal.Evaluation.EXCLUDE_AND_PRUNE;
-import static org.neo4j.graphdb.traversal.Evaluation.INCLUDE_AND_CONTINUE;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
+import static org.neo4j.graphdb.Direction.*;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.State;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.io.Pipe;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
-import org.neo4j.graphdb.Direction;
+import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -54,55 +54,29 @@ public class DependenciesTracking extends StatementManipulator {
 	
 	private DependenciesTracking() {};
 	
-	private static TraversalDescription tdRESULTs = 
-			Traversal.description().
-				breadthFirst().
-				relationships(RESULT).
-	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
-	    			@Override
-	    			public Evaluation evaluate(Path path) {
-
-	    				if (path.length() == 0)
-	    					return EXCLUDE_AND_CONTINUE;
-	    				
-	    				System.out.println(path);
-	    				
-	    				Relationship r = path.lastRelationship();
-	    				if (!path.endNode().equals(r.getStartNode()))
-	    					return EXCLUDE_AND_PRUNE;
-	    				
-    					if (path.lastRelationship().isType(THE._))
-	    					return INCLUDE_AND_CONTINUE;
-	    				
-	    				return EXCLUDE_AND_CONTINUE;
-	    			}
-	    		});
-
 	public Pipe execute(final Controller controller, final Relationship op) throws IOException {
-		System.out.println("DependenciesTracking");
-		System.out.println(op);
+//		System.out.println("DependenciesTracking");
 		Node current = THE._.getActualEndNode(op);
-		System.out.println(current);
 		
-		System.out.println("REVs");
-		for (Relationship r : current.getRelationships(REV, Direction.OUTGOING)) {
-			walker(r);
+		for (Relationship r : current.getRelationships(REV, INCOMING)) {
+			walker(r.getStartNode());
 		}
         return null;
 	}
 	
-	private void walker(Relationship op) {
-		System.out.println(op);
+	private void walker(Node n) {
 
-		Node n = op.getEndNode();
-		
-		for (Path path : tdRESULTs.traverse(n)) {
-			System.out.println(path);
+		for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
+			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
+				System.out.println(path);
+				CachedSerializer.drop(path.lastRelationship());
+			}
 		}
 
 		IndexHits<Relationship> hits = Order._.queryDown(n);
 		for (Relationship r : hits) {
-			walker(r);
+			//System.out.println(r);
+			walker(r.getEndNode());
 		}
 	}
 	

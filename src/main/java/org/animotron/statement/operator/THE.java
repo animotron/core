@@ -85,7 +85,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     public Node getActualEndNode(Relationship r) {
     	Node n = r.getEndNode();
 
-		if (r.isType(REF._))
+		if (r.isType(REF._) || r.isType(THE._))
 			return getDb().getNodeById((Long)ARID.get(n));
 		
 		return n;
