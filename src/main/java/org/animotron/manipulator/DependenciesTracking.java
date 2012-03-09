@@ -54,9 +54,9 @@ public class DependenciesTracking extends StatementManipulator {
 	private DependenciesTracking() {};
 	
 	public Pipe execute(final Controller controller, final Relationship op) throws IOException {
-		System.out.println("DependenciesTracking");
+		//System.out.println("DependenciesTracking");
 		Node current = THE._.getActualEndNode(op);
-		System.out.println(current);
+		//System.out.println(current);
 		
 		Transaction tx = AnimoGraph.beginTx();
 		try {
@@ -82,14 +82,14 @@ public class DependenciesTracking extends StatementManipulator {
 
 		for (Relationship r : n.getRelationships(REF._, INCOMING)) {
 			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
-				System.out.println(path);
+				//System.out.println(path);
 				CachedSerializer.drop(path.lastRelationship());
 			}
 		}
 
 		for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
 			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
-				System.out.println(path);
+				//System.out.println(path);
 				CachedSerializer.drop(path.lastRelationship());
 			}
 			r.delete();
