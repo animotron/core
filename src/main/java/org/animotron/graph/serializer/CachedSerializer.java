@@ -41,7 +41,6 @@ import java.lang.reflect.Field;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.Properties.CACHE;
 import static org.animotron.graph.Properties.RUUID;
-import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -246,35 +245,22 @@ public abstract class CachedSerializer extends AbstractSerializer {
         this.ext = ext;
 	}
 
-    private String key (final Relationship r) throws IOException {
+    private static String key(String uuid, String ext) throws IOException {
         StringBuilder s = new StringBuilder(2);
-        String uuid;
-        if (RUUID.has(r)) {
-            uuid = (String) RUUID.get(r);
-        } else {
-            uuid =  execute(new GraphOperation<String> (){
-                @Override
-                public String execute() throws Throwable {
-                    String uuid = uuid();
-                    RUUID.set(r, uuid);
-                    return uuid;
-                }
-            });
-        }
         s.append(uuid);
         s.append(ext);
         return s.toString();
     }
 
-    public final void serialize(Relationship r, OutputStream out, Cache cache) throws IOException {
-        String key = key(r);
+    public final void serialize(Relationship r, OutputStream out, Cache cache, String uuid) throws IOException {
+        String key = key(uuid, ext);
         if (cache.available(key)) {
             cache.get(key, out);
         } else {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(r, os);
-                cache(r, cache);
+                cache(r, cache, uuid);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -283,15 +269,15 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-    public final void serialize(Relationship r, StringBuilder out, Cache cache) throws IOException {
-        String key = key(r);
+    public final void serialize(Relationship r, StringBuilder out, Cache cache, String uuid) throws IOException {
+        String key = key(uuid, ext);
         if (cache.available(key)) {
             cache.get(key, out);
         } else {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(r, os);
-                cache(r, cache);
+                cache(r, cache, uuid);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -300,8 +286,8 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-    public final String serialize(Relationship r, Cache cache) throws IOException {
-        String key = key(r);
+    public final String serialize(Relationship r, Cache cache, String uuid) throws IOException {
+        String key = key(uuid, ext);
         if (cache.available(key)) {
             return cache.get(key);
         } else {
@@ -309,7 +295,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             OutputStream os = cache.stream(key, out);
             try {
                 serialize(r, os);
-                cache(r, cache);
+                cache(r, cache, uuid);
             } catch (IOException e) {
                 cache.drop(key);
                 throw e;
@@ -319,7 +305,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
     
-    private void cache(final Relationship r, final Cache cache) {
+    private void cache(final Relationship r, final Cache cache, final String uuid) {
         final String[] entities;
         String entity = entity(cache);
         if (CACHE.has(r)) {
@@ -338,6 +324,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
         execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws Throwable {
+                RUUID.set(r, uuid);
                 CACHE.set(r, entities);
                 return null;
             }
@@ -355,7 +342,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             Field field = clazz.getField("_");
             Cache cache = (Cache) field.get(clazz);
             StringBuilder s = new StringBuilder(2);
-            cache.drop(uuid + token[0]);
+            cache.drop(key(uuid, token[0]));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

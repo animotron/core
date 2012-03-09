@@ -20,17 +20,17 @@
  */
 package org.animotron.graph;
 
-import java.io.IOException;
-
 import junit.framework.Assert;
-
 import org.animotron.ATest;
 import org.animotron.cache.FileCache;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.animotron.expression.AnimoExpression.__;
+import static org.animotron.utils.MessageDigester.uuid;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -133,7 +133,7 @@ public class DependenciesTrackingTest extends ATest {
         assertNotNull(op);
         System.out.println("Animo result serializer...");
         
-        String result = CachedSerializer.ANIMO_RESULT.serialize(new AnimoExpression(op), FileCache._);
+        String result = CachedSerializer.ANIMO_RESULT.serialize(new AnimoExpression(op), FileCache._, uuid());
         
         System.out.println(result);
         Assert.assertEquals("", expected, result);

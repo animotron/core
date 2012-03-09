@@ -55,7 +55,7 @@ public class UUID extends NonDetermInstruction {
 			try {
                 Relationship[] params = Order._.first(1, pf.getOP().getStartNode());
                 String uuid = params.length > 1
-                        ? uuid(STRING._.eval(pf, params).toString())
+                        ? uuid(STRING._.eval(pf, params).toString()).toString()
                         : uuid();
                 answered(pf, new JExpression(value(uuid)));
 			} catch (Throwable t) {
