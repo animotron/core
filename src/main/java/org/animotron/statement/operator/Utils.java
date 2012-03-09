@@ -489,6 +489,7 @@ public class Utils {
 
 	public static TraversalDescription THES =
 			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
                     @Override
                     public Evaluation evaluate(Path path) {
@@ -515,6 +516,7 @@ public class Utils {
 
 	public static TraversalDescription THEs =
 			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
                     @Override
                     public Evaluation evaluate(Path path) {
@@ -541,6 +543,7 @@ public class Utils {
 
 	public static TraversalDescription REFS =
 			Traversal.description().depthFirst().
+			uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
                     @Override
                     public Evaluation evaluate(Path path) {

@@ -109,19 +109,23 @@ public class DependenciesTrackingTest extends ATest {
             "get cost all item",
             "cost 10 (USD)."
         );
+        assertCachedAnimoResult(
+            "+ get cost all item",
+            "10."
+		);
 
         __(
 	        "the item2 (goods item) (qty (1) (kg)) (cost (5) (USD))."
         );
 
         assertAnimoResult(
-                "all item",
-                "cost 10 (USD)."
+                "get cost all item",
+                "cost 10 (USD). cost 5 (USD)."
     		);
 
         assertCachedAnimoResult(
-            "get cost all item",
-            "cost 15 (USD)."
+            "+ get cost all item",
+            "15."
 		);
     }
 

@@ -82,14 +82,14 @@ public class DependenciesTracking extends StatementManipulator {
 
 		for (Relationship r : n.getRelationships(REF._, INCOMING)) {
 			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
-				//System.out.println(path);
+				System.out.println(path);
 				CachedSerializer.drop(path.lastRelationship());
 			}
 		}
 
 		for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
 			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
-				//System.out.println(path);
+				System.out.println(path);
 				CachedSerializer.drop(path.lastRelationship());
 			}
 			r.delete();
