@@ -35,11 +35,10 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 	@Override
 	public final void onMessage(final PFlow pf) {
 		
-		if (pf.getController() != null)
-			pf.getController().startStatement(pf.getOP());
-		
 		//System.out.println("start "+Thread.currentThread());
 		try {
+			if (pf.getController() != null)
+				pf.getController().startStatement(pf.getOP());
 		
 			pf.waitBeforeClosePipe(1);
 			act(pf);
