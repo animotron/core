@@ -164,8 +164,8 @@ public class MessageDigester {
         return new UUID().toString();
     }
 
-    public static String uuid(String uuid) {
-        return new String(uuid);
+    public static UUID uuid(String uuid) {
+        return new UUID(uuid);
     }
 
 }
