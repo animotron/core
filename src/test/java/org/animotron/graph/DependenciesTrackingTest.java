@@ -93,6 +93,38 @@ public class DependenciesTrackingTest extends ATest {
 		);
     }
 
+    @Test
+    public void test_02() throws Throwable {
+
+        __(
+	        "the goods word \"goods\".",
+	        "the qty (part (number) (UoM)).",
+	        "the price (part (number) (currency) (UoM)).",
+	        "the cost (part (number) (currency)).",
+	        
+	        "the item1 (goods item) (qty (1) (kg)) (cost (10) (USD))."
+        );
+
+        assertCachedAnimoResult(
+            "get cost all item",
+            "cost 10 (USD)."
+        );
+
+        __(
+	        "the item2 (goods item) (qty (1) (kg)) (cost (5) (USD))."
+        );
+
+        assertAnimoResult(
+                "all item",
+                "cost 10 (USD)."
+    		);
+
+        assertCachedAnimoResult(
+            "get cost all item",
+            "cost 15 (USD)."
+		);
+    }
+
     protected void assertCachedAnimoResult(String op, String expected) throws IOException {
         assertNotNull(op);
         System.out.println("Animo result serializer...");
@@ -103,4 +135,5 @@ public class DependenciesTrackingTest extends ATest {
         Assert.assertEquals("", expected, result);
         System.out.println();
     }
+
 }

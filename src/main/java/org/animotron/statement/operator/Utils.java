@@ -41,7 +41,9 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
+import org.neo4j.graphdb.traversal.UniquenessFactory;
 import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -51,8 +53,7 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.INCOMING;
-import static org.neo4j.graphdb.Direction.OUTGOING;
+import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
@@ -78,7 +79,8 @@ public class Utils {
 
 	public static TraversalDescription td_THE = 
 			Traversal.description().
-				breadthFirst().
+				depthFirst().
+				uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 				relationships(AN._, INCOMING).
 				relationships(THE._, INCOMING).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
@@ -88,12 +90,16 @@ public class Utils {
 	    				if (path.length() == 0)
 	    					return EXCLUDE_AND_CONTINUE;
 	    				
+	    				//System.out.println(path);
+	    				
 	    				Relationship r = path.lastRelationship();
-	    				if (!path.endNode().equals(r.getStartNode()))
+	    				Node n = r.getStartNode();
+	    				
+	    				if (!path.endNode().equals(n))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-    					if (path.lastRelationship().isType(THE._))
-	    					return INCLUDE_AND_CONTINUE;
+    					if (r.isType(THE._) || THEID.has(n))
+	    					return INCLUDE_AND_PRUNE;
 	    				
 	    				return EXCLUDE_AND_CONTINUE;
 	    			}

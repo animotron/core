@@ -32,6 +32,7 @@ import org.animotron.io.Pipe;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
@@ -53,14 +54,20 @@ public class DependenciesTracking extends StatementManipulator {
 	private DependenciesTracking() {};
 	
 	public Pipe execute(final Controller controller, final Relationship op) throws IOException {
-//		System.out.println("DependenciesTracking");
+		System.out.println("DependenciesTracking");
 		Node current = THE._.getActualEndNode(op);
+		System.out.println(current);
 		
 		Transaction tx = AnimoGraph.beginTx();
 		try {
+			Node n = null;
 			for (Relationship r : current.getRelationships(REV, INCOMING)) {
-				walker(r.getStartNode());
+				n = r.getStartNode();
+				walker(n);
 			}
+			if (n == null)
+				walker(current);
+
 			tx.success();
 		} catch (Exception e) {
 			tx.failure();
@@ -73,9 +80,16 @@ public class DependenciesTracking extends StatementManipulator {
 	
 	private void walker(Node n) {
 
+		for (Relationship r : n.getRelationships(REF._, INCOMING)) {
+			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
+				//System.out.println(path);
+				CachedSerializer.drop(path.lastRelationship());
+			}
+		}
+
 		for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
 			for (Path path : Utils.THEs.traverse(r.getStartNode())) {
-				System.out.println(path);
+				//System.out.println(path);
 				CachedSerializer.drop(path.lastRelationship());
 			}
 			r.delete();

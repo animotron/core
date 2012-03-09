@@ -21,6 +21,8 @@
 package org.animotron.statement.query;
 
 import javolution.util.FastSet;
+
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
@@ -115,7 +117,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 		        for (Path path : td_IS_leaf.traverse(node)) {
 		        	
-		        	//System.out.println(path);
+		        	System.out.println(path);
 
 		        	Relationship r = path.lastRelationship();
 		        	if (!Utils.haveContext(r.getEndNode())) {
@@ -126,18 +128,23 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 
 	        			try {
 			        		res = getThe(r.getStartNode());
-		        			if (filtering(pf, res, uses, weaks)) {
-		        				pf.sendAnswer( res );
-		        				if (returnFirstOnly) return;
-		        			}
-	        			} catch (Throwable t) {
-	        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-	        					res = p.lastRelationship();
+			        		if (res != null) {
 			        			if (filtering(pf, res, uses, weaks)) {
 			        				pf.sendAnswer( res );
 			        				if (returnFirstOnly) return;
 			        			}
-	        				}
+			        		} else {
+		        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
+		        					res = p.lastRelationship();
+				        			if (filtering(pf, res, uses, weaks)) {
+				        				pf.sendAnswer( res );
+				        				if (returnFirstOnly) return;
+				        			}
+		        				}
+			        		}
+	        			} catch (Throwable t) {
+	        				pf.sendException(t);
+	        				return;
 						}
 		        	} else {
 		    			IndexHits<Relationship> hits = Order._.context(r.getEndNode());

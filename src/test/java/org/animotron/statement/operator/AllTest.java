@@ -20,6 +20,8 @@
  */
 package org.animotron.statement.operator;
 
+import java.io.IOException;
+
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.EQ;
@@ -28,7 +30,7 @@ import org.animotron.statement.query.ALL;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -142,5 +144,20 @@ public class AllTest extends ATest {
 		);
         //assertAnimoResult(test, "the test the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
 		assertAnimoResultOneStep(test, "the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+	}
+	
+	@Test
+	public void test_00() throws Exception {
+        __(
+	        "the item1 (goods item) (qty (1) (kg)) (cost (10) (USD)).",
+	        "the item2 (goods item) (qty (1) (kg)) (cost (5) (USD))."
+        );
+
+        //Thread.sleep(10000);
+        
+        assertAnimoResult(
+            "all item",
+            "the item1 (goods) (qty) (cost). the item2 (goods) (qty) (cost)."
+        );
 	}
 }
