@@ -26,8 +26,11 @@ import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.*;
-import org.neo4j.graphdb.Direction;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Operator;
+import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -35,13 +38,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.neo4j.graphdb.Direction.INCOMING;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 public abstract class AbstractUpdate extends Operator implements Evaluable {
 
-	protected AbstractUpdate(String... name) { super(name); }
+    private Node root;
+
+    protected AbstractUpdate(String... name) { super(name); }
 
     protected abstract void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException;
 
@@ -67,26 +75,31 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             //Set<Relationship> d = new FastSet<Relationship>();
             QCAVector v;
             while ((v = destination.take()) != null) {
-                Set<Relationship> the = new FastSet<Relationship>();
-                getThe(v, the);
-                execute(the, v.getClosest(), param);
+                getThe(v);
             }
         } finally {
             it.close();
         }
     }
 
-    private void getThe(QCAVector v, Set<Relationship> the) throws IOException {
+    private void getThe(QCAVector v) throws IOException {
         List<QCAVector> c = v.getContext();
         if (c != null) {
             for (QCAVector i : c) {
-                getThe(i, the);
+                getThe(i);
             }
         } else {
-        	Relationship r = v.getClosest().getEndNode().getSingleRelationship(THE._, Direction.INCOMING);
-        	if (r != null)
-        		the.add(r);
+            Node n = v.getClosest().getEndNode(); 
+            Relationship r = n.getSingleRelationship(THE._, INCOMING);
+            if (r != null) {
+                root = createNode();
+                copy(root, n);
+            }
         }
+    }
+
+    protected void copy(Node root, Node node) {
+
     }
 
 }

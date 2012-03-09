@@ -22,6 +22,7 @@ package org.animotron.statement.animo.update;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -37,9 +38,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_00() throws Throwable {
-        Relationship e = __(new AnimoExpression("the a x 1."));
+        Expression e = testAnimo("the a x 1.");
         eval(new AnimoExpression("add a y 2."));
         assertAnimo(e, "the a (x 1) (y 2).");
+        eval(new AnimoExpression("delete get x a."));
+        assertAnimo(e, "the a y 2.");
 	}
 
     @Test

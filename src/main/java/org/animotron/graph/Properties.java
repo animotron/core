@@ -29,7 +29,7 @@ import org.neo4j.graphdb.PropertyContainer;
  */
 public enum Properties  {
 	
-	NAME, VALUE, HASH, THEID, ARID, RID, CID, CONTEXT, TYPE, TO_NODE, MODIFIED, CACHE, UUID, FREEZE;
+	NAME, VALUE, HASH, THEID, ARID, RID, CID, UUID, RUUID, CONTEXT, TYPE, TO_NODE, CACHE, FREEZE;
 	
 	public Object get(PropertyContainer container) {
 		return container.getProperty(name());
