@@ -356,8 +356,8 @@ public abstract class CachedSerializer extends AbstractSerializer {
         AnimoGraph.execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws IOException {
-                String uuid = (String) RUUID.get(r);
                 if (CACHE.has(r)) {
+                    String uuid = (String) RUUID.get(r);
                     try {
                         for (String i : (String[]) CACHE.get(r)) {
                             drop(uuid, i);
@@ -366,8 +366,8 @@ public abstract class CachedSerializer extends AbstractSerializer {
                         throw e;
                     } finally {
                         CACHE.remove(r);
+                        RUUID.remove(r);
                     }
-                    RUUID.remove(r);
                 }
                 return null;
             }
