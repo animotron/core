@@ -31,6 +31,7 @@ import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.AnimoExpression.__;
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -153,11 +154,44 @@ public class AllTest extends ATest {
 	        "the item2 (goods item) (qty (1) (kg)) (cost (5) (USD))."
         );
 
-        //Thread.sleep(10000);
-        
         assertAnimoResult(
             "all item",
             "the item1 (goods) (qty) (cost). the item2 (goods) (qty) (cost)."
         );
 	}
+
+    @Test
+    //TODO is all select a closest not leaf by a predicate?
+    public void test_01() throws Throwable {
+
+    	__(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
+            )
+        );
+
+        JExpression a = new JExpression(
+            _(THE._, "a", _(ALL._, "S", _(WITH._, "X", value("α"))))
+        );
+        //assertAnimoResultOneStep(a, "the a the B (A) (Y \"β\").");
+        assertAnimoResultOneStep(a, "the a.");
+
+        JExpression b = new JExpression(
+            _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", value("β"))))
+        );
+        //assertAnimoResultOneStep(b, "the b the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(b, "the b.");
+
+        JExpression c = new JExpression(
+            _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", value("γ"))))
+        );
+        assertAnimoResultOneStep(c, "the c the C (B) (Z \"γ\") (X \"αα\").");
+
+    }
 }

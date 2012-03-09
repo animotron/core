@@ -27,8 +27,8 @@ import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.junit.Test;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -144,4 +144,37 @@ public class AnyTest extends ATest {
 		assertAnimoResult("get foo y1", "x1.");		
 		assertAnimoResult("any z with foo x2", "the y2 (z) (x2 (foo) 2).");		
 	}
+
+    @Test
+    public void test_03() throws Throwable {
+
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")))
+            )
+        );
+
+        JExpression test = new JExpression(
+            _(THE._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
+        );
+        //assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
+        assertAnimoResultOneStep(test, "the a.");
+
+        test = new JExpression(
+            _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", value("β"))))
+        );
+        //assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
+        assertAnimoResultOneStep(test, "the b.");
+
+        test = new JExpression(
+            _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))
+        );
+        assertAnimoResultOneStep(test, "the c the C (B) (Z \"γ\").");
+    }
 }

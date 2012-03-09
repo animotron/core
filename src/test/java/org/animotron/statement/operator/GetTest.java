@@ -25,6 +25,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
+import org.animotron.statement.relation.SHALL;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -674,4 +675,101 @@ public class GetTest extends ATest {
         assertAnimoResult("a (b) (c)", "a.");
     }
 
+    @Test
+    public void test_49() throws Throwable {
+
+        __(
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B", value("π")))
+            )
+        );
+
+        JExpression E = new JExpression(
+            _(THE._, "E", _(GET._, "A", _(AN._, "C")))
+        );
+        assertAnimoResult(E, "the E B \"π\".");
+
+    }
+
+    @Test
+    public void test_50() throws Throwable {
+
+        __(
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(SHALL._, "B", value("π")))
+            ),
+            new JExpression(
+                    _(THE._, "D", _(AN._, "C"))
+            )
+        );
+
+        JExpression E = new JExpression(
+            _(THE._, "E", _(GET._, "A", _(AN._, "D")))
+        );
+        //XXX: assertAnimoResult(E, "the E B \"π\".");
+        assertAnimoResult(E, "the E shall B \"π\".");
+    }
+
+    @Test
+    public void test_51() throws Throwable {
+
+        __(
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B", value("π")))
+            ),
+            new JExpression(
+                    _(THE._, "D", _(AN._, "C"))
+            )
+        );
+
+        JExpression E = new JExpression(
+            _(THE._, "E", _(GET._, "A", _(AN._, "D")))
+        );
+        assertAnimoResult(E, "the E B \"π\".");
+    }
+
+    @Test
+    public void test_000() throws Throwable {
+        testAnimo("the a (x) (foo 1).");
+        testAnimo("the y (a) (get foo).");
+        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
+    }
+
+    @Test
+    public void test_001() throws Throwable {
+        testAnimo("the a (x) (foo 1).");
+        testAnimo("the y (any x) (get foo).");
+        assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
+    }
+
+    @Test
+    public void test_002() throws Throwable {
+        testAnimo("the a (x) (foo 1).");
+        testAnimo("the y (all x) (get foo).");
+        assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
+    }
+
+    @Test
+    public void test_003() throws Throwable {
+        testAnimo("the a (x) (foo 1).");
+        testAnimo("the y (prefer x use a) (get foo).");
+        assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
+    }
+
+    @Test
+    public void test_004() throws Throwable {
+        testAnimo("the a (x) (foo 1).");
+        testAnimo("the y get foo.");
+        testAnimo("the z y any x.");
+        assertAnimoResult("z", "z y foo 1.");
+    }
 }
