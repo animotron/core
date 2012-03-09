@@ -41,6 +41,7 @@ import java.lang.reflect.Field;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.Properties.CACHE;
 import static org.animotron.graph.Properties.RUUID;
+import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -252,6 +253,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
         return s.toString();
     }
 
+    public final void serialize(Relationship r, OutputStream out, Cache cache) throws IOException {
+        serialize(r, out, cache, uuid());
+    }
+
     public final void serialize(Relationship r, OutputStream out, Cache cache, String uuid) throws IOException {
         String key = key(uuid, ext);
         if (cache.available(key)) {
@@ -269,6 +274,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
+    public final void serialize(Relationship r, StringBuilder out, Cache cache) throws IOException {
+        serialize(r, out, cache, uuid());
+    }
+
     public final void serialize(Relationship r, StringBuilder out, Cache cache, String uuid) throws IOException {
         String key = key(uuid, ext);
         if (cache.available(key)) {
@@ -284,6 +293,10 @@ public abstract class CachedSerializer extends AbstractSerializer {
             }
             os.close();
         }
+    }
+
+    public final String serialize(Relationship r, Cache cache) throws IOException {
+        return serialize(r, cache, uuid());
     }
 
     public final String serialize(Relationship r, Cache cache, String uuid) throws IOException {

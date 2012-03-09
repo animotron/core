@@ -133,7 +133,7 @@ public class DependenciesTrackingTest extends ATest {
         assertNotNull(op);
         System.out.println("Animo result serializer...");
         
-        String result = CachedSerializer.ANIMO_RESULT.serialize(new AnimoExpression(op), FileCache._, uuid());
+        String result = CachedSerializer.ANIMO_RESULT.serialize(new AnimoExpression(op), FileCache._);
         
         System.out.println(result);
         Assert.assertEquals("", expected, result);
