@@ -188,6 +188,9 @@ public class PFlow {
 	}
 	
 	public void countDown(Pipe pipe) {
+		if (waitBeforeClosePipe == null)
+			pipe.close();
+
 		waitBeforeClosePipe.countDown();
 		if (waitBeforeClosePipe.getCount() == 0)
 			pipe.close();
