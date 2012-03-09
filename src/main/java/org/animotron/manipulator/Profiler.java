@@ -94,8 +94,10 @@ public class Profiler implements Controller {
 		}
 		
 		public void start(Relationship op) {
-			if (startTS.containsKey(op))
+			if (startTS.containsKey(op)) {
 				System.out.println("Profilling ERROR 2");
+				throw new RuntimeException("cycling detected @ "+op);
+			}
 			
 			startTS.put(op, System.currentTimeMillis());
 		}
