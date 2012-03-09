@@ -28,6 +28,7 @@ import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.*;
 import org.animotron.graph.traverser.*;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.utils.MessageDigester;
 import org.codehaus.jackson.JsonFactory;
 import org.neo4j.graphdb.Relationship;
 
@@ -41,7 +42,6 @@ import java.lang.reflect.Field;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.Properties.CACHE;
 import static org.animotron.graph.Properties.RUUID;
-import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -253,8 +253,12 @@ public abstract class CachedSerializer extends AbstractSerializer {
         return s.toString();
     }
 
+    private String uuid(Relationship r) {
+        return RUUID.has(r) ? (String) RUUID.get(r) : MessageDigester.uuid();
+    }
+
     public final void serialize(Relationship r, OutputStream out, Cache cache) throws IOException {
-        serialize(r, out, cache, uuid());
+        serialize(r, out, cache, uuid(r));
     }
 
     public final void serialize(Relationship r, OutputStream out, Cache cache, String uuid) throws IOException {
@@ -275,7 +279,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
     }
 
     public final void serialize(Relationship r, StringBuilder out, Cache cache) throws IOException {
-        serialize(r, out, cache, uuid());
+        serialize(r, out, cache, uuid(r));
     }
 
     public final void serialize(Relationship r, StringBuilder out, Cache cache, String uuid) throws IOException {
@@ -296,7 +300,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
     }
 
     public final String serialize(Relationship r, Cache cache) throws IOException {
-        return serialize(r, cache, uuid());
+        return serialize(r, cache, uuid(r));
     }
 
     public final String serialize(Relationship r, Cache cache, String uuid) throws IOException {
