@@ -36,6 +36,7 @@ import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.Properties.*;
+import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * Operator 'THE'.
@@ -110,7 +111,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
-        UUID.set(r, java.util.UUID.randomUUID().toString());
+        UUID.set(r, uuid());
         ARID.set(r, r.getId());
         ARID.set(n, n.getId());
         add(r, name);

@@ -41,6 +41,7 @@ import java.lang.reflect.Field;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.Properties.CACHE;
 import static org.animotron.graph.Properties.RUUID;
+import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -254,7 +255,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
             uuid =  execute(new GraphOperation<String> (){
                 @Override
                 public String execute() throws Throwable {
-                    String uuid = java.util.UUID.randomUUID().toString();
+                    String uuid = uuid();
                     RUUID.set(r, uuid);
                     return uuid;
                 }

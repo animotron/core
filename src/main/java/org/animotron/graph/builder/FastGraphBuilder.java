@@ -39,8 +39,7 @@ import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.statement.operator.Utils.freeze;
 import static org.animotron.statement.operator.Utils.unfreeze;
-import static org.animotron.utils.MessageDigester.cloneMD;
-import static org.animotron.utils.MessageDigester.updateMD;
+import static org.animotron.utils.MessageDigester.*;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -118,7 +117,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     relationship = THE._.get(reference);
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, THE._);
-                        UUID.set(relationship, java.util.UUID.randomUUID().toString());
+                        UUID.set(relationship, uuid());
                         HASH.set(relationship, hash);
                         ARID.set(relationship, relationship.getId());
                         ARID.set(end, end.getId());
@@ -130,7 +129,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         long arid = (Long) ARID.get(n);
                         Node rn = getDb().getNodeById(arid);
                         Relationship rr = rn.createRelationshipTo(end, REV);
-                        UUID.set(rr, java.util.UUID.randomUUID().toString());
+                        UUID.set(rr, uuid());
                         HASH.set(rr, hash);
                         ARID.set(relationship, rr.getId());
                         ARID.set(n, end.getId());
@@ -151,7 +150,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 long arid = (Long) ARID.get(n);
                 Node rn = getDb().getNodeById(arid);
                 Relationship rr = rn.createRelationshipTo(end, REV);
-                UUID.set(rr, java.util.UUID.randomUUID().toString());
+                UUID.set(rr, uuid());
                 HASH.set(rr, hash);
                 ARID.set(relationship, rr.getId());
                 ARID.set(n, end.getId());

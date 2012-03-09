@@ -25,12 +25,10 @@ import org.animotron.utils.MessageDigester;
 
 import java.io.*;
 import java.security.MessageDigest;
-import java.util.UUID;
 
 import static org.animotron.graph.AnimoGraph.binStorage;
 import static org.animotron.graph.AnimoGraph.tmpStorage;
-import static org.animotron.utils.MessageDigester.byteArrayToHex;
-import static org.animotron.utils.MessageDigester.longToHex;
+import static org.animotron.utils.MessageDigester.*;
 
 
 /**
@@ -53,7 +51,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
 
     @Override
     public void build() throws Throwable {
-        String uuid = UUID.randomUUID().toString();
+        String uuid = uuid();
         File tmp = new File(tmpStorage(), uuid);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);

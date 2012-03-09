@@ -100,6 +100,11 @@
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.eaio.uuid</groupId>
+			<artifactId>uuid</artifactId>
+			<version>3.2</version>
+		</dependency>
 	</dependencies>
 	
 	<dependencyManagement>
@@ -151,7 +156,10 @@
             <name>Jetlang Repository for Maven</name>
             <url>http://jetlang.googlecode.com/svn/repo/</url>
         </repository>		
-		<!-- 
+        <repository>
+			<id>eaio.com</id>
+			<url>http://eaio.com/maven2</url>
+		</repository>		<!--
 		<repository>
 			<id>http://repository.codehaus.org/</id>
 			<url>http://repository.codehaus.org/</url>

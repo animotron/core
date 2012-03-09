@@ -95,7 +95,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                 relationship = THE._.get(reference);
                 if (relationship == null) {
                     relationship = getROOT().createRelationshipTo(end, THE._);
-                    UUID.set(relationship, java.util.UUID.randomUUID().toString());
+                    UUID.set(relationship, uuid());
                     HASH.set(relationship, hash);
                     ARID.set(relationship, relationship.getId());
                     ARID.set(end, end.getId());
@@ -107,7 +107,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                     long arid = (Long) ARID.get(n);
                     Node rn = getDb().getNodeById(arid);
                     Relationship rr = rn.createRelationshipTo(end, REV);
-                    UUID.set(rr, java.util.UUID.randomUUID().toString());
+                    UUID.set(rr, uuid());
                     HASH.set(rr, hash);
                     ARID.set(relationship, rr.getId());
                     ARID.set(n, end.getId());
@@ -127,7 +127,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             long arid = (Long) ARID.get(n);
             Node rn = getDb().getNodeById(arid);
             Relationship rr = rn.createRelationshipTo(end, REV);
-            UUID.set(rr, java.util.UUID.randomUUID().toString());
+            UUID.set(rr, uuid());
             HASH.set(rr, hash);
             ARID.set(relationship, rr.getId());
             ARID.set(n, end.getId());

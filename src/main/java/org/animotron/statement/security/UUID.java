@@ -29,6 +29,7 @@ import org.animotron.statement.string.STRING;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.JExpression.value;
+import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * Security instruction 'uuid'.
@@ -53,10 +54,10 @@ public class UUID extends NonDetermInstruction {
         public void act(final PFlow pf) {
 			try {
                 Relationship[] params = Order._.first(1, pf.getOP().getStartNode());
-                java.util.UUID uuid = params.length > 1
-                        ? java.util.UUID.fromString(STRING._.eval(pf, params).toString())
-                        : java.util.UUID.randomUUID();
-                answered(pf, new JExpression(value(uuid.toString())));
+                String uuid = params.length > 1
+                        ? uuid(STRING._.eval(pf, params).toString())
+                        : uuid();`
+                answered(pf, new JExpression(value(uuid)));
 			} catch (Throwable t) {
 				pf.sendException(t);
 			}

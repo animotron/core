@@ -20,6 +20,7 @@
  */
 package org.animotron.utils;
 
+import com.eaio.uuid.UUID;
 import org.animotron.statement.Statement;
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Node;
@@ -157,6 +158,14 @@ public class MessageDigester {
         updateMD(tmp, reference);
         updateMD(tmp, statement);
         md.update(tmp.digest());
+    }
+
+    public static String uuid() {
+        return new UUID().toString();
+    }
+
+    public static String uuid(String uuid) {
+        return new String(uuid);
     }
 
 }

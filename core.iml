@@ -15,7 +15,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.sleepycat:je:4.1.10" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-kernel:1.6" level="project" />
     <orderEntry type="library" name="Maven: org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-lucene-index:1.6" level="project" />
@@ -49,6 +48,7 @@
     <orderEntry type="library" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.4" level="project" />
     <orderEntry type="library" name="Maven: org.jetlang:jetlang:0.2.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
+    <orderEntry type="library" name="Maven: com.eaio.uuid:uuid:3.2" level="project" />
   </component>
 </module>
 
