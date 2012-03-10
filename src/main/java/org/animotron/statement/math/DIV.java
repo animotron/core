@@ -27,7 +27,7 @@ import java.io.IOException;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class DIV extends MathOperator {
+public class DIV extends MathInstruction {
 
 	public static final DIV _ = new DIV();
 

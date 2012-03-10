@@ -30,9 +30,9 @@ import java.io.IOException;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class AbstractMathOperator extends DetermInstruction {
+public abstract class AbstractMathInstruction extends DetermInstruction {
 
-	protected AbstractMathOperator(String... name) { super(name); }
+	protected AbstractMathInstruction(String... name) { super(name); }
 
     protected AnimObject param (Relationship r) throws IOException {
     	return new AnimObject(r);

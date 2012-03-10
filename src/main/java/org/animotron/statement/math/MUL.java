@@ -25,7 +25,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class MUL extends MathOperator {
+public class MUL extends MathInstruction {
 	
 	public static final MUL _ = new MUL();
 	

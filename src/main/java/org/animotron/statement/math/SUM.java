@@ -25,7 +25,7 @@ package org.animotron.statement.math;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUM extends MathOperator {
+public class SUM extends MathInstruction {
 	
 	public static final SUM _ = new SUM();
 	

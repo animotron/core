@@ -27,7 +27,7 @@ import java.io.IOException;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class SUB extends MathOperator {
+public class SUB extends MathInstruction {
 
 	public static final SUB _ = new SUB();
 

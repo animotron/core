@@ -51,9 +51,9 @@ import static org.animotron.graph.RelationshipTypes.TRI;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class MathOperator extends AbstractMathOperator implements Evaluable, Prepare {
+public abstract class MathInstruction extends AbstractMathInstruction implements Evaluable, Prepare {
 
-	protected MathOperator(String name) { super(name); }
+	protected MathInstruction(String name) { super(name); }
 
 //    protected abstract AnimObject execute (AnimObject a, AnimObject b) throws IOException;
 //    protected abstract AnimObject execute (AnimObject a);
@@ -99,7 +99,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
                 				Object obj = THE._.reference(param);
                 				if (obj != null && obj instanceof String ) {
                 					s = Statements.name((String) obj);
-                					if (s instanceof MathOperator) {
+                					if (s instanceof MathInstruction) {
                 						x = action(x, param);
                 						continue;
                 					}
@@ -111,7 +111,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
                             } catch (Throwable t){}							
 	        			}
 	        			if (s instanceof Evaluable) {
-	        				if (s instanceof MathOperator) {
+	        				if (s instanceof MathInstruction) {
         						x = action(x, param);
         						continue;
 	        				} else {

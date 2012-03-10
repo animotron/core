@@ -28,7 +28,7 @@ import org.animotron.io.Pipe;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.math.MathOperator;
+import org.animotron.statement.math.MathInstruction;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
@@ -166,7 +166,7 @@ public abstract class Manipulator {
 	                        }
 	            			
 	
-	                        if (s != null && s instanceof MathOperator && !fullEval) {
+	                        if (s != null && s instanceof MathInstruction && !fullEval) {
 	                        	pipe.write(context);
 
 	                        } else if (s != null && s instanceof Evaluable) {

@@ -93,7 +93,7 @@ public class AnimObject extends AbstractExpression {
     				Object obj = THE._.reference(ref.getEndNode());
     				if (obj != null && obj instanceof String ) {
     					Statement s = Statements.name((String) obj);
-    					if (s instanceof MathOperator) {
+    					if (s instanceof MathInstruction) {
 							elements.add(new AnimObject(r));
 							return true;
     					}
