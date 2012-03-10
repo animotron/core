@@ -30,6 +30,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
@@ -56,20 +57,20 @@ public class AnimObject extends AbstractExpression {
 	PFlow pf = null;
 	Relationship r;
 	List<Relationship> elements = null;
-    Statement op = null;
+    Instruction op = null;
 
 	public AnimObject(Relationship r) {
         super(null);
 		this.r = r;
 	}
 
-	public AnimObject(Statement op, List<Relationship> elements) {
+	public AnimObject(Instruction op, List<Relationship> elements) {
         super(new FastGraphBuilder());
 		this.elements = elements;
         this.op = op;
 	}
 
-	public AnimObject(Statement op, Relationship... elements) {
+	public AnimObject(Instruction op, Relationship... elements) {
         super(new FastGraphBuilder());
         this.elements = new FastList();
         for (Relationship r : elements) {
@@ -165,7 +166,7 @@ public class AnimObject extends AbstractExpression {
     @Override
     public void build() throws Throwable {
         builder.start(AN._);
-            builder._(REF._, op);
+            builder._(REF._, op.name());
             for (Relationship r : elements) {
                 builder.bind(r);
             }
