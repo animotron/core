@@ -38,4 +38,7 @@ public class SUB extends MathInstruction {
         return MUL._.execute(AnimObject.MINUS_ONE, a);
     }
 
+    protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
+    	return null; //TODO: new AnimObject(this, a, b);
+    }
 }

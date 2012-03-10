@@ -58,9 +58,10 @@ public abstract class MathInstruction extends AbstractMathInstruction implements
 //    protected abstract AnimObject execute (AnimObject a, AnimObject b) throws IOException;
 //    protected abstract AnimObject execute (AnimObject a);
 
-    protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
-    	return new AnimObject(this, a, b);
-    }
+    protected abstract AnimObject execute(AnimObject a, AnimObject b) throws IOException;
+//	{
+//    	return new AnimObject(this, a, b);
+//    }
 
     protected AnimObject execute(AnimObject a) throws IOException {
         return a;

@@ -38,4 +38,7 @@ public class DIV extends MathInstruction {
         return execute(AnimObject.ONE, a);
     }
 
+    protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
+    	return null; //TODO: new AnimObject(this, a, b);
+    }
 }
