@@ -166,7 +166,7 @@ public class AnimObject extends AbstractExpression {
     @Override
     public void build() throws Throwable {
         builder.start(AN._);
-            builder._(REF._, op);
+            builder._(REF._, op.name());
             for (Relationship r : elements) {
                 builder.bind(r);
             }

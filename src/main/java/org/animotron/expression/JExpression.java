@@ -79,7 +79,7 @@ public class JExpression extends AbstractExpression {
         } else {
             if (e[0] instanceof Instruction) {
                 builder.start(AN._);
-                builder._(REF._, e[0]);
+                builder._(REF._, ((Instruction) e[0]).name());
             } else if (e[0] instanceof Operator) {
                 builder.start((Operator) e[0]);
                 if (e[1] instanceof Object[]) {
