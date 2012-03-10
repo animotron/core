@@ -170,7 +170,7 @@ public class AnimObject extends AbstractExpression {
             for (Relationship r : elements) {
                 if (r.isType(REF._)) {
                     builder.start(AN._);
-                        builder.bind(r);
+                        builder._(REF._, r.getEndNode());
                     builder.end();
                 } else {
                     builder.bind(r);
