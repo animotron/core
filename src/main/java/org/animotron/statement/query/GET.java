@@ -421,7 +421,8 @@ public class GET extends AbstractQuery implements Shift {
 			if (debug) 
 				System.out.println("["+pf.getOP()+"] answered "+op);
 			
-			pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
+			pf.sendAnswer(op);
+			//pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
 			return true;
 		}
 		
