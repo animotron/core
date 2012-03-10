@@ -23,13 +23,12 @@ package org.animotron.statement;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.inmemory.InMemoryRelationship;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.graph.Properties.CONTEXT;
-import static org.animotron.graph.Properties.NAME;
-import static org.animotron.graph.Properties.RID;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.animotron.statement.operator.Utils.unfreeze;
 
@@ -78,6 +77,8 @@ public abstract class AbstractStatement implements Statement {
             node = (Node) reference;
         } else if (reference instanceof Relationship) {
             node = ((Relationship) reference).getEndNode();
+        } else if (reference instanceof Instruction) {
+            return THE._.getOrCreate(((Instruction) reference).name(), true).getEndNode();
         } else {
             return THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode();
         }
