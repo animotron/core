@@ -118,7 +118,10 @@ public abstract class AbstractValue extends AbstractStatement {
     }
 
     public static Number number(Object o) {
-        if (o instanceof String) {
+    	if (o instanceof Number) {
+    		return (Number)o;
+    	
+    	} else if (o instanceof String) {
             String s = (String) o;
             try {
                 return Long.valueOf(s);

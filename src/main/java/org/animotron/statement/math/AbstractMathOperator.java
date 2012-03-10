@@ -20,10 +20,8 @@
  */
 package org.animotron.statement.math;
 
-import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.instruction.DetermInstruction;
-import org.animotron.statement.value.AbstractValue;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
@@ -36,11 +34,7 @@ public abstract class AbstractMathOperator extends DetermInstruction {
 
 	protected AbstractMathOperator(String... name) { super(name); }
 
-    protected Number param (QCAVector vector) throws IOException {
-    	String number = CachedSerializer.STRING.serialize(vector);
-    	
-    	if (number.isEmpty()) return null;
-    	
-		return AbstractValue.number(number);
+    protected AnimObject param (Relationship r) throws IOException {
+    	return new AnimObject(r);
     };
 }

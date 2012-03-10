@@ -32,17 +32,13 @@ public class SUB extends MathOperator {
 	private SUB() { super("-"); }
 
     @Override
-    protected Number execute(Number a, Number b) {
-        if (a instanceof Long && b instanceof Long) {
-            return a.longValue() - b.longValue();
-        } else {
-            return a.doubleValue() - b.doubleValue();
-        }
+    protected AnimObject execute(AnimObject a, AnimObject b) {
+    	return a.sub(b);
     }
 
     @Override
-    protected Number execute(Number a) {
-        return MUL._.execute((long) -1, a);
+    protected AnimObject execute(AnimObject a) {
+        return MUL._.execute(AnimObject.MINUS_ONE, a);
     }
 
 }

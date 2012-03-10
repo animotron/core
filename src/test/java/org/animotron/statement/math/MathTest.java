@@ -291,4 +291,9 @@ public class MathTest extends ATest {
         );
     	assertStringResult("+ a,b", "5");
 	}
+
+    @Test
+	public void test_40() throws Throwable {
+    	assertStringResult("+ ((10) (a)) ((10) (b))", "+ ((10) (a)) ((10) (b))");
+	}
 }

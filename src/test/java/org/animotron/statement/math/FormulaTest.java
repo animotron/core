@@ -96,4 +96,18 @@ public class FormulaTest extends ATest {
 
         //assertStringResult("get cost m1.", "50");
 	}
+	
+    @Test
+    public void test_02() throws Throwable {
+        __(
+	        "the item1 (goods item) (cost * (10) (USD)).",
+	        "the item2 (goods item) (cost * (5) (USD))."
+        );
+
+        assertAnimoResult(
+            "+ get cost all item",
+            "* (15) (USD)."
+		);
+    }
+
 }

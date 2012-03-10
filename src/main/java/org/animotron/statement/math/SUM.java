@@ -20,6 +20,8 @@
  */
 package org.animotron.statement.math;
 
+import java.io.IOException;
+
 /**
  * Math instruction 'SUM'. (aka summation)
  * 
@@ -32,16 +34,12 @@ public class SUM extends MathOperator {
 	private SUM() { super("+"); }
 
     @Override
-    protected Number execute(Number a, Number b) {
-        if (a instanceof Long && b instanceof Long) {
-            return a.longValue() + b.longValue();
-        } else {
-            return a.doubleValue() + b.doubleValue();
-        }
+    protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
+    	return a.sum(b);
     }
 
     @Override
-    protected Number execute(Number a) {
+    protected AnimObject execute(AnimObject a) {
         return a;
     }
 

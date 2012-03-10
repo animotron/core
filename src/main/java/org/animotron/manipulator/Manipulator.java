@@ -28,6 +28,7 @@ import org.animotron.io.Pipe;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.math.MathOperator;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
@@ -165,7 +166,10 @@ public abstract class Manipulator {
 	                        }
 	            			
 	
-	                        if (s != null && s instanceof Evaluable) {
+	                        if (s != null && s instanceof MathOperator && !fullEval) {
+	                        	pipe.write(context);
+
+	                        } else if (s != null && s instanceof Evaluable) {
 	                        	Pipe in = execute(controller, context, ((Evaluable) s).onCalcQuestion(), fullEval);
 	                        	QCAVector v;
 	                            while ((v = in.take()) != null) {

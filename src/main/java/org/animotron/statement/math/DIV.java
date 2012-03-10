@@ -32,15 +32,15 @@ public class DIV extends MathOperator {
 	private DIV() { super("/"); }
 
     @Override
-    protected Number execute(Number a, Number b) {
-    	Number res = a.doubleValue() / b.doubleValue();
+    protected AnimObject execute(AnimObject a, AnimObject b) {
+    	//Number res = a.doubleValue() / b.doubleValue();
     	//return res.longValue();
-    	return res;
+    	return a.div(b);
     }
 
     @Override
-    protected Number execute(Number a) {
-        return execute((long) 1, a);
+    protected AnimObject execute(AnimObject a) {
+        return execute(AnimObject.ONE, a);
     }
 
 }

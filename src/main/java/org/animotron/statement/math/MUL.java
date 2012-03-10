@@ -32,16 +32,12 @@ public class MUL extends MathOperator {
 	private MUL() { super("*"); }
 
     @Override
-    protected Number execute(Number a, Number b) {
-        if (a instanceof Long && b instanceof Long) {
-            return a.longValue() * b.longValue();
-        } else {
-            return a.doubleValue() * b.doubleValue();
-        }
+    protected AnimObject execute(AnimObject a, AnimObject b) {
+    	return a.mul(b);
     }
 
     @Override
-    protected Number execute(Number a) {
+    protected AnimObject execute(AnimObject a) {
         return a;
     }
 
