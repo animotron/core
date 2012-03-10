@@ -168,7 +168,13 @@ public class AnimObject extends AbstractExpression {
         builder.start(AN._);
             builder._(REF._, op.name());
             for (Relationship r : elements) {
-                builder.bind(r);
+                if (r.isType(REF._)) {
+                    builder.start(AN._);
+                        builder.bind(r);
+                    builder.end();
+                } else {
+                    builder.bind(r);
+                }
             }
         builder.end();
     }
