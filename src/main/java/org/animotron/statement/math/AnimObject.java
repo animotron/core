@@ -20,14 +20,10 @@
  */
 package org.animotron.statement.math;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
 import javolution.util.FastList;
-
+import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.JExpression;
+import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.PFlow;
@@ -40,11 +36,11 @@ import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.GraphDatabaseService;
-import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
+
+import java.io.IOException;
+import java.util.List;
 
 import static org.animotron.expression.JExpression.value;
 
@@ -52,7 +48,7 @@ import static org.animotron.expression.JExpression.value;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class AnimObject implements Relationship {
+public class AnimObject extends AbstractExpression {
 	
 	protected static AnimObject ONE = new AnimObject(new JExpression(value(Long.valueOf(1))));
 	protected static AnimObject MINUS_ONE = new AnimObject(new JExpression(value(Long.valueOf(-1))));
@@ -60,21 +56,28 @@ public class AnimObject implements Relationship {
 	PFlow pf = null;
 	Relationship r;
 	List<Relationship> elements = null;
+    Statement op = null;
 
 	public AnimObject(Relationship r) {
+        super(null);
 		this.r = r;
 	}
 
-	public AnimObject(List<Relationship> elements) {
+	public AnimObject(Statement op, List<Relationship> elements) {
+        super(new FastGraphBuilder());
 		this.elements = elements;
-		
-		//TODO: this.r = r;
+        this.op = op;
 	}
 
-	public Relationship getRelationship() {
-		return r;
+	public AnimObject(Statement op, Relationship... elements) {
+        super(new FastGraphBuilder());
+        this.elements = new FastList();
+        for (Relationship r : elements) {
+		    this.elements.add(r);
+        }
+        this.op = op;
 	}
-	
+
 	private boolean check(Relationship r) {
     	if (r.isType(VALUE._)) {
     		elements.add(r);
@@ -135,175 +138,92 @@ public class AnimObject implements Relationship {
 		return elements;
 	}
 
-	public AnimObject sum(AnimObject b) throws IOException {
-		System.out.println("+");
-		
-		List<Relationship> As = getElements();
-		List<Relationship> Bs = b.getElements();
-		
-		System.out.println("As = ");
-		System.out.println(Arrays.toString(As.toArray()));
-		System.out.println("Bs = ");
-		System.out.println(Arrays.toString(Bs.toArray()));
-		
-		if (As.size() == Bs.size()) {
-			List<Relationship> eq = new FastList<Relationship>();
-			
-			Iterator<Relationship> it = As.iterator();
-			while (it.hasNext()) {
-				Relationship r = it.next();
-				if (Bs.contains(r)) {
-					eq.add(r);
-					
-					it.remove();
-					Bs.remove( Bs.indexOf(r) );
-				}
-			}
-			
-			if (As.size() == 1 && As.size() == Bs.size()) {
-				eq.add(sum(As.get(0), Bs.get(0)));
-			}
+//	public static AnimObject sum(Relationship... elements) throws IOException {
+//        return new AnimObject(SUM._, elements);
+//		System.out.println("+");
+//		
+//		List<Relationship> As = getElements();
+//		List<Relationship> Bs = b.getElements();
+//		
+//		System.out.println("As = ");
+//		System.out.println(Arrays.toString(As.toArray()));
+//		System.out.println("Bs = ");
+//		System.out.println(Arrays.toString(Bs.toArray()));
+//		
+//		if (As.size() == Bs.size()) {
+//			List<Relationship> eq = new FastList<Relationship>();
+//			
+//			Iterator<Relationship> it = As.iterator();
+//			while (it.hasNext()) {
+//				Relationship r = it.next();
+//				if (Bs.contains(r)) {
+//					eq.add(r);
+//					
+//					it.remove();
+//					Bs.remove( Bs.indexOf(r) );
+//				}
+//			}
+//			
+//			if (As.size() == 1 && As.size() == Bs.size()) {
+//				eq.add(sum(As.get(0), Bs.get(0)));
+//			}
+//
+//			System.out.println(Arrays.toString(eq.toArray()));
+//			
+//			return new AnimObject(eq);
+//		}
+//		return null; //new AnimObject(this, b);
+//	}
+//
+//	private Relationship sum(Relationship a, Relationship b) {
+//		if (a.isType(VALUE._) && b.isType(VALUE._)) {
+//			Number Na = VALUE.number(VALUE._.reference(a));
+//			Number Nb = VALUE.number(VALUE._.reference(b));
+//			
+//			Number result;
+//			if (Na instanceof Long && Nb instanceof Long) {
+//				result = Na.longValue() + Nb.longValue();
+//			} else {
+//				result = Na.doubleValue() + Nb.doubleValue();
+//			}
+//			
+//			return new JExpression(value(result));
+//		}
+//		throw new RuntimeException("not supported relations "+a+" & "+b);
+//	}
+//
+//	public static AnimObject sub(List<Relationship> elements) {
+//        return new AnimObject(SUB._, elements);
+//	}
+//
+//	public static AnimObject sub(Relationship... elements) {
+//        return new AnimObject(SUB._, elements);
+//	}
+//
+//	public static AnimObject mul(List<Relationship> elements) {
+//        return new AnimObject(MUL._, elements);
+//	}
+//
+//	public static AnimObject mul(Relationship... elements) {
+//        return new AnimObject(MUL._, elements);
+//	}
+//
+//	public static AnimObject div(List<Relationship> elements) {
+//        return new AnimObject(DIV._, elements);
+//	}
+//
+//	public static AnimObject div(Relationship... elements) {
+//        return new AnimObject(DIV._, elements);
+//	}
 
-			System.out.println(Arrays.toString(eq.toArray()));
-			
-			return new AnimObject(eq);
-		}
-		return null; //new AnimObject(this, b);
-	}
-	
-	private Relationship sum(Relationship a, Relationship b) {
-		if (a.isType(VALUE._) && b.isType(VALUE._)) {
-			Number Na = VALUE.number(VALUE._.reference(a));
-			Number Nb = VALUE.number(VALUE._.reference(b));
-			
-			Number result;
-			if (Na instanceof Long && Nb instanceof Long) {
-				result = Na.longValue() + Nb.longValue();
-			} else {
-				result = Na.doubleValue() + Nb.doubleValue();
-			}
-			
-			return new JExpression(value(result));
-		}
-		throw new RuntimeException("not supported relations "+a+" & "+b);
-	}
+    @Override
+    public void build() throws Throwable {
+        builder.start(AN._);
+            builder._(REF._, op);
+            for (Relationship r : elements) {
+                builder.bind(r);
+            }
+        builder.end();
+    }
 
-	public AnimObject sub(AnimObject b) {
-		// TODO Auto-generated method stub
-		return null;
-//        if (a instanceof Long && b instanceof Long) {
-//            return a.longValue() - b.longValue();
-//        } else {
-//            return a.doubleValue() - b.doubleValue();
-//        }
-	}
-
-	public AnimObject mul(AnimObject b) {
-		return null;
-//        if (a instanceof Long && b instanceof Long) {
-//            return a.longValue() * b.longValue();
-//        } else {
-//            return a.doubleValue() * b.doubleValue();
-//        }
-	}
-
-	public AnimObject div(AnimObject b) {
-		return null;
-	}
-
-	@Override
-	public GraphDatabaseService getGraphDatabase() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean hasProperty(String key) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Object getProperty(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Object getProperty(String key, Object defaultValue) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setProperty(String key, Object value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Object removeProperty(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Iterable<String> getPropertyKeys() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Iterable<Object> getPropertyValues() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public void delete() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Node getStartNode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Node getEndNode() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Node getOtherNode(Node node) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Node[] getNodes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public RelationshipType getType() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean isType(RelationshipType type) {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

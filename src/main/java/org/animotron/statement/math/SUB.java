@@ -20,6 +20,8 @@
  */
 package org.animotron.statement.math;
 
+import java.io.IOException;
+
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
@@ -32,12 +34,7 @@ public class SUB extends MathOperator {
 	private SUB() { super("-"); }
 
     @Override
-    protected AnimObject execute(AnimObject a, AnimObject b) {
-    	return a.sub(b);
-    }
-
-    @Override
-    protected AnimObject execute(AnimObject a) {
+    protected AnimObject execute(AnimObject a) throws IOException {
         return MUL._.execute(AnimObject.MINUS_ONE, a);
     }
 

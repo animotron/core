@@ -31,14 +31,4 @@ public class MUL extends MathOperator {
 	
 	private MUL() { super("*"); }
 
-    @Override
-    protected AnimObject execute(AnimObject a, AnimObject b) {
-    	return a.mul(b);
-    }
-
-    @Override
-    protected AnimObject execute(AnimObject a) {
-        return a;
-    }
-
 }

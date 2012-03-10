@@ -51,12 +51,20 @@ import static org.animotron.graph.RelationshipTypes.TRI;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class MathOperator extends AbstractMathOperator implements Evaluable, Prepare{
+public abstract class MathOperator extends AbstractMathOperator implements Evaluable, Prepare {
 
 	protected MathOperator(String name) { super(name); }
 
-    protected abstract AnimObject execute (AnimObject a, AnimObject b) throws IOException;
-    protected abstract AnimObject execute (AnimObject a);
+//    protected abstract AnimObject execute (AnimObject a, AnimObject b) throws IOException;
+//    protected abstract AnimObject execute (AnimObject a);
+
+    protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
+    	return new AnimObject(this, a, b);
+    }
+
+    protected AnimObject execute(AnimObject a) throws IOException {
+        return a;
+    }
 
 //    private final AnimObject execute (Relationship r) throws IOException {
 //    	AnimObject a = param(r);
@@ -124,7 +132,7 @@ public abstract class MathOperator extends AbstractMathOperator implements Evalu
                     //XXX: fix context
                     //pf.sendAnswer(r);
 	                
-	                pf.sendAnswer(x.getRelationship());
+	                pf.sendAnswer(x);
 	            } finally {
 	                params.close();
 	            }

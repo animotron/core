@@ -20,6 +20,8 @@
  */
 package org.animotron.statement.math;
 
+import java.io.IOException;
+
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
@@ -32,14 +34,7 @@ public class DIV extends MathOperator {
 	private DIV() { super("/"); }
 
     @Override
-    protected AnimObject execute(AnimObject a, AnimObject b) {
-    	//Number res = a.doubleValue() / b.doubleValue();
-    	//return res.longValue();
-    	return a.div(b);
-    }
-
-    @Override
-    protected AnimObject execute(AnimObject a) {
+    protected AnimObject execute(AnimObject a) throws IOException {
         return execute(AnimObject.ONE, a);
     }
 
