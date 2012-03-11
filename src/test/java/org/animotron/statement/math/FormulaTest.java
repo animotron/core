@@ -119,7 +119,7 @@ public class FormulaTest extends ATest {
 
         assertAnimoResult(
             "+ (item1) (item2)",
-            "* (5) (+ (X) (Y))."
+            "* 5 (+ (X) (Y))."
 		);
     }
 
@@ -132,7 +132,7 @@ public class FormulaTest extends ATest {
 
         assertAnimoResult(
             "+ get cost all item",
-            "* (15) (USD)."
+            "* 5 (+ (X) (Y))."
 		);
     }
 

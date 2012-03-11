@@ -152,7 +152,7 @@ public class PFlow {
 	}
 
 	public void sendException(Throwable t) {
-		//t.printStackTrace();
+		t.printStackTrace();
 		
 		AnimoException ae;
 		if (t instanceof AnimoException) {

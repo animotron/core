@@ -29,6 +29,7 @@ import javolution.util.FastList;
 
 import org.animotron.expression.JExpression;
 import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.JExpression.value;
@@ -63,7 +64,25 @@ public class SUM extends MathInstruction {
 			Iterator<Relationship> it = As.iterator();
 			while (it.hasNext()) {
 				Relationship r = it.next();
-				if (Bs.contains(r)) {
+				if (r.isType(VALUE._)) {
+					Node n = r.getEndNode();
+					
+					Iterator<Relationship> Bit = Bs.iterator();
+					while (Bit.hasNext()) {
+						Relationship rr = Bit.next();
+						if (rr.isType(VALUE._)) {
+							if (rr.getEndNode().equals(n)) {
+								eq.add(rr);
+								
+								it.remove();
+								Bit.remove();
+
+								break;
+							}
+						}
+					}
+					
+				} else if (Bs.contains(r)) {
 					eq.add(r);
 
 					it.remove();
@@ -79,7 +98,7 @@ public class SUM extends MathInstruction {
 
 			return new AnimObject(MUL._, eq);
 		}
-		return null; // new AnimObject(this, b);
+		return new AnimObject(SUM._, a, b);
 	}
 
 	private Relationship sum(Relationship a, Relationship b) {
@@ -96,7 +115,6 @@ public class SUM extends MathInstruction {
 
 			return new JExpression(value(result));
 		}
-		throw new RuntimeException("not supported relations " + a + " & " + b);
+		return new AnimObject(SUM._, a, b);
 	}
-
 }
