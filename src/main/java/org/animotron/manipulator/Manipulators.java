@@ -22,6 +22,8 @@ package org.animotron.manipulator;
 
 import javolution.util.FastTable;
 import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.statement.operator.THE;
+import org.animotron.synchro.Synchro;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -34,7 +36,9 @@ import java.io.IOException;
 public class Manipulators {
 	
 	private static Manipulators _ = new Manipulators();
-	
+
+	private Synchro synchro = new Synchro();
+
 	private Manipulators() {}
 	
 	//TODO: Implement manipulators/listeners/broadcasters loader
@@ -82,6 +86,9 @@ public class Manipulators {
 
         private void preparative() throws IOException {
 			for (Node n : preparative) {
+            	for (Relationship r : n.getRelationships(THE._)) {
+            		synchro.sendDataToChannel(CachedSerializer.ANIMO.serialize(r));
+            	}
 				Preparator._.execute(null, n);
 			}
         }
