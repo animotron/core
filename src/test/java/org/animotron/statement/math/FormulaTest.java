@@ -135,4 +135,19 @@ public class FormulaTest extends ATest {
             "* (15) (USD)."
 		);
     }
+
+
+    @Test
+    public void test_101() throws Throwable {
+        __(
+    	    "the USD currency.",
+	        "the item1 (goods item) (cost * (10) (USD)).",
+	        "the item2 (goods item) (cost * (5) (USD))."
+        );
+
+        assertAnimoResult(
+            "get currency get cost all item",
+            "USD. USD."
+		);
+    }
 }
