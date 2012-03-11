@@ -92,7 +92,6 @@ public class GET extends AbstractQuery implements Shift {
 				Pipe p = AN.getREFs(pf, pf.getVector());
 				QCAVector theNode;
 				while ((theNode = p.take()) != null) {
-					//System.out.println(theNode);
 					r = theNode.getClosest();
 					if (r.isType(AN._)) {
 						try {
@@ -125,7 +124,6 @@ public class GET extends AbstractQuery implements Shift {
 			
 			if (debug) { 
 				Utils.debug(GET._, op, thes);
-			//	System.out.println(pf.getVector());
 			}
 
 			//check, maybe, result was already calculated
@@ -225,8 +223,6 @@ public class GET extends AbstractQuery implements Shift {
 			Set<Relationship> visitedREFs,
 			final boolean onContext) {
 		
-		//System.out.println("GET context = "+ref);
-		
 		if (visitedREFs == null) visitedREFs = new FastSet<Relationship>();
 		
 		FastSet<QCAVector> nextREFs = FastSet.newInstance();
@@ -243,7 +239,7 @@ public class GET extends AbstractQuery implements Shift {
 			
 			while (true) {
 				
-				if (debug) System.out.println("["+pf.getOP()+"] nextREFs ");//+Arrays.toString(nextREFs.toArray()));
+				if (debug) System.out.println("["+pf.getOP()+"] nextREFs ");
 	
 				QCAVector v = null;
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
@@ -336,8 +332,6 @@ public class GET extends AbstractQuery implements Shift {
 		IndexHits<Relationship> it = Order._.context(node);
 		try {
 			for (Relationship r : it) {
-				//if (debug) System.out.println(r);
-				
 				if (visitedREFs != null && visitedREFs.contains(r)) {
 					continue;
 				}
@@ -346,7 +340,6 @@ public class GET extends AbstractQuery implements Shift {
 
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
-					//System.out.println(r);
 					Pipe p = AN.getREFs(pf, prev);
 					QCAVector v;
 					while ((v = p.take()) != null) {
@@ -354,28 +347,20 @@ public class GET extends AbstractQuery implements Shift {
 						
 						prev.addAnswer(v);
 						
-						//System.out.println(t);
 						if (visitedREFs != null && !visitedREFs.contains(t)) {
-							//v.setPrecedingSibling(prev);
-							//prev = v;
 							newREFs.add(v);
 						}
 					}
 	
 				} else if (st instanceof Reference) {
 //					if (!pf.isInStack(r)) {
-						try {
-							//System.out.println("["+pf.getOP()+"] evaluate "+prev);
-							Pipe in = Evaluator._.execute(pf.getController(), prev);
-							QCAVector v;
-							while ((v = in.take()) != null) {
-								prev.addAnswer(v);
-								if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
-									newREFs.add(v);
-							}
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+						//System.out.println("["+pf.getOP()+"] evaluate "+prev);
+						Pipe in = Evaluator._.execute(pf.getController(), prev);
+						QCAVector v;
+						while ((v = in.take()) != null) {
+							prev.addAnswer(v);
+							if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
+								newREFs.add(v);
 						}
 //					}
 				}
@@ -393,14 +378,6 @@ public class GET extends AbstractQuery implements Shift {
 			final QCAVector v,
 			final Set<Node> thes,
 			final boolean onContext) {
-		
-//		if ((ref.isType(REF._) || ref.isType(THE._)) && thes.contains(ref.getEndNode())) {
-//			if (!pf.isInStack(ref)) {
-//				pf.sendAnswer(pf.getVector().answered(ref, v), AN._);
-//				return true;
-//			}
-//			return false;
-//		}
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
@@ -421,8 +398,8 @@ public class GET extends AbstractQuery implements Shift {
 			if (debug) 
 				System.out.println("["+pf.getOP()+"] answered "+op);
 			
-			pf.sendAnswer(op);
-			//pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
+			pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
+			//pf.sendAnswer(op);
 			return true;
 		}
 		
@@ -474,7 +451,6 @@ public class GET extends AbstractQuery implements Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(path);
 				return _evaluate_(path, thes);
 			}
 		});
