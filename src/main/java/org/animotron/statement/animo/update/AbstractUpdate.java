@@ -38,7 +38,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 
-import static org.animotron.graph.AnimoGraph.createNode;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -91,9 +90,9 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             Node n = v.getClosest().getEndNode(); 
             Relationship r = n.getSingleRelationship(THE._, INCOMING);
             if (r != null) {
-                root = createNode();
-
-                copy(root, n);
+                //root = createNode();
+                System.out.println(r);
+//                copy(root, n);
             }
         }
     }
