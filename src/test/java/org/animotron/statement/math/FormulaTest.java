@@ -106,8 +106,33 @@ public class FormulaTest extends ATest {
 
         assertAnimoResult(
             "+ get cost all item",
-            "* (15) (USD)."
+            "*", " 15", " (USD)", "."
 		);
     }
 
+    @Test
+    public void test_03() throws Throwable {
+        __(
+	        "the item1 * 5 (X).",
+	        "the item2 * 5 (Y)."
+        );
+
+        assertAnimoResult(
+            "+ (item1) (item2)",
+            "* (5) (+ (X) (Y))."
+		);
+    }
+
+    @Test
+    public void test_04() throws Throwable {
+        __(
+	        "the item1 (item) (cost * (5) (X)).",
+	        "the item2 (item) (cost * (5) (Y))."
+        );
+
+        assertAnimoResult(
+            "+ get cost all item",
+            "* (15) (USD)."
+		);
+    }
 }
