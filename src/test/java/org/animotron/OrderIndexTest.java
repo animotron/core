@@ -20,6 +20,8 @@
  */
 package org.animotron;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
@@ -28,13 +30,13 @@ import org.junit.Test;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.index.lucene.QueryContext;
 
 import java.util.List;
 
-import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
 
 
 /**
@@ -44,15 +46,15 @@ import static org.animotron.graph.AnimoGraph.*;
 public class OrderIndexTest extends ATest {
 
     @Test
-	public void orderedRelationships() {
+	public void orderedRelationships() throws Throwable {
 		if (true) {
-			Transaction tx = beginTx();
-			try {
-				createChild(getROOT(), 10000);
-				tx.success();
-			} finally {
-				finishTx(tx);
-			}
+            AnimoGraph.execute(new GraphOperation<Void>() {
+                @Override
+                public Void execute() throws Throwable {
+                    createChild(getROOT(), 10000);
+                    return null;
+                }
+            });
 		}
 		
 		System.out.println("reading ...");
