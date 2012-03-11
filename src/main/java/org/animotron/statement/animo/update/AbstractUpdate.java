@@ -21,24 +21,36 @@
 package org.animotron.statement.animo.update;
 
 import javolution.util.FastSet;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
+import org.animotron.graph.Properties;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
+import org.animotron.manipulator.DependenciesTracking;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.Utils;
+import org.animotron.statement.Statements;
+import org.animotron.statement.operator.*;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.Evaluator;
+import org.neo4j.kernel.Traversal;
+import org.neo4j.kernel.Uniqueness;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -50,8 +62,6 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
 
     protected AbstractUpdate(String... name) { super(name); }
 
-    protected abstract void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException;
-
     public OnQuestion onCalcQuestion() {
         return new Calc();
     }
@@ -60,45 +70,70 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         @Override
         public void act(PFlow pf) throws IOException {
             Pipe destination = Utils.getByREF(pf);
-
-            execute(destination, Order._.context(pf.getOP().getEndNode()));
+            IndexHits<Relationship> it = Order._.context(pf.getOP().getEndNode());
+            try {
+                Set<Relationship> param = new FastSet<Relationship>();
+                for (Relationship r : it) {
+                    param.add(r);
+                }
+                QCAVector v;
+                while ((v = destination.take()) != null) {
+                    execute(v, v.getClosest().getEndNode());
+                }
+            } finally {
+                it.close();
+            }
         }
     }
 
-    private void execute(Pipe destination, IndexHits<Relationship> it) throws IOException {
-        try {
-            Set<Relationship> param = new FastSet<Relationship>();
-            for (Relationship r : it) {
-                param.add(r);
-            }
-            QCAVector v;
-            while ((v = destination.take()) != null) {
-                getThe(v);
-            }
-        } finally {
-            it.close();
-        }
+	private Iterator<Path> diff(Node start, final Node end) {
+        return
+            Traversal.description().depthFirst().
+                uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
+                evaluator(new Evaluator() {
+                    @Override
+                    public Evaluation evaluate(Path path) {
+                        if (path.length() == 0)
+                            return Evaluation.EXCLUDE_AND_CONTINUE;
+                        if (!path.endNode().equals(path.lastRelationship().getEndNode()))
+                            return EXCLUDE_AND_PRUNE;
+                        if (path.lastRelationship().isType(REF._))
+                            return EXCLUDE_AND_PRUNE;
+                        if (Statements.relationshipType(path.lastRelationship()) == null)
+                            return EXCLUDE_AND_PRUNE;
+                        if (path.endNode().equals(end))
+                            return INCLUDE_AND_PRUNE;
+                        return EXCLUDE_AND_CONTINUE;
+                    }
+                }).traverse(start).iterator();
     }
 
-    private void getThe(QCAVector v) throws IOException {
+    private void execute(QCAVector v, final Node x) throws IOException {
         List<QCAVector> c = v.getContext();
         if (c != null) {
             for (QCAVector i : c) {
-                getThe(i);
+                execute(i, x);
             }
         } else {
-            Node n = v.getClosest().getEndNode(); 
+            final Node n = v.getClosest().getEndNode();
             Relationship r = n.getSingleRelationship(THE._, INCOMING);
             if (r != null) {
-                //root = createNode();
-                System.out.println(r);
-//                copy(root, n);
+                Relationship rr = AnimoGraph.execute(new GraphOperation<Relationship>() {
+                    @Override
+                    public Relationship execute() throws Throwable {
+                        Node rev = THE._.getActualRevision(n);
+                        Node rn = createNode();
+                        process(rn, rev, x, diff(rev, x));
+                        Relationship rr = rev.createRelationshipTo(rn, RelationshipTypes.REV);
+                        Properties.UUID.set(rr, uuid());
+                        return rr;
+                    }
+                });
+                DependenciesTracking._.execute(null, rr);
             }
         }
     }
 
-    protected void copy(Node root, Node node) {
-
-    }
+    protected abstract void process(Node root, Node rev, Node x, Iterator<Path> diff);
 
 }
