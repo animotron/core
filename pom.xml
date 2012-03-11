@@ -90,6 +90,13 @@
             <version>1.9.4</version>
         </dependency>
 
+        <!-- library for multicast communication via a flexible protocol stack. --> 
+		<dependency>
+			<groupId>jgroups</groupId>
+			<artifactId>jgroups</artifactId>
+			<version>2.9.0.GA</version>
+		</dependency>
+
 		<dependency>
             <groupId>org.jetlang</groupId>
             <artifactId>jetlang</artifactId>
