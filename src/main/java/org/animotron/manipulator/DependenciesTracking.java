@@ -35,7 +35,6 @@ import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
@@ -67,7 +66,6 @@ public class DependenciesTracking extends StatementManipulator {
                 return null;
             }
         });
-		Transaction tx = AnimoGraph.beginTx();
         return null;
 	}
 	
