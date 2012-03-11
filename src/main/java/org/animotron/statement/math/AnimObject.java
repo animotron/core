@@ -63,8 +63,7 @@ public class AnimObject extends AbstractExpression {
     MathInstruction op = null;
 
 	public AnimObject(MathInstruction op, Relationship r) {
-        super(null);
-        relationship = r;
+        super(r);
         this.op = op;
 	}
     

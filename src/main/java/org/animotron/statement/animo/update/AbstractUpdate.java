@@ -72,7 +72,6 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             for (Relationship r : it) {
                 param.add(r);
             }
-            //Set<Relationship> d = new FastSet<Relationship>();
             QCAVector v;
             while ((v = destination.take()) != null) {
                 getThe(v);
@@ -93,6 +92,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             Relationship r = n.getSingleRelationship(THE._, INCOMING);
             if (r != null) {
                 root = createNode();
+
                 copy(root, n);
             }
         }
