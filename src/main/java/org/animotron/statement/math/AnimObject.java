@@ -67,7 +67,7 @@ public class AnimObject extends AbstractExpression {
         relationship = r;
         this.op = op;
 	}
-
+    
 	public AnimObject(MathInstruction op, List<Relationship> elements) {
         super(new FastGraphBuilder());
 		this.elements = elements;
