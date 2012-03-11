@@ -66,9 +66,7 @@ public class AnimObject extends AbstractExpression {
     
     @Override
     public Relationship relationship(){
-        if (r != null)
-            return r;
-        return super.relationship();
+        return r != null ? r : super.relationship();
     }
 
 	public AnimObject(Instruction op, List<Relationship> elements) {
