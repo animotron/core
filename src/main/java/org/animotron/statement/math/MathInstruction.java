@@ -86,7 +86,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 		}
 
 		@Override
-    	public void act(final PFlow pf) {
+    	public void act(final PFlow pf) throws Throwable {
     		final FastList<Node> thes = FastList.newInstance();
     		IndexHits<Relationship> hits = Order._.context(pf.getOPNode());
     		try {
@@ -94,22 +94,17 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
     				if (!r.isType(GET._)) {
     					return;
     				}
-    				
     				Pipe p = AN.getREFs(pf, new QCAVector(r));
     				QCAVector v;
     				while ((v = p.take()) != null) {
     					thes.add(v.getClosest().getEndNode());
     				}
-    				
     				if (thes.size() > 2) {
     					return;
     				}
     			}
-    			
 				if (thes.size() == 2) {
-
 	    			AnimoGraph.execute(new GraphOperation<Void>() {
-	
 						@Override
 						public Void execute() throws Throwable {
 							Relationship r = thes.get(0).createRelationshipTo(thes.get(1), TRI);
@@ -117,10 +112,8 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 							Properties.TO_NODE.set(r, pf.getOP().getStartNode().getId());
 							return null;
 						}
-	    				
 	    			});
 				}
-    			
     		} finally {
     			hits.close();
     			FastList.recycle(thes);

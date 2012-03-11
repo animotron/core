@@ -59,7 +59,7 @@ public class GC extends Manipulator {
 			}
 			
 			@Override
-			public void act(final PFlow pf) {
+			public void act(final PFlow pf) throws Throwable {
 				AnimoGraph.execute(
 					new GraphOperation<Void>(){
 						@Override
@@ -67,7 +67,6 @@ public class GC extends Manipulator {
 							garbage(pf);
 							return null;
 						}
-						
 					}
 				);
 			}

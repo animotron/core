@@ -78,7 +78,7 @@ public class Manipulators {
             r.delete();
         }
 
-		public void push() throws IOException {
+		public void push() throws Throwable {
 			preparative();
             modified();
 			destructive();
@@ -93,7 +93,7 @@ public class Manipulators {
 			}
         }
 
-        private void modified() throws IOException {
+        private void modified() throws Throwable {
             if (modified != null) {
                 //CachedSerializer.drop(modified);
                 DependenciesTracking._.execute(null, modified);

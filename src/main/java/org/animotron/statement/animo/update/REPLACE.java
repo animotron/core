@@ -20,10 +20,10 @@
  */
 package org.animotron.statement.animo.update;
 
-import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 
-import java.io.IOException;
-import java.util.Set;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -35,15 +35,20 @@ public class REPLACE extends AbstractUpdate {
 
 	private REPLACE() {super("replace");}
 
+//    @Override
+//    protected void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException {
+//        for (Relationship r: the) {
+//            if (r.getEndNode().equals(destination.getEndNode())) {
+//                throw new UnsupportedOperationException();
+//            } else {
+//                //TODO : implement
+//            }
+//        }
+//    }
+
     @Override
-    protected void execute(Set<Relationship> the, Relationship destination, Set<Relationship> target) throws IOException {
-        for (Relationship r: the) {
-            if (r.getEndNode().equals(destination.getEndNode())) {
-                throw new UnsupportedOperationException();
-            } else {
-                //TODO : implement
-            }
-        }
+    protected void process(Node root, Node rev, Node x, Iterator<Path> diff) {
+        //To change body of implemented methods use File | Settings | File Templates.
     }
 
 }

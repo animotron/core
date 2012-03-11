@@ -167,14 +167,14 @@ public class AnimoGraph {
 	 * @param operation
 	 * @return
 	 */
-	public static <T> T execute(GraphOperation<T> operation) {
+	public static <T> T execute(GraphOperation<T> operation) throws Throwable {
 		T result = null;
 		Transaction tx = beginTx();
 		try {
 			result = operation.execute();
 			tx.success();
 		} catch (Throwable t) {
-			t.printStackTrace();
+			throw t;
         } finally {
 			finishTx(tx);
 		}

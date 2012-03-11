@@ -42,7 +42,7 @@ public class OrderTest extends ATest {
     private enum Rel implements RelationshipType { A, B, C}
 
     @Test
-	public void test_00() {
+	public void test_00() throws Throwable {
 
         Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
@@ -65,7 +65,7 @@ public class OrderTest extends ATest {
     }
 
     @Test
-	public void test_01() {
+	public void test_01() throws Throwable {
 
         Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
@@ -89,7 +89,7 @@ public class OrderTest extends ATest {
     }
 
     @Test
-	public void test_02() {
+	public void test_02() throws Throwable {
 
         Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
@@ -113,7 +113,7 @@ public class OrderTest extends ATest {
     }
 
     @Test
-	public void test_03() {
+	public void test_03() throws Throwable {
 
         final Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
@@ -144,7 +144,7 @@ public class OrderTest extends ATest {
     }
 
     @Test
-	public void test_04() {
+	public void test_04() throws Throwable {
 
         final Node node = AnimoGraph.execute(
             new GraphOperation<Node>() {
@@ -193,7 +193,7 @@ public class OrderTest extends ATest {
     }
 
     @Test
-	public void test_05() {
+	public void test_05() throws Throwable {
 
         final Node start = AnimoGraph.execute(
             new GraphOperation<Node>() {
@@ -238,7 +238,7 @@ public class OrderTest extends ATest {
     }
 
     @Test
-	public void test_06() {
+	public void test_06() throws Throwable {
 
         final Node start = AnimoGraph.execute(
             new GraphOperation<Node>() {

@@ -125,24 +125,25 @@ public class PFlow {
 		//	System.out.print("answered ");
 		//	Utils.debug(answer);
 		//}
-		sendAnswer(answer, RESULT, getPathHash());
-	}
+        try {
+            sendAnswer(answer, RESULT, getPathHash());
+        } catch (Throwable t) {
+            sendException(t);
+        }
+    }
 
-	public void sendAnswer(Relationship answer, RelationshipType rType, byte[] hash) {
+	public void sendAnswer(Relationship answer, RelationshipType rType, byte[] hash) throws Throwable {
 		Relationship createdAnswer = Utils.createResult( this, getOPNode(), answer, rType, hash );
-		
 		answerChannel().publish(path.answered(createdAnswer));
 	}
 
-	public void sendAnswer(QCAVector answerVector, RelationshipType rType) {
+	public void sendAnswer(QCAVector answerVector, RelationshipType rType) throws Throwable {
 		Relationship answer = Utils.createResult(this, answerVector.getContext(), getOPNode(), answerVector.getAnswer(), rType);
-		
 		answerChannel().publish(new QCAVector(getOP(), answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
 	}
 
-	public void sendAnswer(Relationship answer, QCAVector context) {
+	public void sendAnswer(Relationship answer, QCAVector context) throws Throwable {
 		Relationship createdAnswer = Utils.createResult(this, getOPNode(), answer, RESULT);
-
 		sendAnswer(getOP(), context, createdAnswer);
 	}
 

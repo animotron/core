@@ -68,7 +68,7 @@ public abstract class Manipulator {
         return pipe;
 	}
 
-	public Pipe execute(final Controller controller, final Relationship op) throws IOException {
+	public Pipe execute(final Controller controller, final Relationship op) throws Throwable {
 		return execute(controller, new QCAVector(op), null, true);
 	}
 	

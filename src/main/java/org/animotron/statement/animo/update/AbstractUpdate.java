@@ -42,7 +42,6 @@ import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -68,7 +67,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
     
     class Calc extends OnQuestion {
         @Override
-        public void act(PFlow pf) throws IOException {
+        public void act(PFlow pf) throws Throwable {
             Pipe destination = Utils.getByREF(pf);
             IndexHits<Relationship> it = Order._.context(pf.getOP().getEndNode());
             try {
@@ -108,7 +107,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 }).traverse(start).iterator();
     }
 
-    private void execute(QCAVector v, final Node x) throws IOException {
+    private void execute(QCAVector v, final Node x) throws Throwable {
         List<QCAVector> c = v.getContext();
         if (c != null) {
             for (QCAVector i : c) {
@@ -118,18 +117,18 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             final Node n = v.getClosest().getEndNode();
             Relationship r = n.getSingleRelationship(THE._, INCOMING);
             if (r != null) {
-                Relationship rr = AnimoGraph.execute(new GraphOperation<Relationship>() {
-                    @Override
-                    public Relationship execute() throws Throwable {
-                        Node rev = THE._.getActualRevision(n);
-                        Node rn = createNode();
-                        process(rn, rev, x, diff(rev, x));
-                        Relationship rr = rev.createRelationshipTo(rn, RelationshipTypes.REV);
-                        Properties.UUID.set(rr, uuid());
-                        return rr;
-                    }
-                });
-                DependenciesTracking._.execute(null, rr);
+                DependenciesTracking._.execute(null,
+                    AnimoGraph.execute(new GraphOperation<Relationship>() {
+                        @Override
+                        public Relationship execute() throws Throwable {
+                            Node rev = THE._.getActualRevision(n);
+                            Node rn = createNode();
+                            process(rn, rev, x, diff(rev, x));
+                            Relationship rr = rev.createRelationshipTo(rn, RelationshipTypes.REV);
+                            Properties.UUID.set(rr, uuid());
+                            return rr;
+                        }
+                }));
             }
         }
     }

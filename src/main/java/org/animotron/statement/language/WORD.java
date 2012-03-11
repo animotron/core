@@ -152,9 +152,8 @@ public class WORD extends DetermInstruction implements Prepare {
 		}
 
 		@Override
-    	public void act(final PFlow pf) {
+    	public void act(final PFlow pf) throws Throwable {
 			AnimoGraph.execute(new GraphOperation<Void>() {
-
 				@Override
 				public Void execute() throws Throwable {
 					IndexHits<Relationship> hits = Order._.queryDown(pf.getOPNode());

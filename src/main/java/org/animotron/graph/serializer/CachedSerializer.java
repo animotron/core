@@ -257,11 +257,11 @@ public abstract class CachedSerializer extends AbstractSerializer {
         return RUUID.has(r) ? (String) RUUID.get(r) : MessageDigester.uuid();
     }
 
-    public final void serialize(Relationship r, OutputStream out, Cache cache) throws IOException {
+    public final void serialize(Relationship r, OutputStream out, Cache cache) throws Throwable {
         serialize(r, out, cache, uuid(r));
     }
 
-    public final void serialize(Relationship r, OutputStream out, Cache cache, String uuid) throws IOException {
+    public final void serialize(Relationship r, OutputStream out, Cache cache, String uuid) throws Throwable {
         String key = key(uuid, ext);
         if (cache.available(key)) {
             cache.get(key, out);
@@ -270,19 +270,19 @@ public abstract class CachedSerializer extends AbstractSerializer {
             try {
                 serialize(r, os);
                 cache(r, cache, uuid);
-            } catch (IOException e) {
+            } catch (Throwable t) {
                 cache.drop(key);
-                throw e;
+                throw t;
             }
             os.close();
         }
     }
 
-    public final void serialize(Relationship r, StringBuilder out, Cache cache) throws IOException {
+    public final void serialize(Relationship r, StringBuilder out, Cache cache) throws Throwable {
         serialize(r, out, cache, uuid(r));
     }
 
-    public final void serialize(Relationship r, StringBuilder out, Cache cache, String uuid) throws IOException {
+    public final void serialize(Relationship r, StringBuilder out, Cache cache, String uuid) throws Throwable {
         String key = key(uuid, ext);
         if (cache.available(key)) {
             cache.get(key, out);
@@ -291,19 +291,19 @@ public abstract class CachedSerializer extends AbstractSerializer {
             try {
                 serialize(r, os);
                 cache(r, cache, uuid);
-            } catch (IOException e) {
+            } catch (Throwable t) {
                 cache.drop(key);
-                throw e;
+                throw t;
             }
             os.close();
         }
     }
 
-    public final String serialize(Relationship r, Cache cache) throws IOException {
+    public final String serialize(Relationship r, Cache cache) throws Throwable {
         return serialize(r, cache, uuid(r));
     }
 
-    public final String serialize(Relationship r, Cache cache, String uuid) throws IOException {
+    public final String serialize(Relationship r, Cache cache, String uuid) throws Throwable {
         String key = key(uuid, ext);
         if (cache.available(key)) {
             return cache.get(key);
@@ -313,16 +313,16 @@ public abstract class CachedSerializer extends AbstractSerializer {
             try {
                 serialize(r, os);
                 cache(r, cache, uuid);
-            } catch (IOException e) {
+            } catch (Throwable t) {
                 cache.drop(key);
-                throw e;
+                throw t;
             }
             os.close();
             return out.toString();
         }
     }
     
-    private void cache(final Relationship r, final Cache cache, final String uuid) {
+    private void cache(final Relationship r, final Cache cache, final String uuid) throws Throwable {
         final String[] entities;
         String entity = entity(cache);
         if (CACHE.has(r)) {
@@ -369,7 +369,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-    public static void drop(final Relationship r) {
+    public static void drop(final Relationship r) throws Throwable {
         AnimoGraph.execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws IOException {

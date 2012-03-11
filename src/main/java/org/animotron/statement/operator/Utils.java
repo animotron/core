@@ -385,19 +385,19 @@ public class Utils {
 		return -1;
 	}
 
-	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType) {
+	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType) throws Throwable {
 		return createResult(pf, null, node, r, rType, pf.getPathHash());
 	}
 
-	public static Relationship createResult(final PFlow pf, final List<QCAVector> context, final Node node, final Relationship r, final RelationshipType rType) {
+	public static Relationship createResult(final PFlow pf, final List<QCAVector> context, final Node node, final Relationship r, final RelationshipType rType) throws Throwable {
 		return createResult(pf, context, node, r, rType, pf.getPathHash());
 	}
 
-	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+	public static Relationship createResult(final PFlow pf, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) throws Throwable {
 		return createResult(pf, null, node, r, rType, hash);
 	}
 
-	public static Relationship createResult(final PFlow pf, final List<QCAVector> context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) {
+	public static Relationship createResult(final PFlow pf, final List<QCAVector> context, final Node node, final Relationship r, final RelationshipType rType, final byte[] hash) throws Throwable {
 		return AnimoGraph.execute(new GraphOperation<Relationship>() {
 			@Override
 			public Relationship execute() {

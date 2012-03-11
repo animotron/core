@@ -42,16 +42,21 @@ public abstract class DetermInstruction extends Instruction {
 
     @Override
     protected void answered(final PFlow pf, final Relationship r) {
-        Relationship res = AnimoGraph.execute(new GraphOperation<Relationship>() {
-            @Override
-            public Relationship execute() {
-                Node sNode = pf.getVector().getQuestion().getEndNode();
-                Relationship res = sNode.createRelationshipTo(r.getEndNode(), RESULT);
-                Properties.RID.set(res, r.getId());
-                //Properties.CID.set(res, pf.getLastContext().getId());
-                return res;
-            }
-        });
+        Relationship res = null;
+        try {
+            res = AnimoGraph.execute(new GraphOperation<Relationship>() {
+                @Override
+                public Relationship execute() {
+                    Node sNode = pf.getVector().getQuestion().getEndNode();
+                    Relationship res = sNode.createRelationshipTo(r.getEndNode(), RESULT);
+                    Properties.RID.set(res, r.getId());
+                    //Properties.CID.set(res, pf.getLastContext().getId());
+                    return res;
+                }
+            });
+        } catch (Throwable t) {
+            pf.sendException(t);
+        }
         pf.sendAnswer(pf.getVector().answered(res));
     }
 

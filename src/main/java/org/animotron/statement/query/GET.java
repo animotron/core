@@ -394,44 +394,48 @@ public class GET extends AbstractQuery implements Shift {
 	}
 
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
-		if (!(op.isType(ANY._) || op.isType(GET._))) {
-			if (debug) 
-				System.out.println("["+pf.getOP()+"] answered "+op);
-			
-			pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
-			//pf.sendAnswer(op);
-			return true;
-		}
-		
-		if (debug) 
-			System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
-		
-		try {
-			Pipe in = Evaluator._.execute(pf.getController(), vector.question(op));
+        try{
+            if (!(op.isType(ANY._) || op.isType(GET._))) {
+                if (debug)
+                    System.out.println("["+pf.getOP()+"] answered "+op);
 
-			//if (!in.hasNext()) return false;
-			
-			boolean answered = false;
-			
-			Relationship res = null;
-			QCAVector v;
-			while ((v = in.take()) != null) {
-				res = v.getAnswer();
-				if (!pf.isInStack(res)) {
-					
-					if (debug) 
-						System.out.println("["+pf.getOP()+"] Relaxing answered "+v.getAnswer());
-					
-					pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
-					answered = true;
-				}
-			}
-			return answered;
-			
-		} catch (IOException e) {
-			pf.sendException(e);
-		}
-		return false;
+                pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
+                //pf.sendAnswer(op);
+                return true;
+            }
+
+            if (debug)
+                System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
+
+            try {
+                Pipe in = Evaluator._.execute(pf.getController(), vector.question(op));
+
+                //if (!in.hasNext()) return false;
+
+                boolean answered = false;
+
+                Relationship res = null;
+                QCAVector v;
+                while ((v = in.take()) != null) {
+                    res = v.getAnswer();
+                    if (!pf.isInStack(res)) {
+
+                        if (debug)
+                            System.out.println("["+pf.getOP()+"] Relaxing answered "+v.getAnswer());
+
+                        pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
+                        answered = true;
+                    }
+                }
+                return answered;
+
+            } catch (IOException e) {
+                pf.sendException(e);
+            }
+        } catch (Throwable t) {
+            pf.sendException(t);
+        }
+        return false;
 	}
 
 	private static TraversalDescription prepared = 

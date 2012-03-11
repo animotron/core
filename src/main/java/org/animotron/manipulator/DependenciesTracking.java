@@ -20,11 +20,8 @@
  */
 package org.animotron.manipulator;
 
-import static org.neo4j.graphdb.Direction.*;
-import static org.animotron.graph.RelationshipTypes.REV;
-import static org.animotron.graph.RelationshipTypes.RESULT;
-
 import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.State;
 import org.animotron.graph.serializer.CachedSerializer;
@@ -41,7 +38,9 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.io.IOException;
+import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.animotron.graph.RelationshipTypes.REV;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -53,32 +52,26 @@ public class DependenciesTracking extends StatementManipulator {
 	
 	private DependenciesTracking() {};
 	
-	public Pipe execute(final Controller controller, final Relationship op) throws IOException {
+	public Pipe execute(final Controller controller, final Relationship op) throws Throwable {
 		//System.out.println("DependenciesTracking");
-		Node current = THE._.getActualEndNode(op);
+		final Node current = THE._.getActualEndNode(op);
 		//System.out.println(current);
-		
+		AnimoGraph.execute(new GraphOperation<Void>() {
+            @Override
+            public Void execute() throws Throwable {
+                Node n = null;
+                for (Relationship r : current.getRelationships(REV, INCOMING)) {
+                    n = r.getStartNode();
+                    walker(n);
+                }
+                return null;
+            }
+        });
 		Transaction tx = AnimoGraph.beginTx();
-		try {
-			Node n = null;
-			for (Relationship r : current.getRelationships(REV, INCOMING)) {
-				n = r.getStartNode();
-				walker(n);
-			}
-			if (n == null)
-				walker(current);
-
-			tx.success();
-		} catch (Exception e) {
-			tx.failure();
-			e.printStackTrace();
-		} finally {
-			AnimoGraph.finishTx(tx);
-		}
         return null;
 	}
 	
-	private void walker(Node n) {
+	private void walker(Node n) throws Throwable {
 
 		for (Relationship r : n.getRelationships(REF._, INCOMING)) {
 			for (Path path : Utils.THEs.traverse(r.getStartNode())) {

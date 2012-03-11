@@ -27,10 +27,7 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.utils.MessageDigester.uuid;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -129,7 +126,7 @@ public class DependenciesTrackingTest extends ATest {
 		);
     }
 
-    protected void assertCachedAnimoResult(String op, String expected) throws IOException {
+    protected void assertCachedAnimoResult(String op, String expected) throws Throwable {
         assertNotNull(op);
         System.out.println("Animo result serializer...");
         
