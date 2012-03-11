@@ -21,12 +21,10 @@
 package org.animotron.synchro;
 
 import org.animotron.statement.operator.THE;
-import org.jgroups.ChannelException;
-import org.jgroups.JChannel;
-import org.jgroups.Message;
-import org.jgroups.ReceiverAdapter;
-import org.jgroups.View;
+import org.jgroups.*;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
 
 import static org.animotron.graph.Properties.HASH;
 
@@ -68,14 +66,16 @@ public class Synchro {
 		}
 	}
 
-	public void sendDataToChannel(String message) {
+	public void sendDataToChannel(String message) throws IOException {
+        try {
 		if(channel1 != null)
-			try {
-				channel1.send(new Message(null, null, message));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	}
+            channel1.send(new Message(null, null, message));
+        } catch (ChannelNotConnectedException e) {
+            throw new IOException(e);
+        } catch (ChannelClosedException e) {
+            throw new IOException(e);
+        }
+    }
 
 	private void checkInstance(String message) {
 		int fromIndex = message.indexOf(" ") + 1;
