@@ -28,6 +28,7 @@ import java.util.List;
 import javolution.util.FastList;
 
 import org.animotron.expression.JExpression;
+import org.animotron.manipulator.PFlow;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -47,11 +48,11 @@ public class SUM extends MathInstruction {
 		super("+");
 	}
 
-	protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
+	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
 		System.out.println("+");
 
-		List<Relationship> As = a.getElements();
-		List<Relationship> Bs = b.getElements();
+		List<Relationship> As = a.getElements(pf);
+		List<Relationship> Bs = b.getElements(pf);
 
 		System.out.println("As = ");
 		System.out.println(Arrays.toString(As.toArray()));
@@ -91,7 +92,7 @@ public class SUM extends MathInstruction {
 			}
 
 			if (As.size() == 1 && As.size() == Bs.size()) {
-				eq.add(sum(As.get(0), Bs.get(0)));
+				eq.add(execute(pf, As.get(0), Bs.get(0)));
 			}
 
 			System.out.println(Arrays.toString(eq.toArray()));
@@ -101,7 +102,23 @@ public class SUM extends MathInstruction {
 		return new AnimObject(SUM._, a, b);
 	}
 
-	private Relationship sum(Relationship a, Relationship b) {
+	protected Relationship execute(final PFlow pf, AnimObject a) throws IOException {
+		List<Relationship> elements = a.getElements(pf);
+		
+		//System.out.println(Arrays.toString(elements.toArray()));
+		
+		Relationship res = null;
+		for (Relationship r : elements) {
+			if (res == null)
+				res = r;
+			else
+				res = execute(pf, res, r);
+		}
+		
+		return res;
+	}
+	
+	private Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
 		if (a.isType(VALUE._) && b.isType(VALUE._)) {
 			Number Na = VALUE.number(VALUE._.reference(a));
 			Number Nb = VALUE.number(VALUE._.reference(b));
@@ -114,6 +131,9 @@ public class SUM extends MathInstruction {
 			}
 
 			return new JExpression(value(result));
+		
+		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
+			return execute(pf, (AnimObject)a, (AnimObject)b);
 		}
 		return new AnimObject(SUM._, a, b);
 	}

@@ -41,7 +41,6 @@ import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
-import org.neo4j.graphdb.traversal.UniquenessFactory;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 

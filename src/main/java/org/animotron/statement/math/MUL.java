@@ -22,6 +22,8 @@ package org.animotron.statement.math;
 
 import java.io.IOException;
 
+import org.animotron.manipulator.PFlow;
+
 /**
  * Math instruction 'MULT'. (aka multiplication)
  * 
@@ -33,7 +35,13 @@ public class MUL extends MathInstruction {
 	
 	private MUL() { super("*"); }
 
-    protected AnimObject execute(AnimObject a, AnimObject b) throws IOException {
+
+    @Override
+    protected AnimObject execute(final PFlow pf, AnimObject a) throws IOException {
+        return null; //TODO: MUL
+    }
+
+	protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
     	return null; //TODO: new AnimObject(this, a, b);
     }
 }
