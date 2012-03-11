@@ -22,8 +22,6 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
@@ -191,16 +189,15 @@ public abstract class GraphBuilder {
         	endGraph();
             tx.success();
             finishTx(tx);
-        } catch (final Throwable t) {
+        } catch (Throwable t) {
             finishTx(tx);
-            AnimoGraph.execute(new GraphOperation<Void>() {
-                @Override
-                public Void execute() throws Throwable {
-                    catcher.clear();
-                    fail(t);
-                    return null;
-                }
-            });
+            tx = beginTx();
+            try {
+                catcher.clear();
+                fail(t);
+            } finally {
+                finishTx(tx);
+            }
             throw t;
         } finally {
             catcher.push();
