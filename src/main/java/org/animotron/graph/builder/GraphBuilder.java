@@ -201,8 +201,8 @@ public abstract class GraphBuilder {
             });
             throw t;
         } finally {
-            catcher.push();
             finishTx(tx);
+            catcher.push();
         }
     }
 
