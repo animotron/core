@@ -40,7 +40,7 @@ public abstract class AbstractExpression extends Expression {
     public abstract void build() throws Throwable;
 
     @Override
-    protected final Relationship relationship() {
+    protected Relationship relationship() {
         if (relationship == null) {
             try {
                 builder.build(this);

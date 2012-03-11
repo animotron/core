@@ -60,9 +60,16 @@ public class AnimObject extends AbstractExpression {
     Instruction op = null;
 
 	public AnimObject(Relationship r) {
-        super(null);
+        super(null); 
 		this.r = r;
 	}
+    
+    @Override
+    public Relationship relationship(){
+        if (r != null)
+            return r;
+        return super.relationship();
+    }
 
 	public AnimObject(Instruction op, List<Relationship> elements) {
         super(new FastGraphBuilder());
