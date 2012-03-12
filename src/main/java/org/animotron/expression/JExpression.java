@@ -142,7 +142,7 @@ public class JExpression extends AbstractExpression {
     }
 
     private static Object[] $(AbstractValue s, Object[]... ref) {
-        return _(s, ref, null);
+        return _(s, ref, (Object[])null);
     }
 
 	public static Object[] element(String name) {
