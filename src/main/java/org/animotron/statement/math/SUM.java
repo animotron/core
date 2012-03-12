@@ -124,10 +124,8 @@ public class SUM extends MathInstruction {
 			Number Nb = VALUE.number(VALUE._.reference(b));
 
 			Number result;
-			if (Na instanceof Integer && Nb instanceof Integer) {
-				result = Na.intValue() + Nb.intValue();
-			
-			} else if (Na instanceof Long && Nb instanceof Long) {
+			if ((Na instanceof Long || Na instanceof Integer) 
+					&& (Nb instanceof Long || Nb instanceof Integer)) {
 				result = Na.longValue() + Nb.longValue();
 			
 			} else {
