@@ -20,9 +20,14 @@
  */
 package org.animotron.statement.math;
 
+import static org.animotron.expression.JExpression.value;
+
 import java.io.IOException;
 
+import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
@@ -35,12 +40,27 @@ public class SUB extends MathInstruction {
 
 	private SUB() { super("-"); }
 
-    @Override
-    protected AnimObject execute(final PFlow pf, AnimObject a) throws IOException {
-        return null; //TODO: MUL._.execute(AnimObject.MINUS_ONE, a);
-    }
+	protected Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
+		if (a.isType(VALUE._) && b.isType(VALUE._)) {
+			Number Na = VALUE.number(VALUE._.reference(a));
+			Number Nb = VALUE.number(VALUE._.reference(b));
 
-    protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
-    	return null; //TODO: new AnimObject(this, a, b);
-    }
+			Number result;
+			if ((Na instanceof Long || Na instanceof Integer) 
+					&& (Nb instanceof Long || Nb instanceof Integer)) {
+				result = Na.longValue() - Nb.longValue();
+			
+			} else {
+				result = Na.doubleValue() - Nb.doubleValue();
+			}
+
+			System.out.println(""+Na.doubleValue()+" - "+Nb.doubleValue()+" = "+result);
+			
+			return new JExpression(value(result));
+		
+		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
+			return execute(pf, (AnimObject)a, (AnimObject)b);
+		}
+		return new AnimObject(SUB._, a, b);
+	}
 }

@@ -102,8 +102,13 @@ public class MathTest extends ATest {
         Expression e = new JExpression(
             _(DIV._, value(4), value(2))
         );
-    	assertStringResult(e, "2.0");
-	}
+    	assertStringResult(e, "2");
+
+        e = new JExpression(
+            _(DIV._, value(5), value(2))
+        );
+    	assertStringResult(e, "2.5");
+    }
 
     @Test
 	public void test_07() throws Throwable {
@@ -123,20 +128,19 @@ public class MathTest extends ATest {
     
     @Test
 	public void test_09() throws Throwable {
-    	Expression test = new AnimoExpression("- 5 * 6 7"); //5-6*7
-    	assertStringResult(test, "-37");
+    	assertStringResult("- 5 * 6 7", "-37"); //5-(6*7) = 5 - 42 = -37
+
+    	assertStringResult("* 5 - 6 7", "-37"); //5*(6-7) = 5 *(-1) = -5
     }
 
     @Test
 	public void test_10() throws Throwable {
-        Expression e = new AnimoExpression("+ 1 2 3 4");
-    	assertStringResult(e, "10");
+    	assertStringResult("+ 1 2 3 4", "10");
 	}
 
     @Test
 	public void test_11() throws Throwable {
-        Expression e = new AnimoExpression("* 2 2");
-    	assertStringResult(e, "4");
+    	assertStringResult("* 2 2", "4");
 	}
 
     @Test

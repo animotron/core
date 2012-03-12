@@ -35,11 +35,15 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.animotron.graph.RelationshipTypes.TRI;
 
@@ -52,9 +56,78 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 
 	protected MathInstruction(String name) { super(name); }
 
-    protected abstract Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException;
+	protected abstract Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException;
+	
+	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
+		List<Relationship> As = a.getElements(pf);
+		List<Relationship> Bs = b.getElements(pf);
 
-    protected abstract Relationship execute(final PFlow pf, AnimObject a) throws IOException;
+		System.out.println("As = ");
+		System.out.println(Arrays.toString(As.toArray()));
+		System.out.println("Bs = ");
+		System.out.println(Arrays.toString(Bs.toArray()));
+
+		if (As.size() == Bs.size()) {
+			List<Relationship> eq = new FastList<Relationship>();
+
+			if (As.size() != 1) {
+				Iterator<Relationship> it = As.iterator();
+				while (it.hasNext()) {
+					Relationship r = it.next();
+					if (r.isType(VALUE._)) {
+						Node n = r.getEndNode();
+						
+						Iterator<Relationship> Bit = Bs.iterator();
+						while (Bit.hasNext()) {
+							Relationship rr = Bit.next();
+							if (rr.isType(VALUE._)) {
+								if (rr.getEndNode().equals(n)) {
+									eq.add(rr);
+									
+									it.remove();
+									Bit.remove();
+	
+									break;
+								}
+							}
+						}
+						
+					} else if (Bs.contains(r)) {
+						eq.add(r);
+	
+						it.remove();
+						Bs.remove(Bs.indexOf(r));
+					}
+				}
+			}
+
+			if (As.size() == 1 && As.size() == Bs.size()) {
+				eq.add(execute(pf, As.get(0), Bs.get(0)));
+			}
+
+			System.out.println(Arrays.toString(eq.toArray()));
+
+			return new AnimObject(MUL._, eq);
+		}
+		return new AnimObject(this, a, b);
+	}
+
+	protected Relationship execute(final PFlow pf, AnimObject a) throws IOException {
+		List<Relationship> elements = a.getElements(pf);
+		
+		//System.out.println(Arrays.toString(elements.toArray()));
+		
+		Relationship res = null;
+		for (Relationship r : elements) {
+			if (res == null)
+				res = r;
+			else
+				res = execute(pf, res, r);
+		}
+		
+		return res;
+	}
+	
 
     @Override
     public OnQuestion onCalcQuestion() {

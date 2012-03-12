@@ -40,6 +40,7 @@ import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
@@ -180,4 +181,18 @@ public class AnimObject extends AbstractExpression {
         builder.end();
     }
 
+//	@Override
+//	public RelationshipType getType() {
+//		List<Relationship> elements;
+//		try {
+//			elements = getElements(null);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+//		if (elements.size() == 1) {
+//			return elements.get(0).getType();
+//		}
+//		return relationship().getType();
+//	}
 }
