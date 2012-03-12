@@ -177,7 +177,7 @@ public class MathTest extends ATest {
 
     @Test
 	public void test_16() throws Throwable {
-    	assertStringResult("/ 4 2", "2.0");
+    	assertStringResult("/ 4 2", "2");
 	}
 
     @Test
