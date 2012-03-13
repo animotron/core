@@ -149,14 +149,19 @@ public class THIS extends Operator implements Reference, Evaluable {
 							} else {
 								Node n = Utils.getByREF(toCheck).getEndNode();
 								if (thes.contains( n )) {
-									IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
-									try {
-										for (Relationship r : hits) {
-											pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+									if (next.hasAnswer()) {
+										pf.sendAnswer(pf.getVector().answered(next.getAnswer()));//, next.getContext()
+									
+									} else {
+										IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
+										try {
+											for (Relationship r : hits) {
+												pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+											}
+											return true;
+										} finally {
+											hits.close();
 										}
-										return true;
-									} finally {
-										hits.close();
 									}
 								}
 							}
