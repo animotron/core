@@ -93,8 +93,8 @@ public class AnimObject extends AbstractExpression {
 	}
 
 	private boolean check(List<Relationship> elements, Relationship r) throws IOException {
-		//System.out.println("check");
-		//System.out.println(r.getType());
+		System.out.println("check");
+		System.out.println(r.getType());
     	if (r.isType(VALUE._)) {
     		elements.add(r);
     		return true;
@@ -105,9 +105,11 @@ public class AnimObject extends AbstractExpression {
     			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
     			List<Relationship> els = getElements(pf, ref.getEndNode());
     			if (els == null || els.isEmpty())
-    				;
+    				elements.add(ref);
+    			
     			else if (els.size() == 1)
     				elements.add(els.get(0));
+    			
     			else 
     				elements.add( new AnimObject(pf, MUL._, els));
         		
@@ -213,15 +215,16 @@ public class AnimObject extends AbstractExpression {
         builder.end();
     }
 
-    @Override
-    protected Relationship relationship() {
-		try {
-			Relationship r = relax(pf);
-			if (r != null) return r;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    	
-		return super.relationship();
-    }
+//    @Override
+//    protected Relationship relationship() {
+//    	System.out.println("relationship");
+//		try {
+//			Relationship r = relax(pf);
+//			if (r != null) return r;
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//    	
+//		return super.relationship();
+//    }
 }
