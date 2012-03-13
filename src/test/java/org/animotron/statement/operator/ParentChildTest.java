@@ -31,11 +31,24 @@ import org.junit.Test;
 public class ParentChildTest extends ATest {
 	
     @Test
-    public void test() throws Throwable {
+    public void test_00() throws Throwable {
         testAnimo("= parent, child.");
         testAnimo("the Joe parent John.");
-        assertAnimoResult("get parent Joe", "parent John.");
-        assertAnimoResult("get child John", "child Joe.");
+        assertAnimoResult("get parent Joe.", "parent John.");
+        assertAnimoResult("get child John.", "child Joe.");
+    }
+
+    @Test
+    public void test_01() throws Throwable {
+        testAnimo("= parent, child.");
+        testAnimo("= (son) (child male).");
+        testAnimo("= (father) (parent male).");
+        testAnimo("the Joe (male) (parent John.)");
+        testAnimo("the John male.");
+        assertAnimoResult("get parent Joe.", "parent John.");
+        assertAnimoResult("get child John.", "child Joe.");
+        assertAnimoResult("all father.", "the John male.");
+        assertAnimoResult("all son.", "the Joe (male) (parent).");
     }
 
 }
