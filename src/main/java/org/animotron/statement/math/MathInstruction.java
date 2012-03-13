@@ -108,6 +108,9 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 			}
 
 			System.out.println(Arrays.toString(eq.toArray()));
+			if (eq.isEmpty()) {
+				return new AnimObject(pf, this, a, b);
+			}
 
 			return new AnimObject(pf, MUL._, eq);
 		}
