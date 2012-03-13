@@ -61,6 +61,6 @@ public class MUL extends MathInstruction {
 		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
 			return execute(pf, (AnimObject)a, (AnimObject)b);
 		}
-		return new AnimObject(MUL._, a, b);
+		return new AnimObject(pf, MUL._, a, b);
 	}
 }

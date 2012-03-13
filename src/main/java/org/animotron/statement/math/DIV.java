@@ -65,6 +65,6 @@ public class DIV extends MathInstruction {
 		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
 			return execute(pf, (AnimObject)a, (AnimObject)b);
 		}
-		return new AnimObject(DIV._, a, b);
+		return new AnimObject(pf, DIV._, a, b);
 	}
 }

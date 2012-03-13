@@ -130,7 +130,7 @@ public class MathTest extends ATest {
 	public void test_09() throws Throwable {
     	assertStringResult("- 5 * 6 7", "-37"); //5-(6*7) = 5 - 42 = -37
 
-    	assertStringResult("* 5 - 6 7", "-37"); //5*(6-7) = 5 *(-1) = -5
+    	assertStringResult("* 5 - 6 7", "-5"); //5*(6-7) = 5 *(-1) = -5
     }
 
     @Test

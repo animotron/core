@@ -63,6 +63,6 @@ public class SUM extends MathInstruction {
 		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
 			return execute(pf, (AnimObject)a, (AnimObject)b);
 		}
-		return new AnimObject(SUM._, a, b);
+		return new AnimObject(pf, SUM._, a, b);
 	}
 }

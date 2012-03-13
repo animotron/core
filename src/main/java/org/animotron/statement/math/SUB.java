@@ -61,6 +61,6 @@ public class SUB extends MathInstruction {
 		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
 			return execute(pf, (AnimObject)a, (AnimObject)b);
 		}
-		return new AnimObject(SUB._, a, b);
+		return new AnimObject(pf, SUB._, a, b);
 	}
 }

@@ -40,7 +40,6 @@ import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
@@ -62,25 +61,35 @@ public class AnimObject extends AbstractExpression {
 	PFlow pf = null;
 	List<Relationship> elements = null;
     MathInstruction op = null;
+    Relationship result = null;
 
-	public AnimObject(MathInstruction op, Relationship r) {
+	private AnimObject(MathInstruction op, Relationship r) {
         super(r);
         this.op = op;
+        result = r;
+	}
+
+    public AnimObject(PFlow pf, MathInstruction op, Relationship r) {
+        super(r);
+        this.op = op;
+        this.pf = pf;
 	}
     
-	public AnimObject(MathInstruction op, List<Relationship> elements) {
+	public AnimObject(PFlow pf, MathInstruction op, List<Relationship> elements) {
         super(new FastGraphBuilder());
 		this.elements = elements;
         this.op = op;
+        this.pf = pf;
 	}
 
-	public AnimObject(MathInstruction op, Relationship... elements) {
+	public AnimObject(PFlow pf, MathInstruction op, Relationship... elements) {
         super(new FastGraphBuilder());
         this.elements = new FastList<Relationship>();
         for (Relationship r : elements) {
 		    this.elements.add(r);
         }
         this.op = op;
+        this.pf = pf;
 	}
 
 	private boolean check(Relationship r) {
@@ -99,7 +108,7 @@ public class AnimObject extends AbstractExpression {
     				if (obj != null && obj instanceof String ) {
     					Statement s = Statements.name((String) obj);
     					if (s instanceof MathInstruction) {
-							elements.add(new AnimObject((MathInstruction)s, r));
+							elements.add(new AnimObject(pf, (MathInstruction)s, r));
 							return true;
     					}
     				} else {
@@ -162,7 +171,12 @@ public class AnimObject extends AbstractExpression {
 	}
 	
 	public Relationship relax(final PFlow pf) throws IOException {
-		return op.execute(pf, this);
+		if (result == null) {
+			System.out.println(op);
+			result = op.execute(pf, this);
+		}
+		
+		return result;
 	}
 
     @Override
@@ -181,18 +195,15 @@ public class AnimObject extends AbstractExpression {
         builder.end();
     }
 
-//	@Override
-//	public RelationshipType getType() {
-//		List<Relationship> elements;
-//		try {
-//			elements = getElements(null);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//		if (elements.size() == 1) {
-//			return elements.get(0).getType();
-//		}
-//		return relationship().getType();
-//	}
+    @Override
+    protected Relationship relationship() {
+		try {
+			Relationship r = relax(pf);
+			if (r != null) return r;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+		return super.relationship();
+    }
 }

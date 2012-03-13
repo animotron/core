@@ -107,9 +107,9 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 
 			System.out.println(Arrays.toString(eq.toArray()));
 
-			return new AnimObject(MUL._, eq);
+			return new AnimObject(pf, MUL._, eq);
 		}
-		return new AnimObject(this, a, b);
+		return new AnimObject(pf, this, a, b);
 	}
 
 	protected Relationship execute(final PFlow pf, AnimObject a) throws IOException {
@@ -139,7 +139,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
         @Override
         public void act(final PFlow pf) throws IOException {
         	if (!Utils.results(pf)) {
-                AnimObject x = new AnimObject(MathInstruction.this, pf.getOP());
+                AnimObject x = new AnimObject(pf, MathInstruction.this, pf.getOP());
 	                
                 Relationship res = x.relax(pf);
                 if (res != null)
