@@ -93,8 +93,8 @@ public class AnimObject extends AbstractExpression {
 	}
 
 	private boolean check(List<Relationship> elements, Relationship r) throws IOException {
-		System.out.println("check");
-		System.out.println(r.getType());
+		//System.out.println("check");
+		//System.out.println(r.getType());
     	if (r.isType(VALUE._)) {
     		elements.add(r);
     		return true;
