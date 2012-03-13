@@ -40,6 +40,10 @@ public class MUL extends MathInstruction {
 	
 	private MUL() { super("*"); }
 
+	protected Relationship execute(final PFlow pf, Relationship a) throws IOException {
+		return a; 
+	}
+
 	protected Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
 		if (a.isType(VALUE._) && b.isType(VALUE._)) {
 			Number Na = VALUE.number(VALUE._.reference(a));

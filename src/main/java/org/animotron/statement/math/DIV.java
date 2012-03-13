@@ -40,6 +40,19 @@ public class DIV extends MathInstruction {
 
 	private DIV() { super("/"); }
 
+	protected Relationship execute(final PFlow pf, Relationship a) throws IOException {
+		if (a.isType(VALUE._)) {
+			Number Na = VALUE.number(VALUE._.reference(a));
+
+			Number result = 1 / Na.doubleValue();
+
+			System.out.println(" 1/ "+Na.doubleValue()+" = "+result);
+			
+			return new JExpression(value(result));
+		}
+		return new AnimObject(pf, DIV._, a);
+	}
+
 	protected Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
 		if (a.isType(VALUE._) && b.isType(VALUE._)) {
 			Number Na = VALUE.number(VALUE._.reference(a));

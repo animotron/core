@@ -40,6 +40,25 @@ public class SUB extends MathInstruction {
 
 	private SUB() { super("-"); }
 
+	protected Relationship execute(final PFlow pf, Relationship a) throws IOException {
+		if (a.isType(VALUE._)) {
+			Number Na = VALUE.number(VALUE._.reference(a));
+
+			Number result;
+			if ((Na instanceof Long || Na instanceof Integer)) {
+				result = - Na.longValue();
+			
+			} else {
+				result = - Na.doubleValue();
+			}
+
+			System.out.println(" - "+Na.doubleValue()+" = "+result);
+			
+			return new JExpression(value(result));
+		}
+		return new AnimObject(pf, SUB._, a);
+	}
+
 	protected Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
 		if (a.isType(VALUE._) && b.isType(VALUE._)) {
 			Number Na = VALUE.number(VALUE._.reference(a));

@@ -57,6 +57,8 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 	protected MathInstruction(String name) { super(name); }
 
 	protected abstract Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException;
+
+	protected abstract Relationship execute(final PFlow pf, Relationship a) throws IOException;
 	
 	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
 		List<Relationship> As = a.getElements(pf);
@@ -118,11 +120,15 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 		//System.out.println(Arrays.toString(elements.toArray()));
 		
 		Relationship res = null;
-		for (Relationship r : elements) {
-			if (res == null)
-				res = r;
-			else
-				res = execute(pf, res, r);
+		if (elements.size() == 1) {
+			res = execute(pf, elements.get(0));
+		} else {
+			for (Relationship r : elements) {
+				if (res == null)
+					res = r;
+				else
+					res = execute(pf, res, r);
+			}
 		}
 		
 		return res;

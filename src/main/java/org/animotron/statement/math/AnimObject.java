@@ -171,10 +171,8 @@ public class AnimObject extends AbstractExpression {
 	}
 	
 	public Relationship relax(final PFlow pf) throws IOException {
-		if (result == null) {
-			System.out.println(op);
+		if (result == null)
 			result = op.execute(pf, this);
-		}
 		
 		return result;
 	}
