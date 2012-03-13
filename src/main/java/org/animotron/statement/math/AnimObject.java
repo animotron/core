@@ -61,36 +61,58 @@ public class AnimObject extends AbstractExpression {
 	PFlow pf = null;
 	List<Relationship> elements = null;
     MathInstruction op = null;
+    Relationship result = null;
 
-	public AnimObject(MathInstruction op, Relationship r) {
+	private AnimObject(MathInstruction op, Relationship r) {
         super(r);
         this.op = op;
+        result = r;
+	}
+
+    public AnimObject(PFlow pf, MathInstruction op, Relationship r) {
+        super(r);
+        this.op = op;
+        this.pf = pf;
 	}
     
-	public AnimObject(MathInstruction op, List<Relationship> elements) {
+	public AnimObject(PFlow pf, MathInstruction op, List<Relationship> elements) {
         super(new FastGraphBuilder());
 		this.elements = elements;
         this.op = op;
+        this.pf = pf;
 	}
 
-	public AnimObject(MathInstruction op, Relationship... elements) {
+	public AnimObject(PFlow pf, MathInstruction op, Relationship... elements) {
         super(new FastGraphBuilder());
         this.elements = new FastList<Relationship>();
         for (Relationship r : elements) {
 		    this.elements.add(r);
         }
         this.op = op;
+        this.pf = pf;
 	}
 
-	private boolean check(Relationship r) {
+	private boolean check(List<Relationship> elements, Relationship r) throws IOException {
+		System.out.println("check");
+		System.out.println(r.getType());
     	if (r.isType(VALUE._)) {
     		elements.add(r);
     		return true;
     		
     	} else if (r.isType(AN._)) {
     		if (!Utils.haveContext(r.getEndNode())) {
-        		elements.add( r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING) );
+
+    			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
+    			List<Relationship> els = getElements(pf, ref.getEndNode());
+    			if (els == null || els.isEmpty())
+    				;
+    			else if (els.size() == 1)
+    				elements.add(els.get(0));
+    			else 
+    				elements.add( new AnimObject(pf, MUL._, els));
+        		
         		return true;
+    		
     		} else {
                 try {
                 	Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
@@ -98,7 +120,7 @@ public class AnimObject extends AbstractExpression {
     				if (obj != null && obj instanceof String ) {
     					Statement s = Statements.name((String) obj);
     					if (s instanceof MathInstruction) {
-							elements.add(new AnimObject((MathInstruction)s, r));
+							elements.add(new AnimObject(pf, (MathInstruction)s, r));
 							return true;
     					}
     				} else {
@@ -113,47 +135,55 @@ public class AnimObject extends AbstractExpression {
 	}
 
 	protected List<Relationship> getElements(final PFlow pf) throws IOException {
-		if (elements == null) {
-			elements = new FastList<Relationship>();
+		if (elements == null)
+			elements = getElements(pf, super.relationship());
+			
+		return elements;
+	}
 
-			Node n;
-			if (relationship().isType(REF._))
-				n = relationship().getStartNode();
-			else
-				n = relationship().getEndNode();
-			
-            IndexHits<Relationship> hits = Order._.context(n);
-            try {
-                for (Relationship r : hits) {
-                	if (!check(r)) {
-                		if (pf == null)
+	protected List<Relationship> getElements(final PFlow pf, Relationship op) throws IOException {
+		Node n;
+		if (op.isType(REF._))
+			n = op.getStartNode();
+		else
+			n = op.getEndNode();
+		
+		return getElements(pf, n);
+	}
+
+	protected List<Relationship> getElements(final PFlow pf, Node n) throws IOException {
+		List<Relationship> elements = new FastList<Relationship>();
+
+        IndexHits<Relationship> hits = Order._.context(n);
+        try {
+            for (Relationship r : hits) {
+            	if (!check(elements, r)) {
+            		if (pf == null)
+            			throw new RuntimeException("Unsupported operator "+r);
+            		
+            		Pipe pipe = Evaluator._.execute(pf.getController(), pf.getVector().question(r), null, false);
+                	QCAVector v;
+                	while ((v = pipe.take()) != null) {
+                		System.out.println(v);
+                		if (v.getQuestion().isType(GET._)) {
+                            IndexHits<Relationship> _hits = Order._.context(v.getClosest().getEndNode());
+                            try {
+                            	for (Relationship rr : _hits) {
+                            		if (!check(elements, rr))
+                            			throw new RuntimeException("Unsupported operator "+rr);
+                            	}
+                            } finally {
+                            	_hits.close();
+                            }
+                			
+                		} else if (!check(elements, v.getClosest()))
                 			throw new RuntimeException("Unsupported operator "+r);
-                		
-                		Pipe pipe = Evaluator._.execute(pf.getController(), pf.getVector().question(r), null, false);
-	                	QCAVector v;
-	                	while ((v = pipe.take()) != null) {
-	                		System.out.println(v);
-	                		if (v.getQuestion().isType(GET._)) {
-	                            IndexHits<Relationship> _hits = Order._.context(v.getClosest().getEndNode());
-	                            try {
-	                            	for (Relationship rr : _hits) {
-	                            		if (!check(rr))
-	                            			throw new RuntimeException("Unsupported operator "+rr);
-	                            	}
-	                            } finally {
-	                            	_hits.close();
-	                            }
-	                			
-	                		} else if (!check(v.getClosest()))
-	                			throw new RuntimeException("Unsupported operator "+r);
-	                	}
                 	}
-                }
-            } finally {
-            	hits.close();
+            	}
             }
-			
-		}
+        } finally {
+        	hits.close();
+        }
 		if (elements.size() == 1 && elements.get(0) instanceof AnimObject)
 			elements = ((AnimObject)elements.get(0)).getElements(pf);
 			
@@ -161,7 +191,10 @@ public class AnimObject extends AbstractExpression {
 	}
 	
 	public Relationship relax(final PFlow pf) throws IOException {
-		return op.execute(pf, this);
+		if (result == null)
+			result = op.execute(pf, this);
+		
+		return result;
 	}
 
     @Override
@@ -180,4 +213,15 @@ public class AnimObject extends AbstractExpression {
         builder.end();
     }
 
+    @Override
+    protected Relationship relationship() {
+		try {
+			Relationship r = relax(pf);
+			if (r != null) return r;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    	
+		return super.relationship();
+    }
 }
