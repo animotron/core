@@ -92,15 +92,27 @@ public class AnimObject extends AbstractExpression {
         this.pf = pf;
 	}
 
-	private boolean check(Relationship r) {
+	private boolean check(List<Relationship> elements, Relationship r) throws IOException {
+		System.out.println("check");
+		System.out.println(r.getType());
     	if (r.isType(VALUE._)) {
     		elements.add(r);
     		return true;
     		
     	} else if (r.isType(AN._)) {
     		if (!Utils.haveContext(r.getEndNode())) {
-        		elements.add( r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING) );
+
+    			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
+    			List<Relationship> els = getElements(pf, ref.getEndNode());
+    			if (els == null || els.isEmpty())
+    				;
+    			else if (els.size() == 1)
+    				elements.add(els.get(0));
+    			else 
+    				elements.add( new AnimObject(pf, MUL._, els));
+        		
         		return true;
+    		
     		} else {
                 try {
                 	Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
@@ -123,47 +135,55 @@ public class AnimObject extends AbstractExpression {
 	}
 
 	protected List<Relationship> getElements(final PFlow pf) throws IOException {
-		if (elements == null) {
-			elements = new FastList<Relationship>();
+		if (elements == null)
+			elements = getElements(pf, super.relationship());
+			
+		return elements;
+	}
 
-			Node n;
-			if (relationship().isType(REF._))
-				n = relationship().getStartNode();
-			else
-				n = relationship().getEndNode();
-			
-            IndexHits<Relationship> hits = Order._.context(n);
-            try {
-                for (Relationship r : hits) {
-                	if (!check(r)) {
-                		if (pf == null)
+	protected List<Relationship> getElements(final PFlow pf, Relationship op) throws IOException {
+		Node n;
+		if (op.isType(REF._))
+			n = op.getStartNode();
+		else
+			n = op.getEndNode();
+		
+		return getElements(pf, n);
+	}
+
+	protected List<Relationship> getElements(final PFlow pf, Node n) throws IOException {
+		List<Relationship> elements = new FastList<Relationship>();
+
+        IndexHits<Relationship> hits = Order._.context(n);
+        try {
+            for (Relationship r : hits) {
+            	if (!check(elements, r)) {
+            		if (pf == null)
+            			throw new RuntimeException("Unsupported operator "+r);
+            		
+            		Pipe pipe = Evaluator._.execute(pf.getController(), pf.getVector().question(r), null, false);
+                	QCAVector v;
+                	while ((v = pipe.take()) != null) {
+                		System.out.println(v);
+                		if (v.getQuestion().isType(GET._)) {
+                            IndexHits<Relationship> _hits = Order._.context(v.getClosest().getEndNode());
+                            try {
+                            	for (Relationship rr : _hits) {
+                            		if (!check(elements, rr))
+                            			throw new RuntimeException("Unsupported operator "+rr);
+                            	}
+                            } finally {
+                            	_hits.close();
+                            }
+                			
+                		} else if (!check(elements, v.getClosest()))
                 			throw new RuntimeException("Unsupported operator "+r);
-                		
-                		Pipe pipe = Evaluator._.execute(pf.getController(), pf.getVector().question(r), null, false);
-	                	QCAVector v;
-	                	while ((v = pipe.take()) != null) {
-	                		System.out.println(v);
-	                		if (v.getQuestion().isType(GET._)) {
-	                            IndexHits<Relationship> _hits = Order._.context(v.getClosest().getEndNode());
-	                            try {
-	                            	for (Relationship rr : _hits) {
-	                            		if (!check(rr))
-	                            			throw new RuntimeException("Unsupported operator "+rr);
-	                            	}
-	                            } finally {
-	                            	_hits.close();
-	                            }
-	                			
-	                		} else if (!check(v.getClosest()))
-	                			throw new RuntimeException("Unsupported operator "+r);
-	                	}
                 	}
-                }
-            } finally {
-            	hits.close();
+            	}
             }
-			
-		}
+        } finally {
+        	hits.close();
+        }
 		if (elements.size() == 1 && elements.get(0) instanceof AnimObject)
 			elements = ((AnimObject)elements.get(0)).getElements(pf);
 			
