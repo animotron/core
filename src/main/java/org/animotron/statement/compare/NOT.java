@@ -20,13 +20,13 @@
  */
 package org.animotron.statement.compare;
 
-import java.io.IOException;
-import java.util.Set;
-
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -36,7 +36,7 @@ public class NOT extends Operator implements Predicate {
 
 	public static final NOT _ = new NOT();
 
-	private NOT() { super("not"); }
+	private NOT() { super("not", "!"); }
 	
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) {

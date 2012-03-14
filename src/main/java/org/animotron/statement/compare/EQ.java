@@ -53,7 +53,7 @@ public class EQ extends Operator implements Predicate {
 	
 	public static final EQ _ = new EQ();
 	
-	private EQ() { super("eq"); }
+	private EQ() { super("eq", "=="); }
 
 	private static boolean debug = false;
 	

@@ -20,13 +20,13 @@
  */
 package org.animotron.statement.compare;
 
-import java.io.IOException;
-import java.util.Set;
-
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * Compare operator 'GT'.
@@ -38,7 +38,7 @@ public class GT extends Operator implements Predicate {
 	
 	public static final GT _ = new GT();
 	
-	private GT() { super("gt"); }
+	private GT() { super("gt", ">"); }
 
 	@Override
 	public boolean filter(PFlow pf, Relationship op, Relationship ref) {

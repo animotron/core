@@ -38,12 +38,12 @@ public class loveTest extends ATest {
         testAnimo("the John person.");
         testAnimo("the Lily person.");
         testAnimo("the Lui person.");
-        testAnimo("the event1 (Peter love Kate) (date \"2012-03-14\").");
-        testAnimo("the event2 (John love Joe) (date sometime).");
-        testAnimo("the event3 (Joe love Lily) (date \"2012-03-12\").");
-        testAnimo("the event4 (Lily love Lui) (date \"2012-03-15\").");
+        testAnimo("the event1 love (Peter, Kate) (date \"2012-03-14\").");
+        testAnimo("the event2 love (John, Joe) (date sometime).");
+        testAnimo("the event3 love (Joe, Lily) (date \"2012-03-12\").");
+        testAnimo("the event4 love (Lily, Lui) (date \"2012-03-15\").");
         testAnimo("the today date \"2012-03-14\".");
-        assertAnimoResult("all love.", "");
+        assertAnimoResult("get person all love.", "Kate. Joe. Lily. Lui.");
     }
 
 }
