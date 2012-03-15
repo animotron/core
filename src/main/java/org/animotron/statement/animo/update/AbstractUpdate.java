@@ -23,7 +23,6 @@ package org.animotron.statement.animo.update;
 import javolution.util.FastSet;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.Properties;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
@@ -46,7 +45,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.Properties.ARID;
+import static org.animotron.graph.Properties.UUID;
 import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -115,24 +117,44 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             }
         } else {
             final Node n = v.getClosest().getEndNode();
-            Relationship r = n.getSingleRelationship(THE._, INCOMING);
+            final Relationship r = n.getSingleRelationship(THE._, INCOMING);
             if (r != null) {
-                DependenciesTracking._.execute(null,
-                    AnimoGraph.execute(new GraphOperation<Relationship>() {
-                        @Override
-                        public Relationship execute() throws Throwable {
-                            Node rev = THE._.getActualRevision(n);
-                            Node rn = createNode();
-                            process(rn, rev, x, diff(rev, x));
-                            Relationship rr = rev.createRelationshipTo(rn, RelationshipTypes.REV);
-                            Properties.UUID.set(rr, uuid());
-                            return rr;
+                AnimoGraph.execute(new GraphOperation<Void>() {
+                    @Override
+                    public Void execute() throws Throwable {
+                        Node rev = THE._.getActualRevision(n);
+                        Node rn = createNode();
+                        Path path = diff(rev, x).next();
+                        if (path != null) {
+                            Relationship skip = path.relationships().iterator().next();
+                            IndexHits<Relationship> it = Order._.queryDown(rev);
+                            try{
+                                for (Relationship i : it) {
+                                    if (!i.equals(skip)) {
+                                        copy(rn, i);
+                                    }
+                                }
+                            } finally {
+                                it.close();
+                            }
+                            process(rn, rev, x, path);
+                        } else {
+                            process(rn, rev, x);
                         }
-                }));
+                        Relationship rr = rev.createRelationshipTo(rn, RelationshipTypes.REV);
+                        ARID.set(r, rr.getId());
+                        ARID.set(n, rn.getId());
+                        UUID.set(rr, uuid());
+                        return null;
+                    }
+                });
+                DependenciesTracking._.execute(null, r);
             }
         }
     }
 
-    protected abstract void process(Node root, Node rev, Node x, Iterator<Path> diff);
+    protected abstract void process(Node rn, Node rev, Node x);
+
+    protected abstract void process(Node root, Node rev, Node x, Path diff);
 
 }

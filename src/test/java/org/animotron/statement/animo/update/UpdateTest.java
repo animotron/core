@@ -39,10 +39,10 @@ public class UpdateTest extends ATest {
     @Ignore
 	public void test_00() throws Throwable {
         Expression e = testAnimo("the a x 1.");
-        eval(new AnimoExpression("add a y 2."));
-        //assertAnimo(e, "the a (x 1) (y 2).");
-        eval(new AnimoExpression("add a y 2."));
-        //assertAnimo(e, "the a (x 1) (y 2).");
+        eval(new AnimoExpression("add (get x a) (y 2)."));
+        //assertAnimo(e, "the a x 1 (y 2).");
+        eval(new AnimoExpression("add a z 3."));
+        //assertAnimo(e, "the a (x 1 (y 2)) (z 3).");
         eval(new AnimoExpression("delete get x a."));
         //assertAnimo(e, "the a y 2.");
 	}

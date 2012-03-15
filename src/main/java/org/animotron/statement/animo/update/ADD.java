@@ -23,8 +23,6 @@ package org.animotron.statement.animo.update;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 
-import java.util.Iterator;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -41,7 +39,12 @@ public class ADD extends AbstractUpdate {
 //    }
 
     @Override
-    protected void process(Node root, Node rev, Node x, Iterator<Path> diff) {
+    protected void process(Node rn, Node rev, Node x) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    protected void process(Node root, Node rev, Node x, Path diff) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
