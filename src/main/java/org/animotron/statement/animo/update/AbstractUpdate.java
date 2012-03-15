@@ -25,6 +25,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
+import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.DependenciesTracking;
 import org.animotron.manipulator.OnQuestion;
@@ -41,6 +42,7 @@ import org.neo4j.graphdb.traversal.Evaluator;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -48,6 +50,7 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.Properties.ARID;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.Properties.UUID;
 import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.INCOMING;
@@ -120,12 +123,19 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             final Relationship r = n.getSingleRelationship(THE._, INCOMING);
             if (r != null) {
                 AnimoGraph.execute(new GraphOperation<Void>() {
+                    private void revision(Node rn, Node n, Relationship r) throws IOException {
+                        Relationship rr = n.createRelationshipTo(rn, RelationshipTypes.REV);
+                        ARID.set(r, rr.getId());
+                        ARID.set(n, rn.getId());
+                        UUID.set(rr, uuid());
+                        HASH.set(rr, DigestSerializer._.serialize(rr));
+                    }
                     @Override
                     public Void execute() throws Throwable {
                         Node rev = THE._.getActualRevision(n);
-                        Node rn = createNode();
                         Path path = diff(rev, x).next();
                         if (path != null) {
+                            Node rn = createNode();
                             Relationship skip = path.relationships().iterator().next();
                             IndexHits<Relationship> it = Order._.queryDown(rev);
                             try{
@@ -137,14 +147,10 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                             } finally {
                                 it.close();
                             }
-                            process(rn, rev, x, path);
-                        } else {
-                            process(rn, rev, x);
+                            revision(process(rev, x, path), n, r);
+                        } else if (n.equals(x)) {
+                            revision(process(rev, x), n, r);
                         }
-                        Relationship rr = rev.createRelationshipTo(rn, RelationshipTypes.REV);
-                        ARID.set(r, rr.getId());
-                        ARID.set(n, rn.getId());
-                        UUID.set(rr, uuid());
                         return null;
                     }
                 });
@@ -153,8 +159,8 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         }
     }
 
-    protected abstract void process(Node rn, Node rev, Node x);
+    protected abstract Node process(Node rev, Node x);
 
-    protected abstract void process(Node root, Node rev, Node x, Path diff);
+    protected abstract Node process(Node rev, Node x, Path diff);
 
 }

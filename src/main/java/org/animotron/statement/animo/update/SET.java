@@ -39,12 +39,12 @@ public class SET extends AbstractUpdate {
 //    }
 
     @Override
-    protected void process(Node rn, Node rev, Node x) {
+    protected Node process(Node rev, Node x) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    protected void process(Node root, Node rev, Node x, Path diff) {
+    protected Node process(Node rev, Node x, Path diff) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
