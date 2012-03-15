@@ -20,6 +20,7 @@
  */
 package org.animotron.statement.animo.update;
 
+import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 
@@ -50,7 +51,7 @@ public class DELETE extends AbstractUpdate {
     }
 
     @Override
-    protected Node process(Node n, Path diff) {
+    protected Node process(PFlow pf, Node n, Path diff) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 }

@@ -20,7 +20,6 @@
  */
 package org.animotron.statement.animo.update;
 
-import javolution.util.FastSet;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.RelationshipTypes;
@@ -45,13 +44,10 @@ import org.neo4j.kernel.Uniqueness;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.Properties.ARID;
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.Properties.UUID;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -74,18 +70,9 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         @Override
         public void act(PFlow pf) throws Throwable {
             Pipe destination = Utils.getByREF(pf);
-            IndexHits<Relationship> it = Order._.context(pf.getOP().getEndNode());
-            try {
-                Set<Relationship> param = new FastSet<Relationship>();
-                for (Relationship r : it) {
-                    param.add(r);
-                }
-                QCAVector v;
-                while ((v = destination.take()) != null) {
-                    execute(v, v.getClosest().getEndNode());
-                }
-            } finally {
-                it.close();
+            QCAVector v;
+            while ((v = destination.take()) != null) {
+                execute(pf, v, v.getClosest().getEndNode());
             }
         }
     }
@@ -112,11 +99,11 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 }).traverse(start).iterator();
     }
 
-    private void execute(QCAVector v, final Node x) throws Throwable {
+    private void execute(final PFlow pf, QCAVector v, final Node x) throws Throwable {
         List<QCAVector> c = v.getContext();
         if (c != null) {
             for (QCAVector i : c) {
-                execute(i, x);
+                execute(pf, i, x);
             }
         } else {
             final Node n = v.getClosest().getEndNode();
@@ -147,9 +134,9 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                             } finally {
                                 it.close();
                             }
-                            revision(process(rev, path), n, r);
+                            revision(process(pf, rev, path), n, r);
                         } else if (n.equals(x)) {
-                            revision(process(rev), n, r);
+                            revision(process(pf, rev), n, r);
                         }
                         return null;
                     }
@@ -159,8 +146,8 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         }
     }
 
-    protected abstract Node process(Node n);
+    protected abstract Node process(PFlow pf, Node n);
 
-    protected abstract Node process(Node n, Path diff);
+    protected abstract Node process(PFlow pf, Node n, Path diff);
 
 }
