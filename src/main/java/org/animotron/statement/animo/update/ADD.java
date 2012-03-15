@@ -39,12 +39,12 @@ public class ADD extends AbstractUpdate {
 //    }
 
     @Override
-    protected Node process(Node rev, Node x) {
+    protected Node process(Node n) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
     @Override
-    protected Node process(Node rev, Node x, Path diff) {
+    protected Node process(Node n, Path diff) {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 

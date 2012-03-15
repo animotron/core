@@ -147,9 +147,9 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                             } finally {
                                 it.close();
                             }
-                            revision(process(rev, x, path), n, r);
+                            revision(process(rev, path), n, r);
                         } else if (n.equals(x)) {
-                            revision(process(rev, x), n, r);
+                            revision(process(rev), n, r);
                         }
                         return null;
                     }
@@ -159,8 +159,8 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
         }
     }
 
-    protected abstract Node process(Node rev, Node x);
+    protected abstract Node process(Node n);
 
-    protected abstract Node process(Node rev, Node x, Path diff);
+    protected abstract Node process(Node n, Path diff);
 
 }
