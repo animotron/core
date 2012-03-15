@@ -125,7 +125,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                             Node rn = createNode();
                             Relationship skip = path.relationships().iterator().next();
                             IndexHits<Relationship> it = Order._.queryDown(rev);
-                            try{
+                            try {
                                 for (Relationship i : it) {
                                     if (!i.equals(skip)) {
                                         copy(rn, i);

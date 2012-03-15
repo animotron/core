@@ -46,12 +46,14 @@ public class DELETE extends AbstractUpdate {
 //    }
 
     @Override
-    protected Node process(Node n) {
+    protected Node process(PFlow pf, Node n) {
         //To change body of implemented methods use File | Settings | File Templates.
+        return n;
     }
 
     @Override
     protected Node process(PFlow pf, Node n, Path diff) {
         //To change body of implemented methods use File | Settings | File Templates.
+        return n;
     }
 }
