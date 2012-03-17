@@ -23,8 +23,10 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -255,6 +257,10 @@ public class QCAVector {
 			b.append(" '");
 			b.append(question.getType());
 			b.append("'");
+			
+			for (Relationship r : question.getEndNode().getRelationships(REF._, Direction.OUTGOING)) {
+				b.append(" "+THE._.reference(r));
+			}
 			
 //			try {
 //				Pipe thes = AN.getREFs(null, new QCAVector(question));
