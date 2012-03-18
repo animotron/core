@@ -218,7 +218,7 @@ public abstract class ATest {
         if (messagers) System.out.println("HTML result serializer...");
         String result = CachedSerializer.HTML.serialize(op);
         if (messagers) System.out.println(result);
-        Assert.assertEquals("", expected, result);
+        Assert.assertEquals("", "<!DOCTYPE html>" + expected, result);
         if (messagers) System.out.println();
     }
 
