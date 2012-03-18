@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
+import static org.junit.Assert.*;
 
 
 /**
@@ -80,6 +81,15 @@ public class CurrentWebFrameworkTest extends ATest {
 
         assertAnimoResult(q1, 
     		"the foo-site (site the hello-foo (html-page (mime-tipe) (\\html (\\head \\title title \"hello foo\") (\\body the foo-root-layout (layout) (foo) (root) (\\h1 title \"hello foo\") (\\p content \"foo foo foo\")))) (service) (root) (foo) (title) (content)) (server-name) (weak-use foo).");
+
+        assertXMLResult(q1, 
+    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+
+        try {
+        	assertXMLResult(q2, "");
+        	fail("must be empty");
+        } catch (Exception e) {
+		}
 
     }
 }
