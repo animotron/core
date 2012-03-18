@@ -83,8 +83,10 @@ public class CurrentWebFrameworkTest extends ATest {
 
         assertStringResult(m1, "text/html");
         assertStringResult(m2, "");
-        assertStringResult(m3, "text/html");
+        assertStringResult(m3, "");
         assertStringResult(m4, "text/html");
+        assertStringResult(m5, "text/html");
+        assertStringResult(m6, "text/html");
 
         assertAnimoResult(q1, 
     		"the foo-site (site the hello-foo (html-page (mime-tipe) (\\html (\\head \\title title \"hello foo\") (\\body the foo-root-layout (layout) (foo) (root) (\\h1 title \"hello foo\") (\\p content \"foo foo foo\")))) (service) (root) (foo) (title) (content)) (server-name) (weak-use foo).");
@@ -98,10 +100,10 @@ public class CurrentWebFrameworkTest extends ATest {
         } catch (Exception e) {
 		}
 
-        assertXMLResult(q3, 
+        assertXMLResult(q4, 
     		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
-        assertXMLResult(q4, 
+        assertXMLResult(q5, 
     		"<html><head><title>hello world</title></head><body/></html>");
     }
 }
