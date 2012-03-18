@@ -65,13 +65,13 @@ public class CurrentWebFrameworkTest extends ATest {
             "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar (xxx) (yyy))"
         );
 
-        Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (use root)");
-        Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (use xxx)");
-        Expression q3 = new AnimoExpression("any site (with server-name \"foo.com\") (use yyy)");
+        Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (weak-use root)");
+        Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (weak-use xxx)");
+        Expression q3 = new AnimoExpression("any site (with server-name \"foo.com\") (weak-use yyy)");
 
-        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (use root)");
-        Expression q5 = new AnimoExpression("any site (with server-name \"bar.com\") (use xxx)");
-        Expression q6 = new AnimoExpression("any site (with server-name \"bar.com\") (use yyy)");
+        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (weak-use root)");
+        Expression q5 = new AnimoExpression("any site (with server-name \"bar.com\") (weak-use xxx)");
+        Expression q6 = new AnimoExpression("any site (with server-name \"bar.com\") (weak-use yyy)");
 
         Expression m1 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q1))));
         Expression m2 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q2))));
