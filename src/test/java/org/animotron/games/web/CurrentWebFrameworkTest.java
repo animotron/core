@@ -43,15 +43,15 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the site any service",
+            "the site get service",
             
             "the text-html (mime-type) (type \"text/html\") (extrnsion \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
             
-            "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the xxx (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
+            "the xxx (html-page) (title \"hello world\") (content \"xxx xxx xxx\")",
             //"the xxx-bar (xxx) (bar).",
             //"the xxx-layout-bar (xxx-layout) (bar).",
             
@@ -61,15 +61,15 @@ public class CurrentWebFrameworkTest extends ATest {
             "the xxx-layout (layout, xxx) (\\h3 get title) (\\span get content)",
             
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar xxx)"
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)"
+//            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar xxx)"
         );
 
-        Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (use root)");
-        Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (use xxx)");
+        Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (service any root)");
+        Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (service xxx)");
         
-        Expression q3 = new AnimoExpression("any site (with server-name \"bar.com\") (use root)");
-        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (use xxx)");
+        Expression q3 = new AnimoExpression("any site (with server-name \"bar.com\") (service any root)");
+        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (service xxx)");
 
         Expression m1 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q1))));
         Expression m2 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q2))));
@@ -77,7 +77,7 @@ public class CurrentWebFrameworkTest extends ATest {
         Expression m4 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q4))));
 
         assertStringResult(m1, "text/html");
-        assertStringResult(m2, "");
+        assertStringResult(m2, "text/html");
         assertStringResult(m3, "text/html");
         assertStringResult(m4, "text/html");
 
