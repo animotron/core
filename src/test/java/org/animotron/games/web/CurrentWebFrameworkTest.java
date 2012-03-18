@@ -43,20 +43,27 @@ public class CurrentWebFrameworkTest extends ATest {
 
         __(
             "the site any service",
+            
             "the text-html (mime-type) (type \"text/html\") (extrnsion \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
-            "the hello-foo (html-page, service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page, service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
+            
+            "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
+            
             "the xxx (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
+            
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             "the xxx-layout (layout, xxx) (\\h3 get title) (\\span get content)",
+            
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
+            
             "the bar-site (site) (server-name \"bar.com\") (weak-use bar)"
         );
 
         Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (use root)");
         Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (use xxx)");
+        
         Expression q3 = new AnimoExpression("any site (with server-name \"bar.com\") (use root)");
         Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (use xxx)");
 
@@ -66,11 +73,12 @@ public class CurrentWebFrameworkTest extends ATest {
         Expression m4 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q4))));
 
         assertStringResult(m1, "text/html");
-        assertStringResult(m2, "text/html");
+        assertStringResult(m2, "");
         assertStringResult(m3, "text/html");
-        assertStringResult(m4, "text/html");
+        assertStringResult(m4, "");
 
-        assertAnimoResult(q1, "");
+        assertAnimoResult(q1, 
+    		"the foo-site (site the hello-foo (html-page (mime-tipe) (\\html (\\head \\title title \"hello foo\") (\\body the foo-root-layout (layout) (foo) (root) (\\h1 title \"hello foo\") (\\p content \"foo foo foo\")))) (service) (root) (foo) (title) (content)) (server-name) (weak-use foo).");
 
     }
 }
