@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
-import static org.junit.Assert.*;
 
 
 /**
@@ -48,21 +47,18 @@ public class CurrentWebFrameworkTest extends ATest {
             "the text-html (mime-type) (type \"text/html\") (extrnsion \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
             
-            "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page, service) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page, service) (title \"hello bar\") (content \"bar bar bar\")",
             
             "the xxx (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
-            //"the xxx-bar (xxx) (bar).",
-            //"the xxx-layout-bar (xxx-layout) (bar).",
-            
+
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
             "the xxx-layout (layout, xxx) (\\h3 get title) (\\span get content)",
             
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar xxx)"
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (foo xxx) (root hello-foo)",
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar xxx) (root hello-bar)"
         );
 
         Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (use root)");
