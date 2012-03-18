@@ -65,8 +65,6 @@ public class CurrentWebFrameworkTest extends ATest {
             "the bar-site (site) (server-name \"bar.com\") (use bar) (bar (xxx) (yyy))"
         );
 
-        assertAnimoResultOneStep("any service use xxx", "the zzz-layout (layout, xxx, foo) (\\h3 get title) (\\span get content).");
-
         String fooSite = "any site (with server-name \"foo.com\")";
         
         Expression q1 = new AnimoExpression(fooSite+" (use root)");
