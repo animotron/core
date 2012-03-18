@@ -50,28 +50,33 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the xxx (html-page, service) (use zzz-layout) (title \"hello world\") (content \"xxx xxx xxx\")",
-            "the yyy (html-page, service) (use zzz-layout) (title \"hello hell\") (content \"yyy yyy yyy\")",
+            "the xxx (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
+            "the yyy (html-page, service) (title \"hello hell\") (content \"yyy yyy yyy\")",
             //"the xxx-bar (xxx) (bar).",
             //"the xxx-layout-bar (xxx-layout) (bar).",
             
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the zzz-layout (layout) (\\h3 get title) (\\span get content)",
+            "the zzz-layout (layout, xxx, foo) (\\h3 get title) (\\span get content)",
             
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
             
             "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar (xxx) (yyy))"
         );
 
-        Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (use root)");
-        Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (use xxx)");
-        Expression q3 = new AnimoExpression("any site (with server-name \"foo.com\") (use yyy)");
+        assertAnimoResultOneStep("any service use xxx", "the zzz-layout (layout, xxx, foo) (\\h3 get title) (\\span get content).");
 
-        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (use root)");
-        Expression q5 = new AnimoExpression("any site (with server-name \"bar.com\") (use xxx)");
-        Expression q6 = new AnimoExpression("any site (with server-name \"bar.com\") (use yyy)");
+        String fooSite = "any site (with server-name \"foo.com\")";
+        
+        Expression q1 = new AnimoExpression(fooSite+" (use root)");
+        Expression q2 = new AnimoExpression(fooSite+" (use xxx)");
+        Expression q3 = new AnimoExpression(fooSite+" (use yyy)");
+
+        String barSite = "any site (with server-name \"bar.com\")";
+        Expression q4 = new AnimoExpression(barSite+" (use root)");
+        Expression q5 = new AnimoExpression(barSite+" (use xxx)");
+        Expression q6 = new AnimoExpression(barSite+" (use yyy)");
 
         Expression m1 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q1))));
         Expression m2 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q2))));
