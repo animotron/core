@@ -52,6 +52,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
             
             "the xxx (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
+            "the yyy (html-page, service) (title \"hello hell\") (content \"yyy yyy yyy\")",
             //"the xxx-bar (xxx) (bar).",
             //"the xxx-layout-bar (xxx-layout) (bar).",
             
@@ -62,19 +63,23 @@ public class CurrentWebFrameworkTest extends ATest {
             
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
             
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar xxx)"
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar (xxx) (yyy))"
         );
 
         Expression q1 = new AnimoExpression("any site (with server-name \"foo.com\") (use root)");
         Expression q2 = new AnimoExpression("any site (with server-name \"foo.com\") (use xxx)");
-        
-        Expression q3 = new AnimoExpression("any site (with server-name \"bar.com\") (use root)");
-        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (use xxx)");
+        Expression q3 = new AnimoExpression("any site (with server-name \"foo.com\") (use yyy)");
+
+        Expression q4 = new AnimoExpression("any site (with server-name \"bar.com\") (use root)");
+        Expression q5 = new AnimoExpression("any site (with server-name \"bar.com\") (use xxx)");
+        Expression q6 = new AnimoExpression("any site (with server-name \"bar.com\") (use yyy)");
 
         Expression m1 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q1))));
         Expression m2 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q2))));
         Expression m3 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q3))));
         Expression m4 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q4))));
+        Expression m5 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q5))));
+        Expression m6 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q6))));
 
         assertStringResult(m1, "text/html");
         assertStringResult(m2, "");
