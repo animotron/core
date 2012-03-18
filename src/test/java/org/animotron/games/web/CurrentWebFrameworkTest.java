@@ -44,7 +44,7 @@ public class CurrentWebFrameworkTest extends ATest {
         __(
             "the site any service",
             
-            "the text-html (mime-type) (type \"text/html\") (extrnsion \"htm\" \"html\")",
+            "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
             
             "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
@@ -58,11 +58,11 @@ public class CurrentWebFrameworkTest extends ATest {
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the zzz-layout (layout, xxx, foo) (\\h3 get title) (\\span get content)",
+            "the zzz-layout (layout, xxx, yyy) (\\h3 get title) (\\span get content)",
             
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
+            "the foo-site (site) (server-name \"foo.com\") (use foo)",
             
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar (xxx) (yyy))"
+            "the bar-site (site) (server-name \"bar.com\") (use bar) (bar (xxx) (yyy))"
         );
 
         assertAnimoResultOneStep("any service use xxx", "the zzz-layout (layout, xxx, foo) (\\h3 get title) (\\span get content).");
