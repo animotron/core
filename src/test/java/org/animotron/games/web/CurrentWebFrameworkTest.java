@@ -47,22 +47,20 @@ public class CurrentWebFrameworkTest extends ATest {
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
             
-            "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page, service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page, service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the xxx-service (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
-            "the yyy-service (html-page, service) (title \"hello hell\") (content \"yyy yyy yyy\")",
-            //"the xxx-bar (xxx) (bar).",
-            //"the xxx-layout-bar (xxx-layout) (bar).",
-            
+            "the xxx-service (html-page, service, foo) (title \"hello world\") (content \"xxx xxx xxx\")",
+            "the yyy-service (html-page, service, bar) (title \"hello hell\") (content \"yyy yyy yyy\")",
+
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the zzz-layout (layout) (\\h3 get title) (\\span get content)",
+            "the zzz-layout (layout, xxx, yyy) (\\h3 get title) (\\span get content)",
             
-            "the foo-site (site) (server-name \"foo.com\") (use foo)",
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
             
-            "the bar-site (site) (server-name \"bar.com\") (use bar) (bar (xxx) (yyy))"
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)"
         );
 
         String fooSite = "any site (with server-name \"foo.com\")";
@@ -84,8 +82,8 @@ public class CurrentWebFrameworkTest extends ATest {
         Expression m6 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q6))));
 
         assertStringResult(m1, "text/html");
-        assertStringResult(m2, "");
-        assertStringResult(m3, "");
+        assertStringResult(m2, "text/html");
+        assertStringResult(m3, "text/html");
         assertStringResult(m4, "text/html");
         assertStringResult(m5, "text/html");
         assertStringResult(m6, "text/html");
