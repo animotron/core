@@ -91,5 +91,10 @@ public class CurrentWebFrameworkTest extends ATest {
         } catch (Exception e) {
 		}
 
+        assertXMLResult(q3, 
+    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
+
+        assertXMLResult(q4, 
+    		"<html><head><title>hello world</title></head><body/></html>");
     }
 }
