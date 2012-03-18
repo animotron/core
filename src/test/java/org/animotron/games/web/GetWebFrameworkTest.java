@@ -43,10 +43,8 @@ public class GetWebFrameworkTest extends ATest {
     
     private Expression query(String site, String service) {
         return new JExpression(
-                _(AN._,
-                        _(ANY._, "site",
-                                _(WITH._, "server-name", value(site))
-                        ),
+                _(ANY._, "site",
+                        _(WITH._, "server-name", value(site)),
                         _(AN._, "service", _(AN._, service))
                 )
         );
@@ -67,19 +65,23 @@ public class GetWebFrameworkTest extends ATest {
 
                 "the root (html-page) (any main)",
                 "the hello-foo (main) (title \"hello foo\") (content \"foo foo foo\")",
-                "the hello-bar (main) (title \"hello bar\") (content \"bar bar bar\")",
+//                "the hello-bar (main) (title \"hello bar\") (content \"bar bar bar\")",
 
-                "the xxx-service (html-page) (title \"hello world\") (content \"xxx xxx xxx\")",
-                "the yyy-service (html-page) (title \"hello hell\") (content \"yyy yyy yyy\")",
-
-                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
-                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
-
-                "the zzz-layout (layout, xxx, yyy) (\\h3 get title) (\\span get content)",
+//                "the xxx-service (html-page) (title \"hello world\") (content \"xxx xxx xxx\")",
+//                "the yyy-service (html-page) (title \"hello hell\") (content \"yyy yyy yyy\")",
+//
+//                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+//                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
+//
+//                "the zzz-layout (layout, xxx, yyy) (\\h3 get title) (\\span get content)",
 
                 "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
                 "the bar-site (site) (server-name \"bar.com\") (weak-use bar)"
         );
+
+        assertAnimoResult("foo-site) (service root)", "");
+        assertAnimoResult("an (any site) (service root)", "");
+        assertAnimoResult("any site service root", "");
 
         Expression q1 = query("foo.com", "root");
         Expression q2 = query("foo.com", "xxx");
@@ -89,13 +91,15 @@ public class GetWebFrameworkTest extends ATest {
         Expression q5 = query("bar.com", "xxx");
         Expression q6 = query("bar.com", "yyy");
 
-        assertStringResult(mime(q1), "text/html");
-        assertStringResult(mime(q2), "text/html");
-        assertStringResult(mime(q3), "text/html");
-        assertStringResult(mime(q4), "text/html");
-        assertStringResult(mime(q5), "text/html");
-        assertStringResult(mime(q6), "text/html");
+        assertAnimoResult(q1, "");
 
+//        assertStringResult(mime(q1), "text/html");
+//        assertStringResult(mime(q2), "text/html");
+//        assertStringResult(mime(q3), "text/html");
+//        assertStringResult(mime(q4), "text/html");
+//        assertStringResult(mime(q5), "text/html");
+//        assertStringResult(mime(q6), "text/html");
+//
 //        assertHtmlResult(q1,
 //                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 //
