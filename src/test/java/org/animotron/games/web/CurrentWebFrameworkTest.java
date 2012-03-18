@@ -29,7 +29,6 @@ import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
-import static org.junit.Assert.*;
 
 
 /**
@@ -51,8 +50,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (service) (root) (foo) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (service) (root) (bar) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the xxx (html-page, service) (title \"hello world\") (content \"xxx xxx xxx\")",
-            "the xxx-bar (xxx) (bar).",
+            "the xxx (html-page) (service) (title \"hello world\") (content \"xxx xxx xxx\")",
             
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
@@ -77,24 +75,10 @@ public class CurrentWebFrameworkTest extends ATest {
         assertStringResult(m1, "text/html");
         assertStringResult(m2, "");
         assertStringResult(m3, "text/html");
-        assertStringResult(m4, "text/html");
+        assertStringResult(m4, "");
 
         assertAnimoResult(q1, 
     		"the foo-site (site the hello-foo (html-page (mime-tipe) (\\html (\\head \\title title \"hello foo\") (\\body the foo-root-layout (layout) (foo) (root) (\\h1 title \"hello foo\") (\\p content \"foo foo foo\")))) (service) (root) (foo) (title) (content)) (server-name) (weak-use foo).");
 
-        assertXMLResult(q1, 
-    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
-
-        try {
-        	assertXMLResult(q2, "");
-        	fail("must be empty");
-        } catch (Exception e) {
-		}
-
-        assertXMLResult(q3, 
-    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
-
-        assertXMLResult(q4, 
-    		"<html><head><title>hello world</title></head><body/></html>");
     }
 }
