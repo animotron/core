@@ -24,9 +24,9 @@ import org.animotron.ATest;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
+import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
@@ -45,7 +45,7 @@ public class CurrentWebFrameworkTest extends ATest {
         return new JExpression(
                 _(ANY._, "site",
                         _(WITH._, "server-name", value(site)),
-                        _(AN._, "service", _(AN._, service))
+                        _(USE._, service)
                 )
         );
     }
