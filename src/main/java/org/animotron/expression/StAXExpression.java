@@ -58,6 +58,11 @@ public class StAXExpression extends AbstractStAXExpression {
     @Override
     public void build() throws Throwable {
         builder.start(THE._, name);
+        process();
+        builder.end();
+    }
+
+    protected void process() throws Throwable {
         while (reader.hasNext()) {
             switch (reader.getEventType()) {
                 case XMLStreamConstants.START_ELEMENT :
@@ -96,10 +101,9 @@ public class StAXExpression extends AbstractStAXExpression {
             }
             reader.next();
         }
-        builder.end();
     }
 
-    private void build(Statement s, Object reference) throws AnimoException, IOException {
+    protected void build(Statement s, Object reference) throws AnimoException, IOException {
         builder._(s, reference);
     }
 
