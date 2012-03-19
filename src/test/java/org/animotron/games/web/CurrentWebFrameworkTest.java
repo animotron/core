@@ -80,7 +80,6 @@ public class CurrentWebFrameworkTest extends ATest {
         Expression m4 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q4))));
         Expression m5 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q5))));
         Expression m6 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q6))));
-
         assertStringResult(m1, "text/html");
         assertStringResult(m2, "text/html");
         assertStringResult(m3, "text/html");
