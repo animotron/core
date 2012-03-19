@@ -68,38 +68,62 @@ public class StAXExpression extends AbstractStAXExpression {
                     startElement();
                     break;
                 case XMLStreamConstants.END_ELEMENT :
-                    builder.end();
+                    endElement();
                     break;
                 case XMLStreamConstants.PROCESSING_INSTRUCTION :
-                    String target = reader.getPITarget();
-                    String data = reader.getPIData();
-                    //builder.start(PI._, _(name(target), value(data)));
-                    //builder.end();
-                    //XXX: target can't be null/empty ?
-                    builder._(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
+                    pi();
                     break;
                 case XMLStreamConstants.DTD :
-                    String dtd = reader.getText();
-                    builder._(DTD._, dtd.isEmpty() ? null : dtd);
+                    dtd();
                     break;
                 case XMLStreamConstants.ENTITY_REFERENCE :
-                    builder._(ENTITY._, _(name(reader.getText())));
+                    entity();
                     break;
                 case XMLStreamConstants.CDATA :
-                    String cdata = reader.getText();
-                    builder._(CDATA._, cdata.isEmpty() ? null : cdata);
+                    cdata();
                     break;
                 case XMLStreamConstants.COMMENT :
-                    String comment = reader.getText();
-                    builder._(COMMENT._, comment.isEmpty() ? null : comment);
+                    comment();
                     break;
                 case XMLStreamConstants.CHARACTERS :
-                    String text = AbstractValue.removeWS(reader.getText());
-                    if (!text.isEmpty())
-                        builder._(VALUE._, AbstractValue.value(text));
+                    text();
             }
             reader.next();
         }
+    }
+
+    private void text() throws AnimoException, IOException {
+        String text = AbstractValue.removeWS(reader.getText());
+        if (!text.isEmpty())
+            builder._(VALUE._, AbstractValue.value(text));
+    }
+
+    private void comment() throws AnimoException, IOException {
+        String comment = reader.getText();
+        builder._(COMMENT._, comment.isEmpty() ? null : comment);
+    }
+
+    private void cdata() throws AnimoException, IOException {
+        String cdata = reader.getText();
+        builder._(CDATA._, cdata.isEmpty() ? null : cdata);
+    }
+
+    private void entity() throws AnimoException, IOException {
+        builder._(ENTITY._, _(name(reader.getText())));
+    }
+
+    private void dtd() throws AnimoException, IOException {
+        String dtd = reader.getText();
+        builder._(DTD._, dtd.isEmpty() ? null : dtd);
+    }
+
+    private void pi() throws AnimoException, IOException {
+        String target = reader.getPITarget();
+        String data = reader.getPIData();
+        //builder.start(PI._, _(name(target), value(data)));
+        //builder.end();
+        //XXX: target can't be null/empty ?
+        builder._(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
     }
 
     protected void startElement() throws AnimoException, IOException {
@@ -112,6 +136,10 @@ public class StAXExpression extends AbstractStAXExpression {
         for (int i = 0; i < reader.getAttributeCount(); i++) {
             builder._(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(AbstractValue.value(reader.getAttributeValue(i)))));
         }
+    }
+
+    protected void endElement() throws AnimoException, IOException {
+        builder.end();
     }
 
 }
