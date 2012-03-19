@@ -48,7 +48,7 @@ public abstract class AbstractStAXExpression extends AbstractExpression {
     }
 
     public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader) {
-        this(new StreamGraphBuilder(), reader, null);
+        this(builder, reader, null);
     }
 
     public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) {
