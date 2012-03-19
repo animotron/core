@@ -22,7 +22,6 @@ package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.statement.Statement;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.THE;
 import org.animotron.statement.value.AbstractValue;
@@ -77,34 +76,30 @@ public class StAXExpression extends AbstractStAXExpression {
                     //builder.start(PI._, _(name(target), value(data)));
                     //builder.end();
                     //XXX: target can't be null/empty ?
-                    build(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
+                    builder._(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
                     break;
                 case XMLStreamConstants.DTD :
                     String dtd = reader.getText();
-                    build(DTD._, dtd.isEmpty() ? null : dtd);
+                    builder._(DTD._, dtd.isEmpty() ? null : dtd);
                     break;
                 case XMLStreamConstants.ENTITY_REFERENCE :
-                    build(ENTITY._, _(name(reader.getText())));
+                    builder._(ENTITY._, _(name(reader.getText())));
                     break;
                 case XMLStreamConstants.CDATA :
                     String cdata = reader.getText();
-                    build(CDATA._, cdata.isEmpty() ? null : cdata);
+                    builder._(CDATA._, cdata.isEmpty() ? null : cdata);
                     break;
                 case XMLStreamConstants.COMMENT :
                     String comment = reader.getText();
-                    build(COMMENT._, comment.isEmpty() ? null : comment);
+                    builder._(COMMENT._, comment.isEmpty() ? null : comment);
                     break;
                 case XMLStreamConstants.CHARACTERS :
                     String text = AbstractValue.removeWS(reader.getText());
                     if (!text.isEmpty())
-                        build(VALUE._, AbstractValue.value(text));
+                        builder._(VALUE._, AbstractValue.value(text));
             }
             reader.next();
         }
-    }
-
-    protected void build(Statement s, Object reference) throws AnimoException, IOException {
-        builder._(s, reference);
     }
 
     protected void startElement() throws AnimoException, IOException {
@@ -112,10 +107,10 @@ public class StAXExpression extends AbstractStAXExpression {
         for (int i = 0; i < reader.getNamespaceCount(); i++) {
             String namespace = reader.getNamespaceURI(i);
             String prefix = reader.getNamespacePrefix(i);
-            build(NS._, prefix.isEmpty() ? _(value(namespace)) : _(name(prefix), value(namespace)));
+            builder._(NS._, prefix.isEmpty() ? _(value(namespace)) : _(name(prefix), value(namespace)));
         }
         for (int i = 0; i < reader.getAttributeCount(); i++) {
-            build(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(AbstractValue.value(reader.getAttributeValue(i)))));
+            builder._(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(AbstractValue.value(reader.getAttributeValue(i)))));
         }
     }
 
