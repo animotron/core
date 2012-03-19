@@ -21,14 +21,17 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
+import org.animotron.statement.compare.WITH;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.value;
 
 
 /**
@@ -37,6 +40,19 @@ import static org.animotron.expression.JExpression._;
  *
  */
 public class CurrentWebFrameworkTest extends ATest {
+
+    private Expression query(String site, String service) {
+        return new JExpression(
+                _(ANY._, "site",
+                        _(WITH._, "server-name", value(site)),
+                        _(AN._, "service", _(AN._, service))
+                )
+        );
+    }
+
+    private Expression mime(Expression query) {
+        return new JExpression(_(GET._, "type", _(GET._, "mime-type", _(query))));
+    }
 
     @Test
     public void test() throws Throwable {
@@ -63,29 +79,20 @@ public class CurrentWebFrameworkTest extends ATest {
             "the bar-site (site) (server-name \"bar.com\") (weak-use bar)"
         );
 
-        String fooSite = "any site (with server-name \"foo.com\")";
-        
-        Expression q1 = new AnimoExpression(fooSite+" (use root)");
-        Expression q2 = new AnimoExpression(fooSite+" (use xxx)");
-        Expression q3 = new AnimoExpression(fooSite+" (use yyy)");
+        Expression q1 = query("foo.com", "root");
+        Expression q2 = query("foo.com", "xxx");
+        Expression q3 = query("foo.com", "yyy");
 
-        String barSite = "any site (with server-name \"bar.com\")";
-        Expression q4 = new AnimoExpression(barSite+" (use root)");
-        Expression q5 = new AnimoExpression(barSite+" (use xxx)");
-        Expression q6 = new AnimoExpression(barSite+" (use yyy)");
+        Expression q4 = query("bar.com", "root");
+        Expression q5 = query("bar.com", "xxx");
+        Expression q6 = query("bar.com", "yyy");
 
-        Expression m1 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q1))));
-        Expression m2 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q2))));
-        Expression m3 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q3))));
-        Expression m4 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q4))));
-        Expression m5 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q5))));
-        Expression m6 = new JExpression(_(GET._, "type", _(GET._, "mime-type", _(q6))));
-        assertStringResult(m1, "text/html");
-        assertStringResult(m2, "text/html");
-        assertStringResult(m3, "text/html");
-        assertStringResult(m4, "text/html");
-        assertStringResult(m5, "text/html");
-        assertStringResult(m6, "text/html");
+        assertStringResult(mime(q1), "text/html");
+        assertStringResult(mime(q2), "text/html");
+        assertStringResult(mime(q3), "text/html");
+        assertStringResult(mime(q4), "text/html");
+        assertStringResult(mime(q5), "text/html");
+        assertStringResult(mime(q6), "text/html");
 
         assertHtmlResult(q1,
     		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
