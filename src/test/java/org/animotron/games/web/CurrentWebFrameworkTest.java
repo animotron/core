@@ -58,7 +58,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the site any service",
+            "the site some service",
             
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
@@ -66,8 +66,8 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the zzz-service (html-page) (service, zzz) (title \"hello world\") (content \"xxx xxx xxx\")",
-            "the yyy-service (html-page) (service, yyy) (title \"hello hell\") (content \"yyy yyy yyy\")",
+            "the zzz-service (html-page) (service, zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy-service (html-page) (service, yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
@@ -79,7 +79,10 @@ public class CurrentWebFrameworkTest extends ATest {
             "the bar-site (site) (server-name \"bar.com\") (weak-use bar)", // (bar (yyy-service) (qLayout)).
 
             "the bar-yyy-service (yyy-service, bar)",
-            "the bar-yyy-layout (qLayout, bar)"
+            "the bar-yyy-layout (qLayout, bar)",
+            
+            "the uri"
+
         );
 
         //root service
@@ -94,12 +97,16 @@ public class CurrentWebFrameworkTest extends ATest {
         Expression barZzz = query("bar.com", "zzz");
         Expression barYyy = query("bar.com", "yyy");
 
+        Expression barURI = query("bar.com", "uri");
+
         assertStringResult(mime(fooRoot), "text/html");
         assertStringResult(mime(fooXxx), "text/html");
         assertStringResult(mime(fooYyy), "");
         assertStringResult(mime(barRoot), "text/html");
         assertStringResult(mime(barZzz), "");
         assertStringResult(mime(barYyy), "text/html");
+        //wrong!!!
+        assertStringResult(mime(barURI), "text/htmltext/html");
 
         assertHtmlResult(fooRoot,
     		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
@@ -116,6 +123,10 @@ public class CurrentWebFrameworkTest extends ATest {
     		"");
 
         assertHtmlResult(barYyy,
-    		"<html><head><title>hello hell</title></head><body><h3>hello hell</h3><span>yyy yyy yyy</span></body></html>");
+    		"<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
+
+        //wrong!!!
+        assertHtmlResult(barURI,
+    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html><html><head><title>hello yyy</title></head><body><h2>hello yyy</h2><div>yyy yyy yyy</div></body></html>");
     }
 }
