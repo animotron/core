@@ -62,8 +62,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-            "the hello-foo (html-page) (foo-site, root) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (bar-site, root) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page) (foo-site, service, root) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (bar-site, service, root) (title \"hello bar\") (content \"bar bar bar\")",
             
             "the zzz (html-page) (service) (all site) (title \"hello zzz\") (content \"zzz zzz zzz\")",
             "the yyy (html-page) (service) (all site) (title \"hello yyy\") (content \"yyy yyy yyy\")",
