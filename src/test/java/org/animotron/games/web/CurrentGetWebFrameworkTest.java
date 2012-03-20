@@ -101,13 +101,12 @@ public class CurrentGetWebFrameworkTest extends ATest {
         Expression barURI = query("bar.com", "uri");
 
         assertStringResult(mime(fooRoot), "text/html");
-        assertStringResult(mime(fooXxx), "text/html");
+        assertStringResult(mime(fooXxx), "");
         assertStringResult(mime(fooYyy), "");
         assertStringResult(mime(barRoot), "text/html");
         assertStringResult(mime(barZzz), "");
-        assertStringResult(mime(barYyy), "text/html");
-        //wrong!!!
-        assertStringResult(mime(barURI), "text/htmltext/html");
+        assertStringResult(mime(barYyy), "");
+        assertStringResult(mime(barURI), "");
 
         assertHtmlResult(fooRoot,
     		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
