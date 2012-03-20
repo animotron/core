@@ -62,12 +62,13 @@ public class CurrentGetWebFrameworkTest extends ATest {
             
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+            "the main any root",
+            "the hello-foo (html-page) (foo, root) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (bar, root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the hello-foo (html-page) (service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
-            
-            "the zzz-service (html-page) (service, zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (service, yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the zzz-service (html-page) (use zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy-service (html-page) (use yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
@@ -86,14 +87,14 @@ public class CurrentGetWebFrameworkTest extends ATest {
         );
 
         //root service
-        Expression fooRoot = query("foo.com", "root");
+        Expression fooRoot = query("foo.com", "main");
         //this service wasn't defined, so root should be returned?
         //No!
         Expression fooXxx = query("foo.com", "xxx");
         //this service defined, but do not allowed by site 
         Expression fooYyy = query("foo.com", "yyy");
 
-        Expression barRoot = query("bar.com", "root");
+        Expression barRoot = query("bar.com", "main");
         Expression barZzz = query("bar.com", "zzz");
         Expression barYyy = query("bar.com", "yyy");
 
