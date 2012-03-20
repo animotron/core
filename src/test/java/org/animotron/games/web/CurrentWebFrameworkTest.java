@@ -26,7 +26,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
@@ -43,9 +42,8 @@ public class CurrentWebFrameworkTest extends ATest {
 
     private Expression query(String site, String service) {
         return new JExpression(
-                _(ANY._, "site",
-                        _(WITH._, "server-name", value(site)),
-                        _(USE._, service)
+                _(ANY._, service,
+                        _(WITH._, "server-name", value(site))
                 )
         );
     }
@@ -58,39 +56,29 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the site some service",
-            
+            "the foo-site (foo, site) (server-name \"foo.com\") (weak-use foo)",
+            "the bar-site (bar, site) (server-name \"bar.com\") (weak-use bar)",
+
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+            "the hello-foo (html-page) (foo-site, service, root) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (bar-site, service, root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the hello-foo (html-page) (service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
-            
-            "the zzz-service (html-page) (service, zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (service, yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the zzz (html-page) (service) (all site) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy (html-page) (service) (all site) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)",
-            
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)", // (bar (yyy-service) (qLayout)).
-
-            "the bar-yyy-service (yyy-service, bar)",
-            "the bar-yyy-layout (qLayout, bar)",
-            
-            "the uri"
-
+            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)"
         );
 
         //root service
         Expression fooRoot = query("foo.com", "root");
         //this service wasn't defined, so root should be returned?
-        //No! Why root? Why not yyy or zzz
+        //No!
         Expression fooXxx = query("foo.com", "xxx");
-        //this service defined, but do not allowed by site 
         Expression fooYyy = query("foo.com", "yyy");
 
         Expression barRoot = query("bar.com", "root");
@@ -100,13 +88,12 @@ public class CurrentWebFrameworkTest extends ATest {
         Expression barURI = query("bar.com", "uri");
 
         assertStringResult(mime(fooRoot), "text/html");
-        assertStringResult(mime(fooXxx), "text/html");
+        assertStringResult(mime(fooXxx), "");
         assertStringResult(mime(fooYyy), "");
         assertStringResult(mime(barRoot), "text/html");
         assertStringResult(mime(barZzz), "");
-        assertStringResult(mime(barYyy), "text/html");
-        //wrong!!!
-        assertStringResult(mime(barURI), "text/htmltext/html");
+        assertStringResult(mime(barYyy), "");
+        assertStringResult(mime(barURI), "");
 
         assertHtmlResult(fooRoot,
     		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
