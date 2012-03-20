@@ -65,8 +65,8 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (foo-site, service, root) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (bar-site, service, root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the zzz (html-page) (service) (all site) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy (html-page) (service) (all site) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the zzz (html-page) (foo-site, service) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy (html-page) (bar-site, service) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
