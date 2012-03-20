@@ -24,7 +24,6 @@ import org.animotron.ATest;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
@@ -43,9 +42,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
 
     private Expression query(String site, String service) {
         return new JExpression(
-                _(ANY._, "site",
-                        _(WITH._, "server-name", value(site)),
-                        _(AN._, "service", _(AN._, service))
+                _(ANY._, service,
+                        _(WITH._, "server-name", value(site))
                 )
         );
     }
@@ -58,39 +56,33 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the site get service",
-            
+            "the foo-site (foo, site) (server-name \"foo.com\") (weak-use foo)",
+            "the bar-site (bar, site) (server-name \"bar.com\") (weak-use bar)",
+
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-            "the main any root",
-            "the hello-foo (html-page) (foo, root) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (bar, root) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page) (foo-site, root) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (bar-site, root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the zzz-service (html-page) (use zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (use yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the zzz (html-page) (service) (all site) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy (html-page) (service) (all site) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)",
-            
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)", // (bar (yyy-service) (qLayout)).
-
-            "the bar-yyy-service (yyy-service, bar)",
-            "the bar-yyy-layout (qLayout, bar)",
-            
-            "the uri"
+            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)"
 
         );
 
-        Expression fooRoot = query("foo.com", "main");
+        //root service
+        Expression fooRoot = query("foo.com", "root");
+        //this service wasn't defined, so root should be returned?
+        //No!
         Expression fooXxx = query("foo.com", "xxx");
         Expression fooYyy = query("foo.com", "yyy");
 
-        Expression barRoot = query("bar.com", "main");
+        Expression barRoot = query("bar.com", "root");
         Expression barZzz = query("bar.com", "zzz");
         Expression barYyy = query("bar.com", "yyy");
 
