@@ -58,8 +58,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (service zzz)",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (service yyy)",
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
 
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
@@ -67,8 +67,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (foo-site, root) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (bar-site, root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the zzz (html-page) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy (html-page) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the zzz (html-page) (all site) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy (html-page) (all site) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
