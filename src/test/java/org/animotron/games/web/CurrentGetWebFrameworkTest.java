@@ -79,7 +79,6 @@ public class CurrentGetWebFrameworkTest extends ATest {
         //this service wasn't defined, so root should be returned?
         //No!
         Expression fooXxx = query("foo.com", "xxx");
-        //this service defined, but do not allowed by site 
         Expression fooYyy = query("foo.com", "yyy");
 
         Expression barRoot = query("bar.com", "root");
