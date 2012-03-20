@@ -98,11 +98,11 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				}
 
 				boolean underUSE = false;
-				Node n = getClosestIntersection(directed);
-				if (n != null) {
-					node = n;
-					underUSE = true;
-				}
+//				Node n = getClosestIntersection(directed);
+//				if (n != null) {
+//					node = n;
+//					underUSE = true;
+//				}
 				
         		Relationship res;
 				if (underUSE 

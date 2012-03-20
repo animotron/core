@@ -76,7 +76,10 @@ public class CurrentWebFrameworkTest extends ATest {
             
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
             
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar (yyy-service) (qLayout))."
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)", // (bar (yyy-service) (qLayout)).
+
+            "the bar-yyy-service (yyy-service, bar)",
+            "the bar-yyy-layout (qLayout, bar)"
         );
 
         //root service
@@ -94,7 +97,7 @@ public class CurrentWebFrameworkTest extends ATest {
         assertStringResult(mime(fooXxx), "text/html");
         assertStringResult(mime(fooYyy), "");
         assertStringResult(mime(barRoot), "text/html");
-        assertStringResult(mime(barZzz), "text/html");
+        assertStringResult(mime(barZzz), "");
         assertStringResult(mime(barYyy), "text/html");
 
         assertHtmlResult(fooRoot,
@@ -112,6 +115,6 @@ public class CurrentWebFrameworkTest extends ATest {
     		"");
 
         assertHtmlResult(barYyy,
-    		"<html><head><title>hello world</title></head><body/></html>");
+    		"<html><head><title>hello hell</title></head><body><h3>hello hell</h3><span>yyy yyy yyy</span></body></html>");
     }
 }
