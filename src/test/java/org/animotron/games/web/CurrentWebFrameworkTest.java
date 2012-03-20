@@ -63,51 +63,55 @@ public class CurrentWebFrameworkTest extends ATest {
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
             
-            "the hello-foo (html-page, service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page, service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page) (service, root, foo) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (service, root, bar) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the xxx-service (html-page, service, foo) (title \"hello world\") (content \"xxx xxx xxx\")",
-            "the yyy-service (html-page, service, bar) (title \"hello hell\") (content \"yyy yyy yyy\")",
+            "the zzz-service (html-page) (service, zzz) (title \"hello world\") (content \"xxx xxx xxx\")",
+            "the yyy-service (html-page) (service, yyy) (title \"hello hell\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the zzz-layout (layout, xxx, yyy) (\\h3 get title) (\\span get content)",
+            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)",
             
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
             
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)"
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (yyy (yyy-service) (qLayout))."
         );
 
-        Expression q1 = query("foo.com", "root");
-        Expression q2 = query("foo.com", "xxx");
-        Expression q3 = query("foo.com", "yyy");
+        //root service
+        Expression fooRoot = query("foo.com", "root");
+        //this service wasn't defined, so root should be returned? 
+        Expression fooXxx = query("foo.com", "xxx");
+        //this service defined, but do not allowed by site 
+        Expression fooYyy = query("foo.com", "yyy");
 
-        Expression q4 = query("bar.com", "root");
-        Expression q5 = query("bar.com", "xxx");
-        Expression q6 = query("bar.com", "yyy");
+        Expression barRoot = query("bar.com", "root");
+        Expression barZzz = query("bar.com", "zzz");
+        Expression barYyy = query("bar.com", "yyy");
 
-        assertStringResult(mime(q1), "text/html");
-        assertStringResult(mime(q2), "text/html");
-        assertStringResult(mime(q3), "text/html");
-        assertStringResult(mime(q4), "text/html");
-        assertStringResult(mime(q5), "text/html");
-        assertStringResult(mime(q6), "text/html");
+        assertStringResult(mime(fooRoot), "text/html");
+        assertStringResult(mime(fooXxx), "text/html");
+        assertStringResult(mime(fooYyy), "");
+        assertStringResult(mime(barRoot), "text/html");
+        assertStringResult(mime(barZzz), "text/html");
+        assertStringResult(mime(barYyy), "text/html");
 
-        assertHtmlResult(q1,
+        assertHtmlResult(fooRoot,
     		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
-        assertHtmlResult(q2, "");
+        assertHtmlResult(fooXxx,
+    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
-        assertHtmlResult(q3, "");
+        assertHtmlResult(fooYyy, "");
 
-        assertHtmlResult(q4,
+        assertHtmlResult(barRoot,
     		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
-        assertHtmlResult(q5,
-    		"<html><head><title>hello world</title></head><body/></html>");
+        assertHtmlResult(barZzz,
+    		"");
 
-        assertHtmlResult(q6,
+        assertHtmlResult(barYyy,
     		"<html><head><title>hello world</title></head><body/></html>");
     }
 }
