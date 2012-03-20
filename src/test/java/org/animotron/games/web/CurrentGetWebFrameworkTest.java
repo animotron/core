@@ -26,7 +26,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
@@ -43,9 +42,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
 
     private Expression query(String site, String service) {
         return new JExpression(
-                _(ANY._, "service",
-                        _(WITH._, "server-name", value(site)),
-                        _(USE._, service)
+                _(ANY._, service,
+                        _(WITH._, "server-name", value(site))
                 )
         );
     }
@@ -58,8 +56,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
+            "the foo-site (foo, site) (server-name \"foo.com\") (weak-use foo)",
+            "the bar-site (bar, site) (server-name \"bar.com\") (weak-use bar)",
 
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
