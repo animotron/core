@@ -76,7 +76,7 @@ public class CurrentWebFrameworkTest extends ATest {
             
             "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
             
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (yyy (yyy-service) (qLayout))."
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (bar (yyy-service) (qLayout))."
         );
 
         //root service
