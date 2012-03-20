@@ -72,7 +72,6 @@ public class CurrentGetWebFrameworkTest extends ATest {
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
             "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)"
-
         );
 
         //root service
