@@ -28,6 +28,8 @@ import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
@@ -52,6 +54,12 @@ public class CurrentWebFrameworkTest extends ATest {
         return new JExpression(_(GET._, "type", _(GET._, "mime-type", _(query))));
     }
 
+    private void assertQuery(String site, String service, String mime, String html) throws IOException, InterruptedException {
+        Expression e = query(site, service);
+        assertStringResult(mime(e), mime);
+        assertHtmlResult(e, html);
+    }
+
     @Test
     public void test() throws Throwable {
 
@@ -74,46 +82,25 @@ public class CurrentWebFrameworkTest extends ATest {
             "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)"
         );
 
-        //root service
-        Expression fooRoot = query("foo.com", "root");
-        //this service wasn't defined, so root should be returned?
-        //No!
-        Expression fooXxx = query("foo.com", "xxx");
-        Expression fooYyy = query("foo.com", "yyy");
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
-        Expression barRoot = query("bar.com", "root");
-        Expression barZzz = query("bar.com", "zzz");
-        Expression barYyy = query("bar.com", "yyy");
+        assertQuery("foo.com", "xxx", "", "");
 
-        Expression barURI = query("bar.com", "uri");
+        assertQuery("foo.com", "yyy", "", "");
 
-        assertStringResult(mime(fooRoot), "text/html");
-        assertStringResult(mime(fooXxx), "");
-        assertStringResult(mime(fooYyy), "");
-        assertStringResult(mime(barRoot), "text/html");
-        assertStringResult(mime(barZzz), "");
-        assertStringResult(mime(barYyy), "");
-        assertStringResult(mime(barURI), "");
+        assertQuery("foo.com", "zzz", "text/html",
+                "<html><head><title>hello zzz</title></head><body><h3>hello zzz</h3><span>zzz zzz zzz</span></body></html>");
 
-        assertHtmlResult(fooRoot,
-    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+        assertQuery("bar.com", "root", "text/html",
+                "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
-        assertHtmlResult(fooXxx,
-    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+        assertQuery("bar.com", "xxx", "", "");
 
-        assertHtmlResult(fooYyy, "");
+        assertQuery("bar.com", "yyy", "text/html",
+                "<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
 
-        assertHtmlResult(barRoot,
-    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
+        assertQuery("bar.com", "zzz", "", "");
 
-        assertHtmlResult(barZzz,
-    		"");
-
-        assertHtmlResult(barYyy,
-    		"<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
-
-        //wrong!!!
-        assertHtmlResult(barURI,
-    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html><html><head><title>hello yyy</title></head><body><h2>hello yyy</h2><div>yyy yyy yyy</div></body></html>");
     }
 }
