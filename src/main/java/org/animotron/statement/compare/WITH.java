@@ -176,7 +176,7 @@ public class WITH extends Operator implements Predicate {
 			}
 		if (ref == -1) return null;
 		
-		QCAVector qVector = pf.getVector().answered(pf.getVector().getClosest());
+		QCAVector qVector = pf.getVector();//.answered(pf.getVector().getClosest());
 		Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
 		QCAVector v;
 		while ((v = in.take()) != null) {

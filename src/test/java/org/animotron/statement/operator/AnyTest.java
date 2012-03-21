@@ -27,7 +27,7 @@ import org.animotron.statement.compare.WITH;
 import org.animotron.statement.query.ANY;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression.__;
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
 
@@ -176,5 +176,22 @@ public class AnyTest extends ATest {
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))
         );
         assertAnimoResultOneStep(test, "the c the C (B) (Z \"γ\").");
+    }
+
+    @Test
+    public void test_04() throws Throwable {
+        __(
+            "the foo-site (site) (server-name \"foo.com\")",
+            "the bar-site (site) (server-name \"bar.com\")",
+
+            "the hello-foo (foo-site, root) (title \"hello foo\")",
+            "the hello-bar (bar-site, root) (title \"hello bar\")",
+            
+            "the foo-root-layout (layout, foo, root) (\\h1)"
+		);
+
+        assertAnimoResult(
+    		"any root with server-name \"foo.com\"", 
+    		"the hello-foo (foo-site (site) (server-name)) (root) (title).");
     }
 }

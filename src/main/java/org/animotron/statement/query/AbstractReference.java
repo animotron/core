@@ -22,7 +22,6 @@ package org.animotron.statement.query;
 
 import javolution.util.FastSet;
 
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
@@ -81,11 +80,13 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 				//System.out.println(uses);
 				
-				Set<Relationship> list = getExpected(pf);
+        		Relationship res;
+
+        		Set<Relationship> list = getExpected(pf);
 				if (list !=null && !list.isEmpty()) {
 					System.out.println("after predicate "+Arrays.toString(list.toArray()));
 					for (Relationship r : list) {
-						if (setFiltering(r.getEndNode(), uses, weaks))
+						if (setFiltering(r.getEndNode(), uses, weaks)) {
 							if (isLeaf(r.getEndNode())) {
 								//System.out.print("answered ");
 								//Utils.debug(r);
@@ -93,6 +94,22 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 		        				
 		        				if (returnFirstOnly) return;
 							}
+						}
+				        for (Path path : td_IS_leaf.traverse(r.getEndNode())) {
+				        	
+				        	Node n = path.lastRelationship().getStartNode();
+							if (setFiltering(n, uses, weaks)) {
+								if (isLeaf(n) && (res = getThe(n)) != null) {
+									//System.out.print("answered ");
+									//Utils.debug(r);
+			        				pf.sendAnswer( res );
+			        				
+			        				if (returnFirstOnly) return;
+								}
+							}
+				        }
+
+						
 					}
 					return;
 				}
@@ -104,7 +121,6 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 //					underUSE = true;
 //				}
 				
-        		Relationship res;
 				if (underUSE 
 						&& isLeaf(node) 
 						&& (res = getThe(node)) != null  
