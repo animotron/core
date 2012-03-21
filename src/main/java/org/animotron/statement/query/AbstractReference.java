@@ -113,6 +113,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 					}
 					return;
 				}
+				System.out.println("NOT OPTIMIZED");
 
 				boolean underUSE = false;
 //				Node n = getClosestIntersection(directed);

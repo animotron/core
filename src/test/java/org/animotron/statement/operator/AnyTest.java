@@ -194,4 +194,20 @@ public class AnyTest extends ATest {
     		"any root with server-name \"foo.com\"", 
     		"the hello-foo (foo-site (site) (server-name)) (root) (title).");
     }
+
+    @Test
+    public void test_05() throws Throwable {
+
+        __(
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
+
+            "the hello-foo (foo-site, root) (title \"hello foo\")",
+            "the hello-bar (bar-site, root) (title \"hello bar\")",
+            
+            "the foo-root-layout (layout, foo, root) (\\h1)"
+        );
+
+        assertAnimoResult("any xxx with server-name \"foo.com\"", "");
+    }
 }
