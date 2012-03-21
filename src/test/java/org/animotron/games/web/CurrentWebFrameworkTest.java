@@ -70,19 +70,17 @@ public class CurrentWebFrameworkTest extends ATest {
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-            "the hello-foo (html-page) (foo-site, root) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (bar-site, root) (title \"hello bar\") (content \"bar bar bar\")",
+            "the hello-foo (html-page) (foo-site, root) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (bar-site, root) (use root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the zzz-service (html-page) (foo-site, zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (bar-site, yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the zzz-service (html-page) (foo-site, zzz) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy-service (html-page) (bar-site, yyy) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)"
+            "the qLayout (layout) (\\h3 get title) (\\span get content)"
         );
-
-        assertAnimoResult("any xxx with server-name \"foo.com\"", "");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
