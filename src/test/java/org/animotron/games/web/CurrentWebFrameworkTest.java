@@ -82,8 +82,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)"
         );
 
-        //must fail
-        assertAnimoResult("any root with server-name \"foo.com\"", "");
+        assertAnimoResult("any xxx with server-name \"foo.com\"", "");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
