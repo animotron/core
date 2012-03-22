@@ -66,8 +66,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (service (root) (xxx) (zzz))",
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (service (root) (xxx) (yyy))",
 
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
