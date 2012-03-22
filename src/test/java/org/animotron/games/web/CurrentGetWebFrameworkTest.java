@@ -66,8 +66,8 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (service (root) (xxx) (zzz))",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (service (root) (xxx) (yyy))",
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
 
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
             "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
@@ -103,7 +103,7 @@ public class CurrentGetWebFrameworkTest extends ATest {
         assertQuery("bar.com", "root", "text/html",
                 "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
-        assertQuery("bar.com", "xxx", "",
+        assertQuery("bar.com", "xxx", "text/html",
                 "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
 
         assertQuery("bar.com", "yyy", "text/html",
