@@ -73,7 +73,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (foo-site, root) (use root) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (bar-site, root) (use root) (title \"hello bar\") (content \"bar bar bar\")",
             
-            "the xxx-service (html-page) (foo-site, bar-site, xxx) (use xxx) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the xxx-service (html-page) (foo-site, bar-site, xxx) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
             "the zzz-service (html-page) (foo-site, zzz) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
             "the yyy-service (html-page) (bar-site, yyy) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
