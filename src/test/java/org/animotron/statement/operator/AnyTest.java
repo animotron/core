@@ -164,13 +164,14 @@ public class AnyTest extends ATest {
             _(THE._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
         );
         //assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
-        assertAnimoResultOneStep(test, "the a.");
+        assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
+        
 
         test = new JExpression(
             _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", value("β"))))
         );
         //assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
-        assertAnimoResultOneStep(test, "the b.");
+        assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
 
         test = new JExpression(
             _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))

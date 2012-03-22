@@ -381,7 +381,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(" "+path);
+				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -415,10 +415,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						return EXCLUDE_AND_PRUNE;
 				}
 				
-				shouldHave.remove(sNode);
+				if (shouldHave != null) shouldHave.remove(sNode);
 				mustHave.remove(sNode);
 				if (mustHave.size() == 0) {
-					if (was == 0 || shouldHave.size() != was)
+					if (was == 0 || (shouldHave == null || shouldHave.size() != was))
 						return INCLUDE_AND_PRUNE;
 				}
 
@@ -689,7 +689,44 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
 	};
 
+	abstract class ISearcher implements Evaluator {
 
+		public Evaluation _evaluate_(final Path path, final Set<Node> targets) {
+			//System.out.println(path);
+			
+			if (path.length() < 2)
+				return EXCLUDE_AND_CONTINUE;
+			
+			Relationship r = path.lastRelationship();
+			if (r.isType(REF._) && FREEZE.has(r))
+				return EXCLUDE_AND_PRUNE;
+
+			if (path.length() == 1) {
+				if (!r.isType(REF._))
+					return EXCLUDE_AND_PRUNE;
+				else if (path.endNode().equals(r.getStartNode())) {
+					return EXCLUDE_AND_CONTINUE;
+				}
+				return EXCLUDE_AND_PRUNE;
+			}
+
+			if (r.isType(AN._)) {
+				if (path.endNode().equals(r.getEndNode()))
+					return EXCLUDE_AND_CONTINUE;
+				else
+					return EXCLUDE_AND_PRUNE;
+			}
+			
+			Node n = r.getEndNode();
+			if (r.isType(REF._) && targets.contains(n) && path.endNode().equals(n)){
+				return INCLUDE_AND_PRUNE;
+			}
+
+			return EXCLUDE_AND_PRUNE;
+		}
+	};
+
+	
     protected boolean isLeaf(Node node) {
 		for (Relationship r : node.getRelationships(Direction.INCOMING, REF._))
 			if (!FREEZE.has(r))

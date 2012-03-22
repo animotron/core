@@ -25,13 +25,17 @@ import javolution.util.FastSet;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.TraversalDescription;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -50,6 +54,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 	public void process(final PFlow pf, boolean returnFirstOnly, boolean forceUSE) {
     	Relationship the = null;
     	FastSet<Relationship> thes = FastSet.newInstance();
+    	final FastSet<Node> theNodes = FastSet.newInstance();
 		FastSet<Relationship> others = FastSet.newInstance();
 		try {
 			Utils.getTHELikeBag(pf, pf.getVector(), thes);
@@ -61,6 +66,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 			the = thes.valueOf(rec);
 			
 			Node node = the.getEndNode();
+			theNodes.add(node);
 
 			FastSet<Node> uses = FastSet.newInstance();
 			FastSet<Node> weaks = FastSet.newInstance();
@@ -73,9 +79,11 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 					return;
 				}
 
-				
 				for (FastSet.Record end = thes.tail(); (rec = rec.getNext()) != end;) {
-					uses.add(thes.valueOf(rec).getEndNode());
+					Node n = thes.valueOf(rec).getEndNode();
+					
+					theNodes.add(n);
+					uses.add(n);
 				}
 				
 				//System.out.println(uses);
@@ -86,6 +94,24 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				if (list !=null && !list.isEmpty()) {
 					System.out.println("after predicate "+Arrays.toString(list.toArray()));
 					for (Relationship r : list) {
+						
+						//System.out.println("*"+r);
+						
+				    	TraversalDescription trav = td.
+								relationships(AN._, Direction.OUTGOING).
+								relationships(REF._).
+						evaluator(new ISearcher(){
+							@Override
+							public Evaluation evaluate(Path path) {
+								return _evaluate_(path, theNodes);
+							}
+						});
+						
+						
+						if (!trav.traverse(r.getEndNode()).iterator().hasNext()) {
+							continue;
+						}
+						
 						if (setFiltering(r.getEndNode(), uses, weaks)) {
 							if (isLeaf(r.getEndNode())) {
 								//System.out.print("answered ");

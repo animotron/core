@@ -176,7 +176,7 @@ public class WITH extends Operator implements Predicate {
 			}
 		if (ref == -1) return null;
 		
-		System.out.println(ref);
+		//System.out.println(ref);
 		
 		QCAVector qVector = pf.getVector();//.answered(pf.getVector().getClosest());
 		Pipe in = Evaluator._.execute(pf.getController(), qVector, op.getEndNode());
@@ -185,36 +185,27 @@ public class WITH extends Operator implements Predicate {
 			
 			final Relationship r = v.getClosest();
 			
-			System.out.println("==============");
-			System.out.println(r);
+			//System.out.println("==============");
+			//System.out.println(r);
 
 			for (Relationship rr : r.getEndNode().getRelationships(r.getType(), INCOMING)) {
 
-				System.out.println(" "+rr);
+				//System.out.println(" "+rr);
 				
 				try {
 					Relationship rf = rr.getStartNode().getSingleRelationship(REF._, OUTGOING);
 					
-					System.out.println("  "+rf);
+					//System.out.println("  "+rf);
 
 					if (rf != null && rf.getEndNode().getId() == ref) {
 						
 						for (Relationship rrr : rr.getStartNode().getRelationships(AN._, INCOMING)) {
 							
-							System.out.println("   "+rrr);
+							//System.out.println("   "+rrr);
 							
-							for (Relationship is : Utils.td_eval_IS.traverse(rrr.getStartNode()).relationships()) {
-								System.out.print(is);
-								System.out.println(" "+is.getEndNode());
-								if (ref == is.getEndNode().getId()) {
-									System.out.println("Ok");
-									for (Relationship the : rrr.getStartNode().getRelationships(THE._, INCOMING)) {
-										thes.add( the );
-									}
-									break;
-								}
+							for (Relationship the : rrr.getStartNode().getRelationships(THE._, INCOMING)) {
+								thes.add( the );
 							}
-
 						}
 					}
 				} catch (Throwable t) {};
