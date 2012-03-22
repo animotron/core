@@ -90,7 +90,8 @@ public class CurrentWebFrameworkTest extends ATest {
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
-        assertQuery("foo.com", "xxx", "", "");
+        assertQuery("foo.com", "xxx", "text/html",
+                "<html><head><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p></body></html>");
 
         assertQuery("foo.com", "yyy", "", "");
 
@@ -100,7 +101,8 @@ public class CurrentWebFrameworkTest extends ATest {
         assertQuery("bar.com", "root", "text/html",
                 "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
-        assertQuery("bar.com", "xxx", "", "");
+        assertQuery("bar.com", "xxx", "text/html",
+                "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div></body></html>");
 
         assertQuery("bar.com", "yyy", "text/html",
                 "<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
