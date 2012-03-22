@@ -196,4 +196,64 @@ public class AnyUseTest extends ATest {
 		assertAnimoResult("the rest (any site) (any resource).",
 			"the rest (the local-site (site) (use resource-A)) (the resource-A resource).");
     }
+
+
+    @Test
+    public void test_001a() throws Throwable {
+        testAnimo("the foo x.");
+        testAnimo("the bar x.");
+        testAnimo("the a use foo.");
+        testAnimo("the b use bar.");
+        testAnimo("the c (a, b) (any x).");
+        assertAnimoResult("any a", "the c (a use foo) (b use bar) (the foo x).");
+        assertAnimoResult("any b", "the c (a use foo) (b use bar) (the bar x).");
+    }
+
+    @Test
+    public void test_001b() throws Throwable {
+        testAnimo("the foo x.");
+        testAnimo("the bar x.");
+        testAnimo("the a use foo.");
+        testAnimo("the b use bar.");
+        testAnimo("the c (a) (b) (any x).");
+        assertAnimoResult("any a", "the c (a use foo) (b use bar) (the foo x).");
+        assertAnimoResult("any b", "the c (a use foo) (b use bar) (the bar x).");
+    }
+
+    @Test
+    public void test_002a() throws Throwable {
+        testAnimo("the foo x.");
+        testAnimo("the bar x.");
+        testAnimo("the a use foo.");
+        testAnimo("the b use bar.");
+        testAnimo("the c any x.");
+        testAnimo("the d a, b, c.");
+        assertAnimoResult("any a", "the c (a use foo) (b use bar) (c the foo x).");
+        assertAnimoResult("any b", "the c (a use foo) (b use bar) (c the bar x).");
+    }
+
+    @Test
+    public void test_002b() throws Throwable {
+        testAnimo("the foo x.");
+        testAnimo("the bar x.");
+        testAnimo("the a use foo.");
+        testAnimo("the b use bar.");
+        testAnimo("the c any x.");
+        testAnimo("the d (a, b) (c).");
+        assertAnimoResult("any a", "the c (a use foo) (b use bar) (c the foo x).");
+        assertAnimoResult("any b", "the c (a use foo) (b use bar) (c the bar x).");
+    }
+
+    @Test
+    public void test_002c() throws Throwable {
+        testAnimo("the foo x.");
+        testAnimo("the bar x.");
+        testAnimo("the a use foo.");
+        testAnimo("the b use bar.");
+        testAnimo("the c any x.");
+        testAnimo("the d (a) (b) (c).");
+        assertAnimoResult("any a", "the c (a use foo) (b use bar) (c the foo x).");
+        assertAnimoResult("any b", "the c (a use foo) (b use bar) (c the bar x).");
+    }
+
 }
