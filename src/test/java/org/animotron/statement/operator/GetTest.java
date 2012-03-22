@@ -774,7 +774,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_005() throws Throwable {
+    public void test_005a() throws Throwable {
         testAnimo("the a x foo.");
         testAnimo("the b x bar.");
         testAnimo("the c (a, b) (get x).");
@@ -783,11 +783,40 @@ public class GetTest extends ATest {
     }
 
     @Test
-    public void test_006() throws Throwable {
+    public void test_005b() throws Throwable {
+        testAnimo("the a x foo.");
+        testAnimo("the b x bar.");
+        testAnimo("the c (a) (b) (get x).");
+        assertAnimoResult("any a", "the c (a x) (b x) (x foo).");
+        assertAnimoResult("any b", "the c (a x) (b x) (x bar).");
+    }
+
+    @Test
+    public void test_006a() throws Throwable {
         testAnimo("the a x foo.");
         testAnimo("the b x bar.");
         testAnimo("the c get x.");
         testAnimo("the d a, b, c.");
+        assertAnimoResult("any a", "the d (a x) (b x) (c x foo).");
+        assertAnimoResult("any b", "the d (a x) (b x) (c x bar).");
+    }
+
+    @Test
+    public void test_006b() throws Throwable {
+        testAnimo("the a x foo.");
+        testAnimo("the b x bar.");
+        testAnimo("the c get x.");
+        testAnimo("the d (a, b) (c).");
+        assertAnimoResult("any a", "the d (a x) (b x) (c x foo).");
+        assertAnimoResult("any b", "the d (a x) (b x) (c x bar).");
+    }
+
+    @Test
+    public void test_006c() throws Throwable {
+        testAnimo("the a x foo.");
+        testAnimo("the b x bar.");
+        testAnimo("the c get x.");
+        testAnimo("the d (a) (b) (c).");
         assertAnimoResult("any a", "the d (a x) (b x) (c x foo).");
         assertAnimoResult("any b", "the d (a x) (b x) (c x bar).");
     }
