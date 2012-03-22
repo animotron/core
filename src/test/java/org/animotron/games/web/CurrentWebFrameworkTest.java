@@ -73,17 +73,19 @@ public class CurrentWebFrameworkTest extends ATest {
             "the hello-foo (html-page) (foo-site, root) (use root) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (bar-site, root) (use root) (title \"hello bar\") (content \"bar bar bar\")",
             
+            "the xxx-service (html-page) (foo-site, bar-site, xxx) (use xxx) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+
             "the zzz-service (html-page) (foo-site, zzz) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
             "the yyy-service (html-page) (bar-site, yyy) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
+            "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content)",
+            "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content)",
+
             "the qLayout (layout) (\\h3 get title) (\\span get content)"
         );
-
-        assertAnimoResult("any zzz with server-name \"foo.com\"", "");
-
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
