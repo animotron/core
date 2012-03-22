@@ -81,8 +81,8 @@ public class CurrentWebFrameworkTest extends ATest {
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content)",
-            "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content)",
+            "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+            "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
 
             "the qLayout (layout) (\\h3 get title) (\\span get content)"
         );
@@ -91,7 +91,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
         assertQuery("foo.com", "xxx", "text/html",
-                "<html><head><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p></body></html>");
+                "<html><head><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p><p>foo.com</p></body></html>");
 
         assertQuery("foo.com", "yyy", "", "");
 
@@ -102,7 +102,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
         assertQuery("bar.com", "xxx", "text/html",
-                "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div></body></html>");
+                "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
 
         assertQuery("bar.com", "yyy", "text/html",
                 "<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
