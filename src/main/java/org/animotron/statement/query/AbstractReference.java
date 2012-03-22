@@ -47,6 +47,8 @@ import java.util.Set;
  */
 public abstract class AbstractReference extends AbstractQuery implements Reference {
 
+	private static boolean optimizer = false;
+	
     public AbstractReference(String... name) {
         super(name);
     }
@@ -91,7 +93,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
         		Relationship res;
 
         		Set<Relationship> list = getExpected(pf);
-				if (list !=null && !list.isEmpty()) {
+				if (optimizer && list !=null && !list.isEmpty()) {
 					System.out.println("after predicate "+Arrays.toString(list.toArray()));
 					for (Relationship r : list) {
 						
