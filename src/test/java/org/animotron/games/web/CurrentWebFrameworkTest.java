@@ -68,7 +68,7 @@ public class CurrentWebFrameworkTest extends ATest {
             "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
 
             "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-            "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
+            "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
             "the hello-foo (html-page) (foo-site, root) (use root) (title \"hello foo\") (content \"foo foo foo\")",
             "the hello-bar (html-page) (bar-site, root) (use root) (title \"hello bar\") (content \"bar bar bar\")",

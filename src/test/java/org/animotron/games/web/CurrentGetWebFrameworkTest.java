@@ -24,10 +24,11 @@ import org.animotron.ATest;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
@@ -43,9 +44,10 @@ public class CurrentGetWebFrameworkTest extends ATest {
 
     private Expression query(String site, String service) {
         return new JExpression(
-                _(ANY._, "site",
-                        _(WITH._, "server-name", value(site)),
-                        _(AN._, "service", _(AN._, service))
+                _(GET._, service,
+                        _(ANY._, "site",
+                                _(WITH._, "server-name", value(site))
+                        )
                 )
         );
     }
@@ -54,79 +56,60 @@ public class CurrentGetWebFrameworkTest extends ATest {
         return new JExpression(_(GET._, "type", _(GET._, "mime-type", _(query))));
     }
 
+    private void assertQuery(String site, String service, String mime, String html) throws IOException, InterruptedException {
+        Expression e = query(site, service);
+        assertStringResult(mime(e), mime);
+        assertHtmlResult(e, html);
+    }
+
     @Test
     public void test() throws Throwable {
 
         __(
-            "the site get service",
-            
-            "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-            "the html-page (mime-tipe text-html) (\\html (\\head \\title get title) (\\body any layout))",
+            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
+            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
 
-            "the main any root",
-            "the hello-foo (html-page) (foo, root) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (bar, root) (title \"hello bar\") (content \"bar bar bar\")",
-            
-            "the zzz-service (html-page) (use zzz) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (use yyy) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+            "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+            "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+            "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+            "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+
+            "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
+
+            "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+            "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
             "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
             "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
             
-            "the qLayout (layout, zzz, yyy) (\\h3 get title) (\\span get content)",
-            
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)", // (bar (yyy-service) (qLayout)).
+            "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+            "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
 
-            "the bar-yyy-service (yyy-service, bar)",
-            "the bar-yyy-layout (qLayout, bar)",
-            
-            "the uri"
-
+            "the qLayout (layout) (\\h3 get title) (\\span get content)"
         );
 
-        //root service
-        Expression fooRoot = query("foo.com", "root");
-        //this service wasn't defined, so root should be returned?
-        //No!
-        Expression fooXxx = query("foo.com", "xxx");
-        //this service defined, but do not allowed by site 
-        Expression fooYyy = query("foo.com", "yyy");
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
-        Expression barRoot = query("bar.com", "root");
-        Expression barZzz = query("bar.com", "zzz");
-        Expression barYyy = query("bar.com", "yyy");
+        assertQuery("foo.com", "xxx", "text/html",
+                "<html><head><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p><p>foo.com</p></body></html>");
 
-        Expression barURI = query("bar.com", "uri");
+        assertQuery("foo.com", "yyy", "", "");
 
-        assertStringResult(mime(fooRoot), "text/html");
-        assertStringResult(mime(fooXxx), "");
-        assertStringResult(mime(fooYyy), "");
-        assertStringResult(mime(barRoot), "text/html");
-        assertStringResult(mime(barZzz), "");
-        assertStringResult(mime(barYyy), "");
-        assertStringResult(mime(barURI), "");
+        assertQuery("foo.com", "zzz", "text/html",
+                "<html><head><title>hello zzz</title></head><body><h3>hello zzz</h3><span>zzz zzz zzz</span></body></html>");
 
-        assertHtmlResult(fooRoot,
-    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+        assertQuery("bar.com", "root", "text/html",
+                "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
-        assertHtmlResult(fooXxx,
-    		"<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+        assertQuery("bar.com", "xxx", "",
+                "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
 
-        assertHtmlResult(fooYyy, "");
+        assertQuery("bar.com", "yyy", "text/html",
+                "<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
 
-        assertHtmlResult(barRoot,
-    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
+        assertQuery("bar.com", "zzz", "", "");
 
-        assertHtmlResult(barZzz,
-    		"");
-
-        assertHtmlResult(barYyy,
-    		"<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
-
-        //wrong!!!
-        assertHtmlResult(barURI,
-    		"<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html><html><head><title>hello yyy</title></head><body><h2>hello yyy</h2><div>yyy yyy yyy</div></body></html>");
     }
 }
