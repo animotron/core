@@ -91,7 +91,7 @@ public class CurrentGetWebFrameworkTest extends ATest {
 
         assertAnimoResult(
     		"get xxx any site with server-name \"foo.com\"", 
-    		"xxx xxx-service (html-page (mime-type) (\\html (\\head \\title title \"hello xxx\") (\\body the foo-root-layout (layout) (foo) (root) (\\h1 title \"hello xxx\") (\\p content \"xxx xxx xxx\")))) (use xxx) (title) (content).");
+    		"xxx xxx-service (html-page (mime-type) (\\html (\\head \\title title \"hello xxx\") (\\body the foo-xxx-layout (layout) (foo) (xxx) (\\h3 title \"hello xxx\") (\\p content \"xxx xxx xxx\") (\\p server-name \"foo.com\")))) (use xxx) (title) (content).");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
