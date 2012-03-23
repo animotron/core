@@ -99,30 +99,30 @@ public class DependenciesTrackingTest extends ATest {
 	        "the price (part (number) (currency) (UoM)).",
 	        "the cost (part (number) (currency)).",
 	        
-	        "the item1 (goods item) (qty (1) (kg)) (cost (10) (USD))."
+	        "the item1 (goods item) (qty * (1) (kg)) (cost * (10) (USD))."
         );
 
         assertCachedAnimoResult(
             "get cost all item",
-            "cost 10 (USD)."
+            "cost * 10 (USD)."
         );
         assertCachedAnimoResult(
             "+ get cost all item",
-            "10."
+            "* 10 (USD)."
 		);
 
         __(
-	        "the item2 (goods item) (qty (1) (kg)) (cost (5) (USD))."
+	        "the item2 (goods item) (qty * (1) (kg)) (cost * (5) (USD))."
         );
 
         assertAnimoResult(
                 "get cost all item",
-                "cost 10 (USD). cost 5 (USD)."
+                "cost * 10 (USD). cost * 5 (USD)."
     		);
 
         assertCachedAnimoResult(
             "+ get cost all item",
-            "15."
+            "* 15 (USD)."
 		);
     }
 
