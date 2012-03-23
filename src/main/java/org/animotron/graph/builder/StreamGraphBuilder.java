@@ -121,7 +121,6 @@ public class StreamGraphBuilder extends GraphBuilder {
             r.delete();
         } else if (relationship.isType(THE._)) {
             Node end = relationship.getEndNode();
-            relationship = THE._.get(NAME.get(r.getEndNode()));
             freeze(THE._.getActualRevision(relationship));
             Node n = relationship.getEndNode();
             long arid = (Long) ARID.get(n);

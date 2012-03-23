@@ -144,7 +144,6 @@ public class FastGraphBuilder extends GraphBuilder {
                 root.delete();
             } else if (statement instanceof THE) {
                 Node end = relationship.getEndNode();
-                relationship = THE._.get(NAME.get(end));
                 freeze(THE._.getActualRevision(relationship));
                 Node n = relationship.getEndNode();
                 long arid = (Long) ARID.get(n);
