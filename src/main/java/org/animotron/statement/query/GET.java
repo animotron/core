@@ -294,6 +294,11 @@ public class GET extends AbstractQuery implements Shift {
 						
 						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
 					}
+
+					t = v.getQuestion();
+					if (t != null && t.isType(THE._)) {
+						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
+					}
 				}
 	
 				if (newREFs.size() == 0) return false;
