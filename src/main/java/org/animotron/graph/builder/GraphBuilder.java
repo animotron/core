@@ -143,7 +143,7 @@ public abstract class GraphBuilder {
             s = null; r = null;
         } else {
             o = peekParent();
-            bind(e, peekParent(), hash);
+            bind(e, o, hash);
         }
         if (o != null) {
             ((MessageDigest) o[0]).update(hash);

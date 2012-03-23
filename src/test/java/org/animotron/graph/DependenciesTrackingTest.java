@@ -93,6 +93,9 @@ public class DependenciesTrackingTest extends ATest {
     @Test
     public void test_02() throws Throwable {
 
+        testAnimo("the item1 cost * 10 (USD).");
+        assertAnimoResult("get cost item1", "cost * 10 (USD)");
+
         __(
 	        "the goods word \"goods\".",
 	        "the qty (part (number) (UoM)).",
@@ -101,6 +104,7 @@ public class DependenciesTrackingTest extends ATest {
 	        
 	        "the item1 (goods item) (qty * (1) (kg)) (cost * (10) (USD))."
         );
+
 
         assertCachedAnimoResult(
             "get cost all item",
