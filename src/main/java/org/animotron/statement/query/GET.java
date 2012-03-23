@@ -276,7 +276,7 @@ public class GET extends AbstractQuery implements Shift {
 						
 						visitedREFs.add(next.getQuestion());
 						
-						next = next.getPrecedingSibling();
+						next = null;//next.getPrecedingSibling();
 					}
 				}
 				
@@ -310,7 +310,7 @@ public class GET extends AbstractQuery implements Shift {
 						//		checkVector(c, newREFs, visitedREFs);
 						//	}
 						//}
-						next = next.getPrecedingSibling();
+						next = null;//next.getPrecedingSibling();
 					}
 				}
 	
