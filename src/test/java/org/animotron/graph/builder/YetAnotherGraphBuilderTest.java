@@ -25,10 +25,8 @@ import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.statement.operator.THE;
 import org.junit.Test;
 
 import javax.xml.stream.XMLInputFactory;
@@ -38,7 +36,6 @@ import java.io.StringReader;
 
 import static org.animotron.graph.AnimoGraph.startDB;
 import static org.animotron.graph.Properties.HASH;
-import static org.animotron.expression.JExpression._;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -52,21 +49,14 @@ public class YetAnotherGraphBuilderTest extends ATest {
         return FACTORY.createXMLStreamReader(new StringReader(xml));
     }
 
-    private Expression the (Expression e) {
-        return new JExpression(
-            _(THE._, _(e))
-        );
-    }
-
-
     private void test_0(String animo, String xml) throws Throwable {
         Expression e;
-        e = the(new AnimoExpression(new FastGraphBuilder(), animo));
+        e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         cleanDB();
         startDB(DATA_FOLDER);
-        e = new StAXExpression(new StreamGraphBuilder(), r(xml));
+        e = new StAXExpression(new StreamGraphBuilder(), r(xml), "a");
         String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
@@ -75,10 +65,10 @@ public class YetAnotherGraphBuilderTest extends ATest {
 
     private void test_1(String animo, String xml) throws Throwable {
         Expression e;
-        e = the(new AnimoExpression(new FastGraphBuilder(), animo));
+        e = new AnimoExpression(new FastGraphBuilder(), animo);
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
-        e = new StAXExpression(new StreamGraphBuilder(), r(xml));
+        e = new StAXExpression(new StreamGraphBuilder(), r(xml), "a");
         String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
@@ -87,10 +77,10 @@ public class YetAnotherGraphBuilderTest extends ATest {
 
     private void test_2(String animo, String xml) throws Throwable {
         Expression e;
-        e = the(new AnimoExpression(new StreamGraphBuilder(), animo));
+        e = new AnimoExpression(new StreamGraphBuilder(), animo);
         String outA = CachedSerializer.ANIMO.serialize(e);
         byte[] outH = (byte[]) HASH.get(e);
-        e = new StAXExpression(new FastGraphBuilder(), r(xml));
+        e = new StAXExpression(new FastGraphBuilder(), r(xml), "a");
         String inA = CachedSerializer.ANIMO.serialize(e);
         byte[] inH = (byte[]) HASH.get(e);
         assertEquals(inH, outH);
@@ -109,26 +99,26 @@ public class YetAnotherGraphBuilderTest extends ATest {
 
     @Test
 	public void test_00() throws Throwable {
-        test("\\a", "<a/>");
+        test("the a \\a", "<a/>");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        test("\\x:a $x \"x-namespace\"", "<x:a xmlns:x=\"x-namespace\"/>");
+        test("the a \\x:a $x \"x-namespace\"", "<x:a xmlns:x=\"x-namespace\"/>");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        test("\\a $ \"x-namespace\"", "<a xmlns=\"x-namespace\"/>");
+        test("the a \\a $ \"x-namespace\"", "<a xmlns=\"x-namespace\"/>");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        test("\\a @b \"c\"", "<a b=\"c\"/>");
+        test("the a \\a @b \"c\"", "<a b=\"c\"/>");
 	}
 
     @Test
 	public void test_04() throws Throwable {
-        test("((??stylesheet \"path\") (\\a))", "<?stylesheet \"path\"?><a/>");
+        test("the a (??stylesheet \"path\") (\\a)", "<?stylesheet \"path\"?><a/>");
 	}
 }
