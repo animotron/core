@@ -106,6 +106,6 @@ public class GraphBuilderTest extends ATest {
 
     @Test
 	public void test_04() throws Throwable {
-        test("(??stylesheet \"path\")) (\\a).");
+        test("((??stylesheet \"path\") (\\a)).");
 	}
 }
