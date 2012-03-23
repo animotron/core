@@ -127,7 +127,7 @@ public class AnimoTraverser {
 
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
                 if (i instanceof Relationship) {
-                	System.out.println(i);
+//                	System.out.println(i);
                 	prev = new QCAVector((Relationship)i, v, prev);
                 	build(handler, parent, prev, level, isOne, pos++, isLast);
                 } else {
@@ -144,7 +144,7 @@ public class AnimoTraverser {
                 	build(handler, parent, i, level, isOne, pos++, !it.hasNext());
             }
         } catch (AnimoException e) {
-        	e.printStackTrace();
+//        	e.printStackTrace();
         	throw new IOException("on "+v,e);
         } finally {
             FastTable.recycle(o);
