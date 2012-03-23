@@ -63,7 +63,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -328,7 +328,7 @@ public class GET extends AbstractQuery implements Shift {
 	
 	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
 
-		QCAVector prev = null;
+		QCAVector cV = null;
 		IndexHits<Relationship> it = Order._.context(node);
 		try {
 			for (Relationship r : it) {
@@ -336,16 +336,16 @@ public class GET extends AbstractQuery implements Shift {
 					continue;
 				}
 	
-				prev = vector.question(r, prev); 
+				cV = vector.question(r); 
 
 				Statement st = Statements.relationshipType(r);
 				if (st instanceof AN) {
-					Pipe p = AN.getREFs(pf, prev);
+					Pipe p = AN.getREFs(pf, cV);
 					QCAVector v;
 					while ((v = p.take()) != null) {
 						Relationship t = v.getClosest();
 						
-						prev.addAnswer(v);
+						cV.addAnswer(v);
 						
 						if (visitedREFs != null && !visitedREFs.contains(t)) {
 							newREFs.add(v);
@@ -355,10 +355,10 @@ public class GET extends AbstractQuery implements Shift {
 				} else if (st instanceof Reference) {
 //					if (!pf.isInStack(r)) {
 						//System.out.println("["+pf.getOP()+"] evaluate "+prev);
-						Pipe in = Evaluator._.execute(pf.getController(), prev);
+						Pipe in = Evaluator._.execute(pf.getController(), cV);
 						QCAVector v;
 						while ((v = in.take()) != null) {
-							prev.addAnswer(v);
+							cV.addAnswer(v);
 							if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
 								newREFs.add(v);
 						}
@@ -468,7 +468,8 @@ public class GET extends AbstractQuery implements Shift {
 		
 		if (context == null) return false;
 		
-		System.out.println("middle "+middle);
+		if (debug)
+			System.out.println("middle "+middle);
 		
 		TraversalDescription trav = prepared.
 		evaluator(new Searcher(){

@@ -44,6 +44,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -245,7 +246,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
     }
 
-    private void collectUSEs(final Set<Node> uses, final Set<Node> weaks, final Node node) {
+    private void collectUSEs(final Set<Node> uses, final Set<Node> weaks, Node node) {
 		for (Relationship r : node.getRelationships(OUTGOING, USE._)) {
 			for (Relationship rr : r.getEndNode().getRelationships(OUTGOING, REF._))
 				if (!FREEZE.has(rr))
@@ -266,7 +267,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			collectUSEs(uses, weaks, vector.getQuestion().getEndNode());
 
 		if (vector.getUnrelaxedAnswer() != null)
-			collectUSEs(uses, weaks, vector.getUnrelaxedAnswer().getEndNode());
+			collectUSEs(uses, weaks, vector.getAnswerEndNode());
 
 		searchForUSE(uses, weaks, vector.getAnswers(), visitred);
     }
@@ -296,9 +297,12 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	try {
 			searchForUSE(allUses, allWeaks, pf.getVector(), visited);
 			
-			//System.out.println("allUses "+allUses);
-			//System.out.println("allWeaks "+allWeaks);
-	
+			System.out.println(pf.getVector());
+			System.out.println("allUses");
+			System.out.println(Arrays.toString(allUses.toArray()));
+			System.out.println("allWeaks");
+			System.out.println(Arrays.toString(allWeaks.toArray()));
+			
 	    	if (allUses.isEmpty()) return;
 	    		
 	    	TraversalDescription trav = td.breadthFirst().

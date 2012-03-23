@@ -20,8 +20,6 @@
  */
 package org.animotron.statement.operator;
 
-import java.io.IOException;
-
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.EQ;
@@ -31,7 +29,6 @@ import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -185,8 +182,7 @@ public class AllTest extends ATest {
         JExpression b = new JExpression(
             _(THE._, "b", _(ALL._, "S", _(WITH._, "Y", value("β"))))
         );
-        //assertAnimoResultOneStep(b, "the b the C (B) (Z \"γ\") (X \"αα\").");
-        assertAnimoResultOneStep(b, "the b.");
+        assertAnimoResultOneStep(b, "the b the C (B) (Z \"γ\") (X \"αα\").");
 
         JExpression c = new JExpression(
             _(THE._, "c", _(ALL._, "S", _(WITH._, "Z", value("γ"))))

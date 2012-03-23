@@ -186,6 +186,7 @@ public class AnyUseTest extends ATest {
     }
 
     @Test
+    @Ignore //USE is not on a vector
     public void useUnderAny() throws Throwable {
 		testAnimo("the resource-B resource.");
 		testAnimo("the resource-A resource.");
