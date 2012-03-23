@@ -261,18 +261,24 @@ public class QCAVector {
         return longToByteArray(answer.getId());
 	}
 	
-	public void debug(StringBuilder b, FastSet<Relationship> visited) {
-		b.append("QCA(");
-		if (question == null)
+	private void spaces(StringBuilder b, int n) {
+		for (int i = 0; i < n; i++)
+			b.append(" ");
+	}
+	
+	public void debug(StringBuilder b, FastSet<Relationship> visited, int level) {
+		//spaces(b, level);
+		b.append(" ");
+		if (question == null) {
 			b.append("NULL");
-		else {
+		} else {
 			if (visited.contains(question)) {
+				spaces(b, level);
 				b.append(" cycling detected "+question);
 				return;
 			}
 			visited.add(question);
 				
-			b.append(question.getId());
 			b.append(" '");
 			b.append(question.getType());
 			b.append("'");
@@ -280,6 +286,9 @@ public class QCAVector {
 			for (Relationship r : question.getEndNode().getRelationships(REF._, Direction.OUTGOING)) {
 				b.append(" "+THE._.reference(r));
 			}
+			b.append("[");
+			b.append(question.getId());
+			b.append("]");
 			
 //			try {
 //				Pipe thes = AN.getREFs(null, new QCAVector(question));
@@ -294,24 +303,28 @@ public class QCAVector {
 //			} catch (Throwable t) {
 //			}
 		}
-		b.append(" {");
 		if (context != null) {
+			b.append(" {\n");
 			int i = 0;
 			for (QCAVector c : context) {
+				spaces(b, level);
 				b.append(i); i++;
 				b.append("=");
 				
-				c.debug(b, visited);
+				c.debug(b, visited, level+1);
 			}
+			b.append("}\n");
+		} else {
+			b.append(" {}\n");
 		}
-		b.append("}");
+		spaces(b, level);
 		if (answer != null) {
 			if (visited.contains(answer)) {
 				b.append(" cycling detected "+answer);
 				return;
 			}
 
-			b.append(" ");
+			b.append("   ");
 			b.append(answer.getId());
 			b.append(" '");
 			b.append(answer.getType());
@@ -327,7 +340,7 @@ public class QCAVector {
 				else
 					first = false;
 				
-				a.debug(b, visited);
+				a.debug(b, visited, level+1);
 			}
 			b.append("*");
 			
@@ -342,10 +355,10 @@ public class QCAVector {
 		
 		b.append("[");
 		b.append(super.hashCode());
-		b.append("] ");
+		b.append("]\n");
 
 		if (debug) System.out.println("DEBUG START");
-		debug(b, visited);
+		debug(b, visited, 0);
 		if (debug) System.out.println("DEBUG END");
 		return b.toString();
 	}
