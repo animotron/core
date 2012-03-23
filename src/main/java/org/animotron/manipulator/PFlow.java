@@ -139,7 +139,8 @@ public class PFlow {
 
 	public void sendAnswer(QCAVector answerVector, RelationshipType rType) throws Throwable {
 		Relationship answer = Utils.createResult(this, answerVector.getContext(), getOPNode(), answerVector.getAnswer(), rType);
-		answerChannel().publish(new QCAVector(getOP(), answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
+//		answerChannel().publish(new QCAVector(getOP(), answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
+		answerChannel().publish(new QCAVector(getOP(), answer, answerVector.getContext()));
 	}
 
 	public void sendAnswer(Relationship answer, QCAVector context) throws Throwable {

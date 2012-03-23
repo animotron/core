@@ -283,7 +283,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	    	checkVectorForUSE(uses, weaks, prev, visitred);
 			searchForUSE(uses, weaks, prev.getContext(), visitred);
 			
-	    	prev = prev.getPrecedingSibling();
+	    	prev = null;//prev.getPrecedingSibling();
     	}
     	
     }
