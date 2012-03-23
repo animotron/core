@@ -28,7 +28,6 @@ import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.DataOutputStream;
@@ -171,6 +170,17 @@ public class QCAVector {
 
 	public Node getClosestEndNode() {
 		Relationship r = getClosest();
+		
+		Node n = r.getEndNode();
+		try {
+			return THE._.getActualRevision(n);
+		} catch (Exception e) {
+			return n;
+		}
+	}
+
+	public Node getAnswerEndNode() {
+		Relationship r = getUnrelaxedAnswer();
 		
 		Node n = r.getEndNode();
 		try {
