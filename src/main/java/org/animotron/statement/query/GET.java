@@ -530,11 +530,25 @@ public class GET extends AbstractQuery implements Shift {
 				List<Path> ps = paths.get(fR);
 				if (ps == null) {// || p.length() > path.length()) {
 					
-					middlePresent = haveMiddle(path, middle);
-					l = new FastList<Path>();
-					l.add(path);
-
-					paths.put(fR, l);
+					boolean thisMiddle = haveMiddle(path, middle);
+					if (middlePresent) {
+						if (thisMiddle) {
+							l = new FastList<Path>();
+							l.add(path);
+		
+							paths.put(fR, l);
+						}
+					} else {
+						if (thisMiddle) {
+							middlePresent = thisMiddle;
+							paths.clear();
+						}
+						
+						l = new FastList<Path>();
+						l.add(path);
+	
+						paths.put(fR, l);
+					}
 				} else {
 					l = paths.get(fR);
 					
