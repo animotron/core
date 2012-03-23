@@ -197,6 +197,7 @@ public class GET extends AbstractQuery implements Shift {
 			final PFlow pf, 
 			final QCAVector v, 
 			final Relationship toCheck, 
+			final Node middle, 
 			final Set<Node> thes, 
 			final Set<Relationship> visitedREFs,
 			final boolean onContext) {
@@ -208,7 +209,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		visitedREFs.add(toCheck);
 		
-		if (searchForHAVE(pf, toCheck, v, thes, onContext))
+		if (searchForHAVE(pf, toCheck, v, middle, thes, onContext))
 			return true;
 
 		//if (!pf.isInStack(have[i])) {
@@ -250,17 +251,28 @@ public class GET extends AbstractQuery implements Shift {
 					
 					QCAVector next = v;
 					while (next != null) {
-						if (next.getQuestion() != null && next.hasAnswer())
+						if (next.getQuestion() != null && next.hasAnswer()) {
 							
-							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs, onContext)) {
+							Node middle = null;
+							Statement s = Statements.relationshipType(next.getQuestion());
+							if (s instanceof ANY) {
+								try {
+									middle = next.getQuestion().getEndNode().getSingleRelationship(REF._, OUTGOING).getEndNode();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+							
+							if (!check(pf, next, next.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext)) {
 								if (next.getAnswers() != null)
 									for (QCAVector vv : next.getAnswers()) {
-										if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs, onContext))
+										if (check(pf, next, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
 											found = true;
 									}
 							} else {
 								found = true;
 							}
+						}
 						
 						visitedREFs.add(next.getQuestion());
 						
@@ -377,17 +389,18 @@ public class GET extends AbstractQuery implements Shift {
 			final PFlow pf, 
 			final Relationship ref,
 			final QCAVector v,
+			final Node middle,
 			final Set<Node> thes,
 			final boolean onContext) {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, THE._.getActualEndNode(ref), thes, onContext))
+		if (getByHave(pf, v, ref, THE._.getActualEndNode(ref), middle, thes, onContext))
 			return true;
 
 		//search for local 'HAVE'
 		if (ref.isType(REF._)) {
-			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), thes, onContext))
+			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), middle, thes, onContext))
 				return true;
 		}
 
@@ -438,6 +451,14 @@ public class GET extends AbstractQuery implements Shift {
         }
         return false;
 	}
+	
+	private boolean haveMiddle(Path path, Node middle) {
+		for (Node n : path.nodes()) {
+			if (n.equals(middle))
+				return true;
+		}
+		return false;
+	}
 
 	private static TraversalDescription prepared = 
 			Traversal.description().
@@ -449,8 +470,18 @@ public class GET extends AbstractQuery implements Shift {
 			relationships(GET._, OUTGOING).
 			relationships(SHALL._, OUTGOING);
 	
-	private boolean getByHave(final PFlow pf, QCAVector vector, Relationship op, final Node context, final Set<Node> thes, final boolean onContext) {
+	private boolean getByHave(
+			final PFlow pf, 
+			QCAVector vector, 
+			Relationship op, 
+			final Node context, 
+			final Node middle, 
+			final Set<Node> thes, 
+			final boolean onContext) {
+		
 		if (context == null) return false;
+		
+		System.out.println("middle "+middle);
 		
 		TraversalDescription trav = prepared.
 		evaluator(new Searcher(){
@@ -463,6 +494,7 @@ public class GET extends AbstractQuery implements Shift {
 		FastMap<Relationship, List<Path>> paths = FastMap.newInstance();
 		try {
 	
+			boolean middlePresent = false;
 			List<Path> l;
 			for (Path path : trav.traverse(context)) {
 				if (debug) 
@@ -498,6 +530,7 @@ public class GET extends AbstractQuery implements Shift {
 				List<Path> ps = paths.get(fR);
 				if (ps == null) {// || p.length() > path.length()) {
 					
+					middlePresent = haveMiddle(path, middle);
 					l = new FastList<Path>();
 					l.add(path);
 
@@ -506,11 +539,26 @@ public class GET extends AbstractQuery implements Shift {
 					l = paths.get(fR);
 					
 					if (l.get(0).length() > path.length()) {
+						
+						middlePresent = haveMiddle(path, middle);
 						l.clear();
 						l.add(path);
 						
 					} else if (l.get(0).length() == path.length()) {
-						l.add(path);
+						boolean thisMiddle = haveMiddle(path, middle);
+						if (middlePresent) {
+							if (thisMiddle)
+								l.add(path);
+						} else {
+							if (thisMiddle) {
+								middlePresent = thisMiddle;
+								l.clear();
+								l.add(path);
+							
+							} else {
+								l.add(path);
+							}
+						}
 					}
 				}
 			}
