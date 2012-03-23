@@ -20,6 +20,7 @@
  */
 package org.animotron.statement.query;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
@@ -62,7 +63,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -459,9 +460,10 @@ public class GET extends AbstractQuery implements Shift {
 			}
 		});
 		
-		FastMap<Relationship, Path> paths = FastMap.newInstance();
+		FastMap<Relationship, List<Path>> paths = FastMap.newInstance();
 		try {
 	
+			List<Path> l;
 			for (Path path : trav.traverse(context)) {
 				if (debug) 
 					System.out.println("["+pf.getOP()+"] * "+path);
@@ -475,7 +477,10 @@ public class GET extends AbstractQuery implements Shift {
 					if (pf.getOP().equals(op))
 						continue;
 					
-					paths.put(op, path);
+					l = new FastList<Path>();
+					l.add(path);
+					paths.put(op, l);
+					
 					continue;
 				}
 				
@@ -490,9 +495,23 @@ public class GET extends AbstractQuery implements Shift {
 				}
 	
 				Relationship fR = path.relationships().iterator().next();
-				Path p = paths.get(fR);
-				if (p == null || p.length() > path.length()) {
-					paths.put(fR, path);
+				List<Path> ps = paths.get(fR);
+				if (ps == null) {// || p.length() > path.length()) {
+					
+					l = new FastList<Path>();
+					l.add(path);
+
+					paths.put(fR, l);
+				} else {
+					l = paths.get(fR);
+					
+					if (l.get(0).length() > path.length()) {
+						l.clear();
+						l.add(path);
+						
+					} else if (l.get(0).length() == path.length()) {
+						l.add(path);
+					}
 				}
 			}
 			
@@ -510,80 +529,82 @@ public class GET extends AbstractQuery implements Shift {
 			FastTable<Relationship> resByHAVE = FastTable.newInstance();
 			FastTable<Relationship> resByIS = FastTable.newInstance();
 			try {
-				for (Path path : paths.values()) {
-					res = null; prevRes = null; prevPrevRes = null;
-
-					if (path.length() == 1 && path.lastRelationship().isType(REF._)) {
-						res = op;
-
-					} else {
-						Iterator<Relationship> it = path.relationships().iterator();
-						for (Relationship r = null; it.hasNext(); ) {
-							r = it.next();
-							if (startBy == null)
-								startBy = r;
-								
-							if (!pf.isInStack(r)) {
-								if (r.isType(AN._)) {
-									res = r;
-									ANs++;
-								} else {
-									if (ANs > 1) {
-										//check is it pseudo HAVE or IS topology. on HAVE return it else last of top 
-										if (r.isType(REF._) && it.hasNext()) {
-											r = it.next();
-											if (r.isType(AN._) && Utils.haveContext(r.getEndNode()))
-												res = r;
-										}
-										break;
-									}
-									ANs = 0;
-										
-									if (r.isType(ANY._)) {
-										if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
-											res = r;
-										} else {
-											res = null;
-										}
-										break;
-				
-									} else if (r.isType(GET._)) {
-										if (it.hasNext())
-											if (it.next().isType(REF._) && !it.hasNext())
-												res = r;
-										break;
-		
-									} else if (r.isType(SHALL._)) {
+				for (List<Path> ps : paths.values()) {
+					for (Path path : ps) {
+						res = null; prevRes = null; prevPrevRes = null;
+	
+						if (path.length() == 1 && path.lastRelationship().isType(REF._)) {
+							res = op;
+	
+						} else {
+							Iterator<Relationship> it = path.relationships().iterator();
+							for (Relationship r = null; it.hasNext(); ) {
+								r = it.next();
+								if (startBy == null)
+									startBy = r;
+									
+								if (!pf.isInStack(r)) {
+									if (r.isType(AN._)) {
 										res = r;
-		
-									} else if (r.isType(REF._)) {
-										//ignore pseudo IS
-										if (Utils.haveContext(r.getStartNode())) {
-											prevRes = null;
+										ANs++;
+									} else {
+										if (ANs > 1) {
+											//check is it pseudo HAVE or IS topology. on HAVE return it else last of top 
+											if (r.isType(REF._) && it.hasNext()) {
+												r = it.next();
+												if (r.isType(AN._) && Utils.haveContext(r.getEndNode()))
+													res = r;
+											}
+											break;
+										}
+										ANs = 0;
 											
-											if (onContext) break;
-											else if (refs > 1) break;
-											
-											refs++;
-										} else {
-											prevPrevRes = prevRes;
-											prevRes = res;
+										if (r.isType(ANY._)) {
+											if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
+												res = r;
+											} else {
+												res = null;
+											}
+											break;
+					
+										} else if (r.isType(GET._)) {
+											if (it.hasNext())
+												if (it.next().isType(REF._) && !it.hasNext())
+													res = r;
+											break;
+			
+										} else if (r.isType(SHALL._)) {
+											res = r;
+			
+										} else if (r.isType(REF._)) {
+											//ignore pseudo IS
+											if (Utils.haveContext(r.getStartNode())) {
+												prevRes = null;
+												
+												if (onContext) break;
+												else if (refs > 1) break;
+												
+												refs++;
+											} else {
+												prevPrevRes = prevRes;
+												prevRes = res;
+											}
 										}
 									}
+									
 								}
-								
 							}
 						}
+						if (prevPrevRes != null) res = prevPrevRes;
+						
+						if (res != null) {
+							if (startBy != null && startBy.isType(REF._))
+								resByIS.add(res);
+							else
+								resByHAVE.add(res);
+						}
+						startBy = null;
 					}
-					if (prevPrevRes != null) res = prevPrevRes;
-					
-					if (res != null) {
-						if (startBy != null && startBy.isType(REF._))
-							resByIS.add(res);
-						else
-							resByHAVE.add(res);
-					}
-					startBy = null;
 				}
 		
 				if (!resByHAVE.isEmpty()) {
