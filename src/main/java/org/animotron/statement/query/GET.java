@@ -20,6 +20,7 @@
  */
 package org.animotron.statement.query;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
@@ -62,7 +63,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -196,6 +197,7 @@ public class GET extends AbstractQuery implements Shift {
 			final PFlow pf, 
 			final QCAVector v, 
 			final Relationship toCheck, 
+			final Node middle, 
 			final Set<Node> thes, 
 			final Set<Relationship> visitedREFs,
 			final boolean onContext) {
@@ -207,7 +209,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		visitedREFs.add(toCheck);
 		
-		if (searchForHAVE(pf, toCheck, v, thes, onContext))
+		if (searchForHAVE(pf, toCheck, v, middle, thes, onContext))
 			return true;
 
 		//if (!pf.isInStack(have[i])) {
@@ -247,29 +249,33 @@ public class GET extends AbstractQuery implements Shift {
 					
 					if (debug) System.out.println("checking "+v);
 					
-					QCAVector next = v;
-					while (next != null) {
-						if (next.getQuestion() != null && next.hasAnswer())
-							
-							if (!check(pf, next, next.getUnrelaxedAnswer(), thes, visitedREFs, onContext)) {
-								if (next.getAnswers() != null)
-									for (QCAVector vv : next.getAnswers()) {
-										if (check(pf, next, vv.getUnrelaxedAnswer(), thes, visitedREFs, onContext))
-											found = true;
-									}
-							} else {
-								found = true;
+					if (v.getQuestion() != null && v.hasAnswer()) {
+						
+						Node middle = null;
+						Statement s = Statements.relationshipType(v.getQuestion());
+						if (s instanceof ANY) {
+							try {
+								middle = v.getQuestion().getEndNode().getSingleRelationship(REF._, OUTGOING).getEndNode();
+							} catch (Exception e) {
+								e.printStackTrace();
 							}
+						}
 						
-						visitedREFs.add(next.getQuestion());
-						
-						next = next.getPrecedingSibling();
+						if (!check(pf, v, v.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext)) {
+							if (v.getAnswers() != null)
+								for (QCAVector vv : v.getAnswers()) {
+									if (check(pf, v, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
+										found = true;
+								}
+						} else {
+							found = true;
+						}
 					}
+					
+					visitedREFs.add(v.getQuestion());
 				}
 				
 				if (found) return true;
-	
-				//newREFs = new FastSet<QCAVector>();
 	
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
 					v = nextREFs.valueOf(r);
@@ -281,23 +287,17 @@ public class GET extends AbstractQuery implements Shift {
 						}
 					}
 					
-					QCAVector next = v;
-					while (next != null) {
-						t = next.getUnrelaxedAnswer();
-						if (t != null && !t.equals(next.getQuestion())) {
-							if (! t.isType(AN._))
-								getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
-							
-							getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
-						}
+					t = v.getUnrelaxedAnswer();
+					if (t != null && !t.equals(v.getQuestion())) {
+						if (! t.isType(AN._))
+							getOutgoingReferences(pf, v, t, t.getStartNode(), newREFs, visitedREFs);
+						
+						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
+					}
 
-						//cs = next.getContext();
-						//if (cs != null) {
-						//	for (QCAVector c : cs) {
-						//		checkVector(c, newREFs, visitedREFs);
-						//	}
-						//}
-						next = next.getPrecedingSibling();
+					t = v.getQuestion();
+					if (t != null && t.isType(THE._)) {
+						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
 					}
 				}
 	
@@ -376,17 +376,18 @@ public class GET extends AbstractQuery implements Shift {
 			final PFlow pf, 
 			final Relationship ref,
 			final QCAVector v,
+			final Node middle,
 			final Set<Node> thes,
 			final boolean onContext) {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, THE._.getActualEndNode(ref), thes, onContext))
+		if (getByHave(pf, v, ref, THE._.getActualEndNode(ref), middle, thes, onContext))
 			return true;
 
 		//search for local 'HAVE'
 		if (ref.isType(REF._)) {
-			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), thes, onContext))
+			if (getByHave(pf, v, v.getQuestion(), ref.getStartNode(), middle, thes, onContext))
 				return true;
 		}
 
@@ -437,6 +438,14 @@ public class GET extends AbstractQuery implements Shift {
         }
         return false;
 	}
+	
+	private boolean haveMiddle(Path path, Node middle) {
+		for (Node n : path.nodes()) {
+			if (n.equals(middle))
+				return true;
+		}
+		return false;
+	}
 
 	private static TraversalDescription prepared = 
 			Traversal.description().
@@ -448,8 +457,18 @@ public class GET extends AbstractQuery implements Shift {
 			relationships(GET._, OUTGOING).
 			relationships(SHALL._, OUTGOING);
 	
-	private boolean getByHave(final PFlow pf, QCAVector vector, Relationship op, final Node context, final Set<Node> thes, final boolean onContext) {
+	private boolean getByHave(
+			final PFlow pf, 
+			QCAVector vector, 
+			Relationship op, 
+			final Node context, 
+			final Node middle, 
+			final Set<Node> thes, 
+			final boolean onContext) {
+		
 		if (context == null) return false;
+		
+		System.out.println("middle "+middle);
 		
 		TraversalDescription trav = prepared.
 		evaluator(new Searcher(){
@@ -459,9 +478,11 @@ public class GET extends AbstractQuery implements Shift {
 			}
 		});
 		
-		FastMap<Relationship, Path> paths = FastMap.newInstance();
+		FastMap<Relationship, List<Path>> paths = FastMap.newInstance();
 		try {
 	
+			boolean middlePresent = false;
+			List<Path> l;
 			for (Path path : trav.traverse(context)) {
 				if (debug) 
 					System.out.println("["+pf.getOP()+"] * "+path);
@@ -475,7 +496,10 @@ public class GET extends AbstractQuery implements Shift {
 					if (pf.getOP().equals(op))
 						continue;
 					
-					paths.put(op, path);
+					l = new FastList<Path>();
+					l.add(path);
+					paths.put(op, l);
+					
 					continue;
 				}
 				
@@ -490,9 +514,53 @@ public class GET extends AbstractQuery implements Shift {
 				}
 	
 				Relationship fR = path.relationships().iterator().next();
-				Path p = paths.get(fR);
-				if (p == null || p.length() > path.length()) {
-					paths.put(fR, path);
+				List<Path> ps = paths.get(fR);
+				if (ps == null) {// || p.length() > path.length()) {
+					
+					boolean thisMiddle = haveMiddle(path, middle);
+					if (middlePresent) {
+						if (thisMiddle) {
+							l = new FastList<Path>();
+							l.add(path);
+		
+							paths.put(fR, l);
+						}
+					} else {
+						if (thisMiddle) {
+							middlePresent = thisMiddle;
+							paths.clear();
+						}
+						
+						l = new FastList<Path>();
+						l.add(path);
+	
+						paths.put(fR, l);
+					}
+				} else {
+					l = paths.get(fR);
+					
+					if (l.get(0).length() > path.length()) {
+						
+						middlePresent = haveMiddle(path, middle);
+						l.clear();
+						l.add(path);
+						
+					} else if (l.get(0).length() == path.length()) {
+						boolean thisMiddle = haveMiddle(path, middle);
+						if (middlePresent) {
+							if (thisMiddle)
+								l.add(path);
+						} else {
+							if (thisMiddle) {
+								middlePresent = thisMiddle;
+								l.clear();
+								l.add(path);
+							
+							} else {
+								l.add(path);
+							}
+						}
+					}
 				}
 			}
 			
@@ -510,80 +578,82 @@ public class GET extends AbstractQuery implements Shift {
 			FastTable<Relationship> resByHAVE = FastTable.newInstance();
 			FastTable<Relationship> resByIS = FastTable.newInstance();
 			try {
-				for (Path path : paths.values()) {
-					res = null; prevRes = null; prevPrevRes = null;
-
-					if (path.length() == 1 && path.lastRelationship().isType(REF._)) {
-						res = op;
-
-					} else {
-						Iterator<Relationship> it = path.relationships().iterator();
-						for (Relationship r = null; it.hasNext(); ) {
-							r = it.next();
-							if (startBy == null)
-								startBy = r;
-								
-							if (!pf.isInStack(r)) {
-								if (r.isType(AN._)) {
-									res = r;
-									ANs++;
-								} else {
-									if (ANs > 1) {
-										//check is it pseudo HAVE or IS topology. on HAVE return it else last of top 
-										if (r.isType(REF._) && it.hasNext()) {
-											r = it.next();
-											if (r.isType(AN._) && Utils.haveContext(r.getEndNode()))
-												res = r;
-										}
-										break;
-									}
-									ANs = 0;
-										
-									if (r.isType(ANY._)) {
-										if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
-											res = r;
-										} else {
-											res = null;
-										}
-										break;
-				
-									} else if (r.isType(GET._)) {
-										if (it.hasNext())
-											if (it.next().isType(REF._) && !it.hasNext())
-												res = r;
-										break;
-		
-									} else if (r.isType(SHALL._)) {
+				for (List<Path> ps : paths.values()) {
+					for (Path path : ps) {
+						res = null; prevRes = null; prevPrevRes = null;
+	
+						if (path.length() == 1 && path.lastRelationship().isType(REF._)) {
+							res = op;
+	
+						} else {
+							Iterator<Relationship> it = path.relationships().iterator();
+							for (Relationship r = null; it.hasNext(); ) {
+								r = it.next();
+								if (startBy == null)
+									startBy = r;
+									
+								if (!pf.isInStack(r)) {
+									if (r.isType(AN._)) {
 										res = r;
-		
-									} else if (r.isType(REF._)) {
-										//ignore pseudo IS
-										if (Utils.haveContext(r.getStartNode())) {
-											prevRes = null;
+										ANs++;
+									} else {
+										if (ANs > 1) {
+											//check is it pseudo HAVE or IS topology. on HAVE return it else last of top 
+											if (r.isType(REF._) && it.hasNext()) {
+												r = it.next();
+												if (r.isType(AN._) && Utils.haveContext(r.getEndNode()))
+													res = r;
+											}
+											break;
+										}
+										ANs = 0;
 											
-											if (onContext) break;
-											else if (refs > 1) break;
-											
-											refs++;
-										} else {
-											prevPrevRes = prevRes;
-											prevRes = res;
+										if (r.isType(ANY._)) {
+											if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
+												res = r;
+											} else {
+												res = null;
+											}
+											break;
+					
+										} else if (r.isType(GET._)) {
+											if (it.hasNext())
+												if (it.next().isType(REF._) && !it.hasNext())
+													res = r;
+											break;
+			
+										} else if (r.isType(SHALL._)) {
+											res = r;
+			
+										} else if (r.isType(REF._)) {
+											//ignore pseudo IS
+											if (Utils.haveContext(r.getStartNode())) {
+												prevRes = null;
+												
+												if (onContext) break;
+												else if (refs > 1) break;
+												
+												refs++;
+											} else {
+												prevPrevRes = prevRes;
+												prevRes = res;
+											}
 										}
 									}
+									
 								}
-								
 							}
 						}
+						if (prevPrevRes != null) res = prevPrevRes;
+						
+						if (res != null) {
+							if (startBy != null && startBy.isType(REF._))
+								resByIS.add(res);
+							else
+								resByHAVE.add(res);
+						}
+						startBy = null;
 					}
-					if (prevPrevRes != null) res = prevPrevRes;
-					
-					if (res != null) {
-						if (startBy != null && startBy.isType(REF._))
-							resByIS.add(res);
-						else
-							resByHAVE.add(res);
-					}
-					startBy = null;
 				}
 		
 				if (!resByHAVE.isEmpty()) {

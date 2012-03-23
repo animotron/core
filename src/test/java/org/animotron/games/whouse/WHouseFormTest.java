@@ -142,7 +142,7 @@ public class WHouseFormTest extends ATest {
 
                 "the date word \"date\".",
                 "the receice-party (word \"receiver\") (party,receive).",
-                "the issue-party (word \"issuer\") (party,issue).",
+                "the issue-party (word \"issue\") (party,issue).",
                 "the goods word \"goods\".",
                 "the qty (word \"quantity\") (part (number) (UoM)).",
                 "the price (word \"price\") (part (number) (currency) (UoM)).",
@@ -247,14 +247,14 @@ public class WHouseFormTest extends ATest {
 					"(@id id this generator) " +
 					"(each (get part this generator) (\\input @name id this part))"
 		);
-        assertAnimoResult("generator form", "generator (\\form (@id \"form\") (\\input @name \"field\")).");
+        assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
         
     	__(
 			"the form2 part (field1) (field2)."
 		);
         assertAnimoResult(
     		"generator form2", 
-    		"generator (\\form (@id \"form2\") (\\input @name \"field1\") (\\input @name \"field2\")).");
+    		"generator \\form (@id \"form2\") (\\input @name \"field1\") (\\input @name \"field2\").");
 
     }
 }

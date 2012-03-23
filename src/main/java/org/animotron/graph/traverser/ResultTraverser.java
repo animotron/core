@@ -101,20 +101,20 @@ public class ResultTraverser extends AnimoTraverser {
         boolean found = false;
         boolean isFirst = isOne;
 
-        QCAVector prev = null;
+//        QCAVector prev = null;
         
         QCAVector i = null;
         while (it.hasNext()) {
         	i = it.next();
         	rr.addAnswer(i);
-        	i.setPrecedingSibling(prev);
-        	prev = i;
+//        	i.setPrecedingSibling(prev);
+//        	prev = i;
             if (isFirst) {
                 if (it.hasNext()) {
                     build(handler, parent, i, level, false, pos++, isLast);
                 	i = it.next();
-                	i.setPrecedingSibling(prev);
-                	prev = i;
+//                	i.setPrecedingSibling(prev);
+//                	prev = i;
                     build(handler, parent, i, level, false, pos++, isLast && !it.hasNext());
                 } else {
                     build(handler, parent, i, level, isOne, pos++, isLast && !it.hasNext());

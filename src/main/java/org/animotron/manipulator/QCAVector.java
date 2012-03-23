@@ -28,6 +28,7 @@ import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.DataOutputStream;
@@ -42,6 +43,10 @@ import static org.animotron.utils.MessageDigester.longToByteArray;
  */
 public class QCAVector {
 	
+//	private final Path qPath = null;
+//	private final Path aPath = null;
+//	private final List<Path> aPaths = null;
+	
 	private final Relationship question;
 	private Relationship answer = null;
 	
@@ -49,12 +54,15 @@ public class QCAVector {
 
 	private List<QCAVector> context = null;
 
-	private QCAVector preceding_sibling = null;
+//	private QCAVector preceding_sibling = null;
 	
 	private static boolean debug = false;
 
 	public QCAVector(Relationship question) {
 		this.question = question;
+//		if (question != null && question.isType(THE._))
+//			answer = question;
+		
 		if (debug) System.out.println(" .... create vector 1 .... ");
 	}
 
@@ -112,10 +120,10 @@ public class QCAVector {
 		
 		this.context = context;
 		
-		this.preceding_sibling = preceding_sibling;
-		if (debug) 
-		if (preceding_sibling == this)
-			System.out.println(" .... create vector 7 .... "+this);
+//		this.preceding_sibling = preceding_sibling;
+//		if (debug) 
+//		if (preceding_sibling == this)
+//			System.out.println(" .... create vector 7 .... "+this);
 	}
 
 	public QCAVector(Relationship question, Relationship context, Relationship answer) {
@@ -134,24 +142,25 @@ public class QCAVector {
 		this.context = new FastTable<QCAVector>();
 		this.context.add(context);
 		
-
-		this.preceding_sibling = precedingSibling;
-		if (debug) 
-		if (preceding_sibling == this)
-			System.out.println(" .... create vector 9 .... "+this);
+//		this.preceding_sibling = precedingSibling;
+//		if (debug) 
+//		if (preceding_sibling == this)
+//			System.out.println(" .... create vector 9 .... "+this);
 		
 		cyclingDetection(question);
 	}
 	
 	protected void cyclingDetection(Relationship op) throws AnimoException {
+		if (op.isType(REF._)) return;
+		
 		if (context != null)
 			for (QCAVector v : context)
 				if (v.hasRelationship(op))
 					throw new AnimoException(op, "cycling detected for "+op.getId()+" at "+this);
 
 		
-		if (preceding_sibling != null)
-			preceding_sibling.cyclingDetection(op);
+//		if (preceding_sibling != null)
+//			preceding_sibling.cyclingDetection(op);
 	}
 
 	public Relationship getClosest() {
@@ -204,21 +213,21 @@ public class QCAVector {
 		return context;
 	}
 	
-	public void setPrecedingSibling(QCAVector prev) {
-		if (preceding_sibling == this) {
-			System.out.println("setPrecedingSibling "+preceding_sibling);
-			System.out.println(prev);
-		}
-		preceding_sibling = prev;
-	}
-
-	public QCAVector getPrecedingSibling() {
-		if (preceding_sibling == this) {
-			System.out.println("getPrecedingSibling "+preceding_sibling);
-			System.out.println(this);
-		}
-		return preceding_sibling;
-	}
+//	public void setPrecedingSibling(QCAVector prev) {
+//		if (preceding_sibling == this) {
+//			System.out.println("setPrecedingSibling "+preceding_sibling);
+//			System.out.println(prev);
+//		}
+//		preceding_sibling = prev;
+//	}
+//
+//	public QCAVector getPrecedingSibling() {
+//		if (preceding_sibling == this) {
+//			System.out.println("getPrecedingSibling "+preceding_sibling);
+//			System.out.println(this);
+//		}
+//		return preceding_sibling;
+//	}
 
 	public boolean questionEquals(QCAVector vector) {
 		return question.equals(vector.question);
@@ -359,8 +368,8 @@ public class QCAVector {
 			}
 		}
 		
-		if (preceding_sibling != null)
-			return preceding_sibling.hasRelationship(r);
+//		if (preceding_sibling != null)
+//			return preceding_sibling.hasRelationship(r);
 		
 		return false;
 	}
@@ -412,17 +421,17 @@ public class QCAVector {
 	}
 
 	public QCAVector answered(Relationship createdAnswer) {
-		if (preceding_sibling == this)
-			System.out.println("!!!answered 1 "+this);
-
-		return new QCAVector(question, createdAnswer, context, preceding_sibling);
+//		if (preceding_sibling == this)
+//			System.out.println("!!!answered 1 "+this);
+//
+//		return new QCAVector(question, createdAnswer, context, preceding_sibling);
+		return new QCAVector(question, createdAnswer, context);
 	}
 
 	public QCAVector answered(Relationship createdAnswer, QCAVector context) {
 		//context.removeThis(this);
-		if (preceding_sibling == this)
-			System.out.println("!!!answered 2 "+this);
-
+//		if (preceding_sibling == this)
+//			System.out.println("!!!answered 2 "+this);
 		
 		FastTable<QCAVector> c = new FastTable<QCAVector>();
 		c.add(context);
@@ -433,14 +442,16 @@ public class QCAVector {
 			}
 		}
 			
-		return new QCAVector(question, createdAnswer, c, preceding_sibling);
+//		return new QCAVector(question, createdAnswer, c, preceding_sibling);
+		return new QCAVector(question, createdAnswer, c);
 	}
 	
 	public QCAVector answered(Relationship createdAnswer, List<QCAVector> contexts) {
-		if (preceding_sibling == this)
-			System.out.println("!!!answered 3 "+this);
-
-		return new QCAVector(question, createdAnswer, contexts, preceding_sibling);
+//		if (preceding_sibling == this)
+//			System.out.println("!!!answered 3 "+this);
+//
+//		return new QCAVector(question, createdAnswer, contexts, preceding_sibling);
+		return new QCAVector(question, createdAnswer, contexts);
 	}
 
 	public QCAVector question(Relationship q) {
@@ -464,7 +475,8 @@ public class QCAVector {
 	}
 	
 	public QCAVector question(Relationship q, QCAVector prev) throws AnimoException {
-		if (question != null && question.equals(q) && preceding_sibling == prev && answer == null)
+		if (question != null && question.equals(q) && answer == null)
+//		if (question != null && question.equals(q) && preceding_sibling == prev && answer == null)
 			return this;
 		
 		cyclingDetection(q);

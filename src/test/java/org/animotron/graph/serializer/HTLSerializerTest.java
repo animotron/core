@@ -51,7 +51,6 @@ public class HTLSerializerTest extends ATest {
                         "(\\p \"Welcome to Animo!\") " +
                         "(\\br) "+
                         "(\\input (@name \"test\") (@value \"\"foo\" & 'bar'.\") (@checked)))))",
-            "<!DOCTYPE html>" +
             "<html>" +
                 "<head>" +
                     "<title>Hello World!</title>" +
