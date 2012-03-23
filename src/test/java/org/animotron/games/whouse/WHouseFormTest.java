@@ -142,7 +142,7 @@ public class WHouseFormTest extends ATest {
 
                 "the date word \"date\".",
                 "the receice-party (word \"receiver\") (party,receive).",
-                "the issue-party (word \"issuer\") (party,issue).",
+                "the issue-party (word \"issue\") (party,issue).",
                 "the goods word \"goods\".",
                 "the qty (word \"quantity\") (part (number) (UoM)).",
                 "the price (word \"price\") (part (number) (currency) (UoM)).",
