@@ -249,40 +249,33 @@ public class GET extends AbstractQuery implements Shift {
 					
 					if (debug) System.out.println("checking "+v);
 					
-					QCAVector next = v;
-					while (next != null) {
-						if (next.getQuestion() != null && next.hasAnswer()) {
-							
-							Node middle = null;
-							Statement s = Statements.relationshipType(next.getQuestion());
-							if (s instanceof ANY) {
-								try {
-									middle = next.getQuestion().getEndNode().getSingleRelationship(REF._, OUTGOING).getEndNode();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-							}
-							
-							if (!check(pf, next, next.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext)) {
-								if (next.getAnswers() != null)
-									for (QCAVector vv : next.getAnswers()) {
-										if (check(pf, next, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
-											found = true;
-									}
-							} else {
-								found = true;
+					if (v.getQuestion() != null && v.hasAnswer()) {
+						
+						Node middle = null;
+						Statement s = Statements.relationshipType(v.getQuestion());
+						if (s instanceof ANY) {
+							try {
+								middle = v.getQuestion().getEndNode().getSingleRelationship(REF._, OUTGOING).getEndNode();
+							} catch (Exception e) {
+								e.printStackTrace();
 							}
 						}
 						
-						visitedREFs.add(next.getQuestion());
-						
-						next = null;//next.getPrecedingSibling();
+						if (!check(pf, v, v.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext)) {
+							if (v.getAnswers() != null)
+								for (QCAVector vv : v.getAnswers()) {
+									if (check(pf, v, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
+										found = true;
+								}
+						} else {
+							found = true;
+						}
 					}
+					
+					visitedREFs.add(v.getQuestion());
 				}
 				
 				if (found) return true;
-	
-				//newREFs = new FastSet<QCAVector>();
 	
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
 					v = nextREFs.valueOf(r);
@@ -294,23 +287,12 @@ public class GET extends AbstractQuery implements Shift {
 						}
 					}
 					
-					QCAVector next = v;
-					while (next != null) {
-						t = next.getUnrelaxedAnswer();
-						if (t != null && !t.equals(next.getQuestion())) {
-							if (! t.isType(AN._))
-								getOutgoingReferences(pf, next, t, t.getStartNode(), newREFs, visitedREFs);
-							
-							getOutgoingReferences(pf, next, t, t.getEndNode(), newREFs, visitedREFs);
-						}
-
-						//cs = next.getContext();
-						//if (cs != null) {
-						//	for (QCAVector c : cs) {
-						//		checkVector(c, newREFs, visitedREFs);
-						//	}
-						//}
-						next = null;//next.getPrecedingSibling();
+					t = v.getUnrelaxedAnswer();
+					if (t != null && !t.equals(v.getQuestion())) {
+						if (! t.isType(AN._))
+							getOutgoingReferences(pf, v, t, t.getStartNode(), newREFs, visitedREFs);
+						
+						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
 					}
 				}
 	
