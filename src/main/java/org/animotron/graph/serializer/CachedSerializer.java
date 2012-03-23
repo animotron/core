@@ -23,7 +23,6 @@ package org.animotron.graph.serializer;
 import com.ctc.wstx.api.WriterConfig;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import org.animotron.cache.Cache;
-import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.*;
 import org.animotron.graph.traverser.*;
@@ -369,26 +368,20 @@ public abstract class CachedSerializer extends AbstractSerializer {
         }
     }
 
-    public static void drop(final Relationship r) throws Throwable {
-        AnimoGraph.execute(new GraphOperation<Void>() {
-            @Override
-            public Void execute() throws IOException {
-                if (CACHE.has(r)) {
-                    String uuid = (String) RUUID.get(r);
-                    try {
-                        for (String i : (String[]) CACHE.get(r)) {
-                            drop(uuid, i);
-                        }
-                    } catch (IOException e) {
-                        throw e;
-                    } finally {
-                        CACHE.remove(r);
-                        RUUID.remove(r);
-                    }
+    public static void drop(Relationship r) throws Throwable {
+        if (CACHE.has(r)) {
+            String uuid = (String) RUUID.get(r);
+            try {
+                for (String i : (String[]) CACHE.get(r)) {
+                    drop(uuid, i);
                 }
-                return null;
+            } catch (IOException e) {
+                throw e;
+            } finally {
+                CACHE.remove(r);
+                RUUID.remove(r);
             }
-        });
+        }
     }
 
 }
