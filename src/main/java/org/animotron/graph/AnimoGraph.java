@@ -145,9 +145,9 @@ public class AnimoGraph {
 	}
 
 	public static void finishTx(Transaction tx) {
+        tx.finish();
         activeTx.remove(tx);
         debugActiveTx.remove(tx);
-        tx.finish();
 	}
 
 //	public static boolean isTransactionActive(Transaction tx) {
