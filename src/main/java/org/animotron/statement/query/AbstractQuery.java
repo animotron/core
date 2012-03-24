@@ -374,14 +374,6 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		return null;
 	}
 
-	protected Relationship getThe(Node node) {
-		try {
-			return THE._.get((String) Properties.NAME.get(node));
-		} catch (Throwable t) {
-			return null;
-		}
-	}
-	
 	protected TraversalDescription getIntersectionChecktravers(final Set<Node> mustHave, final Set<Node> shouldHave, final int was) {
 
 		return Traversal.description().depthFirst().
