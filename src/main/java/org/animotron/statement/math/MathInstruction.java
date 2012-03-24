@@ -71,6 +71,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 
 		if (As.size() == Bs.size()) {
 			List<Relationship> eq = new FastList<Relationship>();
+			List<Relationship> nm = new FastList<Relationship>();
 
 			if (As.size() != 1) {
 				Iterator<Relationship> it = As.iterator();
@@ -84,7 +85,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 							Relationship rr = Bit.next();
 							if (rr.isType(VALUE._)) {
 								if (rr.getEndNode().equals(n)) {
-									eq.add(rr);
+									nm.add(rr);
 									
 									it.remove();
 									Bit.remove();
@@ -109,7 +110,15 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 
 			System.out.println(Arrays.toString(eq.toArray()));
 			if (eq.isEmpty()) {
-				return new AnimObject(pf, this, a, b);
+				if (nm.isEmpty())
+					return new AnimObject(pf, this, a, b);
+				else {
+					for (Relationship n : nm)
+						eq.add(execute(pf, n, n));
+				}
+			} else {
+				for (Relationship n : nm)
+					eq.add(execute(pf, n, n));
 			}
 
 			return new AnimObject(pf, MUL._, eq);
