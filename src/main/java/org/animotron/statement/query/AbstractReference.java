@@ -95,54 +95,56 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
         		Relationship res;
 
-        		Set<Relationship> list = getExpected(pf);
-				if (optimizer && list !=null && !list.isEmpty()) {
-					System.out.println("after predicate "+Arrays.toString(list.toArray()));
-					for (Relationship r : list) {
-						
-						//System.out.println("*"+r);
-						
-				    	TraversalDescription trav = td.
-								relationships(AN._, Direction.OUTGOING).
-								relationships(REF._).
-						evaluator(new ISearcher(){
-							@Override
-							public Evaluation evaluate(Path path) {
-								return _evaluate_(path, theNodes);
+        		if (optimizer) {
+	        		Set<Relationship> list = getExpected(pf);
+					if (list !=null && !list.isEmpty()) {
+						System.out.println("after predicate "+Arrays.toString(list.toArray()));
+						for (Relationship r : list) {
+							
+							//System.out.println("*"+r);
+							
+					    	TraversalDescription trav = td.
+									relationships(AN._, Direction.OUTGOING).
+									relationships(REF._).
+							evaluator(new ISearcher(){
+								@Override
+								public Evaluation evaluate(Path path) {
+									return _evaluate_(path, theNodes);
+								}
+							});
+							
+							
+							if (!trav.traverse(r.getEndNode()).iterator().hasNext()) {
+								continue;
 							}
-						});
-						
-						
-						if (!trav.traverse(r.getEndNode()).iterator().hasNext()) {
-							continue;
-						}
-						
-						if (setFiltering(r.getEndNode(), uses, weaks)) {
-							if (isLeaf(r.getEndNode())) {
-								//System.out.print("answered ");
-								//Utils.debug(r);
-		        				pf.sendAnswer( r );
-		        				
-		        				if (returnFirstOnly) return;
-							}
-						}
-				        for (Path path : td_IS_leaf.traverse(r.getEndNode())) {
-				        	
-				        	Node n = path.lastRelationship().getStartNode();
-							if (setFiltering(n, uses, weaks)) {
-								if (isLeaf(n) && (res = getThe(n)) != null) {
+							
+							if (setFiltering(r.getEndNode(), uses, weaks)) {
+								if (isLeaf(r.getEndNode())) {
 									//System.out.print("answered ");
 									//Utils.debug(r);
-			        				pf.sendAnswer( res );
+			        				pf.sendAnswer( r );
 			        				
 			        				if (returnFirstOnly) return;
 								}
 							}
-				        }
-
-						
+					        for (Path path : td_IS_leaf.traverse(r.getEndNode())) {
+					        	
+					        	Node n = path.lastRelationship().getStartNode();
+								if (setFiltering(n, uses, weaks)) {
+									if (isLeaf(n) && (res = getThe(n)) != null) {
+										//System.out.print("answered ");
+										//Utils.debug(r);
+				        				pf.sendAnswer( res );
+				        				
+				        				if (returnFirstOnly) return;
+									}
+								}
+					        }
+	
+							
+						}
+						return;
 					}
-					return;
 				}
 				System.out.println("NOT OPTIMIZED");
 
