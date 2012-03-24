@@ -111,4 +111,9 @@ public class XMLTest extends ATest {
         test("<a xmlns:a=\"a\" a=\"a\">a</a>", "\\a ($a \"a\") (@a \"a\") \"a\".");
 	}
 
+    @Test
+	public void test_09() throws Throwable {
+        test("<a><!--a--></a>", "\\a !-- \"a\".");
+	}
+
 }
