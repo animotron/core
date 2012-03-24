@@ -126,14 +126,14 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                 if (!isOne) {
                     write("(");
                 }
-                Node n= ((Relationship) o[1]).getEndNode();
-                if (!n.hasRelationship(REF._, OUTGOING)) {
-                    write(statement.name());
-                } else if (((Integer) o[6]) == 0 && ps instanceof Operator) {
-                    write(statement.name());
-                    if (n.hasRelationship(OUTGOING)) {
-                        write(" ");
-                    }
+            }
+            Node n= ((Relationship) o[1]).getEndNode();
+            if (!n.hasRelationship(REF._, OUTGOING)) {
+                write(statement.name());
+            } else if (((Integer) o[6]) == 0 && ps instanceof Operator) {
+                write(statement.name());
+                if (n.hasRelationship(OUTGOING)) {
+                    write(" ");
                 }
             }
         } else {

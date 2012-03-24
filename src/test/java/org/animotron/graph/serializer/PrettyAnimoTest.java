@@ -116,4 +116,27 @@ public class PrettyAnimoTest extends ATest {
         );
     }
 
+    @Test
+    public void test_0B() throws Throwable {
+        test("an\n" +
+                "    get x.");
+    }
+
+    @Test
+    public void test_0C() throws Throwable {
+        test("an\n" +
+                "    (get x)\n" +
+                "    (y).");
+    }
+
+    @Test
+    public void test_0D() throws Throwable {
+        testAnimo("the z an (get x) (y).");
+    }
+
+    @Test
+    public void test_0E() throws Throwable {
+        testAnimo("the z (an (get x) (y)) (an (any b) (c)).");
+    }
+
 }
