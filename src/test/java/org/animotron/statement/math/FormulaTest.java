@@ -175,7 +175,7 @@ public class FormulaTest extends ATest {
 
         assertAnimoResult(
             "+ get cost all item",
-            "20 (USD)."
+            "* (USD currency) 20."
 		);
     }
 }
