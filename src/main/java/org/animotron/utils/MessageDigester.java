@@ -21,6 +21,7 @@
 package org.animotron.utils;
 
 import com.eaio.uuid.UUID;
+import com.eaio.uuid.UUIDGen;
 import org.animotron.statement.Statement;
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Node;
@@ -161,7 +162,7 @@ public class MessageDigester {
     }
 
     public static UUID uuid() {
-        return new UUID();
+        return new UUID(System.currentTimeMillis(), UUIDGen.getClockSeqAndNode());
     }
 
     public static UUID uuid(String uuid) {
