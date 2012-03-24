@@ -45,9 +45,11 @@ public class CurrentWebFrameworkTest extends ATest {
 
     private Expression query(String site, String service) {
         return new JExpression(
-                _(GET._, service,
-                        _(ANY._, "site",
-                                _(WITH._, "server-name", value(site))
+                _(AN._,
+                        _(GET._, service,
+                                _(ANY._, "site",
+                                        _(WITH._, "server-name", value(site))
+                                )
                         )
                 )
         );
@@ -55,12 +57,14 @@ public class CurrentWebFrameworkTest extends ATest {
 
     private Expression error(String site, int code, String trace) {
         return new JExpression(
-                _(GET._,
-                        _(ANY._, "error",
-                                _(WITH._, "code", value(code))
-                        ),
-                        _(ANY._, "site",
-                                _(WITH._, "server-name", value(site))
+                _(AN._,
+                        _(GET._,
+                                _(ANY._, "error",
+                                        _(WITH._, "code", value(code))
+                                ),
+                                _(ANY._, "site",
+                                        _(WITH._, "server-name", value(site))
+                                )
                         ),
                         _(AN._, "stack-trace", value(trace))
                 )
