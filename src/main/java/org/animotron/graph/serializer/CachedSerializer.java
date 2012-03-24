@@ -253,7 +253,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
     }
 
     private String uuid(Relationship r) {
-        return RUUID.has(r) ? (String) RUUID.get(r) : MessageDigester.uuid();
+        return RUUID.has(r) ? (String) RUUID.get(r) : MessageDigester.uuid().toString();
     }
 
     public final void serialize(Relationship r, OutputStream out, Cache cache) throws Throwable {

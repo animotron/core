@@ -160,8 +160,8 @@ public class MessageDigester {
         md.update(tmp.digest());
     }
 
-    public static String uuid() {
-        return new UUID().toString();
+    public static UUID uuid() {
+        return new UUID();
     }
 
     public static UUID uuid(String uuid) {

@@ -51,7 +51,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
 
     @Override
     public void build() throws Throwable {
-        String uuid = uuid();
+        String uuid = uuid().toString();
         File tmp = new File(tmpStorage(), uuid);
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
