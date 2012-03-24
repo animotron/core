@@ -21,6 +21,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -31,6 +32,7 @@ import org.junit.Test;
 public class ParentChildTest extends ATest {
 	
     @Test
+    @Ignore //TODO implement
     public void test_00() throws Throwable {
         testAnimo("= parent, child.");
         testAnimo("the Joe parent John.");
@@ -39,6 +41,7 @@ public class ParentChildTest extends ATest {
     }
 
     @Test
+    @Ignore //TODO implement
     public void test_01() throws Throwable {
         testAnimo("= parent, child.");
         testAnimo("= (son) (child male).");
