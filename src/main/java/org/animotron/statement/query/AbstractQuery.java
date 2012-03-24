@@ -294,14 +294,15 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     	final FastSet<QCAVector> visited = FastSet.newInstance();
     	final FastSet<Node> allUses = FastSet.newInstance();
     	final FastSet<Node> allWeaks = FastSet.newInstance();
+    	final FastSet<Node> weakest = FastSet.newInstance();
     	try {
 			searchForUSE(allUses, allWeaks, pf.getVector(), visited);
 			
-			System.out.println(pf.getVector());
-			System.out.println("allUses");
-			System.out.println(Arrays.toString(allUses.toArray()));
-			System.out.println("allWeaks");
-			System.out.println(Arrays.toString(allWeaks.toArray()));
+//			System.out.println(pf.getVector());
+//			System.out.println("allUses");
+//			System.out.println(Arrays.toString(allUses.toArray()));
+//			System.out.println("allWeaks");
+//			System.out.println(Arrays.toString(allWeaks.toArray()));
 			
 	    	if (allUses.isEmpty()) return;
 	    		
@@ -313,13 +314,16 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				@Override
 				public Evaluation evaluate(Path path) {
 					//System.out.println(" "+path);
-					return _evaluate_(path, allUses, allWeaks, uses, weaks, directed);
+					return _evaluate_(path, allUses, allWeaks, uses, weaks, weakest, directed);
 				}
 			});
 	    	
 	    	for (Path path : trav.traverse(theNode)) {
 	    		//System.out.println(" * use * "+path);
 	    	}
+	    	
+	    	if (uses.isEmpty())
+	    		weaks.addAll(weakest);
 	
 	    	if (allUses.contains(theNode))
 				uses.add(theNode);
@@ -331,6 +335,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		FastSet.recycle(allUses);
     		FastSet.recycle(allWeaks);
     		FastSet.recycle(visited);
+    		FastSet.recycle(weakest);
     	}
     }
 	
@@ -385,7 +390,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+				//System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -420,6 +425,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				}
 				
 				if (shouldHave != null) shouldHave.remove(sNode);
+				//System.out.println(Arrays.toString(mustHave.toArray()));
 				mustHave.remove(sNode);
 				if (mustHave.size() == 0) {
 					if (was == 0 || (shouldHave == null || shouldHave.size() != was))
@@ -552,8 +558,45 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	}
 
 	abstract class IntersectionSearcher implements Evaluator {
+		
+		private boolean haveUSE(final Path path, final Set<Node> intersection) {
+			if (intersection.isEmpty()) return false;
+			
+			for (Node node : path.nodes()) {
+				if (intersection.contains(node)) {
+					return true;
+				}
+			}
+			return false;
+		}
 
-		public Evaluation _evaluate_(Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Path> directed) {
+		private void checkTHEnode(final Node n, final Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection, final Set<Path> directed) {
+			if (targets.contains(n)) {
+				if (debugUSE) 
+					System.out.println(" =>"+path);
+					
+				intersection.add(n);
+
+				directed.add(path);//n
+			
+			} else if (weakTargets.contains(n)) {
+				if (debugUSE) 
+					System.out.println("[?weak] =>"+path);
+
+				weakestIntersection.add(n);
+				if (haveUSE(path, intersection)) {
+
+					if (debugUSE) 
+						System.out.println("[weak] =>"+path);
+					
+					weakIntersection.add(n);
+
+					directed.add(path);//n
+				}
+			}
+		}
+
+		public Evaluation _evaluate_(Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection, final Set<Path> directed) {
 			if (path.length() < 2)
 				return EXCLUDE_AND_CONTINUE;
 			
@@ -563,54 +606,59 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_PRUNE;
 
 			if (r.isType(THE._)) {
-				Node n = r.getEndNode(); 
-				if (targets.contains(n)) {
-					if (debugUSE) 
-						System.out.println("THE->"+path);
-						
-					intersection.add(n);
-
-					directed.add(path);//n
-				
-				} else if (weakTargets.contains(n)) {
-					if (debugUSE) 
-						System.out.println("[weak] THE->"+path);
-						
-					weakIntersection.add(n);
-
-					directed.add(path);//n
-				}
+				checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 
 			} else if (path.length() % 2 == 0) {
 				if (!r.isType(AN._))
 					return EXCLUDE_AND_PRUNE;
 				
-		    	TraversalDescription trav = td.
-						relationships(AN._, OUTGOING).
-						relationships(REF._, OUTGOING).
-						relationships(THE._, OUTGOING).
-				evaluator(new DownIntersectionSearcher(){
-					@Override
-					public Evaluation evaluate(Path path) {
-						//XXX: make this work
-//						if (path.length() == 1 && path.lastRelationship().equals(r)) {
-//							System.out.println(" - "+path+" - ");
-//							return EXCLUDE_AND_PRUNE;
-//						}
-						
-						//System.out.println(" - "+path);
-						return _evaluate_(path, targets, weakTargets, intersection, weakIntersection);
-					}
-				});
-
-				if (debugUSE) System.out.println(" - "+path);
-		    	for (Path p : trav.traverse(r.getStartNode())) {
-
-		    		//System.out.println(path);
-		    		//System.out.println(" ** "+p);
-
-					directed.add(path);//r.getStartNode()
-		    	}
+				Node node = r.getStartNode();
+				try {
+					checkTHEnode(THE._.get(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+				} catch (Exception e) {}
+				
+				final FastSet<Node> use = FastSet.newInstance();
+				final FastSet<Node> weakest = FastSet.newInstance();
+				try {
+			    	TraversalDescription trav = td.
+							relationships(AN._, OUTGOING).
+							relationships(REF._, OUTGOING).
+							relationships(THE._, OUTGOING).
+					evaluator(new DownIntersectionSearcher(){
+						@Override
+						public Evaluation evaluate(Path path) {
+							//XXX: make this work
+	//						if (path.length() == 1 && path.lastRelationship().equals(r)) {
+	//							System.out.println(" - "+path+" - ");
+	//							return EXCLUDE_AND_PRUNE;
+	//						}
+							
+							//System.out.println(" - "+path);
+							return _evaluate_(path, haveUSE(path, intersection), targets, weakTargets, use, weakIntersection, weakest);
+						}
+					});
+	
+					if (debugUSE) 
+						System.out.println(" - "+path);
+					
+			    	for (Path p : trav.traverse(node)) {
+	
+			    		//System.out.println(path);
+			    		//System.out.println(" ** "+p);
+	
+						directed.add(path);//r.getStartNode()
+			    	}
+			    	
+			    	if (!use.isEmpty()) {
+			    		intersection.addAll(use);
+			    		weakIntersection.addAll(weakest);
+			    	}
+			    	
+			    	weakestIntersection.addAll(weakest);
+				} finally {
+					FastSet.recycle(use);
+					FastSet.recycle(weakest);
+				}
 		    	
 		    	if (Utils.haveContext(r.getEndNode()))
 		    		return EXCLUDE_AND_PRUNE;
@@ -619,20 +667,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {
-					Node n = r.getEndNode(); 
-					if (targets.contains(n)) {
-						//System.out.println("->"+path);
-
-						intersection.add(n);
-
-						directed.add(path);//n
-					} else if (weakTargets.contains(n)) {
-						//System.out.println("->"+path);
-
-						weakIntersection.add(n);
-
-						directed.add(path);//n
-					}
+					checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 				}
 				
 
@@ -641,8 +676,30 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	};
 
 	abstract class DownIntersectionSearcher implements Evaluator {
+		
+		private Evaluation checkTHEnode(final Node n, final Path path, final boolean allowWeak, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection) {
+			if (targets.contains(n)) {
+				if (debugUSE) 
+					System.out.println(" ~> "+path);
+				intersection.add(n);
+				return INCLUDE_AND_PRUNE;
+			
+			} else if (weakTargets.contains(n)) {
+				if (debugUSE) 
+					System.out.println("[?weak] ~> "+path);
+				
+				if (allowWeak) {
+					if (debugUSE) 
+						System.out.println("[weak] ~> "+path);
+					weakIntersection.add(n);
+					return INCLUDE_AND_PRUNE;
+				}
+				weakestIntersection.add(n); 
+			}
+			return EXCLUDE_AND_PRUNE;
+		}
 
-		public Evaluation _evaluate_(final Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection) {
+		public Evaluation _evaluate_(final Path path, final boolean allowWeak, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection) {
 			if (path.length() < 2)
 				return EXCLUDE_AND_CONTINUE;
 			
@@ -652,18 +709,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				
 			
 			if (r.isType(THE._)) {
-				Node n = r.getEndNode(); 
-				
-				if (targets.contains(n)) {
-					intersection.add(n);
-					return INCLUDE_AND_PRUNE;
-				
-				} else if (weakTargets.contains(n)) {
-					weakIntersection.add(n);
-					return INCLUDE_AND_PRUNE;
-					
-				}
-				return EXCLUDE_AND_PRUNE;
+				return checkTHEnode(r.getEndNode(), path, allowWeak, targets, weakTargets, intersection, weakIntersection, weakestIntersection);
 			
 			} else if (path.length() % 2 == 1) {
 				if (!r.isType(AN._))
@@ -673,19 +719,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {
-					Node n = r.getEndNode(); 
-					if (targets.contains(n)) {
-						if (debugUSE) System.out.println(" -> "+path);
-						intersection.add(n);
-						return INCLUDE_AND_PRUNE;
-					
-					} else if (weakTargets.contains(n)) {
-						if (debugUSE) System.out.println("[weak] -> "+path);
-						weakIntersection.add(n);
-						return INCLUDE_AND_PRUNE;
-						
-					}
-					return EXCLUDE_AND_PRUNE;
+					return checkTHEnode(r.getEndNode(), path, allowWeak, targets, weakTargets, intersection, weakIntersection, weakestIntersection);
 				}
 				
 
