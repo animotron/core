@@ -21,10 +21,10 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
@@ -53,6 +53,20 @@ public class CurrentGetWebFrameworkTest extends ATest {
         );
     }
 
+    private Expression error(String site, int code, String trace) {
+        return new JExpression(
+                _(GET._,
+                        _(ANY._, "error",
+                                _(WITH._, "code", value(code))
+                        ),
+                        _(ANY._, "site",
+                                _(WITH._, "server-name", value(site))
+                        ),
+                        _(AN._, "stack-trace", value(trace))
+                )
+        );
+    }
+
     private Expression mime(Expression query) {
         return new JExpression(_(GET._, "type", _(GET._, "mime-type", _(query))));
     }
@@ -63,14 +77,20 @@ public class CurrentGetWebFrameworkTest extends ATest {
         assertHtmlResult(e, html);
     }
 
+    private void assertError(String site, int code, String trace, String mime, String html) throws IOException, InterruptedException {
+        Expression e = error(site, code, trace);
+        assertStringResult(mime(e), mime);
+        assertHtmlResult(e, html);
+    }
+
     @Test
     public void test() throws Throwable {
 
         __(
-                "the site (not-found-error default-not-found)",
+                "the site (not-found-error default-not-found) (xxx xxx-service)",
 
-                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
-                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
+                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
+                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
                 "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
@@ -93,20 +113,26 @@ public class CurrentGetWebFrameworkTest extends ATest {
 
                 "the not-found-error (error) (code 404)",
 
-                "the default-not-found (html-page) (use error) (title \"Not found\") (message \"Not found anything\")",
+                "the default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
 
-                "the error-layout (layout, error) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)"
+                "the bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
+
+                "the default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
+                "the bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
 
         );
 
-        assertAnimoResult(
-    		"any site with server-name \"foo.com\"", 
-    		"the foo-site (site not-found-error (error) (code)) (server-name) (weak-use foo) (root) (xxx) (zzz).");
-
-        assertHtmlResult(
-                new AnimoExpression("get not-found-error (any site with server-name \"foo.com\") (stack-trace \"stack trace will be here\")"),
-                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace will be here</p></body></html>"
+        assertError("foo.com", 404, "stack trace would be here", "text/html",
+                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
         );
+
+        assertError("foo.com", 500, "", "", "");
+
+        assertError("bar.com", 404, "stack trace", "text/html",
+                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
+        );
+
+        assertError("bar.com", 500, "", "", "");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
@@ -136,32 +162,28 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test_01() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
+                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
+                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
 
-            "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-            "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-            "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+                "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+                "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
 
-            "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
+                "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
-            "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+                "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+                "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
-            "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
-            "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
-            
-            "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
-            "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
 
-            "the qLayout (layout) (\\h3 get title) (\\span get content)"
+                "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+                "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+
+                "the qLayout (layout) (\\h3 get title) (\\span get content)"
         );
-
-        assertAnimoResult(
-    		"get xxx any site with server-name \"foo.com\"", 
-    		"xxx xxx-service (html-page (mime-type) (\\html (\\head \\title title \"hello xxx\") (\\body the foo-xxx-layout (layout) (foo) (xxx) (\\h3 title \"hello xxx\") (\\p content \"xxx xxx xxx\") (\\p server-name \"foo.com\")))) (use xxx) (title) (content).");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
