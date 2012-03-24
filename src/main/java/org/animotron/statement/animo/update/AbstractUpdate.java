@@ -114,7 +114,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                         Relationship rr = n.createRelationshipTo(rn, RelationshipTypes.REV);
                         ARID.set(r, rr.getId());
                         ARID.set(n, rn.getId());
-                        UUID.set(rr, uuid());
+                        UUID.set(rr, uuid().toString());
                         HASH.set(rr, DigestSerializer._.serialize(rr));
                     }
                     @Override
