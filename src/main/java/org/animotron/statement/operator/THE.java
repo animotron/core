@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
+import org.animotron.graph.Properties;
 import org.animotron.graph.index.AbstractIndex;
 import org.animotron.graph.index.Cache;
 import org.animotron.manipulator.OnQuestion;
@@ -106,6 +107,14 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	public Relationship get(Object name) {
         return the.get(name);
+	}
+
+	public Relationship getThe(Node node) {
+		try {
+			return THE._.get((String) Properties.NAME.get(node));
+		} catch (Throwable t) {
+			return null;
+		}
 	}
 
 	private Relationship create(String name) throws AnimoException {
