@@ -99,7 +99,9 @@ public class CurrentGetWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("any site with server-name \"foo.com\"", " ");
+        assertAnimoResult(
+    		"any site with server-name \"foo.com\"", 
+    		"the foo-site (site not-found-error (error) (code)) (server-name) (weak-use foo) (root) (xxx) (zzz).");
 
         assertHtmlResult(
                 new AnimoExpression("get not-found-error (any site with server-name \"foo.com\") (stack-trace \"stack trace will be here\")"),
