@@ -21,6 +21,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
@@ -66,32 +67,42 @@ public class CurrentGetWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
+                "the site (not-found-error default-not-found)",
 
-            "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-            "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
+                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
 
-            "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
-            "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+                "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-            "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
+                "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+                "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
 
-            "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-            "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+                "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
-            "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
-            "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
-            
-            "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
-            "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+                "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+                "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
-            "the qLayout (layout) (\\h3 get title) (\\span get content)"
+                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
+
+                "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+                "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+
+                "the qLayout (layout) (\\h3 get title) (\\span get content)",
+
+                "the not-found-error (error) (code 404)",
+
+                "the default-not-found (html-page) (use error) (title \"Not found\") (message \"Not found anything\")",
+
+                "the error-layout (layout, error) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)"
+
         );
 
-        assertAnimoResult(
-    		"get xxx any site with server-name \"foo.com\"", 
-    		"xxx xxx-service (html-page (mime-type) (\\html (\\head \\title title \"hello xxx\") (\\body the foo-xxx-layout (layout) (foo) (xxx) (\\h3 title \"hello xxx\") (\\p content \"xxx xxx xxx\") (\\p server-name \"foo.com\")))) (use xxx) (title) (content).");
+        assertHtmlResult(
+                new AnimoExpression("get (any error with code 404) (any site with server-name \"foo.com\") (stack-trace \"stack trace will be here\")"),
+                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace will be here</p></body></html>"
+        );
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
