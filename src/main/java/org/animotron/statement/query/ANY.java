@@ -38,7 +38,7 @@ public class ANY extends AbstractReference {
 	
 	private ANY() { super("any", "~"); }
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 
 	public OnQuestion onCalcQuestion() {
         return new Calc();
