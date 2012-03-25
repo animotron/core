@@ -513,7 +513,7 @@ public class Utils {
                     }
                 });
 
-	public static TraversalDescription THEs =
+	public static TraversalDescription EXPS =
 			Traversal.description().depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator() {
@@ -529,8 +529,8 @@ public class Utils {
                         if (Statements.relationshipType(path.lastRelationship()) == null)
                             return EXCLUDE_AND_PRUNE;
 
-                        if (path.lastRelationship().isType(THE._))
-                            return INCLUDE_AND_PRUNE;
+//                        if (path.lastRelationship().isType(THE._))
+//                            return INCLUDE_AND_PRUNE;
 
                         if (path.endNode().getId() == 0)
                             return INCLUDE_AND_PRUNE;
