@@ -185,7 +185,7 @@ public class Utils {
 		}
 	}
 
-	private static Pipe evaluable(final Controller controller, final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
+	private static void evaluable(final Controller controller, final QCAVector v, final Pipe pipe) throws InterruptedException, IOException, AnimoException {
 		
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
@@ -196,27 +196,19 @@ public class Utils {
 			while ((e = in.take()) != null) {
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
-//				if (aS instanceof Evaluable && s instanceof Shift) {
-//					if (aS instanceof AN) {
-//						Pipe p = eval(controller, e);
-//						QCAVector rr;
-//						while ((rr = p.take()) != null) {
-//							pipe.write(rr);
-//						}
-//					} else {
-//						Pipe p = eval(controller, e);
-//						QCAVector rr;
-//						while ((rr = p.take()) != null) {
-//							pipe.write(rr);
-//						}
-//					}
-//				} else  
-					if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
-//				if (result.isType(REF) 
-//						|| result.isType(org.animotron.statement.operator.REF._)
-//						|| result.isType(THE._)
-//					) {
+				if (aS instanceof Evaluable && s instanceof Shift) {
+					if (aS instanceof AN) {
+						Pipe p = eval(controller, e);
+						QCAVector rr;
+						while ((rr = p.take()) != null) {
+							pipe.write(rr);
+						}
+					} else {
+						evaluable(controller, e, pipe);
+					}
+				} else if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
 					pipe.write(e);
+
 				} else {
 					Pipe p = eval(controller, e);
 					QCAVector rr;
@@ -229,8 +221,6 @@ public class Utils {
 		} else {
 			pipe.write(v.getContext().get(0).answered(r));
 		}
-		
-		return pipe;
 	}
 	
 	public static Pipe getTheRelationships(final PFlow pf, final QCAVector v) throws IOException {
@@ -300,7 +290,7 @@ public class Utils {
 			public void run() {
 		        Relationship op = vector.getClosest();
 		        
-		        QCAVector prev = null;
+		        QCAVector v = null;
 
 				IndexHits<Relationship> hits = Order._.context(op.getEndNode());
 				try {
@@ -309,11 +299,13 @@ public class Utils {
 						
 						Statement _s = Statements.relationshipType(rr);
 						if (_s instanceof Query || _s instanceof Evaluable) {
-							prev = vector.question(rr, prev);
-							Pipe _in = Evaluator._.execute(controller, prev);
+							v = vector.question(rr);
+							Pipe _in = Evaluator._.execute(controller, v);
 							QCAVector ee;
 							while ((ee = _in.take()) != null) {
-								pipe.write(ee);//new QCAVector(op, vector, ee.getUnrelaxedAnswer())
+								System.out.println(ee);
+								pipe.write(ee);
+								//pipe.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
 							}
 							
 						} else {
