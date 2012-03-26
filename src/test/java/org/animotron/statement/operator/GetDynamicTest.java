@@ -252,4 +252,36 @@ public class GetDynamicTest extends ATest {
 
         testAnimoResult("get b x.", "b c.");
     }
+
+    @Test
+    public void test_17() throws Throwable {
+        testAnimo("the a b (c) (d) (e).");
+        assertAnimoResult("an get b a", "c. d. e.");
+    }
+
+    @Test
+    public void test_18() throws Throwable {
+        testAnimo("the x c.");
+        testAnimo("the y d.");
+        testAnimo("the z e.");
+        testAnimo("the foo c, d, e.");
+        testAnimo("the bar (c) (d) (e).");
+        testAnimo("the a b (c) (d) (e).");
+        assertAnimoResult("all get b a", "the bar (c) (d) (e). the foo (c) (d) (e).");
+    }
+
+    @Test
+    public void test_19() throws Throwable {
+        testAnimo("the x c, d, e.");
+        testAnimo("the a b (c) (d) (e).");
+        assertAnimoResult("any get b a", "the x (c) (d) (e).");
+    }
+
+    @Test
+    public void test_20() throws Throwable {
+        testAnimo("the x (c) (d) (e).");
+        testAnimo("the a b (c) (d) (e).");
+        assertAnimoResult("any get b a", "the x (c) (d) (e).");
+    }
+
 }
