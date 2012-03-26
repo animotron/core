@@ -120,7 +120,7 @@ public abstract class Manipulator {
 	            public void onMessage(QCAVector context) {
 	            	super.onMessage(context);
 	            	
-	            	//System.out.println("get answer ["+vector+"] "+context);
+	            	System.out.println("get answer ["+vector+"]\n"+context);
 	            	//out.debug();
 	            	try {
 	            		if (context == null) {
@@ -128,7 +128,6 @@ public abstract class Manipulator {
 	            			pf.countDown(pipe);
 	
 	            		} else if (context.getAnswer() != null) {
-	//            			int addedContexts = 0;
 	                        Statement s = null;
 	                        
 	                        Relationship msg = context.getAnswer();
@@ -191,6 +190,18 @@ public abstract class Manipulator {
 	                        	pipe.write(context);
 	                        }
 	                    } else {
+	                    	if (!vector.getQuestion().equals(context.getQuestion())) {
+	                    		Statement s = Statements.relationshipType(context.getQuestion());
+	                            if (s instanceof Evaluable) {
+	                                Pipe in = Evaluator._.execute(controller, context);
+	                                QCAVector v;
+	                                while ((v = in.take()) != null) {
+	                                    pipe.write(v);
+	                                }
+	                            } else {
+	                                pipe.write(context);
+	                            }
+	                    	}
 	                        //what to do if msg is null?
 	                    	//ignore -- XXX: log warning
 	                    }

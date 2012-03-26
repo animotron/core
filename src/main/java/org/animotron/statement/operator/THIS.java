@@ -30,6 +30,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.query.PREFER;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -71,7 +72,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 				thes.add(theNode.getClosest().getEndNode());
 			}
 
-			//if (debug) 
+			if (debug) 
 				Utils.debug(THIS._, op, thes);
 			
 			if (!Utils.results(pf)) {
@@ -80,13 +81,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 					if (pf.getVector().getContext() != null)
 						list.addAll( pf.getVector().getContext() );
 					
-//					QCAVector next = pf.getVector().getPrecedingSibling();
-//					while (next != null) {
-//						list.add(next);
-//						next = next.getPrecedingSibling();
-//					}
-					
-					search(pf, thes, list);
+					search(pf, thes, list, null);
 					
 				} finally {
 					FastList.recycle(list);
@@ -95,47 +90,67 @@ public class THIS extends Operator implements Reference, Evaluable {
 		}
     }
 	
-	private boolean search(final PFlow pf, final Set<Node> thes, List<QCAVector> cs) {
+	private boolean search(final PFlow pf, final Set<Node> thes, List<QCAVector> cs, Relationship prevAnswer) {
 		if (cs != null) {
-			for (QCAVector c : cs) {
-				//if (debug) 
-					System.out.println(c);
+			for (QCAVector next : cs) {
+				if (debug) 
+					System.out.println(next);
 				
 				FastList<QCAVector> list = FastList.newInstance();
 				try {
-					QCAVector next = c;
-					while (next != null) {
-						Relationship toCheck = next.getQuestion();
-						if (toCheck.isType(THIS._)) {
-							if (thes.isEmpty()) {
-								if (next.getUnrelaxedAnswer() != null) {
-									pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
+					Relationship toCheck = next.getQuestion();
+					if (toCheck.isType(THIS._)) {
+						if (thes.isEmpty()) {
+							if (next.getUnrelaxedAnswer() != null) {
+								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
+								return true;
+							}
+						} else {
+							Node n = Utils.getByREF(toCheck).getEndNode();
+							if (thes.contains( n )) {
+								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
+								return true;
+							}
+						}
+					} else if (toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
+						if (thes.isEmpty()) {
+							
+						} else {
+							Node n = Utils.getByREF(toCheck).getEndNode();
+							
+							if (debug) System.out.println(n);
+							
+							if (thes.contains( n )) {
+								if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
+								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext())); //, next.getContext()
+								return true;
+							}
+						}
+					} else if (toCheck.isType(GET._)) {
+						if (prevAnswer != null)
+							pf.sendAnswer(pf.getVector().answered(prevAnswer));
+
+					} else if (toCheck.isType(AN._)) {
+						if (thes.isEmpty()) {
+							if (next.getUnrelaxedAnswer() != null) {
+								IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
+								try {
+									for (Relationship r : hits) {
+										pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+									}
 									return true;
-								}
-							} else {
-								Node n = Utils.getByREF(toCheck).getEndNode();
-								if (thes.contains( n )) {
-									pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
-									return true;
+								} finally {
+									hits.close();
 								}
 							}
-						} else if (toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
-							if (thes.isEmpty()) {
-								
-							} else {
-								Node n = Utils.getByREF(toCheck).getEndNode();
-								
-								if (debug) System.out.println(n);
-								
-								if (thes.contains( n )) {
-									if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
-									pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext())); //, next.getContext()
+						} else {
+							Node n = Utils.getByREF(toCheck).getEndNode();
+							if (thes.contains( n )) {
+								if (next.hasAnswer()) {
+									pf.sendAnswer(pf.getVector().answered(next.getAnswer()));//, next.getContext()
 									return true;
-								}
-							}
-						} else if (toCheck.isType(AN._)) {
-							if (thes.isEmpty()) {
-								if (next.getUnrelaxedAnswer() != null) {
+								
+								} else {
 									IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
 									try {
 										for (Relationship r : hits) {
@@ -146,32 +161,13 @@ public class THIS extends Operator implements Reference, Evaluable {
 										hits.close();
 									}
 								}
-							} else {
-								Node n = Utils.getByREF(toCheck).getEndNode();
-								if (thes.contains( n )) {
-									if (next.hasAnswer()) {
-										pf.sendAnswer(pf.getVector().answered(next.getAnswer()));//, next.getContext()
-									
-									} else {
-										IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
-										try {
-											for (Relationship r : hits) {
-												pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
-											}
-											return true;
-										} finally {
-											hits.close();
-										}
-									}
-								}
 							}
 						}
-						if (next.getContext() != null)
-							list.addAll(next.getContext());
-						
-						next = null;//next.getPrecedingSibling();
 					}
-					if (search(pf, thes, list))
+					if (next.getContext() != null)
+						list.addAll(next.getContext());
+					
+					if (search(pf, thes, list, next.getAnswer()))
 						return true;
 					
 				} finally {

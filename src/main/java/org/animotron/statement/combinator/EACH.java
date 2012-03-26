@@ -83,7 +83,7 @@ public class EACH extends Combinator {
 
 					} else {
 						for (QCAVector r : set) {
-							QCAVector rr = new QCAVector(pf.getOP(), r, element);
+							QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r));
 							pf.sendAnswer(rr);
 						}
 					}
