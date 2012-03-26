@@ -196,7 +196,22 @@ public class Utils {
 			while ((e = in.take()) != null) {
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
-				if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
+//				if (aS instanceof Evaluable && s instanceof Shift) {
+//					if (aS instanceof AN) {
+//						Pipe p = eval(controller, e);
+//						QCAVector rr;
+//						while ((rr = p.take()) != null) {
+//							pipe.write(rr);
+//						}
+//					} else {
+//						Pipe p = eval(controller, e);
+//						QCAVector rr;
+//						while ((rr = p.take()) != null) {
+//							pipe.write(rr);
+//						}
+//					}
+//				} else  
+					if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
 //				if (result.isType(REF) 
 //						|| result.isType(org.animotron.statement.operator.REF._)
 //						|| result.isType(THE._)
@@ -287,10 +302,10 @@ public class Utils {
 		        
 		        QCAVector prev = null;
 
-				IndexHits<Relationship> hits = Order._.queryDown(op.getEndNode());
+				IndexHits<Relationship> hits = Order._.context(op.getEndNode());
 				try {
 					for (Relationship rr : hits) {
-						if (rr.isType(REF._)) continue;
+						//if (rr.isType(REF._)) continue;
 						
 						Statement _s = Statements.relationshipType(rr);
 						if (_s instanceof Query || _s instanceof Evaluable) {
@@ -298,8 +313,7 @@ public class Utils {
 							Pipe _in = Evaluator._.execute(controller, prev);
 							QCAVector ee;
 							while ((ee = _in.take()) != null) {
-								//XXX: ee should be context too???
-								pipe.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
+								pipe.write(ee);//new QCAVector(op, vector, ee.getUnrelaxedAnswer())
 							}
 							
 						} else {
