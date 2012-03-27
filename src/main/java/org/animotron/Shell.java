@@ -35,18 +35,12 @@ import static org.animotron.graph.AnimoGraph.startDB;
  */
 public class Shell {
 
-	public static void main( String[] args ) {
-
-        startDB("data");
-
+    public static void process() {
 		boolean pretty = true;
 		String argument;
-
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		
-		PrintWriter writer = new PrintWriter(System.out); 
-		PrintWriter error = new PrintWriter(System.err); 
-
+		PrintWriter writer = new PrintWriter(System.out);
+		PrintWriter error = new PrintWriter(System.err);
 		while (true) {
 			writer.print("> ");
 			writer.flush();
@@ -56,12 +50,10 @@ public class Shell {
 	        	t.printStackTrace();
 	        	return;
 			}
-			
 			if ("quit".equals(argument)) break;
-			
 	        try {
 	        	AnimoExpression expression = new AnimoExpression(argument);
-			
+
 				String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(expression) : CachedSerializer.ANIMO_RESULT.serialize(expression);
 				writer.write(result);
 				writer.flush();
@@ -71,5 +63,10 @@ public class Shell {
 				error.flush();
 			}
 		}
+    }
+
+	public static void main( String[] args ) {
+        startDB("data");
+        process();
 	}
 }
