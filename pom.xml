@@ -27,14 +27,14 @@
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
-            <version>1.6</version>
+            <version>1.7.M02</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>org.neo4j.build</groupId>
             <artifactId>neo4j-berkeleydb-je-index</artifactId>
-            <version>0.5-SNAPSHOT</version>
+            <version>1.7.M02</version>
         </dependency>
 
 		<!--
