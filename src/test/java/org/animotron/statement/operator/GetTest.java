@@ -462,7 +462,7 @@ public class GetTest extends ATest {
     public void test_27() throws Throwable {
         testAnimo("the x y z.");
         testAnimo("the z \\bar.");
-        assertAnimoResult("the foo (x) (an (get y))", "the foo (x y) (y z \\bar).");
+        assertAnimoResult("the foo (x) (an (get y))", "the foo (x y) (z \\bar).");
     }
 
     @Test
