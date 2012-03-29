@@ -647,7 +647,7 @@ public class GetTest extends ATest {
         testAnimo("the a b c.");
         testAnimo("the c get d.");
         testAnimo("the x an (get b a) (d e).");
-        assertAnimoResult("x", "x b c d e.");
+        assertAnimoResult("x", "x c d e.");
     }
 
     @Test
