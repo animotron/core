@@ -498,6 +498,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     //XXX: this looks very wrong...
     public void test_30() throws Throwable {
         testAnimo("the x y foo.");
@@ -510,6 +511,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     //XXX: this looks veeeeery wrong...
     public void test_30_() throws Throwable {
         testAnimo("the x y foo.");
