@@ -168,7 +168,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 		        for (Path path : td_IS_leaf.traverse(node)) {
 		        	
-		        	//System.out.println("-> "+path);
+		        	System.out.println("-> "+path);
 
 		        	Relationship r = path.lastRelationship();
 		        	if (!Utils.haveContext(r.getEndNode())) {
@@ -197,21 +197,21 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 	        				pf.sendException(t);
 	        				return;
 						}
-		        	} else {
-		    			IndexHits<Relationship> hits = Order._.context(r.getEndNode());
-		    			try {
-		    				for (Relationship rr : hits) {
-		    					
-		    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
-		    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
-				        				pf.sendAnswer( rr );
-				        				if (returnFirstOnly) return;
-		    						}
-		    					}
-		    				}
-		    			} finally {
-		    				hits.close();
-		    			}
+//		        	} else {
+//		    			IndexHits<Relationship> hits = Order._.context(r.getEndNode());
+//		    			try {
+//		    				for (Relationship rr : hits) {
+//		    					
+//		    					if (rr.isType(AN._) || rr.isType(VALUE._)) {
+//		    						if (filtering(pf, rr, r.getEndNode(), uses, weaks)) {
+//				        				pf.sendAnswer( rr );
+//				        				if (returnFirstOnly) return;
+//		    						}
+//		    					}
+//		    				}
+//		    			} finally {
+//		    				hits.close();
+//		    			}
 		        	}
 		        }
 			} finally {
