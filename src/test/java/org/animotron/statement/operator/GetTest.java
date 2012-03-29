@@ -470,7 +470,7 @@ public class GetTest extends ATest {
         testAnimo("the x y z.");
         testAnimo("the z get bar.");
         testAnimo("the a bar 0.");
-        assertAnimoResult("the foo (a) (x) (an (get y))", "the foo (a bar) (x y) (y z bar 0).");
+        assertAnimoResult("the foo (a) (x) (an (get y))", "the foo (a bar) (x y) (z bar 0).");
     }
 
     @Test
