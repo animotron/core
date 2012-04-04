@@ -60,7 +60,7 @@ public class SUM500Test extends ATest {
         });
         System.out.println("Build expression in " + (currentTimeMillis() - t));
         t = currentTimeMillis();
-        assertAnimoResult(e, "124750");
+        assertAnimoResult(e, "124750.");
         System.out.println("Eval expression in " + (currentTimeMillis() - t));
 	}
 
@@ -72,14 +72,14 @@ public class SUM500Test extends ATest {
             __(new JExpression(
                     _(THE._, "a" + i, 
                             _(AN._, "a"),
-                            _(AN._, "value", value(i))
+                            _(AN._, "b", value(i))
                     )
             ));
         }
-        Expression e = new AnimoExpression("summ get value all a");
+        Expression e = new AnimoExpression("+ get b all a");
         System.out.println("Build expressions in " + (currentTimeMillis() - t));
         t = currentTimeMillis();
-        assertAnimoResult(e, "124750");
+        assertAnimoResult(e, "124750.");
         System.out.println("Eval expression in " + (currentTimeMillis() - t));
 	}
 
