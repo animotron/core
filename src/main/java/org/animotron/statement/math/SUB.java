@@ -59,27 +59,18 @@ public class SUB extends MathInstruction {
 		return new AnimObject(pf, SUB._, a);
 	}
 
-	protected Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
-		if (a.isType(VALUE._) && b.isType(VALUE._)) {
-			Number Na = VALUE.number(VALUE._.reference(a));
-			Number Nb = VALUE.number(VALUE._.reference(b));
-
-			Number result;
-			if ((Na instanceof Long || Na instanceof Integer) 
-					&& (Nb instanceof Long || Nb instanceof Integer)) {
-				result = Na.longValue() - Nb.longValue();
-			
-			} else {
-				result = Na.doubleValue() - Nb.doubleValue();
-			}
-
-			System.out.println(""+Na.doubleValue()+" - "+Nb.doubleValue()+" = "+result);
-			
-			return new JExpression(value(result));
+	protected Relationship execute(Number Na, Number Nb) throws IOException {
+		Number result;
+		if ((Na instanceof Long || Na instanceof Integer) 
+				&& (Nb instanceof Long || Nb instanceof Integer)) {
+			result = Na.longValue() - Nb.longValue();
 		
-		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
-			return execute(pf, (AnimObject)a, (AnimObject)b);
+		} else {
+			result = Na.doubleValue() - Nb.doubleValue();
 		}
-		return new AnimObject(pf, SUB._, a, b);
+
+		System.out.println(""+Na.doubleValue()+" - "+Nb.doubleValue()+" = "+result);
+		
+		return new JExpression(value(result));
 	}
 }

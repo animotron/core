@@ -56,10 +56,44 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 
 	protected MathInstruction(String name) { super(name); }
 
-	protected abstract Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException;
-
 	protected abstract Relationship execute(final PFlow pf, Relationship a) throws IOException;
+
+	protected abstract Relationship execute(Number Na, Number Nb) throws IOException;
 	
+	protected final Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
+		if (a.isType(VALUE._) && b instanceof AnimObject) {
+			Number Na = VALUE.number(VALUE._.reference(a));
+			Relationship Rb = ((AnimObject)b).relax(pf);
+			if (Rb.isType(VALUE._)) {
+				Number Nb = VALUE.number(VALUE._.reference(Rb));
+				return execute(Na, Nb);
+			} else {
+				System.out.println("VALUE-ANIMO");
+				//TODO: code
+			}
+
+		} else if (a instanceof AnimObject && b.isType(VALUE._)) {
+			Number Nb = VALUE.number(VALUE._.reference(b));
+			Relationship Ra = ((AnimObject)a).relax(pf);
+			if (Ra.isType(VALUE._)) {
+				Number Na = VALUE.number(VALUE._.reference(Ra));
+				return execute(Na, Nb);
+			} else {
+				System.out.println("ANIMO-VALUE");
+				//TODO: code
+			}
+		
+		} else if (a.isType(VALUE._) && b.isType(VALUE._)) {
+			Number Na = VALUE.number(VALUE._.reference(a));
+			Number Nb = VALUE.number(VALUE._.reference(b));
+			return execute(Na, Nb);
+		
+		} else  if (a instanceof AnimObject && b instanceof AnimObject) {
+			return execute(pf, (AnimObject)a, (AnimObject)b);
+		}
+		return new AnimObject(pf, this, a, b);
+	}
+
 	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
 		List<Relationship> As = a.getElements(pf);
 		List<Relationship> Bs = b.getElements(pf);
