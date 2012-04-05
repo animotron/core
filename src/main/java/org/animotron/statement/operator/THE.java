@@ -79,12 +79,16 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     };
     
     public void setActualRevision(Node node, Node rev) {
-        node.getSingleRelationship(AREV, OUTGOING).delete();
+        Relationship r = node.getSingleRelationship(AREV, OUTGOING);
+        if (r != null) {
+            r.delete();
+        }
         node.createRelationshipTo(rev, AREV);
     }
 
     public Node getActualRevision(Node node) {
-        return node.getSingleRelationship(AREV, OUTGOING).getEndNode();
+        Relationship r = node.getSingleRelationship(AREV, OUTGOING);
+        return r == null ? node : r.getEndNode();
     }
 
     public Node getActualRevision(Relationship relationship) {
@@ -132,7 +136,6 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
         UUID.set(r, uuid().toString());
-        setActualRevision(n, n);
         add(r, name);
         return r;
 	}

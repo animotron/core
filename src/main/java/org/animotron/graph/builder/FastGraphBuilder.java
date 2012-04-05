@@ -119,7 +119,6 @@ public class FastGraphBuilder extends GraphBuilder {
                         relationship = getROOT().createRelationshipTo(end, THE._);
                         UUID.set(relationship, uuid().toString());
                         HASH.set(relationship, hash);
-                        THE._.setActualRevision(end, end);
                         THE._.add(relationship, reference);
                         Cache.RELATIONSHIP.add(relationship, hash);
                     } else {
