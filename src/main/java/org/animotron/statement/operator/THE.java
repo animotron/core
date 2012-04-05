@@ -79,7 +79,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     };
     
     public void setActualRevision(Node node, Node rev) {
-        node.getSingleRelationship(AREV, OUTGOING);
+        node.getSingleRelationship(AREV, OUTGOING).delete();
         node.createRelationshipTo(rev, AREV);
     }
 
