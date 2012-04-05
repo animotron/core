@@ -37,7 +37,9 @@ import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.AnimoGraph.getROOT;
 import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.RelationshipTypes.AREV;
 import static org.animotron.utils.MessageDigester.uuid;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Operator 'THE'.
@@ -76,19 +78,28 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         }
     };
     
-    public Node getActualRevision(Node node) {
-        return getDb().getNodeById((Long)ARID.get(node));
+    public void setActualRevision(Node node, Node rev) {
+        node.getSingleRelationship(AREV, OUTGOING);
+        node.createRelationshipTo(rev, AREV);
     }
 
-    public Relationship getActualRevision(Relationship relationship) {
-        return getDb().getRelationshipById((Long)ARID.get(relationship));
+    public Node getActualRevision(Node node) {
+        return node.getSingleRelationship(AREV, OUTGOING).getEndNode();
     }
+
+    public Node getActualRevision(Relationship relationship) {
+        return getActualRevision(relationship.getEndNode());
+    }
+
+//    public Relationship getActualRevision(Relationship relationship) {
+//        return ;
+//    }
 
     public Node getActualEndNode(Relationship r) {
     	Node n = r.getEndNode();
 
 		if (r.isType(REF._) || r.isType(THE._))
-			return getDb().getNodeById((Long)ARID.get(n));
+			return getActualRevision(n);
 		
 		return n;
     }
@@ -121,8 +132,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
         UUID.set(r, uuid().toString());
-        ARID.set(r, r.getId());
-        ARID.set(n, n.getId());
+        setActualRevision(n, n);
         add(r, name);
         return r;
 	}

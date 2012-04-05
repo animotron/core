@@ -57,7 +57,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 	if (s instanceof REF)
                 		node = REF._.getActualRevision(r);
                 	else if (s instanceof THE)
-                		node = THE._.getActualRevision(r).getEndNode();
+                		node = THE._.getActualRevision(r);
                 	else
                 		node = r.getEndNode();
                 	

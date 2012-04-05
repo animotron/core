@@ -85,7 +85,7 @@ public class AnimoTraverser {
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof REF)) {
-            node = (statement instanceof THE ? THE._.getActualRevision(r) : r).getEndNode();
+            node = (statement instanceof THE ? THE._.getActualRevision(r) : r.getEndNode());
             It it = new It(node);
             iterate(handler, rr, statement, it, level);
 		}

@@ -97,21 +97,18 @@ public class StreamGraphBuilder extends GraphBuilder {
                     relationship = getROOT().createRelationshipTo(end, THE._);
                     UUID.set(relationship, uuid().toString());
                     HASH.set(relationship, hash);
-                    ARID.set(relationship, relationship.getId());
-                    ARID.set(end, end.getId());
+                    THE._.setActualRevision(end, end);
                     THE._.add(relationship, reference);
                     Cache.RELATIONSHIP.add(relationship, hash);
                 } else {
                     freeze(THE._.getActualRevision(relationship));
                     Node n = relationship.getEndNode();
-                    long arid = (Long) ARID.get(n);
-                    Node rn = getDb().getNodeById(arid);
+                    Node rn = THE._.getActualRevision(n);
                     Relationship rr = rn.createRelationshipTo(end, REV);
                     UUID.set(rr, uuid().toString());
                     HASH.set(rr, hash);
-                    ARID.set(relationship, rr.getId());
-                    ARID.set(n, end.getId());
                     THEID.set(end, n.getId());
+                    THE._.setActualRevision(n, end);
                 }
             } else {
                 relationship = copy(getROOT(), r);
@@ -123,13 +120,11 @@ public class StreamGraphBuilder extends GraphBuilder {
             Node end = relationship.getEndNode();
             freeze(THE._.getActualRevision(relationship));
             Node n = relationship.getEndNode();
-            long arid = (Long) ARID.get(n);
-            Node rn = getDb().getNodeById(arid);
+            Node rn = THE._.getActualRevision(n);
             Relationship rr = rn.createRelationshipTo(end, REV);
             UUID.set(rr, uuid().toString());
             HASH.set(rr, hash);
-            ARID.set(relationship, rr.getId());
-            ARID.set(n, end.getId());
+            THE._.setActualRevision(n, end);
             unfreeze(relationship);
             r.delete();
             destructive(root);

@@ -80,8 +80,7 @@ public class It implements Iterator<Object>, Iterable<Object> {
                                 CACHE.equals(o) ||
                                     UUID.equals(o) ||
                                         FREEZE.equals(o) ||
-                                            THEID.equals(o) ||
-                                                ARID.equals(o)) {
+                                            THEID.equals(o)) {
                 return step();
             } else {
                 return o;
