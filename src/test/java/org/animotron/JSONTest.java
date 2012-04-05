@@ -23,14 +23,13 @@ package org.animotron;
 import junit.framework.Assert;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JSONExpression;
+import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonParser;
 import org.junit.Test;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Relationship;
-
-import java.util.Iterator;
+import org.neo4j.graphdb.index.IndexHits;
 
 
 /**
@@ -49,18 +48,22 @@ public class JSONTest extends ATest {
         JsonParser jp = FACTORY.createJsonParser(in);
         Expression e = new JSONExpression(jp);
         StringBuilder s = new StringBuilder();
-        Iterator<Relationship> it = e.getEndNode().getRelationships(Direction.OUTGOING).iterator();
-        if (it.hasNext()) {
-            Relationship i = it.next();
-            s.append(truncate(CachedSerializer.ANIMO.serialize(i)));
-            while (it.hasNext()) {
-                i = it.next();
-                s.append(" ");
+        IndexHits<Relationship> it = Order._.queryDown(e.getEndNode());
+        try {
+            if (it.hasNext()) {
+                Relationship i = it.next();
                 s.append(truncate(CachedSerializer.ANIMO.serialize(i)));
+                while (it.hasNext()) {
+                    i = it.next();
+                    s.append(" ");
+                    s.append(truncate(CachedSerializer.ANIMO.serialize(i)));
+                }
+                s.append(".");
+                Assert.assertEquals(out, s.toString());
             }
-            s.append(".");
+        } finally {
+            it.close();
         }
-        Assert.assertEquals(out, s.toString());
     }
 
     @Test
