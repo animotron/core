@@ -20,6 +20,8 @@
  */
 package org.animotron.graph;
 
+import javolution.util.FastList;
+import javolution.util.FastMap;
 import org.animotron.Executor;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
@@ -33,8 +35,9 @@ import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -65,8 +68,8 @@ public class AnimoGraph {
         
         System.gc();
         
-        activeTx = Collections.synchronizedList(new LinkedList<Transaction>());
-        debugActiveTx = new ConcurrentHashMap<Transaction, Throwable>();
+        activeTx = new FastList<Transaction>();
+        debugActiveTx = new FastMap<Transaction, Throwable>();
     	STORAGE = folder;
     	
     	Executor.init();
