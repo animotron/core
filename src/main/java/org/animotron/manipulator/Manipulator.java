@@ -120,7 +120,7 @@ public abstract class Manipulator {
 	            public void onMessage(QCAVector context) {
 	            	super.onMessage(context);
 	            	
-	            	//System.out.println("get answer ["+vector+"]\n"+context);
+	            	//System.out.println("getThe answer ["+vector+"]\n"+context);
 	            	//out.debug();
 	            	try {
 	            		if (context == null) {

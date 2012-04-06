@@ -175,7 +175,7 @@ public class WORD extends DetermInstruction implements Prepare {
 	}
 
 	public IndexHits<Relationship> search(String word) {
-		//System.out.println(words.get(NAME, word).getSingle());
+		//System.out.println(words.getThe(NAME, word).getSingle());
 		return words.query(word);
 	}
 }

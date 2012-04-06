@@ -52,17 +52,17 @@ public class TheTest extends ATest {
  	public void testREV() throws Throwable {
 //        Expression e;
 //        e = testAnimo("the e 1.");
-//        String uuid1 = (String) UUID.get(e);
+//        String uuid1 = (String) UUID.getThe(e);
 //        e = testAnimo("the e 2.");
-//        String uuid2 = (String) UUID.get(e);
+//        String uuid2 = (String) UUID.getThe(e);
 //        Relationship rev1 = e.getEndNode().getSingleRelationship(REV, OUTGOING);
 //        Assert.assertNotNull(rev1);
-//        Assert.assertEquals("", UUID.get(rev1), uuid1);
+//        Assert.assertEquals("", UUID.getThe(rev1), uuid1);
 //        e = testAnimo("the e 3.");
-//        String uuid3 = (String) UUID.get(e);
+//        String uuid3 = (String) UUID.getThe(e);
 //        Relationship rev2 = e.getEndNode().getSingleRelationship(REV, OUTGOING).getEndNode().getSingleRelationship(REV, OUTGOING);
 //        Assert.assertNotNull(rev2);
-//        Assert.assertEquals("", UUID.get(rev2), uuid1);
+//        Assert.assertEquals("", UUID.getThe(rev2), uuid1);
 //        Assert.assertFalse(uuid1.equals(uuid2));
 //        Assert.assertFalse(uuid2.equals(uuid3));
 	}

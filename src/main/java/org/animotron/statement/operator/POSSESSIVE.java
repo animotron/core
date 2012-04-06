@@ -91,7 +91,7 @@ public class POSSESSIVE extends Operator implements Suffix {
 					
 	//				for (QCAVector vector : pf.getPFlowPath()) {
 	//					//System.out.println("CHECK PFLOW "+vector);
-	//					Set<QCAVector> rSet = get(pf, op, vector, thes, suffixes, visitedREFs);
+	//					Set<QCAVector> rSet = getThe(pf, op, vector, thes, suffixes, visitedREFs);
 	//					if (rSet != null) {
 	//						for (QCAVector v : rSet) {
 	//							pf.sendAnswer(v, AN._);

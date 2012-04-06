@@ -94,7 +94,7 @@ public class FormulaTest extends ATest {
         }
         Assert.assertEquals(2, count);
 
-        //assertStringResult("get cost m1.", "50");
+        //assertStringResult("getThe cost m1.", "50");
 	}
 	
     @Test

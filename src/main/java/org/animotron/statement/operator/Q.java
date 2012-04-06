@@ -50,7 +50,7 @@ public class Q extends Operator implements Reference {
 //		@Override
 //		public void onMessage(PFlow pf) {
 //
-//			System.out.println("Q "+NAME.get(pf.getOPNode()));
+//			System.out.println("Q "+NAME.getThe(pf.getOPNode()));
 //
 //			pf.sendAnswer(pf.getOP());
 //			pf.done();

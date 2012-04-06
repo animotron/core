@@ -52,6 +52,7 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
@@ -190,7 +191,7 @@ public class Utils {
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
-			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getThe evaluable");
 			Pipe in = Evaluator._.execute(controller, v);
 			QCAVector e;
 			while ((e = in.take()) != null) {
@@ -217,7 +218,7 @@ public class Utils {
 					}
 				}
 			}
-			//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
+			//System.out.println("end++++++++++++++++++++++++++++++++++++++ getThe evaluable");
 		} else {
 			pipe.write(v.getContext().get(0).answered(r));
 		}
@@ -255,7 +256,7 @@ public class Utils {
 			}
 
 			if (s instanceof Query || s instanceof Evaluable) {
-				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ get evaluable");
+				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getThe evaluable");
 				Pipe in = Evaluator._.execute(pf.getController(), v);
 				QCAVector e;
 				while ((e = in.take()) != null) {
@@ -272,7 +273,7 @@ public class Utils {
 						}
 					}
 				}
-				//System.out.println("end++++++++++++++++++++++++++++++++++++++ get evaluable");
+				//System.out.println("end++++++++++++++++++++++++++++++++++++++ getThe evaluable");
 			} else {
 				pipe.write(v);//.answered(v.getClosest())
 			}
@@ -353,7 +354,7 @@ public class Utils {
 //		boolean haveSome = false;
 //
 //		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-//		for (QCAVector v : Result.get(hash, op)) {
+//		for (QCAVector v : Result.getThe(hash, op)) {
 //			pf.sendAnswer(v);
 //			
 //			haveSome = true;
@@ -506,6 +507,9 @@ public class Utils {
                             return EXCLUDE_AND_PRUNE;
 
                         if (Statements.relationshipType(path.lastRelationship()) == null)
+                            return EXCLUDE_AND_PRUNE;
+
+                        if (path.lastRelationship().isType(REV))
                             return EXCLUDE_AND_PRUNE;
 
                         if (path.lastRelationship().isType(THE._))

@@ -23,7 +23,6 @@ package org.animotron.statement.query;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 
-import org.animotron.graph.Properties;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -605,7 +604,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				
 				Node node = r.getStartNode();
 				try {
-					checkTHEnode(THE._.get(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+					checkTHEnode(THE._.getThe(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 				} catch (Exception e) {}
 				
 				final FastSet<Node> use = FastSet.newInstance();

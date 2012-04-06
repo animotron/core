@@ -103,14 +103,14 @@ public class AnimObject extends AbstractExpression {
     		if (!Utils.haveContext(r.getEndNode())) {
 
     			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
-    			elements.add(THE._.getThe(ref.getEndNode()));
+    			elements.add(THE._.get(ref.getEndNode()));
     			
 //    			List<Relationship> els = getElements(pf, ref.getEndNode());
 //    			if (els == null || els.isEmpty())
 //    				elements.add(ref);
 //    			
 //    			else if (els.size() == 1)
-//    				elements.add(els.get(0));
+//    				elements.add(els.getThe(0));
 //    			
 //    			else 
 //    				elements.add( new AnimObject(pf, MUL._, els));

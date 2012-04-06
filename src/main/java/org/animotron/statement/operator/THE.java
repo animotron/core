@@ -22,23 +22,21 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
-import org.animotron.graph.Properties;
 import org.animotron.graph.index.AbstractIndex;
 import org.animotron.graph.index.Cache;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
-import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.AnimoGraph.getDb;
-import static org.animotron.graph.AnimoGraph.getROOT;
-import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.Properties.NAME;
+import static org.animotron.graph.Properties.THEID;
 import static org.animotron.graph.RelationshipTypes.AREV;
-import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -112,25 +110,20 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         the.add(r, name);
 	}
 
-	public Node get(Node n) {
-        return getDb().getNodeById((Long)THEID.get(n));
+	public Node getThe(Node rev) {
+        return getDb().getNodeById((Long)THEID.get(rev));
 	}
 
 	public Relationship get(Object name) {
         return the.get(name);
 	}
 
-	public Relationship getThe(Node node) {
-		try {
-			return THE._.get((String) Properties.NAME.get(node));
-		} catch (Throwable t) {
-			return null;
-		}
+	public Relationship get(Node node) {
+        return node.getSingleRelationship(THE._, Direction.INCOMING);
 	}
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
-        UUID.set(r, uuid().toString());
         add(r, name);
         return r;
 	}

@@ -547,7 +547,7 @@ public class GetTest extends ATest {
         testAnimo("the foo1 (bar) 1.");
         testAnimo("the foo2 (bar) 2.");
         assertAnimoResult("get bar get y x", "");//"foo1."
-        //XXX: answer '' correct because get y x return ''
+        //XXX: answer '' correct because getThe y x return ''
     }
 
     @Test
@@ -557,7 +557,7 @@ public class GetTest extends ATest {
         testAnimo("the foo2 (bar) 2.");
         //assertAnimoResult("foo1 a 1", "foo1 (bar z) (a 1).");
         assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (a 1).");
-        //assertAnimoResult("an (get bar get y x) (a 1)", "foo1 a 1."); //answer '' correct because (get bar get y x) == ''
+        //assertAnimoResult("an (getThe bar getThe y x) (a 1)", "foo1 a 1."); //answer '' correct because (getThe bar getThe y x) == ''
     }
 
     @Test
@@ -567,7 +567,7 @@ public class GetTest extends ATest {
         testAnimo("the foo2 (bar) 2.");
         assertAnimoResult("foo1 a 1", "foo1 (bar z) (\\p a 1).");
         assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (\\p a 1).");
-        //assertAnimoResult("an (get bar get y x) (a 1)", "foo1 \\p a 1."); //answer '' correct because (get bar get y x) == ''
+        //assertAnimoResult("an (getThe bar getThe y x) (a 1)", "foo1 \\p a 1."); //answer '' correct because (getThe bar getThe y x) == ''
     }
 
     @Test
@@ -593,7 +593,7 @@ public class GetTest extends ATest {
         testAnimo("the x a b.");
         testAnimo("the y (x) (a c).");
         assertAnimoResult("get a y", "a c.");
-        //assertAnimoResult("get b get a y", "a b.");
+        //assertAnimoResult("getThe b getThe a y", "a b.");
     }
 
     @Test
