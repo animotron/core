@@ -95,10 +95,6 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         return getActualRevision(relationship.getEndNode());
     }
 
-//    public Relationship getActualRevision(Relationship relationship) {
-//        return ;
-//    }
-
     public Node getActualEndNode(Relationship r) {
     	Node n = r.getEndNode();
 
@@ -134,7 +130,6 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
-        Node n = r.getEndNode();
         UUID.set(r, uuid().toString());
         add(r, name);
         return r;
