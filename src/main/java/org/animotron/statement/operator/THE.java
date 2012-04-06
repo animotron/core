@@ -36,7 +36,6 @@ import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.AREV;
 import static org.animotron.utils.MessageDigester.uuid;
-import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -82,7 +81,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     }
 
     public Node getActualRevision(Node node) {
-        return node.getSingleRelationship(AREV, INCOMING).getEndNode();
+        return node.getSingleRelationship(AREV, OUTGOING).getEndNode();
     }
 
     public Node getActualRevision(Relationship relationship) {
