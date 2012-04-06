@@ -121,6 +121,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         HASH.set(relationship, hash);
                         THE._.add(relationship, reference);
                         Cache.RELATIONSHIP.add(relationship, hash);
+                        THE._.setActualRevision(end, end);
                     } else {
                         freeze(THE._.getActualRevision(relationship));
                         Node n = relationship.getEndNode();

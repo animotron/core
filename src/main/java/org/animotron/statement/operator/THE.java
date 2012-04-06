@@ -23,7 +23,6 @@ package org.animotron.statement.operator;
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.index.AbstractIndex;
-import org.animotron.graph.index.Cache;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
@@ -34,9 +33,10 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Properties.NAME;
-import static org.animotron.graph.Properties.THEID;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.AREV;
+import static org.animotron.utils.MessageDigester.uuid;
+import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -77,16 +77,12 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     };
     
     public void setActualRevision(Node node, Node rev) {
-        Relationship r = node.getSingleRelationship(AREV, OUTGOING);
-        if (r != null) {
-            r.delete();
-        }
+        node.getSingleRelationship(AREV, OUTGOING).delete();
         node.createRelationshipTo(rev, AREV);
     }
 
     public Node getActualRevision(Node node) {
-        Relationship r = node.getSingleRelationship(AREV, OUTGOING);
-        return r == null ? node : r.getEndNode();
+        return node.getSingleRelationship(AREV, INCOMING).getEndNode();
     }
 
     public Node getActualRevision(Relationship relationship) {
@@ -111,7 +107,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 	}
 
 	public Node getThe(Node rev) {
-        return getDb().getNodeById((Long)THEID.get(rev));
+        return getDb().getNodeById((Long) THEID.get(rev));
 	}
 
 	public Relationship get(Object name) {
@@ -124,6 +120,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
+        UUID.set(r, uuid().toString());
         add(r, name);
         return r;
 	}
@@ -141,10 +138,9 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 	}
 	
     @Override
-    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
+    protected Node createChild(Object name, boolean ready, boolean ignoreNotFound) throws AnimoException {
         Node node = createNode();
-        Cache.NODE.add(node, reference);
-        NAME.set(node, reference);
+        NAME.set(node, name);
         return node;
     }
 
