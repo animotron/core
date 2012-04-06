@@ -120,6 +120,8 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
+        Node n = r.getEndNode();
+        n.createRelationshipTo(n, AREV);
         UUID.set(r, uuid().toString());
         add(r, name);
         return r;
