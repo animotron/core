@@ -33,6 +33,7 @@ import java.security.MessageDigest;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.RelationshipTypes.AREV;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.statement.operator.Utils.freeze;
 import static org.animotron.statement.operator.Utils.unfreeze;
@@ -99,7 +100,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                     HASH.set(relationship, hash);
                     THE._.add(relationship, reference);
                     Cache.RELATIONSHIP.add(relationship, hash);
-                    THE._.setActualRevision(end, end);
+                    end.createRelationshipTo(end, AREV);
                 } else {
                     freeze(THE._.getActualRevision(relationship));
                     Node n = relationship.getEndNode();
