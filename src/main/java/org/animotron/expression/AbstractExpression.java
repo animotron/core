@@ -45,15 +45,17 @@ public abstract class AbstractExpression extends Expression {
     public abstract void build() throws Throwable;
 
     @Override
-    protected Relationship relationship() {
+    protected synchronized Relationship relationship() {
         if (relationship == null) {
             try {
                 builder.build(this);
                 relationship = builder.relationship();
             } catch (Throwable t) {
+                t.printStackTrace();
                 throw new RuntimeException(t);
             }
         }
         return relationship;
     }
+
 }
