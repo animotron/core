@@ -30,6 +30,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import junit.framework.Assert;
+
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.expression.JExpression.*;
 
@@ -155,11 +157,13 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0F() throws Throwable {
+    	IOException ex = null;
         try {
             test("the a \\x:root $x", "<x:root xmlns:x=\"\"/>");
         } catch (IOException e) {
-            e.printStackTrace();
+        	ex = e;
         }
+        Assert.assertNotNull(ex);
     }
 
     @Test
