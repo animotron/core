@@ -127,8 +127,12 @@ public class AnimoGraph {
 			System.out.println("Active transactions "+activeTx.size());
 			
 			for (Map.Entry<Transaction, Throwable> e : debugActiveTx.entrySet()) {
-				System.out.println(e.getKey());
-				e.getValue().printStackTrace();
+				if (e != null) {
+					System.out.println(e.getKey());
+					e.getValue().printStackTrace();
+				} else {
+					System.out.println("NULL @ debugActiveTx");
+				}
 			}
 
 			try { Thread.sleep(1000); } catch (InterruptedException e) {}
@@ -145,6 +149,10 @@ public class AnimoGraph {
 	}
 
 	public static void finishTx(Transaction tx) {
+		if (tx == null) {
+			System.out.println("tx == NULL");
+			return;
+		}
         tx.finish();
         activeTx.remove(tx);
         debugActiveTx.remove(tx);
