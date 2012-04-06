@@ -47,7 +47,8 @@ import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.copy;
 import static org.animotron.graph.AnimoGraph.createNode;
-import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.Properties.HASH;
+import static org.animotron.graph.Properties.UUID;
 import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.INCOMING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -112,8 +113,7 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 AnimoGraph.execute(new GraphOperation<Void>() {
                     private void revision(Node rn, Node n, Relationship r) throws IOException {
                         Relationship rr = n.createRelationshipTo(rn, RelationshipTypes.REV);
-                        ARID.set(r, rr.getId());
-                        ARID.set(n, rn.getId());
+                        THE._.setActualRevision(n, rn);
                         UUID.set(rr, uuid().toString());
                         HASH.set(rr, DigestSerializer._.serialize(rr));
                     }
