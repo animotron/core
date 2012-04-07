@@ -156,8 +156,8 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 		}
 	}
 
-	public Object reference(Node r) {
-		return NAME.get(r);
+	public Object reference(Node n) {
+		return NAME.get(n);
 	}
 
 	@Override
