@@ -163,17 +163,17 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-//        assertError("foo.com", 404, "stack trace would be here", "text/html",
-//                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
-//        );
-//
-//        assertError("foo.com", 500, "", "", "");
-//
-//        assertError("bar.com", 404, "stack trace", "text/html",
-//                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
-//        );
-//
-//        assertError("bar.com", 500, "", "", "");
+        assertError("foo.com", 404, "stack trace would be here", "text/html",
+                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
+        );
+
+        assertError("foo.com", 500, "", "", "");
+
+        assertError("bar.com", 404, "stack trace", "text/html",
+                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
+        );
+
+        assertError("bar.com", 500, "", "", "");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
@@ -238,17 +238,17 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-//        assertError("foo.com", 404, "stack trace would be here", "text/html",
-//                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
-//        );
-//
-//        assertError("foo.com", 500, "", "", "");
-//
-//        assertError("bar.com", 404, "stack trace", "text/html",
-//                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
-//        );
-//
-//        assertError("bar.com", 500, "", "", "");
+        assertError("foo.com", 404, "stack trace would be here", "text/html",
+                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
+        );
+
+        assertError("foo.com", 500, "", "", "");
+
+        assertError("bar.com", 404, "stack trace", "text/html",
+                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
+        );
+
+        assertError("bar.com", 500, "", "", "");
 
         assertQuery("foo.com", "root", "text/html",
                 "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
