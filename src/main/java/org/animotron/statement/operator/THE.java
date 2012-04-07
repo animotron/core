@@ -114,8 +114,8 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 	}
 
 	public Relationship get(Node rev) {
-        return rev.getSingleRelationship(AREV, Direction.INCOMING).getStartNode()
-                  .getSingleRelationship(THE._, Direction.INCOMING);
+        Relationship ar = rev.getSingleRelationship(AREV, Direction.INCOMING);
+        return ar == null ? null : ar.getStartNode().getSingleRelationship(THE._, Direction.INCOMING);
 	}
 
 	private Relationship create(String name) throws AnimoException {
