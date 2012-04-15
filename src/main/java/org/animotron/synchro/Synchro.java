@@ -20,13 +20,19 @@
  */
 package org.animotron.synchro;
 
+import org.animotron.expression.AnimoExpression;
 import org.animotron.statement.operator.THE;
 import org.jgroups.*;
+import org.neo4j.graphdb.Direction;
+import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
 import static org.animotron.graph.Properties.HASH;
+import static org.animotron.graph.RelationshipTypes.REV;
+import static org.animotron.expression.Expression.__;
+import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
 /**
  * @author <a href="mailto:amir.akhmedov@gmail.com">Amir Akhmedov</a>
@@ -35,6 +41,8 @@ import static org.animotron.graph.Properties.HASH;
 public class Synchro {
 
 	public static JChannel channel1;
+
+	public static final Synchro _ = new Synchro();
 
 	public Synchro() {
 		System.setProperty("jgroups.bind_addr", "127.0.0.1");
@@ -48,10 +56,9 @@ public class Synchro {
 				public void receive(Message msg) {
 					System.out.println("channel1 received msg from " + msg.getSrc() + ": " + msg.getObject());
 
-					checkInstance((String)msg.getObject());
-//					if(channel1.getAddress() != msg.getSrc()) {
-//						__((String)msg.getObject());
-//					}
+					if(channel1.getAddress() != msg.getSrc()) {
+						checkInstance((String)msg.getObject());
+					}
 				}
 				@Override
 				public void viewAccepted(View new_view) {
@@ -60,7 +67,7 @@ public class Synchro {
 	
 		    channel1.connect("AnimoCluster");
 	
-//		    channel1.close();//XXX: When close it?
+//		    channel1.close();//XXX: When do close it?
 		} catch (ChannelException e) {
 			e.printStackTrace();
 		}
@@ -78,10 +85,40 @@ public class Synchro {
     }
 
 	private void checkInstance(String message) {
-		int fromIndex = message.indexOf(" ") + 1;
-		String instanceName = message.substring(fromIndex, message.indexOf(" ", fromIndex));
+		String synchPreviousHash = message.substring(0, message.indexOf("|"));
+		synchPreviousHash = synchPreviousHash.substring(synchPreviousHash.indexOf(":") + 1);
 
-		Relationship instance = THE._.get(instanceName);
-		Object hash = HASH.get(instance);
+		message = message.substring(message.indexOf("|")+1);
+		String synchHash = message.substring(0, message.indexOf("|"));
+		synchHash = synchHash.substring(synchHash.indexOf(":") + 1);
+		
+		String synchContent = message.substring(message.indexOf("|") + 1);
+		synchContent = synchContent.substring(synchContent.indexOf(":") + 1);
+
+		int fromIndex = synchContent.indexOf(" ") + 1;
+		String synchName = synchContent.substring(fromIndex, synchContent.indexOf(" ", fromIndex));
+
+		Relationship instance = THE._.get(synchName);
+
+		String instanceHash = "";
+		String instancePreviousHash = "";
+		if(instance != null) {
+			instanceHash = byteArrayToHex((byte[]) HASH.get(instance));
+
+			Node nn = THE._.getActualRevision(instance);
+			Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
+			if(prev != null) {
+				instancePreviousHash = byteArrayToHex((byte[]) HASH.get(prev));
+			}
+		}
+
+//		System.out.println("synchHash = " + synchHash + " synchPreviousHash = " + synchPreviousHash +
+//				" instanceHash = " + instanceHash + " instancePreviousHash = " + instancePreviousHash);
+
+		if(synchPreviousHash.equals(instancePreviousHash) || synchPreviousHash == "" || instancePreviousHash == "") {
+			if (instance == null || synchHash != instanceHash) {
+	            __(new AnimoExpression(synchContent));
+			}
+		}
 	}
 }
