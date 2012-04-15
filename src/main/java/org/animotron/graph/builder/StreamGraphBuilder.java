@@ -22,11 +22,13 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
+import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.THE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -82,17 +84,17 @@ public class StreamGraphBuilder extends GraphBuilder {
 
     @Override
     public void endGraph() throws AnimoException {
-        Object reference;
         relationship = Cache.RELATIONSHIP.get(hash);
-        if (relationship == null) {
-            if (r.isType(THE._)) {
-                Node end = r.getEndNode();
-                if (!NAME.has(end)) {
-                    reference = byteArrayToHex(hash);
-                    NAME.set(end, reference);
-                } else {
-                    reference = NAME.get(end);
-                }
+        if (r.isType(THE._)) {
+            Node end = r.getEndNode();
+            Object reference;
+            if (!NAME.has(end)) {
+                reference = byteArrayToHex(hash);
+                NAME.set(end, reference);
+            } else {
+                reference = NAME.get(end);
+            }
+            if (relationship == null) {
                 relationship = THE._.get(reference);
                 if (relationship == null) {
                     relationship = getROOT().createRelationshipTo(end, THE._);
@@ -103,37 +105,52 @@ public class StreamGraphBuilder extends GraphBuilder {
                     Cache.RELATIONSHIP.add(relationship, hash);
                     end.createRelationshipTo(end, AREV);
                 } else {
-                    freeze(THE._.getActualRevision(relationship));
                     Node n = relationship.getEndNode();
                     Node rn = THE._.getActualRevision(n);
+                    freeze(rn);
                     Relationship rr = rn.createRelationshipTo(end, REV);
                     UUID.set(rr, uuid().toString());
                     HASH.set(rr, hash);
                     THEID.set(end, n.getId());
+                    Cache.RELATIONSHIP.add(rr, hash);
                     THE._.setActualRevision(n, end);
                 }
+                r.delete();
             } else {
+                unfreeze(end);
+                Node nn = createNode();
+                copyProperties(end, nn);
+                int i = 1;
+                IndexHits<Relationship> hits = Order._.queryDown(end);
+                try {
+                    for (Relationship r : hits) {
+                        order(copy(nn, r), i++);
+                    }
+                } finally {
+                    hits.close();
+                }
+                relationship = THE._.get(reference);
+                Node n = relationship.getEndNode();
+                Node rn = THE._.getActualRevision(n);
+                freeze(rn);
+                Relationship rr = rn.createRelationshipTo(nn, REV);
+                UUID.set(rr, uuid().toString());
+                HASH.set(rr, hash);
+                THE._.setActualRevision(n, nn);
+                r.delete();
+            }
+        } else {
+            if (relationship == null) {
                 relationship = copy(getROOT(), r);
                 HASH.set(relationship, hash);
                 Cache.RELATIONSHIP.add(relationship, hash);
+                r.delete();
+                destructive(root);
+            } else {
+                r.delete();
+                destructive(root);
+                return;
             }
-            r.delete();
-        } else if (relationship.isType(THE._)) {
-            Node end = relationship.getEndNode();
-            freeze(THE._.getActualRevision(relationship));
-            Node n = relationship.getEndNode();
-            Node rn = THE._.getActualRevision(n);
-            Relationship rr = rn.createRelationshipTo(end, REV);
-            UUID.set(rr, uuid().toString());
-            HASH.set(rr, hash);
-            THE._.setActualRevision(n, end);
-            unfreeze(relationship);
-            r.delete();
-            destructive(root);
-        } else {
-            r.delete();
-            destructive(root);
-            return;
         }
         preparative(relationship);
         modified(relationship);

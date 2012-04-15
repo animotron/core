@@ -20,15 +20,7 @@
  */
 package org.animotron.manipulator;
 
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.RelationshipTypes.REV;
-import static org.animotron.utils.MessageDigester.byteArrayToHex;
 import javolution.util.FastTable;
-
-import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.statement.operator.THE;
-import org.animotron.synchro.Synchro;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -89,16 +81,16 @@ public class Manipulators {
 
         private void preparative() throws IOException {
 			for (Node n : preparative) {
-            	for (Relationship r : n.getRelationships(THE._)) {
-            		Node nn = THE._.getActualRevision(r);
-            		Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
-            		String previousHash = "";
-            		if(prev != null)
-                		previousHash = byteArrayToHex((byte[]) HASH.get(prev));
-            		String hash = byteArrayToHex((byte[]) HASH.get(r));
-
-            		Synchro._.sendDataToChannel("PREVIOUSHASH:" + previousHash + "|HASH:" + hash + "|INSTANCE:" + CachedSerializer.ANIMO.serialize(r));
-            	}
+//            	for (Relationship r : n.getRelationships(THE._)) {
+//            		Node nn = THE._.getActualRevision(r);
+//            		Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
+//            		String previousHash = "";
+//            		if(prev != null)
+//                		previousHash = byteArrayToHex((byte[]) HASH.get(prev));
+//            		String hash = byteArrayToHex((byte[]) HASH.get(r));
+//
+//            		Synchro._.sendDataToChannel("PREVIOUSHASH:" + previousHash + "|HASH:" + hash + "|INSTANCE:" + CachedSerializer.ANIMO.serialize(r));
+//            	}
 				Preparator._.execute(null, n);
 			}
         }

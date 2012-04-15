@@ -29,6 +29,13 @@ import org.junit.Test;
 public class RevTest extends ATest {
 
     @Test
+    public void test_00() throws Throwable {
+        testAnimo("the a x.");
+        testAnimo("the a y.");
+        testAnimo("the a x.");
+    }
+
+    @Test
     public void test_01() throws Throwable {
         testAnimo("the a x.");
         testAnimo("the a y.");
