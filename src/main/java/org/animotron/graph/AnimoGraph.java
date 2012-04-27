@@ -150,9 +150,12 @@ public class AnimoGraph {
 			System.out.println("tx == NULL");
 			return;
 		}
-        tx.finish();
-        activeTx.remove(tx);
-        debugActiveTx.remove(tx);
+		try {
+			tx.finish();
+		} finally {
+			activeTx.remove(tx);
+			debugActiveTx.remove(tx);
+		}
 	}
 
 //	public static boolean isTransactionActive(Transaction tx) {
