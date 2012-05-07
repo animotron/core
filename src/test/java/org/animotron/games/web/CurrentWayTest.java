@@ -43,38 +43,36 @@ public class CurrentWayTest extends ATest {
     @Test
     public void test() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                    _(THE._, "current-site",
-                        _(ANY._, "site",
-                            _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
-                        )
-                    )
-                ),
-                new JExpression(
-                    _(THE._, "test-service",
-                        _(AN._, "service")
-                    )
-                ),
-                new JExpression(
-                    _(THE._, "localhost-site",
-                        _(AN._, "site"),
-                        _(AN._, "server-name", value("localhost"))
-                    )
-                ),
-                new JExpression(
-                    _(THE._, "rest",
-                        _(ANY._, "service",
-                            _(AN._, "current-site")
-                        )
-                    )
-                ),
-                new JExpression(
-                    _(THE._, "current-request",
-                        _(AN._, "request"),
-                        _(AN._, "host", value("localhost"))
-                    )
+        new JExpression(
+            _(THE._, "current-site",
+                _(ANY._, "site",
+                    _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                 )
+            )
+        );
+        new JExpression(
+            _(THE._, "test-service",
+                _(AN._, "service")
+            )
+        );
+        new JExpression(
+            _(THE._, "localhost-site",
+                _(AN._, "site"),
+                _(AN._, "server-name", value("localhost"))
+            )
+        );
+        new JExpression(
+            _(THE._, "rest",
+                _(ANY._, "service",
+                    _(AN._, "current-site")
+                )
+            )
+        );
+        new JExpression(
+            _(THE._, "current-request",
+                _(AN._, "request"),
+                _(AN._, "host", value("localhost"))
+            )
         );
 
         JExpression s = new JExpression(

@@ -28,7 +28,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 import static org.animotron.expression.JExpression.element;
 
@@ -42,19 +41,17 @@ public class AllUseTest extends ATest {
     @Test
     public void simple_all_Use() throws Throwable {
 
-        __(
-            new JExpression(
-                _(THE._, "A", _(AN._, "S"), element("X", value("α")))
-            ),
-            new JExpression(
-                _(THE._, "B", _(AN._, "A"), element("Y", value("β")))
-            ),
-            new JExpression(
-                _(THE._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
-            ),
-            new JExpression(
-                _(THE._, "s", _(ALL._, "S"))
-            )
+        new JExpression(
+            _(THE._, "A", _(AN._, "S"), element("X", value("α")))
+        );
+        new JExpression(
+            _(THE._, "B", _(AN._, "A"), element("Y", value("β")))
+        );
+        new JExpression(
+            _(THE._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
+        );
+        new JExpression(
+            _(THE._, "s", _(ALL._, "S"))
         );
 
         JExpression test = new JExpression(
@@ -74,25 +71,23 @@ public class AllUseTest extends ATest {
     @Ignore
     public void simple_all_Use_1() throws Throwable {
 
-        __(
-            new JExpression(
-                _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
-            ),
-            new JExpression(
-                _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
-            ),
-            new JExpression(
-                _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
-            ),
-            new JExpression(
-                _(THE._, "s", _(ALL._, "S"))
-            ),
-            new JExpression(
-                _(THE._, "ub", _(USE._, "B"))
-            ),
-            new JExpression(
-                _(THE._, "uc", _(USE._, "C"))
-            )
+        new JExpression(
+            _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+        );
+        new JExpression(
+            _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
+        );
+        new JExpression(
+            _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
+        );
+        new JExpression(
+            _(THE._, "s", _(ALL._, "S"))
+        );
+        new JExpression(
+            _(THE._, "ub", _(USE._, "B"))
+        );
+        new JExpression(
+            _(THE._, "uc", _(USE._, "C"))
         );
 
         JExpression b = new JExpression(
@@ -110,25 +105,23 @@ public class AllUseTest extends ATest {
     @Test
     public void complex_all_Use() throws Throwable {
 
-        __(
-            new JExpression(
-                _(THE._, "A", _(AN._, "S"), element("X", value("α")))
-            ),
-            new JExpression(
-                _(THE._, "B", _(AN._, "A"), element("Y", value("β")))
-            ),
-            new JExpression(
-                _(THE._, "B1", _(AN._, "B"), element("Y", value("ββ")))
-            ),
-            new JExpression(
-                _(THE._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
-            ),
-            new JExpression(
-                _(THE._, "C1", _(AN._, "C"), element("Z", value("γγ")), element("X", value("ααα")))
-            ),
-            new JExpression(
-                _(THE._, "s", _(ALL._, "S"))
-            )
+        new JExpression(
+            _(THE._, "A", _(AN._, "S"), element("X", value("α")))
+        );
+        new JExpression(
+            _(THE._, "B", _(AN._, "A"), element("Y", value("β")))
+        );
+        new JExpression(
+            _(THE._, "B1", _(AN._, "B"), element("Y", value("ββ")))
+        );
+        new JExpression(
+            _(THE._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
+        );
+        new JExpression(
+            _(THE._, "C1", _(AN._, "C"), element("Z", value("γγ")), element("X", value("ααα")))
+        );
+        new JExpression(
+            _(THE._, "s", _(ALL._, "S"))
         );
 
         JExpression b = new JExpression(
@@ -149,31 +142,29 @@ public class AllUseTest extends ATest {
     @Ignore
     public void complex_all_Use_1() throws Throwable {
 
-        __(
-            new JExpression(
-                _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
-            ),
-            new JExpression(
-                _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
-            ),
-            new JExpression(
-                _(THE._, "B1", _(AN._, "B"), _(AN._, "Y", value("ββ")))
-            ),
-            new JExpression(
-                _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
-            ),
-            new JExpression(
-                _(THE._, "C1", _(AN._, "C"), _(AN._, "Z", value("γγ")), _(AN._, "X", value("ααα")))
-            ),
-            new JExpression(
-                _(THE._, "s", _(ALL._, "S"))
-            ),
-            new JExpression(
-                _(THE._, "ub", _(USE._, "B"))
-            ),
-            new JExpression(
-                _(THE._, "uc", _(USE._, "C"))
-            )
+        new JExpression(
+            _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+        );
+        new JExpression(
+            _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
+        );
+        new JExpression(
+            _(THE._, "B1", _(AN._, "B"), _(AN._, "Y", value("ββ")))
+        );
+        new JExpression(
+            _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
+        );
+        new JExpression(
+            _(THE._, "C1", _(AN._, "C"), _(AN._, "Z", value("γγ")), _(AN._, "X", value("ααα")))
+        );
+        new JExpression(
+            _(THE._, "s", _(ALL._, "S"))
+        );
+        new JExpression(
+            _(THE._, "ub", _(USE._, "B"))
+        );
+        new JExpression(
+            _(THE._, "uc", _(USE._, "C"))
         );
 
         JExpression b = new JExpression(

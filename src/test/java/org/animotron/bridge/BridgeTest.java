@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -69,17 +68,15 @@ public class BridgeTest extends ATest {
     private class ZipBridge extends AbstractZipBridge {
 
         @Override
-        protected void loadEntry(ZipInputStream zis, final ZipEntry entry) {
-            __(
-                    new BinaryExpression(zis, false) {
-                        @Override
-                        protected String id () {
-                            return entry.getName();
-                        }
-                        @Override
-                        protected void description() throws AnimoException, IOException {}
-                    }
-            );
+        protected void loadEntry(ZipInputStream zis, final ZipEntry entry) throws Throwable {
+            new BinaryExpression(zis, false) {
+                @Override
+                protected String id () {
+                    return entry.getName();
+                }
+                @Override
+                protected void description() throws AnimoException, IOException {}
+            };
         }
     }
 }

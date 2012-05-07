@@ -28,8 +28,6 @@ import org.animotron.statement.operator.THE;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.io.IOException;
-
 import static org.animotron.expression.JExpression.*;
 
 /**
@@ -38,7 +36,7 @@ import static org.animotron.expression.JExpression.*;
  */
 public class AnimoMLSerializerTest extends ATest {
 
-    private void test (String src, String res) throws IOException {
+    private void test (String src, String res) throws Throwable {
         assertAnimoResult(new AnimoExpression(src), res);
     }
 
@@ -55,13 +53,13 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("c"))));
+        new JExpression(_(THE._, "b", value("c")));
         test("the a \\ b", "the a \\ b \"c\".");
     }
 
     @Test
     public void test_03() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("c"))));
+        new JExpression(_(THE._, "b", value("c")));
         test("the a \\ an b", "the a \\ b \"c\".");
     }
 
@@ -82,34 +80,28 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Throwable {
-        __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", value("e")))
-        );
+        new JExpression(_(THE._, "b", value("b")));
+        new JExpression(_(THE._, "c", value("c")));
+        new JExpression(_(THE._, "d", value("d")));
+        new JExpression(_(THE._, "e", value("e")));
         test("the a \\ (b) (@ (c) (d)) (e)", "the a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \"e\").");
     }
 
     @Test
     public void test_08() throws Throwable {
-        __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", value("e")))
-        );
+        new JExpression(_(THE._, "b", value("b")));
+        new JExpression(_(THE._, "c", value("c")));
+        new JExpression(_(THE._, "d", value("d")));
+        new JExpression(_(THE._, "e", value("e")));
         test("the a \\((b) (@ (c) (d)) (e))", "the a \\ ((b \"b\") (@ (c \"c\") (d \"d\")) (e \"e\")).");
     }
 
     @Test
     public void test_09() throws Throwable {
-        __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
-        );
+        new JExpression(_(THE._, "b", value("b")));
+        new JExpression(_(THE._, "c", value("c")));
+        new JExpression(_(THE._, "d", value("d")));
+        new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
         test("the a \\(b) (@ (c) (d)) (e)", "the a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\e (b \"b\") (c \"c\") (d \"d\")).");
     }
 }

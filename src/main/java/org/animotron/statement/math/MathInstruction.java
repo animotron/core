@@ -40,7 +40,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -56,11 +55,11 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 
 	protected MathInstruction(String name) { super(name); }
 
-	protected abstract Relationship execute(final PFlow pf, Relationship a) throws IOException;
+	protected abstract Relationship execute(final PFlow pf, Relationship a) throws Throwable;
 
-	protected abstract Relationship execute(Number Na, Number Nb) throws IOException;
+	protected abstract Relationship execute(Number Na, Number Nb) throws Throwable;
 	
-	protected final Relationship execute(final PFlow pf, Relationship a, Relationship b) throws IOException {
+	protected final Relationship execute(final PFlow pf, Relationship a, Relationship b) throws Throwable {
 		if (a.isType(VALUE._) && b instanceof AnimObject) {
 			Number Na = VALUE.number(VALUE._.reference(a));
 			Relationship Rb = ((AnimObject)b).relax(pf);
@@ -94,7 +93,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 		return new AnimObject(pf, this, a, b);
 	}
 
-	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
+	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws Throwable {
 		List<Relationship> As = a.getElements(pf);
 		List<Relationship> Bs = b.getElements(pf);
 
@@ -160,7 +159,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 		return new AnimObject(pf, this, a, b);
 	}
 
-	protected Relationship execute(final PFlow pf, AnimObject a) throws IOException {
+	protected Relationship execute(final PFlow pf, AnimObject a) throws Throwable {
 		List<Relationship> elements = a.getElements(pf);
 		
 		//System.out.println(Arrays.toString(elements.toArray()));
@@ -189,7 +188,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 	class Calc extends OnQuestion {
 		
         @Override
-        public void act(final PFlow pf) throws IOException {
+        public void act(final PFlow pf) throws Throwable {
         	if (!Utils.results(pf)) {
                 AnimObject x = new AnimObject(pf, MathInstruction.this, pf.getOP());
 	                

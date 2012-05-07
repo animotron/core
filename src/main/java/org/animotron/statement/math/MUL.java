@@ -20,13 +20,13 @@
  */
 package org.animotron.statement.math;
 
-import static org.animotron.expression.JExpression.value;
-
-import java.io.IOException;
-
 import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+
+import static org.animotron.expression.JExpression.value;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
@@ -43,7 +43,7 @@ public class MUL extends MathInstruction {
 		return a; 
 	}
 
-	protected Relationship execute(Number Na, Number Nb) throws IOException {
+	protected Relationship execute(Number Na, Number Nb) throws Throwable {
 		Number result;
 		if ((Na instanceof Long || Na instanceof Integer) 
 				&& (Nb instanceof Long || Nb instanceof Integer)) {

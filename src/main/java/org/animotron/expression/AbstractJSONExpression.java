@@ -34,19 +34,19 @@ public abstract class AbstractJSONExpression extends AbstractExpression {
     protected final String name;
     protected final JsonParser parser;
 
-    public AbstractJSONExpression(JsonParser parser) {
+    public AbstractJSONExpression(JsonParser parser) throws Throwable {
         this(parser, null);
     }
 
-    public AbstractJSONExpression(JsonParser parser, String name) {
+    public AbstractJSONExpression(JsonParser parser, String name) throws Throwable {
         this(new FastGraphBuilder(), parser, name);
     }
 
-    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser) {
+    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser) throws Throwable {
         this(builder, parser, null);
     }
 
-    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser, String name) {
+    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser, String name) throws Throwable {
         super(builder);
         this.name = name;
         this.parser = parser;

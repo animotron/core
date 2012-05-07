@@ -51,7 +51,7 @@ public class ID extends Operator implements Evaluable {
     
     class Calc extends OnQuestion {
     	@Override
-        public void act(final PFlow pf) {
+        public void act(final PFlow pf) throws Throwable {
         	Pipe p = Utils.getByREF(pf);
         	QCAVector v;
         	while ((v = p.take()) != null) {

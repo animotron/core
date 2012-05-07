@@ -34,18 +34,6 @@ public abstract class Expression implements Relationship {
 
     protected abstract Relationship relationship();
 
-    public final static Relationship[] __(Expression... e) {
-        Relationship[] a = new Relationship[e.length];
-        for (int i = 0; i < e.length; i++) {
-            a[i] = __(e[i]);
-        }
-        return a;
-    }
-
-    public final static Relationship __(Expression e) {
-        return e.relationship();
-    }
-
     @Override
 	public GraphDatabaseService getGraphDatabase() {
 		return relationship().getGraphDatabase();

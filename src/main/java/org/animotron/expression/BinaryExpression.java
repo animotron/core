@@ -43,7 +43,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     private File bin;
     private String hash;
 
-    public BinaryExpression(InputStream stream, boolean closeStream) {
+    public BinaryExpression(InputStream stream, boolean closeStream) throws Throwable {
         super(new FastGraphBuilder());
         this.stream = stream;
         this.closeStream = closeStream;

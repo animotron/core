@@ -25,8 +25,6 @@ import org.animotron.expression.AnimoExpression;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.animotron.expression.Expression.__;
-
 /**
  * Repository loader
  * 
@@ -40,8 +38,8 @@ public class ZipBridge extends AbstractZipBridge {
     private ZipBridge(){}
 
     @Override
-    protected void loadEntry(ZipInputStream zis, ZipEntry entry) {
-        __(new AnimoExpression(zis));
+    protected void loadEntry(ZipInputStream zis, ZipEntry entry) throws Throwable {
+        new AnimoExpression(zis);
     }
 
 }

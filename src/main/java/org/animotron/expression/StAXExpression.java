@@ -38,19 +38,19 @@ import java.io.IOException;
  */
 public class StAXExpression extends AbstractStAXExpression {
 
-    public StAXExpression(XMLStreamReader reader) {
+    public StAXExpression(XMLStreamReader reader) throws Throwable {
         super(reader);
     }
 
-    public StAXExpression(XMLStreamReader reader, String name) {
+    public StAXExpression(XMLStreamReader reader, String name) throws Throwable {
         super(reader, name);
     }
 
-    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) {
+    public StAXExpression(GraphBuilder builder, XMLStreamReader reader) throws Throwable {
         super(builder, reader);
     }
 
-    public StAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) {
+    public StAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) throws Throwable {
         super(builder, reader, name);
     }
 

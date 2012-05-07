@@ -42,26 +42,24 @@ public class CurrentSiteTest extends ATest {
     @Test
     public void test() throws Throwable {
 
-    	JExpression.__(
-            new JExpression(
-                _(THE._, "test-service",
-                    _(AN._, "service"),
-                    _(GET._, "server-name"),
-                    _(GET._, "host")
-                )
-            ),
-            new JExpression(
-                _(THE._, "localhost-site",
-                    _(AN._, "site"),
-                    _(AN._, "server-name", value("localhost"))
-                )
-            ),
-            new JExpression(
-                _(THE._, "rest",
-                    _(ANY._, "service",
-                        _(ANY._, "site",
-                            _(WITH._, "server-name", _(GET._, "host"))
-                        )
+        new JExpression(
+            _(THE._, "test-service",
+                _(AN._, "service"),
+                _(GET._, "server-name"),
+                _(GET._, "host")
+            )
+        );
+        new JExpression(
+            _(THE._, "localhost-site",
+                _(AN._, "site"),
+                _(AN._, "server-name", value("localhost"))
+            )
+        );
+        new JExpression(
+            _(THE._, "rest",
+                _(ANY._, "service",
+                    _(ANY._, "site",
+                        _(WITH._, "server-name", _(GET._, "host"))
                     )
                 )
             )

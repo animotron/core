@@ -42,30 +42,28 @@ public class ResourceTest extends ATest {
     @Test
     public void test1() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "service",
-                                _(AN._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ANY._, "resource")
-                        )
+        new JExpression(
+                _(THE._, "service",
+                        _(AN._, "resource")
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root"))
+                )
+        );
+        new JExpression(
+                _(THE._, "not-found-service",
+                        _(AN._, "service"),
+                        _(AN._, "not-found"),
+                        _(AN._, "title", value("404"))
+                )
+        );
+        new JExpression(
+                _(THE._, "rest",
+                        _(ANY._, "resource")
                 )
         );
 
@@ -84,37 +82,35 @@ public class ResourceTest extends ATest {
     @Test
     public void test2() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "service",
-                                _(AN._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service1",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ALL._, "resource")
-                        )
+        new JExpression(
+                _(THE._, "service",
+                        _(AN._, "resource")
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root"))
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service1",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root1"))
+                )
+        );
+        new JExpression(
+                _(THE._, "not-found-service",
+                        _(AN._, "service"),
+                        _(AN._, "not-found"),
+                        _(AN._, "title", value("404"))
+                )
+        );
+        new JExpression(
+                _(THE._, "rest",
+                        _(ALL._, "resource")
                 )
         );
 
@@ -134,36 +130,34 @@ public class ResourceTest extends ATest {
     @Test
     public void test3() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "service",
-                                _(AN._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service1",
-                                _(AN._, "root-service"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ALL._, "resource")
-                        )
+        new JExpression(
+                _(THE._, "service",
+                        _(AN._, "resource")
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root"))
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service1",
+                        _(AN._, "root-service"),
+                        _(AN._, "title", value("root1"))
+                )
+        );
+        new JExpression(
+                _(THE._, "not-found-service",
+                        _(AN._, "service"),
+                        _(AN._, "not-found"),
+                        _(AN._, "title", value("404"))
+                )
+        );
+        new JExpression(
+                _(THE._, "rest",
+                        _(ALL._, "resource")
                 )
         );
 
@@ -184,25 +178,23 @@ public class ResourceTest extends ATest {
     @Test
     public void test4() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ANY._, "service")
-                        )
+        new JExpression(
+                _(THE._, "root-service",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root"))
+                )
+        );
+        new JExpression(
+                _(THE._, "not-found-service",
+                        _(AN._, "service"),
+                        _(AN._, "not-found"),
+                        _(AN._, "title", value("404"))
+                )
+        );
+        new JExpression(
+                _(THE._, "rest",
+                        _(ANY._, "service")
                 )
         );
 
@@ -221,32 +213,30 @@ public class ResourceTest extends ATest {
     @Test
     public void test5() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service1",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ALL._, "service")
-                        )
+        new JExpression(
+                _(THE._, "root-service",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root"))
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service1",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root1"))
+                )
+        );
+        new JExpression(
+                _(THE._, "not-found-service",
+                        _(AN._, "service"),
+                        _(AN._, "not-found"),
+                        _(AN._, "title", value("404"))
+                )
+        );
+        new JExpression(
+                _(THE._, "rest",
+                        _(ALL._, "service")
                 )
         );
 
@@ -265,31 +255,29 @@ public class ResourceTest extends ATest {
     @Test
     public void test6() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(THE._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "root-service1",
-                                _(AN._, "root-service"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(THE._, "rest",
-                                _(ALL._, "service")
-                        )
+        new JExpression(
+                _(THE._, "root-service",
+                        _(AN._, "service"),
+                        _(AN._, "root"),
+                        _(AN._, "title", value("root"))
+                )
+        );
+        new JExpression(
+                _(THE._, "root-service1",
+                        _(AN._, "root-service"),
+                        _(AN._, "title", value("root1"))
+                )
+        );
+        new JExpression(
+                _(THE._, "not-found-service",
+                        _(AN._, "service"),
+                        _(AN._, "not-found"),
+                        _(AN._, "title", value("404"))
+                )
+        );
+        new JExpression(
+                _(THE._, "rest",
+                        _(ALL._, "service")
                 )
         );
 

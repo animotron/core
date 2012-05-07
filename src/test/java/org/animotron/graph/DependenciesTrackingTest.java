@@ -27,7 +27,6 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -39,13 +38,13 @@ public class DependenciesTrackingTest extends ATest {
     @Test
     public void test_00() throws Throwable {
 
-        __(
-	        "the goods word \"goods\".",
-	        "the qty (part (number) (UoM)).",
-	        "the price (part (number) (currency) (UoM)).",
-	        "the cost (part (number) (currency)).",
-	        
-	        "the item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+        testAnimo(
+                "the goods word \"goods\".",
+                "the qty (part (number) (UoM)).",
+                "the price (part (number) (currency) (UoM)).",
+                "the cost (part (number) (currency)).",
+
+                "the item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
         );
 
         assertAnimoResult(
@@ -53,8 +52,8 @@ public class DependenciesTrackingTest extends ATest {
             "cost 10 (USD)."
         );
 
-        __(
-	        "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+        testAnimo(
+                "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
         );
 
         assertAnimoResult(
@@ -66,13 +65,13 @@ public class DependenciesTrackingTest extends ATest {
     @Test
     public void test_01() throws Throwable {
 
-        __(
-	        "the goods word \"goods\".",
-	        "the qty (part (number) (UoM)).",
-	        "the price (part (number) (currency) (UoM)).",
-	        "the cost (part (number) (currency)).",
-	        
-	        "the item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+        testAnimo(
+                "the goods word \"goods\".",
+                "the qty (part (number) (UoM)).",
+                "the price (part (number) (currency) (UoM)).",
+                "the cost (part (number) (currency)).",
+
+                "the item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
         );
 
         assertCachedAnimoResult(
@@ -80,8 +79,8 @@ public class DependenciesTrackingTest extends ATest {
             "cost 10 (USD)."
         );
 
-        __(
-	        "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+        testAnimo(
+                "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
         );
 
         assertCachedAnimoResult(
@@ -96,13 +95,13 @@ public class DependenciesTrackingTest extends ATest {
         testAnimo("the item1 cost * 10 (USD).");
         assertAnimoResult("get cost item1", "cost * 10 (USD)");
 
-        __(
-	        "the goods word \"goods\".",
-	        "the qty (part (number) (UoM)).",
-	        "the price (part (number) (currency) (UoM)).",
-	        "the cost (part (number) (currency)).",
-	        
-	        "the item1 (goods item) (qty * (1) (kg)) (cost * (10) (USD))."
+        testAnimo(
+                "the goods word \"goods\".",
+                "the qty (part (number) (UoM)).",
+                "the price (part (number) (currency) (UoM)).",
+                "the cost (part (number) (currency)).",
+
+                "the item1 (goods item) (qty * (1) (kg)) (cost * (10) (USD))."
         );
 
 
@@ -116,8 +115,8 @@ public class DependenciesTrackingTest extends ATest {
             "* 10 (USD)."
 		);
 
-        __(
-	        "the item2 (goods item) (qty * (1) (kg)) (cost * (5) (USD))."
+        testAnimo(
+                "the item2 (goods item) (qty * (1) (kg)) (cost * (5) (USD))."
         );
 
         assertCachedAnimoResult(

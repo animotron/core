@@ -20,24 +20,15 @@
  */
 package org.animotron.synchro;
 
-import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.graph.AnimoGraph.startDB;
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.RelationshipTypes.REV;
-import static org.animotron.synchro.Synchro._;
-import static org.animotron.utils.MessageDigester.byteArrayToHex;
-
 import org.animotron.ATest;
-import org.animotron.statement.operator.THE;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
 import org.junit.Before;
 import org.junit.Test;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+
+import static org.animotron.graph.AnimoGraph.startDB;
 
 /**
  * @author <a href="mailto:amir.akhmedov@gmail.com">Amir Akhmedov</a>

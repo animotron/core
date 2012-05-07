@@ -73,7 +73,7 @@ public class StreamGraphBuilder extends GraphBuilder {
 	}
 
     @Override
-    public Relationship relationship() {
+    protected Relationship relationship() {
         return relationship;
     }
 

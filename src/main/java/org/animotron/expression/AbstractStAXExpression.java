@@ -39,19 +39,19 @@ public abstract class AbstractStAXExpression extends AbstractExpression {
     protected final String name;
     protected final XMLStreamReader reader;
 
-    public AbstractStAXExpression(XMLStreamReader reader) {
+    public AbstractStAXExpression(XMLStreamReader reader) throws Throwable {
         this(reader, null);
     }
 
-    public AbstractStAXExpression(XMLStreamReader reader, String name) {
+    public AbstractStAXExpression(XMLStreamReader reader, String name) throws Throwable {
         this(new StreamGraphBuilder(), reader, name);
     }
 
-    public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader) {
+    public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader) throws Throwable {
         this(builder, reader, null);
     }
 
-    public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) {
+    public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) throws Throwable {
         super(builder);
         this.name = name;
         this.reader = reader;

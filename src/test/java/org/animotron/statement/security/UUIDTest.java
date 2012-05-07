@@ -26,8 +26,6 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Test;
 
-import java.io.IOException;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -35,7 +33,7 @@ import java.io.IOException;
  */
 public class UUIDTest extends ATest {
     
-    public void test(String expr) throws IOException {
+    public void test(String expr) throws Throwable {
         String res = CachedSerializer.STRING.serialize(new AnimoExpression(expr));
         Assert.assertEquals(res.replaceAll("[0-9a-f]", "x"), "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
     }

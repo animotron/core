@@ -20,6 +20,7 @@
  */
 package org.animotron.graph.serializer;
 
+import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
@@ -30,10 +31,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
-
-import static org.animotron.graph.Properties.HASH;
 import static org.animotron.expression.JExpression.*;
+import static org.animotron.graph.Properties.HASH;
 
 
 /**
@@ -63,14 +62,14 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("c"))));
+        new JExpression(_(THE._, "b", value("c")));
         test("\\ b", "<c/>");
         test("the a \\ b", "<c/>");
     }
 
     @Test
     public void test_03() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("c"))));
+        new JExpression(_(THE._, "b", value("c")));
         test("\\ an b", "<c/>");
         test("the a \\ an b", "<c/>");
     }
@@ -95,36 +94,30 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Throwable {
-        __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", value("e")))
-        );
+        new JExpression(_(THE._, "b", value("b")));
+        new JExpression(_(THE._, "c", value("c")));
+        new JExpression(_(THE._, "d", value("d")));
+        new JExpression(_(THE._, "e", value("e")));
         test("\\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
         test("the a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_08() throws Throwable {
-        __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", value("e")))
-        );
+        new JExpression(_(THE._, "b", value("b")));
+        new JExpression(_(THE._, "c", value("c")));
+        new JExpression(_(THE._, "d", value("d")));
+        new JExpression(_(THE._, "e", value("e")));
         test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
         test("the a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
     public void test_09() throws Throwable {
-        __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
-        );
+        new JExpression(_(THE._, "b", value("b")));
+        new JExpression(_(THE._, "c", value("c")));
+        new JExpression(_(THE._, "d", value("d")));
+        new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))));
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
         test("the a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
@@ -141,7 +134,7 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0C() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("path"))));
+        new JExpression(_(THE._, "b", value("path")));
         test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 

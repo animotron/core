@@ -35,7 +35,7 @@ import java.io.IOException;
  */
 public abstract class AbstractBinaryExpression extends AbstractExpression {
 
-    public AbstractBinaryExpression(GraphBuilder builder) {
+    public AbstractBinaryExpression(GraphBuilder builder) throws Throwable {
         super(builder);
     }
 

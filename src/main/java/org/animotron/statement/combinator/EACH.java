@@ -98,7 +98,7 @@ public class EACH extends Combinator {
 	}
 
 	@SuppressWarnings("unused")
-	private void processByBuildSubgraph(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
+	private void processByBuildSubgraph(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) throws Throwable {
 		if (pos > sets.size()) {
 
             Relationship r = res[res.length-1];

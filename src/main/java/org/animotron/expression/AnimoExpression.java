@@ -45,38 +45,30 @@ import java.util.Stack;
  */
 public class AnimoExpression extends AbstractExpression {
 
-    public final static Relationship[] __(String... e) {
-        Relationship[] a = new Relationship[e.length];
-        for (int i = 0; i < e.length; i++) {
-            a[i] = __(new AnimoExpression(e[i]));
-        }
-        return a;
-    }
-
 	private Reader reader;
     private boolean comma = false;
 
-    public AnimoExpression(InputStream stream) {
+    public AnimoExpression(InputStream stream) throws Throwable {
         this(new InputStreamReader(stream));
     }
 
-    public AnimoExpression(GraphBuilder builder, InputStream stream) {
+    public AnimoExpression(GraphBuilder builder, InputStream stream) throws Throwable {
         this(builder, new InputStreamReader(stream));
     }
 
-    public AnimoExpression(String str) {
+    public AnimoExpression(String str) throws Throwable {
         this(new StringReader(str));
     }
 
-    public AnimoExpression(GraphBuilder builder, String str) {
+    public AnimoExpression(GraphBuilder builder, String str) throws Throwable {
         this(builder, new StringReader(str));
     }
 
-    public AnimoExpression(Reader reader) {
+    public AnimoExpression(Reader reader) throws Throwable {
         this(new FastGraphBuilder(), reader);
     }
 
-    public AnimoExpression(GraphBuilder builder, Reader reader) {
+    public AnimoExpression(GraphBuilder builder, Reader reader) throws Throwable {
         super(builder);
         this.reader = reader;
     }
