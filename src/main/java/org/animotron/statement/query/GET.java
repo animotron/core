@@ -287,18 +287,18 @@ public class GET extends AbstractQuery implements Shift {
 						}
 					}
 					
-					t = v.getUnrelaxedAnswer();
-					if (t != null && !t.equals(v.getQuestion())) {
-						if (! t.isType(AN._))
-							getOutgoingReferences(pf, v, t, t.getStartNode(), newREFs, visitedREFs);
-						
-						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
-					}
-
-					t = v.getQuestion();
-					if (t != null && t.isType(THE._)) {
-						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
-					}
+//					t = v.getUnrelaxedAnswer();
+//					if (t != null && !t.equals(v.getQuestion())) {
+//						if (! t.isType(AN._))
+//							getOutgoingReferences(pf, v, t, t.getStartNode(), newREFs, visitedREFs);
+//						
+//						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
+//					}
+//
+//					t = v.getQuestion();
+//					if (t != null && t.isType(THE._)) {
+//						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
+//					}
 				}
 	
 				if (newREFs.size() == 0) return false;
