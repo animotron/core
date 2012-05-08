@@ -46,9 +46,9 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-    protected void testAnimo(String... s) throws Throwable {
+    protected void animo(String... s) throws Throwable {
         for (String i : s) {
-            testAnimo(i);
+            new AnimoExpression(i);
         }
     }
 

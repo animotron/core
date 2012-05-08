@@ -29,7 +29,7 @@ import org.codehaus.jackson.JsonParser;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractJSONExpression extends AbstractExpression {
+public abstract class AbstractJSONExpression extends Expression {
 
     protected final String name;
     protected final JsonParser parser;

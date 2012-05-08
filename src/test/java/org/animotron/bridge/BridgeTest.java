@@ -70,6 +70,9 @@ public class BridgeTest extends ATest {
         @Override
         protected void loadEntry(ZipInputStream zis, final ZipEntry entry) throws Throwable {
             new BinaryExpression(zis, false) {
+                void BinaryExpression() throws Throwable {
+                    relationship = builder.build(this);
+                }
                 @Override
                 protected String id () {
                     return entry.getName();

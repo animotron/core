@@ -87,7 +87,7 @@ public class CurrentWebFrameworkTest extends ATest {
     @Test
     public void test_00() throws Throwable {
 
-        testAnimo(
+        animo(
                 "the site",
                 "the not-found-error",
                 "the default-not-found",
@@ -199,7 +199,7 @@ public class CurrentWebFrameworkTest extends ATest {
     @Test
     public void test_01() throws Throwable {
 
-        testAnimo(
+        animo(
                 "the site (not-found-error default-not-found) (xxx xxx-service)",
 
                 "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
@@ -274,7 +274,7 @@ public class CurrentWebFrameworkTest extends ATest {
     @Test
     public void test_02() throws Throwable {
 
-        testAnimo(
+        animo(
                 "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
                 "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
 

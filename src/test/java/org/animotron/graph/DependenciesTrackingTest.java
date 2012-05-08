@@ -38,7 +38,7 @@ public class DependenciesTrackingTest extends ATest {
     @Test
     public void test_00() throws Throwable {
 
-        testAnimo(
+        animo(
                 "the goods word \"goods\".",
                 "the qty (part (number) (UoM)).",
                 "the price (part (number) (currency) (UoM)).",
@@ -52,7 +52,7 @@ public class DependenciesTrackingTest extends ATest {
             "cost 10 (USD)."
         );
 
-        testAnimo(
+        animo(
                 "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
         );
 
@@ -65,7 +65,7 @@ public class DependenciesTrackingTest extends ATest {
     @Test
     public void test_01() throws Throwable {
 
-        testAnimo(
+        animo(
                 "the goods word \"goods\".",
                 "the qty (part (number) (UoM)).",
                 "the price (part (number) (currency) (UoM)).",
@@ -79,7 +79,7 @@ public class DependenciesTrackingTest extends ATest {
             "cost 10 (USD)."
         );
 
-        testAnimo(
+        animo(
                 "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
         );
 
@@ -95,7 +95,7 @@ public class DependenciesTrackingTest extends ATest {
         testAnimo("the item1 cost * 10 (USD).");
         assertAnimoResult("get cost item1", "cost * 10 (USD)");
 
-        testAnimo(
+        animo(
                 "the goods word \"goods\".",
                 "the qty (part (number) (UoM)).",
                 "the price (part (number) (currency) (UoM)).",
@@ -115,7 +115,7 @@ public class DependenciesTrackingTest extends ATest {
             "* 10 (USD)."
 		);
 
-        testAnimo(
+        animo(
                 "the item2 (goods item) (qty * (1) (kg)) (cost * (5) (USD))."
         );
 

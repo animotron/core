@@ -28,7 +28,7 @@ public class WhatISTest extends ATest {
 
     @Test
     public void test_03() throws Throwable {
-        testAnimo("the a x.", "the b y.", "the c b a.");
+        animo("the a x.", "the b y.", "the c b a.");
 
         assertAnimoResult("what-is get b c", "y.");
 
@@ -37,21 +37,21 @@ public class WhatISTest extends ATest {
 
     @Test
     public void test_04() throws Throwable {
-        testAnimo("the a x.", "the b y.", "the c part (a) (b).");
+        animo("the a x.", "the b y.", "the c part (a) (b).");
 
         assertAnimoResult("each (get part c) (what-is this part)", "x. y.");
     }
 
     @Test
     public void test_05() throws Throwable {
-        testAnimo("the a x.", "the b y.", "the c part (a) (b).", "the part foo.");
+        animo("the a x.", "the b y.", "the c part (a) (b).", "the part foo.");
 
         assertAnimoResult("each (get part c) (what-is this part)", "x. foo. y. foo.");
     }
 
     @Test
     public void test_06() throws Throwable {
-        testAnimo("the foo bar.", "the a bar x.");
+        animo("the foo bar.", "the a bar x.");
 
         assertAnimoResult("get (what-is foo) (a)", "bar x.");
     }

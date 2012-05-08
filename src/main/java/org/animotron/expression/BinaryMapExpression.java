@@ -37,6 +37,7 @@ public abstract class BinaryMapExpression extends AbstractBinaryExpression {
     public BinaryMapExpression(File file) throws Throwable {
         super(new FastGraphBuilder());
         this.file = file;
+        relationship = builder.build(this);
     }
 
     @Override

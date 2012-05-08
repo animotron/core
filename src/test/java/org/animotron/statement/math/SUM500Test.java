@@ -21,9 +21,8 @@
 package org.animotron.statement.math;
 
 import org.animotron.ATest;
-import org.animotron.expression.AbstractExpression;
-import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.statement.operator.AN;
@@ -46,7 +45,7 @@ public class SUM500Test extends ATest {
 	public void test_00() throws Throwable {
         long t;
         t = currentTimeMillis();
-        Relationship e = new AbstractExpression(new FastGraphBuilder()) {
+        Relationship e = new Expression(new FastGraphBuilder()) {
             @Override
             public void build() throws Throwable {
                 builder.start(AN._);

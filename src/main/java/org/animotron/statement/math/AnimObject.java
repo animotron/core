@@ -21,7 +21,7 @@
 package org.animotron.statement.math;
 
 import javolution.util.FastList;
-import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.Order;
@@ -51,33 +51,36 @@ import static org.animotron.expression.JExpression.value;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class AnimObject extends AbstractExpression {
+public class AnimObject extends Expression {
 	
 	protected static Relationship ONE;
 
+	protected static AnimObject PLUS_ONE;
+	protected static AnimObject MINUS_ONE;
+	
     static {
         try {
             ONE = new JExpression(value(Long.valueOf(1)));
+            PLUS_ONE = new AnimObject(SUM._, ONE);
+            MINUS_ONE = new AnimObject(SUB._, ONE);
         } catch (Throwable t) {
             t.printStackTrace();
         }
     }
-	
-	protected static AnimObject PLUS_ONE = new AnimObject(SUM._, ONE);
-	protected static AnimObject MINUS_ONE = new AnimObject(SUB._, ONE);
-	
+
 	PFlow pf = null;
 	List<Relationship> elements = null;
     MathInstruction op = null;
     Relationship result = null;
 
-	private AnimObject(MathInstruction op, Relationship r) {
+	private AnimObject(MathInstruction op, Relationship r) throws Throwable {
         super(r);
         this.op = op;
         result = r;
+        relationship = builder.build(this);
 	}
 
-    public AnimObject(PFlow pf, MathInstruction op, Relationship r) {
+    public AnimObject(PFlow pf, MathInstruction op, Relationship r) throws Throwable {
         super(r);
         this.op = op;
         this.pf = pf;
@@ -88,6 +91,7 @@ public class AnimObject extends AbstractExpression {
 		this.elements = elements;
         this.op = op;
         this.pf = pf;
+        relationship = builder.build(this);
 	}
 
 	public AnimObject(PFlow pf, MathInstruction op, Relationship... elements) throws Throwable {
@@ -98,6 +102,7 @@ public class AnimObject extends AbstractExpression {
         }
         this.op = op;
         this.pf = pf;
+        relationship = builder.build(this);
 	}
 
 	private boolean check(List<Relationship> elements, Relationship r) throws IOException {
@@ -148,7 +153,7 @@ public class AnimObject extends AbstractExpression {
 
 	protected List<Relationship> getElements(final PFlow pf) throws IOException {
 		if (elements == null)
-			elements = getElements(pf, super.relationship());
+			elements = getElements(pf, this);
 			
 		return elements;
 	}

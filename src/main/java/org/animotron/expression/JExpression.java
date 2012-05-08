@@ -43,7 +43,7 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class JExpression extends AbstractExpression {
+public class JExpression extends Expression {
 	
 	Object[][] e;
 	

@@ -33,7 +33,7 @@ import java.io.IOException;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public abstract class AbstractBinaryExpression extends AbstractExpression {
+public abstract class AbstractBinaryExpression extends Expression {
 
     public AbstractBinaryExpression(GraphBuilder builder) throws Throwable {
         super(builder);

@@ -90,7 +90,7 @@ public class WordTest extends ATest {
 
 	@Test
 	public void test_02() throws Throwable {
-        testAnimo(
+        animo(
                 "the test1 (test) (word \"test1\").",
                 "the test2 (test) (word \"test2\").",
                 "the pest3 (test) (word \"pest3\")."
@@ -106,7 +106,7 @@ public class WordTest extends ATest {
 
 	@Test
 	public void test_10() throws Throwable {
-        testAnimo(
+        animo(
                 "the test1 (word \"test1\")."
         );
         

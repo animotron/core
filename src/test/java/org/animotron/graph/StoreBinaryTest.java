@@ -124,6 +124,7 @@ public class StoreBinaryTest extends ATest {
         public TestExpression(InputStream stream, String path) throws Throwable {
             super(stream, true);
             this.path = path;
+            relationship = builder.build(this);
         }
 
         @Override
