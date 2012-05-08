@@ -50,6 +50,7 @@ public abstract class AbstractJSONExpression extends Expression {
         super(builder);
         this.name = name;
         this.parser = parser;
+        relationship = builder.relationship();
     }
 
 }
