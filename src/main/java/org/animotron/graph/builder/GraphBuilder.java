@@ -21,7 +21,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.expression.Expression;
+import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
@@ -89,7 +89,7 @@ public abstract class GraphBuilder {
         }
     }
 
-    public abstract Relationship relationship();
+    protected abstract Relationship relationship();
 
     protected abstract void fail(Throwable t);
 
@@ -177,7 +177,7 @@ public abstract class GraphBuilder {
         return stack.peek();
     }
 
-    public final Relationship build(Expression exp) throws Throwable {
+    public final Relationship build(AbstractExpression exp) throws Throwable {
         order = 0;
         catcher = Manipulators.getCatcher();
         tx = beginTx();
@@ -201,8 +201,8 @@ public abstract class GraphBuilder {
             throw t;
         } finally {
             catcher.push();
+            return relationship();
         }
-        return relationship();
     }
 
     protected final void step() {

@@ -236,7 +236,7 @@ public class MathTest extends ATest {
 
     @Test
 	public void test_30() throws Throwable {
-        animo(
+        testAnimo(
                 "the a 1",
                 "the b 2",
                 "the c 3",
@@ -248,7 +248,7 @@ public class MathTest extends ATest {
 
     @Test
 	public void test_31() throws Throwable {
-        animo(
+        testAnimo(
                 "the a (z) (1)",
                 "the b (z) (2)",
                 "the c (z) (3)",
@@ -259,7 +259,7 @@ public class MathTest extends ATest {
 
     @Test
 	public void test_32() throws Throwable {
-        animo(
+        testAnimo(
                 "the a x 1",
                 "the b x 2",
                 "the c x 3",
@@ -270,7 +270,7 @@ public class MathTest extends ATest {
 
     @Test
 	public void test_33() throws Throwable {
-        animo(
+        testAnimo(
                 "the a (z) (x 1)",
                 "the b (z) (x 2)",
                 "the c (z) (x 3)",

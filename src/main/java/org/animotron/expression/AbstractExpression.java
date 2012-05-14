@@ -20,36 +20,34 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
-import org.codehaus.jackson.JsonParser;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractJSONExpression extends AbstractExpression {
+public abstract class AbstractExpression extends Expression {
 
-    protected final String name;
-    protected final JsonParser parser;
+	private Relationship relationship = null;
+    protected final GraphBuilder builder;
 
-    public AbstractJSONExpression(JsonParser parser) throws Throwable {
-        this(parser, null);
+    public AbstractExpression(GraphBuilder builder) throws Throwable {
+        this.builder = builder;
+        relationship = builder.build(this);
     }
 
-    public AbstractJSONExpression(JsonParser parser, String name) throws Throwable {
-        this(new FastGraphBuilder(), parser, name);
+    public AbstractExpression(Relationship r) {
+        builder = null;
+        relationship = r;
     }
 
-    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser) throws Throwable {
-        this(builder, parser, null);
-    }
+    public abstract void build() throws Throwable;
 
-    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser, String name) throws Throwable {
-        super(builder);
-        this.name = name;
-        this.parser = parser;
+    @Override
+    protected synchronized Relationship relationship() {
+        return relationship;
     }
 
 }

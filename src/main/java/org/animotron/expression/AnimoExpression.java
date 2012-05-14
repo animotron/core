@@ -43,7 +43,7 @@ import java.util.Stack;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class AnimoExpression extends Expression {
+public class AnimoExpression extends AbstractExpression {
 
 	private Reader reader;
     private boolean comma = false;
@@ -71,7 +71,6 @@ public class AnimoExpression extends Expression {
     public AnimoExpression(GraphBuilder builder, Reader reader) throws Throwable {
         super(builder);
         this.reader = reader;
-        relationship = builder.build(this);
     }
 
     private StringBuilder s = new StringBuilder();

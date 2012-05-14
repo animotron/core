@@ -87,7 +87,7 @@ public class FastGraphBuilder extends GraphBuilder {
     }
 
     @Override
-    public Relationship relationship() {
+    protected Relationship relationship() {
         return relationship;
     }
 

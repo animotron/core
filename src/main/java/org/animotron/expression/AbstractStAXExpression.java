@@ -34,7 +34,7 @@ import javax.xml.stream.XMLStreamReader;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public abstract class AbstractStAXExpression extends Expression {
+public abstract class AbstractStAXExpression extends AbstractExpression {
 
     protected final String name;
     protected final XMLStreamReader reader;
@@ -55,7 +55,6 @@ public abstract class AbstractStAXExpression extends Expression {
         super(builder);
         this.name = name;
         this.reader = reader;
-        relationship = builder.build(this);
     }
 
     protected String qname(QName qname) {
