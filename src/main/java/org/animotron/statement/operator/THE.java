@@ -56,7 +56,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 //        }
 //    }
 //
-//    public static Relationship testAnimo(String name) {
+//    public static Relationship __(String name) {
 //        try {
 //            return THE._.getOrCreate(name, true);
 //        } catch (Throwable t) {

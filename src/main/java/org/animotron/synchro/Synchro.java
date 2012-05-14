@@ -31,6 +31,7 @@ import java.io.IOException;
 
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.RelationshipTypes.REV;
+import static org.animotron.expression.Expression.__;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
 /**
@@ -56,12 +57,8 @@ public class Synchro {
 					System.out.println("channel1 received msg from " + msg.getSrc() + ": " + msg.getObject());
 
 					if(channel1.getAddress() != msg.getSrc()) {
-                        try {
-                            checkInstance((String)msg.getObject());
-                        } catch (Throwable t) {
-                            t.printStackTrace();
-                        }
-                    }
+						checkInstance((String)msg.getObject());
+					}
 				}
 				@Override
 				public void viewAccepted(View new_view) {
@@ -87,7 +84,7 @@ public class Synchro {
         }
     }
 
-	private void checkInstance(String message) throws Throwable {
+	private void checkInstance(String message) {
 		String synchPreviousHash = message.substring(0, message.indexOf("|"));
 		synchPreviousHash = synchPreviousHash.substring(synchPreviousHash.indexOf(":") + 1);
 
@@ -120,7 +117,7 @@ public class Synchro {
 
 		if(synchPreviousHash.equals(instancePreviousHash) || synchPreviousHash == "" || instancePreviousHash == "") {
 			if (instance == null || synchHash != instanceHash) {
-	            new AnimoExpression(synchContent);
+	            __(new AnimoExpression(synchContent));
 			}
 		}
 	}

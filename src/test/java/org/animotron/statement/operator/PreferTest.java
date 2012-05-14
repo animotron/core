@@ -27,6 +27,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,11 +40,13 @@ public class PreferTest extends ATest {
     @Test
     public void test_0() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "X"))
+            )
         );
 
         JExpression test = new JExpression(
@@ -56,11 +59,13 @@ public class PreferTest extends ATest {
     @Test
     public void test_01() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "X"))
+            )
         );
 
         JExpression test = new JExpression(
@@ -73,11 +78,13 @@ public class PreferTest extends ATest {
     @Test
     public void test_02() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "X"))
+            )
         );
 
         JExpression test = new JExpression(
@@ -90,11 +97,13 @@ public class PreferTest extends ATest {
     @Test
     public void test_03() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "X"))
+            )
         );
 
         JExpression test = new JExpression(

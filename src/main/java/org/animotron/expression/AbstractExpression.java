@@ -33,9 +33,8 @@ public abstract class AbstractExpression extends Expression {
 	private Relationship relationship = null;
     protected final GraphBuilder builder;
 
-    public AbstractExpression(GraphBuilder builder) throws Throwable {
+    public AbstractExpression(GraphBuilder builder) {
         this.builder = builder;
-        relationship = builder.build(this);
     }
 
     public AbstractExpression(Relationship r) {
@@ -47,6 +46,15 @@ public abstract class AbstractExpression extends Expression {
 
     @Override
     protected synchronized Relationship relationship() {
+        if (relationship == null) {
+            try {
+                builder.build(this);
+                relationship = builder.relationship();
+            } catch (Throwable t) {
+                t.printStackTrace();
+                throw new RuntimeException(t);
+            }
+        }
         return relationship;
     }
 

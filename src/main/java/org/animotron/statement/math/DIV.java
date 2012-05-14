@@ -20,12 +20,14 @@
  */
 package org.animotron.statement.math;
 
+import static org.animotron.expression.JExpression.value;
+
+import java.io.IOException;
+
 import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.expression.JExpression.value;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
@@ -38,7 +40,7 @@ public class DIV extends MathInstruction {
 
 	private DIV() { super("/"); }
 
-	protected Relationship execute(final PFlow pf, Relationship a) throws Throwable {
+	protected Relationship execute(final PFlow pf, Relationship a) throws IOException {
 		if (a.isType(VALUE._)) {
 			Number Na = VALUE.number(VALUE._.reference(a));
 
@@ -51,7 +53,7 @@ public class DIV extends MathInstruction {
 		return new AnimObject(pf, DIV._, a);
 	}
 
-	protected Relationship execute(Number Na, Number Nb) throws Throwable {
+	protected Relationship execute(Number Na, Number Nb) throws IOException {
 		Number result;
 		if ((Na instanceof Long || Na instanceof Integer) 
 				&& (Nb instanceof Long || Nb instanceof Integer)) {
@@ -69,5 +71,4 @@ public class DIV extends MathInstruction {
 		
 		return new JExpression(value(result));
 	}
-
 }

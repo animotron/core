@@ -47,11 +47,11 @@ public class JExpression extends AbstractExpression {
 	
 	Object[][] e;
 	
-    public JExpression(Object[]... e) throws Throwable {
+    public JExpression(Object[]... e) {
         this(new FastGraphBuilder(), e);
     }
 
-    public JExpression(GraphBuilder builder, Object[]... e) throws Throwable {
+    public JExpression(GraphBuilder builder, Object[]... e) {
         super(builder);
         this.e = e;
     }

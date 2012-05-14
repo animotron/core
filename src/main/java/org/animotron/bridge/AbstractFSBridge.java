@@ -21,6 +21,7 @@
 package org.animotron.bridge;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Repository loader
@@ -30,11 +31,11 @@ import java.io.File;
  */
 public abstract class AbstractFSBridge {
 
-    public void load(String path) throws Throwable {
+    public void load(String path) throws IOException {
         load(new File(path));
     }
 
-    public void load(File path) throws Throwable {
+    public void load(File path) throws IOException {
         if (!path.exists()) {
             return;
         }
@@ -45,7 +46,7 @@ public abstract class AbstractFSBridge {
         }
     }
 
-    private void loadDir (File path) throws Throwable {
+    private void loadDir (File path) throws IOException {
         for (File file : path.listFiles()) {
             if (file.isDirectory()) {
                 loadDir(file);
@@ -55,6 +56,6 @@ public abstract class AbstractFSBridge {
         }
     }
 
-    abstract protected void loadFile(File file) throws Throwable;
+    abstract protected void loadFile(File file) throws IOException;
 
 }

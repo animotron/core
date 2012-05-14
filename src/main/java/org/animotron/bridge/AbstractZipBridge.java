@@ -23,6 +23,7 @@ package org.animotron.bridge;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -36,11 +37,11 @@ public abstract class AbstractZipBridge {
 
 	static final int BUFFER = 2048;
 
-    public void load(String path) throws Throwable {
+    public void load(String path) throws IOException {
         load(new File(path));
     }
 
-	public void load(File file) throws Throwable {
+	public void load(File file) throws IOException {
 		if (!file.exists()) {
 			return;
 		}
@@ -53,6 +54,6 @@ public abstract class AbstractZipBridge {
 		zis.close();
 	}
 
-    protected abstract void loadEntry(ZipInputStream zis, ZipEntry entry) throws Throwable;
+    protected abstract void loadEntry(ZipInputStream zis, ZipEntry entry);
 
 }

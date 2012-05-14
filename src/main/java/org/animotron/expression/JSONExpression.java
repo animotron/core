@@ -38,19 +38,19 @@ import static org.codehaus.jackson.JsonToken.FIELD_NAME;
  */
 public class JSONExpression extends AbstractJSONExpression {
 
-    public JSONExpression(JsonParser parser) throws Throwable {
+    public JSONExpression(JsonParser parser) {
         super(parser);
     }
 
-    public JSONExpression(JsonParser parser, String name) throws Throwable {
+    public JSONExpression(JsonParser parser, String name) {
         super(parser, name);
     }
 
-    public JSONExpression(GraphBuilder builder, JsonParser parser) throws Throwable {
+    public JSONExpression(GraphBuilder builder, JsonParser parser) {
         super(builder, parser);
     }
 
-    public JSONExpression(GraphBuilder builder, JsonParser parser, String name) throws Throwable {
+    public JSONExpression(GraphBuilder builder, JsonParser parser, String name) {
         super(builder, parser, name);
     }
 

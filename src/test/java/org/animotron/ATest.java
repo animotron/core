@@ -46,13 +46,7 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-    protected void testAnimo(String... s) throws Throwable {
-        for (String i : s) {
-            testAnimo(i);
-        }
-    }
-
-    protected AnimoExpression testAnimo(String exp) throws Throwable {
+	protected AnimoExpression testAnimo(String exp) throws Throwable {
         return testAnimo(exp, exp);
     }
 
@@ -129,7 +123,7 @@ public abstract class ATest {
         System.out.println();
     }
 
-    protected void assertAnimoResult(String op, String expected) throws Throwable {
+    protected void assertAnimoResult(String op, String expected) throws IOException {
         assertAnimoResult(new AnimoExpression(op), expected, false);
     }
 
@@ -150,7 +144,7 @@ public abstract class ATest {
         System.out.println();
     }
     
-    protected void assertAnimoResult(String op, String... expected) throws Throwable {
+    protected void assertAnimoResult(String op, String... expected) throws IOException {
         assertAnimoResult(new AnimoExpression(op), expected);
     }
 
@@ -171,7 +165,7 @@ public abstract class ATest {
     		Assert.fail("Result contain unmatched part '"+result+"'");
     }
     
-    protected void assertAnimoResultOneStep(String op, String expected) throws Throwable {
+    protected void assertAnimoResultOneStep(String op, String expected) throws IOException {
     	assertAnimoResultOneStep(new AnimoExpression(op), expected);
     }
 
@@ -228,7 +222,7 @@ public abstract class ATest {
         if (messagers) System.out.println();
     }
 
-    protected void assertStringResult(String op, String expected) throws Throwable, InterruptedException {
+    protected void assertStringResult(String op, String expected) throws IOException, InterruptedException {
     	assertStringResult(new AnimoExpression(op), expected, true);
     }
 

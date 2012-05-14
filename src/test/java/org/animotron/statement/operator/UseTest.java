@@ -28,6 +28,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,8 +40,10 @@ public class UseTest extends ATest {
     @Test
     public void any_use() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            )
         );
 
         JExpression x = new JExpression(
@@ -52,11 +55,13 @@ public class UseTest extends ATest {
     @Test
     public void an_any_use() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "q", _(ANY._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "q", _(ANY._, "X"))
+            )
         );
 
         JExpression x = new JExpression(
@@ -68,11 +73,13 @@ public class UseTest extends ATest {
     @Test
     public void all_use() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "X"))
+            )
         );
 
         JExpression x = new JExpression(
@@ -84,14 +91,16 @@ public class UseTest extends ATest {
     @Test
     public void an_all_use() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "q", _(ALL._, "X"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "q", _(ALL._, "X"))
+            )
         );
 
         JExpression x = new JExpression(
@@ -103,14 +112,16 @@ public class UseTest extends ATest {
     @Test
     public void cross_use_case() throws Throwable {
 
-        new JExpression(
-                _(THE._, "A", _(AN._, "S"), _(AN._, "X"))
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "S"), _(AN._, "Y"))
-        );
-        new JExpression(
-                _(THE._, "C", _(AN._, "S"), _(AN._, "X"), _(AN._, "Y"))
+        __(
+            new JExpression(
+                    _(THE._, "A", _(AN._, "S"), _(AN._, "X"))
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "S"), _(AN._, "Y"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "S"), _(AN._, "X"), _(AN._, "Y"))
+            )
         );
 
         JExpression test;

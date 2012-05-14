@@ -28,6 +28,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -40,11 +41,13 @@ public class GetDynamicTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(AN._, "Z", value("A")))
-        );
-        new JExpression(
-            _(THE._, "B", _(AN._, "Z", value("B")))
+        __(
+            new JExpression(
+                _(THE._, "A", _(AN._, "Z", value("A")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(AN._, "Z", value("B")))
+            )
         );
 
     	JExpression d = new JExpression(
@@ -56,14 +59,16 @@ public class GetDynamicTest extends ATest {
 	@Test
 	public void getOnManyANbyIS() throws Throwable {
 
-        new JExpression(
-            _(THE._, "ZZ", _(AN._, "Z"))
-        );
-        new JExpression(
-            _(THE._, "A", _(AN._, "Z", value("A")))
-        );
-        new JExpression(
-            _(THE._, "B", _(AN._, "ZZ", value("B")))
+        __(
+            new JExpression(
+                _(THE._, "ZZ", _(AN._, "Z"))
+            ),
+            new JExpression(
+                _(THE._, "A", _(AN._, "Z", value("A")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(AN._, "ZZ", value("B")))
+            )
         );
 
     	JExpression d = new JExpression(
@@ -76,14 +81,16 @@ public class GetDynamicTest extends ATest {
     @Ignore
     public void get_via_is() throws Throwable {
 
-        new JExpression(
-            _(THE._, "B", _(AN._, "A"))
-        );
-        new JExpression(
-            _(THE._, "C", _(AN._, "Z"), _(AN._, "B", value("π")))
-        );
-        new JExpression(
-            _(THE._, "D", _(AN._, "Z"), _(AN._, "A", value("Aπ")))
+        __(
+            new JExpression(
+                _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(AN._, "Z"), _(AN._, "B", value("π")))
+            ),
+            new JExpression(
+                _(THE._, "D", _(AN._, "Z"), _(AN._, "A", value("Aπ")))
+            )
         );
 
         JExpression E = new JExpression(

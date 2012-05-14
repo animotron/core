@@ -20,11 +20,11 @@
  */
 package org.animotron.statement.math;
 
+import java.io.IOException;
+
 import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
-
-import java.io.IOException;
 
 import static org.animotron.expression.JExpression.value;
 
@@ -45,7 +45,7 @@ public class SUM extends MathInstruction {
 		return a;
 	}
 
-	protected Relationship execute(Number Na, Number Nb) throws Throwable {
+	protected Relationship execute(Number Na, Number Nb) throws IOException {
 		Number result;
 		if ((Na instanceof Long || Na instanceof Integer) 
 				&& (Nb instanceof Long || Nb instanceof Integer)) {
@@ -59,5 +59,4 @@ public class SUM extends MathInstruction {
 
 		return new JExpression(value(result));
 	}
-
 }

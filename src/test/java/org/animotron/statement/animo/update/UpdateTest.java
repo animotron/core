@@ -27,6 +27,8 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
+import static org.animotron.expression.Expression.__;
+
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
@@ -48,21 +50,21 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
     public void test_001() throws Throwable {
-        new AnimoExpression("the a x z.");
+        __(new AnimoExpression("the a x z."));
         assertAnimoResult("all x", "z.");
     }
 
     @Test
     @Ignore
     public void test_002() throws Throwable {
-        new AnimoExpression("the a x 1.");
+        __(new AnimoExpression("the a x 1."));
         assertAnimoResult(new AnimoExpression("all x"), "1.");
     }
 
     @Test
     @Ignore
 	public void test_01() throws Throwable {
-        Relationship e = new AnimoExpression("the a x 1.");
+        Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("replace (get x a) (y 2)."));
         assertAnimo(e, "the a y 2.");
 	}
@@ -70,7 +72,7 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_02() throws Throwable {
-        Relationship e = new AnimoExpression("the a x 1.");
+        Relationship e = __(new AnimoExpression("the a x 1."));
         eval(new AnimoExpression("set (get x a) (2)."));
         assertAnimo(e, "the a x 2.");
 	}
@@ -78,11 +80,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_03() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a x 1."),
             new AnimoExpression("the b x 1."),
             new AnimoExpression("the c x 1.")
-        };
+        );
         eval(new AnimoExpression("set (get x a) (2)."));
         assertAnimo(e[0], "the a x 2.");
         assertAnimo(e[1], "the b x 1.");
@@ -92,11 +94,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_04() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a x 1."),
             new AnimoExpression("the b x 1."),
             new AnimoExpression("the c x 1.")
-        };
+        );
         eval(new AnimoExpression("replace (get x a) (y 2)."));
         assertAnimo(e[0], "the a y 2.");
         assertAnimo(e[1], "the b x 1.");
@@ -106,11 +108,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_05() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
             new AnimoExpression("the b x 1."),
             new AnimoExpression("the c x 1.")
-        };
+        );
         eval(new AnimoExpression("set (get z get y get x a) (2)."));
         assertAnimo(e[0], "the a z y x 2.");
         assertAnimo(e[1], "the b x 1.");
@@ -120,11 +122,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_06() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
             new AnimoExpression("the b x 1."),
             new AnimoExpression("the c x 1.")
-        };
+        );
         eval(new AnimoExpression("replace (get z get y get x a) (y 2)."));
         assertAnimo(e[0], "the a z y y 2.");
         assertAnimo(e[1], "the b x 1.");
@@ -134,11 +136,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_07() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
             new AnimoExpression("the b z y x 1."),
             new AnimoExpression("the c z y x 1.")
-        };
+        );
         eval(new AnimoExpression("set (get z get y get x a) (2)."));
         assertAnimo(e[0], "the a z y x 2.");
         assertAnimo(e[1], "the b z y x 1.");
@@ -148,11 +150,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_08() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a z y x 1."),
             new AnimoExpression("the b z y x 1."),
             new AnimoExpression("the c z y x 1.")
-        };
+        );
         eval(new AnimoExpression("replace (get z get y get x a) (y 2)."));
         assertAnimo(e[0], "the a z y y 2.");
         assertAnimo(e[1], "the b z y x 1.");
@@ -162,11 +164,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_09() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a z (y x 1) (α 3)."),
             new AnimoExpression("the b z (y x 1) (α 3)."),
             new AnimoExpression("the c z y x 1.")
-        };
+        );
         eval(new AnimoExpression("set (get z get y get x a) (2)."));
         assertAnimo(e[0], "the a z (y x 2) (α 3).");
         assertAnimo(e[1], "the b z (y x 1) (α 3).");
@@ -176,11 +178,11 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_10() throws Throwable {
-        Relationship[] e = {
+        Relationship[] e = __(
             new AnimoExpression("the a z (y x 1) (α 3)."),
             new AnimoExpression("the b z (y x 1) (α 3)."),
             new AnimoExpression("the c z y x 1.")
-        };
+        );
         eval(new AnimoExpression("replace (get z get y get x a) (y 2)."));
         assertAnimo(e[0], "the a z (y y 2) (α 3).");
         assertAnimo(e[1], "the b z (y x 1) (α 3).");

@@ -21,10 +21,13 @@
 package org.animotron.statement.language;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
 import org.junit.Assert;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+
+import static org.animotron.expression.AnimoExpression.__;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -34,10 +37,10 @@ public class WordTest extends ATest {
 
 	@Test
 	public void test_01() throws Throwable {
-        testAnimo(
-                "the test1 word \"test1\".",
-                "the test2 word \"test2\"."
-        );
+        __(
+            "the test1 word \"test1\".",
+            "the test2 word \"test2\"."
+		);
         
         Thread.sleep(1000);
         
@@ -90,11 +93,11 @@ public class WordTest extends ATest {
 
 	@Test
 	public void test_02() throws Throwable {
-        testAnimo(
-                "the test1 (test) (word \"test1\").",
-                "the test2 (test) (word \"test2\").",
-                "the pest3 (test) (word \"pest3\")."
-        );
+        __(
+            "the test1 (test) (word \"test1\").",
+            "the test2 (test) (word \"test2\").",
+            "the pest3 (test) (word \"pest3\")."
+		);
         
         Thread.sleep(1000);
         
@@ -106,9 +109,9 @@ public class WordTest extends ATest {
 
 	@Test
 	public void test_10() throws Throwable {
-        testAnimo(
-                "the test1 (word \"test1\")."
-        );
+        __(
+            "the test1 (word \"test1\")."
+		);
         
         assertAnimoResult("word test1", "\"test1\".");
 	}

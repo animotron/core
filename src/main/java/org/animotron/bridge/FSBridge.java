@@ -24,6 +24,9 @@ import org.animotron.expression.AnimoExpression;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+
+import static org.animotron.expression.Expression.__;
 
 /**
  * Repository loader
@@ -38,8 +41,8 @@ public class FSBridge extends AbstractFSBridge {
     private FSBridge(){}
 
     @Override
-    protected void loadFile(File file) throws Throwable {
-        new AnimoExpression(new FileInputStream(file));
+    protected void loadFile(File file) throws IOException {
+        __(new AnimoExpression(new FileInputStream(file)));
     }
 
 }

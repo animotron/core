@@ -26,6 +26,7 @@ import org.animotron.statement.query.GET;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.__;
 import static org.animotron.expression.JExpression.value;
 
 
@@ -38,11 +39,13 @@ public class SimpleTest extends ATest {
 	@Test
 	public void an() throws Throwable {
         
-        new JExpression(
-                _(THE._, "AA")
-        );
-        new JExpression(
-                _(THE._, "BB", _(AN._, "AA", value("a@b")))
+    	__(
+            new JExpression(
+                    _(THE._, "AA")
+            ),
+            new JExpression(
+                    _(THE._, "BB", _(AN._, "AA", value("a@b")))
+            )
         );
 
     	JExpression C = new JExpression(
@@ -54,11 +57,13 @@ public class SimpleTest extends ATest {
 	@Test
 	public void get() throws Throwable {
         
-        new JExpression(
-                _(THE._, "A")
-        );
-        new JExpression(
-                _(THE._, "B", _(AN._, "A", value("a@b")))
+    	__(
+            new JExpression(
+                    _(THE._, "A")
+            ),
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A", value("a@b")))
+            )
         );
 
     	JExpression C = new JExpression(

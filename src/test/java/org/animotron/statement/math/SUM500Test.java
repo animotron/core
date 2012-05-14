@@ -33,6 +33,7 @@ import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import static java.lang.System.currentTimeMillis;
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
 
@@ -46,7 +47,7 @@ public class SUM500Test extends ATest {
 	public void test_00() throws Throwable {
         long t;
         t = currentTimeMillis();
-        Relationship e = new AbstractExpression(new FastGraphBuilder()) {
+        Relationship e = __(new AbstractExpression(new FastGraphBuilder()) {
             @Override
             public void build() throws Throwable {
                 builder.start(AN._);
@@ -56,7 +57,7 @@ public class SUM500Test extends ATest {
                 }
                 builder.end();
             }
-        };
+        });
         System.out.println("Build expression in " + (currentTimeMillis() - t));
         t = currentTimeMillis();
         assertAnimoResult(e, "124750.");
@@ -68,12 +69,12 @@ public class SUM500Test extends ATest {
         long t;
         t = currentTimeMillis();
         for (int i = 0; i < 500; i++) {
-            new JExpression(
+            __(new JExpression(
                     _(THE._, "a" + i, 
                             _(AN._, "a"),
                             _(AN._, "b", value(i))
                     )
-            );
+            ));
         }
         Expression e = new AnimoExpression("+ get b all a");
         System.out.println("Build expressions in " + (currentTimeMillis() - t));

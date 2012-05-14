@@ -29,6 +29,7 @@ import org.animotron.statement.relation.SHALL;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.expression.JExpression.*;
 
 /**
@@ -41,11 +42,13 @@ public class GetTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(AN._, "Z", value("A")))
-        );
-        new JExpression(
-            _(THE._, "B", _(AN._, "Z", value("B")))
+        __(
+            new JExpression(
+                _(THE._, "A", _(AN._, "Z", value("A")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(AN._, "Z", value("B")))
+            )
         );
 
     	JExpression test = new JExpression(
@@ -62,17 +65,17 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_param() throws Throwable {
 
-    	new JExpression(
+    	__(new JExpression(
             _(THE._, "A", element("B" , _(GET._, "C")))
-        );
+        ));
     	JExpression test = new JExpression(
 			_(AN._, "A", _(AN._, "C", value(".")))
 		);
     	assertAnimoResult(test, "A \\B C \".\".");
 
-    	new JExpression(
+    	__(new JExpression(
             _(THE._, "A1", _(GET._, "B1"))
-        );
+        ));
 
     	test = new JExpression(
 			_(AN._, "A1", _(AN._, "B1", value(".")))
@@ -83,13 +86,15 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(AN._, "B", _(GET._, "C")))
+        __(
+            new JExpression(
+                _(THE._, "A", _(AN._, "B", _(GET._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "D", element("E", _(GET._, "B")))
+            )
         );
-        new JExpression(
-            _(THE._, "D", element("E", _(GET._, "B")))
-        );
-
+    	
     	JExpression test = new JExpression(
 			_(AN._, "D", _(AN._, "A", _(AN._, "C", value(":"))))
 		);
@@ -99,11 +104,13 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_an() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", element("B", _(GET._, "C")))
-        );
-        new JExpression(
-            _(THE._, "D", _(AN._, "C", value(".")))
+        __(
+            new JExpression(
+                _(THE._, "A", element("B", _(GET._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "D", _(AN._, "C", value(".")))
+            )
         );
 
     	JExpression test = new JExpression(
@@ -115,14 +122,16 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", element("B", _(GET._, "C")))
-        );
-        new JExpression(
-            _(THE._, "D", _(AN._, "C", value(".")))
-        );
-        new JExpression(
-            _(THE._, "E", _(AN._, "C", value(":")))
+    	__(
+            new JExpression(
+                _(THE._, "A", element("B", _(GET._, "C")))
+            ),
+            new JExpression(
+                _(THE._, "D", _(AN._, "C", value(".")))
+            ),
+            new JExpression(
+                _(THE._, "E", _(AN._, "C", value(":")))
+            )
         );
 
     	JExpression test = new JExpression(
@@ -135,14 +144,16 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_with_stack() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(GET._, "X"))
-        );
-        new JExpression(
-            _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
-        );
-        new JExpression(
-            _(THE._, "C", _(GET._, "Z"), _(AN._, "B"))
+        __(
+            new JExpression(
+                _(THE._, "A", _(GET._, "X"))
+            ),
+            new JExpression(
+                _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"), _(AN._, "B"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -154,14 +165,16 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_more_an_with_stack() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
-        );
-        new JExpression(
-            _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
-        );
-        new JExpression(
-            _(THE._, "C", _(GET._, "Z"))
+        __(
+            new JExpression(
+                _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(GET._, "Y"), _(AN._, "A"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -174,14 +187,16 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_one_more_an_with_stack() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
-        );
-        new JExpression(
-            _(THE._, "B", _(GET._, "Y"))
-        );
-        new JExpression(
-            _(THE._, "C", _(GET._, "Z"))
+        __(
+            new JExpression(
+                _(THE._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(GET._, "Y"))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -193,14 +208,16 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_an_an() throws Throwable {
 
-        new JExpression(
-            _(THE._, "A", _(AN._, "Y", _(GET._, "X")))
-        );
-        new JExpression(
-            _(THE._, "B", _(AN._, "Z", _(GET._, "Y")))
-        );
-        new JExpression(
-            _(THE._, "C", _(GET._, "Z"))
+        __(
+            new JExpression(
+                _(THE._, "A", _(AN._, "Y", _(GET._, "X")))
+            ),
+            new JExpression(
+                _(THE._, "B", _(AN._, "Z", _(GET._, "Y")))
+            ),
+            new JExpression(
+                _(THE._, "C", _(GET._, "Z"))
+            )
         );
 
         JExpression D = new JExpression(
@@ -211,26 +228,32 @@ public class GetTest extends ATest {
     
     @Test
 	public void test_01() throws Throwable {
-        new AnimoExpression("the a (x 1) (y 2) (z 3)");
-        new AnimoExpression("the b (get x) (get y) (get z)");
+        __(
+            new AnimoExpression("the a (x 1) (y 2) (z 3)"),
+            new AnimoExpression("the b (get x) (get y) (get z)")
+        );
         Expression e = new AnimoExpression("b a");
         assertStringResult(e, "123");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        new AnimoExpression("the a (x 1)");
-        new AnimoExpression("the b (x 2)");
-        new AnimoExpression("the c (x 3)");
+        __(
+                new AnimoExpression("the a (x 1)"),
+                new AnimoExpression("the b (x 2)"),
+                new AnimoExpression("the c (x 3)")
+        );
         Expression e = new AnimoExpression("get x (a) (b) (c)");
         assertAnimoResult(e, "x 1.", "x 2.", "x 3.");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        new AnimoExpression("the a x 1");
-        new AnimoExpression("the b x 2");
-        new AnimoExpression("the c x 3");
+        __(
+            new AnimoExpression("the a x 1"),
+            new AnimoExpression("the b x 2"),
+            new AnimoExpression("the c x 3")
+        );
         Expression e = new AnimoExpression("get x a,b,c");
         assertAnimoResult(e, "x 1. x 2. x 3.");
 	}
@@ -657,11 +680,13 @@ public class GetTest extends ATest {
     @Test
     public void test_49() throws Throwable {
 
-        new JExpression(
-                _(THE._, "B", _(AN._, "A"))
-        );
-        new JExpression(
-                _(THE._, "C", _(AN._, "B", value("π")))
+        __(
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B", value("π")))
+            )
         );
 
         JExpression E = new JExpression(
@@ -674,14 +699,16 @@ public class GetTest extends ATest {
     @Test
     public void test_50() throws Throwable {
 
-        new JExpression(
-                _(THE._, "B", _(AN._, "A"))
-        );
-        new JExpression(
-                _(THE._, "C", _(SHALL._, "B", value("π")))
-        );
-        new JExpression(
-                _(THE._, "D", _(AN._, "C"))
+        __(
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(SHALL._, "B", value("π")))
+            ),
+            new JExpression(
+                    _(THE._, "D", _(AN._, "C"))
+            )
         );
 
         JExpression E = new JExpression(
@@ -694,14 +721,16 @@ public class GetTest extends ATest {
     @Test
     public void test_51() throws Throwable {
 
-        new JExpression(
-                _(THE._, "B", _(AN._, "A"))
-        );
-        new JExpression(
-                _(THE._, "C", _(AN._, "B", value("π")))
-        );
-        new JExpression(
-                _(THE._, "D", _(AN._, "C"))
+        __(
+            new JExpression(
+                    _(THE._, "B", _(AN._, "A"))
+            ),
+            new JExpression(
+                    _(THE._, "C", _(AN._, "B", value("π")))
+            ),
+            new JExpression(
+                    _(THE._, "D", _(AN._, "C"))
+            )
         );
 
         JExpression E = new JExpression(

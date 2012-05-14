@@ -34,7 +34,7 @@ public abstract class BinaryMapExpression extends AbstractBinaryExpression {
 
     private File file;
 
-    public BinaryMapExpression(File file) throws Throwable {
+    public BinaryMapExpression(File file) {
         super(new FastGraphBuilder());
         this.file = file;
     }

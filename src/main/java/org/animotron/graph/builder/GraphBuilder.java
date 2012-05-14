@@ -89,7 +89,7 @@ public abstract class GraphBuilder {
         }
     }
 
-    protected abstract Relationship relationship();
+    public abstract Relationship relationship();
 
     protected abstract void fail(Throwable t);
 
@@ -177,7 +177,7 @@ public abstract class GraphBuilder {
         return stack.peek();
     }
 
-    public final Relationship build(AbstractExpression exp) throws Throwable {
+    public final void build(AbstractExpression exp) throws Throwable {
         order = 0;
         catcher = Manipulators.getCatcher();
         tx = beginTx();
@@ -201,7 +201,6 @@ public abstract class GraphBuilder {
             throw t;
         } finally {
             catcher.push();
-            return relationship();
         }
     }
 

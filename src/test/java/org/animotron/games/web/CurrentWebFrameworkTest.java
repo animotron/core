@@ -29,6 +29,9 @@ import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
 
+import java.io.IOException;
+
+import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.JExpression.value;
 
@@ -40,7 +43,7 @@ import static org.animotron.expression.JExpression.value;
  */
 public class CurrentWebFrameworkTest extends ATest {
 
-    private Expression query(String site, String service) throws Throwable {
+    private Expression query(String site, String service) {
         return new JExpression(
                 _(AN._,
                         _(GET._, service,
@@ -52,7 +55,7 @@ public class CurrentWebFrameworkTest extends ATest {
         );
     }
 
-    private Expression error(String site, int code, String trace) throws Throwable {
+    private Expression error(String site, int code, String trace) {
         return new JExpression(
                 _(AN._,
                         _(GET._,
@@ -68,17 +71,17 @@ public class CurrentWebFrameworkTest extends ATest {
         );
     }
 
-    private Expression mime(Expression query) throws Throwable {
+    private Expression mime(Expression query) {
         return new JExpression(_(GET._, "type", _(GET._, "mime-type", _(query))));
     }
 
-    private void assertQuery(String site, String service, String mime, String html) throws Throwable, InterruptedException {
+    private void assertQuery(String site, String service, String mime, String html) throws IOException, InterruptedException {
         Expression e = query(site, service);
         assertStringResult(mime(e), mime);
         assertHtmlResult(e, html);
     }
 
-    private void assertError(String site, int code, String trace, String mime, String html) throws Throwable, InterruptedException {
+    private void assertError(String site, int code, String trace, String mime, String html) throws IOException, InterruptedException {
         Expression e = error(site, code, trace);
         assertStringResult(mime(e), mime);
         assertHtmlResult(e, html);
@@ -87,7 +90,7 @@ public class CurrentWebFrameworkTest extends ATest {
     @Test
     public void test_00() throws Throwable {
 
-        testAnimo(
+        __(
                 "the site",
                 "the not-found-error",
                 "the default-not-found",
@@ -199,7 +202,7 @@ public class CurrentWebFrameworkTest extends ATest {
     @Test
     public void test_01() throws Throwable {
 
-        testAnimo(
+        __(
                 "the site (not-found-error default-not-found) (xxx xxx-service)",
 
                 "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
@@ -274,7 +277,7 @@ public class CurrentWebFrameworkTest extends ATest {
     @Test
     public void test_02() throws Throwable {
 
-        testAnimo(
+        __(
                 "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
                 "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
 

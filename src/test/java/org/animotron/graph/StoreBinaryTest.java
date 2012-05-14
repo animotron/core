@@ -121,7 +121,7 @@ public class StoreBinaryTest extends ATest {
 
         private String path;
 
-        public TestExpression(InputStream stream, String path) throws Throwable {
+        public TestExpression(InputStream stream, String path) {
             super(stream, true);
             this.path = path;
         }

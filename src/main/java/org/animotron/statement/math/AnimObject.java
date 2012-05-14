@@ -53,15 +53,7 @@ import static org.animotron.expression.JExpression.value;
  */
 public class AnimObject extends AbstractExpression {
 	
-	protected static Relationship ONE;
-
-    static {
-        try {
-            ONE = new JExpression(value(Long.valueOf(1)));
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-    }
+	protected static Relationship ONE = new JExpression(value(Long.valueOf(1)));
 	
 	protected static AnimObject PLUS_ONE = new AnimObject(SUM._, ONE);
 	protected static AnimObject MINUS_ONE = new AnimObject(SUB._, ONE);
@@ -83,14 +75,14 @@ public class AnimObject extends AbstractExpression {
         this.pf = pf;
 	}
     
-	public AnimObject(PFlow pf, MathInstruction op, List<Relationship> elements) throws Throwable {
+	public AnimObject(PFlow pf, MathInstruction op, List<Relationship> elements) {
         super(new FastGraphBuilder());
 		this.elements = elements;
         this.op = op;
         this.pf = pf;
 	}
 
-	public AnimObject(PFlow pf, MathInstruction op, Relationship... elements) throws Throwable {
+	public AnimObject(PFlow pf, MathInstruction op, Relationship... elements) {
         super(new FastGraphBuilder());
         this.elements = new FastList<Relationship>();
         for (Relationship r : elements) {
@@ -202,7 +194,7 @@ public class AnimObject extends AbstractExpression {
 		return elements;
 	}
 	
-	public Relationship relax(final PFlow pf) throws Throwable {
+	public Relationship relax(final PFlow pf) throws IOException {
 		if (result == null)
 			result = op.execute(pf, this);
 		
