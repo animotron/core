@@ -21,7 +21,6 @@
 package org.animotron.statement.language;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.junit.Assert;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -51,7 +50,7 @@ public class WordTest extends ATest {
         	
         	r = hits.next();
 
-        	Assert.assertEquals(4, r.getId());
+        	Assert.assertEquals(5, r.getId());
 
         	Assert.assertEquals(false, hits.hasNext());
         } finally {
@@ -64,7 +63,7 @@ public class WordTest extends ATest {
         	
         	r = hits.next();
 
-        	Assert.assertEquals(9, r.getId());
+        	Assert.assertEquals(11, r.getId());
 
         	Assert.assertEquals(false, hits.hasNext());
         } finally {
@@ -76,12 +75,12 @@ public class WordTest extends ATest {
         	Assert.assertEquals(true, hits.hasNext());
         	
         	r = hits.next();
-        	Assert.assertEquals(4, r.getId());
+        	Assert.assertEquals(5, r.getId());
 
         	Assert.assertEquals(true, hits.hasNext());
 
         	r = hits.next();
-        	Assert.assertEquals(9, r.getId());
+        	Assert.assertEquals(11, r.getId());
 
         	Assert.assertEquals(false, hits.hasNext());
         } finally {
