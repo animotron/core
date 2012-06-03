@@ -45,32 +45,32 @@ public class AnotherPrettyAnimoTest extends ATest {
 
     @Test
 	public void test_00() throws Throwable {
-        test("the a get b c.", "the a\n    get b c.");
+        test("def a get b c.", "def a\n    get b c.");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        test("the a get an b an c", "the a\n    get an b c.");
+        test("def a get an b an c", "def a\n    get an b c.");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        test("the a get an b c", "the a\n    get an b c.");
+        test("def a get an b c", "def a\n    get an b c.");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        test("the a get (b) (c)", "the a\n    get b c.");
+        test("def a get (b) (c)", "def a\n    get b c.");
 	}
 
     @Test
 	public void test_04() throws Throwable {
-        test("the a\n    an\n        (all b)\n        (all c).");
+        test("def a\n    an\n        (all b)\n        (all c).");
 	}
 
     @Test
 	public void test_05() throws Throwable {
-        test("the a\n    b.");
+        test("def a\n    b.");
 	}
 
     @Test

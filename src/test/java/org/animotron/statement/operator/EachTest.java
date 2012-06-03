@@ -36,9 +36,9 @@ public class EachTest extends ATest {
 
     @Test
     public void test() throws Throwable {
-        testAnimo("the a (s) (x 1).");
-        testAnimo("the b (s) (x 2).");
-        testAnimo("the c (s) (x 3).");
+        testAnimo("def a (s) (x 1).");
+        testAnimo("def b (s) (x 2).");
+        testAnimo("def c (s) (x 3).");
 
         assertAnimoResult("each (all s) (\\foo get x)", "\\foo x 1. \\foo x 2. \\foo x 3.");
     }

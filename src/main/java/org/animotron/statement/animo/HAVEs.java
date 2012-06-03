@@ -23,7 +23,7 @@ package org.animotron.statement.animo;
 import org.animotron.statement.AbstractStatement;
 
 /**
- * Return HAVE relations of THE instance.
+ * Return HAVE relations of DEF instance.
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *

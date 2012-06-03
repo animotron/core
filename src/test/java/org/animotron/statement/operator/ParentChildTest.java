@@ -35,7 +35,7 @@ public class ParentChildTest extends ATest {
     @Ignore //TODO implement
     public void test_00() throws Throwable {
         testAnimo("= parent, child.");
-        testAnimo("the Joe parent John.");
+        testAnimo("def Joe parent John.");
         assertAnimoResultOneStep("get parent Joe.", "parent John.");
         assertAnimoResultOneStep("get child John.", "child Joe.");
     }
@@ -46,12 +46,12 @@ public class ParentChildTest extends ATest {
         testAnimo("= parent, child.");
         testAnimo("= (son) (child male).");
         testAnimo("= (father) (parent male).");
-        testAnimo("the Joe (male) (parent John).");
-        testAnimo("the John male.");
+        testAnimo("def Joe (male) (parent John).");
+        testAnimo("def John male.");
         assertAnimoResultOneStep("get parent Joe.", "parent John.");
         assertAnimoResultOneStep("get child John.", "child Joe.");
-        assertAnimoResultOneStep("all father.", "the John male.");
-        assertAnimoResultOneStep("all son.", "the Joe (male) (parent).");
+        assertAnimoResultOneStep("all father.", "def John male.");
+        assertAnimoResultOneStep("all son.", "def Joe (male) (parent).");
     }
 
 }

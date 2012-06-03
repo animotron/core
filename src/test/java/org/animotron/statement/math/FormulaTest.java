@@ -22,7 +22,7 @@ package org.animotron.statement.math;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -41,15 +41,15 @@ public class FormulaTest extends ATest {
 	@Ignore
 	public void test_01() throws Throwable {
         __(
-            new AnimoExpression("the qty / (get cost) (get price)."),
-            new AnimoExpression("the cost * (get qty) (get price)."),
-            new AnimoExpression("the price / (get cost) (get qty).")
+            new AnimoExpression("def qty / (get cost) (get price)."),
+            new AnimoExpression("def cost * (get qty) (get price)."),
+            new AnimoExpression("def price / (get cost) (get qty).")
 
-            //new AnimoExpression("the m1 (qty 10) (cost 50).")
+            //new AnimoExpression("def m1 (qty 10) (cost 50).")
 		);
         
         int count = 0;
-        Relationship qty = THE._.get("qty");
+        Relationship qty = DEF._.get("qty");
         
         System.out.println("qty");
         for (Relationship r : qty.getEndNode().getRelationships(TRI)) {
@@ -72,7 +72,7 @@ public class FormulaTest extends ATest {
         Assert.assertEquals(2, count);
         
         count = 0;
-        Relationship cost = THE._.get("cost");
+        Relationship cost = DEF._.get("cost");
         
         System.out.println("cost");
         for (Relationship r : cost.getEndNode().getRelationships(TRI)) {
@@ -100,8 +100,8 @@ public class FormulaTest extends ATest {
     @Test
     public void test_02() throws Throwable {
         __(
-	        "the item1 (goods item) (cost * (10) (USD)).",
-	        "the item2 (goods item) (cost * (5) (USD))."
+	        "def item1 (goods item) (cost * (10) (USD)).",
+	        "def item2 (goods item) (cost * (5) (USD))."
         );
 
         assertAnimoResult(
@@ -113,8 +113,8 @@ public class FormulaTest extends ATest {
     @Test
     public void test_03() throws Throwable {
         __(
-	        "the item1 * 5 (X).",
-	        "the item2 * 5 (Y)."
+	        "def item1 * 5 (X).",
+	        "def item2 * 5 (Y)."
         );
 
         assertAnimoResult(
@@ -126,8 +126,8 @@ public class FormulaTest extends ATest {
     @Test
     public void test_04() throws Throwable {
         __(
-	        "the item1 (item) (cost * (5) (X)).",
-	        "the item2 (item) (cost * (5) (Y))."
+	        "def item1 (item) (cost * (5) (X)).",
+	        "def item2 (item) (cost * (5) (Y))."
         );
 
         assertAnimoResult(
@@ -140,9 +140,9 @@ public class FormulaTest extends ATest {
     @Test
     public void test_05() throws Throwable {
         __(
-	        "the item1 (goods item) (cost * (10) (USD)).",
-	        "the item2 (goods item) (cost * (5) (USD)).",
-	        "the item3 (goods item) (cost * (17) (UZD))."
+	        "def item1 (goods item) (cost * (10) (USD)).",
+	        "def item2 (goods item) (cost * (5) (USD)).",
+	        "def item3 (goods item) (cost * (17) (UZD))."
         );
 
         assertAnimoResult(
@@ -154,9 +154,9 @@ public class FormulaTest extends ATest {
     @Test
     public void test_101() throws Throwable {
         __(
-    	    "the USD currency.",
-	        "the item1 (goods item) (cost * (10) (USD)).",
-	        "the item2 (goods item) (cost * (5) (USD))."
+    	    "def USD currency.",
+	        "def item1 (goods item) (cost * (10) (USD)).",
+	        "def item2 (goods item) (cost * (5) (USD))."
         );
 
         assertAnimoResult(
@@ -168,9 +168,9 @@ public class FormulaTest extends ATest {
     @Test
     public void test_102() throws Throwable {
         __(
-    	    "the USD currency.",
-	        "the item1 (goods item) (cost * (10) (USD)).",
-	        "the item2 (goods item) (cost * (10) (USD))."
+    	    "def USD currency.",
+	        "def item1 (goods item) (cost * (10) (USD)).",
+	        "def item2 (goods item) (cost * (10) (USD))."
         );
 
         assertAnimoResult(

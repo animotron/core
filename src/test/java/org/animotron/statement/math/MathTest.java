@@ -191,7 +191,7 @@ public class MathTest extends ATest {
     @Test
 	public void test_18() throws Throwable {
         __(
-            "the a (x 1) (y 2) (z 3)"
+            "def a (x 1) (y 2) (z 3)"
         );
     	assertStringResult("+ (get x a) (get y a) (get z a)", "6");
 	}
@@ -199,8 +199,8 @@ public class MathTest extends ATest {
     @Test
 	public void test_19() throws Throwable {
         __(
-            "the a (x 1) (y 2) (z 3)",
-            "the b + (get x) (get y) (get z)"
+            "def a (x 1) (y 2) (z 3)",
+            "def b + (get x) (get y) (get z)"
         );
     	assertStringResult("b a", "6");
 	}
@@ -238,10 +238,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_30() throws Throwable {
         __(
-            "the a 1",
-            "the b 2",
-            "the c 3",
-            "the d 4"
+            "def a 1",
+            "def b 2",
+            "def c 3",
+            "def d 4"
         );
     	assertStringResult("a", "1");
     	assertStringResult("+ (a) (b) (c) (d)", "10");
@@ -250,10 +250,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_31() throws Throwable {
         __(
-            "the a (z) (1)",
-            "the b (z) (2)",
-            "the c (z) (3)",
-            "the d (z) (4)"
+            "def a (z) (1)",
+            "def b (z) (2)",
+            "def c (z) (3)",
+            "def d (z) (4)"
         );
     	assertStringResult("+ all z", "10");
 	}
@@ -261,10 +261,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_32() throws Throwable {
         __(
-            "the a x 1",
-            "the b x 2",
-            "the c x 3",
-            "the d x 4"
+            "def a x 1",
+            "def b x 2",
+            "def c x 3",
+            "def d x 4"
         );
     	assertStringResult("+ get x (a) (b) (c) (d)", "10");
 	}
@@ -272,10 +272,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_33() throws Throwable {
         __(
-            "the a (z) (x 1)",
-            "the b (z) (x 2)",
-            "the c (z) (x 3)",
-            "the d (z) (x 4)"
+            "def a (z) (x 1)",
+            "def b (z) (x 2)",
+            "def c (z) (x 3)",
+            "def d (z) (x 4)"
         );
     	assertStringResult("+ get x all z", "10");
 	}
@@ -290,8 +290,8 @@ public class MathTest extends ATest {
     @Ignore
 	public void test_35() throws Throwable {
         __(
-            "the a 2",
-            "the b 3"
+            "def a 2",
+            "def b 3"
         );
     	assertStringResult("+ a,b", "5");
 	}

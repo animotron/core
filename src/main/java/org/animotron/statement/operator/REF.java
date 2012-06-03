@@ -43,15 +43,15 @@ public class REF extends AbstractStatement implements Reference {
 
     @Override
     public Object reference(Relationship r) {
-        return THE._.reference(r);
+        return DEF._.reference(r);
     }
 
     public Node getActualRevision(Relationship r) {
-        return THE._.getActualRevision(r);
+        return DEF._.getActualRevision(r);
     }
     
     public Relationship getThe(Relationship r) {
-        return r.getEndNode().getSingleRelationship(THE._, Direction.INCOMING);
+        return r.getEndNode().getSingleRelationship(DEF._, Direction.INCOMING);
 	}
 
 

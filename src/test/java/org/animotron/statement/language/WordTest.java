@@ -38,8 +38,8 @@ public class WordTest extends ATest {
 	@Test
 	public void test_01() throws Throwable {
         __(
-            "the test1 word \"test1\".",
-            "the test2 word \"test2\"."
+            "def test1 word \"test1\".",
+            "def test2 word \"test2\"."
 		);
         
         Thread.sleep(1000);
@@ -94,23 +94,23 @@ public class WordTest extends ATest {
 	@Test
 	public void test_02() throws Throwable {
         __(
-            "the test1 (test) (word \"test1\").",
-            "the test2 (test) (word \"test2\").",
-            "the pest3 (test) (word \"pest3\")."
+            "def test1 (test) (word \"test1\").",
+            "def test2 (test) (word \"test2\").",
+            "def pest3 (test) (word \"pest3\")."
 		);
         
         Thread.sleep(1000);
         
-        assertAnimoResult("any test search \"test1\"", "the test1 (test).");
-        assertAnimoResult("any test search \"test2\"", "the test2 (test).");
+        assertAnimoResult("any test search \"test1\"", "def test1 (test).");
+        assertAnimoResult("any test search \"test2\"", "def test2 (test).");
 
-        assertAnimoResult("all test search \"test*\"", "the test1 (test). the test2 (test).");
+        assertAnimoResult("all test search \"test*\"", "def test1 (test). the test2 (test).");
 	}
 
 	@Test
 	public void test_10() throws Throwable {
         __(
-            "the test1 (word \"test1\")."
+            "def test1 (word \"test1\")."
 		);
         
         assertAnimoResult("word test1", "\"test1\".");

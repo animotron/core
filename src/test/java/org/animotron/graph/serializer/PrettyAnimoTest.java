@@ -45,59 +45,59 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
 	public void test_00() throws Throwable {
-        test("the a.");
+        test("def a.");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        test("the a\n    b.");
+        test("def a\n    b.");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        test("the a\n    b \"test\".");
+        test("def a\n    b \"test\".");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        test("the a (b) (c)", "the a\n    (b)\n    (c).");
+        test("def a (b) (c)", "def a\n    (b)\n    (c).");
 	}
 
     @Test
 	public void test_04() throws Throwable {
-        test("the a\n    (b\n        (any x)\n        (all y))\n    (c).");
+        test("def a\n    (b\n        (any x)\n        (all y))\n    (c).");
 	}
 
     @Test
 	public void test_05() throws Throwable {
-        test("the a\n    b\n        (any x)\n        (all y).");
+        test("def a\n    b\n        (any x)\n        (all y).");
 	}
 
 
     @Test
 	public void test_06() throws Throwable {
-        test("the a\n    b\n        (any x α)\n        (all y β).");
+        test("def a\n    b\n        (any x α)\n        (all y β).");
 	}
 
     @Test
     public void test_07() throws Throwable {
-        test("the a @b (get c)", "the a\n    @b\n        get c.");
+        test("def a @b (get c)", "def a\n    @b\n        get c.");
     }
 
     @Test
     public void test_08() throws Throwable {
-        test("the a\n    \\b \\c @d e.");
+        test("def a\n    \\b \\c @d e.");
     }
 
     @Test
     public void test_09() throws Throwable {
-        test("the a\n    \\b \\c\n        @d\n            (e)\n            (f).");
+        test("def a\n    \\b \\c\n        @d\n            (e)\n            (f).");
     }
 
     @Test
     public void test_0A() throws Throwable {
         test(
-            "the rest\n" +
+            "def rest\n" +
             "    content\n" +
             "        \\html\n" +
             "            (\\head \\title title \"Welcome to Animo\")\n" +
@@ -131,12 +131,12 @@ public class PrettyAnimoTest extends ATest {
 
     @Test
     public void test_0D() throws Throwable {
-        testAnimo("the z an (get x) (y).");
+        testAnimo("def z an (get x) (y).");
     }
 
     @Test
     public void test_0E() throws Throwable {
-        testAnimo("the z (an (get x) (y)) (an (any b) (c)).");
+        testAnimo("def z (an (get x) (y)) (an (any b) (c)).");
     }
 
 }

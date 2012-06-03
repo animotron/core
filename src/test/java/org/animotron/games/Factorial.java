@@ -27,7 +27,7 @@ import org.animotron.statement.math.SUM;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.PTRN;
 import org.animotron.statement.operator.Q;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.GET;
 
 import static org.animotron.expression.JExpression._;
@@ -43,7 +43,7 @@ public class Factorial extends ATest {
 	public void factorial() throws Throwable {
 		
     	new JExpression(
-			_(THE._, "factorial", 
+			_(DEF._, "factorial",
 				_(AN._, "number",
 					_(PTRN._, "number", 
 						_(Q._, "N0", value("Q:N1")),

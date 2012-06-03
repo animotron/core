@@ -206,7 +206,7 @@ public class AnimoExpression extends AbstractExpression {
                 builder._(QNAME._, token);
                 op = null;
                 prefix = false;
-            } else if (op instanceof THE) {
+            } else if (op instanceof DEF) {
                 builder.start(op, token);
                 op = null;
                 level++;

@@ -23,8 +23,8 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -59,7 +59,7 @@ public class QCAVector {
 
 	public QCAVector(Relationship question) {
 		this.question = question;
-//		if (question != null && question.isType(THE._))
+//		if (question != null && question.isType(DEF._))
 //			answer = question;
 		
 		if (debug) System.out.println(" .... create vector 1 .... ");
@@ -173,7 +173,7 @@ public class QCAVector {
 		
 		Node n = r.getEndNode();
 		try {
-			return THE._.getActualRevision(n);
+			return DEF._.getActualRevision(n);
 		} catch (Exception e) {
 			return n;
 		}
@@ -184,7 +184,7 @@ public class QCAVector {
 		
 		Node n = r.getEndNode();
 		try {
-			return THE._.getActualRevision(n);
+			return DEF._.getActualRevision(n);
 		} catch (Exception e) {
 			return n;
 		}
@@ -284,7 +284,7 @@ public class QCAVector {
 			b.append("'");
 			
 			for (Relationship r : question.getEndNode().getRelationships(REF._, Direction.OUTGOING)) {
-				b.append(" "+THE._.reference(r));
+				b.append(" "+ DEF._.reference(r));
 			}
 			b.append("[");
 			b.append(question.getId());
@@ -294,7 +294,7 @@ public class QCAVector {
 //				Pipe thes = AN.getREFs(null, new QCAVector(question));
 //				QCAVector v;
 //				while ((v = thes.take()) != null) {
-//					Object name = THE._.reference(v.getClosest());
+//					Object name = DEF._.reference(v.getClosest());
 //					if (name != null) {
 //						b.append(" ");
 //						b.append(name);

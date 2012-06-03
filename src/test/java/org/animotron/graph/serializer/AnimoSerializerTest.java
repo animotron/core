@@ -24,7 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.relation.USE;
 import org.junit.Test;
 
@@ -40,64 +40,64 @@ public class AnimoSerializerTest extends ATest {
 	@Test
 	public void test_00() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X"),
                 _(USE._, "Y")
             )
         );
-        assertAnimo(A, "the A (X) (use Y).");
+        assertAnimo(A, "def A (X) (use Y).");
     }
 
     @Test
     public void test_01() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X"),
                 _(AN._, "Y")
             )
         );
-        assertAnimo(A, "the A (X) (Y).");
+        assertAnimo(A, "def A (X) (Y).");
     }
 
     @Test
     public void test_02() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X",
                     _(AN._, "Y")
                 )
             )
         );
-        assertAnimo(A, "the A X Y.");
+        assertAnimo(A, "def A X Y.");
     }
 
     @Test
     public void test_03() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X"),
                 _(AN._, "Y")
             )
         );
-        assertAnimo(A, "the A (X) (Y).");
+        assertAnimo(A, "def A (X) (Y).");
     }
 
     @Test
     public void test_04() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X",
                     _(AN._, "Y")
                 )
             )
         );
-        assertAnimo(A, "the A X Y.");
+        assertAnimo(A, "def A X Y.");
     }
 
     @Test
     public void test_05() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "B",
                     _(AN._, "C",
                         _(AN._, "D", value("."))
@@ -105,13 +105,13 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A B C D \".\".");
+        assertAnimo(A, "def A B C D \".\".");
     }
 
     @Test
     public void test_06() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "B",
                     _(AN._, "C",
                         _(AN._, "D"),
@@ -120,13 +120,13 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A B C (D) \".\".");
+        assertAnimo(A, "def A B C (D) \".\".");
     }
 
     @Test
     public void test_07() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "B",
                     _(AN._, "C",
                         _(AN._, "D", value(".")),
@@ -135,13 +135,13 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A B C (D \".\") (E \"_\").");
+        assertAnimo(A, "def A B C (D \".\") (E \"_\").");
     }
 
     @Test
     public void test_08() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X"),
                 _(AN._, "B",
                     _(AN._, "C",
@@ -151,13 +151,13 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (X) (B C (D \".\") (E \"_\")).");
+        assertAnimo(A, "def A (X) (B C (D \".\") (E \"_\")).");
     }
 
     @Test
     public void test_09() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X"),
                 _(AN._, "B",
                     _(AN._, "C",
@@ -171,13 +171,13 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (X) (B (C (D \".\") (E \"_\")) (F (G \":\") (H \";\"))).");
+        assertAnimo(A, "def A (X) (B (C (D \".\") (E \"_\")) (F (G \":\") (H \";\"))).");
     }
 
     @Test
     public void test_0A() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "X"),
                 _(AN._, "B",
                     _(AN._, "C",
@@ -201,160 +201,160 @@ public class AnimoSerializerTest extends ATest {
                 )
             )
         );
-        assertAnimo(A, "the A (X) (B (C (D \"1\") (E \"2\")) (F (G \"3\") (H \"4\"))) (I (J (K \"5\") (L \"6\")) (M (N \"7\") (O \"8\"))).");
+        assertAnimo(A, "def A (X) (B (C (D \"1\") (E \"2\")) (F (G \"3\") (H \"4\"))) (I (J (K \"5\") (L \"6\")) (M (N \"7\") (O \"8\"))).");
 	}
 
     @Test
     public void test_0B() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 value("bla"), value("bla")
             )
         );
-        assertAnimo(A, "the A \"bla\" \"bla\".");
+        assertAnimo(A, "def A \"bla\" \"bla\".");
     }
 	
     @Test
     public void test_0C() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "B"),
                 _(AN._, "C")
             )
         );
-        assertAnimo(A, "the A (B) (C).");
-        assertAnimoResult(A, "the A (B) (C).");
+        assertAnimo(A, "def A (B) (C).");
+        assertAnimoResult(A, "def A (B) (C).");
     }
 
     @Test
     public void test_0D() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 value("B", value("C"))
             )
         );
-        assertAnimo(A, "the A \"B\" \"C\".");
+        assertAnimo(A, "def A \"B\" \"C\".");
     }
 
     @Test
     public void test_0E() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(AN._, "B"), _(AN._, "C"))
             )
         );
-        assertAnimo(A, "the A ((B) (C)).");
+        assertAnimo(A, "def A ((B) (C)).");
     }
 
     @Test
     public void test_0F() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(AN._, "B", _(AN._, "C")))
             )
         );
-        assertAnimo(A, "the A (B C).");
+        assertAnimo(A, "def A (B C).");
     }
 
     @Test
     public void test_10() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(AN._, "B"), _(AN._, "C")),
                 _(_(AN._, "D"), _(AN._, "E"))
             )
         );
-        assertAnimo(A, "the A ((B) (C)) ((D) (E)).");
+        assertAnimo(A, "def A ((B) (C)) ((D) (E)).");
     }
 
     @Test
     public void test_11() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(AN._, "B")
             )
         );
-        assertAnimo(A, "the A B.");
+        assertAnimo(A, "def A B.");
     }
 
     @Test
     public void test_12() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(AN._, "B"))
             )
         );
-        assertAnimo(A, "the A (B).");
+        assertAnimo(A, "def A (B).");
     }
 
     @Test
     public void test_13() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(_(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B)).");
+        assertAnimo(A, "def A ((B)).");
     }
 
     @Test
     public void test_14() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(_(_(AN._, "B"))))
             )
         );
-        assertAnimo(A, "the A (((B))).");
+        assertAnimo(A, "def A (((B))).");
     }
 
     @Test
     public void test_15() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(LINK._, _(AN._, "B"))
             )
         );
-        assertAnimo(A, "the A (B).");
+        assertAnimo(A, "def A (B).");
     }
 
     @Test
     public void test_16() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(LINK._, _(LINK._, _(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B)).");
+        assertAnimo(A, "def A ((B)).");
     }
 
     @Test
     public void test_17() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(LINK._, _(LINK._, _(LINK._, _(AN._, "B"))))
             )
         );
-        assertAnimo(A, "the A (((B))).");
+        assertAnimo(A, "def A (((B))).");
     }
 
     @Test
     public void test_18() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(_(LINK._, _(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B)).");
+        assertAnimo(A, "def A ((B)).");
     }
 
     @Test
     public void test_19() throws Throwable {
         JExpression A = new JExpression(
-            _(THE._, "A",
+            _(DEF._, "A",
                 _(LINK._, _(_(AN._, "B")))
             )
         );
-        assertAnimo(A, "the A ((B)).");
+        assertAnimo(A, "def A ((B)).");
     }
 
 }

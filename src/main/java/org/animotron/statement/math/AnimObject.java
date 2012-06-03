@@ -32,8 +32,8 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.value.VALUE;
@@ -103,7 +103,7 @@ public class AnimObject extends AbstractExpression {
     		if (!Utils.haveContext(r.getEndNode())) {
 
     			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
-    			elements.add(THE._.get(ref.getEndNode()));
+    			elements.add(DEF._.get(ref.getEndNode()));
     			
 //    			List<Relationship> els = getElements(pf, ref.getEndNode());
 //    			if (els == null || els.isEmpty())
@@ -120,7 +120,7 @@ public class AnimObject extends AbstractExpression {
     		} else {
                 try {
                 	Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
-    				Object obj = THE._.reference(ref.getEndNode());
+    				Object obj = DEF._.reference(ref.getEndNode());
     				if (obj != null && obj instanceof String ) {
     					Statement s = Statements.name((String) obj);
     					if (s instanceof MathInstruction) {
@@ -206,7 +206,7 @@ public class AnimObject extends AbstractExpression {
         builder.start(AN._);
             builder._(REF._, op.name());
             for (Relationship r : elements) {
-                if (r.isType(REF._) || r.isType(THE._)) {
+                if (r.isType(REF._) || r.isType(DEF._)) {
                     builder.start(AN._);
                         builder._(REF._, r.getEndNode());
                     builder.end();

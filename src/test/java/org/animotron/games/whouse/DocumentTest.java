@@ -33,28 +33,28 @@ public class DocumentTest extends ATest {
 	@Test
 	public void test() throws Throwable {
 		
-		testAnimo("the D2011-11-01 name \"1 November 2011\".");
-		testAnimo("the D2011-11-02 name \"2 November 2011\".");
-		testAnimo("the D2011-11-03 name \"3 November 2011\".");
+		testAnimo("def D2011-11-01 name \"1 November 2011\".");
+		testAnimo("def D2011-11-02 name \"2 November 2011\".");
+		testAnimo("def D2011-11-03 name \"3 November 2011\".");
 
-		testAnimo("the N3 name \"3\".");
-		testAnimo("the N5 name \"5\".");
-		testAnimo("the N7 name \"7\".");
+		testAnimo("def N3 name \"3\".");
+		testAnimo("def N5 name \"5\".");
+		testAnimo("def N7 name \"7\".");
 
-		testAnimo("the user1 name \"user1\".");
-		testAnimo("the user2 name \"user1\".");
+		testAnimo("def user1 name \"user1\".");
+		testAnimo("def user2 name \"user1\".");
 
-		testAnimo("the number name \"number\".");
-		testAnimo("the date name \"date\".");
-		testAnimo("the owner name \"owner\".");
+		testAnimo("def number name \"number\".");
+		testAnimo("def date name \"date\".");
+		testAnimo("def owner name \"owner\".");
 
-		testAnimo("the document (date) (number) (owner).");
+		testAnimo("def document (date) (number) (owner).");
 
-		testAnimo("the doc3 (document) (date D2011-11-01) (number N3) (owner user1).");
-		testAnimo("the doc5 (document) (date D2011-11-02) (number N5) (owner user1).");
-		testAnimo("the doc7 (document) (date D2011-11-03) (number N7) (owner user2).");
+		testAnimo("def doc3 (document) (date D2011-11-01) (number N3) (owner user1).");
+		testAnimo("def doc5 (document) (date D2011-11-02) (number N5) (owner user1).");
+		testAnimo("def doc7 (document) (date D2011-11-03) (number N7) (owner user2).");
 		
-		testAnimo("the table " +
+		testAnimo("def table " +
 					"(column) " +
 					"(row) " +
 					"(html " +
@@ -63,7 +63,7 @@ public class DocumentTest extends ATest {
 							"(each (get row) (\\tr each (get column) (\\td get name get (this column) (this row))))" +
 					").");
 		
-		testAnimo("the journal (table) (column (date) (number)) (row all document).");
+		testAnimo("def journal (table) (column (date) (number)) (row all document).");
 
 		assertXMLResult(
             new AnimoExpression("get html journal"),

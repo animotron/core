@@ -39,97 +39,97 @@ public class ReferencesTest extends ATest {
     public void test() throws Throwable {
 
         JExpression A = new JExpression(
-            _(THE._, "A", _(AN._, "B", _(AN._, "C")))
+            _(DEF._, "A", _(AN._, "B", _(AN._, "C")))
         );
-        //assertAnimoResultOneStep(A, "the A the B.");
-        assertAnimoResultOneStep(A, "the A B.");
+        //assertAnimoResultOneStep(A, "def A the B.");
+        assertAnimoResultOneStep(A, "def A B.");
 
         JExpression.__(new JExpression(
-            _(THE._, "B", _(AN._, "C", value("y")))
+            _(DEF._, "B", _(AN._, "C", value("y")))
         ));
-        assertAnimoResultOneStep(A, "the A B C \"y\".");
+        assertAnimoResultOneStep(A, "def A B C \"y\".");
     }
 
     @Test
     public void test_000() throws Throwable {
-        testAnimo("the john sex male.");
-        assertAnimoResult("all male", "the john sex.");
+        testAnimo("def john sex male.");
+        assertAnimoResult("all male", "def john sex.");
     }
 
     @Test
     public void test_010() throws Throwable {
-        testAnimo("the john sex male.");
-        assertAnimoResult("any male", "the john sex.");
+        testAnimo("def john sex male.");
+        assertAnimoResult("any male", "def john sex.");
     }
 
     @Test
     public void test_020() throws Throwable {
-        testAnimo("the joe male.");
-        assertAnimoResult("all male", "the joe male.");
+        testAnimo("def joe male.");
+        assertAnimoResult("all male", "def joe male.");
     }
 
     @Test
     @Ignore //this test for USE, but it was't agreed yet
     public void test_030() throws Throwable {
-        testAnimo("the john (person) (sex male).");
-        assertAnimoResult("any person use male", "the john (person) (sex).");
-        assertAnimoResult("all person use male", "the john (person) (sex).");
-        assertAnimoResult("prefer person use male", "the john (person) (sex).");
+        testAnimo("def john (person) (sex male).");
+        assertAnimoResult("any person use male", "def john (person) (sex).");
+        assertAnimoResult("all person use male", "def john (person) (sex).");
+        assertAnimoResult("prefer person use male", "def john (person) (sex).");
     }
 
     @Test
     public void test_031() throws Throwable {
-        testAnimo("the john person, male.");
-        assertAnimoResult("any person use male", "the john (person) (male).");
-        assertAnimoResult("all person use male", "the john (person) (male).");
-        assertAnimoResult("prefer person use male", "the john (person) (male).");
+        testAnimo("def john person, male.");
+        assertAnimoResult("any person use male", "def john (person) (male).");
+        assertAnimoResult("all person use male", "def john (person) (male).");
+        assertAnimoResult("prefer person use male", "def john (person) (male).");
     }
 
     @Test
     public void test_032() throws Throwable {
-        testAnimo("the john (person) (male).");
-        assertAnimoResult("any person use male", "the john (person) (male).");
-        assertAnimoResult("all person use male", "the john (person) (male).");
-        assertAnimoResult("prefer person use male", "the john (person) (male).");
+        testAnimo("def john (person) (male).");
+        assertAnimoResult("any person use male", "def john (person) (male).");
+        assertAnimoResult("all person use male", "def john (person) (male).");
+        assertAnimoResult("prefer person use male", "def john (person) (male).");
     }
 
     @Test
     public void test_040() throws Throwable {
-        testAnimo("the male sex.");
-        testAnimo("the joe male.");
-        testAnimo("the john sex male.");
-        //assertAnimoResult("all male", "the joe male. the john sex.");
-        assertAnimoResult("all male", "the joe male sex. the john sex.");
+        testAnimo("def male sex.");
+        testAnimo("def joe male.");
+        testAnimo("def john sex male.");
+        //assertAnimoResult("all male", "def joe male. the john sex.");
+        assertAnimoResult("all male", "def joe male sex. the john sex.");
     }
 
     @Test
     public void test_050() throws Throwable {
-        testAnimo("the john sex male.");
+        testAnimo("def john sex male.");
         assertAnimoResult("get sex john", "sex male.");
     }
 
     @Test
     public void test_060() throws Throwable {
-        testAnimo("the male sex.");
-        testAnimo("the joe male.");
+        testAnimo("def male sex.");
+        testAnimo("def joe male.");
         assertAnimoResult("get sex joe", "male.");
     }
 
     @Test
     public void test_070() throws Throwable {
-        testAnimo("the male sex.");
-        testAnimo("the joe male.");
-        testAnimo("the john sex male.");
+        testAnimo("def male sex.");
+        testAnimo("def joe male.");
+        testAnimo("def john sex male.");
         assertAnimoResult("get sex joe", "male.");
         assertAnimoResult("get sex john", "sex male sex.");
     }
 
 	@Test
     public void test_100() throws Throwable {
-        testAnimo("the xxx-site (site) (name \"XXX\").");
-        testAnimo("the xxx-layout (layout) (get name).");
-        testAnimo("the html-page any layout.");
-        testAnimo("the xxx (any site) (html-page).");
+        testAnimo("def xxx-site (site) (name \"XXX\").");
+        testAnimo("def xxx-layout (layout) (get name).");
+        testAnimo("def html-page any layout.");
+        testAnimo("def xxx (any site) (html-page).");
         assertStringResult("xxx", "XXX");
     }
 }

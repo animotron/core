@@ -43,25 +43,25 @@ public class AnyTest extends ATest {
         
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "value"))
+                    _(DEF._, "A", _(AN._, "value"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
+                    _(DEF._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
             ),
             new JExpression(
-                    _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
+                    _(DEF._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
             )
         );
 
         JExpression test = new JExpression(
             _(ANY._, "A")
         );
-        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
+        assertAnimoResultOneStep(test, "def C (B) (value \"C\").");
 
         test = new JExpression(
             _(ANY._, "B")
         );
-        assertAnimoResultOneStep(test, "the C (B) (value \"C\").");
+        assertAnimoResultOneStep(test, "def C (B) (value \"C\").");
     }
 	
     @Test
@@ -69,31 +69,31 @@ public class AnyTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "value"))
+                    _(DEF._, "A", _(AN._, "value"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
+                    _(DEF._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
             ),
             new JExpression(
-                    _(THE._, "B1", _(AN._, "B"), _(AN._, "value", value("B")))
+                    _(DEF._, "B1", _(AN._, "B"), _(AN._, "value", value("B")))
             ),
             new JExpression(
-                    _(THE._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
+                    _(DEF._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
             ),
             new JExpression(
-                    _(THE._, "C1", _(AN._, "C"), _(AN._, "value", value("C")))
+                    _(DEF._, "C1", _(AN._, "C"), _(AN._, "value", value("C")))
             )
         );
 
         JExpression test = new JExpression(
             _(ANY._, "A", _(WITH._, "value", value("B")))
         );
-        assertAnimoResultOneStep(test, "the B1 (B) (value \"B\").");
+        assertAnimoResultOneStep(test, "def B1 (B) (value \"B\").");
 
         test = new JExpression(
             _(ANY._, "A", _(WITH._, "value", value("C")))
         );
-        assertAnimoResultOneStep(test, "the C1 (C) (value \"C\").");
+        assertAnimoResultOneStep(test, "def C1 (C) (value \"C\").");
     }
 
 	@Test
@@ -101,7 +101,7 @@ public class AnyTest extends ATest {
 
 		__(
             new JExpression(
-                _(THE._, "value-plain",
+                _(DEF._, "value-plain",
                     _(AN._, "mime-type"),
                     _(AN._, "value"),
                     _(AN._, "type", value("value/plain")),
@@ -110,7 +110,7 @@ public class AnyTest extends ATest {
                 )
             ),
             new JExpression(
-                _(THE._, "application-atom",
+                _(DEF._, "application-atom",
                     _(AN._, "mime-type"),
                     _(AN._, "application"),
                     _(AN._, "type", value("application/atom+xml")),
@@ -123,26 +123,26 @@ public class AnyTest extends ATest {
 		JExpression test = new JExpression(
 			_(ANY._, "mime-type", _(EQ._, "extension", value("txt")))
 		);
-		assertAnimoResultOneStep(test, "the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+		assertAnimoResultOneStep(test, "def value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
 	}
 
 	@Test
 	public void test_01() throws Throwable {
-		testAnimo("the x1 1.");
-		testAnimo("the x2 2.");
-		testAnimo("the y1 (z) (foo x1).");
-		testAnimo("the y2 (z) (foo x2).");
-		assertAnimoResult("any z with foo x2", "the y2 (z) (foo).");		
+		testAnimo("def x1 1.");
+		testAnimo("def x2 2.");
+		testAnimo("def y1 (z) (foo x1).");
+		testAnimo("def y2 (z) (foo x2).");
+		assertAnimoResult("any z with foo x2", "def y2 (z) (foo).");
 	}
 
 	@Test
 	public void test_02() throws Throwable {
-		testAnimo("the x1 (foo) 1.");
-		testAnimo("the x2 (foo) 2.");
-		testAnimo("the y1 (z) (x1).");
-		testAnimo("the y2 (z) (x2).");
+		testAnimo("def x1 (foo) 1.");
+		testAnimo("def x2 (foo) 2.");
+		testAnimo("def y1 (z) (x1).");
+		testAnimo("def y2 (z) (x2).");
 		assertAnimoResult("get foo y1", "x1.");		
-		assertAnimoResult("any z with foo x2", "the y2 (z) (x2 (foo) 2).");		
+		assertAnimoResult("any z with foo x2", "def y2 (z) (x2 (foo) 2).");
 	}
 
     @Test
@@ -150,63 +150,63 @@ public class AnyTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
+                    _(DEF._, "A", _(AN._, "S"), _(AN._, "X", value("α")))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
+                    _(DEF._, "B", _(AN._, "A"), _(AN._, "Y", value("β")))
             ),
             new JExpression(
-                    _(THE._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")))
+                    _(DEF._, "C", _(AN._, "B"), _(AN._, "Z", value("γ")))
             )
         );
 
         JExpression test = new JExpression(
-            _(THE._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
+            _(DEF._, "a", _(ANY._, "S", _(WITH._, "X", value("α"))))
         );
-        //assertAnimoResultOneStep(a, "the a the A (S) (X \"α\").");
-        assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
+        //assertAnimoResultOneStep(a, "def a the A (S) (X \"α\").");
+        assertAnimoResultOneStep(test, "def a the C (B) (Z \"γ\").");
         
 
         test = new JExpression(
-            _(THE._, "b", _(ANY._, "S", _(WITH._, "Y", value("β"))))
+            _(DEF._, "b", _(ANY._, "S", _(WITH._, "Y", value("β"))))
         );
-        //assertAnimoResultOneStep(b, "the b the B (A) (Y \"β\").");
-        assertAnimoResultOneStep(test, "the a the C (B) (Z \"γ\").");
+        //assertAnimoResultOneStep(b, "def b the B (A) (Y \"β\").");
+        assertAnimoResultOneStep(test, "def a the C (B) (Z \"γ\").");
 
         test = new JExpression(
-            _(THE._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))
+            _(DEF._, "c", _(ANY._, "S", _(WITH._, "Z", value("γ"))))
         );
-        assertAnimoResultOneStep(test, "the c the C (B) (Z \"γ\").");
+        assertAnimoResultOneStep(test, "def c the C (B) (Z \"γ\").");
     }
 
     @Test
     public void test_04() throws Throwable {
         __(
-            "the foo-site (site) (server-name \"foo.com\")",
-            "the bar-site (site) (server-name \"bar.com\")",
+            "def foo-site (site) (server-name \"foo.com\")",
+            "def bar-site (site) (server-name \"bar.com\")",
 
-            "the hello-foo (foo-site, root) (title \"hello foo\")",
-            "the hello-bar (bar-site, root) (title \"hello bar\")",
+            "def hello-foo (foo-site, root) (title \"hello foo\")",
+            "def hello-bar (bar-site, root) (title \"hello bar\")",
             
-            "the foo-root-layout (layout, foo, root) (\\h1)"
+            "def foo-root-layout (layout, foo, root) (\\h1)"
 		);
 
         assertAnimoResult(
     		"any root with server-name \"foo.com\"", 
-    		"the hello-foo (foo-site (site) (server-name)) (root) (title).");
+    		"def hello-foo (foo-site (site) (server-name)) (root) (title).");
     }
 
     @Test
     public void test_05() throws Throwable {
 
         __(
-            "the foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            "the bar-site (site) (server-name \"bar.com\") (weak-use bar)",
+            "def foo-site (site) (server-name \"foo.com\") (weak-use foo)",
+            "def bar-site (site) (server-name \"bar.com\") (weak-use bar)",
 
-            "the hello-foo (foo-site, root) (title \"hello foo\")",
-            "the hello-bar (bar-site, root) (title \"hello bar\")",
+            "def hello-foo (foo-site, root) (title \"hello foo\")",
+            "def hello-bar (bar-site, root) (title \"hello bar\")",
             
-            "the foo-root-layout (layout, foo, root) (\\h1)"
+            "def foo-root-layout (layout, foo, root) (\\h1)"
         );
 
         assertAnimoResult("any xxx with server-name \"foo.com\"", "");

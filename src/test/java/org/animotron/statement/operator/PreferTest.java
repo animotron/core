@@ -42,10 +42,10 @@ public class PreferTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "X"))
+                    _(DEF._, "B", _(AN._, "X"))
             )
         );
 
@@ -61,17 +61,17 @@ public class PreferTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "X"))
+                    _(DEF._, "B", _(AN._, "X"))
             )
         );
 
         JExpression test = new JExpression(
                 _(PREFER._, "X", _(USE._, "X"))
         );
-        assertAnimoResultOneStep(test, "the A X. the B X.");
+        assertAnimoResultOneStep(test, "def A X. the B X.");
 
     }
 
@@ -80,17 +80,17 @@ public class PreferTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "X"))
+                    _(DEF._, "B", _(AN._, "X"))
             )
         );
 
         JExpression test = new JExpression(
             _(PREFER._, "X", _(USE._, "A"))
         );
-        assertAnimoResultOneStep(test, "the A X.");
+        assertAnimoResultOneStep(test, "def A X.");
 
     }
 
@@ -99,16 +99,16 @@ public class PreferTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "X"))
+                    _(DEF._, "B", _(AN._, "X"))
             )
         );
 
         JExpression test = new JExpression(
                 _(PREFER._, "X", _(USE._, "B"))
         );
-        assertAnimoResultOneStep(test, "the B X.");
+        assertAnimoResultOneStep(test, "def B X.");
     }
 }

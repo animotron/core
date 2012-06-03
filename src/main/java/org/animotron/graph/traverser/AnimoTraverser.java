@@ -28,8 +28,8 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -85,7 +85,7 @@ public class AnimoTraverser {
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof REF)) {
-            node = (statement instanceof THE ? THE._.getActualRevision(r) : r.getEndNode());
+            node = (statement instanceof DEF ? DEF._.getActualRevision(r) : r.getEndNode());
             It it = new It(node);
             iterate(handler, rr, statement, it, level);
 		}

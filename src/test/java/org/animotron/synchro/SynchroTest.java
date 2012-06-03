@@ -22,22 +22,14 @@ package org.animotron.synchro;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.graph.AnimoGraph.startDB;
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.RelationshipTypes.REV;
-import static org.animotron.synchro.Synchro._;
-import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
 import org.animotron.ATest;
-import org.animotron.statement.operator.THE;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
 import org.junit.Before;
 import org.junit.Test;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * @author <a href="mailto:amir.akhmedov@gmail.com">Amir Akhmedov</a>
@@ -81,7 +73,7 @@ public class SynchroTest extends ATest{
 		String s =
 			"PREVIOUSHASH:7eb83afdaa9f0bfeb627d9ea9100c8dc34fb3ad5a00a22eb6d07e7f081b90c9a|" +
 			"HASH:3e7120f442b9c671fdddf5e5aa2f02e916b7666d076a938b51728bb73404b9df|INSTANCE:" +
-			"the goods01 " +
+			"def goods01 " +
 				"(goods) "+
 				"(color \"red\") " +
 				"(name \"goods-name04\") " +

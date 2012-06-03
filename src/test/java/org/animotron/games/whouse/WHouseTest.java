@@ -26,8 +26,8 @@ import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.Q;
-import org.animotron.statement.operator.THE;
 import org.animotron.statement.query.ALL;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -49,75 +49,75 @@ public class WHouseTest extends ATest {
 		//party: person & organization
 		// + receipt or issue
 		new JExpression(
-    		_(THE._, "party")
+    		_(DEF._, "party")
         );
 
 		new JExpression(
-    		_(THE._, "receipt-party", 
+    		_(DEF._, "receipt-party",
 				_(AN._, "party"),
 				_(AN._, "receipt")
 		)	);
 
 		new JExpression(
-    		_(THE._, "issue-party", 
+    		_(DEF._, "issue-party",
 				_(AN._, "party"),
 				_(AN._, "issue")
 		)	);
 
 		new JExpression(
-    		_(THE._, "person", 
+    		_(DEF._, "person",
 				_(AN._, "party")
 		)	);
 
 		new JExpression(
-    		_(THE._, "organization", 
+    		_(DEF._, "organization",
 				_(AN._, "party")
 		)	);
 
 		new JExpression(
-    		_(THE._, "ORG-01", 
+    		_(DEF._, "ORG-01",
 				_(AN._, "organization")
 		)	);
 
 		new JExpression(
-    		_(THE._, "ORG-02", 
+    		_(DEF._, "ORG-02",
 				_(AN._, "organization")
 		)	);
 
 		new JExpression(
-    		_(THE._, "I", 
+    		_(DEF._, "I",
 				_(AN._, "person")
 		)	);
 		
 		//unit of measure
-		new JExpression(_(THE._, "UoM"));
+		new JExpression(_(DEF._, "UoM"));
 		
 		new JExpression(
-    		_(THE._, "kilo", 
+    		_(DEF._, "kilo",
 				_(AN._, "number", _(Q._, "N1000"))
 		)	);
 
 		//kg -> kilo + gramm
 		new JExpression(
-    		_(THE._, "gram", 
+    		_(DEF._, "gram",
 				_(AN._, "UoM")
 		)	);
 
 		new JExpression(
-    		_(THE._, "kilogram", 
+    		_(DEF._, "kilogram",
 				_(AN._, "kilo"),
 				_(AN._, "gram")
 		)	);
 
 		//currency
 		new JExpression(
-    		_(THE._, "USD", 
+    		_(DEF._, "USD",
 				_(AN._, "currency")
 		)	);
 		
 		//Stock Keeping Unit
 		new JExpression(
-    		_(THE._, "SKU",
+    		_(DEF._, "SKU",
 				_(AN._, "reference"),
 				_(AN._, "qty"),
 				_(AN._, "price"),
@@ -126,11 +126,11 @@ public class WHouseTest extends ATest {
 
 		//documents structure
 		new JExpression(
-    		_(THE._, "document", _(AN._, "date"))
+    		_(DEF._, "document", _(AN._, "date"))
         );
 
         new JExpression(
-    		_(THE._, "whouse-document", 
+    		_(DEF._, "whouse-document",
 				_(AN._, "document"),
 				_(AN._, "issue-party"),
 				_(AN._, "receipt-party"),
@@ -138,21 +138,21 @@ public class WHouseTest extends ATest {
 		)	);
 
         new JExpression(
-    		_(THE._, "whouse-receipt", 
+    		_(DEF._, "whouse-receipt",
 				_(AN._, "whouse-document"),
 				//I do receipt
 				_(AN._, "receipt")
 		)	);
 
         new JExpression(
-    		_(THE._, "whouse-issue", 
+    		_(DEF._, "whouse-issue",
 				_(AN._, "whouse-document"),
 				//I do issue
 				_(AN._, "issue")
 		)	);
 
         new JExpression(
-    		_(THE._, "whouse-transfer", 
+    		_(DEF._, "whouse-transfer",
 				_(AN._, "whouse-document"),
 				//I do receipt & issue
 				_(AN._, "receipt"),
@@ -161,13 +161,13 @@ public class WHouseTest extends ATest {
         
         //documents
         new JExpression(
-    		_(THE._, "R01", 
+    		_(DEF._, "R01",
 				_(AN._, "whouse-document"),
 				_(AN._, "date", value("T2011-08-07")), //TODO: date instruction
 				_(AN._, "issue-party", _(AN._, "ORG-01")),
 				_(AN._, "receipt-party", _(AN._, "I")),
 				_(AN._, "SKU",
-					_(THE._, "item01", 
+					_(DEF._, "item01",
 						_(AN._, "reference", value("item01")),
 						_(AN._, "qty",
 							_(AN._, "number", _(Q._, "N2")),
@@ -182,17 +182,17 @@ public class WHouseTest extends ATest {
 		)	);
         
         JExpression a = new JExpression(
-    		_(THE._, "a", 
+    		_(DEF._, "a",
 				_(ALL._, "whouse-receive",
 					_(WITH._, "party", _(AN._, "I"))))
 		);
-        assertAnimoResult(a, "the a.");
+        assertAnimoResult(a, "def a.");
 
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?
 
         JExpression f = new JExpression(
-    		_(THE._, "f", 
+    		_(DEF._, "f",
 				_(AN._, "form", _(AN._, "R01")))
 		);
 
@@ -219,12 +219,12 @@ public class WHouseTest extends ATest {
 	@Ignore
 	public void test_01() throws Throwable {
         __(
-            "the kilo number 1000.", //* 1000
-            "the UoM.",
-            "the gram.",
-            "the kg (kilo, gram).", //the base unit of mass in the International System of Units
+            "def kilo number 1000.", //* 1000
+            "def UoM.",
+            "def gram.",
+            "def kg (kilo, gram).", //the base unit of mass in the International System of Units
 
-            "the measument1 qty (number 1000) (UoM gram)."
+            "def measument1 qty (number 1000) (UoM gram)."
         );
         Expression e = new AnimoExpression("get qty (measument1) (UoM kg)."); //???
     	assertStringResult(e, "have qty (number 1) (UoM kg)");
@@ -232,14 +232,14 @@ public class WHouseTest extends ATest {
 
 	public void test_02() throws Throwable {
         __(
-            "the SKU " +
+            "def SKU " +
         		"(word " +
             		"(lang-en \"stock-keeping unit\") " +
     				"(lang-ru \"единица учета запасов\") " +
 				") " +
 				"(goods, qty, price, cost).",
 
-			"the qty" +
+			"def qty" +
         		"(word " +
         			"(lang-en \"quantity\") " +
         			"(lang-ru \"количество\") " +
@@ -247,24 +247,24 @@ public class WHouseTest extends ATest {
 				"(/ (get cost) (get price))" +
 				"(number, UoM).",
 
-			"the price" +
+			"def price" +
 				"(/ (get cost) (get qty)).",
 				
-			"the cost" +
+			"def cost" +
 				"(* (get qty) (get price))" +
 				"(number, currency)."
 		);
     	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" value=\"\"/></label>");
     	
     	__(
-            "the whouse-receive " +
+            "def whouse-receive " +
         		"(word " +
             		"(lang-en \"ware house receive\") " +
     				"(lang-ru \"складской приход\") " +
 				") " +
 				"(receive-party, issue-party, (goods, qty, price, cost)).",
 
-			"the receiptsForWhouse " +
+			"def receiptsForWhouse " +
 			"(D2012-01-29)" +
 			"(issue companyA) "+
 			"(receive whouse) "+
@@ -275,7 +275,7 @@ public class WHouseTest extends ATest {
     	assertAnimoResult("get qty whouse,paper,D2012-01-30", "(10,kg).");
 
     	__(
-			"the issueForWhouse " +
+			"def issueForWhouse " +
 			"(D2012-01-30)" +
 			"(issue whouse) "+
 			"(paper (qty 1,kg))."

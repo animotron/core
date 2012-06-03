@@ -36,24 +36,24 @@ public class ThisTest extends ATest {
     @Test
     @Ignore //empty this
     public void test_00() throws Throwable {
-        testAnimo("the file uri id this.");
+        testAnimo("def file uri id this.");
         assertAnimoResult("get uri file.", "uri \"file\".");
     }
 
     @Test
     @Ignore //empty this
     public void test_01() throws Throwable {
-        testAnimo("the file uri id this.");
-        testAnimo("the x file.");
+        testAnimo("def file uri id this.");
+        testAnimo("def x file.");
         assertAnimoResult("get uri x.", "uri \"x\".");
     }
 
     @Test
     @Ignore //empty this
     public void test_02() throws Throwable {
-        testAnimo("the file uri id this.");
-        testAnimo("the x file.");
-        testAnimo("the y file.");
+        testAnimo("def file uri id this.");
+        testAnimo("def x file.");
+        testAnimo("def y file.");
         assertAnimoResult("get uri x.", "uri \"x\".");
         assertAnimoResult("get uri y.", "uri \"y\".");
     }
@@ -61,7 +61,7 @@ public class ThisTest extends ATest {
     @Test
     public void test_10() throws Throwable {
         __(
-    		"the rainbow each (this) (\\p id this)."
+    		"def rainbow each (this) (\\p id this)."
 		);
         assertAnimoResult("rainbow (red) (green).", "rainbow (\\p \"red\") (\\p \"green\").");
     }

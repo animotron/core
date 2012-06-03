@@ -296,7 +296,7 @@ public class GET extends AbstractQuery implements Shift {
 //					}
 //
 //					t = v.getQuestion();
-//					if (t != null && t.isType(THE._)) {
+//					if (t != null && t.isType(DEF._)) {
 //						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
 //					}
 				}
@@ -382,7 +382,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, THE._.getActualEndNode(ref), middle, thes, onContext))
+		if (getByHave(pf, v, ref, DEF._.getActualEndNode(ref), middle, thes, onContext))
 			return true;
 
 		//search for local 'HAVE'

@@ -39,18 +39,18 @@ import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
- * Operator 'THE'.
+ * Operator 'DEF'.
  *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class THE extends AbstractStatement implements Prepare, Definition {
+public class DEF extends AbstractStatement implements Prepare, Definition {
 
-	public static final THE _ = new THE();
+	public static final DEF _ = new DEF();
 
 //    public static Node _(String name) {
 //        try {
-//            return THE._.getOrCreate(name, true).getEndNode();
+//            return DEF._.getOrCreate(name, true).getEndNode();
 //        } catch (Throwable t) {
 //            throw new RuntimeException(e);
 //        }
@@ -58,15 +58,15 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 //
 //    public static Relationship __(String name) {
 //        try {
-//            return THE._.getOrCreate(name, true);
+//            return DEF._.getOrCreate(name, true);
 //        } catch (Throwable t) {
 //            throw new RuntimeException(e);
 //        }
 //    }
     
-    private static final String name = "the";
+    private static final String name = "def";
 
-    private THE() { super(name); }
+    private DEF() { super(name); }
     
     private AbstractIndex<Relationship> the = new AbstractIndex<Relationship>(name) {
         @Override
@@ -91,7 +91,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
     public Node getActualEndNode(Relationship r) {
     	Node n = r.getEndNode();
 
-		if (r.isType(REF._) || r.isType(THE._))
+		if (r.isType(REF._) || r.isType(DEF._))
 			return getActualRevision(n);
 		
 		return n;
@@ -115,7 +115,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
 
 	public Relationship get(Node rev) {
         Relationship ar = rev.getSingleRelationship(AREV, Direction.INCOMING);
-        return ar == null ? null : ar.getStartNode().getSingleRelationship(THE._, Direction.INCOMING);
+        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
 	}
 
 	private Relationship create(String name) throws AnimoException {
@@ -133,7 +133,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
             if (ignoreNotFound) {
                 r = create(name);
             } else {
-                throw new ENotFound(null, "Internal error: \"the:" + name + "\" not found");
+                throw new ENotFound(null, "Internal error: \"def:" + name + "\" not found");
             }
 		}
 		return r;
@@ -164,7 +164,7 @@ public class THE extends AbstractStatement implements Prepare, Definition {
         return new OnQuestion() {
 			@Override
 			public void act(PFlow pf) {
-				System.out.println("PREPARE THE");
+				System.out.println("PREPARE DEF");
 			}
 			
 		};

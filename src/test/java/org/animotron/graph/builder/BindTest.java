@@ -30,7 +30,7 @@ import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Assert;
@@ -73,9 +73,9 @@ public class BindTest extends ATest {
             _(AN._, "a")
         );
         Expression b = new JExpression(new StreamGraphBuilder(),
-            _(THE._, "b", _(a))
+            _(DEF._, "b", _(a))
         );
-        test(b, "the b a.");
+        test(b, "def b a.");
 	}
 
     @Test
@@ -84,9 +84,9 @@ public class BindTest extends ATest {
             _(AN._, "a")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(a))
+            _(DEF._, "b", _(a))
         );
-        test(b, "the b a.");
+        test(b, "def b a.");
 	}
 
     @Test
@@ -95,9 +95,9 @@ public class BindTest extends ATest {
             _(AN._, "a")
         );
         Expression b = new JExpression(new StreamGraphBuilder(),
-            _(THE._, "b", _(AN._, "x"), _(a))
+            _(DEF._, "b", _(AN._, "x"), _(a))
         );
-        test(b, "the b (x) (a).");
+        test(b, "def b (x) (a).");
 	}
 
     @Test
@@ -106,23 +106,23 @@ public class BindTest extends ATest {
             _(AN._, "a")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(AN._, "x"), _(a))
+            _(DEF._, "b", _(AN._, "x"), _(a))
         );
-        test(b, "the b (x) (a).");
+        test(b, "def b (x) (a).");
 	}
 
     @Test
 	public void test_04() throws Throwable {
         Expression x = new JExpression(
-            _(THE._, "x")
+            _(DEF._, "x")
         );
         Expression y = new JExpression(
-            _(THE._, "y")
+            _(DEF._, "y")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(AN._, x), _(AN._, y))
+            _(DEF._, "b", _(AN._, x), _(AN._, y))
         );
-        test(b, "the b (x) (y).");
+        test(b, "def b (x) (y).");
 	}
 
     @Test
@@ -131,9 +131,9 @@ public class BindTest extends ATest {
             _(ANY._, "a")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(AN._, "y", _(a)))
+            _(DEF._, "b", _(AN._, "y", _(a)))
         );
-        test(b, "the b y any a.");
+        test(b, "def b y any a.");
 	}
 
     @Test
@@ -142,27 +142,27 @@ public class BindTest extends ATest {
             _(ANY._, "a")
         );
         Expression x = new JExpression(
-            _(THE._, "x")
+            _(DEF._, "x")
         );
         Expression y = new JExpression(
-            _(THE._, "y")
+            _(DEF._, "y")
         );
         Expression b = new JExpression(
-            _(THE._, "b", _(AN._, x), _(AN._, y, _(a)))
+            _(DEF._, "b", _(AN._, x), _(AN._, y, _(a)))
         );
-        test(b, "the b (x) (y any a).");
+        test(b, "def b (x) (y any a).");
 	}
 
     @Test
     @Ignore
 	public void test_07() throws Throwable {
         Expression x = new JExpression(
-            _(THE._, "x")
+            _(DEF._, "x")
         );
         Expression b = new JExpression(
-            _(THE._, "y", _(x))
+            _(DEF._, "y", _(x))
         );
-        test(b, "the x y.");
+        test(b, "def x y.");
 	}
 
     private static final XMLInputFactory FACTORY = new WstxInputFactory();
@@ -171,7 +171,7 @@ public class BindTest extends ATest {
 	public void test_08() throws Throwable {
         Expression a = new AnimoExpression("any a.");
         Expression b = new AnimoExpression("all b.");
-        Expression c = new AnimoExpression("the c bla bla bla.");
+        Expression c = new AnimoExpression("def c bla bla bla.");
         Expression x = new JExpression(
             _(AN._, c, _(a), _(b))
         );

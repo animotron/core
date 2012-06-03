@@ -30,32 +30,32 @@ public class AnotherParserTest extends ATest {
 
     @Test
 	public void test_00() throws Throwable {
-        testAnimo("the a get b c.");
+        testAnimo("def a get b c.");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        testAnimo("the a get an b an c", "the a get an b c.");
+        testAnimo("def a get an b an c", "def a get an b c.");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        testAnimo("the a get an b c", "the a get an b c.");
+        testAnimo("def a get an b c", "def a get an b c.");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        testAnimo("the a get (b) (c)", "the a get b c.");
+        testAnimo("def a get (b) (c)", "def a get b c.");
 	}
 
     @Test
 	public void test_04() throws Throwable {
-        testAnimo("the a an (all b) (all c).");
+        testAnimo("def a an (all b) (all c).");
 	}
 
     @Test
 	public void test_05() throws Throwable {
-        testAnimo("the a b.");
+        testAnimo("def a b.");
 	}
 
     @Test

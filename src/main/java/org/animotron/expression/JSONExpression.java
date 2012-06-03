@@ -23,7 +23,7 @@ package org.animotron.expression;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 
@@ -58,7 +58,7 @@ public class JSONExpression extends AbstractJSONExpression {
     public void build() throws Throwable {
         int l = 0;
         JsonToken token, prev = null;
-        builder.start(THE._, name);
+        builder.start(DEF._, name);
         while((token = parser.nextToken()) != null) {
             switch (token) {
                 case START_OBJECT           :

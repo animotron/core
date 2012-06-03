@@ -23,11 +23,8 @@ package org.animotron.statement.query;
 import javolution.util.FastSet;
 
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Reference;
-import org.animotron.statement.operator.THE;
-import org.animotron.statement.operator.Utils;
+import org.animotron.statement.operator.*;
+import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -129,7 +126,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 					        	
 					        	Node n = path.lastRelationship().getStartNode();
 								if (setFiltering(n, uses, weaks)) {
-									if (isLeaf(n) && (res = THE._.get(n)) != null) {
+									if (isLeaf(n) && (res = DEF._.get(n)) != null) {
 										//System.out.print("answered ");
 										//Utils.debug(r);
 				        				pf.sendAnswer( res );
@@ -155,7 +152,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 				if (underUSE 
 						&& isLeaf(node) 
-						&& (res = THE._.get(node)) != null
+						&& (res = DEF._.get(node)) != null
 						&& filtering(pf, res, uses, weaks))
 					
 	            	try {
@@ -175,7 +172,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 		        			continue;
 
 	        			try {
-			        		res = THE._.get(r.getStartNode());
+			        		res = DEF._.get(r.getStartNode());
 			        		if (res != null) {
 			        			if (filtering(pf, res, uses, weaks)) {
 			        				pf.sendAnswer( res );

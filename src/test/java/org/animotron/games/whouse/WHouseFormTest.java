@@ -42,17 +42,17 @@ public class WHouseFormTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-                "the companyA (party) (word \"Company A & Co.\")",
-                "the centralWhouse (party) (word \"Central warehouse\")",
+                "def companyA (party) (word \"Company A & Co.\")",
+                "def centralWhouse (party) (word \"Central warehouse\")",
 
-                "the book (goods).",
-                "the ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
-                "the ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\")",
+                "def book (goods).",
+                "def ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
+                "def ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\")",
 
-                "the pcs (UoM) (word \"pcs\")",
+                "def pcs (UoM) (word \"pcs\")",
 
-                "the EUR (currency) (word \"EUR\")",
-                "the USD (currency) (word \"USD\")"
+                "def EUR (currency) (word \"EUR\")",
+                "def USD (currency) (word \"USD\")"
 
         );
 
@@ -81,7 +81,7 @@ public class WHouseFormTest extends ATest {
 
         assertAnimo(
                 doc,
-                "the docA " +
+                "def docA " +
                 	"(event) " +
                     "(date \"D2012-02-11\") " +
                     "(issue-party companyA) " +
@@ -101,21 +101,21 @@ public class WHouseFormTest extends ATest {
 
         assertAnimoResult(
     		"all centralWhouse with date \"D2012-02-11\"",
-    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
+    		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
     		"all centralWhouse,event with date \"D2012-02-11\"",
-    		"the docA (event) (date) (issue-party) (receive-party) (SKU).");
+    		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
     		"get SKU all centralWhouse,event with date \"D2012-02-11\"",
     		"SKU (uuidA) (uuidB).");
 
         __(
-    		"the person party.",
-    		"the personA person.",
+    		"def person party.",
+    		"def personA person.",
 
-            "the docB " +
+            "def docB " +
                 	"(event) " +
                     "(date \"D2012-02-12\") " +
                     "(issue-party centralWhouse) " +
@@ -134,24 +134,24 @@ public class WHouseFormTest extends ATest {
     		"SKU (uuidA) (uuidB). SKU uuidA.");
 
         __(
-                "the whouse-issue " +
+                "def whouse-issue " +
                     "(word \"warehouse issue document\") " +
                     "(part (date) (issue-party) (receive-party) (table row SKU)).",
 
-                "the SKU part (goods) (qty) (price) (cost).",
+                "def SKU part (goods) (qty) (price) (cost).",
 
-                "the date word \"date\".",
-                "the receice-party (word \"receiver\") (party,receive).",
-                "the issue-party (word \"issue\") (party,issue).",
-                "the goods word \"goods\".",
-                "the qty (word \"quantity\") (part (number) (UoM)).",
-                "the price (word \"price\") (part (number) (currency) (UoM)).",
-                "the cost (word \"cost\") (part (number) (currency)).",
+                "def date word \"date\".",
+                "def receice-party (word \"receiver\") (party,receive).",
+                "def issue-party (word \"issue\") (party,issue).",
+                "def goods word \"goods\".",
+                "def qty (word \"quantity\") (part (number) (UoM)).",
+                "def price (word \"price\") (part (number) (currency) (UoM)).",
+                "def cost (word \"cost\") (part (number) (currency)).",
 
-                "the generate-form each (get prism) (any form-widget).",
-                "the generate-table-row each (get row get prism) (any table-row-widget).",
+                "def generate-form each (get prism) (any form-widget).",
+                "def generate-table-row each (get row get prism) (any table-row-widget).",
 
-                "the html-form " +
+                "def html-form " +
                     "(form-widget)" +
                     "(\\form (@name id this prism)" +
                         "(each (get part) " +
@@ -159,31 +159,31 @@ public class WHouseFormTest extends ATest {
                                 "(?is table html-table) " +
                                 "(html-label-input)))).",
 
-                "the html-input \\input (@name id this part).",
+                "def html-input \\input (@name id this part).",
 
-                "the html-label-input \\label (word this part) (html-input).",
+                "def html-label-input \\label (word this part) (html-input).",
 
-                "the html-table " +
+                "def html-table " +
                     "each (get row this part) "+
                         "(\\table (@name id this row) " +
                             "(html-table-head) (html-table-row)).",
 
-                "the html-table-head \\tr each (get part this row) (\\th word this part).",
+                "def html-table-head \\tr each (get part this row) (\\th word this part).",
 
-                "the html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input))).",
+                "def html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input))).",
 
-                "the fill-form " +
+                "def fill-form " +
                     "each (get prism) " +
                         "(each (get part this prism) " +
                             "(ptrn (this part) " +
                                 "(?is table fill-table) " +
                                 "(fill-input))).",
 
-                "the fill-table " +
+                "def fill-table " +
                     "each (get row this part) " +
                         "(fill-form prizm this row).",
 
-                "the fill-input \\input " +
+                "def fill-input \\input " +
                     "(@name id this part) " +
                     "(each (get (this part) (this object)) " +
                         "(@id id this this part)" +
@@ -194,7 +194,7 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
                 "generate-form prism whouse-issue",
                 "generate-form " +
-                    "the html-form " +
+                    "def html-form " +
                         "(form-widget) " +
                         "(\\form (@name \"whouse-issue\") " +
                             "(html-label-input " +
@@ -217,7 +217,7 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
                 "generate-table-row prism whouse-issue",
                 "generate-table-row " +
-                    "the html-table-row (table-row-widget) " +
+                    "def html-table-row (table-row-widget) " +
                         "(\\tr (@name \"uuid\") " +
                             "(\\td html-input \\input @name \"goods\") " +
                             "(\\td html-input \\input @name \"qty\") " +
@@ -228,7 +228,7 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
                 "fill-form (prism whouse-issue) ",// (object docA) ",
                 "fill-form " +
-                    "the html-table-row (table-row-widget) " +
+                    "def html-table-row (table-row-widget) " +
                         "(\\tr (@name \"uuid\") " +
                             "(\\td html-input \\input @name \"goods\") " +
                             "(\\td html-input \\input @name \"qty\") " +
@@ -241,8 +241,8 @@ public class WHouseFormTest extends ATest {
     @Test
     public void test_01() throws Throwable {
     	__(
-			"the form part field.",
-			"the generator " +
+			"def form part field.",
+			"def generator " +
 				"\\form " +
 					"(@id id this generator) " +
 					"(each (get part this generator) (\\input @name id this part))"
@@ -250,7 +250,7 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
         
     	__(
-			"the form2 part (field1) (field2)."
+			"def form2 part (field1) (field2)."
 		);
         assertAnimoResult(
     		"generator form2", 

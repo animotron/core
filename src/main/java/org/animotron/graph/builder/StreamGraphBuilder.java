@@ -24,7 +24,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -85,7 +85,7 @@ public class StreamGraphBuilder extends GraphBuilder {
     @Override
     public void endGraph() throws AnimoException {
         relationship = Cache.RELATIONSHIP.get(hash);
-        if (r.isType(THE._)) {
+        if (r.isType(DEF._)) {
             Node end = r.getEndNode();
             Object reference;
             if (!NAME.has(end)) {
@@ -95,25 +95,25 @@ public class StreamGraphBuilder extends GraphBuilder {
                 reference = NAME.get(end);
             }
             if (relationship == null) {
-                relationship = THE._.get(reference);
+                relationship = DEF._.get(reference);
                 if (relationship == null) {
-                    relationship = getROOT().createRelationshipTo(end, THE._);
+                    relationship = getROOT().createRelationshipTo(end, DEF._);
                     UUID.set(relationship, uuid().toString());
                     HASH.set(relationship, hash);
                     THEID.set(end, end.getId());
-                    THE._.add(relationship, reference);
+                    DEF._.add(relationship, reference);
                     Cache.RELATIONSHIP.add(relationship, hash);
                     end.createRelationshipTo(end, AREV);
                 } else {
                     Node n = relationship.getEndNode();
-                    Node rn = THE._.getActualRevision(n);
+                    Node rn = DEF._.getActualRevision(n);
                     freeze(rn);
                     Relationship rr = rn.createRelationshipTo(end, REV);
                     UUID.set(rr, uuid().toString());
                     HASH.set(rr, hash);
                     THEID.set(end, n.getId());
                     Cache.RELATIONSHIP.add(rr, hash);
-                    THE._.setActualRevision(n, end);
+                    DEF._.setActualRevision(n, end);
                 }
                 r.delete();
             } else {
@@ -129,14 +129,14 @@ public class StreamGraphBuilder extends GraphBuilder {
                 } finally {
                     hits.close();
                 }
-                relationship = THE._.get(reference);
+                relationship = DEF._.get(reference);
                 Node n = relationship.getEndNode();
-                Node rn = THE._.getActualRevision(n);
+                Node rn = DEF._.getActualRevision(n);
                 freeze(rn);
                 Relationship rr = rn.createRelationshipTo(nn, REV);
                 UUID.set(rr, uuid().toString());
                 HASH.set(rr, hash);
-                THE._.setActualRevision(n, nn);
+                DEF._.setActualRevision(n, nn);
                 r.delete();
             }
         } else {

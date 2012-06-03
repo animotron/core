@@ -82,7 +82,7 @@ public class Utils {
 				depthFirst().
 				uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 				relationships(AN._, INCOMING).
-				relationships(THE._, INCOMING).
+				relationships(DEF._, INCOMING).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 	    			@Override
 	    			public Evaluation evaluate(Path path) {
@@ -98,7 +98,7 @@ public class Utils {
 	    				if (!path.endNode().equals(n))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-    					if (r.isType(THE._) || THEID.has(n))
+    					if (r.isType(DEF._) || THEID.has(n))
 	    					return INCLUDE_AND_PRUNE;
 	    				
 	    				return EXCLUDE_AND_CONTINUE;
@@ -120,7 +120,7 @@ public class Utils {
 			@Override
 			public void run() {
 				try {
-					Relationship theNode = THE._.get((String) THE._.reference(node));
+					Relationship theNode = DEF._.get((String) DEF._.reference(node));
 		
 					if (theNode != null) {
 						pipe.write(vector.answered(theNode));
@@ -247,7 +247,7 @@ public class Utils {
 //                	for (QCAVector a : AN._.getREFs(pf, v)) {
 //                		out.write(a);
 //                	}
-                    s = Statements.name((String) THE._.reference(v.getClosest()));
+                    s = Statements.name((String) DEF._.reference(v.getClosest()));
                     
                 } catch (Throwable t) {
     				pipe.write(v);//.answered(v.getClosest())
@@ -263,7 +263,7 @@ public class Utils {
 
 					Relationship result = e.getAnswer();
 					
-					if (result.isType(REF._) || result.isType(THE._)) {
+					if (result.isType(REF._) || result.isType(DEF._)) {
 						pipe.write(e);
 					} else {
 						Pipe p = eval(pf.getController(), e);
@@ -512,7 +512,7 @@ public class Utils {
                         if (path.lastRelationship().isType(REV))
                             return EXCLUDE_AND_PRUNE;
 
-                        if (path.lastRelationship().isType(THE._))
+                        if (path.lastRelationship().isType(DEF._))
                             return INCLUDE_AND_PRUNE;
 
                         if (path.endNode().getId() == 0)
@@ -539,7 +539,7 @@ public class Utils {
                         if (Statements.relationshipType(path.lastRelationship()) == null)
                             return EXCLUDE_AND_PRUNE;
 
-//                        if (path.lastRelationship().isType(THE._))
+//                        if (path.lastRelationship().isType(DEF._))
 //                            return INCLUDE_AND_PRUNE;
 
                         if (path.endNode().getId() == 0)

@@ -41,17 +41,17 @@ public class SimpleTest extends ATest {
         
     	__(
             new JExpression(
-                    _(THE._, "AA")
+                    _(DEF._, "AA")
             ),
             new JExpression(
-                    _(THE._, "BB", _(AN._, "AA", value("a@b")))
+                    _(DEF._, "BB", _(AN._, "AA", value("a@b")))
             )
         );
 
     	JExpression C = new JExpression(
-			_(THE._, "CC", _(AN._, "BB"))
+			_(DEF._, "CC", _(AN._, "BB"))
 		);
-        assertAnimoResultOneStep(C, "the CC BB AA \"a@b\".");
+        assertAnimoResultOneStep(C, "def CC BB AA \"a@b\".");
 	}
 
 	@Test
@@ -59,16 +59,16 @@ public class SimpleTest extends ATest {
         
     	__(
             new JExpression(
-                    _(THE._, "A")
+                    _(DEF._, "A")
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "A", value("a@b")))
+                    _(DEF._, "B", _(AN._, "A", value("a@b")))
             )
         );
 
     	JExpression C = new JExpression(
-			_(THE._, "C", _(GET._, "A", _(AN._, "B")))
+			_(DEF._, "C", _(GET._, "A", _(AN._, "B")))
 		);
-        assertAnimoResult(C, "the C A \"a@b\".");
+        assertAnimoResult(C, "def C A \"a@b\".");
 	}
 }
