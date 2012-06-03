@@ -98,8 +98,8 @@ public class ReferencesTest extends ATest {
         testAnimo("def male sex.");
         testAnimo("def joe male.");
         testAnimo("def john sex male.");
-        //assertAnimoResult("all male", "def joe male. the john sex.");
-        assertAnimoResult("all male", "def joe male sex. the john sex.");
+        //assertAnimoResult("all male", "def joe male. def john sex.");
+        assertAnimoResult("all male", "def joe male sex. def john sex.");
     }
 
     @Test

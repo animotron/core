@@ -267,7 +267,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def foo c, d, e.");
         testAnimo("def bar (c) (d) (e).");
         testAnimo("def a b (c) (d) (e).");
-        assertAnimoResult("all get b a", "def bar (c) (d) (e). the foo (c) (d) (e).");
+        assertAnimoResult("all get b a", "def bar (c) (d) (e). def foo (c) (d) (e).");
     }
 
     @Test

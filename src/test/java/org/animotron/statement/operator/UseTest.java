@@ -128,17 +128,17 @@ public class UseTest extends ATest {
         test = new JExpression(
             _(ALL._, "S")
         );
-        assertAnimoResult(test, "def A (S) (X). the B (S) (Y). the C (S) (X) (Y).");
+        assertAnimoResult(test, "def A (S) (X). def B (S) (Y). def C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "X"))
         );
-        assertAnimoResult(test, "def A (S) (X). the C (S) (X) (Y).");
+        assertAnimoResult(test, "def A (S) (X). def C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "Y"))
         );
-        assertAnimoResult(test, "def B (S) (Y). the C (S) (X) (Y).");
+        assertAnimoResult(test, "def B (S) (Y). def C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "X"), _(USE._, "Y"))

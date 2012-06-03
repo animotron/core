@@ -104,7 +104,7 @@ public class WordTest extends ATest {
         assertAnimoResult("any test search \"test1\"", "def test1 (test).");
         assertAnimoResult("any test search \"test2\"", "def test2 (test).");
 
-        assertAnimoResult("all test search \"test*\"", "def test1 (test). the test2 (test).");
+        assertAnimoResult("all test search \"test*\"", "def test1 (test). def test2 (test).");
 	}
 
 	@Test
