@@ -24,7 +24,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -103,7 +103,7 @@ public class FastGraphBuilder extends GraphBuilder {
             Object[] o = it.next();
             Statement statement = (Statement) o[1];
             relationship = Cache.RELATIONSHIP.get(hash);
-            Object reference = statement instanceof THE && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
+            Object reference = statement instanceof DEF && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
             if (relationship == null) {
                 root = createNode();
                 o[6] = Cache.NODE.get(hash) != null;
@@ -116,26 +116,26 @@ public class FastGraphBuilder extends GraphBuilder {
                     build(it.next());
                     step();
                 }
-                if (statement instanceof THE) {
-                    relationship = THE._.get(reference);
+                if (statement instanceof DEF) {
+                    relationship = DEF._.get(reference);
                     if (relationship == null) {
-                        relationship = getROOT().createRelationshipTo(end, THE._);
+                        relationship = getROOT().createRelationshipTo(end, DEF._);
                         UUID.set(relationship, uuid().toString());
                         HASH.set(relationship, hash);
                         THEID.set(end, end.getId());
-                        THE._.add(relationship, reference);
+                        DEF._.add(relationship, reference);
                         Cache.RELATIONSHIP.add(relationship, hash);
                         end.createRelationshipTo(end, AREV);
                     } else {
                         Node n = relationship.getEndNode();
-                        Node rn = THE._.getActualRevision(n);
+                        Node rn = DEF._.getActualRevision(n);
                         freeze(rn);
                         Relationship rr = rn.createRelationshipTo(end, REV);
                         UUID.set(rr, uuid().toString());
                         HASH.set(rr, hash);
                         THEID.set(end, n.getId());
                         Cache.RELATIONSHIP.add(rr, hash);
-                        THE._.setActualRevision(n, end);
+                        DEF._.setActualRevision(n, end);
                     }
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
@@ -144,7 +144,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 }
                 r.delete();
                 root.delete();
-            } else if (statement instanceof THE) {
+            } else if (statement instanceof DEF) {
                 Node end = relationship.getEndNode();
                 unfreeze(end);
                 Node nn = createNode();
@@ -158,14 +158,14 @@ public class FastGraphBuilder extends GraphBuilder {
                 } finally {
                     hits.close();
                 }
-                relationship = THE._.get(reference);
+                relationship = DEF._.get(reference);
                 Node n = relationship.getEndNode();
-                Node rn = THE._.getActualRevision(n);
+                Node rn = DEF._.getActualRevision(n);
                 freeze(rn);
                 Relationship rr = rn.createRelationshipTo(nn, REV);
                 UUID.set(rr, uuid().toString());
                 HASH.set(rr, hash);
-                THE._.setActualRevision(n, nn);
+                DEF._.setActualRevision(n, nn);
             } else {
                 return;
             }

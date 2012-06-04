@@ -42,7 +42,7 @@ public class JSONSerializerTest extends ATest {
 
     @Test
     public void test_01() throws Throwable {
-        test("the a 1", "1");
+        test("def a 1", "1");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class JSONSerializerTest extends ATest {
 
     @Test
     public void test_03() throws Throwable {
-        test("the a 1 2", "[1,2]");
+        test("def a 1 2", "[1,2]");
     }
 
     @Test

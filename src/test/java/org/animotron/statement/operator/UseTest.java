@@ -42,14 +42,14 @@ public class UseTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             )
         );
 
         JExpression x = new JExpression(
-            _(THE._, "x", _(ANY._, "X", _(USE._, "Y")))
+            _(DEF._, "x", _(ANY._, "X", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x the A X.");
+        assertAnimoResult(x, "def x the A X.");
     }
 
     @Test
@@ -57,17 +57,17 @@ public class UseTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "q", _(ANY._, "X"))
+                    _(DEF._, "q", _(ANY._, "X"))
             )
         );
 
         JExpression x = new JExpression(
-            _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
+            _(DEF._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x q the A X.");
+        assertAnimoResult(x, "def x q the A X.");
     }
 
     @Test
@@ -75,17 +75,17 @@ public class UseTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "X"))
+                    _(DEF._, "B", _(AN._, "X"))
             )
         );
 
         JExpression x = new JExpression(
-            _(THE._, "x", _(ALL._, "X", _(USE._, "Y")))
+            _(DEF._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x (the A X) (the B X).");
+        assertAnimoResult(x, "def x (the A X) (the B X).");
     }
 
     @Test
@@ -93,20 +93,20 @@ public class UseTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "X"))
+                    _(DEF._, "B", _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "q", _(ALL._, "X"))
+                    _(DEF._, "q", _(ALL._, "X"))
             )
         );
 
         JExpression x = new JExpression(
-            _(THE._, "x", _(AN._, "q", _(USE._, "Y")))
+            _(DEF._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "the x q (the A X) (the B X).");
+        assertAnimoResult(x, "def x q (the A X) (the B X).");
     }
     
     @Test
@@ -114,13 +114,13 @@ public class UseTest extends ATest {
 
         __(
             new JExpression(
-                    _(THE._, "A", _(AN._, "S"), _(AN._, "X"))
+                    _(DEF._, "A", _(AN._, "S"), _(AN._, "X"))
             ),
             new JExpression(
-                    _(THE._, "B", _(AN._, "S"), _(AN._, "Y"))
+                    _(DEF._, "B", _(AN._, "S"), _(AN._, "Y"))
             ),
             new JExpression(
-                    _(THE._, "C", _(AN._, "S"), _(AN._, "X"), _(AN._, "Y"))
+                    _(DEF._, "C", _(AN._, "S"), _(AN._, "X"), _(AN._, "Y"))
             )
         );
 
@@ -128,22 +128,22 @@ public class UseTest extends ATest {
         test = new JExpression(
             _(ALL._, "S")
         );
-        assertAnimoResult(test, "the A (S) (X). the B (S) (Y). the C (S) (X) (Y).");
+        assertAnimoResult(test, "def A (S) (X). def B (S) (Y). def C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "X"))
         );
-        assertAnimoResult(test, "the A (S) (X). the C (S) (X) (Y).");
+        assertAnimoResult(test, "def A (S) (X). def C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "Y"))
         );
-        assertAnimoResult(test, "the B (S) (Y). the C (S) (X) (Y).");
+        assertAnimoResult(test, "def B (S) (Y). def C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "X"), _(USE._, "Y"))
         );
-        assertAnimoResult(test, "the C (S) (X) (Y).");
+        assertAnimoResult(test, "def C (S) (X) (Y).");
 
     }    
 }

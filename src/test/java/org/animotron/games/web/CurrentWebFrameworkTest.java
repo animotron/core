@@ -91,75 +91,75 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-                "the site",
-                "the not-found-error",
-                "the default-not-found",
-                "the xxx",
-                "the xxx-service",
-                "the foo-site",
-                "the site",
-                "the server-name",
-                "the foo",
-                "the root",
-                "the hello-foo",
-                "the zzz",
-                "the zzz-service",
-                "the bar-site",
-                "the bar",
-                "the hello-bar",
-                "the yyy",
-                "the yyy-service",
-                "the bar-not-found",
-                "the text-html",
-                "the mime-type",
-                "the type",
-                "the extension",
-                "the html-page",
-                "the title",
-                "the layout",
-                "the content",
-                "the qLayout",
-                "the foo-root-layout",
-                "the bar-root-layout",
-                "the foo-xxx-layout",
-                "the bar-xxx-layout",
-                "the code",
-                "the error",
-                "the message",
-                "the stack-trace",
+                "def site",
+                "def not-found-error",
+                "def default-not-found",
+                "def xxx",
+                "def xxx-service",
+                "def foo-site",
+                "def site",
+                "def server-name",
+                "def foo",
+                "def root",
+                "def hello-foo",
+                "def zzz",
+                "def zzz-service",
+                "def bar-site",
+                "def bar",
+                "def hello-bar",
+                "def yyy",
+                "def yyy-service",
+                "def bar-not-found",
+                "def text-html",
+                "def mime-type",
+                "def type",
+                "def extension",
+                "def html-page",
+                "def title",
+                "def layout",
+                "def content",
+                "def qLayout",
+                "def foo-root-layout",
+                "def bar-root-layout",
+                "def foo-xxx-layout",
+                "def bar-xxx-layout",
+                "def code",
+                "def error",
+                "def message",
+                "def stack-trace",
 
-                "the site (not-found-error default-not-found) (xxx xxx-service)",
+                "def site (not-found-error default-not-found) (xxx xxx-service)",
 
-                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
-                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
+                "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
+                "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
-                "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-                "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-                "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
-                "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+                "def hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
 
-                "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
+                "def xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
-                "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-                "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+                "def zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+                "def yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
-                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
-                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
+                "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+                "def bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
 
-                "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
-                "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+                "def foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+                "def bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
 
-                "the qLayout (layout) (\\h3 get title) (\\span get content)",
+                "def qLayout (layout) (\\h3 get title) (\\span get content)",
 
-                "the not-found-error (error) (code 404)",
+                "def not-found-error (error) (code 404)",
 
-                "the default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
+                "def default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
 
-                "the bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
+                "def bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
 
-                "the default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "the bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
+                "def bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
 
         );
 
@@ -203,38 +203,38 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_01() throws Throwable {
 
         __(
-                "the site (not-found-error default-not-found) (xxx xxx-service)",
+                "def site (not-found-error default-not-found) (xxx xxx-service)",
 
-                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
-                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
+                "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
+                "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
-                "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-                "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-                "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
-                "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+                "def hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
 
-                "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
+                "def xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
-                "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-                "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+                "def zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+                "def yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
-                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
-                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
+                "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+                "def bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
 
-                "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
-                "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+                "def foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+                "def bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
 
-                "the qLayout (layout) (\\h3 get title) (\\span get content)",
+                "def qLayout (layout) (\\h3 get title) (\\span get content)",
 
-                "the not-found-error (error) (code 404)",
+                "def not-found-error (error) (code 404)",
 
-                "the default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
+                "def default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
 
-                "the bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
+                "def bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
 
-                "the default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "the bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
+                "def bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
 
         );
 
@@ -278,27 +278,27 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_02() throws Throwable {
 
         __(
-                "the foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
-                "the bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
+                "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (xxx xxx-service) (zzz zzz-service)",
+                "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (xxx xxx-service) (yyy yyy-service)",
 
-                "the text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-                "the html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-                "the hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
-                "the hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+                "def hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
 
-                "the xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
+                "def xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
-                "the zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-                "the yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+                "def zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+                "def yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
-                "the foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
-                "the bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
+                "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+                "def bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
 
-                "the foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
-                "the bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
+                "def foo-xxx-layout (layout, foo, xxx) (\\h3 get title) (\\p get content) (\\p get server-name)",
+                "def bar-xxx-layout (layout, bar, xxx) (\\h4 get title) (\\div get content) (\\p get server-name)",
 
-                "the qLayout (layout) (\\h3 get title) (\\span get content)"
+                "def qLayout (layout) (\\h3 get title) (\\span get content)"
         );
 
         assertQuery("foo.com", "root", "text/html",

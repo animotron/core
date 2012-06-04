@@ -67,7 +67,7 @@ public class WHATIS extends AbstractQuery implements Reference {
 					QCAVector vector = thes.valueOf(rc);
 					Relationship the = vector.getClosest();
 					
-					if (the.isType(REF._) || the.isType(THE._)) {
+					if (the.isType(REF._) || the.isType(DEF._)) {
 						downIS(pf, the.getEndNode());
 						
 						upIS(pf, vector, the);

@@ -31,7 +31,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
@@ -121,7 +121,7 @@ public class EACH extends Combinator {
                         subelements.close();
                     }
                 } else {
-                    the = new JExpression(JExpression._(THE._, JExpression._(res[i])));
+                    the = new JExpression(JExpression._(DEF._, JExpression._(res[i])));
                     r = new JExpression(JExpression._(AN._, the, JExpression._(r)));
                 }
             }

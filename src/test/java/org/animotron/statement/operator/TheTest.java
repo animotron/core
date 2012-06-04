@@ -42,23 +42,23 @@ public class TheTest extends ATest {
     public void testTHE() throws Throwable {
 
         JExpression A = new JExpression(
-            _(THE._, "A", _(THE._, "B", _(THE._, "C")))
+            _(DEF._, "A", _(DEF._, "B", _(DEF._, "C")))
         );
-        assertAnimoResult(A, "the A the B the C.");
-        assertAnimo(A, "the A the B the C.");
+        assertAnimoResult(A, "def A the B the C.");
+        assertAnimo(A, "def A the B the C.");
     }
 
 	@Test
  	public void testREV() throws Throwable {
 //        Expression e;
-//        e = testAnimo("the e 1.");
+//        e = testAnimo("def e 1.");
 //        String uuid1 = (String) UUID.getThe(e);
-//        e = testAnimo("the e 2.");
+//        e = testAnimo("def e 2.");
 //        String uuid2 = (String) UUID.getThe(e);
 //        Relationship rev1 = e.getEndNode().getSingleRelationship(REV, OUTGOING);
 //        Assert.assertNotNull(rev1);
 //        Assert.assertEquals("", UUID.getThe(rev1), uuid1);
-//        e = testAnimo("the e 3.");
+//        e = testAnimo("def e 3.");
 //        String uuid3 = (String) UUID.getThe(e);
 //        Relationship rev2 = e.getEndNode().getSingleRelationship(REV, OUTGOING).getEndNode().getSingleRelationship(REV, OUTGOING);
 //        Assert.assertNotNull(rev2);
@@ -69,20 +69,20 @@ public class TheTest extends ATest {
 
 	@Test
  	public void testREV_00() throws Throwable {
-        testAnimo("the e 1.");
-        testAnimo("the e 2.");
-        testAnimo("the e 3.");
-        testAnimo("the e 1.");
+        testAnimo("def e 1.");
+        testAnimo("def e 2.");
+        testAnimo("def e 3.");
+        testAnimo("def e 1.");
 	}
 
 	@Test
  	public void testREV_01() throws Throwable {
 		Expression e;
 		
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 		
-        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
+        e = testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 	}
 	
@@ -90,31 +90,31 @@ public class TheTest extends ATest {
  	public void testREV_02() throws Throwable {
 		Expression e;
 		
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 		
-        e = testAnimo("the e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
+        e = testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 
-		e = testAnimo("the e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
         System.out.println(UUID.get(e));
 	}
 
 	@Test
  	public void testREV_10() throws Throwable {
-        testAnimo("the e 1.");
-        testAnimo("the e 2.");
-        assertAnimoResultOneStep("e", "e 2."); //UNDERSTAND: is it correct, missing THE at beginning?
+        testAnimo("def e 1.");
+        testAnimo("def e 2.");
+        assertAnimoResultOneStep("e", "e 2."); //UNDERSTAND: is it correct, missing DEF at beginning?
 
-        testAnimo("the e 1.");
-        assertAnimoResultOneStep("e", "e 1."); //UNDERSTAND: is it correct, missing THE at beginning?
+        testAnimo("def e 1.");
+        assertAnimoResultOneStep("e", "e 1."); //UNDERSTAND: is it correct, missing DEF at beginning?
 	}
 
     @Test
     public void test_11() throws Throwable {
 
         __(
-	        "the item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+	        "def item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
         );
 
         assertAnimoResult(
@@ -123,7 +123,7 @@ public class TheTest extends ATest {
         );
 
         __(
-	        "the item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+	        "def item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
         );
 
         assertAnimoResult(

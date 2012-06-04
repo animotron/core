@@ -24,7 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -51,115 +51,115 @@ public class XMLSerializerTest extends ATest {
     @Test
     public void test_00() throws Throwable {
         test("\\b", "<b/>");
-        test("the a \\b", "<b/>");
+        test("def a \\b", "<b/>");
     }
 
     @Test
     @Ignore
     public void test_01() throws Throwable {
         test("\\ get element-name element-name \"b\"", "<b/>");
-        test("the a \\ get element-name element-name \"b\"", "<b/>");
+        test("def a \\ get element-name element-name \"b\"", "<b/>");
     }
 
     @Test
     public void test_02() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("c"))));
+        __(new JExpression(_(DEF._, "b", value("c"))));
         test("\\ b", "<c/>");
-        test("the a \\ b", "<c/>");
+        test("def a \\ b", "<c/>");
     }
 
     @Test
     public void test_03() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("c"))));
+        __(new JExpression(_(DEF._, "b", value("c"))));
         test("\\ an b", "<c/>");
-        test("the a \\ an b", "<c/>");
+        test("def a \\ an b", "<c/>");
     }
 
     @Test
 	public void test_04() throws Throwable {
         test("\\ \"b\"", "<b/>");
-        test("the a \\ \"b\"", "<b/>");
+        test("def a \\ \"b\"", "<b/>");
 	}
 
     @Test
 	public void test_05() throws Throwable {
         test("\\b @c \"d\"", "<b c=\"d\"/>");
-        test("the a \\b @c \"d\"", "<b c=\"d\"/>");
+        test("def a \\b @c \"d\"", "<b c=\"d\"/>");
 	}
 
     @Test
     public void test_06() throws Throwable {
         test("\\b (@c \"d\") (\"e\")", "<b c=\"d\">e</b>");
-        test("the a \\b (@c \"d\") (\"e\")", "<b c=\"d\">e</b>");
+        test("def a \\b (@c \"d\") (\"e\")", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_07() throws Throwable {
         __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", value("e")))
+                new JExpression(_(DEF._, "b", value("b"))),
+                new JExpression(_(DEF._, "c", value("c"))),
+                new JExpression(_(DEF._, "d", value("d"))),
+                new JExpression(_(DEF._, "e", value("e")))
         );
         test("\\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
-        test("the a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
+        test("def a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_08() throws Throwable {
         __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", value("e")))
+                new JExpression(_(DEF._, "b", value("b"))),
+                new JExpression(_(DEF._, "c", value("c"))),
+                new JExpression(_(DEF._, "d", value("d"))),
+                new JExpression(_(DEF._, "e", value("e")))
         );
         test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
-        test("the a \\((b) (@ (c) (d)) (e))", "<bcde/>");
+        test("def a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
     public void test_09() throws Throwable {
         __(
-                new JExpression(_(THE._, "b", value("b"))),
-                new JExpression(_(THE._, "c", value("c"))),
-                new JExpression(_(THE._, "d", value("d"))),
-                new JExpression(_(THE._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
+                new JExpression(_(DEF._, "b", value("b"))),
+                new JExpression(_(DEF._, "c", value("c"))),
+                new JExpression(_(DEF._, "d", value("d"))),
+                new JExpression(_(DEF._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
         );
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
-        test("the a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
+        test("def a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
 
     @Test
     public void test_0A() throws Throwable {
-        test("the a (??stylesheet) \\root", "<?stylesheet?><root/>");
+        test("def a (??stylesheet) \\root", "<?stylesheet?><root/>");
     }
 
     @Test
     public void test_0B() throws Throwable {
-        test("the a (??stylesheet \"path\") \\root", "<?stylesheet path?><root/>");
+        test("def a (??stylesheet \"path\") \\root", "<?stylesheet path?><root/>");
     }
 
     @Test
     public void test_0C() throws Throwable {
-        __(new JExpression(_(THE._, "b", value("path"))));
-        test("the a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
+        __(new JExpression(_(DEF._, "b", value("path"))));
+        test("def a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 
     @Test
     public void test_0D() throws Throwable {
-        test("the a \\x:root $x \"x-namespace\"", "<x:root xmlns:x=\"x-namespace\"/>");
+        test("def a \\x:root $x \"x-namespace\"", "<x:root xmlns:x=\"x-namespace\"/>");
     }
 
     @Test
     public void test_0E() throws Throwable {
-        test("the a \\x:root $ (\"x\") (\"x-namespace\")", "<x:root xmlns:x=\"x-namespace\"/>");
+        test("def a \\x:root $ (\"x\") (\"x-namespace\")", "<x:root xmlns:x=\"x-namespace\"/>");
     }
 
     @Test
     public void test_0F() throws Throwable {
     	IOException ex = null;
         try {
-            test("the a \\x:root $x", "<x:root xmlns:x=\"\"/>");
+            test("def a \\x:root $x", "<x:root xmlns:x=\"\"/>");
         } catch (IOException e) {
         	ex = e;
         }
@@ -168,23 +168,23 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_10() throws Throwable {
-        test("the a \\root $ \"x-namespace\"", "<root xmlns=\"x-namespace\"/>");
+        test("def a \\root $ \"x-namespace\"", "<root xmlns=\"x-namespace\"/>");
     }
 
     @Test
     public void test_11() throws Throwable {
         //TODO implement startDTD()/endDTD()
-        test("the a (!! \"<!DOCTYPE html>\") (\\html)", "<!DOCTYPE html><html/>");
+        test("def a (!! \"<!DOCTYPE html>\") (\\html)", "<!DOCTYPE html><html/>");
     }
 
     @Test
     public void test_12() throws Throwable {
-        test("the a \\html &#amp", "<html>&amp;</html>");
+        test("def a \\html &#amp", "<html>&amp;</html>");
     }
 
     @Test
     public void test_13() throws Throwable {
-        test("the a \\html @x \"&\"", "<html x=\"&amp;\"/>");
+        test("def a \\html @x \"&\"", "<html x=\"&amp;\"/>");
     }
 
 }

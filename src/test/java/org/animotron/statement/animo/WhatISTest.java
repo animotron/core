@@ -11,28 +11,28 @@ public class WhatISTest extends ATest {
 
 	@Test
 	public void test_00() throws IOException {
-        __("the a x.");
+        __("def a x.");
         
         assertAnimoResult("what-is a", "x.");
 	}
 
     @Test
     public void test_01() throws IOException {
-        __("the a (x) (y).");
+        __("def a (x) (y).");
 
         assertAnimoResult("what-is a", "x. y.");
     }
 
 //    @Test
 //    public void test_02() throws IOException {
-//        __("the a (x) (y) (z).");
+//        __("def a (x) (y) (z).");
 //
 //        assertAnimoResult("what-is a use y", "y.");
 //    }
 
     @Test
     public void test_03() throws IOException {
-        __("the a x.", "the b y.", "the c b a.");
+        __("def a x.", "def b y.", "def c b a.");
 
         assertAnimoResult("what-is get b c", "y.");
 
@@ -41,21 +41,21 @@ public class WhatISTest extends ATest {
 
     @Test
     public void test_04() throws IOException {
-        __("the a x.", "the b y.", "the c part (a) (b).");
+        __("def a x.", "def b y.", "def c part (a) (b).");
 
         assertAnimoResult("each (get part c) (what-is this part)", "x. y.");
     }
 
     @Test
     public void test_05() throws IOException {
-        __("the a x.", "the b y.", "the c part (a) (b).", "the part foo.");
+        __("def a x.", "def b y.", "def c part (a) (b).", "def part foo.");
 
         assertAnimoResult("each (get part c) (what-is this part)", "x. foo. y. foo.");
     }
 
     @Test
     public void test_06() throws IOException {
-        __("the foo bar.", "the a bar x.");
+        __("def foo bar.", "def a bar x.");
 
         assertAnimoResult("get (what-is foo) (a)", "bar x.");
     }

@@ -30,7 +30,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -64,7 +64,7 @@ public class Preparator extends StatementManipulator {
         		if (s instanceof AN) {
         			try {
         				Relationship ref = r.getEndNode().getSingleRelationship(REF._, OUTGOING);
-        				String name = (String) THE._.reference(ref);
+        				String name = (String) DEF._.reference(ref);
         				if (name != null) {
 	                        s = Statements.name(name);
 	        			    

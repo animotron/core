@@ -43,41 +43,41 @@ public class IdTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        testAnimo("the a (x) (y 1).");
-        testAnimo("the b (x) (y 2).");
-        testAnimo("the c (x) (y 3).");
+        testAnimo("def a (x) (y 1).");
+        testAnimo("def b (x) (y 2).");
+        testAnimo("def c (x) (y 3).");
         assertAnimoResult("id all x", "\"a\". \"b\". \"c\".");
     }
 
     @Test
     @Ignore
     public void test_03() throws Throwable {
-        testAnimo("the a (x) (y 1).");
+        testAnimo("def a (x) (y 1).");
         assertAnimoResult("id get y a", "\"y\".");
     }
 
     @Test
     public void test_04() throws Throwable {
-        testAnimo("the a (x) (y 1).");
-        testAnimo("the b (x) (y 2).");
-        testAnimo("the c (x) (y 3).");
+        testAnimo("def a (x) (y 1).");
+        testAnimo("def b (x) (y 2).");
+        testAnimo("def c (x) (y 3).");
         assertAnimoResult("id any x with y 2", "\"b\".");
     }
 
     @Test
     public void test_05() throws Throwable {
-        testAnimo("the a (x) (y 1).");
-        testAnimo("the b (x) (y 2).");
-        testAnimo("the c (x) (y 3).");
+        testAnimo("def a (x) (y 1).");
+        testAnimo("def b (x) (y 2).");
+        testAnimo("def c (x) (y 3).");
         assertAnimoResult("each (all x) (\\foo id this x)", "\\foo \"a\". \\foo \"b\". \\foo \"c\".");
     }
 
     @Test
     @Ignore
     public void test_06() throws Throwable {
-        testAnimo("the a (x) (y id this).");
-        testAnimo("the b (x) (y id this).");
-        testAnimo("the c (x) (y id this).");
+        testAnimo("def a (x) (y id this).");
+        testAnimo("def b (x) (y id this).");
+        testAnimo("def c (x) (y id this).");
 
         assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo y \"b\". \\foo y \"c\".");
     }
@@ -85,10 +85,10 @@ public class IdTest extends ATest {
     @Test
     @Ignore
     public void test_07() throws Throwable {
-        testAnimo("the x y id this.");
-        testAnimo("the a x.");
-        testAnimo("the b x.");
-        testAnimo("the c x.");
+        testAnimo("def x y id this.");
+        testAnimo("def a x.");
+        testAnimo("def b x.");
+        testAnimo("def c x.");
         assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo y \"b\". \\foo y \"c\".");
     }
 

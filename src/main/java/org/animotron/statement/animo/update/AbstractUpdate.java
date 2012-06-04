@@ -108,18 +108,18 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
             }
         } else {
             final Node n = v.getClosest().getEndNode();
-            final Relationship r = n.getSingleRelationship(THE._, INCOMING);
+            final Relationship r = n.getSingleRelationship(DEF._, INCOMING);
             if (r != null) {
                 AnimoGraph.execute(new GraphOperation<Void>() {
                     private void revision(Node rn, Node n, Relationship r) throws IOException {
                         Relationship rr = n.createRelationshipTo(rn, RelationshipTypes.REV);
-                        THE._.setActualRevision(n, rn);
+                        DEF._.setActualRevision(n, rn);
                         UUID.set(rr, uuid().toString());
                         HASH.set(rr, DigestSerializer._.serialize(rr));
                     }
                     @Override
                     public Void execute() throws Throwable {
-                        Node rev = THE._.getActualRevision(n);
+                        Node rev = DEF._.getActualRevision(n);
                         Path path = diff(rev, x).next();
                         if (path != null) {
                             Node rn = createNode();

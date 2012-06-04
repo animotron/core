@@ -203,7 +203,7 @@ public class WITH extends Operator implements Predicate {
 							
 							//System.out.println("   "+rrr);
 							
-							for (Relationship the : rrr.getStartNode().getRelationships(THE._, INCOMING)) {
+							for (Relationship the : rrr.getStartNode().getRelationships(DEF._, INCOMING)) {
 								thes.add( the );
 							}
 						}

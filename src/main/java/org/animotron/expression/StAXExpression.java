@@ -23,7 +23,7 @@ package org.animotron.expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.ml.*;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
 
@@ -56,7 +56,7 @@ public class StAXExpression extends AbstractStAXExpression {
 
     @Override
     public void build() throws Throwable {
-        builder.start(THE._, name);
+        builder.start(DEF._, name);
         process();
         builder.end();
     }

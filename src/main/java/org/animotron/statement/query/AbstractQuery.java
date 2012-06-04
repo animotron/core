@@ -176,7 +176,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				if (path.length() == 1 && r.isType(REF._))
     						return EXCLUDE_AND_CONTINUE;
         					
-        				if (path.length() == 2 && r.isType(THE._))
+        				if (path.length() == 2 && r.isType(DEF._))
     						return INCLUDE_AND_PRUNE;
         				
     					return EXCLUDE_AND_PRUNE;
@@ -307,7 +307,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	    	TraversalDescription trav = td.breadthFirst().
 					relationships(AN._, INCOMING).
 					relationships(REF._, INCOMING).
-					relationships(THE._, INCOMING).
+					relationships(DEF._, INCOMING).
 			evaluator(new IntersectionSearcher(){
 				@Override
 				public Evaluation evaluate(Path path) {
@@ -595,7 +595,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(REF._) && FREEZE.has(r))
 				return EXCLUDE_AND_PRUNE;
 
-			if (r.isType(THE._)) {
+			if (r.isType(DEF._)) {
 				checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 
 			} else if (path.length() % 2 == 0) {
@@ -604,7 +604,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				
 				Node node = r.getStartNode();
 				try {
-					checkTHEnode(THE._.getThe(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+					checkTHEnode(DEF._.getThe(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 				} catch (Exception e) {}
 				
 				final FastSet<Node> use = FastSet.newInstance();
@@ -613,7 +613,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			    	TraversalDescription trav = td.
 							relationships(AN._, OUTGOING).
 							relationships(REF._, OUTGOING).
-							relationships(THE._, OUTGOING).
+							relationships(DEF._, OUTGOING).
 					evaluator(new DownIntersectionSearcher(){
 						@Override
 						public Evaluation evaluate(Path path) {
@@ -698,7 +698,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_PRUNE;
 				
 			
-			if (r.isType(THE._)) {
+			if (r.isType(DEF._)) {
 				return checkTHEnode(r.getEndNode(), path, allowWeak, targets, weakTargets, intersection, weakIntersection, weakestIntersection);
 			
 			} else if (path.length() % 2 == 1) {
@@ -759,7 +759,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		for (Relationship r : node.getRelationships(Direction.INCOMING, REF._))
 			if (!FREEZE.has(r))
 				for (Relationship rr : r.getStartNode().getRelationships(Direction.INCOMING, AN._))
-					if (rr.getStartNode().hasRelationship(Direction.INCOMING, THE._))
+					if (rr.getStartNode().hasRelationship(Direction.INCOMING, DEF._))
 						return false;
 		
 		return true;

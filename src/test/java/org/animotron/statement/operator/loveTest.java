@@ -32,17 +32,17 @@ public class loveTest extends ATest {
 	
     @Test
     public void test() throws Throwable {
-        testAnimo("the Peter person.");
-        testAnimo("the Kate person.");
-        testAnimo("the Joe person.");
-        testAnimo("the John person.");
-        testAnimo("the Lily person.");
-        testAnimo("the Lui person.");
-        testAnimo("the event1 (love) (Peter, Kate) (date \"2012-03-14\").");
-        testAnimo("the event2 (love John, Joe) (date sometime).");
-        testAnimo("the event3 (love Joe, Lily) (date \"2012-03-12\").");
-        testAnimo("the event4 (love Lily, Lui) (date \"2012-03-15\").");
-        testAnimo("the today date \"2012-03-14\".");
+        testAnimo("def Peter person.");
+        testAnimo("def Kate person.");
+        testAnimo("def Joe person.");
+        testAnimo("def John person.");
+        testAnimo("def Lily person.");
+        testAnimo("def Lui person.");
+        testAnimo("def event1 (love) (Peter, Kate) (date \"2012-03-14\").");
+        testAnimo("def event2 (love John, Joe) (date sometime).");
+        testAnimo("def event3 (love Joe, Lily) (date \"2012-03-12\").");
+        testAnimo("def event4 (love Lily, Lui) (date \"2012-03-15\").");
+        testAnimo("def today date \"2012-03-14\".");
         // Todo who is love today?
         assertAnimoResult("all get date today.", "Kate. Joe. Lily. Lui.");
     }

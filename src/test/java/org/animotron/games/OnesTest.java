@@ -43,7 +43,7 @@ public class OnesTest extends ATest {
 	public void test_02() throws Throwable {
 		//x=1+ 1/(1+1/x)
 
-		testAnimoResult("the x + (1) (/ + 1 (x)).", "1.42857.");
+		testAnimoResult("def x + (1) (/ + 1 (x)).", "1.42857.");
 	}
 
 }

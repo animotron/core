@@ -99,26 +99,26 @@ public class YetAnotherGraphBuilderTest extends ATest {
 
     @Test
 	public void test_00() throws Throwable {
-        test("the a \\a", "<a/>");
+        test("def a \\a", "<a/>");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        test("the a \\x:a $x \"x-namespace\"", "<x:a xmlns:x=\"x-namespace\"/>");
+        test("def a \\x:a $x \"x-namespace\"", "<x:a xmlns:x=\"x-namespace\"/>");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        test("the a \\a $ \"x-namespace\"", "<a xmlns=\"x-namespace\"/>");
+        test("def a \\a $ \"x-namespace\"", "<a xmlns=\"x-namespace\"/>");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        test("the a \\a @b \"c\"", "<a b=\"c\"/>");
+        test("def a \\a @b \"c\"", "<a b=\"c\"/>");
 	}
 
     @Test
 	public void test_04() throws Throwable {
-        test("the a (??stylesheet \"path\") (\\a)", "<?stylesheet path?><a/>");
+        test("def a (??stylesheet \"path\") (\\a)", "<?stylesheet path?><a/>");
 	}
 }

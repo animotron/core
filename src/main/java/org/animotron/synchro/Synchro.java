@@ -21,7 +21,7 @@
 package org.animotron.synchro;
 
 import org.animotron.expression.AnimoExpression;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.jgroups.*;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -98,14 +98,14 @@ public class Synchro {
 		int fromIndex = synchContent.indexOf(" ") + 1;
 		String synchName = synchContent.substring(fromIndex, synchContent.indexOf(" ", fromIndex));
 
-		Relationship instance = THE._.get(synchName);
+		Relationship instance = DEF._.get(synchName);
 
 		String instanceHash = "";
 		String instancePreviousHash = "";
 		if(instance != null) {
 			instanceHash = byteArrayToHex((byte[]) HASH.get(instance));
 
-			Node nn = THE._.getActualRevision(instance);
+			Node nn = DEF._.getActualRevision(instance);
 			Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
 			if(prev != null) {
 				instancePreviousHash = byteArrayToHex((byte[]) HASH.get(prev));

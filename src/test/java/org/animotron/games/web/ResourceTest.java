@@ -23,7 +23,7 @@ package org.animotron.games.web;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.USE;
@@ -44,41 +44,41 @@ public class ResourceTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "service",
+                        _(DEF._, "service",
                                 _(AN._, "resource")
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service",
+                        _(DEF._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "not-found-service",
+                        _(DEF._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
                                 _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "rest",
+                        _(DEF._, "rest",
                                 _(ANY._, "resource")
                         )
                 )
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s",
+            _(DEF._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
         );
 
-        //assertAnimoResult(s, "the s rest the root-service (service resource) (root) (title \"root\").");
-        assertAnimoResult(s, "the s rest the root-service (service resource) (root) (title).");
+        //assertAnimoResult(s, "def s rest the root-service (service resource) (root) (title \"root\").");
+        assertAnimoResult(s, "def s rest the root-service (service resource) (root) (title).");
     }
 
     @Test
@@ -86,48 +86,48 @@ public class ResourceTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "service",
+                        _(DEF._, "service",
                                 _(AN._, "resource")
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service",
+                        _(DEF._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service1",
+                        _(DEF._, "root-service1",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "not-found-service",
+                        _(DEF._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
                                 _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "rest",
+                        _(DEF._, "rest",
                                 _(ALL._, "resource")
                         )
                 )
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s",
+            _(DEF._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
         );
 
-        //assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (service resource) (root) (title \"root1\")).");
-        assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title)) (the root-service1 (service resource) (root) (title)).");
+        //assertAnimoResult(s, "def s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (service resource) (root) (title \"root1\")).");
+        assertAnimoResult(s, "def s rest (the root-service (service resource) (root) (title)) (the root-service1 (service resource) (root) (title)).");
 
     }
 
@@ -136,48 +136,48 @@ public class ResourceTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "service",
+                        _(DEF._, "service",
                                 _(AN._, "resource")
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service",
+                        _(DEF._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service1",
+                        _(DEF._, "root-service1",
                                 _(AN._, "root-service"),
                                 _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "not-found-service",
+                        _(DEF._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
                                 _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "rest",
+                        _(DEF._, "rest",
                                 _(ALL._, "resource")
                         )
                 )
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s",
+            _(DEF._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
         );
 
-        //assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (root-service (service resource) (root) (title \"root\")) (title)) (title \"root1\")).");
-        //assertAnimoResult(s, "the s rest (the root-service (service resource) (root) (title)) (the root-service1 (root-service (service resource) (root) (title)) (title)).");
-        assertAnimoResult(s, "the s rest the root-service1 (root-service (service resource) (root) (title)) (title).");
+        //assertAnimoResult(s, "def s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (root-service (service resource) (root) (title \"root\")) (title)) (title \"root1\")).");
+        //assertAnimoResult(s, "def s rest (the root-service (service resource) (root) (title)) (the root-service1 (root-service (service resource) (root) (title)) (title)).");
+        assertAnimoResult(s, "def s rest the root-service1 (root-service (service resource) (root) (title)) (title).");
 
     }
 
@@ -186,36 +186,36 @@ public class ResourceTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "root-service",
+                        _(DEF._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "not-found-service",
+                        _(DEF._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
                                 _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "rest",
+                        _(DEF._, "rest",
                                 _(ANY._, "service")
                         )
                 )
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s",
+            _(DEF._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
         );
 
-        //assertAnimoResult(s, "the s rest the root-service (service) (root) (title \"root\").");
-        assertAnimoResult(s, "the s rest the root-service (service) (root) (title).");
+        //assertAnimoResult(s, "def s rest the root-service (service) (root) (title \"root\").");
+        assertAnimoResult(s, "def s rest the root-service (service) (root) (title).");
     }
 
     @Test
@@ -223,43 +223,43 @@ public class ResourceTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "root-service",
+                        _(DEF._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service1",
+                        _(DEF._, "root-service1",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "not-found-service",
+                        _(DEF._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
                                 _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "rest",
+                        _(DEF._, "rest",
                                 _(ALL._, "service")
                         )
                 )
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s",
+            _(DEF._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
         );
 
-        //assertAnimoResult(s, "the s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (service) (root) (title \"root1\")).");
-        assertAnimoResult(s, "the s rest (the root-service (service) (root) (title)) (the root-service1 (service) (root) (title)).");
+        //assertAnimoResult(s, "def s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (service) (root) (title \"root1\")).");
+        assertAnimoResult(s, "def s rest (the root-service (service) (root) (title)) (the root-service1 (service) (root) (title)).");
     }
 
     @Test
@@ -267,42 +267,42 @@ public class ResourceTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                        _(THE._, "root-service",
+                        _(DEF._, "root-service",
                                 _(AN._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "root-service1",
+                        _(DEF._, "root-service1",
                                 _(AN._, "root-service"),
                                 _(AN._, "title", value("root1"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "not-found-service",
+                        _(DEF._, "not-found-service",
                                 _(AN._, "service"),
                                 _(AN._, "not-found"),
                                 _(AN._, "title", value("404"))
                         )
                 ),
                 new JExpression(
-                        _(THE._, "rest",
+                        _(DEF._, "rest",
                                 _(ALL._, "service")
                         )
                 )
         );
 
         JExpression s = new JExpression(
-            _(THE._, "s",
+            _(DEF._, "s",
                 _(AN._, "rest",
                     _(USE._, "root")
                 )
             )
         );
 
-        //assertAnimoResult(s, "the s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (root-service) (title \"root1\")).");
-        //assertAnimoResult(s, "the s rest (the root-service (service) (root) (title)) (the root-service1 (root-service (service) (root) (title)) (title)).");
-        assertAnimoResult(s, "the s rest the root-service1 (root-service (service) (root) (title)) (title).");
+        //assertAnimoResult(s, "def s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (root-service) (title \"root1\")).");
+        //assertAnimoResult(s, "def s rest (the root-service (service) (root) (title)) (the root-service1 (root-service (service) (root) (title)) (title)).");
+        assertAnimoResult(s, "def s rest the root-service1 (root-service (service) (root) (title)) (title).");
     }
 }

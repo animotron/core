@@ -23,7 +23,7 @@ package org.animotron.statement.string;
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
 
@@ -41,14 +41,14 @@ public class AfterLastTest extends ATest {
         System.out.println("Test 'AfterLast' ...");
         
     	JExpression.__(new JExpression(
-                JExpression._(THE._, "A", _(AN._, "B", value("x.y.z")))
+                JExpression._(DEF._, "A", _(AN._, "B", value("x.y.z")))
         ));
     	
     	JExpression C = new JExpression(
-			_(THE._, "C", _(AFTER_LAST._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
+			_(DEF._, "C", _(AFTER_LAST._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
 		);
     	
-        assertAnimoResult(C, "the C \"z\".");
+        assertAnimoResult(C, "def C \"z\".");
 
         //System.out.println("done.");
 	}

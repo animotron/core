@@ -24,7 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
@@ -44,20 +44,20 @@ public class CurrentSiteTest extends ATest {
 
     	JExpression.__(
             new JExpression(
-                _(THE._, "test-service",
+                _(DEF._, "test-service",
                     _(AN._, "service"),
                     _(GET._, "server-name"),
                     _(GET._, "host")
                 )
             ),
             new JExpression(
-                _(THE._, "localhost-site",
+                _(DEF._, "localhost-site",
                     _(AN._, "site"),
                     _(AN._, "server-name", value("localhost"))
                 )
             ),
             new JExpression(
-                _(THE._, "rest",
+                _(DEF._, "rest",
                     _(ANY._, "service",
                         _(ANY._, "site",
                             _(WITH._, "server-name", _(GET._, "host"))
@@ -75,7 +75,7 @@ public class CurrentSiteTest extends ATest {
 
         assertAnimoResult(s,
             "rest " +
-                "the test-service " +
+                "def test-service " +
                 "(service) " +
                     "(server-name \"localhost\") " +
                     "(host \"localhost\").");

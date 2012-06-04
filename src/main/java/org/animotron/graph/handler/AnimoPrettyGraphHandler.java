@@ -91,7 +91,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         } else {
             list.add(root);
         }
-        root[5] = !(statement instanceof REF || statement instanceof AN && pos == 0) && ((Boolean)root[5] || size > 1) || (level == 1 && statement instanceof THE);
+        root[5] = !(statement instanceof REF || statement instanceof AN && pos == 0) && ((Boolean)root[5] || size > 1) || (level == 1 && statement instanceof DEF);
     }
 
     @Override
@@ -113,7 +113,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         if (statement instanceof AN) {
             if (level != 0) {
                 if (!(ps instanceof LINK)) {
-            		if ((Boolean) o[5] || ps instanceof THE) {
+            		if ((Boolean) o[5] || ps instanceof DEF) {
             			indent++;
                 		write("\n");
             			for (int i = 0; i < indent; i++) {

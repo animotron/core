@@ -27,8 +27,8 @@ import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
@@ -70,7 +70,7 @@ public class SUM500Test extends ATest {
         t = currentTimeMillis();
         for (int i = 0; i < 500; i++) {
             __(new JExpression(
-                    _(THE._, "a" + i, 
+                    _(DEF._, "a" + i,
                             _(AN._, "a"),
                             _(AN._, "b", value(i))
                     )

@@ -30,42 +30,42 @@ public class RevTest extends ATest {
 
     @Test
     public void test_00() throws Throwable {
-        testAnimo("the a x.");
-        testAnimo("the a y.");
-        testAnimo("the a x.");
+        testAnimo("def a x.");
+        testAnimo("def a y.");
+        testAnimo("def a x.");
     }
 
     @Test
     public void test_01() throws Throwable {
-        testAnimo("the a x.");
-        testAnimo("the a y.");
-        testAnimo("the a z.");
-        testAnimo("the a y.");
-        testAnimo("the a x.");
+        testAnimo("def a x.");
+        testAnimo("def a y.");
+        testAnimo("def a z.");
+        testAnimo("def a y.");
+        testAnimo("def a x.");
     }
 
     @Test
     public void test_02() throws Throwable {
-        testAnimo("the a x.");
-        testAnimo("the b x.");
-        testAnimo("the a y.");
-        testAnimo("the b y.");
-        testAnimo("the a z.");
-        testAnimo("the b z.");
+        testAnimo("def a x.");
+        testAnimo("def b x.");
+        testAnimo("def a y.");
+        testAnimo("def b y.");
+        testAnimo("def a z.");
+        testAnimo("def b z.");
     }
 
     @Test
     public void test_03() throws Throwable {
-        testAnimo("the a x.");
-        testAnimo("the a y.");
-        testAnimo("the a z.");
-        testAnimo("the a y.");
-        testAnimo("the a x.");
-        testAnimo("the b x.");
-        testAnimo("the b y.");
-        testAnimo("the b z.");
-        testAnimo("the b y.");
-        testAnimo("the b x.");
+        testAnimo("def a x.");
+        testAnimo("def a y.");
+        testAnimo("def a z.");
+        testAnimo("def a y.");
+        testAnimo("def a x.");
+        testAnimo("def b x.");
+        testAnimo("def b y.");
+        testAnimo("def b z.");
+        testAnimo("def b y.");
+        testAnimo("def b x.");
     }
 
 }

@@ -32,7 +32,7 @@ import org.animotron.statement.math.MathInstruction;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -145,7 +145,7 @@ public abstract class Manipulator {
 	                			}
 	                			
 	                            try {
-	                				Object obj = THE._.reference(msg);
+	                				Object obj = DEF._.reference(msg);
 	                				if (obj != null && obj instanceof String )
 	                					s = Statements.name((String) obj);
 	                				else
@@ -156,7 +156,7 @@ public abstract class Manipulator {
 	        				}
 	
 	            			if (msg.isType(REF._)) {
-	            				Object obj = THE._.reference(msg);
+	            				Object obj = DEF._.reference(msg);
 	            				if (obj != null && obj instanceof String )
 	            					s = Statements.name((String) obj);
 	            				else

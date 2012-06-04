@@ -30,7 +30,7 @@ import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
@@ -53,7 +53,7 @@ public class DependenciesTracking extends StatementManipulator {
 	
 	public Pipe execute(final Controller controller, final Relationship op) throws Throwable {
 		//System.out.println("DependenciesTracking");
-		final Node current = THE._.getActualEndNode(op);
+		final Node current = DEF._.getActualEndNode(op);
 		//System.out.println(current);
 		AnimoGraph.execute(new GraphOperation<Void>() {
             @Override

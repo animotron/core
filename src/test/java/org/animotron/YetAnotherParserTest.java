@@ -30,12 +30,12 @@ public class YetAnotherParserTest extends ATest {
 
     @Test
 	public void test_00() throws Throwable {
-        testAnimo("the a + 1 2.");
+        testAnimo("def a + 1 2.");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        testAnimo("the a + \"1\" 2.");
+        testAnimo("def a + \"1\" 2.");
 	}
 
     @Test

@@ -23,7 +23,7 @@ package org.animotron.statement;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.inmemory.InMemoryRelationship;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -79,12 +79,12 @@ public abstract class AbstractStatement implements Statement {
         } else if (reference instanceof Relationship) {
             node = ((Relationship) reference).getEndNode();
         } else {
-            return THE._.getOrCreate((String) reference, ignoreNotFound).getEndNode();
+            return DEF._.getOrCreate((String) reference, ignoreNotFound).getEndNode();
         }
         if (NAME.has(node)) {
             return node;
         }
-        throw new IllegalArgumentException("Referemce must be the \"THE\" object");
+        throw new IllegalArgumentException("Referemce must be the \"DEF\" object");
     }
 
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {

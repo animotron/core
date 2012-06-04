@@ -24,7 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.THE;
+import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.animotron.statement.relation.USE;
@@ -45,32 +45,32 @@ public class CurrentWayTest extends ATest {
 
         JExpression.__(
                 new JExpression(
-                    _(THE._, "current-site",
+                    _(DEF._, "current-site",
                         _(ANY._, "site",
                             _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
                         )
                     )
                 ),
                 new JExpression(
-                    _(THE._, "test-service",
+                    _(DEF._, "test-service",
                         _(AN._, "service")
                     )
                 ),
                 new JExpression(
-                    _(THE._, "localhost-site",
+                    _(DEF._, "localhost-site",
                         _(AN._, "site"),
                         _(AN._, "server-name", value("localhost"))
                     )
                 ),
                 new JExpression(
-                    _(THE._, "rest",
+                    _(DEF._, "rest",
                         _(ANY._, "service",
                             _(AN._, "current-site")
                         )
                     )
                 ),
                 new JExpression(
-                    _(THE._, "current-request",
+                    _(DEF._, "current-request",
                         _(AN._, "request"),
                         _(AN._, "host", value("localhost"))
                     )
