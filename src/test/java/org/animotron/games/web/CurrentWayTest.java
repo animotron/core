@@ -83,6 +83,6 @@ public class CurrentWayTest extends ATest {
             )
         );
 
-        assertAnimoResult(s, "rest the test-service service.");
+        assertAnimoResult(s, "rest def test-service service.");
     }
 }

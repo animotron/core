@@ -133,7 +133,7 @@ public class AnyUseTest extends ATest {
             _(DEF._, "b", _(AN._, "s", _(USE._, "B")))
         );
         //assertAnimoResult(b, "def b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
-        assertAnimoResult(b, "def b s the B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\").");
+        assertAnimoResult(b, "def b s def B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\").");
 
         JExpression c = new JExpression(
             _(DEF._, "c", _(AN._, "s", _(USE._, "C")))
