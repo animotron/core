@@ -176,18 +176,18 @@ public class AllTest extends ATest {
         JExpression a = new JExpression(
             _(DEF._, "a", _(ALL._, "S", _(WITH._, "X", value("α"))))
         );
-        //assertAnimoResultOneStep(a, "def a the B (A) (Y \"β\").");
+        //assertAnimoResultOneStep(a, "def a def B (A) (Y \"β\").");
         assertAnimoResultOneStep(a, "def a.");
 
         JExpression b = new JExpression(
             _(DEF._, "b", _(ALL._, "S", _(WITH._, "Y", value("β"))))
         );
-        assertAnimoResultOneStep(b, "def b the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(b, "def b def C (B) (Z \"γ\") (X \"αα\").");
 
         JExpression c = new JExpression(
             _(DEF._, "c", _(ALL._, "S", _(WITH._, "Z", value("γ"))))
         );
-        assertAnimoResultOneStep(c, "def c the C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(c, "def c def C (B) (Z \"γ\") (X \"αα\").");
 
     }
 }
