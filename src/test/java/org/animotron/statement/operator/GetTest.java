@@ -616,7 +616,7 @@ public class GetTest extends ATest {
         testAnimo("def a (foo) (b c).");
         testAnimo("def y (z) (b v).");
         testAnimo("def x (a) (any z) (get b).");
-        assertAnimoResult("any a", "def x (a (foo) (b)) (the y (z) (b)) (b c).");
+        assertAnimoResult("any a", "def x (a (foo) (b)) (def y (z) (b)) (b c).");
     }
 
     @Test
@@ -624,14 +624,14 @@ public class GetTest extends ATest {
         testAnimo("def a (foo) (b c).");
         testAnimo("def y (z) (b v).");
         testAnimo("def x (a) (any z) (get b this a).");
-        assertAnimoResult("any a", "def x (a (foo) (b)) (the y (z) (b)) (b c).");
+        assertAnimoResult("any a", "def x (a (foo) (b)) (def y (z) (b)) (b c).");
     }
 
     @Test
     public void test_42() throws Throwable {
         testAnimo("def a (foo) (b c).");
         testAnimo("def x (any foo) (get b).");
-        assertAnimoResult("x", "x (the a (foo) (b)) (b c).");
+        assertAnimoResult("x", "x (def a (foo) (b)) (b c).");
     }
 
     @Test
@@ -750,21 +750,21 @@ public class GetTest extends ATest {
     public void test_001() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (any x) (get foo).");
-        assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
+        assertAnimoResult("y", "y (def a (x) (foo)) (foo 1).");
     }
 
     @Test
     public void test_002() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (all x) (get foo).");
-        assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
+        assertAnimoResult("y", "y (def a (x) (foo)) (foo 1).");
     }
 
     @Test
     public void test_003() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (prefer x use a) (get foo).");
-        assertAnimoResult("y", "y (the a (x) (foo)) (foo 1).");
+        assertAnimoResult("y", "y (def a (x) (foo)) (foo 1).");
     }
 
     @Test

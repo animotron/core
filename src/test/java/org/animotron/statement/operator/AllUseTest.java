@@ -61,13 +61,13 @@ public class AllUseTest extends ATest {
             _(AN._, "s", _(USE._, "B"))
         );
         //assertAnimoResult(test, "def s (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
-        assertAnimoResult(test, "s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
+        assertAnimoResult(test, "s def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
 
         test = new JExpression(
             _(AN._, "s", _(USE._, "C"))
         );
         //assertAnimoResult(test, "def s the C (B) (Z \"γ\") (X \"αα\").");
-        assertAnimoResult(test, "s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
+        assertAnimoResult(test, "s def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
     }
 
     @Test
@@ -135,8 +135,8 @@ public class AllUseTest extends ATest {
             _(DEF._, "b", _(AN._, "s", _(USE._, "B")))
         );
         assertAnimoResult(b, "def b s " +
-        		"(the B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\")) " +
-        		"(the C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\")).");
+        		"(def B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\")) " +
+        		"(def C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\")).");
 
         JExpression c = new JExpression(
             _(DEF._, "c", _(AN._, "s", _(USE._, "C")))

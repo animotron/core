@@ -78,7 +78,7 @@ public class ResourceTest extends ATest {
         );
 
         //assertAnimoResult(s, "def s rest the root-service (service resource) (root) (title \"root\").");
-        assertAnimoResult(s, "def s rest the root-service (service resource) (root) (title).");
+        assertAnimoResult(s, "def s rest def root-service (service resource) (root) (title).");
     }
 
     @Test
@@ -127,7 +127,7 @@ public class ResourceTest extends ATest {
         );
 
         //assertAnimoResult(s, "def s rest (the root-service (service resource) (root) (title \"root\")) (the root-service1 (service resource) (root) (title \"root1\")).");
-        assertAnimoResult(s, "def s rest (the root-service (service resource) (root) (title)) (the root-service1 (service resource) (root) (title)).");
+        assertAnimoResult(s, "def s rest (def root-service (service resource) (root) (title)) (def root-service1 (service resource) (root) (title)).");
 
     }
 
@@ -215,7 +215,7 @@ public class ResourceTest extends ATest {
         );
 
         //assertAnimoResult(s, "def s rest the root-service (service) (root) (title \"root\").");
-        assertAnimoResult(s, "def s rest the root-service (service) (root) (title).");
+        assertAnimoResult(s, "def s rest def root-service (service) (root) (title).");
     }
 
     @Test
@@ -259,7 +259,7 @@ public class ResourceTest extends ATest {
         );
 
         //assertAnimoResult(s, "def s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (service) (root) (title \"root1\")).");
-        assertAnimoResult(s, "def s rest (the root-service (service) (root) (title)) (the root-service1 (service) (root) (title)).");
+        assertAnimoResult(s, "def s rest (def root-service (service) (root) (title)) (the root-service1 (service) (root) (title)).");
     }
 
     @Test
@@ -303,6 +303,6 @@ public class ResourceTest extends ATest {
 
         //assertAnimoResult(s, "def s rest (the root-service (service) (root) (title \"root\")) (the root-service1 (root-service) (title \"root1\")).");
         //assertAnimoResult(s, "def s rest (the root-service (service) (root) (title)) (the root-service1 (root-service (service) (root) (title)) (title)).");
-        assertAnimoResult(s, "def s rest the root-service1 (root-service (service) (root) (title)) (title).");
+        assertAnimoResult(s, "def s rest def root-service1 (root-service (service) (root) (title)) (title).");
     }
 }
