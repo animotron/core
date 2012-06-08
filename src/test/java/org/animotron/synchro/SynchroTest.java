@@ -29,6 +29,7 @@ import org.jgroups.Message;
 import org.jgroups.ReceiverAdapter;
 import org.jgroups.View;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -69,6 +70,7 @@ public class SynchroTest extends ATest{
 	}
 
 	@Test
+	@Ignore
 	public void test_00() throws Exception {
 		String s =
 			"PREVIOUSHASH:7eb83afdaa9f0bfeb627d9ea9100c8dc34fb3ad5a00a22eb6d07e7f081b90c9a|" +
