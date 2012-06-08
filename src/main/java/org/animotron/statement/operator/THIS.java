@@ -143,14 +143,14 @@ public class THIS extends Operator implements Reference, Evaluable {
 									hits.close();
 								}
 							}
-						} else {
+						} else if (next.hasAnswer()) {
 							Node n = Utils.getByREF(toCheck).getEndNode();
 							if (thes.contains( n )) {
-								if (next.hasAnswer()) {
-									pf.sendAnswer(pf.getVector().answered(next.getAnswer()));//, next.getContext()
-									return true;
-								
-								} else {
+//								if (next.hasAnswer()) {
+//									pf.sendAnswer(pf.getVector().answered(next.getAnswer()));//, next.getContext()
+//									return true;
+//								
+//								} else {
 									IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
 									try {
 										for (Relationship r : hits) {
@@ -160,7 +160,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 									} finally {
 										hits.close();
 									}
-								}
+//								}
 							}
 						}
 					}
