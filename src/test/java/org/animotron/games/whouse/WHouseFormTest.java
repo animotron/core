@@ -100,15 +100,19 @@ public class WHouseFormTest extends ATest {
         );
 
         assertAnimoResult(
-    		"all centralWhouse with date \"D2012-02-11\"",
+    		"all event (with party centralWhouse) (with date \"D2012-02-11\")",
     		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
-    		"all centralWhouse,event with date \"D2012-02-11\"",
+       		"all event (with receive-party centralWhouse) (with date \"D2012-02-11\")",
     		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
 
+//        assertAnimoResult(
+//           		"all event (with centralWhouse) (with date \"D2012-02-11\")",
+//        		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
+
         assertAnimoResult(
-    		"get SKU all centralWhouse,event with date \"D2012-02-11\"",
+    		"get SKU all event (with receive-party centralWhouse) (with date \"D2012-02-11\")",
     		"SKU (uuidA) (uuidB).");
 
         __(
@@ -130,7 +134,7 @@ public class WHouseFormTest extends ATest {
 		);
 
         assertAnimoResult(
-    		"get SKU all centralWhouse,event between date (\"D2012-02-11\") (\"D2012-02-12\") ",
+    		"get SKU all event (with party centralWhouse) (between date (\"D2012-02-11\") (\"D2012-02-12\")) ",
     		"SKU (uuidA) (uuidB). SKU uuidA.");
 
         __(
