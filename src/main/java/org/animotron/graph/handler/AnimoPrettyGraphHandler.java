@@ -127,8 +127,11 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                     write("(");
                 }
             }
-            Node n= ((Relationship) o[1]).getEndNode();
-            if (!n.hasRelationship(REF._, OUTGOING)) {
+            Relationship r = (Relationship) o[1];
+            Node n= r.getEndNode();
+            if (r.hasProperty(STOPPER._.name())) {
+                write(STOPPER._.name());
+            } else if (!n.hasRelationship(REF._, OUTGOING)) {
                 write(statement.name());
             } else if (((Integer) o[6]) == 0 && ps instanceof Operator) {
                 write(statement.name());

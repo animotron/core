@@ -38,7 +38,9 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 	private static boolean debug = false;
 	
 	private AN() { super("an"); }
-	
+
+    public AN(String... name) { super(name); }
+
     @Override
 	public OnQuestion onCalcQuestion() {
 		return new Calc();

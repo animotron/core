@@ -85,7 +85,7 @@ public class AnimoExpression extends AbstractExpression {
     private Stack<Integer> stack = new Stack<Integer>();
     private Statement op = null;
     private int level = 0;
-    private boolean prefix = false;
+    private boolean isML = false;
     boolean link = false;
     boolean number = true;
     boolean text = false;
@@ -171,7 +171,7 @@ public class AnimoExpression extends AbstractExpression {
             level++;
             op = st;
             link = false;
-            prefix = true;
+            isML = st instanceof MLOperator;
             s = new StringBuilder();
             number = true;
         }
@@ -182,7 +182,7 @@ public class AnimoExpression extends AbstractExpression {
             token();
             s = new StringBuilder();
         } else {
-            prefix = false;
+            isML = false;
         }
         number = true;
     }
@@ -191,7 +191,7 @@ public class AnimoExpression extends AbstractExpression {
         if (s.length() > 0) {
             token();
         } else {
-            prefix = false;
+            isML = false;
         }
         number = true;
     }
@@ -202,10 +202,10 @@ public class AnimoExpression extends AbstractExpression {
     	if (text) {
             builder._(token);
         } else {
-            if (prefix) {
+            if (isML) {
                 builder._(QNAME._, token);
                 op = null;
-                prefix = false;
+                isML = false;
             } else if (op instanceof DEF) {
                 builder.start(op, token);
                 op = null;
