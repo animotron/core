@@ -60,13 +60,13 @@ public class AllUseTest extends ATest {
         JExpression test = new JExpression(
             _(AN._, "s", _(USE._, "B"))
         );
-        //assertAnimoResult(test, "def s (the B (A) (Y \"β\")) (the C (B) (Z \"γ\") (X \"αα\")).");
-        assertAnimoResult(test, "s def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
+        assertAnimoResult(test, "s (def B (A (S) (\\X \"α\")) (\\Y \"β\")) (def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")).");
+//        assertAnimoResult(test, "s (def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")).");
 
         test = new JExpression(
             _(AN._, "s", _(USE._, "C"))
         );
-        //assertAnimoResult(test, "def s the C (B) (Z \"γ\") (X \"αα\").");
+//        assertAnimoResult(test, "s def C (B) (Z \"γ\") (X \"αα\").");
         assertAnimoResult(test, "s def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
     }
 
@@ -135,14 +135,17 @@ public class AllUseTest extends ATest {
             _(DEF._, "b", _(AN._, "s", _(USE._, "B")))
         );
         assertAnimoResult(b, "def b s " +
-        		"(def B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\")) " +
-        		"(def C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\")).");
+    		"(def B (A (S) (\\X \"α\")) (\\Y \"β\")) " +
+    		"(def B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\")) " +
+    		"(def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) " +
+			"(def C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\")).");
 
         JExpression c = new JExpression(
             _(DEF._, "c", _(AN._, "s", _(USE._, "C")))
         );
         assertAnimoResult(c, "def c s " +
-        		"def C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\").");
+			"(def C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) " +
+			"(def C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\")).");
     }
 
     @Test
