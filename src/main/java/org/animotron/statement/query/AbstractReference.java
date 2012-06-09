@@ -151,7 +151,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 //				}
 				
 				if (underUSE 
-						&& isLeaf(node) 
+//						&& isLeaf(node) 
 						&& (res = DEF._.get(node)) != null
 						&& filtering(pf, res, uses, weaks))
 					
@@ -167,9 +167,9 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 		        	Relationship r = path.lastRelationship();
 		        	if (!Utils.haveContext(r.getEndNode())) {
 		        		
-		        		//XXX: need better check, it can be reference from other then AN
-		        		if (!isLeaf(r.getStartNode()))
-		        			continue;
+//		        		//XXX: need better check, it can be reference from other then AN
+//		        		if (!isLeaf(r.getStartNode()))
+//		        			continue;
 
 	        			try {
 			        		res = DEF._.get(r.getStartNode());
