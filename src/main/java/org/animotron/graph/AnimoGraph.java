@@ -213,12 +213,18 @@ public class AnimoGraph {
     }
 
     public static Relationship copy(Node start, Relationship r) {
+        if (r.getStartNode().equals(start)) {
+            return r;
+        }
         Relationship c = start.createRelationshipTo(r.getEndNode(), r.getType());
         copyProperties(r, c);
         return c;
     }
 
     public static Relationship copy(Relationship r, Node end) {
+        if (r.getEndNode().equals(end)) {
+            return r;
+        }
         Relationship c = r.getStartNode().createRelationshipTo(end, r.getType());
         copyProperties(r, c);
         return c;

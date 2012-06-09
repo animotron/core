@@ -127,6 +127,7 @@ public abstract class Expression implements Relationship {
 		return relationship().isType(type);
 	}
 
+    @Override
 	public String toString() {
 		return relationship().toString();
 	}

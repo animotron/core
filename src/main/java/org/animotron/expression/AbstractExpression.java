@@ -58,4 +58,9 @@ public abstract class AbstractExpression extends Expression {
         return relationship;
     }
 
+    @Override
+	public String toString() {
+		return relationship == null ? null : relationship.toString();
+	}
+
 }

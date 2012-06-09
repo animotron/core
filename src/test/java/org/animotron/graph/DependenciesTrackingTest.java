@@ -94,7 +94,7 @@ public class DependenciesTrackingTest extends ATest {
     public void test_02() throws Throwable {
 
         testAnimo("def item1 cost * 10 (USD).");
-        assertAnimoResult("get cost item1", "cost * 10 (USD)");
+        assertAnimoResult("get cost item1", "cost * 10 (USD).");
 
         __(
 	        "def goods word \"goods\".",
