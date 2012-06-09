@@ -32,6 +32,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
@@ -64,10 +65,11 @@ public class EACH extends Combinator {
 	
 		@Override
 		public void act(final PFlow pf) throws IOException {
-			if (debug) { 
+//			if (debug) { 
 				System.out.println("EACH EACH EACH EACH");
 				System.out.println(pf.getVector());
-			}
+				System.out.println("EACH EACH EACH EACH");
+//			}
 			
 			IndexHits<Relationship> elements = Order._.queryDown(pf.getOPNode());
 			try {
@@ -83,8 +85,22 @@ public class EACH extends Combinator {
 
 					} else {
 						for (QCAVector r : set) {
-							QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r));
-							pf.sendAnswer(rr);
+			                Statement qS = Statements.relationshipType(r.getQuestion());
+							if (qS instanceof Shift && r.getAnswer().isType(AN._)) {
+								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
+								try {
+									for (Relationship rr : hits) {
+										pf.sendAnswer(rr);
+//										QCAVector v = new QCAVector(element, new QCAVector(pf.getOP(), rr));
+//										pf.sendAnswer(v);
+									}
+								} finally {
+									hits.close();
+								}
+							} else {
+								QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r));
+								pf.sendAnswer(rr);
+							}
 						}
 					}
 				}

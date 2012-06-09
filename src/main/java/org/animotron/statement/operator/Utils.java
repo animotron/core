@@ -263,8 +263,12 @@ public class Utils {
 
 					Relationship result = e.getAnswer();
 					
-					if (result.isType(REF._) || result.isType(DEF._)) {
+	                Statement aS = Statements.relationshipType(result);
+					if (s instanceof Shift && aS instanceof AN) {
 						pipe.write(e);
+					} else if (result.isType(REF._) || result.isType(DEF._)) {
+						pipe.write(e);
+
 					} else {
 						Pipe p = eval(pf.getController(), e);
 						QCAVector rr;
