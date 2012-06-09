@@ -749,6 +749,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore // "foo 1" don't stay on vector (need to calc "any x" to reach)
     public void test_001() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (any x) (get foo).");
@@ -756,6 +757,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore // "foo 1" don't stay on vector (need to calc "all x" to reach)
     public void test_002() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (all x) (get foo).");
@@ -763,6 +765,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore // "foo 1" don't stay on vector (need to calc "prefer x" to reach)
     public void test_003() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (prefer x use a) (get foo).");
@@ -770,6 +773,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore // "foo 1" don't stay on vector (need to calc "any x" to reach)
     public void test_004() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y get foo.");
