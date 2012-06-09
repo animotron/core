@@ -89,10 +89,9 @@ public class EACH extends Combinator {
 							if (qS instanceof Shift && r.getAnswer().isType(AN._)) {
 								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
 								try {
-									for (Relationship rr : hits) {
+									for (Relationship h : hits) {
+										QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r, h));
 										pf.sendAnswer(rr);
-//										QCAVector v = new QCAVector(element, new QCAVector(pf.getOP(), rr));
-//										pf.sendAnswer(v);
 									}
 								} finally {
 									hits.close();
