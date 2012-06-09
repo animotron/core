@@ -324,8 +324,9 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_09() throws Throwable {
-        testAnimo("def male sex.");
+        testAnimo("def male #sex.");
         testAnimo("def john male.");
 
         testAnimo("def _man_ john.");
@@ -337,6 +338,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_10() throws Throwable {
         testAnimo("def male sex.");
         testAnimo("def john person, male.");
