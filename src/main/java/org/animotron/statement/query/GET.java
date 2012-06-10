@@ -107,7 +107,7 @@ public class GET extends AbstractQuery implements Shift {
 //						}
 //					} else
 						thes.add(
-							DEF._.getThe( 
+							DEF._.getDef(
 								theNode.getClosestEndNode() 
 							)
 						);
