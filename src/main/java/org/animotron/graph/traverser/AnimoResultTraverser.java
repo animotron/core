@@ -42,16 +42,16 @@ public class AnimoResultTraverser extends ResultTraverser {
 
     @Override
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    	Statement qS = Statements.relationshipType(rr.getQuestion());
         if (s == null) {
-        	if (parent instanceof Definition) {
+        	if (qS instanceof Definition) {
             	Relationship r = rr.getClosest();
 
-				handler.start(parent, null, rr.getQuestion(), level++, isOne, pos, isLast);
+				handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
                 iterate(handler, rr, s, new It(r.getEndNode()), level);
-                handler.end(parent, null, rr.getQuestion(), --level, isOne, pos, isLast);
+                handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
         	}
         } else {
-        	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
         			|| (s instanceof Evaluable && !(qS instanceof Shift))  
             	) {
