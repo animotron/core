@@ -27,7 +27,6 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
-import org.animotron.statement.operator.Q;
 import org.animotron.statement.query.ALL;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -92,10 +91,10 @@ public class WHouseTest extends ATest {
 		//unit of measure
 		new JExpression(_(DEF._, "UoM"));
 		
-		new JExpression(
-    		_(DEF._, "kilo",
-				_(AN._, "number", _(Q._, "N1000"))
-		)	);
+//		new JExpression(
+//    		_(DEF._, "kilo",
+//				_(AN._, "number", _(Q._, "N1000"))
+//		)	);
 
 		//kg -> kilo + gramm
 		new JExpression(
@@ -168,16 +167,16 @@ public class WHouseTest extends ATest {
 				_(AN._, "receipt-party", _(AN._, "I")),
 				_(AN._, "SKU",
 					_(DEF._, "item01",
-						_(AN._, "reference", value("item01")),
-						_(AN._, "qty",
-							_(AN._, "number", _(Q._, "N2")),
-							_(AN._, "UoM", _(AN._, "KG")) //TODO: _(AN._, "UoM", KG))
-						),
-						_(AN._, "price", //
-							_(AN._, "number", _(Q._, "N5")),
-							_(AN._, "UoM", _(AN._, "G")),
-							_(AN._, "currency", _(AN._, "USD"))
-						)
+						_(AN._, "reference", value("item01"))
+//						_(AN._, "qty",
+//							_(AN._, "number", _(Q._, "N2")),
+//							_(AN._, "UoM", _(AN._, "KG")) //TODO: _(AN._, "UoM", KG))
+//						),
+//						_(AN._, "price", //
+//							_(AN._, "number", _(Q._, "N5")),
+//							_(AN._, "UoM", _(AN._, "G")),
+//							_(AN._, "currency", _(AN._, "USD"))
+//						)
 				)	)
 		)	);
         

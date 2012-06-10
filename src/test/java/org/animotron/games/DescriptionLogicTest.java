@@ -25,13 +25,13 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.instruction.COUNT;
 import org.animotron.statement.instruction.compare.GE;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Q;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ANY;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -92,7 +92,7 @@ public class DescriptionLogicTest extends ATest {
 		//MotherWith3Children  ≡ Mother ⊓ >= 3 hasChild
 		new JExpression(
 			_(DEF._, "motherWith3Children"),
-				_(ANY._, "mother", _(GE._, _(COUNT._, "child"), _(Q._, "N3")))
+				_(ANY._, "mother", _(GE._, _(COUNT._, "child"), value(3)))
 		);
 
 		//MotherWithoutDaughter ≡ Mother ⊓ ∀hasChild.¬Woman
