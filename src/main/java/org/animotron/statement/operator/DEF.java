@@ -110,7 +110,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	}
 
 	public Node getDef(Node rev) {
-        return getDb().getNodeById((Long) THEID.get(rev));
+        return getDb().getNodeById((Long) DEFID.get(rev));
 	}
 
 	public Relationship get(Object name) {
@@ -127,6 +127,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         Node n = r.getEndNode();
         n.createRelationshipTo(n, AREV);
         UUID.set(r, uuid().toString());
+        DEFID.set(n, n.getId());
         add(r, name);
         return r;
 	}
