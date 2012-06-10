@@ -106,11 +106,14 @@ public class GET extends AbstractQuery implements Shift {
 //							return;
 //						}
 //					} else
+					try {
 						thes.add(
 							DEF._.getDef(
 								theNode.getClosestEndNode() 
 							)
 						);
+					} catch (Throwable e) {
+					}
 				}
 	
 				evalGet(pf, op, node, thes, visitedREFs);
