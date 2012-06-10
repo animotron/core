@@ -46,9 +46,9 @@ public class AnimoResultTraverser extends ResultTraverser {
         	if (parent instanceof Definition) {
             	Relationship r = rr.getClosest();
 
-				handler.start(parent, parent, rr.getQuestion(), level++, isOne, pos, isLast);
+				handler.start(parent, null, rr.getQuestion(), level++, isOne, pos, isLast);
                 iterate(handler, rr, s, new It(r.getEndNode()), level);
-                handler.end(parent, parent, rr.getQuestion(), --level, isOne, pos, isLast);
+                handler.end(parent, null, rr.getQuestion(), --level, isOne, pos, isLast);
         	}
         } else {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
