@@ -23,9 +23,12 @@ package org.animotron.statement.operator;
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
 import org.animotron.graph.index.AbstractIndex;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.AbstractStatement;
+import org.animotron.statement.operator.AN.Calc;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -44,7 +47,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class DEF extends AbstractStatement implements Prepare, Definition {
+public class DEF extends AbstractStatement implements Prepare, Evaluable, Definition {
 
 	public static final DEF _ = new DEF();
 
@@ -95,6 +98,10 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 			return getActualRevision(n);
 		
 		return n;
+    }
+
+    public Relationship actualRevision(Relationship r) {
+        return r.getEndNode().getSingleRelationship(AREV, OUTGOING);
     }
 
     public void init(IndexManager index) {
@@ -158,6 +165,20 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	public Object reference(Node n) {
 		return NAME.get(n);
 	}
+	
+    @Override
+	public OnQuestion onCalcQuestion() {
+		return new Calc();
+    }
+    
+    class Calc extends OnQuestion {
+	
+		@Override
+		public void act(final PFlow pf) throws Throwable {
+			pf.sendAnswer(actualRevision(pf.getOP()));
+		}
+    }
+
 
 	@Override
 	public OnQuestion onPrepareQuestion() {
