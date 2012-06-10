@@ -98,7 +98,7 @@ public class Utils {
 	    				if (!path.endNode().equals(n))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-    					if (r.isType(DEF._) || THEID.has(n))
+    					if (r.isType(DEF._) || DEFID.has(n))
 	    					return INCLUDE_AND_PRUNE;
 	    				
 	    				return EXCLUDE_AND_CONTINUE;
