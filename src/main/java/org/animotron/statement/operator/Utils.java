@@ -191,7 +191,7 @@ public class Utils {
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
-			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getThe evaluable");
+			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getDef evaluable");
 			Pipe in = Evaluator._.execute(controller, v);
 			QCAVector e;
 			while ((e = in.take()) != null) {
@@ -218,7 +218,7 @@ public class Utils {
 					}
 				}
 			}
-			//System.out.println("end++++++++++++++++++++++++++++++++++++++ getThe evaluable");
+			//System.out.println("end++++++++++++++++++++++++++++++++++++++ getDef evaluable");
 		} else {
 			pipe.write(v.getContext().get(0).answered(r));
 		}
@@ -256,7 +256,7 @@ public class Utils {
 			}
 
 			if (s instanceof Query || s instanceof Evaluable) {
-				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getThe evaluable");
+				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getDef evaluable");
 				Pipe in = Evaluator._.execute(pf.getController(), v);
 				QCAVector e;
 				while ((e = in.take()) != null) {
@@ -277,7 +277,7 @@ public class Utils {
 						}
 					}
 				}
-				//System.out.println("end++++++++++++++++++++++++++++++++++++++ getThe evaluable");
+				//System.out.println("end++++++++++++++++++++++++++++++++++++++ getDef evaluable");
 			} else {
 				pipe.write(v);//.answered(v.getClosest())
 			}
@@ -358,7 +358,7 @@ public class Utils {
 //		boolean haveSome = false;
 //
 //		//System.out.println("check index "+r+" "+pf.getPathHash()[0]+" "+pf.getPFlowPath());
-//		for (QCAVector v : Result.getThe(hash, op)) {
+//		for (QCAVector v : Result.getDef(hash, op)) {
 //			pf.sendAnswer(v);
 //			
 //			haveSome = true;

@@ -253,7 +253,7 @@ public class WITH extends Operator implements Predicate {
 			for (Relationship i : q) {
 				Statement s = Statements.relationshipType(i);
     			if (s instanceof Query || s instanceof Evaluable) {
-    				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getThe evaluable");
+    				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getDef evaluable");
     				Pipe in = Evaluator._.execute(controller, vector.question(i));
     				QCAVector e;
     				while ((e = in.take()) != null) {

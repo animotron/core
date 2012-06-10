@@ -39,7 +39,7 @@ public class PossessiveCaseTest extends ATest {
 		testAnimo("def item1 (item) (name \"item1\").");
 		
 		//XXX: fix!
-		//testAnimo("getThe (user's name) (user1, item1).", "getThe( user's name) (user1, item1).");
+		//testAnimo("getDef (user's name) (user1, item1).", "getDef( user's name) (user1, item1).");
 		testAnimo("user's get name user1, item1.", " user's get name user1, item1.");
 
 		assertAnimoResult(

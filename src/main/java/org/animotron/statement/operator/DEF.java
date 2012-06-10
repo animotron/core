@@ -109,7 +109,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         the.add(r, name);
 	}
 
-	public Node getThe(Node rev) {
+	public Node getDef(Node rev) {
         return getDb().getNodeById((Long) THEID.get(rev));
 	}
 

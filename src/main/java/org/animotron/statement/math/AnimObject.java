@@ -110,7 +110,7 @@ public class AnimObject extends AbstractExpression {
 //    				elements.add(ref);
 //    			
 //    			else if (els.size() == 1)
-//    				elements.add(els.getThe(0));
+//    				elements.add(els.getDef(0));
 //    			
 //    			else 
 //    				elements.add( new AnimObject(pf, MUL._, els));

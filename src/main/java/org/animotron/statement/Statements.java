@@ -167,7 +167,7 @@ public class Statements {
 		ready();
 		Statement s = statementsByName.get(name);
 //		if (s == null && run())
-//			s = statementsByRelationType.getThe(reference);
+//			s = statementsByRelationType.getDef(reference);
 		
 		return s;
 	}

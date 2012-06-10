@@ -34,7 +34,7 @@ import org.neo4j.graphdb.Relationship;
 public abstract class StatementManipulator extends Manipulator {
 
 	/**
-	 * getThe statement's callback.
+	 * getDef statement's callback.
 	 * 
 	 * @param statement
 	 * @param op

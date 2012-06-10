@@ -607,7 +607,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				
 				Node node = r.getStartNode();
 				try {
-					checkTHEnode(DEF._.getThe(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+					checkTHEnode(DEF._.getDef(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 				} catch (Exception e) {}
 				
 				final FastSet<Node> use = FastSet.newInstance();
