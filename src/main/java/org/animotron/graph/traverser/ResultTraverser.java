@@ -102,7 +102,11 @@ public class ResultTraverser extends AnimoTraverser {
         		new PipeIterator( 
         				Evaluator._.execute(handler.getController(), rr.question(r)) );
         
-        iterate(handler, Statements.relationshipType(r), rr, in, level, isOne, pos, isLast);
+        Statement parent = Statements.relationshipType(r);
+        if (!(parent instanceof DEF))
+        	parent = null;
+        	
+        iterate(handler, parent, rr, in, level, isOne, pos, isLast);
     }
     
     protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne, int pos, boolean isLast) throws IOException {
