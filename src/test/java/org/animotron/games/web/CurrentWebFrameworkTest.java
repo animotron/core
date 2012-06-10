@@ -91,7 +91,8 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test() throws Throwable {
 
         __(
-                "def site (not-found-error default-not-found) (xxx xxx-service)"
+                "def site (not-found-error default-not-found) (xxx xxx-service)",
+                "def not-found-error (error) (code 404)"
         );
 
         assertAnimoResult("get not-found-error site", "not-found-error default-not-found.");
