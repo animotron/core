@@ -25,6 +25,7 @@ import org.animotron.ATest;
 import org.animotron.cache.FileCache;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
@@ -91,6 +92,7 @@ public class DependenciesTrackingTest extends ATest {
     }
 
     @Test
+    @Ignore //deadlocking
     public void test_02() throws Throwable {
 
         testAnimo("def item1 cost * 10 (USD).");
