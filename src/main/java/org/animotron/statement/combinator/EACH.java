@@ -65,11 +65,11 @@ public class EACH extends Combinator {
 	
 		@Override
 		public void act(final PFlow pf) throws IOException {
-//			if (debug) { 
+			if (debug) { 
 				System.out.println("EACH EACH EACH EACH");
 				System.out.println(pf.getVector());
 				System.out.println("EACH EACH EACH EACH");
-//			}
+			}
 			
 			IndexHits<Relationship> elements = Order._.queryDown(pf.getOPNode());
 			try {
