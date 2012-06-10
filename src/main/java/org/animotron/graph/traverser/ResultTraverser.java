@@ -62,7 +62,15 @@ public class ResultTraverser extends AnimoTraverser {
     }
     
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        if (s != null) {
+        if (s == null) {
+        	if (parent instanceof Definition) {
+            	Relationship r = rr.getClosest();
+
+				handler.start(parent, parent, rr.getQuestion(), level++, isOne, pos, isLast);
+                iterate(handler, rr, s, new It(r.getEndNode()), level);
+                handler.end(parent, parent, rr.getQuestion(), --level, isOne, pos, isLast);
+        	}
+        } else {
         	Statement qS = Statements.relationshipType(rr.getQuestion());
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
         			|| (s instanceof Evaluable && !(qS instanceof Shift))
@@ -94,7 +102,7 @@ public class ResultTraverser extends AnimoTraverser {
         		new PipeIterator( 
         				Evaluator._.execute(handler.getController(), rr.question(r)) );
         
-        iterate(handler, null, rr, in, level, isOne, pos, isLast);
+        iterate(handler, Statements.relationshipType(r), rr, in, level, isOne, pos, isLast);
     }
     
     protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne, int pos, boolean isLast) throws IOException {
