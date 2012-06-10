@@ -29,6 +29,7 @@ import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.math.MathInstruction;
+import org.animotron.statement.operator.Definition;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Shift;
@@ -177,7 +178,7 @@ public abstract class Manipulator {
 	                        } else if (s == null){
 	                            s = Statements.relationshipType(msg);
 	                            Statement qS = Statements.relationshipType(context.getQuestion());
-	                            if (s instanceof Evaluable && !(qS instanceof Shift)) {
+	                            if (!(s instanceof Definition) && s instanceof Evaluable && !(qS instanceof Shift)) {
 	                                Pipe in = Evaluator._.execute(controller, context);
 	                                QCAVector v;
 	                                while ((v = in.take()) != null) {
