@@ -114,7 +114,7 @@ public class Utils {
 		final Pipe pipe = Pipe.newInstance(); 
 		
 		final Node node = vector.getClosest().getEndNode();
-		//System.out.println(node);
+		System.out.println(node);
 		
 		Executor.execute(new Runnable() {
 			@Override
@@ -197,7 +197,7 @@ public class Utils {
 			while ((e = in.take()) != null) {
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
-				if (aS instanceof Evaluable && s instanceof Shift) {
+				if (!(aS instanceof Definition) && aS instanceof Evaluable && s instanceof Shift) {
 					if (aS instanceof AN) {
 						Pipe p = eval(controller, e);
 						QCAVector rr;
@@ -207,7 +207,7 @@ public class Utils {
 					} else {
 						evaluable(controller, e, pipe);
 					}
-				} else if (!(aS instanceof Evaluable && !(s instanceof Shift))) {
+				} else if (aS instanceof Definition || !(aS instanceof Evaluable && !(s instanceof Shift))) {
 					pipe.write(e);
 
 				} else {
@@ -308,7 +308,7 @@ public class Utils {
 							Pipe _in = Evaluator._.execute(controller, v);
 							QCAVector ee;
 							while ((ee = _in.take()) != null) {
-								System.out.println(ee);
+								System.out.println("UTILS "+ee);
 								pipe.write(ee);
 								//pipe.write(new QCAVector(op, vector, ee.getUnrelaxedAnswer()));
 							}
