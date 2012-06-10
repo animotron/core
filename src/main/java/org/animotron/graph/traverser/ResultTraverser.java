@@ -63,15 +63,14 @@ public class ResultTraverser extends AnimoTraverser {
     
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
-        if (s == null) {
-        	if (qS instanceof Definition) {
-            	Relationship r = rr.getClosest();
+    	if (qS instanceof Definition) {
+        	Relationship r = rr.getClosest();
 
-				handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
-                iterate(handler, rr, s, new It(r.getEndNode()), level);
-                handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
-        	}
-        } else {
+			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
+            iterate(handler, rr, s, new It(r.getEndNode()), level);
+            handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
+
+        } else if (s != null) {
         	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
         			|| (s instanceof Evaluable && !(qS instanceof Shift))
     			) {
