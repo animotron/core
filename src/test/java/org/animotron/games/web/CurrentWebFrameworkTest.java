@@ -88,6 +88,17 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    public void test() throws Throwable {
+
+        __(
+                "def site (not-found-error default-not-found) (xxx xxx-service)",
+                "def not-found-error (error) (code 404)"
+        );
+
+        assertAnimoResult("get not-found-error site", "not-found-error default-not-found.");
+    }
+
+    @Test
     public void test_00() throws Throwable {
 
         __(
