@@ -122,9 +122,13 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
 
                 "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "def bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def bar-errogr-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
 
         );
+
+        assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
+        assertAnimoResult("get not-found-error site", "not-found-error default-not-found.");
+        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found.");
 
         assertError("foo.com", 404, "stack trace would be here", "text/html",
                 "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
