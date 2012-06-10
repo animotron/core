@@ -44,7 +44,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class DEF extends AbstractStatement implements Prepare, Definition {
+public class DEF extends AbstractStatement implements Prepare, Evaluable, Definition {
 
 	public static final DEF _ = new DEF();
 
@@ -95,6 +95,10 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 			return getActualRevision(n);
 		
 		return n;
+    }
+
+    public Relationship actualRevision(Relationship r) {
+        return r.getEndNode().getSingleRelationship(AREV, OUTGOING);
     }
 
     public void init(IndexManager index) {
@@ -158,6 +162,20 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	public Object reference(Node n) {
 		return NAME.get(n);
 	}
+	
+    @Override
+	public OnQuestion onCalcQuestion() {
+		return new Calc();
+    }
+    
+    class Calc extends OnQuestion {
+	
+		@Override
+		public void act(final PFlow pf) throws Throwable {
+			pf.sendAnswer(actualRevision(pf.getOP()));
+		}
+    }
+
 
 	@Override
 	public OnQuestion onPrepareQuestion() {
