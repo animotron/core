@@ -114,7 +114,7 @@ public class Utils {
 		final Pipe pipe = Pipe.newInstance(); 
 		
 		final Node node = vector.getClosest().getEndNode();
-		System.out.println(node);
+		//System.out.println(node);
 		
 		Executor.execute(new Runnable() {
 			@Override
