@@ -29,7 +29,7 @@ import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.ml.MLOperator;
 import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.Definition;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
 
@@ -83,7 +83,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
                     handler.start(s, parent, param, level++, isOne, pos, isLast);
                     handler.end(s, parent, param, --level, isOne, pos, isLast);
                 }
-            } else if (s instanceof DEF){
+            } else if (s instanceof Definition){
                 iterate(handler, rr, s, new It(rr.getClosest().getEndNode()), level);
             } else {
                 super.process(handler, s, parent, rr, level, isOne, pos, isLast);
