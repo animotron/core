@@ -414,11 +414,12 @@ public class CurrentWebFrameworkTest extends ATest {
         assertQuery("bar.com", "zzz", "", "");
 
     }
+
     @Test
     public void test_04() throws Throwable {
 
         __(
-                "def site (not-found-error default-not-found) (xxx xxx-service)",
+                "def site (not-found-error default-not-found)",
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
@@ -433,8 +434,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
 
-                "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "def bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)"
 
         );
 
@@ -451,7 +451,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_05() throws Throwable {
 
         __(
-                "def site (not-found-error default-not-found) (xxx xxx-service)",
+                "def site (not-found-error default-not-found)",
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
@@ -466,13 +466,52 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
 
-                "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "def bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)"
 
         );
 
         assertError("foo.com", 404, "stack trace would be here", "text/html",
                 "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
+        );
+
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+
+    }
+
+    @Test
+    public void test_06() throws Throwable {
+
+        __(
+                "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
+
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+
+                "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)"
+
+        );
+
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+
+    }
+
+    @Test
+    public void test_07() throws Throwable {
+
+        __(
+                "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
+
+                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+
+                "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)"
+
         );
 
         assertQuery("foo.com", "root", "text/html",
