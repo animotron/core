@@ -35,11 +35,11 @@ import static org.animotron.graph.Properties.UUID;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class TheTest extends ATest {
+public class DefTest extends ATest {
 	
     @Test
     @Ignore
-    public void testTHE() throws Throwable {
+    public void testDEF() throws Throwable {
 
         JExpression A = new JExpression(
             _(DEF._, "A", _(DEF._, "B", _(DEF._, "C")))

@@ -70,67 +70,7 @@ public class StopperTest extends ATest {
         testAnimo("def a #b.");
         testAnimo("def c a.");
         testAnimo("def d c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_05() throws Throwable {
-
-        testAnimo("def a b.");
-        testAnimo("def c #a.");
-        testAnimo("def d c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_06() throws Throwable {
-
-        testAnimo("def a b.");
-        testAnimo("def c a.");
-        testAnimo("def d #c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_07() throws Throwable {
-
-        testAnimo("def a #b.");
-        testAnimo("def c #a.");
-        testAnimo("def d c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_08() throws Throwable {
-
-        testAnimo("def a b.");
-        testAnimo("def c #a.");
-        testAnimo("def d #c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_09() throws Throwable {
-
-        testAnimo("def a #b.");
-        testAnimo("def c a.");
-        testAnimo("def d #c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_10() throws Throwable {
-
-        testAnimo("def a #b.");
-        testAnimo("def c #a.");
-        testAnimo("def d #c.");
-        assertAnimoResult("get b d", "a.");
+        assertAnimoResult("get b d", "");
 
     }
 
