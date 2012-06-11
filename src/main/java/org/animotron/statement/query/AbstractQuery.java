@@ -537,14 +537,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					if (targets.contains(node)) {
 						
 						//check for STOP sign
-						Relationship b = null; int countREF = 0;
+						Relationship b = null; int countSTOPPER = 0;
 						for (Relationship s : path.relationships()) {
-							if (s.isType(REF._))
-								countREF++;
+							if (countSTOPPER > 0)
+								return EXCLUDE_AND_PRUNE;
 								
 							if (s.isType(REF._)) {
-								if (b != null && STOPPER.is(b) && countREF>2)
-									return EXCLUDE_AND_PRUNE;
+								if (b != null && STOPPER.is(b))
+									countSTOPPER++;
 							}
 							b = s;
 						}
