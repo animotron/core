@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/src/test/java/org/animotron/statement/operator/DefTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/test/java/org/animotron/statement/operator/ParentChildTest.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/test/java/org/animotron/statement/operator/TheTest.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/test/java/org/animotron/statement/operator/loveTest.java" charset="UTF-8" />
   </component>
 </project>
