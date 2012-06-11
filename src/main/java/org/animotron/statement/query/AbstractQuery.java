@@ -542,7 +542,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							if (!haveREF)
 								haveREF = s.isType(REF._);
 								
-							if (s.equals(r)) {
+							if (s.isType(REF._) && !s.equals(r)) {
 								if (b != null && STOPPER.is(b) && haveREF)
 									return EXCLUDE_AND_PRUNE;
 							}
