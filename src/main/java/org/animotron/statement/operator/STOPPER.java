@@ -35,6 +35,10 @@ public class STOPPER extends AN implements Prefix {
 
 	public static final STOPPER _ = new STOPPER();
 
+    public static boolean is(Relationship r) {
+    	return r.hasProperty(_.name());
+    }
+
 	private static boolean debug = false;
 
 	private STOPPER() { super("#"); }
@@ -45,5 +49,4 @@ public class STOPPER extends AN implements Prefix {
         r.setProperty(name(), true);
 		return r;
 	}
-
 }
