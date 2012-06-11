@@ -255,6 +255,7 @@ public class GET extends AbstractQuery implements Shift {
 								}
 							}
 							
+							//maybe move out of this loop?
 							if (!found) {
 								//check AN questions
 								if (v.getQuestion().isType(AN._))
