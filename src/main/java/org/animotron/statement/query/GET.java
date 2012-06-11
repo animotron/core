@@ -248,11 +248,18 @@ public class GET extends AbstractQuery implements Shift {
 						}
 						
 						if (!check(pf, v, v.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext)) {
-							if (v.getAnswers() != null)
+							if (v.getAnswers() != null) {
 								for (QCAVector vv : v.getAnswers()) {
 									if (check(pf, v, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
 										found = true;
 								}
+							}
+							
+							if (!found) {
+								//check AN questions
+								if (v.getQuestion().isType(AN._))
+									check(pf, v, v.getQuestion(), null, thes, visitedREFs, onContext);
+							}
 						} else {
 							found = true;
 						}
