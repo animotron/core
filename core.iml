@@ -51,7 +51,7 @@
     <orderEntry type="library" name="Maven: jgroups:jgroups:2.9.0.GA" level="project" />
     <orderEntry type="library" name="Maven: org.jetlang:jetlang:0.2.5" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.2" level="project" />
-    <orderEntry type="library" name="Maven: com.eaio.uuid:uuid:3.2" level="project" />
+    <orderEntry type="library" name="Maven: com.eaio.uuid:uuid:3.3" level="project" />
   </component>
 </module>
 

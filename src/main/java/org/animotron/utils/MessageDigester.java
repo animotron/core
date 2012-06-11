@@ -22,9 +22,11 @@ package org.animotron.utils;
 
 import com.eaio.uuid.UUID;
 import com.eaio.uuid.UUIDGen;
+import org.animotron.graph.Properties;
 import org.animotron.statement.Statement;
 import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
 
 import java.security.MessageDigest;
@@ -167,6 +169,16 @@ public class MessageDigester {
 
     public static UUID uuid(String uuid) {
         return new UUID(uuid);
+    }
+
+    public static void setUUID(PropertyContainer c, UUID uuid) {
+        long [] v = {uuid.time, uuid.clockSeqAndNode};
+        Properties.UUID.set(c, v);
+    }
+
+    public static UUID getUUID(PropertyContainer c, UUID uuid) {
+        long [] v = (long[]) Properties.UUID.get(c);
+        return new UUID(v[0], v[1]);
     }
 
 }

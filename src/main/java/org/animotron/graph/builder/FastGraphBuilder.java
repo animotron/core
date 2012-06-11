@@ -120,7 +120,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     relationship = DEF._.get(reference);
                     if (relationship == null) {
                         relationship = getROOT().createRelationshipTo(end, DEF._);
-                        UUID.set(relationship, uuid().toString());
+                        setUUID(relationship, uuid());
                         HASH.set(relationship, hash);
                         DEFID.set(end, end.getId());
                         DEF._.add(relationship, reference);
@@ -131,7 +131,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         Node rn = DEF._.getActualRevision(n);
                         freeze(rn);
                         Relationship rr = rn.createRelationshipTo(end, REV);
-                        UUID.set(rr, uuid().toString());
+                        setUUID(rr, uuid());
                         HASH.set(rr, hash);
                         DEFID.set(end, n.getId());
                         Cache.RELATIONSHIP.add(rr, hash);
@@ -163,7 +163,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 Node rn = DEF._.getActualRevision(n);
                 freeze(rn);
                 Relationship rr = rn.createRelationshipTo(nn, REV);
-                UUID.set(rr, uuid().toString());
+                setUUID(rr, uuid());
                 HASH.set(rr, hash);
                 DEF._.setActualRevision(n, nn);
             } else {

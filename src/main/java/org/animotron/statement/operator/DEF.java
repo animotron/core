@@ -35,6 +35,7 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.AREV;
+import static org.animotron.utils.MessageDigester.setUUID;
 import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -126,7 +127,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
         n.createRelationshipTo(n, AREV);
-        UUID.set(r, uuid().toString());
+        setUUID(r, uuid());
         DEFID.set(n, n.getId());
         add(r, name);
         return r;
