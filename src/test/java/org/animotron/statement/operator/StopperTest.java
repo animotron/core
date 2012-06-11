@@ -74,4 +74,13 @@ public class StopperTest extends ATest {
 
     }
 
+    @Test
+    public void test_05() throws Throwable {
+
+        testAnimo("def a #b.");
+        testAnimo("def c (a) (x 1).");
+        assertAnimoResult("all b with x 1", "");
+
+    }
+
 }
