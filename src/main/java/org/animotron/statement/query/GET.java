@@ -63,7 +63,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -106,14 +106,7 @@ public class GET extends AbstractQuery implements Shift {
 //							return;
 //						}
 //					} else
-					try {
-						thes.add(
-							DEF._.getDef(
-								theNode.getClosestEndNode() 
-							)
-						);
-					} catch (Throwable e) {
-					}
+						thes.add( theNode.getClosestDefEndNode() );
 				}
 	
 				evalGet(pf, op, node, thes, visitedREFs);

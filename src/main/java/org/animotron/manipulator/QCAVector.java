@@ -548,4 +548,13 @@ public class QCAVector {
 			)
 		);
 	}
+
+	public Node getClosestDefEndNode() {
+		Node node = getClosestEndNode();
+		try {
+			return DEF._.getDef( node );
+		} catch (Throwable e) {
+		}
+		return node;
+	}
 }
