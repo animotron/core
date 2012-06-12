@@ -47,43 +47,39 @@ public class MLResultTraverser extends AnimoResultTraverser {
 
     @Override
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        if (s != null) {
-            if (s instanceof MLOperator || s instanceof VALUE) {
-                if (s instanceof Prefix) {
-                    node = rr.getClosest().getEndNode();
-                    It it = new It(node);
-                    String[] param = {null, null};
-                    try {
-                        if (it.hasNext()) {
-                            Object p = it.next();
-                            param[0] = param(rr, p);
-                            if (!(s instanceof ELEMENT)) {
-                                param[1] = param(rr, it);
-                                if (param[1] == null) {
-                                    if (s instanceof NS) {
-                                        if (QNAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
-                                            param[1] = "";
-                                        } else {
-                                            param[1] = param[0];
-                                            param[0] = "";
-                                        }
+        if (s instanceof MLOperator || s instanceof VALUE) {
+            if (s instanceof Prefix) {
+                node = rr.getClosest().getEndNode();
+                It it = new It(node);
+                String[] param = {null, null};
+                try {
+                    if (it.hasNext()) {
+                        Object p = it.next();
+                        param[0] = param(rr, p);
+                        if (!(s instanceof ELEMENT)) {
+                            param[1] = param(rr, it);
+                            if (param[1] == null) {
+                                if (s instanceof NS) {
+                                    if (QNAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
+                                        param[1] = "";
+                                    } else {
+                                        param[1] = param[0];
+                                        param[0] = "";
                                     }
                                 }
                             }
-                            handler.start(s, parent, param, level++, isOne, pos, isLast);
-                            iterate(handler, rr, s, it, level);
-                            handler.end(s, parent, param, --level, isOne, pos, isLast);
                         }
-                    } finally {
-                        it.remove();
+                        handler.start(s, parent, param, level++, isOne, pos, isLast);
+                        iterate(handler, rr, s, it, level);
+                        handler.end(s, parent, param, --level, isOne, pos, isLast);
                     }
-                } else if (!(s instanceof VALUE) || (s instanceof VALUE)) {
-                    String param = CachedSerializer.STRING.serialize(rr);
-                    handler.start(s, parent, param, level++, isOne, pos, isLast);
-                    handler.end(s, parent, param, --level, isOne, pos, isLast);
+                } finally {
+                    it.remove();
                 }
-            } else {
-                super.process(handler, s, parent, rr, level, isOne, pos, isLast);
+            } else if (!(s instanceof VALUE) || (s instanceof VALUE)) {
+                String param = CachedSerializer.STRING.serialize(rr);
+                handler.start(s, parent, param, level++, isOne, pos, isLast);
+                handler.end(s, parent, param, --level, isOne, pos, isLast);
             }
         } else {
             super.process(handler, s, parent, rr, level, isOne, pos, isLast);
