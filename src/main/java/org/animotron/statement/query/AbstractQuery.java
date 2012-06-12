@@ -190,6 +190,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 
     protected boolean filtering(final PFlow pf, final Relationship ref, final Set<Node> uses, final Set<Node> weaks) {
+    	if (ref == null) {
+    		System.out.println("AbstractQuery: NULL!!!");
+    		return false;
+    	}
+    	System.out.println("filtering: "+ref);
     	return filtering(pf, ref, ref.getEndNode(), uses, weaks);
     }
 
@@ -313,10 +318,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					relationships(AN._, INCOMING).
 					relationships(REF._, INCOMING).
 					relationships(DEF._, INCOMING).
+					relationships(RelationshipTypes.AREV, INCOMING).
 			evaluator(new IntersectionSearcher(){
 				@Override
 				public Evaluation evaluate(Path path) {
-					//System.out.println(" "+path);
+					System.out.println(" "+path);
 					return _evaluate_(path, allUses, allWeaks, uses, weaks, weakest, directed);
 				}
 			});
@@ -385,15 +391,26 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				//System.out.println(" "+path);
+				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
 					sNode = path.startNode();
 				} else {
 					
-					Relationship firstR = firstRelationsip(path);
 					Relationship lastR = path.lastRelationship();
+					if (lastR.isType(RelationshipTypes.AREV)) {
+						if (lastR.getStartNode().equals(lastR.getEndNode()))
+							return EXCLUDE_AND_PRUNE;
+					
+			    		TraversalDescription td = getIntersectionChecktravers(mustHave, shouldHave, was);
+			    		if (!td.traverse(lastR.getStartNode()).iterator().hasNext()) {
+							return EXCLUDE_AND_PRUNE;
+			    		}
+		    			return INCLUDE_AND_PRUNE;
+					}
+
+					Relationship firstR = firstRelationsip(path);
 					if (lastR.isType(REF._) && FREEZE.has(lastR))
 						return EXCLUDE_AND_PRUNE;
 					
@@ -499,7 +516,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets) { //, RelationshipType type
-			System.out.println(path);
+//			System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
