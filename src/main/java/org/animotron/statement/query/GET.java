@@ -25,6 +25,7 @@ import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -445,6 +446,7 @@ public class GET extends AbstractQuery implements Shift {
 			Traversal.description().
 			depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
+			relationships(RelationshipTypes.AREV, OUTGOING).
 			relationships(ANY._, OUTGOING).
 			relationships(AN._, OUTGOING).
 			relationships(REF._, OUTGOING).

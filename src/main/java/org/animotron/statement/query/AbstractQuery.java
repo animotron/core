@@ -24,6 +24,7 @@ import javolution.util.FastSet;
 import javolution.util.FastTable;
 
 import org.animotron.graph.Properties;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -504,6 +505,12 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
+			if (r.isType(RelationshipTypes.AREV))
+				if (r.getEndNode().equals(path.endNode()) && !r.getEndNode().equals(r.getStartNode()))
+					return EXCLUDE_AND_CONTINUE;
+				else
+					return EXCLUDE_AND_PRUNE;
+
 			if (r.isType(REF._) && FREEZE.has(r))
 				return EXCLUDE_AND_PRUNE;
 			
