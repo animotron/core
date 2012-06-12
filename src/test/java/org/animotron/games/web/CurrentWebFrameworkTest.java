@@ -102,13 +102,13 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-                "def site (not-found-error default-not-found) (xxx xxx-service)",
+                "def site (logo any logo) (not-found-error default-not-found) (xxx xxx-service)",
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
                 "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-                "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "def html-page (text-html) (\\html (\\head (each (get logo) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
                 "def hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
@@ -133,7 +133,10 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
 
                 "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "def bar-errogr-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def bar-errogr-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)",
+
+                "def foo-logo (logo, foo) (uri \"foo.png\")",
+                "def bar-logo (logo, bar) (uri \"bar.png\")"
 
         );
 
