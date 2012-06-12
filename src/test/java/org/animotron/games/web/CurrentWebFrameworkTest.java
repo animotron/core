@@ -622,7 +622,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_12() throws Throwable {
 
         __(
-                "def site (logo any logo)",
+                "def site (any logo)",
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
