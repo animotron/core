@@ -138,8 +138,8 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
-        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head \\title title \"Not found\") (\\body def default-error-layout (layout) (\\h1) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
-        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head \\title title \"Not found\") (\\body def default-error-layout (layout) (\\h1) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head \\title title \"Not found\") (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head \\title title \"Not found\") (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
 
         assertError("foo.com", 404, "stack trace would be here", "text/html",
                 "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
