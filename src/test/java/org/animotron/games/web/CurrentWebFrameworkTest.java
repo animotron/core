@@ -582,9 +582,9 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-                "def hello-foo (html-page) (title \"hello foo\") (content \"foo foo foo\")",
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
 
-                "def foo-root-layout (layout) (\\h1 get title) (\\p get content)"
+                "def foo-root-layout (layout, root) (\\h1 get title) (\\p get content)"
 
         );
 
@@ -604,9 +604,9 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
-                "def hello-foo (html-page) (title \"hello foo\") (content \"foo foo foo\")",
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
 
-                "def foo-root-layout (layout) (\\h1 get title) (\\p get content)"
+                "def foo-root-layout (layout, root) (\\h1 get title) (\\p get content)"
 
         );
 
