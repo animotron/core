@@ -222,14 +222,15 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def error",
                 "def message",
                 "def stack-trace",
+                "def logo", "def foo-logo", "def bar-logo", "def icon",
 
-                "def site (not-found-error default-not-found) (xxx xxx-service)",
+                "def site (icon any logo) (not-found-error default-not-found) (xxx xxx-service)",
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-                "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (text-html) (\\html (\\head (each (get icon) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
                 "def hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
@@ -254,41 +255,48 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
 
                 "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
-                "def bar-error-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)"
+                "def bar-errogr-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)",
+
+                "def foo-logo (logo, foo) (uri \"foo.png\")",
+                "def bar-logo (logo, bar) (uri \"bar.png\")"
 
         );
 
+        assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
+        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+
         assertError("foo.com", 404, "stack trace would be here", "text/html",
-                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
+                "<html><head><link href=\"foo.png\"><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
         );
 
         assertError("foo.com", 500, "", "", "");
 
         assertError("bar.com", 404, "stack trace", "text/html",
-                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
+                "<html><head><link href=\"bar.png\"><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
         );
 
         assertError("bar.com", 500, "", "", "");
 
         assertQuery("foo.com", "root", "text/html",
-                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+                "<html><head><link href=\"foo.png\"><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
         assertQuery("foo.com", "xxx", "text/html",
-                "<html><head><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p><p>foo.com</p></body></html>");
+                "<html><head><link href=\"foo.png\"><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p><p>foo.com</p></body></html>");
 
         assertQuery("foo.com", "yyy", "", "");
 
         assertQuery("foo.com", "zzz", "text/html",
-                "<html><head><title>hello zzz</title></head><body><h3>hello zzz</h3><span>zzz zzz zzz</span></body></html>");
+                "<html><head><link href=\"foo.png\"><title>hello zzz</title></head><body><h3>hello zzz</h3><span>zzz zzz zzz</span></body></html>");
 
         assertQuery("bar.com", "root", "text/html",
-                "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
+                "<html><head><link href=\"bar.png\"><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
         assertQuery("bar.com", "xxx", "text/html",
-                "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
+                "<html><head><link href=\"bar.png\"><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
 
         assertQuery("bar.com", "yyy", "text/html",
-                "<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
+                "<html><head><link href=\"bar.png\"><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
 
         assertQuery("bar.com", "zzz", "", "");
 
