@@ -638,7 +638,7 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertQuery("foo.com", "root", "text/html",
-                "<html><head><link href=\"foo.logo\"/><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+                "<html><head><link href=\"foo.png\"/><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
 
     }
