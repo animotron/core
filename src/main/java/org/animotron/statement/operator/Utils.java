@@ -287,7 +287,7 @@ public class Utils {
 		}
 	}
 	
-	public static Pipe eval(final Controller controller, final QCAVector vector) throws IOException, AnimoException, InterruptedException {
+	public static Pipe eval(final Controller controller, final QCAVector vector) throws IOException {
         final Pipe pipe = Pipe.newInstance();
         
         Executor.execute(new Runnable() {

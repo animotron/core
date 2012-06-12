@@ -634,7 +634,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page (text-html) (\\link \"foo.png\").");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"foo.png\".");
 
     }
 

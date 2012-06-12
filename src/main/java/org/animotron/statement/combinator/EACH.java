@@ -32,6 +32,8 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.Evaluable;
+import org.animotron.statement.operator.Query;
 import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.AbstractValue;
@@ -87,15 +89,28 @@ public class EACH extends Combinator {
 						for (QCAVector r : set) {
 			                Statement qS = Statements.relationshipType(r.getQuestion());
 							if (qS instanceof Shift && r.getAnswer().isType(AN._)) {
-								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
-								try {
-									for (Relationship h : hits) {
-										QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r, h));
-										pf.sendAnswer(rr);
-									}
-								} finally {
-									hits.close();
-								}
+//								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
+//								try {
+//									for (Relationship h : hits) {
+//										QCAVector rr;
+//										
+//										//check if it evaluable
+//										Statement s = Statements.relationshipType(h);
+//										if (s != null && (s instanceof Query || s instanceof Evaluable)) {
+											Pipe p = Utils.eval(pf.getController(), r);
+											QCAVector v;
+											while ((v = p.take()) != null) {
+												QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), v));
+												pf.sendAnswer(rr);
+											}
+//										} else {
+//											rr = new QCAVector(element, new QCAVector(pf.getOP(), r, h));
+//											pf.sendAnswer(rr);
+//										}
+//									}
+//								} finally {
+//									hits.close();
+//								}
 							} else {
 								QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r));
 								pf.sendAnswer(rr);
