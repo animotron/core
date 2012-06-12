@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -520,7 +520,7 @@ public class GET extends AbstractQuery implements Shift {
 						continue;
 					
 					if (relaxReference(pf, vector, r)) {
-						System.out.println("+++TRUE+++");
+						//System.out.println("+++TRUE+++");
 						return true;
 					}
 				}
@@ -577,7 +577,7 @@ public class GET extends AbstractQuery implements Shift {
 			}
 			
 			if (paths.isEmpty()) {
-				System.out.println("+++FALSE+++");
+				//System.out.println("+++FALSE+++");
 				return false;
 			}
 			
@@ -690,7 +690,7 @@ public class GET extends AbstractQuery implements Shift {
 				FastTable.recycle(resByHAVE);
 				FastTable.recycle(resByIS);
 			}
-			System.out.println("***TRUE***");
+			//System.out.println("***TRUE***");
 			return true;
 		} finally {
 			FastMap.recycle(paths);

@@ -232,7 +232,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     			uSet.addAll(uses);
     			wSet.addAll(weaks);
 
-	    		TraversalDescription td = getIntersectionChecktravers(uSet, wSet, weaks.size());
+	    		TraversalDescription td = getIntersectionChecktravers(uSet, wSet, weaks.size(), false);
 	    		if (!td.traverse(toCheckByUSE).iterator().hasNext()) {
 	    			if (debugUSE) 
 	    				System.out.println("filtered out by USE "+uses);
@@ -384,14 +384,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		return null;
 	}
 
-	protected TraversalDescription getIntersectionChecktravers(final Set<Node> mustHave, final Set<Node> shouldHave, final int was) {
+	protected TraversalDescription getIntersectionChecktravers(final Set<Node> mustHave, final Set<Node> shouldHave, final int was, final boolean underAREV) {
 
 		return Traversal.description().depthFirst().
 		uniqueness(Uniqueness.RELATIONSHIP_PATH).
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+//				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -399,11 +399,26 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				} else {
 					
 					Relationship lastR = path.lastRelationship();
+					//check direction
+//					if (lastR.getEndNode().equals(path.endNode())) {
+//						if (underAREV)
+//							return EXCLUDE_AND_PRUNE;
+//						
+//						if (lastR.isType(RelationshipTypes.AREV)) {
+//				    		TraversalDescription td = getIntersectionChecktravers(mustHave, shouldHave, was, true);
+//				    		if (!td.traverse(lastR.getStartNode()).iterator().hasNext()) {
+//								return EXCLUDE_AND_PRUNE;
+//				    		}
+//			    			return INCLUDE_AND_PRUNE;
+//						}
+//						return EXCLUDE_AND_PRUNE;
+//					}
+//					
 					if (lastR.isType(RelationshipTypes.AREV)) {
-						if (lastR.getStartNode().equals(lastR.getEndNode()))
+						if ((underAREV && path.length() == 1) || lastR.getStartNode().equals(lastR.getEndNode()))
 							return EXCLUDE_AND_PRUNE;
 					
-			    		TraversalDescription td = getIntersectionChecktravers(mustHave, shouldHave, was);
+			    		TraversalDescription td = getIntersectionChecktravers(mustHave, shouldHave, was, true);
 			    		if (!td.traverse(lastR.getStartNode()).iterator().hasNext()) {
 							return EXCLUDE_AND_PRUNE;
 			    		}
