@@ -238,7 +238,7 @@ public class GET extends AbstractQuery implements Shift {
 					v = nextREFs.valueOf(r);
 					
 					if (debug) {
-						System.out.println("checking ");//+v);
+						System.out.println("checking "+v);
 						Utils.debug(GET._, pf.getOP(), thes);
 					}
 					
@@ -267,7 +267,8 @@ public class GET extends AbstractQuery implements Shift {
 						}
 					}
 					
-					visitedREFs.add(v.getQuestion());
+					if (found || !v.getQuestion().isType(AN._))
+						visitedREFs.add(v.getQuestion());
 				}
 				
 				if (found) return true;
@@ -275,9 +276,11 @@ public class GET extends AbstractQuery implements Shift {
 				//check AN questions
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
 					v = nextREFs.valueOf(r);
-					if (v.getQuestion().isType(AN._))
+					if (v.getQuestion().isType(AN._)) {
 						if (check(pf, v, v.getQuestion(), null, thes, visitedREFs, onContext))
 							found = true;
+						visitedREFs.add(v.getQuestion());
+					}
 				}
 				
 				if (found) return true;
