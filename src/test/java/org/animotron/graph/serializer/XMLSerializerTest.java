@@ -20,6 +20,7 @@
  */
 package org.animotron.graph.serializer;
 
+import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
@@ -30,10 +31,8 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-import junit.framework.Assert;
-
-import static org.animotron.graph.Properties.HASH;
 import static org.animotron.expression.JExpression.*;
+import static org.animotron.graph.Properties.HASH;
 
 
 /**
@@ -185,6 +184,18 @@ public class XMLSerializerTest extends ATest {
     @Test
     public void test_13() throws Throwable {
         test("def a \\html @x \"&\"", "<html x=\"&amp;\"/>");
+    }
+
+    @Test
+    public void test_14() throws Throwable {
+        testAnimo("def a (b) (\\html).");
+        assertXMLResult(new AnimoExpression("any b"), "<html/>");
+    }
+
+    @Test
+    public void test_15() throws Throwable {
+        testAnimo("def a b \\html.");
+        assertXMLResult(new AnimoExpression("get b a"), "<html/>");
     }
 
 }
