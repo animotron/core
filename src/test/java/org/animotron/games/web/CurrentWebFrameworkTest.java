@@ -213,6 +213,8 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def bar-root-layout",
                 "def foo-xxx-layout",
                 "def bar-xxx-layout",
+                "def default-error-layout",
+                "def bar-error-layout",
                 "def code",
                 "def error",
                 "def message",
@@ -566,6 +568,50 @@ public class CurrentWebFrameworkTest extends ATest {
         assertError("foo.com", 404, "stack trace would be here", "text/html",
                 "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
         );
+
+    }
+
+    @Test
+    public void test_10() throws Throwable {
+
+        __(
+                "def foo-root-layout",
+
+                "def foo-site (site) (server-name \"foo.com\") (root hello-foo)",
+
+                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (mime-type text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+                "def hello-foo (html-page) (title \"hello foo\") (content \"foo foo foo\")",
+
+                "def foo-root-layout (layout) (\\h1 get title) (\\p get content)"
+
+        );
+
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+
+    }
+
+    @Test
+    public void test_11() throws Throwable {
+
+        __(
+                "def foo-root-layout",
+
+                "def foo-site (site) (server-name \"foo.com\") (root hello-foo)",
+
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
+
+                "def hello-foo (html-page) (title \"hello foo\") (content \"foo foo foo\")",
+
+                "def foo-root-layout (layout) (\\h1 get title) (\\p get content)"
+
+        );
+
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
     }
 
