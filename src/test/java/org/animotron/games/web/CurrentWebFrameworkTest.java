@@ -141,40 +141,40 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
-        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head \\title title \"Not found\") (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
-        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head \\title title \"Not found\") (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
 
         assertError("foo.com", 404, "stack trace would be here", "text/html",
-                "<html><head><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
+                "<html><head><link href=\"foo.png\"><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
         );
 
         assertError("foo.com", 500, "", "", "");
 
         assertError("bar.com", 404, "stack trace", "text/html",
-                "<html><head><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
+                "<html><head><link href=\"bar.png\"><title>Error. Not found</title></head><body><h1>404</h1><h2>Error. Not found</h2><div>Sorry, not found anything</div><div>stack trace</div></body></html>"
         );
 
         assertError("bar.com", 500, "", "", "");
 
         assertQuery("foo.com", "root", "text/html",
-                "<html><head><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+                "<html><head><link href=\"foo.png\"><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
 
         assertQuery("foo.com", "xxx", "text/html",
-                "<html><head><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p><p>foo.com</p></body></html>");
+                "<html><head><link href=\"foo.png\"><title>hello xxx</title></head><body><h3>hello xxx</h3><p>xxx xxx xxx</p><p>foo.com</p></body></html>");
 
         assertQuery("foo.com", "yyy", "", "");
 
         assertQuery("foo.com", "zzz", "text/html",
-                "<html><head><title>hello zzz</title></head><body><h3>hello zzz</h3><span>zzz zzz zzz</span></body></html>");
+                "<html><head><link href=\"foo.png\"><title>hello zzz</title></head><body><h3>hello zzz</h3><span>zzz zzz zzz</span></body></html>");
 
         assertQuery("bar.com", "root", "text/html",
-                "<html><head><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
+                "<html><head><link href=\"bar.png\"><title>hello bar</title></head><body><h2>hello bar</h2><div>bar bar bar</div></body></html>");
 
         assertQuery("bar.com", "xxx", "text/html",
-                "<html><head><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
+                "<html><head><link href=\"bar.png\"><title>hello xxx</title></head><body><h4>hello xxx</h4><div>xxx xxx xxx</div><p>bar.com</p></body></html>");
 
         assertQuery("bar.com", "yyy", "text/html",
-                "<html><head><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
+                "<html><head><link href=\"bar.png\"><title>hello yyy</title></head><body><h3>hello yyy</h3><span>yyy yyy yyy</span></body></html>");
 
         assertQuery("bar.com", "zzz", "", "");
 
