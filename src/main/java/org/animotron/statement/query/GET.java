@@ -228,13 +228,19 @@ public class GET extends AbstractQuery implements Shift {
 			
 			while (true) {
 				
-				if (debug) System.out.println("["+pf.getOP()+"] nextREFs ");
+				if (debug) {
+					System.out.println("["+pf.getOP()+"] nextREFs ");
+					Utils.debug(GET._, pf.getOP(), thes);
+				}
 	
 				QCAVector v = null;
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
 					v = nextREFs.valueOf(r);
 					
-					if (debug) System.out.println("checking "+v);
+					if (debug) {
+						System.out.println("checking ");//+v);
+						Utils.debug(GET._, pf.getOP(), thes);
+					}
 					
 					if (v.getQuestion() != null && v.hasAnswer()) {
 						
@@ -249,18 +255,12 @@ public class GET extends AbstractQuery implements Shift {
 						}
 						
 						if (!check(pf, v, v.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext)) {
+							//check other answers
 							if (v.getAnswers() != null) {
 								for (QCAVector vv : v.getAnswers()) {
 									if (check(pf, v, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
 										found = true;
 								}
-							}
-							
-							//maybe move out of this loop?
-							if (!found) {
-								//check AN questions
-								if (v.getQuestion().isType(AN._))
-									check(pf, v, v.getQuestion(), null, thes, visitedREFs, onContext);
 							}
 						} else {
 							found = true;
@@ -272,6 +272,16 @@ public class GET extends AbstractQuery implements Shift {
 				
 				if (found) return true;
 	
+				//check AN questions
+				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
+					v = nextREFs.valueOf(r);
+					if (v.getQuestion().isType(AN._))
+						if (check(pf, v, v.getQuestion(), null, thes, visitedREFs, onContext))
+							found = true;
+				}
+				
+				if (found) return true;
+
 				for (FastSet.Record r = nextREFs.head(), end = nextREFs.tail(); (r = r.getNext()) != end;) {
 					v = nextREFs.valueOf(r);
 
@@ -506,8 +516,10 @@ public class GET extends AbstractQuery implements Shift {
 					if (pf.getVector().getQuestion().getId() == r.getId())
 						continue;
 					
-					if (relaxReference(pf, vector, r))
+					if (relaxReference(pf, vector, r)) {
+						System.out.println("+++TRUE+++");
 						return true;
+					}
 				}
 	
 				Relationship fR = path.relationships().iterator().next();
@@ -561,7 +573,10 @@ public class GET extends AbstractQuery implements Shift {
 				}
 			}
 			
-			if (paths.isEmpty()) return false;
+			if (paths.isEmpty()) {
+				System.out.println("+++FALSE+++");
+				return false;
+			}
 			
 			Relationship startBy = null;
 			
@@ -586,6 +601,9 @@ public class GET extends AbstractQuery implements Shift {
 							Iterator<Relationship> it = path.relationships().iterator();
 							for (Relationship r = null; it.hasNext(); ) {
 								r = it.next();
+								if (r.isType(RelationshipTypes.AREV))
+									continue;
+								
 								if (startBy == null)
 									startBy = r;
 									
@@ -669,6 +687,7 @@ public class GET extends AbstractQuery implements Shift {
 				FastTable.recycle(resByHAVE);
 				FastTable.recycle(resByIS);
 			}
+			System.out.println("***TRUE***");
 			return true;
 		} finally {
 			FastMap.recycle(paths);
