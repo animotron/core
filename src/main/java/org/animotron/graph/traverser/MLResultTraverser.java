@@ -85,6 +85,8 @@ public class MLResultTraverser extends AnimoResultTraverser {
             } else {
                 super.process(handler, s, parent, rr, level, isOne, pos, isLast);
             }
+        } else {
+            super.process(handler, s, parent, rr, level, isOne, pos, isLast);
         }
     }
 
