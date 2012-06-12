@@ -618,4 +618,30 @@ public class CurrentWebFrameworkTest extends ATest {
 
     }
 
+    @Test
+    public void test_12() throws Throwable {
+
+        __(
+                "def site (logo any logo)",
+
+                "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
+
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def html-page (text-html) (\\html (\\head (each (get logo) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
+
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+
+                "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
+
+                "def foo-logo (logo, foo) (uri \"foo.png\")"
+
+        );
+
+        assertQuery("foo.com", "root", "text/html",
+                "<html><head><link href=\"foo.logo\"/><title>hello foo</title></head><body><h1>hello foo</h1><p>foo foo foo</p></body></html>");
+
+
+    }
+
+
 }
