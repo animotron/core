@@ -66,7 +66,8 @@ public class CurrentWebFrameworkTest extends ATest {
                                         _(WITH._, "server-name", value(site))
                                 )
                         ),
-                        _(AN._, "stack-trace", value(trace))
+                        _(AN._, "stack-trace", value(trace)),
+                        _(AN._, "code", value(code))
                 )
         );
     }
