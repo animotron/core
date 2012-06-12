@@ -626,7 +626,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def foo-site (site) (root hello-foo)",
 
-                "def html-page (each (get icon) (\\link @href get uri))",
+                "def html-page (each (get icon) (\\link get uri))",
 
                 "def hello-foo (html-page)",
 
@@ -634,7 +634,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page (text-html) (\\link @href \"foo.png\").");
+        assertAnimoResult("an get root any site", "hello-foo html-page (text-html) (\\link \"foo.png\").");
 
     }
 
