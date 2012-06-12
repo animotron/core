@@ -622,12 +622,12 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_12() throws Throwable {
 
         __(
-                "def site (any logo)",
+                "def site icon any logo",
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
                 "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
-                "def html-page (text-html) (\\html (\\head (each (get logo) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
+                "def html-page (text-html) (\\html (\\head (each (get icon) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
 
@@ -642,6 +642,5 @@ public class CurrentWebFrameworkTest extends ATest {
 
 
     }
-
 
 }
