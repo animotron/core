@@ -666,4 +666,22 @@ public class CurrentWebFrameworkTest extends ATest {
 
     }
 
+    @Test
+    public void test_14() throws Throwable {
+
+        __(
+                "def foo-site (site) (root hello-foo) (weak-use foo)",
+
+                "def html-page (each (prefer logo) (\\link get uri))",
+
+                "def hello-foo (html-page)",
+
+                "def foo-logo (logo, foo) (uri \"foo.png\")"
+
+        );
+
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"foo.png\".");
+
+    }
+
 }
