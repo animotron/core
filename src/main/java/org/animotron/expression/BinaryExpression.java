@@ -82,6 +82,11 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     }
 
     @Override
+    public String id() {
+        return hash;
+    }
+
+    @Override
     protected String stream() {
         return bin.getPath();
     }
