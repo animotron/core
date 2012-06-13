@@ -314,7 +314,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 //			System.out.println("allWeaks");
 //			System.out.println(Arrays.toString(allWeaks.toArray()));
 			
-//	    	if (allUses.isEmpty()) return;
+	    	if (allUses.isEmpty() && allWeaks.isEmpty()) return;
 	    		
 	    	TraversalDescription trav = td.breadthFirst().
 					relationships(AN._, INCOMING).
