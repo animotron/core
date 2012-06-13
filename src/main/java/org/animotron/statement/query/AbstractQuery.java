@@ -324,7 +324,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			evaluator(new IntersectionSearcher(){
 				@Override
 				public Evaluation evaluate(Path path) {
-					System.out.println(" "+path);
+//					System.out.println(" "+path);
 					return _evaluate_(path, allUses, allWeaks, uses, weaks, weakest, directed);
 				}
 			});
