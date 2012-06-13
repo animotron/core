@@ -38,6 +38,7 @@ import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
@@ -45,6 +46,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -254,17 +256,17 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
     }
 
+    private void collectUSEs(final RelationshipType type, final Set<Node> set, final Node node) {
+		for (Relationship r : node.getRelationships(OUTGOING, type)) {
+			for (Relationship rr : r.getEndNode().getRelationships(OUTGOING, REF._))
+				if (!FREEZE.has(rr))
+					set.add(rr.getEndNode());
+		}
+    }
+
     private void collectUSEs(final Set<Node> uses, final Set<Node> weaks, Node node) {
-		for (Relationship r : node.getRelationships(OUTGOING, USE._)) {
-			for (Relationship rr : r.getEndNode().getRelationships(OUTGOING, REF._))
-				if (!FREEZE.has(rr))
-					uses.add(rr.getEndNode());
-		}
-		for (Relationship r : node.getRelationships(OUTGOING, WEAK_USE._)) {
-			for (Relationship rr : r.getEndNode().getRelationships(OUTGOING, REF._))
-				if (!FREEZE.has(rr))
-					weaks.add(rr.getEndNode());
-		}
+    	collectUSEs(USE._, uses, node);
+    	collectUSEs(WEAK_USE._, weaks, node);
     }
 
     private void checkVectorForUSE(final Set<Node> uses, final Set<Node> weaks, final QCAVector vector, final Set<QCAVector> visitred) {
@@ -312,7 +314,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 //			System.out.println("allWeaks");
 //			System.out.println(Arrays.toString(allWeaks.toArray()));
 			
-	    	if (allUses.isEmpty()) return;
+//	    	if (allUses.isEmpty()) return;
 	    		
 	    	TraversalDescription trav = td.breadthFirst().
 					relationships(AN._, INCOMING).
@@ -391,7 +393,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-//				System.out.println(" "+path);
+				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -399,21 +401,6 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				} else {
 					
 					Relationship lastR = path.lastRelationship();
-					//check direction
-//					if (lastR.getEndNode().equals(path.endNode())) {
-//						if (underAREV)
-//							return EXCLUDE_AND_PRUNE;
-//						
-//						if (lastR.isType(RelationshipTypes.AREV)) {
-//				    		TraversalDescription td = getIntersectionChecktravers(mustHave, shouldHave, was, true);
-//				    		if (!td.traverse(lastR.getStartNode()).iterator().hasNext()) {
-//								return EXCLUDE_AND_PRUNE;
-//				    		}
-//			    			return INCLUDE_AND_PRUNE;
-//						}
-//						return EXCLUDE_AND_PRUNE;
-//					}
-//					
 					if (lastR.isType(RelationshipTypes.AREV)) {
 						if ((underAREV && path.length() == 1) || lastR.getStartNode().equals(lastR.getEndNode()))
 							return EXCLUDE_AND_PRUNE;
