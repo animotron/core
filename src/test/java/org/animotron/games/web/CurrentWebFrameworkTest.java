@@ -688,20 +688,41 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_15() throws Throwable {
 
         __(
-                "def foo-site (site) (root hello-foo)",
+                "def foo-site (site) (root hello-foo css hello-css) (xxx xxx-foo css xxx-css)",
 
-                "def html-page (any theme) (each (prefer css) (\\link get uri))",
+                "def html-page each (get css) (\\link get uri)",
 
                 "def hello-foo (html-page)",
+                "def xxx-foo (html-page)",
 
-                "def foo-theme (theme) (weak-use less)",
-
-                "def less-css (css,less) (uri \"less.css\")"
-
+                "def hello-css (uri \"hello.css\")",
+                "def xxx-css (uri \"xxx.css\")"
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page (def foo-theme (theme) (weak-use less)) (\\link uri \"less.css\").");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"hello.css\".");
+        assertAnimoResult("an get xxx any site", "xxx-foo html-page \\link uri \"xxx.css\".");
+
+    }
+
+    @Test
+    public void test_16() throws Throwable {
+
+        __(
+                "def foo-site (site) (root hello-foo hello-css) (xxx xxx-foo xxx-css)",
+
+                "def html-page  each (get css) (\\link get uri)",
+
+                "def hello-foo (html-page)",
+                "def xxx-foo (html-page)",
+
+                "def hello-css (css) (uri \"hello.css\")",
+                "def xxx-css (css) (uri \"xxx.css\")"
+
+        );
+
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"hello.css\".");
+        assertAnimoResult("an get xxx any site", "xxx-foo html-page \\link uri \"xxx.css\".");
 
     }
 
