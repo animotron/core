@@ -684,4 +684,25 @@ public class CurrentWebFrameworkTest extends ATest {
 
     }
 
+    @Test
+    public void test_15() throws Throwable {
+
+        __(
+                "def foo-site (site) (root hello-foo)",
+
+                "def html-page (any theme) (each (prefer css) (\\link get uri))",
+
+                "def hello-foo (html-page)",
+
+                "def foo-theme (theme) (weak-use less)",
+
+                "def less-css (css,less) (uri \"less.css\")"
+
+
+        );
+
+        assertAnimoResult("an get root any site", "hello-foo html-page (def foo-theme (theme) (weak-use less)) (\\link uri \"less.css\").");
+
+    }
+
 }
