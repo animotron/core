@@ -34,6 +34,8 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
+import scala.actors.threadpool.Arrays;
+
 import java.io.IOException;
 
 /**
@@ -57,7 +59,7 @@ public class WHATIS extends AbstractQuery implements Reference {
         @Override
         public void act(final PFlow pf) {
         	
-        	System.out.println("WHATIS "+pf.getVector());
+//        	System.out.println("WHATIS "+pf.getVector());
         	
 			FastSet<QCAVector> thes = FastSet.newInstance();
 			try {
@@ -68,15 +70,13 @@ public class WHATIS extends AbstractQuery implements Reference {
 					Relationship the = vector.getClosest();
 					
 					if (the.isType(REF._) || the.isType(DEF._)) {
-						downIS(pf, the.getEndNode());
+						downIS(pf, DEF._.getActualEndNode(the));
 						
-						upIS(pf, vector, the);
 					} else {
 			    		//discover down IS topology
 						discoverDownIS(pf, vector, the);
-			    		
-						upIS(pf, vector, the);
 					}
+					upIS(pf, vector, the);
 				}
 			} finally {
 				FastSet.recycle(thes);
