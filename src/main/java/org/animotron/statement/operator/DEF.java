@@ -69,7 +69,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 
     private DEF() { super(name); }
     
-    private AbstractIndex<Relationship> the = new AbstractIndex<Relationship>(name) {
+    private AbstractIndex<Relationship> def = new AbstractIndex<Relationship>(name) {
         @Override
         public void init(IndexManager index) {
             init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
@@ -103,11 +103,11 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
     }
 
     public void init(IndexManager index) {
-        the.init(index);
+        def.init(index);
 	}
 
 	public void add(Relationship r, Object name) {
-        the.add(r, name);
+        def.add(r, name);
 	}
 
 	public Node getDef(Node rev) {
@@ -115,7 +115,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	}
 
 	public Relationship get(Object name) {
-        return the.get(name);
+        return def.get(name);
 	}
 
 	public Relationship get(Node rev) {
