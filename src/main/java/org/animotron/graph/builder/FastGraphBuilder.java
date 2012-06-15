@@ -122,12 +122,12 @@ public class FastGraphBuilder extends GraphBuilder {
                         Node def = createNode();
                         NAME.set(def, reference);
                         relationship = getROOT().createRelationshipTo(def, DEF._);
-                        Relationship rev = def.createRelationshipTo(end, REV);
-                        setUUID(rev, uuid());
-                        HASH.set(relationship, hash);
+                        Relationship rr = def.createRelationshipTo(end, REV);
+                        setUUID(rr, uuid());
+                        HASH.set(rr, hash);
                         DEFID.set(end, def.getId());
                         DEF._.add(relationship, reference);
-                        Cache.RELATIONSHIP.add(relationship, hash);
+                        Cache.RELATIONSHIP.add(rr, hash);
                         def.createRelationshipTo(end, AREV);
                     } else {
                         Node n = relationship.getEndNode();
