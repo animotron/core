@@ -47,4 +47,5 @@ public class REF extends AbstractStatement implements Reference, Private {
     public Object reference(Relationship r) {
         return DEF._.reference(r);
     }
+
 }

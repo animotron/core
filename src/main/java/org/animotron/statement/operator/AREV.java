@@ -65,6 +65,11 @@ public class AREV extends REF {
         return r.getEndNode().getSingleRelationship(this, OUTGOING);
     }
 
+    @Override
+    public Object reference(Relationship r) {
+        return DEF._.reference(r.getStartNode());
+    }
+
 
 
 }
