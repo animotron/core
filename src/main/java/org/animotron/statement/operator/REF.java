@@ -22,7 +22,6 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -45,14 +44,4 @@ public class REF extends AbstractStatement implements Reference {
     public Object reference(Relationship r) {
         return DEF._.reference(r);
     }
-
-    public Node getActualRevision(Relationship r) {
-        return DEF._.getActualRevision(r);
-    }
-    
-    public Relationship getThe(Relationship r) {
-        return r.getEndNode().getSingleRelationship(DEF._, Direction.INCOMING);
-	}
-
-
 }
