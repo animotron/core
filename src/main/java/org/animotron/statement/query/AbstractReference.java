@@ -150,6 +150,8 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 //					underUSE = true;
 //				}
 				
+				System.out.println(node);
+				
 				if (underUSE 
 //						&& isLeaf(node) 
 						&& (res = DEF._.get(node)) != null
@@ -162,7 +164,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 		        for (Path path : td_IS_leaf.traverse(node)) {
 		        	
-//		        	System.out.println("-> "+path);
+		        	System.out.println("-> "+path);
 
 		        	Relationship r = path.lastRelationship();
 		        	if (!Utils.haveContext(r.getEndNode())) {
@@ -173,6 +175,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 
 	        			try {
 			        		res = DEF._.get(r.getStartNode());
+			        		System.out.println(res);
 			        		if (res != null) {
 			        			if (filtering(pf, DEF._.actualRevision(res), uses, weaks)) {
 			        				pf.sendAnswer( res );
@@ -180,8 +183,9 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 			        			}
 			        		} else {
 		        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
+		        					System.out.println(p);
 		        					res = p.lastRelationship();
-				        			if (filtering(pf, DEF._.actualRevision(res), uses, weaks)) {
+				        			if (filtering(pf, res, uses, weaks)) {
 				        				pf.sendAnswer( res );
 				        				if (returnFirstOnly) return;
 				        			}
