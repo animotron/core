@@ -28,7 +28,6 @@ import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.expression.JExpression._;
-import static org.animotron.graph.Properties.UUID;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -80,10 +79,8 @@ public class DefTest extends ATest {
 		Expression e;
 		
 		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
-        System.out.println(UUID.get(e));
-		
+
         e = testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
-        System.out.println(UUID.get(e));
 	}
 	
 	@Test
@@ -91,13 +88,10 @@ public class DefTest extends ATest {
 		Expression e;
 		
 		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
-        System.out.println(UUID.get(e));
-		
+
         e = testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
-        System.out.println(UUID.get(e));
 
 		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
-        System.out.println(UUID.get(e));
 	}
 
 	@Test
