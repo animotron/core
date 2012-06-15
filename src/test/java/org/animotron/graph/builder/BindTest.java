@@ -177,7 +177,7 @@ public class BindTest extends ATest {
         );
         Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
         Expression z = new JExpression(
-            element("z", _(GET._, "e", _(x)), _(y.getEndNode().getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
+            element("z", _(GET._, "e", _(x)), _(DEF._.getActualRevision(y).getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
         );
         test(z, "\\z (get e c (any a) (all b)) (\\y (@z \"test\") \"content\").");
 	}
