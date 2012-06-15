@@ -66,6 +66,7 @@ public class StreamGraphBuilder extends GraphBuilder {
     private Node root;
     private Relationship relationship, r;
     private byte[] hash;
+    private Object reference = null;
 
     @Override
     public void startGraph() {
@@ -87,12 +88,8 @@ public class StreamGraphBuilder extends GraphBuilder {
         relationship = Cache.RELATIONSHIP.get(hash);
         if (r.isType(DEF._)) {
             Node end = r.getEndNode();
-            Object reference;
-            if (!NAME.has(end)) {
+            if (reference == null) {
                 reference = byteArrayToHex(hash);
-                NAME.set(end, reference);
-            } else {
-                reference = NAME.get(end);
             }
             if (relationship == null) {
                 relationship = DEF._.get(reference);
@@ -201,6 +198,7 @@ public class StreamGraphBuilder extends GraphBuilder {
             hash = md.digest();
         }
         order(r, (Integer) item[3]);
+        reference = item[5];
         return hash;
 	}
 
