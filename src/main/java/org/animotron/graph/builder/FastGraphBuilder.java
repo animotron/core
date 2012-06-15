@@ -128,6 +128,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         DEF._.add(relationship, reference);
                         Relationship ar = def.createRelationshipTo(end, AREV);
                         Cache.RELATIONSHIP.add(ar, hash);
+                        HASH.set(relationship, hash);
                     } else {
                         Node n = relationship.getEndNode();
                         Node rn = DEF._.getActualRevision(n);
@@ -137,6 +138,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         DEFID.set(end, n.getId());
                         Relationship ar = DEF._.setActualRevision(n, end);
                         Cache.RELATIONSHIP.add(ar, hash);
+                        HASH.set(relationship, hash);
                     }
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
