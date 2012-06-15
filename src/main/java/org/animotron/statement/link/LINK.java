@@ -20,12 +20,14 @@
  */
 package org.animotron.statement.link;
 
+import org.animotron.statement.Private;
+
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class LINK extends AbstractLink {
+public class LINK extends AbstractLink implements Private {
 
     public static final LINK _ = new LINK();
 
