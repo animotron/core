@@ -113,13 +113,13 @@ public abstract class AbstractUpdate extends Operator implements Evaluable {
                 AnimoGraph.execute(new GraphOperation<Void>() {
                     private void revision(Node rn, Node n, Relationship r) throws IOException {
                         Relationship rr = n.createRelationshipTo(rn, RelationshipTypes.REV);
-                        DEF._.setActualRevision(n, rn);
+                        AREV._.set(n, rn);
                         UUID.set(rr, uuid().toString());
                         HASH.set(rr, DigestSerializer._.serialize(rr));
                     }
                     @Override
                     public Void execute() throws Throwable {
-                        Node rev = DEF._.getActualRevision(n);
+                        Node rev = AREV._.actualNode(n);
                         Path path = diff(rev, x).next();
                         if (path != null) {
                             Node rn = createNode();

@@ -21,6 +21,7 @@
 package org.animotron.synchro;
 
 import org.animotron.expression.AnimoExpression;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.jgroups.*;
 import org.neo4j.graphdb.Direction;
@@ -105,7 +106,7 @@ public class Synchro {
 		if(instance != null) {
 			instanceHash = byteArrayToHex((byte[]) HASH.get(instance));
 
-			Node nn = DEF._.getActualRevision(instance);
+			Node nn = AREV._.actualNode(instance);
 			Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
 			if(prev != null) {
 				instancePreviousHash = byteArrayToHex((byte[]) HASH.get(prev));

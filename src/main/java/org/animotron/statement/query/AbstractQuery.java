@@ -22,9 +22,6 @@ package org.animotron.statement.query;
 
 import javolution.util.FastSet;
 import javolution.util.FastTable;
-
-import org.animotron.graph.Properties;
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -34,11 +31,7 @@ import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.relation.USE;
 import org.animotron.statement.relation.WEAK_USE;
-import org.neo4j.graphdb.Direction;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
-import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
+import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.Evaluator;
@@ -46,7 +39,6 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -320,7 +312,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					relationships(AN._, INCOMING).
 					relationships(REF._, INCOMING).
 					relationships(DEF._, INCOMING).
-					relationships(RelationshipTypes.AREV, INCOMING).
+					relationships(AREV._, INCOMING).
 			evaluator(new IntersectionSearcher(){
 				@Override
 				public Evaluation evaluate(Path path) {
@@ -401,7 +393,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				} else {
 					
 					Relationship lastR = path.lastRelationship();
-					if (lastR.isType(RelationshipTypes.AREV)) {
+					if (lastR.isType(AREV._)) {
 						if ((underAREV && path.length() == 1) || lastR.getStartNode().equals(lastR.getEndNode()))
 							return EXCLUDE_AND_PRUNE;
 					
@@ -524,7 +516,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
-			if (r.isType(RelationshipTypes.AREV))
+			if (r.isType(AREV._))
 				if (r.getEndNode().equals(path.endNode()) && !r.getEndNode().equals(r.getStartNode()))
 					return EXCLUDE_AND_CONTINUE;
 				else

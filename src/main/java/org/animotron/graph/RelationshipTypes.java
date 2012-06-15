@@ -28,6 +28,6 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public enum RelationshipTypes implements RelationshipType {
 	
-    CONTEXT, RESULT, FAKE, TRI, REV, AREV
+    CONTEXT, RESULT, FAKE, TRI, REV
 	
 }

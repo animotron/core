@@ -18,33 +18,13 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.statement.operator;
+package org.animotron.statement;
 
-import org.animotron.exception.AnimoException;
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.Private;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
+
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
+ *
  */
-public class REF extends AbstractStatement implements Reference, Private {
-
-	public static final REF _ = new REF();
-
-	private REF() { super("->"); }
-
-    protected REF(String... name) { super(name); }
-
-    @Override
-	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-		return parent.createRelationshipTo(reference(reference, ignoreNotFound), this);
-	}
-
-    @Override
-    public Object reference(Relationship r) {
-        return DEF._.reference(r);
-    }
-}
+public interface Private {}

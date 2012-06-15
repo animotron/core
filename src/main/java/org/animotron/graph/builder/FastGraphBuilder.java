@@ -24,6 +24,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
@@ -38,7 +39,6 @@ import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
-import static org.animotron.graph.RelationshipTypes.AREV;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.statement.operator.Utils.freeze;
 import static org.animotron.statement.operator.Utils.unfreeze;
@@ -126,17 +126,17 @@ public class FastGraphBuilder extends GraphBuilder {
                         setUUID(rr, uuid());
                         DEFID.set(end, def.getId());
                         DEF._.add(relationship, reference);
-                        Relationship ar = def.createRelationshipTo(end, AREV);
+                        Relationship ar = AREV._.build(def, end);
                         Cache.RELATIONSHIP.add(ar, hash);
                         HASH.set(relationship, hash);
                     } else {
                         Node n = relationship.getEndNode();
-                        Node rn = DEF._.getActualRevision(n);
+                        Node rn = AREV._.actualNode(n);
                         freeze(rn);
                         Relationship rr = rn.createRelationshipTo(end, REV);
                         setUUID(rr, uuid());
                         DEFID.set(end, n.getId());
-                        Relationship ar = DEF._.setActualRevision(n, end);
+                        Relationship ar = AREV._.set(n, end);
                         Cache.RELATIONSHIP.add(ar, hash);
                         HASH.set(relationship, hash);
                     }
@@ -162,11 +162,11 @@ public class FastGraphBuilder extends GraphBuilder {
                 }
                 relationship = DEF._.get(reference);
                 Node n = relationship.getEndNode();
-                Node rn = DEF._.getActualRevision(n);
+                Node rn = AREV._.actualNode(n);
                 freeze(rn);
                 Relationship rr = rn.createRelationshipTo(nn, REV);
                 setUUID(rr, uuid());
-                DEF._.setActualRevision(n, nn);
+                AREV._.set(n, nn);
             } else {
                 return;
             }

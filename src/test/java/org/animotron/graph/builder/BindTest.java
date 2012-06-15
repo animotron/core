@@ -30,6 +30,7 @@ import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
@@ -177,7 +178,7 @@ public class BindTest extends ATest {
         );
         Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
         Expression z = new JExpression(
-            element("z", _(GET._, "e", _(x)), _(DEF._.getActualRevision(y).getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
+            element("z", _(GET._, "e", _(x)), _(AREV._.actualNode(y).getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
         );
         test(z, "\\z (get e c (any a) (all b)) (\\y (@z \"test\") \"content\").");
 	}

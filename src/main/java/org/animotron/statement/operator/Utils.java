@@ -52,7 +52,6 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.animotron.graph.RelationshipTypes.AREV;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
@@ -83,7 +82,7 @@ public class Utils {
 				depthFirst().
 				uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 				relationships(AN._, INCOMING).
-				relationships(AREV, INCOMING).
+				relationships(AREV._, INCOMING).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 	    			@Override
 	    			public Evaluation evaluate(Path path) {
@@ -99,7 +98,7 @@ public class Utils {
 	    				if (!path.endNode().equals(n))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-    					if (r.isType(AREV))//|| DEFID.has(n)
+    					if (r.isType(AREV._))//|| DEFID.has(n)
 	    					return INCLUDE_AND_PRUNE;
 	    				
 	    				return EXCLUDE_AND_CONTINUE;

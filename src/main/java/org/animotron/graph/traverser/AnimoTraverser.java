@@ -21,14 +21,13 @@
 package org.animotron.graph.traverser;
 
 import javolution.util.FastTable;
-
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.REF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -85,7 +84,7 @@ public class AnimoTraverser {
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof REF)) {
-            node = DEF._.getActualEndNode(r);
+            node = AREV._.actualEndNode(r);
             It it = new It(node);
             iterate(handler, rr, statement, it, level);
 		}

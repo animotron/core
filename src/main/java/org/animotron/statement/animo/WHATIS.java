@@ -34,8 +34,6 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import scala.actors.threadpool.Arrays;
-
 import java.io.IOException;
 
 /**
@@ -70,7 +68,7 @@ public class WHATIS extends AbstractQuery implements Reference {
 					Relationship the = vector.getClosest();
 					
 					if (the.isType(REF._) || the.isType(DEF._)) {
-						downIS(pf, DEF._.getActualEndNode(the));
+						downIS(pf, AREV._.actualEndNode(the));
 						
 					} else {
 			    		//discover down IS topology

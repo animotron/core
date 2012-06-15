@@ -33,11 +33,11 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Properties.*;
-import static org.animotron.graph.RelationshipTypes.*;
+import static org.animotron.graph.Properties.DEFID;
+import static org.animotron.graph.Properties.NAME;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.utils.MessageDigester.setUUID;
 import static org.animotron.utils.MessageDigester.uuid;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Operator 'DEF'.
@@ -75,32 +75,6 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
             init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         }
     };
-    
-    public Relationship setActualRevision(Node node, Node rev) {
-        node.getSingleRelationship(AREV, OUTGOING).delete();
-        return node.createRelationshipTo(rev, AREV);
-    }
-
-    public Node getActualRevision(Node node) {
-        return node.getSingleRelationship(AREV, OUTGOING).getEndNode();
-    }
-
-    public Node getActualRevision(Relationship relationship) {
-        return getActualRevision(relationship.getEndNode());
-    }
-
-    public Node getActualEndNode(Relationship r) {
-    	Node n = r.getEndNode();
-
-		if (r.isType(REF._) || r.isType(DEF._))
-			return getActualRevision(n);
-		
-		return n;
-    }
-
-    public Relationship actualRevision(Relationship r) {
-        return r.getEndNode().getSingleRelationship(AREV, OUTGOING);
-    }
 
     public void init(IndexManager index) {
         def.init(index);
@@ -119,7 +93,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	}
 
 	public Relationship get(Node rev) {
-        Relationship ar = rev.getSingleRelationship(AREV, Direction.INCOMING);
+        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
         return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
 	}
 
@@ -128,7 +102,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         Node n = r.getEndNode();
         NAME.set(n, name);
         Node x = createNode();
-        n.createRelationshipTo(x, AREV);
+        AREV._.build(n, x);
         setUUID(n.createRelationshipTo(x, REV), uuid());
         DEFID.set(x, n.getId());
         add(r, name);
@@ -169,12 +143,12 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	public OnQuestion onCalcQuestion() {
 		return new Calc();
     }
-    
+
     class Calc extends OnQuestion {
 	
 		@Override
 		public void act(final PFlow pf) throws Throwable {
-			pf.sendAnswer(actualRevision(pf.getOP()));
+			pf.sendAnswer(AREV._.actualRelationship(pf.getOP()));
 		}
     }
 

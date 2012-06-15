@@ -23,6 +23,7 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
@@ -173,7 +174,7 @@ public class QCAVector {
 		
 		Node n = r.getEndNode();
 		try {
-			return DEF._.getActualRevision(n);
+			return AREV._.actualNode(n);
 		} catch (Exception e) {
 			return n;
 		}
@@ -184,7 +185,7 @@ public class QCAVector {
 		
 		Node n = r.getEndNode();
 		try {
-			return DEF._.getActualRevision(n);
+			return AREV._.actualNode(n);
 		} catch (Exception e) {
 			return n;
 		}

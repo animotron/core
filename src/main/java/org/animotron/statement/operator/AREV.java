@@ -20,31 +20,51 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.exception.AnimoException;
-import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.Private;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class REF extends AbstractStatement implements Reference, Private {
+public class AREV extends REF {
 
-	public static final REF _ = new REF();
+	public static final AREV _ = new AREV();
 
-	private REF() { super("->"); }
+	private AREV() { super("arev"); }
 
-    protected REF(String... name) { super(name); }
-
-    @Override
-	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-		return parent.createRelationshipTo(reference(reference, ignoreNotFound), this);
-	}
-
-    @Override
-    public Object reference(Relationship r) {
-        return DEF._.reference(r);
+    public Relationship build(Node def, Node rev) {
+        return def.createRelationshipTo(rev, this);
     }
+
+    public Relationship set(Node def, Node rev) {
+        def.getSingleRelationship(this, OUTGOING).delete();
+        return def.createRelationshipTo(rev, this);
+    }
+
+    public Node actualNode(Node node) {
+        return node.getSingleRelationship(this, OUTGOING).getEndNode();
+    }
+
+    public Node actualNode(Relationship relationship) {
+        return actualNode(relationship.getEndNode());
+    }
+
+    public Node actualEndNode(Relationship r) {
+    	Node n = r.getEndNode();
+
+		if (r.isType(REF._) || r.isType(DEF._))
+			return actualNode(n);
+
+		return n;
+    }
+
+    public Relationship actualRelationship(Relationship r) {
+        return r.getEndNode().getSingleRelationship(this, OUTGOING);
+    }
+
+
+
 }

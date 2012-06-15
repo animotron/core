@@ -24,15 +24,9 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
-
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
-import org.animotron.manipulator.Evaluator;
-import org.animotron.manipulator.OnContext;
-import org.animotron.manipulator.OnQuestion;
-import org.animotron.manipulator.PFlow;
-import org.animotron.manipulator.QCAVector;
+import org.animotron.manipulator.*;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
@@ -51,8 +45,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Query operator 'Get'. Return 'have' relations on provided context.
@@ -390,7 +384,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, DEF._.getActualEndNode(ref), middle, thes, onContext))
+		if (getByHave(pf, v, ref, AREV._.actualEndNode(ref), middle, thes, onContext))
 			return true;
 
 		//search for local 'HAVE'
@@ -459,7 +453,7 @@ public class GET extends AbstractQuery implements Shift {
 			Traversal.description().
 			depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			relationships(RelationshipTypes.AREV, OUTGOING).
+			relationships(AREV._, OUTGOING).
 			relationships(ANY._, OUTGOING).
 			relationships(AN._, OUTGOING).
 			relationships(REF._, OUTGOING).
@@ -604,7 +598,7 @@ public class GET extends AbstractQuery implements Shift {
 							Iterator<Relationship> it = path.relationships().iterator();
 							for (Relationship r = null; it.hasNext(); ) {
 								r = it.next();
-								if (r.isType(RelationshipTypes.AREV))
+								if (r.isType(AREV._))
 									continue;
 								
 								if (startBy == null)
