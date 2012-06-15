@@ -97,13 +97,16 @@ public class StreamGraphBuilder extends GraphBuilder {
             if (relationship == null) {
                 relationship = DEF._.get(reference);
                 if (relationship == null) {
-                    relationship = getROOT().createRelationshipTo(end, DEF._);
-                    setUUID(relationship, uuid());
+                    Node def = createNode();
+                    NAME.set(def, reference);
+                    relationship = getROOT().createRelationshipTo(def, DEF._);
+                    Relationship rev = def.createRelationshipTo(end, REV);
+                    setUUID(rev, uuid());
                     HASH.set(relationship, hash);
-                    DEFID.set(end, end.getId());
+                    DEFID.set(end, def.getId());
                     DEF._.add(relationship, reference);
                     Cache.RELATIONSHIP.add(relationship, hash);
-                    end.createRelationshipTo(end, AREV);
+                    def.createRelationshipTo(end, AREV);
                 } else {
                     Node n = relationship.getEndNode();
                     Node rn = DEF._.getActualRevision(n);

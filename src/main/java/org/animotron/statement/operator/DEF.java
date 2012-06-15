@@ -34,7 +34,7 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
-import static org.animotron.graph.RelationshipTypes.AREV;
+import static org.animotron.graph.RelationshipTypes.*;
 import static org.animotron.utils.MessageDigester.setUUID;
 import static org.animotron.utils.MessageDigester.uuid;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -126,9 +126,11 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
-        n.createRelationshipTo(n, AREV);
-        setUUID(r, uuid());
-        DEFID.set(n, n.getId());
+        NAME.set(n, name);
+        Node x = createNode();
+        n.createRelationshipTo(x, AREV);
+        setUUID(n.createRelationshipTo(x, REV), uuid());
+        DEFID.set(x, n.getId());
         add(r, name);
         return r;
 	}
@@ -147,9 +149,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	
     @Override
     protected Node createChild(Object name, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        Node node = createNode();
-        NAME.set(node, name);
-        return node;
+        return createNode();
     }
 
 	@Override
