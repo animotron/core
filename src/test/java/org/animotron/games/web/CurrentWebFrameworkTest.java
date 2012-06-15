@@ -747,11 +747,11 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_18() throws Throwable {
 
         __(
-                "def foo-site (site) (root hello any css, root) (xxx hello any css, xxx)",
+                "def foo-site (site) (root hello any css, root) (xxx hello)",
 
                 "def html-page each (get css) (\\link get uri)",
 
-                "def hello (html-page)",
+                "def hello (html-page) (any css, xxx)",
 
                 "def hello-css (css) (#root) (uri \"hello.css\")",
                 "def xxx-css (css) (#xxx) (uri \"xxx.css\")"
@@ -759,7 +759,7 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertAnimoResult("an get root any site", "hello html-page \\link uri \"hello.css\".");
-        assertAnimoResult("an get xxx any site", "hello html-page \\link uri \"xxx.css\".");
+        assertAnimoResult("an get xxx any site", "hello (html-page \\link uri \"xxx.css\")  (def xxx-css (css) (xxx) (uri)).");
 
     }
 
