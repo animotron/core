@@ -45,7 +45,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     @Override
     protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
-    	if (qS instanceof Definition) {
+    	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
 
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
