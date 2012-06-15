@@ -76,9 +76,9 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         }
     };
     
-    public void setActualRevision(Node node, Node rev) {
+    public Relationship setActualRevision(Node node, Node rev) {
         node.getSingleRelationship(AREV, OUTGOING).delete();
-        node.createRelationshipTo(rev, AREV);
+        return node.createRelationshipTo(rev, AREV);
     }
 
     public Node getActualRevision(Node node) {

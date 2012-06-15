@@ -102,21 +102,19 @@ public class StreamGraphBuilder extends GraphBuilder {
                     relationship = getROOT().createRelationshipTo(def, DEF._);
                     Relationship rr = def.createRelationshipTo(end, REV);
                     setUUID(rr, uuid());
-                    HASH.set(rr, hash);
                     DEFID.set(end, def.getId());
                     DEF._.add(relationship, reference);
-                    Cache.RELATIONSHIP.add(rr, hash);
-                    def.createRelationshipTo(end, AREV);
+                    Relationship ar = def.createRelationshipTo(end, AREV);
+                    Cache.RELATIONSHIP.add(ar, hash);
                 } else {
                     Node n = relationship.getEndNode();
                     Node rn = DEF._.getActualRevision(n);
                     freeze(rn);
                     Relationship rr = rn.createRelationshipTo(end, REV);
                     setUUID(rr, uuid());
-                    HASH.set(rr, hash);
                     DEFID.set(end, n.getId());
-                    Cache.RELATIONSHIP.add(rr, hash);
-                    DEF._.setActualRevision(n, end);
+                    Relationship ar = DEF._.setActualRevision(n, end);
+                    Cache.RELATIONSHIP.add(ar, hash);
                 }
                 r.delete();
             } else {
@@ -138,14 +136,12 @@ public class StreamGraphBuilder extends GraphBuilder {
                 freeze(rn);
                 Relationship rr = rn.createRelationshipTo(nn, REV);
                 setUUID(rr, uuid());
-                HASH.set(rr, hash);
                 DEF._.setActualRevision(n, nn);
                 r.delete();
             }
         } else {
             if (relationship == null) {
                 relationship = copy(getROOT(), r);
-                HASH.set(relationship, hash);
                 Cache.RELATIONSHIP.add(relationship, hash);
                 r.delete();
                 destructive(root);
@@ -155,6 +151,7 @@ public class StreamGraphBuilder extends GraphBuilder {
                 return;
             }
         }
+        HASH.set(relationship, hash);
         preparative(relationship);
         modified(relationship);
 	}
