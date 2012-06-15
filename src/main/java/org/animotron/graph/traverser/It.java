@@ -42,10 +42,6 @@ public class It implements Iterator<Object>, Iterable<Object> {
 
     Object current = null;
 
-    public It(Relationship r) {
-        this(r.getEndNode());
-    }
-
     public It(Node n) {
         p = n.getPropertyKeys().iterator();
         q = Order._.queryDown(n);
