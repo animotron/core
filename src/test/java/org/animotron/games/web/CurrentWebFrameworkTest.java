@@ -747,26 +747,6 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_18() throws Throwable {
 
         __(
-                "def foo-site (site) (root hello any css, root) (xxx hello)",
-
-                "def html-page each (get css) (\\link get uri)",
-
-                "def hello (html-page) (any css, xxx)",
-
-                "def hello-css (css) (#root) (uri \"hello.css\")",
-                "def xxx-css (css) (#xxx) (uri \"xxx.css\")"
-
-        );
-
-        assertAnimoResult("an get root any site", "hello html-page \\link \"hello.css\".");
-        assertAnimoResult("an get xxx any site", "hello (html-page \\link \"xxx.css\")  (def xxx-css (css) (xxx) (uri)).");
-
-    }
-
-    @Test
-    public void test_19() throws Throwable {
-
-        __(
                 "def html-page each (get less) (\\link get uri)",
 
                 "def hello (html-page) (any bootstrap.less)",
@@ -779,53 +759,4 @@ public class CurrentWebFrameworkTest extends ATest {
         assertAnimoResult("hello", "hello (html-page \\link \"uri-bootstrap.less\") (def xxx (bootstrap.less less) (uri)).");
 
     }
-
-    @Test
-    public void test_20() throws Throwable {
-
-        __(
-                "def html-page each (get less) (\\link get uri)",
-
-                "def hello (html-page) (any bootstrap.less)",
-
-                "def xxx (less, bootstrap.less) (uri \"bootstrap.less\")"
-
-        );
-
-        assertAnimoResult("hello", "hello (html-page \\link \"bootstrap.less\") (def xxx (less) (bootstrap.less) (uri)).");
-
-    }
-
-    @Test
-    public void test_21() throws Throwable {
-
-        __(
-                "def html-page get less",
-
-                "def hello (html-page) (any bootstrap.less)",
-
-                "def xxx (less) (bootstrap.less) (uri \"bootstrap.less\")"
-
-        );
-
-        assertAnimoResult("hello", "hello (html-page def xxx (less) (bootstrap.less) (uri)) (def xxx (less) (bootstrap.less) (uri)).");
-
-    }
-
-    @Test
-    public void test_22() throws Throwable {
-
-        __(
-                "def html-page get less",
-
-                "def hello (html-page) (any bootstrap.less)",
-
-                "def xxx (less, bootstrap.less) (uri \"bootstrap.less\")"
-
-        );
-
-        assertAnimoResult("hello", "hello (html-page def xxx (less) (bootstrap.less) (uri)) (def xxx (less) (bootstrap.less) (uri)).");
-
-    }
-
 }
