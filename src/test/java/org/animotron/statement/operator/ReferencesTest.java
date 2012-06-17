@@ -105,7 +105,7 @@ public class ReferencesTest extends ATest {
     @Test
     public void test_050() throws Throwable {
         testAnimo("def john sex male.");
-        assertAnimoResult("get sex john", "sex male.");
+        assertAnimoResult("get sex john", "male.");
     }
 
     @Test
@@ -121,15 +121,6 @@ public class ReferencesTest extends ATest {
         testAnimo("def joe male.");
         testAnimo("def john sex male.");
         assertAnimoResult("get sex joe", "male.");
-        assertAnimoResult("get sex john", "sex male sex.");
-    }
-
-	@Test
-    public void test_100() throws Throwable {
-        testAnimo("def xxx-site (site) (name \"XXX\").");
-        testAnimo("def xxx-layout (layout) (get name).");
-        testAnimo("def html-page any layout.");
-        testAnimo("def xxx (any site) (html-page).");
-        assertStringResult("xxx", "XXX");
+        assertAnimoResult("get sex john", "male.");
     }
 }

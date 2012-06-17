@@ -181,10 +181,10 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 			        			}
 			        		} else {
 		        				for (Path p : Utils.td_THE.traverse(r.getStartNode())) {
-		        					System.out.println(p);
+//		        					System.out.println(p);
 		        					res = p.lastRelationship();
 				        			if (filtering(pf, res, uses, weaks)) {
-				        				pf.sendAnswer( res );
+				        				pf.sendAnswer( DEF.getDef(res) );
 				        				if (returnFirstOnly) return;
 				        			}
 		        				}
