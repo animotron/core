@@ -102,6 +102,10 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
 	}
 
+	public static Relationship getDef(Relationship arev) {
+        return arev.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
+	}
+
 	private Relationship create(String name) throws AnimoException {
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
