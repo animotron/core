@@ -121,11 +121,9 @@ public class PFlow {
 	}
 
 	public void sendAnswer(Relationship answer) {
-		//if (getOP().getId() == 7786) {
-		//	System.out.print("answered ");
-		//	Utils.debug(answer);
-		//}
-        try {
+//		System.out.println("answered ");
+
+		try {
             sendAnswer(answer, RESULT, getPathHash());
         } catch (Throwable t) {
             sendException(t);

@@ -201,7 +201,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		System.out.println("AbstractQuery: NULL!!!");
     		return false;
     	}
-    	System.out.println("filtering: "+ref);
+    	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
     	return filtering(pf, ref, ref.getEndNode(), uses, weaks);
     }
 
@@ -398,7 +398,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+//				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -406,34 +406,59 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				} else {
 					
 					Relationship lastR = path.lastRelationship();
-					if (lastR.isType(AREV._)) {
-						if ((underAREV && path.length() == 1) || lastR.getStartNode().equals(lastR.getEndNode()))
-							return EXCLUDE_AND_PRUNE;
 					
-			    		TraversalDescription td = getIntersectionChecktravers(mustHave, shouldHave, was, true);
-			    		if (!td.traverse(lastR.getStartNode()).iterator().hasNext()) {
-							return EXCLUDE_AND_PRUNE;
-			    		}
-		    			return INCLUDE_AND_PRUNE;
-					}
-
-					Relationship firstR = firstRelationsip(path);
 					if (lastR.isType(REF._) && FREEZE.has(lastR))
 						return EXCLUDE_AND_PRUNE;
 					
+					Relationship firstR = firstRelationsip(path);
 					if (firstR.isType(AN._)) {
-	    				if (path.length() % 2 == 1 && !lastR.isType(AN._))
-	    					return EXCLUDE_AND_PRUNE;
-	    				
-	    				if (path.length() % 2 == 0 && !lastR.isType(REF._))
-	    					return EXCLUDE_AND_PRUNE;
+						switch (path.length() % 3) {
+						case 0:
+		    				if (!lastR.isType(AREV._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						case 1:
+		    				if (!lastR.isType(AN._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						case 2:
+		    				if (!lastR.isType(REF._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						default:
+							break;
+						}
 					
 					} else if (firstR.isType(REF._)) {
-	    				if (path.length() % 2 == 0 && !lastR.isType(AN._))
-	    					return EXCLUDE_AND_PRUNE;
+						switch (path.length() % 3) {
+						case 0:
+		    				if (!lastR.isType(AN._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						case 1:
+		    				if (!lastR.isType(REF._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						case 2:
+		    				if (!lastR.isType(AREV._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						default:
+							break;
+						}
 	    				
-	    				if (path.length() % 2 == 1 && !lastR.isType(REF._))
-	    					return EXCLUDE_AND_PRUNE;
 					} else {
 						return EXCLUDE_AND_PRUNE;
 					}
