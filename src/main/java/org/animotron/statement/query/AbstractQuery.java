@@ -98,6 +98,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 breadthFirst().
                 relationships(REF._, INCOMING ).
                 relationships(AN._, INCOMING ).
+                relationships(AREV._, INCOMING ).
                 //evaluator(Evaluators.excludeStartPosition()).
                 evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
         			@Override
@@ -107,22 +108,33 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				
 //        				System.out.println(path);
         				
-        				if (path.length() < 2)
+        				if (path.length() < 1)
         					return EXCLUDE_AND_CONTINUE;
         				
         				Relationship r = path.lastRelationship();
-        				if (r.isType(REF._) && FREEZE.has(r))
-        					return EXCLUDE_AND_PRUNE;
+        				switch (path.length() % 3) {
+						case 0:
+	        				if (!r.isType(AREV._))
+	        					return EXCLUDE_AND_PRUNE;
+							break;
 
-        				if (path.length() % 2 == 0 && r.isType(AN._)) {
+						case 1:
+	        				if (!r.isType(REF._) || FREEZE.has(r))
+	        					return EXCLUDE_AND_PRUNE;
+							break;
+
+						case 2:
+	        				if (!r.isType(AN._))
+	        					return EXCLUDE_AND_PRUNE;
+	        				
         					if (r.hasProperty(STOPPER._.name()))
         						return INCLUDE_AND_PRUNE;
+
         					return INCLUDE_AND_CONTINUE;
-        				}
-        				
-        				if (path.length() % 2 == 1 && !r.isType(REF._))
-        					return EXCLUDE_AND_PRUNE;
-        					
+
+						default:
+							break;
+						}
 
         				return EXCLUDE_AND_CONTINUE;
         			}
