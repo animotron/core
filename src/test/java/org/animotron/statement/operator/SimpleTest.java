@@ -51,7 +51,7 @@ public class SimpleTest extends ATest {
     	JExpression C = new JExpression(
 			_(DEF._, "CC", _(AN._, "BB"))
 		);
-        assertAnimoResultOneStep(C, "def CC BB AA \"a@b\".");
+        assertAnimoResultOneStep(C, "def CC BB.");// AA \"a@b\".");
 	}
 
 	@Test
@@ -69,6 +69,6 @@ public class SimpleTest extends ATest {
     	JExpression C = new JExpression(
 			_(DEF._, "C", _(GET._, "A", _(AN._, "B")))
 		);
-        assertAnimoResult(C, "def C A \"a@b\".");
+        assertAnimoResult(C, "def C \"a@b\".");
 	}
 }
