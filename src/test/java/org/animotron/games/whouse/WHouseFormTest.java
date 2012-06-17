@@ -113,7 +113,7 @@ public class WHouseFormTest extends ATest {
 
         assertAnimoResult(
     		"get SKU all event (with receive-party centralWhouse) (with date \"D2012-02-11\")",
-    		"SKU (uuidA) (uuidB).");
+    		"uuidA. uuidB.");
 
         __(
     		"def person party.",
