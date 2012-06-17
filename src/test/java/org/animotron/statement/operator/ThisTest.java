@@ -76,4 +76,15 @@ public class ThisTest extends ATest {
 		);
         assertAnimoResult("IDE", "IDE (app app-layout \\js \"some-js-uri\") (js).");
     }
+
+    @Test
+    public void test_12() throws Throwable {
+        __(
+    		"def app (html-page) (js foo)",
+    		"def IDE (app) (js bar)",
+    		"def html-page any layout",
+    		"def app-layout (layout) (get js this app)"
+		);
+        assertAnimoResult("IDE", "IDE (app (html-page def app-layout (layout) (bar)) (js)) (js).");
+    }
 }
