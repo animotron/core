@@ -21,7 +21,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -76,22 +75,18 @@ public class DefTest extends ATest {
 
 	@Test
  	public void testREV_01() throws Throwable {
-		Expression e;
-		
-		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+		testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
 
-        e = testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
+        testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
 	}
 	
 	@Test
  	public void testREV_02() throws Throwable {
-		Expression e;
-		
-		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+		testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
 
-        e = testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
+        testAnimo("def e name (lang-en \"corrected name\") (lang-ru \"исправленное имя\").");
 
-		e = testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
+		testAnimo("def e name (lang-en \"name\") (lang-ru \"исправленное имя\").");
 	}
 
 	@Test
@@ -113,7 +108,7 @@ public class DefTest extends ATest {
 
         assertAnimoResult(
             "get cost item",
-            "cost 10 (USD)."
+            "10. USD."
         );
 
         __(
