@@ -197,17 +197,18 @@ public class Utils {
 			while ((e = in.take()) != null) {
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
-				if (!(aS instanceof Definition) && aS instanceof Evaluable && s instanceof Shift) {
-					if (aS instanceof AN) {
-						Pipe p = eval(controller, e);
-						QCAVector rr;
-						while ((rr = p.take()) != null) {
-							pipe.write(rr);
-						}
-					} else {
-						evaluable(controller, e, pipe);
-					}
-				} else if (aS instanceof Definition || !(aS instanceof Evaluable && !(s instanceof Shift))) {
+//				if (!(aS instanceof Definition) && aS instanceof Evaluable && s instanceof Shift) {
+//					if (aS instanceof AN) {
+//						Pipe p = eval(controller, e);
+//						QCAVector rr;
+//						while ((rr = p.take()) != null) {
+//							pipe.write(rr);
+//						}
+//					} else {
+//						evaluable(controller, e, pipe);
+//					}
+//				} else if (aS instanceof Definition || !(aS instanceof Evaluable && !(s instanceof Shift))) {
+				if (aS instanceof Definition || !(aS instanceof Evaluable)) {
 					pipe.write(e);
 
 				} else {
@@ -264,9 +265,10 @@ public class Utils {
 					Relationship result = e.getAnswer();
 					
 	                Statement aS = Statements.relationshipType(result);
-					if (s instanceof Shift && aS instanceof AN) {
-						pipe.write(e);
-					} else if (result.isType(REF._) || result.isType(DEF._)) {
+//					if (s instanceof Shift && aS instanceof AN) {
+//						pipe.write(e);
+//					} else 
+					if (result.isType(REF._) || result.isType(DEF._)) {
 						pipe.write(e);
 
 					} else {

@@ -134,13 +134,14 @@ public abstract class Manipulator {
 	                        Relationship msg = context.getAnswer();
 	
 	        				if (context.getUnrelaxedAnswer().isType(RESULT)) {
-	        					Statement qS = Statements.relationshipType(context.getQuestion());
+//	        					Statement qS = Statements.relationshipType(context.getQuestion());
 	
-	        					if (qS instanceof Shift) {
-	                				pipe.write(context);
-	                				return;
-	        					
-	        					} else if (!fullEval) {
+//	        					if (qS instanceof Shift) {
+//	                				pipe.write(context);
+//	                				return;
+//	        					
+//	        					} else 
+        						if (!fullEval) {
 	                				pipe.write(context);
 	                				return;
 	                			}
@@ -177,8 +178,9 @@ public abstract class Manipulator {
 	                            }
 	                        } else if (s == null){
 	                            s = Statements.relationshipType(msg);
-	                            Statement qS = Statements.relationshipType(context.getQuestion());
-	                            if (!(s instanceof Definition) && s instanceof Evaluable && !(qS instanceof Shift)) {
+//	                            Statement qS = Statements.relationshipType(context.getQuestion());
+//	                            if (!(s instanceof Definition) && s instanceof Evaluable && !(qS instanceof Shift)) {
+	                            if (!(s instanceof Definition) && s instanceof Evaluable) {
 	                                Pipe in = Evaluator._.execute(controller, context);
 	                                QCAVector v;
 	                                while ((v = in.take()) != null) {
