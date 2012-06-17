@@ -117,7 +117,7 @@ public class DefTest extends ATest {
 
         assertAnimoResult(
             "get cost item",
-            "cost 5 (USD)."
+            "5. USD."
 		);
     }
 }
