@@ -56,7 +56,7 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        assertAnimoResultOneStep(test, "def C (B) (value \"C\").");
+        assertAnimoResultOneStep(test, "def B (A) (value \"B\"). def C (B) (value \"C\").");
     }
 	
     @Test
@@ -77,8 +77,7 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        assertAnimoResultOneStep(test, "def C (B) (value \"C\").");
-        //assertAnimoResult(test, "def B\n    (A)\n    (value \"B\").\nthe C\n    (B)\n    (value \"C\").\n", true);
+        assertAnimoResultOneStep(test, "def B (A) (value \"B\"). def C (B) (value \"C\").");
     }
 
     @Test
@@ -105,12 +104,12 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", value("B")))
         );
-        assertAnimoResultOneStep(test, "def B1 (B) (value \"B\").");
+        assertAnimoResultOneStep(test, "def B (A) (value \"B\"). def B1 (B) (value \"B\").");
 
         test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", value("C")))
         );
-        assertAnimoResultOneStep(test, "def C1 (C) (value \"C\").");
+        assertAnimoResultOneStep(test, "def C (B) (value \"C\"). def C1 (C) (value \"C\").");
     }
 
 	@Test
@@ -153,7 +152,8 @@ public class AllTest extends ATest {
 
         assertAnimoResult(
             "all item",
-            "def item1 (goods) (qty) (cost). def item2 (goods) (qty) (cost)."
+            "item1. item2."
+//            "def item1 (goods) (qty) (cost). def item2 (goods) (qty) (cost)."
         );
 	}
 
@@ -173,21 +173,20 @@ public class AllTest extends ATest {
             )
         );
 
-        JExpression a = new JExpression(
-            _(DEF._, "a", _(ALL._, "S", _(WITH._, "X", value("α"))))
+        JExpression test = new JExpression(
+            _(ALL._, "S", _(WITH._, "X", value("α")))
         );
-        //assertAnimoResultOneStep(a, "def a def B (A) (Y \"β\").");
-        assertAnimoResultOneStep(a, "def a.");
+        assertAnimoResultOneStep(test, "def A (S) (X \"α\"). def B (A) (Y \"β\").");
 
-        JExpression b = new JExpression(
-            _(DEF._, "b", _(ALL._, "S", _(WITH._, "Y", value("β"))))
+        test = new JExpression(
+            _(ALL._, "S", _(WITH._, "Y", value("β")))
         );
-        assertAnimoResultOneStep(b, "def b def C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(test, "def B (A) (Y \"β\"). def C (B) (Z \"γ\") (X \"αα\").");
 
-        JExpression c = new JExpression(
-            _(DEF._, "c", _(ALL._, "S", _(WITH._, "Z", value("γ"))))
+        test = new JExpression(
+            _(ALL._, "S", _(WITH._, "Z", value("γ")))
         );
-        assertAnimoResultOneStep(c, "def c def C (B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(test, "def C (B) (Z \"γ\") (X \"αα\").");
 
     }
 }
