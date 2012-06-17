@@ -95,7 +95,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def not-found-error (error) (code 404)"
         );
 
-        assertAnimoResult("get not-found-error site", "not-found-error default-not-found.");
+        assertAnimoResult("get not-found-error site", "default-not-found.");
     }
 
     @Test
@@ -141,8 +141,8 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
-        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
-        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get not-found-error site", "default-not-found.");
+        assertAnimoResult("get (any error with code 404) (site)", "default-not-found.");// (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
 
         assertError("foo.com", 404, "stack trace would be here", "text/html",
                 "<html><head><link href=\"foo.png\"><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
@@ -263,8 +263,8 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
-        assertAnimoResult("get not-found-error site", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
-        assertAnimoResult("get (any error with code 404) (site)", "not-found-error default-not-found (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get not-found-error site", "default-not-found.");// (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
+        assertAnimoResult("get (any error with code 404) (site)", "default-not-found.");// (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
 
         assertError("foo.com", 404, "stack trace would be here", "text/html",
                 "<html><head><link href=\"foo.png\"><title>Not found</title></head><body><h1>404</h1><h2>Not found</h2><p>Not found anything</p><p>stack trace would be here</p></body></html>"
@@ -642,7 +642,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"foo.png\".");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link \"foo.png\".");
 
     }
 
@@ -662,7 +662,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"foo.png\".");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link \"foo.png\".");
 
     }
 
@@ -680,7 +680,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"foo.png\".");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link \"foo.png\".");
 
     }
 
@@ -700,8 +700,8 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"hello.css\".");
-        assertAnimoResult("an get xxx any site", "xxx-foo html-page \\link uri \"xxx.css\".");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link \"hello.css\".");
+        assertAnimoResult("an get xxx any site", "xxx-foo html-page \\link \"xxx.css\".");
 
     }
 
@@ -719,7 +719,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello-foo html-page \\link uri \"hello.css\".");
+        assertAnimoResult("an get root any site", "hello-foo html-page \\link \"hello.css\".");
 
     }
 
@@ -738,8 +738,8 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello html-page \\link uri \"hello.css\".");
-        assertAnimoResult("an get xxx any site", "hello html-page \\link uri \"xxx.css\".");
+        assertAnimoResult("an get root any site", "hello html-page \\link \"hello.css\".");
+        assertAnimoResult("an get xxx any site", "hello html-page \\link \"xxx.css\".");
 
     }
 
@@ -758,8 +758,8 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("an get root any site", "hello html-page \\link uri \"hello.css\".");
-        assertAnimoResult("an get xxx any site", "hello (html-page \\link uri \"xxx.css\")  (def xxx-css (css) (xxx) (uri)).");
+        assertAnimoResult("an get root any site", "hello html-page \\link \"hello.css\".");
+        assertAnimoResult("an get xxx any site", "hello (html-page \\link \"xxx.css\")  (def xxx-css (css) (xxx) (uri)).");
 
     }
 
