@@ -627,12 +627,15 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					return EXCLUDE_AND_PRUNE;
 
 				} else if (r.isType(ANY._)  || r.isType(ALL._)  || r.isType(PREFER._)) {
-					if (r.getEndNode().equals(path.endNode())) {
+					if (!r.getEndNode().equals(path.endNode()))
 						return EXCLUDE_AND_PRUNE;
-					}
 					
 					for (Relationship rr : r.getEndNode().getRelationships(REF._, OUTGOING)) {
 						Node node = rr.getEndNode();
+						
+						if (targets.contains(node))
+							return INCLUDE_AND_PRUNE;
+						
 						for (Path p : td_IS_leaf.traverse(node)) {
 							System.out.println(p);
 							if (targets.contains( p.lastRelationship().getStartNode()))
