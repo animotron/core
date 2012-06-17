@@ -105,18 +105,16 @@ public class BETWEEN extends Operator implements Predicate {
 		QCAVector have;
 		while ((have = pipe.take()) != null) {
 			if (debug) System.out.println("actual get "+have);
-			IndexHits<Relationship> hits = Order._.context(have.getClosest().getEndNode());
-			try {
-				for (Relationship r : hits) {
-					Pipe in = Evaluator._.execute(pf.getController(), have.question(r));
-					QCAVector e;
-					while ((e = in.take()) != null) {
-						actual.add(e);
-						if (debug) System.out.println("actual "+e);
-					}
+			Relationship h = have.getClosest();
+			if (h.isType(AN._)) {
+				Pipe in = AN._.getREFs(pf, have);
+				QCAVector e;
+				while ((e = in.take()) != null) {
+					actual.add(e);
+					if (debug) System.out.println("actual "+e);
 				}
-			} finally {
-				hits.close();
+			} else {
+				actual.add(have);
 			}
 		}
 		
