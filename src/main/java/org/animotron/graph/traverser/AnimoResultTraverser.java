@@ -51,9 +51,9 @@ public class AnimoResultTraverser extends ResultTraverser {
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
 
         } else if (s != null) {
-        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
-        			|| (s instanceof Evaluable && !(qS instanceof Shift))  
-            	) {
+//        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
+//        			|| (s instanceof Evaluable && !(qS instanceof Shift))  
+        	if (s instanceof Evaluable) {
                 result(handler, rr, level, isOne, pos, isLast);
                 
             } else {
