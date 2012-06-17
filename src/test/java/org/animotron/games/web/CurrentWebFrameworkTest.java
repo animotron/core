@@ -763,4 +763,68 @@ public class CurrentWebFrameworkTest extends ATest {
 
     }
 
+    @Test
+    public void test_19() throws Throwable {
+
+        __(
+                "def html-page each (get less) (\\link get uri)",
+
+                "def hello (html-page) (any bootstrap.less)",
+
+                "def xxx (less) (bootstrap.less) (uri \"bootstrap.less\")"
+
+        );
+
+        assertAnimoResult("hello", "hello (html-page \\link \"bootstrap.less\") (def xxx (less) (bootstrap.less) (uri)).");
+
+    }
+
+    @Test
+    public void test_20() throws Throwable {
+
+        __(
+                "def html-page each (get less) (\\link get uri)",
+
+                "def hello (html-page) (any bootstrap.less)",
+
+                "def xxx (less, bootstrap.less) (uri \"bootstrap.less\")"
+
+        );
+
+        assertAnimoResult("hello", "hello (html-page \\link \"bootstrap.less\") (def xxx (less) (bootstrap.less) (uri)).");
+
+    }
+
+    @Test
+    public void test_21() throws Throwable {
+
+        __(
+                "def html-page get less",
+
+                "def hello (html-page) (any bootstrap.less)",
+
+                "def xxx (less) (bootstrap.less) (uri \"bootstrap.less\")"
+
+        );
+
+        assertAnimoResult("hello", "hello (html-page def xxx (less) (bootstrap.less) (uri)) (def xxx (less) (bootstrap.less) (uri)).");
+
+    }
+
+    @Test
+    public void test_22() throws Throwable {
+
+        __(
+                "def html-page get less",
+
+                "def hello (html-page) (any bootstrap.less)",
+
+                "def xxx (less, bootstrap.less) (uri \"bootstrap.less\")"
+
+        );
+
+        assertAnimoResult("hello", "hello (html-page def xxx (less) (bootstrap.less) (uri)) (def xxx (less) (bootstrap.less) (uri)).");
+
+    }
+
 }
