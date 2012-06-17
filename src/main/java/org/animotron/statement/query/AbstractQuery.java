@@ -39,6 +39,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -510,7 +511,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets) { //, RelationshipType type
-			System.out.println(path);
+//			System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
@@ -634,7 +635,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		}
 
 		public Evaluation _evaluate_(Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection, final Set<Path> directed) {
-			if (path.length() < 2)
+			if (path.length() < 1)
 				return EXCLUDE_AND_CONTINUE;
 			
 			final Relationship r = path.lastRelationship();
@@ -645,7 +646,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(DEF._)) {
 				checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 
-			} else if (path.length() % 2 == 0) {
+			} else if (path.length() % 3 == 0) {
+				if (!r.isType(AREV._))
+					return EXCLUDE_AND_PRUNE;
+				
+				return EXCLUDE_AND_CONTINUE;
+
+			} else if (path.length() % 3 == 2) {
 				if (!r.isType(AN._))
 					return EXCLUDE_AND_PRUNE;
 				
@@ -700,7 +707,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		    	if (Utils.haveContext(r.getEndNode()))
 		    		return EXCLUDE_AND_PRUNE;
 
-			} else if (path.length() % 2 == 1)
+			} else if (path.length() % 3 == 1)
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {
