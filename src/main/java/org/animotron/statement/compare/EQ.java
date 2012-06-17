@@ -30,6 +30,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.REF;
@@ -98,18 +99,16 @@ public class EQ extends Operator implements Predicate {
 		if (debug) System.out.println("Eval actual");
 		QCAVector have;
 		while ((have = pipe.take()) != null) { 
-			IndexHits<Relationship> hits = Order._.context(have.getAnswer().getEndNode());
-			try {
-				for (Relationship r : hits) {
-					Pipe in = Evaluator._.execute(pf.getController(), vector.question(r));
-					QCAVector e;
-					while ((e = in.take()) != null) {
-						actual.add(e);
-						if (debug) System.out.println("actual "+e);
-					}
+			Relationship h = have.getClosest();
+			if (h.isType(AN._)) {
+				Pipe in = AN._.getREFs(pf, have);
+				QCAVector e;
+				while ((e = in.take()) != null) {
+					actual.add(e);
+					if (debug) System.out.println("actual "+e);
 				}
-			} finally {
-				hits.close();
+			} else {
+				actual.add(have);
 			}
 		}
 
