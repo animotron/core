@@ -152,8 +152,7 @@ public class AllTest extends ATest {
 
         assertAnimoResult(
             "all item",
-            "item1. item2."
-//            "def item1 (goods) (qty) (cost). def item2 (goods) (qty) (cost)."
+            "def item1 (goods) (qty) (cost). def item2 (goods) (qty) (cost)."
         );
 	}
 
