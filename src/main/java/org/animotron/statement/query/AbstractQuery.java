@@ -202,7 +202,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		return false;
     	}
     	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
-    	return filtering(pf, ref, ref.getEndNode(), uses, weaks);
+    	return filtering(pf, ref, ref.getStartNode(), uses, weaks);
     }
 
     protected boolean filtering(final PFlow pf, final Relationship ref, final Node toCheckByUSE, final Set<Node> uses, final Set<Node> weaks) {
@@ -398,7 +398,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-//				System.out.println(" "+path);
+				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {

@@ -150,8 +150,6 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 //					underUSE = true;
 //				}
 				
-				System.out.println(node);
-				
 				if (underUSE 
 //						&& isLeaf(node) 
 						&& (res = DEF._.get(node)) != null
