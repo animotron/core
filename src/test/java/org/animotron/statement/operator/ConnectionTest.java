@@ -82,19 +82,19 @@ public class ConnectionTest extends ATest {
             _(GET._, "reference",
                 _(AN._, "fileA")
         ));
-        assertAnimoResult(test, "reference \"file\".");
+        assertAnimoResult(test, "\"file\".");
 
         test = new JExpression(
             _(GET._, "path",
                 _(AN._, "fileA")
         ));
-        assertAnimoResult(test, "path \"/home/test.txt\".");
+        assertAnimoResult(test, "\"/home/test.txt\".");
 
         test = new JExpression(
             _(GET._, "extension",
                 _(AN._, "fileA")
         ));
-        assertAnimoResult(test, "extension \"txt\".");
+        assertAnimoResult(test, "\"txt\".");
 
         test = new JExpression(
             _(GET._, "mime-type",
