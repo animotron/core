@@ -79,7 +79,7 @@ public class RevTest extends ATest {
     public void test_05() throws Throwable {
         testAnimo("def a.");
         testAnimo("def a x y.");
-        assertAnimoResult("get x a", "x y.");
+        assertAnimoResult("get x a", "y.");
     }
 
     @Test
