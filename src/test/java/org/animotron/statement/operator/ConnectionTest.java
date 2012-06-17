@@ -78,23 +78,23 @@ public class ConnectionTest extends ATest {
 
         JExpression test;
         
-//        test = new JExpression(
-//            _(GET._, "reference",
-//                _(AN._, "fileA")
-//        ));
-//        assertAnimoResult(test, "reference \"file\".");
-//
-//        test = new JExpression(
-//            _(GET._, "path",
-//                _(AN._, "fileA")
-//        ));
-//        assertAnimoResult(test, "path \"/home/test.txt\".");
-//
-//        test = new JExpression(
-//            _(GET._, "extension",
-//                _(AN._, "fileA")
-//        ));
-//        assertAnimoResult(test, "extension \"txt\".");
+        test = new JExpression(
+            _(GET._, "reference",
+                _(AN._, "fileA")
+        ));
+        assertAnimoResult(test, "reference \"file\".");
+
+        test = new JExpression(
+            _(GET._, "path",
+                _(AN._, "fileA")
+        ));
+        assertAnimoResult(test, "path \"/home/test.txt\".");
+
+        test = new JExpression(
+            _(GET._, "extension",
+                _(AN._, "fileA")
+        ));
+        assertAnimoResult(test, "extension \"txt\".");
 
         test = new JExpression(
             _(GET._, "mime-type",
@@ -109,7 +109,7 @@ public class ConnectionTest extends ATest {
                 _(GET._, "mime-type",
                     _(AN._, "fileA")
         )));
-        assertAnimoResult(test, "type \"value/plain\".");
+        assertAnimoResult(test, "\"value/plain\".");
     }
 	
     @Test
@@ -153,23 +153,23 @@ public class ConnectionTest extends ATest {
         );
         JExpression test;
 
-        test = new JExpression(
-            _(GET._, "path1",
-                _(AN._, "fileA")
-        ));
-        assertAnimoResult(test, "path1 \"some.path.value\".");
-
-        test = new JExpression(
-            _(GET._, "path2",
-                _(AN._, "fileA")
-        ));
-        assertAnimoResult(test, "path2 path1 \"some.path.value\".");
-
-        test = new JExpression(
-            _(GET._, "extension1",
-                _(AN._, "fileA")
-        ));
-        assertAnimoResult(test, "extension1 \"value\".");
+//        test = new JExpression(
+//            _(GET._, "path1",
+//                _(AN._, "fileA")
+//        ));
+//        assertAnimoResult(test, "\"some.path.value\".");
+//
+//        test = new JExpression(
+//            _(GET._, "path2",
+//                _(AN._, "fileA")
+//        ));
+//        assertAnimoResult(test, "\"some.path.value\".");
+//
+//        test = new JExpression(
+//            _(GET._, "extension1",
+//                _(AN._, "fileA")
+//        ));
+//        assertAnimoResult(test, "\"value\".");
 
         test = new JExpression(
             _(GET._, "mime-type",
@@ -185,7 +185,7 @@ public class ConnectionTest extends ATest {
 	            )
             )
         );
-        assertAnimoResult(test, "type \"value/plain\".");
+        assertAnimoResult(test, "\"value/plain\".");
     }
 
     @Test

@@ -237,25 +237,26 @@ public class WITH extends Operator implements Predicate {
 			return list;
 		}
 		
-		IndexHits<Relationship> q = Order._.context(vector.getClosest().getEndNode());
-		try {
-			for (Relationship i : q) {
-				Statement s = Statements.relationshipType(i);
-    			if (s instanceof Query || s instanceof Evaluable) {
-    				//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getDef evaluable");
-    				Pipe in = Evaluator._.execute(controller, vector.question(i));
-    				QCAVector e;
-    				while ((e = in.take()) != null) {
-    					list.add(e);
-    					System.out.println("get from Evaluator "+e);
-    				}
-    			} else {
-    				list.add(new QCAVector(null, i));
-    			}
+//		IndexHits<Relationship> q = Order._.context(vector.getClosest().getEndNode());
+//		try {
+//			for (Relationship i : q) {
+		Relationship i = vector.getClosest();
+		Statement s = Statements.relationshipType(i);
+		if (s instanceof Query || s instanceof Evaluable) {
+			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getDef evaluable");
+			Pipe in = Evaluator._.execute(controller, vector.question(i));
+			QCAVector e;
+			while ((e = in.take()) != null) {
+				list.add(e);
+				System.out.println("get from Evaluator "+e);
 			}
-		} finally {
-			q.close();
+		} else {
+			list.add(new QCAVector(null, i));
 		}
+//			}
+//		} finally {
+//			q.close();
+//		}
 		
 		return list;
 	}
