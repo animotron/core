@@ -58,7 +58,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -120,10 +120,10 @@ public class GET extends AbstractQuery implements Shift {
 						if (vector == null)
 							return;
 						
-						if (debug) { 
+//						if (debug) { 
 							System.out.println("GET on context "+Thread.currentThread());
 							System.out.println("GET ["+op+"] vector "+vector);
-						}
+//						}
 						
 						get(pf, vector, thes, visitedREFs);
 					}
@@ -190,7 +190,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		visitedREFs.add(toCheck);
 		
-		if (searchForHAVE(pf, toCheck, v, middle, thes, onContext))
+		if (searchForHAVE(pf, Utils.relax(toCheck), v, middle, thes, onContext))
 			return true;
 
 		//if (!pf.isInStack(have[i])) {
@@ -252,7 +252,7 @@ public class GET extends AbstractQuery implements Shift {
 							//check other answers
 							if (v.getAnswers() != null) {
 								for (QCAVector vv : v.getAnswers()) {
-									if (check(pf, v, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
+									if (check(pf, vv, vv.getUnrelaxedAnswer(), middle, thes, visitedREFs, onContext))
 										found = true;
 								}
 							}
@@ -395,6 +395,35 @@ public class GET extends AbstractQuery implements Shift {
 
 		return false;
 	}
+	
+	private boolean eval(PFlow pf, QCAVector vector, Relationship op) throws Throwable {
+        try {
+            Pipe in = Evaluator._.execute(pf.getController(), vector.question(op));
+
+            //if (!in.hasNext()) return false;
+
+            boolean answered = false;
+
+            Relationship res = null;
+            QCAVector v;
+            while ((v = in.take()) != null) {
+                res = v.getAnswer();
+                if (!pf.isInStack(res)) {
+
+                    if (debug)
+                        System.out.println("["+pf.getOP()+"] Relaxing answered "+v.getAnswer());
+
+                    pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
+                    answered = true;
+                }
+            }
+            return answered;
+
+        } catch (IOException e) {
+            pf.sendException(e);
+        }
+        return false;
+	}
 
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
         try{
@@ -402,39 +431,32 @@ public class GET extends AbstractQuery implements Shift {
                 if (debug)
                     System.out.println("["+pf.getOP()+"] answered "+op);
 
-                pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
+//                pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
                 //pf.sendAnswer(op);
+                
+                if (!Utils.haveContext(op.getEndNode())) {
+                    return eval(pf, vector, op);
+//                	System.out.println("SEND AS IT");
+//                	pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
+                } else {
+		    		IndexHits<Relationship> hits = Order._.context(op.getEndNode());
+		    		try {
+		    			for (Relationship rr : hits) {
+//		                    return eval(pf, vector, rr);
+		    				pf.sendAnswer(pf.getVector().answered(rr, vector), RESULT);
+		    			}
+		    		} finally {
+		    			hits.close();
+		    		}
+                }
+                
                 return true;
             }
 
             if (debug)
                 System.out.println("["+pf.getOP()+"] Relaxing "+op+" @ "+vector);
 
-            try {
-                Pipe in = Evaluator._.execute(pf.getController(), vector.question(op));
-
-                //if (!in.hasNext()) return false;
-
-                boolean answered = false;
-
-                Relationship res = null;
-                QCAVector v;
-                while ((v = in.take()) != null) {
-                    res = v.getAnswer();
-                    if (!pf.isInStack(res)) {
-
-                        if (debug)
-                            System.out.println("["+pf.getOP()+"] Relaxing answered "+v.getAnswer());
-
-                        pf.sendAnswer(vector.answered(v.getAnswer(), v), RESULT);
-                        answered = true;
-                    }
-                }
-                return answered;
-
-            } catch (IOException e) {
-                pf.sendException(e);
-            }
+            return eval(pf, vector, op);
         } catch (Throwable t) {
             pf.sendException(t);
         }
@@ -514,7 +536,7 @@ public class GET extends AbstractQuery implements Shift {
 						continue;
 					
 					if (relaxReference(pf, vector, r)) {
-						//System.out.println("+++TRUE+++");
+						System.out.println("+++TRUE+++");
 						return true;
 					}
 				}
@@ -571,7 +593,7 @@ public class GET extends AbstractQuery implements Shift {
 			}
 			
 			if (paths.isEmpty()) {
-				//System.out.println("+++FALSE+++");
+				System.out.println("+++FALSE+++");
 				return false;
 			}
 			
@@ -684,7 +706,7 @@ public class GET extends AbstractQuery implements Shift {
 				FastTable.recycle(resByHAVE);
 				FastTable.recycle(resByIS);
 			}
-			//System.out.println("***TRUE***");
+			System.out.println("***TRUE***");
 			return true;
 		} finally {
 			FastMap.recycle(paths);

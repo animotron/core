@@ -23,6 +23,7 @@ package org.animotron.manipulator;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
@@ -330,6 +331,15 @@ public class QCAVector {
 			b.append(" '");
 			b.append(answer.getType());
 			b.append("'");
+			
+			if (answer.isType(RelationshipTypes.RESULT)) {
+				Relationship relaxed = Utils.relax(answer);
+				b.append("[ ");
+				b.append(relaxed.getId());
+				b.append(" '");
+				b.append(relaxed.getType());
+				b.append("']");
+			}
 		}
 		
 		if (answers != null) {

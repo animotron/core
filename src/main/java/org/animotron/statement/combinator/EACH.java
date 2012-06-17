@@ -87,34 +87,34 @@ public class EACH extends Combinator {
 
 					} else {
 						for (QCAVector r : set) {
-			                Statement qS = Statements.relationshipType(r.getQuestion());
-							if (qS instanceof Shift && r.getAnswer().isType(AN._)) {
-//								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
-//								try {
-//									for (Relationship h : hits) {
-//										QCAVector rr;
-//										
-//										//check if it evaluable
-//										Statement s = Statements.relationshipType(h);
-//										if (s != null && (s instanceof Query || s instanceof Evaluable)) {
-											Pipe p = Utils.eval(pf.getController(), r);
-											QCAVector v;
-											while ((v = p.take()) != null) {
-												QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), v));
-												pf.sendAnswer(rr);
-											}
-//										} else {
-//											rr = new QCAVector(element, new QCAVector(pf.getOP(), r, h));
-//											pf.sendAnswer(rr);
-//										}
-//									}
-//								} finally {
-//									hits.close();
-//								}
-							} else {
+//			                Statement qS = Statements.relationshipType(r.getQuestion());
+//							if (qS instanceof Shift && r.getAnswer().isType(AN._)) {
+////								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
+////								try {
+////									for (Relationship h : hits) {
+////										QCAVector rr;
+////										
+////										//check if it evaluable
+////										Statement s = Statements.relationshipType(h);
+////										if (s != null && (s instanceof Query || s instanceof Evaluable)) {
+//											Pipe p = Utils.eval(pf.getController(), r);
+//											QCAVector v;
+//											while ((v = p.take()) != null) {
+//												QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), v));
+//												pf.sendAnswer(rr);
+//											}
+////										} else {
+////											rr = new QCAVector(element, new QCAVector(pf.getOP(), r, h));
+////											pf.sendAnswer(rr);
+////										}
+////									}
+////								} finally {
+////									hits.close();
+////								}
+//							} else {
 								QCAVector rr = new QCAVector(element, new QCAVector(pf.getOP(), r));
 								pf.sendAnswer(rr);
-							}
+//							}
 						}
 					}
 				}

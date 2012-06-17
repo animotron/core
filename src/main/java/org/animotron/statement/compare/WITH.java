@@ -106,28 +106,17 @@ public class WITH extends Operator implements Predicate {
 		QCAVector have;
 		while ((have = pipe.take()) != null) {
 			if (debug) System.out.println("actual get "+have);
+
 			Relationship h = have.getClosest();
-			if (Utils.haveContext(h.getEndNode())) {
-				IndexHits<Relationship> hits = Order._.context(h.getEndNode());
-				try {
-					for (Relationship r : hits) {
-						Pipe in = Evaluator._.execute(pf.getController(), have.question(r));
-						QCAVector e;
-						while ((e = in.take()) != null) {
-							actual.add(e);
-							if (debug) System.out.println("actual "+e);
-						}
-					}
-				} finally {
-					hits.close();
-				}
-			} else if (h.isType(AN._)) {
+			if (h.isType(AN._)) {
 				Pipe in = AN._.getREFs(pf, have);
 				QCAVector e;
 				while ((e = in.take()) != null) {
 					actual.add(e);
 					if (debug) System.out.println("actual "+e);
 				}
+			} else {
+				actual.add(have);
 			}
 		}
 		
