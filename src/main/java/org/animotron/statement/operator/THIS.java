@@ -147,7 +147,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 							Node n = Utils.getByREF(toCheck).getEndNode();
 							if (thes.contains( n )) {
 								//find highest by pseudo-IS
-								if (next.getContext().size() == 1) {
+								if (next.getContext() != null && next.getContext().size() == 1) {
 									Relationship ths = next.getAnswer();
 									QCAVector v = next.getContext().get(0);
 									Node thisNode = DEF._.getDefNode(next.getQuestion().getStartNode());
