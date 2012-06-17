@@ -523,14 +523,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets) { //, RelationshipType type
-//			System.out.println(path);
+			System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
 			if (r.isType(AREV._))
-				if (r.getEndNode().equals(path.endNode()) && !r.getEndNode().equals(r.getStartNode()))
+				if (r.getEndNode().equals(path.endNode()))
 					return EXCLUDE_AND_CONTINUE;
 				else
 					return EXCLUDE_AND_PRUNE;
@@ -538,20 +538,20 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(REF._) && FREEZE.has(r))
 				return EXCLUDE_AND_PRUNE;
 			
-			if (r.isType(SHALL._)) {
-				if (path.length() < 2)
-					return EXCLUDE_AND_PRUNE;
-
-				for (Path p : td_IS_down.traverse(r.getEndNode())) {
-					if (targets.contains(p.lastRelationship().getEndNode()))
-						return INCLUDE_AND_PRUNE;
-				}
-				//for (QCAVector rr : Utils.getByREF(null, r))
-				//	if (targets.contains(rr.getAnswer().getEndNode()))
-				//		return INCLUDE_AND_PRUNE;
-				
-				return EXCLUDE_AND_PRUNE;
-			}
+//			if (r.isType(SHALL._)) {
+//				if (path.length() < 2)
+//					return EXCLUDE_AND_PRUNE;
+//
+//				for (Path p : td_IS_down.traverse(r.getEndNode())) {
+//					if (targets.contains(p.lastRelationship().getEndNode()))
+//						return INCLUDE_AND_PRUNE;
+//				}
+//				//for (QCAVector rr : Utils.getByREF(null, r))
+//				//	if (targets.contains(rr.getAnswer().getEndNode()))
+//				//		return INCLUDE_AND_PRUNE;
+//				
+//				return EXCLUDE_AND_PRUNE;
+//			}
 
 			if (path.length() == 1) {
 				if (r.isType(REF._) && targets.contains(r.getEndNode()))
@@ -595,12 +595,25 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					
 					return EXCLUDE_AND_CONTINUE;
 				
-				//XXX: check direction!
-				} else if (r.isType(AN._) || r.isType(ANY._)) {
+				} else if (r.isType(AN._)) {
 					if (r.getEndNode().equals(path.endNode())) {
 						return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;
+
+				} else if (r.isType(ANY._)  || r.isType(ALL._)  || r.isType(PREFER._)) {
+					if (r.getEndNode().equals(path.endNode())) {
+						return EXCLUDE_AND_PRUNE;
+					}
+					
+					for (Relationship rr : r.getEndNode().getRelationships(REF._, OUTGOING)) {
+						Node node = rr.getEndNode();
+						for (Path p : td_IS_leaf.traverse(node)) {
+							System.out.println(p);
+							if (targets.contains( p.lastRelationship().getStartNode()))
+								return INCLUDE_AND_PRUNE;
+						}
+					}
 				}
 			}
 			return EXCLUDE_AND_PRUNE;

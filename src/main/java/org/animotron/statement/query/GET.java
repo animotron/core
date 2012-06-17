@@ -218,7 +218,7 @@ public class GET extends AbstractQuery implements Shift {
 	
 			boolean found = false;
 			
-			Relationship t = null;
+//			Relationship t = null;
 			
 			while (true) {
 				
@@ -477,10 +477,13 @@ public class GET extends AbstractQuery implements Shift {
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
 			relationships(AREV._, OUTGOING).
 			relationships(ANY._, OUTGOING).
+			relationships(ALL._, OUTGOING).
+			relationships(PREFER._, OUTGOING).
 			relationships(AN._, OUTGOING).
 			relationships(REF._, OUTGOING).
-			relationships(GET._, OUTGOING).
-			relationships(SHALL._, OUTGOING);
+			relationships(GET._, OUTGOING);
+//			.
+//			relationships(SHALL._, OUTGOING);
 	
 	private boolean getByHave(
 			final PFlow pf, 
@@ -536,7 +539,8 @@ public class GET extends AbstractQuery implements Shift {
 						continue;
 					
 					if (relaxReference(pf, vector, r)) {
-						System.out.println("+++TRUE+++");
+						if (debug)
+							System.out.println("+++TRUE+++");
 						return true;
 					}
 				}
@@ -593,7 +597,8 @@ public class GET extends AbstractQuery implements Shift {
 			}
 			
 			if (paths.isEmpty()) {
-				System.out.println("+++FALSE+++");
+				if (debug)
+					System.out.println("+++FALSE+++");
 				return false;
 			}
 			
@@ -642,12 +647,12 @@ public class GET extends AbstractQuery implements Shift {
 										}
 										ANs = 0;
 											
-										if (r.isType(ANY._)) {
-											if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
+										if (r.isType(ANY._) || r.isType(ALL._) || r.isType(PREFER._)) {
+//											if (it.hasNext() && it.next().isType(REF._) && !it.hasNext()) {
 												res = r;
-											} else {
-												res = null;
-											}
+//											} else {
+//												res = null;
+//											}
 											break;
 					
 										} else if (r.isType(GET._)) {

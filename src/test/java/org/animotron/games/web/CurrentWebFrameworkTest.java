@@ -771,11 +771,12 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def hello (html-page) (any bootstrap.less)",
 
-                "def xxx (less) (bootstrap.less) (uri \"bootstrap.less\")"
+                "def xxx (bootstrap.less) (uri \"uri-bootstrap.less\")",
 
+                "def bootstrap.less (less)."
         );
 
-        assertAnimoResult("hello", "hello (html-page \\link \"bootstrap.less\") (def xxx (less) (bootstrap.less) (uri)).");
+        assertAnimoResult("hello", "hello (html-page \\link \"uri-bootstrap.less\") (def xxx (bootstrap.less less) (uri)).");
 
     }
 
