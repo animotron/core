@@ -51,7 +51,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 
 	private THIS() { super("this"); }
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
     @Override
 	public OnQuestion onCalcQuestion() {
@@ -146,6 +146,30 @@ public class THIS extends Operator implements Reference, Evaluable {
 						} else if (next.hasAnswer()) {
 							Node n = Utils.getByREF(toCheck).getEndNode();
 							if (thes.contains( n )) {
+								//find highest by pseudo-IS
+								if (next.getContext().size() == 1) {
+									Relationship ths = next.getAnswer();
+									QCAVector v = next.getContext().get(0);
+									Node thisNode = DEF._.getDefNode(v.getQuestion().getStartNode());
+									while (thisNode != null) {
+										if (v.getQuestion().isType(AN._) && v.hasAnswer()) {
+											Node nextNode = v.getUnrelaxedAnswer().getEndNode();
+											if (nextNode.equals(thisNode)) {
+												
+												if (v.getContext().size() != 1)
+													break;
+
+												thisNode = nextNode;
+												ths = v.getAnswer();
+												v = next.getContext().get(0);
+												
+											}
+										}
+										break;
+									}
+									pf.sendAnswer(pf.getVector().answered(ths));//, next.getContext()
+								}
+								
 								IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
 								try {
 									for (Relationship r : hits) {

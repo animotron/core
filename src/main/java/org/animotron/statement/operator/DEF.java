@@ -91,6 +91,11 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	public Relationship get(Object name) {
         return def.get(name);
 	}
+	
+	public Node getDefNode(Node rev) {
+        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
+        return ar == null ? null : ar.getStartNode();
+	}
 
 	public Relationship get(Node rev) {
         Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
