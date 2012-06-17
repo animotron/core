@@ -40,7 +40,7 @@ public class EachTest extends ATest {
         testAnimo("def b (s) (x 2).");
         testAnimo("def c (s) (x 3).");
 
-        assertAnimoResult("each (all s) (\\foo get x)", "\\foo x 1. \\foo x 2. \\foo x 3.");
+        assertAnimoResult("each (all s) (\\foo get x)", "\\foo 1. \\foo 2. \\foo 3.");
     }
 
     @Test
