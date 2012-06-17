@@ -398,7 +398,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				System.out.println(" "+path);
+//				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -459,6 +459,30 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 						}
 	    				
+					} else if (firstR.isType(AREV._)) {
+						switch (path.length() % 3) {
+						case 0:
+		    				if (!lastR.isType(REF._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						case 1:
+		    				if (!lastR.isType(AREV._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						case 2:
+		    				if (!lastR.isType(AN._))
+		    					return EXCLUDE_AND_PRUNE;
+							
+							break;
+
+						default:
+							break;
+						}
+
 					} else {
 						return EXCLUDE_AND_PRUNE;
 					}
