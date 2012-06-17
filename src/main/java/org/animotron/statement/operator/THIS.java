@@ -112,7 +112,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 								return true;
 							}
 						}
-					} else if (toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._)) {
+					} else if (toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._) || toCheck.isType(GET._)) {
 						if (thes.isEmpty()) {
 							
 						} else {
@@ -126,9 +126,9 @@ public class THIS extends Operator implements Reference, Evaluable {
 								return true;
 							}
 						}
-					} else if (toCheck.isType(GET._)) {
-						if (prevAnswer != null)
-							pf.sendAnswer(pf.getVector().answered(prevAnswer));
+//					} else if (toCheck.isType(GET._)) {
+//						if (prevAnswer != null)
+//							pf.sendAnswer(pf.getVector().answered(prevAnswer));
 
 					} else if (toCheck.isType(AN._)) {
 						if (thes.isEmpty()) {
@@ -146,21 +146,15 @@ public class THIS extends Operator implements Reference, Evaluable {
 						} else if (next.hasAnswer()) {
 							Node n = Utils.getByREF(toCheck).getEndNode();
 							if (thes.contains( n )) {
-//								if (next.hasAnswer()) {
-//									pf.sendAnswer(pf.getVector().answered(next.getAnswer()));//, next.getContext()
-//									return true;
-//								
-//								} else {
-									IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
-									try {
-										for (Relationship r : hits) {
-											pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
-										}
-										return true;
-									} finally {
-										hits.close();
+								IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
+								try {
+									for (Relationship r : hits) {
+										pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
 									}
-//								}
+									return true;
+								} finally {
+									hits.close();
+								}
 							}
 						}
 					}
