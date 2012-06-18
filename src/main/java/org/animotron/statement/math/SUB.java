@@ -21,6 +21,7 @@
 package org.animotron.statement.math;
 
 import static org.animotron.expression.JExpression.value;
+import static org.animotron.expression.JExpression._;
 
 import java.io.IOException;
 
@@ -71,6 +72,6 @@ public class SUB extends MathInstruction {
 
 		System.out.println(""+Na.doubleValue()+" - "+Nb.doubleValue()+" = "+result);
 		
-		return new JExpression(value(result));
+		return new JExpression(_(value(result)));
 	}
 }

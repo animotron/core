@@ -96,26 +96,23 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 	
 	protected void findEqNm(List<Relationship> As, List<Relationship> Bs, List<Relationship> eq, List<Relationship> nm) {
 		if (As.size() != 1) {
-			Iterator<Relationship> it = As.iterator();
+			Iterator<Relationship> it = Bs.iterator();
 			while (it.hasNext()) {
 				Relationship r = it.next();
 				if (r.isType(VALUE._)) {
-					Node n = r.getEndNode();
-					
-					Iterator<Relationship> Bit = Bs.iterator();
-					while (Bit.hasNext()) {
-						Relationship rr = Bit.next();
-						if (rr.isType(VALUE._)) {
-							if (rr.getEndNode().equals(n)) {
-								nm.add(rr);
-								
-								it.remove();
-								Bit.remove();
+					nm.add(r);
+						
+					it.remove();
+				}
+			}
 
-								break;
-							}
-						}
-					}
+			it = As.iterator();
+			while (it.hasNext()) {
+				Relationship r = it.next();
+				if (r.isType(VALUE._)) {
+					nm.add(r);
+					
+					it.remove();
 					
 				} else if (Bs.contains(r)) {
 					eq.add(r);

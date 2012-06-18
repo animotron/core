@@ -31,6 +31,7 @@ import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.JExpression.value;
+import static org.animotron.expression.JExpression._;
 
 /**
  * Math instruction 'SUM'. (aka summation)
@@ -65,6 +66,9 @@ public class SUM extends MathInstruction {
 	}
 	
 	protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
+		if (!(a.op == b.op && b.op == MUL._))
+			throw new IOException("\ncan't '"+name()+"'\n"+a+" "+b);
+		
 		List<Relationship> As = new FastList<Relationship>( a.getElements(pf) );
 		List<Relationship> Bs = new FastList<Relationship>( b.getElements(pf) );
 
@@ -90,6 +94,18 @@ public class SUM extends MathInstruction {
 			System.out.println(Arrays.toString(nm.toArray()));
 			
 			if (As.isEmpty() && Bs.isEmpty()) {
+				Relationship res = null;
+				for (Relationship r : nm) {
+					if (res == null)
+						res = r;
+					else {
+						res = execute(pf, res, r);
+						if (res == null)
+							throw new IOException("\ncan't '"+name()+"'\n"+a+" "+b);
+					}
+				}
+				eq.add(res);
+				return new AnimObject(pf, MUL._, eq);
 			}
 		}
 		return new AnimObject(pf, this, a, b);
