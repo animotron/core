@@ -70,7 +70,7 @@ public class StopperTest extends ATest {
         testAnimo("def a #b.");
         testAnimo("def c a.");
         testAnimo("def d c.");
-        assertAnimoResult("get b d", "");
+        assertAnimoResult("get b d", "a.");
 
     }
 
