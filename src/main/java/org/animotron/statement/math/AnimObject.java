@@ -92,17 +92,26 @@ public class AnimObject extends AbstractExpression {
 	}
 
 	private boolean check(List<Relationship> elements, Relationship r) throws IOException {
+		if (r == null) return false;
+		
 		System.out.println("check");
-		System.out.println(r.getType());
+		System.out.println(r.getType()+" "+r);
     	if (r.isType(VALUE._)) {
     		elements.add(r);
     		return true;
     		
-    	} else if (r.isType(AN._)) {
+    	} else if (r.isType(AN._) || r.isType(DEF._)) {
     		if (!Utils.haveContext(r.getEndNode())) {
 
-    			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
-    			elements.add(DEF._.get(ref.getEndNode()));
+    			if (r.isType(DEF._)) {
+        			elements.add(r);
+    				
+    			} else {
+//    				System.out.println(r);
+//    				return false;
+    				Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
+    				elements.add(DEF.getDefR(ref.getEndNode()));
+    			}
     			
         		return true;
     		
@@ -113,6 +122,7 @@ public class AnimObject extends AbstractExpression {
     				if (obj != null && obj instanceof String ) {
     					Statement s = Statements.name((String) obj);
     					if (s instanceof MathInstruction) {
+//    						System.out.println(s);
 							elements.add(new AnimObject(pf, (MathInstruction)s, r));
 							return true;
     					}
@@ -150,6 +160,7 @@ public class AnimObject extends AbstractExpression {
         IndexHits<Relationship> hits = Order._.context(n);
         try {
             for (Relationship r : hits) {
+//            	System.out.println(r+" "+r.getType());
             	if (!check(elements, r)) {
             		if (pf == null)
             			throw new RuntimeException("Unsupported operator "+r);
@@ -159,7 +170,7 @@ public class AnimObject extends AbstractExpression {
                 	while ((v = pipe.take()) != null) {
                 		System.out.println(v);
                 		if (!check(elements, v.getClosest()))
-                			throw new RuntimeException("Unsupported operator "+r);
+                			throw new RuntimeException("Unsupported operator "+r+" ["+r.getType()+"]");
                 	}
             	}
             }
@@ -193,5 +204,17 @@ public class AnimObject extends AbstractExpression {
                 }
             }
         builder.end();
+    }
+    
+    public String toString() {
+    	StringBuilder sb = new StringBuilder();
+    	sb.append(op.name()).append("\n");
+    	if (elements != null)
+	    	for (Relationship element : elements) {
+	    		sb.append(" ").append(element).append("\n");
+	    	}
+    	else
+    		sb.append("[NOTHING]");
+    	return sb.toString();
     }
 }

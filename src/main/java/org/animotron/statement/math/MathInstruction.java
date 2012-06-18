@@ -93,72 +93,110 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 		}
 		return new AnimObject(pf, this, a, b);
 	}
-
-	protected Relationship execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
-		List<Relationship> As = a.getElements(pf);
-		List<Relationship> Bs = b.getElements(pf);
-
-		System.out.println("As = ");
-		System.out.println(Arrays.toString(As.toArray()));
-		System.out.println("Bs = ");
-		System.out.println(Arrays.toString(Bs.toArray()));
-
-		if (As.size() == Bs.size()) {
-			List<Relationship> eq = new FastList<Relationship>();
-			List<Relationship> nm = new FastList<Relationship>();
-
-			if (As.size() != 1) {
-				Iterator<Relationship> it = As.iterator();
-				while (it.hasNext()) {
-					Relationship r = it.next();
-					if (r.isType(VALUE._)) {
-						Node n = r.getEndNode();
-						
-						Iterator<Relationship> Bit = Bs.iterator();
-						while (Bit.hasNext()) {
-							Relationship rr = Bit.next();
-							if (rr.isType(VALUE._)) {
-								if (rr.getEndNode().equals(n)) {
-									nm.add(rr);
-									
-									it.remove();
-									Bit.remove();
 	
-									break;
-								}
+	protected void findEqNm(List<Relationship> As, List<Relationship> Bs, List<Relationship> eq, List<Relationship> nm) {
+		if (As.size() != 1) {
+			Iterator<Relationship> it = As.iterator();
+			while (it.hasNext()) {
+				Relationship r = it.next();
+				if (r.isType(VALUE._)) {
+					Node n = r.getEndNode();
+					
+					Iterator<Relationship> Bit = Bs.iterator();
+					while (Bit.hasNext()) {
+						Relationship rr = Bit.next();
+						if (rr.isType(VALUE._)) {
+							if (rr.getEndNode().equals(n)) {
+								nm.add(rr);
+								
+								it.remove();
+								Bit.remove();
+
+								break;
 							}
 						}
-						
-					} else if (Bs.contains(r)) {
-						eq.add(r);
-	
-						it.remove();
-						Bs.remove(Bs.indexOf(r));
 					}
+					
+				} else if (Bs.contains(r)) {
+					eq.add(r);
+
+					it.remove();
+					Bs.remove(Bs.indexOf(r));
 				}
 			}
-
-			if (As.size() == 1 && As.size() == Bs.size()) {
-				eq.add(execute(pf, As.get(0), Bs.get(0)));
-			}
-
-			System.out.println(Arrays.toString(eq.toArray()));
-			if (eq.isEmpty()) {
-				if (nm.isEmpty())
-					return new AnimObject(pf, this, a, b);
-				else {
-					for (Relationship n : nm)
-						eq.add(execute(pf, n, n));
-				}
-			} else {
-				for (Relationship n : nm)
-					eq.add(execute(pf, n, n));
-			}
-
-			return new AnimObject(pf, MUL._, eq);
 		}
-		return new AnimObject(pf, this, a, b);
 	}
+
+	protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
+		throw new IOException("\ncan't '"+name()+"'\n"+a+" "+b);
+	}
+
+//	protected abstract AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException;
+//	{
+//		List<Relationship> As = a.getElements(pf);
+//		List<Relationship> Bs = b.getElements(pf);
+//
+//		System.out.println("As = ");
+//		System.out.println(Arrays.toString(As.toArray()));
+//		System.out.println("Bs = ");
+//		System.out.println(Arrays.toString(Bs.toArray()));
+//
+//		if (As.size() == Bs.size()) {
+//			List<Relationship> eq = new FastList<Relationship>();
+//			List<Relationship> nm = new FastList<Relationship>();
+//
+//			if (As.size() != 1) {
+//				Iterator<Relationship> it = As.iterator();
+//				while (it.hasNext()) {
+//					Relationship r = it.next();
+//					if (r.isType(VALUE._)) {
+//						Node n = r.getEndNode();
+//						
+//						Iterator<Relationship> Bit = Bs.iterator();
+//						while (Bit.hasNext()) {
+//							Relationship rr = Bit.next();
+//							if (rr.isType(VALUE._)) {
+//								if (rr.getEndNode().equals(n)) {
+//									nm.add(rr);
+//									
+//									it.remove();
+//									Bit.remove();
+//	
+//									break;
+//								}
+//							}
+//						}
+//						
+//					} else if (Bs.contains(r)) {
+//						eq.add(r);
+//	
+//						it.remove();
+//						Bs.remove(Bs.indexOf(r));
+//					}
+//				}
+//			}
+//
+//			if (As.size() == 1 && As.size() == Bs.size()) {
+//				eq.add(execute(pf, As.get(0), Bs.get(0)));
+//			}
+//
+//			System.out.println(Arrays.toString(eq.toArray()));
+//			if (eq.isEmpty()) {
+//				if (nm.isEmpty())
+//					return new AnimObject(pf, this, a, b);
+//				else {
+//					for (Relationship n : nm)
+//						eq.add(execute(pf, n, n));
+//				}
+//			} else {
+//				for (Relationship n : nm)
+//					eq.add(execute(pf, n, n));
+//			}
+//
+//			return new AnimObject(pf, MUL._, eq);
+//		}
+//		return new AnimObject(pf, this, a, b);
+//	}
 
 	protected Relationship execute(final PFlow pf, AnimObject a) throws IOException {
 		List<Relationship> elements = a.getElements(pf);
@@ -172,8 +210,11 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
 			for (Relationship r : elements) {
 				if (res == null)
 					res = r;
-				else
+				else {
+					if (r == null) throw new IOException("Error on "+r);
 					res = execute(pf, res, r);
+					if (res == null) throw new IOException("Error after "+r);
+				}
 			}
 		}
 		

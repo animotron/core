@@ -21,6 +21,10 @@
 package org.animotron.statement.math;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+import javolution.util.FastList;
 
 import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
@@ -58,5 +62,37 @@ public class SUM extends MathInstruction {
 		System.out.println(""+Na.doubleValue()+" + "+Nb.doubleValue()+" = "+result);
 
 		return new JExpression(value(result));
+	}
+	
+	protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {
+		List<Relationship> As = new FastList<Relationship>( a.getElements(pf) );
+		List<Relationship> Bs = new FastList<Relationship>( b.getElements(pf) );
+
+		System.out.println("As = ");
+		System.out.println(Arrays.toString(As.toArray()));
+		System.out.println("Bs = ");
+		System.out.println(Arrays.toString(Bs.toArray()));
+
+		if (As.size() == Bs.size()) {
+			List<Relationship> eq = new FastList<Relationship>();
+			List<Relationship> nm = new FastList<Relationship>();
+			
+			findEqNm(As, Bs, eq, nm);
+
+			System.out.println("As = ");
+			System.out.println(Arrays.toString(As.toArray()));
+			System.out.println("Bs = ");
+			System.out.println(Arrays.toString(Bs.toArray()));
+
+			System.out.println("eq = ");
+			System.out.println(Arrays.toString(eq.toArray()));
+			System.out.println("nm = ");
+			System.out.println(Arrays.toString(nm.toArray()));
+			
+			if (As.isEmpty() && Bs.isEmpty()) {
+			}
+		}
+		return new AnimObject(pf, this, a, b);
+//		throw new IOException("can't '"+name()+"'\n "+a+" "+b);
 	}
 }
