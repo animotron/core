@@ -191,28 +191,17 @@ public class Utils {
 		Relationship r = v.getClosest();
 		Statement s = Statements.relationshipType(r);
 		if (s instanceof Query || s instanceof Evaluable) {
-			//System.out.println("+++++++++++++++++++++++++++++++++++++++++ getDef evaluable");
+
 			Pipe in = Evaluator._.execute(controller, v);
 			QCAVector e;
 			while ((e = in.take()) != null) {
 				
                 Statement aS = Statements.relationshipType(e.getAnswer());
-//				if (!(aS instanceof Definition) && aS instanceof Evaluable && s instanceof Shift) {
-//					if (aS instanceof AN) {
-//						Pipe p = eval(controller, e);
-//						QCAVector rr;
-//						while ((rr = p.take()) != null) {
-//							pipe.write(rr);
-//						}
-//					} else {
-//						evaluable(controller, e, pipe);
-//					}
-//				} else if (aS instanceof Definition || !(aS instanceof Evaluable && !(s instanceof Shift))) {
 				if (aS instanceof Definition || !(aS instanceof Evaluable)) {
 					pipe.write(e);
 
 				} else {
-					Pipe p = eval(controller, e);
+					Pipe p = evalDown(controller, e);
 					QCAVector rr;
 					while ((rr = p.take()) != null) {
 						pipe.write(rr);
@@ -286,7 +275,7 @@ public class Utils {
 		}
 	}
 	
-	public static Pipe eval(final Controller controller, final QCAVector vector) throws IOException {
+	public static Pipe evalDown(final Controller controller, final QCAVector vector) throws IOException {
         final Pipe pipe = Pipe.newInstance();
         
         Executor.execute(new Runnable() {
