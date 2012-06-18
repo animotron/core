@@ -21,6 +21,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
@@ -759,4 +760,22 @@ public class CurrentWebFrameworkTest extends ATest {
         assertAnimoResult("hello", "hello (html-page \\link \"uri-bootstrap.less\") (def xxx (bootstrap.less less) (uri)).");
 
     }
+
+    @Test
+    public void test_19() throws Throwable {
+
+        __(
+                "def html-page (any layout)",
+
+                "def app (html-page) (each (get script)) (\\script this script)",
+
+                "def root (app) (script \"alert('Hello world!')\")"
+
+        );
+
+        assertXMLResult(new AnimoExpression("root"), "<script>alert('Hello world!')</script>");
+
+    }
+
+
 }
