@@ -262,22 +262,19 @@ public class Utils {
 				QCAVector e;
 				while ((e = in.take()) != null) {
 
-					Relationship result = e.getAnswer();
-					
-	                Statement aS = Statements.relationshipType(result);
-//					if (s instanceof Shift && aS instanceof AN) {
-//						pipe.write(e);
-//					} else 
-					if (result.isType(REF._) || result.isType(DEF._)) {
+//					Relationship result = e.getAnswer();
+//					
+//	                Statement aS = Statements.relationshipType(result);
+//					if (result.isType(REF._) || result.isType(DEF._) || result.isType(AREV._)) {
 						pipe.write(e);
-
-					} else {
-						Pipe p = eval(pf.getController(), e);
-						QCAVector rr;
-						while ((rr = p.take()) != null) {
-							pipe.write(rr);
-						}
-					}
+//
+//					} else {
+//						Pipe p = eval(pf.getController(), e);
+//						QCAVector rr;
+//						while ((rr = p.take()) != null) {
+//							pipe.write(rr);
+//						}
+//					}
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ getDef evaluable");
 			} else {
