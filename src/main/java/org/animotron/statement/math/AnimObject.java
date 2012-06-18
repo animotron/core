@@ -35,7 +35,6 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.query.GET;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -105,16 +104,6 @@ public class AnimObject extends AbstractExpression {
     			Relationship ref = r.getEndNode().getSingleRelationship(REF._, Direction.OUTGOING);
     			elements.add(DEF._.get(ref.getEndNode()));
     			
-//    			List<Relationship> els = getElements(pf, ref.getEndNode());
-//    			if (els == null || els.isEmpty())
-//    				elements.add(ref);
-//    			
-//    			else if (els.size() == 1)
-//    				elements.add(els.getDef(0));
-//    			
-//    			else 
-//    				elements.add( new AnimObject(pf, MUL._, els));
-        		
         		return true;
     		
     		} else {
@@ -169,18 +158,7 @@ public class AnimObject extends AbstractExpression {
                 	QCAVector v;
                 	while ((v = pipe.take()) != null) {
                 		System.out.println(v);
-                		if (v.getQuestion().isType(GET._)) {
-                            IndexHits<Relationship> _hits = Order._.context(v.getClosest().getEndNode());
-                            try {
-                            	for (Relationship rr : _hits) {
-                            		if (!check(elements, rr))
-                            			throw new RuntimeException("Unsupported operator "+rr);
-                            	}
-                            } finally {
-                            	_hits.close();
-                            }
-                			
-                		} else if (!check(elements, v.getClosest()))
+                		if (!check(elements, v.getClosest()))
                 			throw new RuntimeException("Unsupported operator "+r);
                 	}
             	}
@@ -216,17 +194,4 @@ public class AnimObject extends AbstractExpression {
             }
         builder.end();
     }
-
-//    @Override
-//    protected Relationship relationship() {
-//    	System.out.println("relationship");
-//		try {
-//			Relationship r = relax(pf);
-//			if (r != null) return r;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//    	
-//		return super.relationship();
-//    }
 }
