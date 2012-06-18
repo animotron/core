@@ -140,7 +140,7 @@ public class PFlow {
 //		answerChannel().publish(new QCAVector(getOP(), answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
 		
 		QCAVector v = new QCAVector(getOP(), answer, answerVector.getContext());
-		System.out.println("sendAnswer "+v);
+//		System.out.println("sendAnswer "+v);
 		answerChannel().publish(v);
 	}
 

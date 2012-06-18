@@ -58,7 +58,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -120,10 +120,10 @@ public class GET extends AbstractQuery implements Shift {
 						if (vector == null)
 							return;
 						
-//						if (debug) { 
+						if (debug) { 
 							System.out.println("GET on context "+Thread.currentThread());
 							System.out.println("GET ["+op+"] vector "+vector);
-//						}
+						}
 						
 						get(pf, vector, thes, visitedREFs);
 					}
