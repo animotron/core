@@ -194,6 +194,9 @@ public abstract class ATest {
     		Assert.fail("Result contain unmatched part '"+result+"'");
     }
 
+    protected void assertXMLResult(String op, String expected) throws IOException {
+    	assertXMLResult(new AnimoExpression(op), expected);
+    }
     
     protected void assertXMLResult(Relationship op, String expected) throws IOException {
         assertNotNull(op);

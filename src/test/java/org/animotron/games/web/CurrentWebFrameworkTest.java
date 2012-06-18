@@ -767,13 +767,13 @@ public class CurrentWebFrameworkTest extends ATest {
         __(
                 "def html-page (any layout)",
 
-                "def app (html-page) (each (get script)) (\\script this script)",
+                "def app (html-page) (each (get script) (\\script this script))",
 
                 "def root (app) (script \"alert('Hello world!')\")"
 
         );
 
-        assertXMLResult(new AnimoExpression("root"), "<script>alert('Hello world!')</script>");
+        assertXMLResult("root", "<script>alert('Hello world!')</script>");
 
     }
 
