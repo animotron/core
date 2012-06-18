@@ -482,21 +482,21 @@ public class GetTest extends ATest {
         assertAnimoResult("get foo x", "foo.");
         assertAnimoResult("get bar x", "foo.");
         assertAnimoResult("get foo get y x", "foo.");
-        assertAnimoResult("get bar get y x", "foo.");
+        assertAnimoResult("get bar get y x", "bar.");
     }
 
     @Test
     public void test_29_() throws Throwable {
         testAnimo("def bar 1.");
         testAnimo("def x y foo bar.");
-        assertAnimoResult("get foo x", "foo bar 1."); 
+        assertAnimoResult("get foo x", "bar."); 
     }
 
     @Test
     public void test_29__() throws Throwable {
         testAnimo("def bar 1.");
         testAnimo("def x y foo bar.");
-        assertAnimoResult("get foo get y x", "bar 1.");
+        assertAnimoResult("get foo get y x", "bar.");
     }
 
     @Test
@@ -568,7 +568,7 @@ public class GetTest extends ATest {
         testAnimo("def foo1 (bar) (\\p get a).");
         testAnimo("def foo2 (bar) 2.");
         assertAnimoResult("foo1 a 1", "foo1 (bar z) (\\p 1).");
-        assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (\\p a 1).");
+        assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (\\p 1).");
         //assertAnimoResult("an (getDef bar getDef y x) (a 1)", "foo1 \\p a 1."); //answer '' correct because (getDef bar getDef y x) == ''
     }
 
@@ -649,7 +649,7 @@ public class GetTest extends ATest {
         testAnimo("def a b c.");
         testAnimo("def c get d.");
         testAnimo("def x an (get b a) (d e).");
-        assertAnimoResult("x", "x c d e.");
+        assertAnimoResult("x", "x c e.");
     }
 
     @Test
@@ -669,14 +669,14 @@ public class GetTest extends ATest {
     public void test_47() throws Throwable {
         testAnimo("def c b.");
         testAnimo("def a each (get b) (this b).");
-        assertAnimoResult("a (b) (c)", "a.");
+        assertAnimoResult("a (b) (c)", "a b.");
     }
 
     @Test
     public void test_48() throws Throwable {
         testAnimo("def c b.");
         testAnimo("def a each (get b this a) (this b).");
-        assertAnimoResult("a (b) (c)", "a.");
+        assertAnimoResult("a (b) (c)", "a b.");
     }
 
     @Test
@@ -699,6 +699,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore //no SHALL
     public void test_50() throws Throwable {
 
         __(
