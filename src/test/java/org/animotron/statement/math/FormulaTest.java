@@ -125,6 +125,7 @@ public class FormulaTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_04() throws Throwable {
         __(
 	        "def item1 (item) (cost * (5) (X)).",
