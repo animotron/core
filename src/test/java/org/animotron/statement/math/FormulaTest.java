@@ -140,6 +140,7 @@ public class FormulaTest extends ATest {
 
 
     @Test
+    @Ignore
     public void test_05() throws Throwable {
         __(
 	        "def item1 (goods item) (cost * (10) (USD)).",
