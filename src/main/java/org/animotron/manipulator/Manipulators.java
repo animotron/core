@@ -98,7 +98,7 @@ public class Manipulators {
 
         private void modified() throws Throwable {
             if (modified != null) {
-                CachedSerializer.drop(modified);
+                //CachedSerializer.drop(modified);
                 DependenciesTracking._.execute(null, modified);
             }
         }
