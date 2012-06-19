@@ -51,7 +51,7 @@ public class DependenciesTrackingTest extends ATest {
 
         assertAnimoResult(
             "get cost item",
-            "cost 10 (USD)."
+            "10. USD."
         );
 
         __(
@@ -60,7 +60,7 @@ public class DependenciesTrackingTest extends ATest {
 
         assertAnimoResult(
             "get cost item",
-            "cost 5 (USD)."
+            "5. USD."
 		);
     }
 
@@ -78,7 +78,7 @@ public class DependenciesTrackingTest extends ATest {
 
         assertCachedAnimoResult(
             "get cost item",
-            "cost 10 (USD)."
+            "10. USD."
         );
 
         __(
@@ -87,7 +87,7 @@ public class DependenciesTrackingTest extends ATest {
 
         assertCachedAnimoResult(
             "get cost item",
-            "cost 5 (USD)."
+            "5. USD."
 		);
     }
 
