@@ -134,6 +134,11 @@ public abstract class Manipulator {
 	                        Relationship msg = context.getAnswer();
 	
 	        				if (context.getUnrelaxedAnswer().isType(RESULT)) {
+	        					if (msg.equals(context.getQuestion())) {
+	        						pipe.write(context);
+	                				return;
+	        					}
+	        						
 //	        					Statement qS = Statements.relationshipType(context.getQuestion());
 	
 //	        					if (qS instanceof Shift) {

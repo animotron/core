@@ -46,7 +46,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
         if (s instanceof MLOperator || s instanceof VALUE) {
             if (s instanceof Prefix) {
                 node = rr.getClosest().getEndNode();
@@ -70,7 +70,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
                             }
                         }
                         handler.start(s, parent, param, level++, isOne, pos, isLast);
-                        iterate(handler, rr, s, it, level);
+                        iterate(handler, rr, s, it, level, evaluable);
                         handler.end(s, parent, param, --level, isOne, pos, isLast);
                     }
                 } finally {
@@ -82,7 +82,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
                 handler.end(s, parent, param, --level, isOne, pos, isLast);
             }
         } else {
-            super.process(handler, s, parent, rr, level, isOne, pos, isLast);
+            super.process(handler, s, parent, rr, level, isOne, pos, isLast, evaluable);
         }
     }
 
