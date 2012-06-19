@@ -41,19 +41,21 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
 
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
-            iterate(handler, rr, s, new It(r.getEndNode()), level);
+            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable);
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
 
         } else if (s != null) {
-//        	if ((qS instanceof Shift && rr.getUnrelaxedAnswer() == null)
-//        			|| (s instanceof Evaluable && !(qS instanceof Shift))  
-        	if (s instanceof Evaluable) {
+			//avoid cycling
+			if (rr.hasAnswer() && rr.getAnswer().equals(rr.getQuestion()))
+				evaluable = false;
+
+			if (evaluable && s instanceof Evaluable) {
                 result(handler, rr, level, isOne, pos, isLast);
                 
             } else {
@@ -63,7 +65,7 @@ public class AnimoResultTraverser extends ResultTraverser {
                 if (!(s instanceof REF && !(qS instanceof AN))) {
                		node = AREV._.actualEndNode(r);
                 	
-                    iterate(handler, rr, s, new It(node), level);
+                    iterate(handler, rr, s, new It(node), level, evaluable);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
