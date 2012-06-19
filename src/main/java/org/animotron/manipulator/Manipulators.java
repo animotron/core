@@ -21,6 +21,7 @@
 package org.animotron.manipulator;
 
 import javolution.util.FastTable;
+import org.animotron.graph.serializer.CachedSerializer;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -97,8 +98,8 @@ public class Manipulators {
 
         private void modified() throws Throwable {
             if (modified != null) {
-                //CachedSerializer.drop(modified);
-                //DependenciesTracking._.execute(null, modified);
+                CachedSerializer.drop(modified);
+                DependenciesTracking._.execute(null, modified);
             }
         }
 
