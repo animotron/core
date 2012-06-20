@@ -32,7 +32,6 @@ import org.animotron.statement.math.MathInstruction;
 import org.animotron.statement.operator.Definition;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Shift;
 import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
