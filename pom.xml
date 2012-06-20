@@ -65,8 +65,8 @@
 		<!-- classes utils -->
 		<dependency>
 			<groupId>org.clapper</groupId>
-			<artifactId>util</artifactId>
-			<version>2.5.1</version>
+			<artifactId>javautil</artifactId>
+			<version>3.1.1</version>
 		</dependency>
 		
 		<!-- fast map, list ... -->

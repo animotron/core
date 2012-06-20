@@ -24,7 +24,6 @@ import com.eaio.uuid.UUID;
 import com.eaio.uuid.UUIDGen;
 import org.animotron.graph.Properties;
 import org.animotron.statement.Statement;
-import org.apache.log4j.Logger;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.Relationship;
@@ -38,8 +37,6 @@ public class MessageDigester {
 
     private static String[] hex = 
     	{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
-
-    private static final Logger LOG = Logger.getLogger(MessageDigester.class);
 
 	private static final String CACHE_ALGORITHM = "SHA-256";
 
@@ -61,7 +58,7 @@ public class MessageDigester {
 
         } catch (NoSuchAlgorithmException e) {
             String error = "'"+ algorithm + "' is not a supported MessageDigest algorithm.";
-            LOG.error(error, e);
+//            LOG.error(error, e);
             throw new IllegalArgumentException(error);
         }
 
