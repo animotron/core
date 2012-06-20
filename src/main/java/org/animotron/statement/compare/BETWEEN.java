@@ -24,7 +24,6 @@ import javolution.util.FastList;
 import javolution.util.FastSet;
 
 import org.animotron.Executor;
-import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.OnContext;
@@ -35,7 +34,6 @@ import org.animotron.statement.query.GET;
 import org.animotron.statement.string.STRING;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.List;

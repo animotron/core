@@ -20,7 +20,6 @@
  */
 package org.animotron.synchro;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.graph.AnimoGraph.startDB;
 
 import org.animotron.ATest;

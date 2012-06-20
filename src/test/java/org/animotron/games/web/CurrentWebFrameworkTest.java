@@ -21,7 +21,6 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;

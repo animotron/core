@@ -22,7 +22,6 @@ package org.animotron.statement.animo.update;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -38,7 +37,7 @@ public class UpdateTest extends ATest {
     @Test
     @Ignore
 	public void test_00() throws Throwable {
-        Expression e = testAnimo("def a x 1.");
+        testAnimo("def a x 1.");
         eval(new AnimoExpression("add (get x a) (y 2)."));
         //assertAnimo(e, "def a x 1 (y 2).");
         eval(new AnimoExpression("add a z 3."));
