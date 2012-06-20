@@ -328,51 +328,51 @@ public class GET extends AbstractQuery implements Shift {
 		}
 	}
 	
-	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
-
-		QCAVector cV = null;
-		IndexHits<Relationship> it = Order._.context(node);
-		try {
-			for (Relationship r : it) {
-				if (visitedREFs != null && visitedREFs.contains(r)) {
-					continue;
-				}
-	
-				cV = vector.question(r); 
-
-				Statement st = Statements.relationshipType(r);
-				if (st instanceof AN) {
-					Pipe p = AN.getREFs(pf, cV);
-					QCAVector v;
-					while ((v = p.take()) != null) {
-						Relationship t = v.getClosest();
-						
-						cV.addAnswer(v);
-						
-						if (visitedREFs != null && !visitedREFs.contains(t)) {
-							newREFs.add(v);
-						}
-					}
-	
-				} else if (st instanceof Reference) {
-//					if (!pf.isInStack(r)) {
-						//System.out.println("["+pf.getOP()+"] evaluate "+prev);
-						Pipe in = Evaluator._.execute(pf.getController(), cV);
-						QCAVector v;
-						while ((v = in.take()) != null) {
-							cV.addAnswer(v);
-							if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
-								newREFs.add(v);
-						}
+//	private void getOutgoingReferences(PFlow pf, QCAVector vector, Relationship rr, Node node, Set<QCAVector> newREFs, Set<Relationship> visitedREFs) {
+//
+//		QCAVector cV = null;
+//		IndexHits<Relationship> it = Order._.context(node);
+//		try {
+//			for (Relationship r : it) {
+//				if (visitedREFs != null && visitedREFs.contains(r)) {
+//					continue;
+//				}
+//	
+//				cV = vector.question(r); 
+//
+//				Statement st = Statements.relationshipType(r);
+//				if (st instanceof AN) {
+//					Pipe p = AN.getREFs(pf, cV);
+//					QCAVector v;
+//					while ((v = p.take()) != null) {
+//						Relationship t = v.getClosest();
+//						
+//						cV.addAnswer(v);
+//						
+//						if (visitedREFs != null && !visitedREFs.contains(t)) {
+//							newREFs.add(v);
+//						}
 //					}
-				}
-			}
-		} catch (Throwable t) {
-			pf.sendException(t);
-		} finally {
-			it.close();
-		}
-	}
+//	
+//				} else if (st instanceof Reference) {
+////					if (!pf.isInStack(r)) {
+//						//System.out.println("["+pf.getOP()+"] evaluate "+prev);
+//						Pipe in = Evaluator._.execute(pf.getController(), cV);
+//						QCAVector v;
+//						while ((v = in.take()) != null) {
+//							cV.addAnswer(v);
+//							if (visitedREFs != null && !visitedREFs.contains(v.getAnswer()))
+//								newREFs.add(v);
+//						}
+////					}
+//				}
+//			}
+//		} catch (Throwable t) {
+//			pf.sendException(t);
+//		} finally {
+//			it.close();
+//		}
+//	}
 	
 	private boolean searchForHAVE(
 			final PFlow pf, 

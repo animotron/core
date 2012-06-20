@@ -31,7 +31,6 @@ import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.JExpression.value;
-import static org.animotron.expression.JExpression._;
 
 /**
  * Math instruction 'SUM'. (aka summation)

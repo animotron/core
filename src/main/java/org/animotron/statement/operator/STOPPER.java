@@ -39,7 +39,7 @@ public class STOPPER extends AN implements Prefix {
     	return r.hasProperty(_.name());
     }
 
-	private static boolean debug = false;
+//	private static boolean debug = false;
 
 	private STOPPER() { super("#"); }
 

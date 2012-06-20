@@ -28,7 +28,6 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.relation.USE;
 import org.animotron.statement.relation.WEAK_USE;
 import org.neo4j.graphdb.*;
