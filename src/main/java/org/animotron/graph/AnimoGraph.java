@@ -75,6 +75,15 @@ public class AnimoGraph {
         BIN = new File(STORAGE, BIN_STORAGE); BIN.mkdir();
         TMP = new File(STORAGE, TMP_STORAGE); TMP.mkdir();
         initDB();
+        
+//        final Thread mainThread = Thread.currentThread();
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                shutdownDB();
+//                mainThread.join();
+            }
+        });
+
         return true;
     }
 
