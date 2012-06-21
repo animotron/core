@@ -58,7 +58,7 @@ public class SEARCH extends Operator implements Predicate {
 		
 		StringBuilder sb = STRING._.eval(pf, op.getEndNode());
 		if (sb != null && sb.length() > 0) {
-			IndexHits<Relationship> hits = WORD._.search(sb.toString());
+			IndexHits<Relationship> hits = LABEL._.search(sb.toString());
 			try {
 				for (Relationship r : hits) {
 					for (Path path : Utils.THES.traverse(r.getStartNode())) {

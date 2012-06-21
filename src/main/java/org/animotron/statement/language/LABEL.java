@@ -47,15 +47,15 @@ import static org.animotron.expression.JExpression.value;
  *
  *  @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class WORD extends DetermInstruction implements Prepare {
+public class LABEL extends DetermInstruction implements Prepare {
 
-	public static final WORD _ = new WORD();
+	public static final LABEL _ = new LABEL();
 	
-	private static final String NAME = "word";
+	private static final String NAME = "label";
 
-	private WORD() {super(NAME);}
+	private LABEL() {super(NAME);}
 
-	private AbstractRelationshipIndex words = new AbstractRelationshipIndex(NAME) {
+	private AbstractRelationshipIndex labels = new AbstractRelationshipIndex(NAME) {
         @Override
         public void init(IndexManager index) {
             init(index.forRelationships(name));
@@ -63,7 +63,7 @@ public class WORD extends DetermInstruction implements Prepare {
     };
 	
 	public void init(IndexManager index) {
-		words.init(index);
+		labels.init(index);
 	}
 
 
@@ -160,7 +160,7 @@ public class WORD extends DetermInstruction implements Prepare {
 					try {
 						for (Relationship r : hits) {
 							if (r.isType(VALUE._)) {
-								words.add(r, VALUE._.reference(r));
+								labels.add(r, VALUE._.reference(r));
 							}
 						}
 					} catch (Throwable t) {
@@ -176,6 +176,6 @@ public class WORD extends DetermInstruction implements Prepare {
 
 	public IndexHits<Relationship> search(String word) {
 		//System.out.println(words.getDef(NAME, word).getSingle());
-		return words.query(word);
+		return labels.query(word);
 	}
 }

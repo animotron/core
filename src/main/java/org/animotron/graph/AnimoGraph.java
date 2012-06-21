@@ -25,7 +25,7 @@ import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.graph.index.State;
-import org.animotron.statement.language.WORD;
+import org.animotron.statement.language.LABEL;
 import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
@@ -99,7 +99,7 @@ public class AnimoGraph {
         Result._.init(index);
         Order._.init(index);
         State._.init(index);
-        WORD._.init(index);
+        LABEL._.init(index);
         DEF._.init(index);
     }
 

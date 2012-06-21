@@ -18,7 +18,7 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.games.words;
+package org.animotron.games.labels;
 
 import org.junit.Ignore;
 import org.junit.Test;

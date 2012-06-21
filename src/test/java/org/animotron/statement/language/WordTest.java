@@ -44,7 +44,7 @@ public class WordTest extends ATest {
         Thread.sleep(1000);
         
         Relationship r;
-        IndexHits<Relationship> hits = WORD._.search("test1");
+        IndexHits<Relationship> hits = LABEL._.search("test1");
         try {
         	Assert.assertEquals(true, hits.hasNext());
         	
@@ -57,7 +57,7 @@ public class WordTest extends ATest {
         	hits.close();
         }
         
-        hits = WORD._.search("test2");
+        hits = LABEL._.search("test2");
         try {
         	Assert.assertEquals(true, hits.hasNext());
         	
@@ -70,7 +70,7 @@ public class WordTest extends ATest {
         	hits.close();
         }
 
-        hits = WORD._.search("test*");
+        hits = LABEL._.search("test*");
         try {
         	Assert.assertEquals(true, hits.hasNext());
         	
