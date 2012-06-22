@@ -23,7 +23,6 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.serializer.BinarySerializer;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.After;
 import org.junit.Before;
@@ -240,17 +239,6 @@ public abstract class ATest {
         if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
         if (messagers) System.out.println();
-    }
-
-    protected void assertBinary(Relationship op, String expected) throws IOException {
-        assertNotNull(op);
-        System.out.println("Binary serializer...");
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        BinarySerializer._.serialize(op, out);
-        String bin = out.toString();
-        Assert.assertEquals("", expected, bin);
-        System.out.println(bin);
-        System.out.println();
     }
 
     private void deleteDir(File dir) {

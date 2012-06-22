@@ -23,7 +23,6 @@ package org.animotron.expression;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.DEF;
-import org.animotron.statement.value.STREAM;
 
 import java.io.IOException;
 
@@ -31,9 +30,12 @@ import java.io.IOException;
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
- * 
+ *
  */
 public abstract class AbstractBinaryExpression extends AbstractExpression {
+
+    public final static String MIME_TYPE = "mime-type";
+    public final static String TYPE = "type";
 
     public AbstractBinaryExpression(GraphBuilder builder) {
         super(builder);
@@ -42,13 +44,13 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
     @Override
     public void build() throws Throwable {
         builder.start(DEF._, id());
-            builder._(STREAM._, stream());
+            mime();
             description();
         builder.end();
     }
 
     protected abstract void description() throws AnimoException, IOException;
-    protected abstract String stream();
+    protected abstract void mime() throws AnimoException, IOException;
 
     protected String id() {
         return null;

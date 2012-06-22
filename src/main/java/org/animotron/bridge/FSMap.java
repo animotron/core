@@ -20,6 +20,7 @@
  */
 package org.animotron.bridge;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.expression.BinaryMapExpression;
 
 import java.io.File;
@@ -45,6 +46,9 @@ public class FSMap extends AbstractFSBridge {
                 new BinaryMapExpression(file) {
                     @Override
                     protected void description() {}
+
+                    @Override
+                    protected void mime() throws AnimoException, IOException {}
                 }
         );
     }

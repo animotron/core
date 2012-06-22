@@ -39,9 +39,4 @@ public abstract class BinaryMapExpression extends AbstractBinaryExpression {
         this.file = file;
     }
 
-    @Override
-    protected String stream() {
-        return file.getPath();
-    }
-
 }

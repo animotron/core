@@ -40,7 +40,6 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
 
     private InputStream stream;
     private boolean closeStream = true;
-    private File bin;
     private String hash;
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
@@ -68,7 +67,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         if (closeStream) stream.close();
         hash = byteArrayToHex(md.digest()) + longToHex(size);
         File dir = getFolder(hash);
-        bin = getFile(dir, hash);
+        File bin = getFile(dir, hash);
         if (bin.exists()) {
             tmp.delete();
         } else {
@@ -83,14 +82,9 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
 
     @Override
     protected String id() {
-        return hash;
+        return hash();
     }
 
-    @Override
-    protected String stream() {
-        return bin.getPath();
-    }
-    
     protected String hash() {
         return hash;
     }
