@@ -128,7 +128,8 @@ public class AnimObject extends AbstractExpression {
     					}
     				} else {
     					//XXX: log
-    					System.out.println("WARNING: REF but no name");
+//    					System.out.println("WARNING: REF but no name");
+    					return false;
     				}
                 } catch (Throwable t){}							
     		}

@@ -197,10 +197,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
     protected boolean filtering(final PFlow pf, final Relationship ref, final Set<Node> uses, final Set<Node> weaks) {
     	if (ref == null) {
-    		System.out.println("AbstractQuery: NULL!!!");
+//    		System.out.println("AbstractQuery: NULL!!!");
     		return false;
     	}
-    	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
+//    	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
     	return filtering(pf, ref, ref.getStartNode(), uses, weaks);
     }
 
