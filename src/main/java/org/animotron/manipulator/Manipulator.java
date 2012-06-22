@@ -151,12 +151,13 @@ public abstract class Manipulator {
 	                			}
 	                			
 	                            try {
-	                				Object obj = DEF._.reference(msg);
+	                				Object obj = DEF._.reference(context.getUnrelaxedAnswer());
 	                				if (obj != null && obj instanceof String )
 	                					s = Statements.name((String) obj);
 	                				else
 	                					//XXX: log
-	                					System.out.println("WARNING: REF but no name");
+//	                					System.out.println("WARNING: REF but no name");
+	                					;
 	                				
 	                            } catch (Throwable t){}
 	        				}
@@ -167,7 +168,8 @@ public abstract class Manipulator {
 	            					s = Statements.name((String) obj);
 	            				else
 	            					//XXX: log
-	            					System.out.println("WARNING: REF but no name");
+//	            					System.out.println("WARNING: REF but no name");
+	            					;
 	                        }
 	            			
 	

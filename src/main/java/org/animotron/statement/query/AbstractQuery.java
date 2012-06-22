@@ -38,7 +38,6 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -197,10 +196,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
     protected boolean filtering(final PFlow pf, final Relationship ref, final Set<Node> uses, final Set<Node> weaks) {
     	if (ref == null) {
-    		System.out.println("AbstractQuery: NULL!!!");
+//    		System.out.println("AbstractQuery: NULL!!!");
     		return false;
     	}
-    	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
+//    	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
     	return filtering(pf, ref, ref.getStartNode(), uses, weaks);
     }
 
@@ -660,7 +659,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							return INCLUDE_AND_PRUNE;
 						
 						for (Path p : td_IS_leaf.traverse(node)) {
-							System.out.println(p);
+//							System.out.println(p);
 							if (targets.contains( p.lastRelationship().getStartNode()))
 								return INCLUDE_AND_PRUNE;
 						}
