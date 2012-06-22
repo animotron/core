@@ -78,9 +78,6 @@ public class BridgeTest extends ATest {
                         }
                         @Override
                         protected void description() throws AnimoException, IOException {}
-
-                        @Override
-                        protected void mime() throws AnimoException, IOException {}
                     }
             );
         }

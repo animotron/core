@@ -41,13 +41,11 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
     @Override
     public void build() throws Throwable {
         builder.start(DEF._, id());
-            mime();
             description();
         builder.end();
     }
 
     protected abstract void description() throws AnimoException, IOException;
-    protected abstract void mime() throws AnimoException, IOException;
 
     protected String id() {
         return null;
