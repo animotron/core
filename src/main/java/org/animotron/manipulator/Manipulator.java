@@ -156,7 +156,8 @@ public abstract class Manipulator {
 	                					s = Statements.name((String) obj);
 	                				else
 	                					//XXX: log
-	                					System.out.println("WARNING: REF but no name");
+//	                					System.out.println("WARNING: REF but no name");
+	                					;
 	                				
 	                            } catch (Throwable t){}
 	        				}

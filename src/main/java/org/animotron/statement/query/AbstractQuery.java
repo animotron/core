@@ -38,7 +38,6 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -660,7 +659,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							return INCLUDE_AND_PRUNE;
 						
 						for (Path p : td_IS_leaf.traverse(node)) {
-							System.out.println(p);
+//							System.out.println(p);
 							if (targets.contains( p.lastRelationship().getStartNode()))
 								return INCLUDE_AND_PRUNE;
 						}
