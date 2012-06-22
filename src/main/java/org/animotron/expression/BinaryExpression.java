@@ -88,12 +88,16 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
         return hash;
     }
 
-    public static File getFolder(String hash) {
+    private static File getFolder(String hash) {
         return new File(new File(binStorage(), hash.substring(0, 2)), hash.substring(0, 4));
     }
 
-    public static File getFile(File folder, String hash){
+    private static File getFile(File folder, String hash){
         return new File(folder,  hash);
+    }
+
+    public static File getFile(String hash){
+        return getFile(getFolder(hash), hash);
     }
 
 }
