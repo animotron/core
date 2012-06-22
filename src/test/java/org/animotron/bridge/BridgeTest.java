@@ -73,7 +73,7 @@ public class BridgeTest extends ATest {
             __(
                     new BinaryExpression(zis, false) {
                         @Override
-                        protected String id () {
+                        public String id() {
                             return entry.getName();
                         }
                         @Override
