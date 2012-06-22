@@ -34,9 +34,6 @@ import java.io.IOException;
  */
 public abstract class AbstractBinaryExpression extends AbstractExpression {
 
-    public final static String MIME_TYPE = "mime-type";
-    public final static String TYPE = "type";
-
     public AbstractBinaryExpression(GraphBuilder builder) {
         super(builder);
     }
