@@ -21,7 +21,7 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.GraphBuilder;
+import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.statement.operator.DEF;
 
 import java.io.IOException;
@@ -34,8 +34,8 @@ import java.io.IOException;
  */
 public abstract class AbstractBinaryExpression extends AbstractExpression {
 
-    public AbstractBinaryExpression(GraphBuilder builder) {
-        super(builder);
+    public AbstractBinaryExpression() {
+        super(new FastGraphBuilder());
     }
 
     @Override

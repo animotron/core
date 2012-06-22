@@ -20,7 +20,6 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.utils.MessageDigester;
 
 import java.io.*;
@@ -43,7 +42,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     private String hash;
 
     public BinaryExpression(InputStream stream, boolean closeStream) {
-        super(new FastGraphBuilder());
+        super();
         this.stream = stream;
         this.closeStream = closeStream;
     }
