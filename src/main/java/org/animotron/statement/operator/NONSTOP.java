@@ -31,17 +31,17 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class STOPPER extends AN implements Prefix {
+public class NONSTOP extends AN implements Prefix {
 
-	public static final STOPPER _ = new STOPPER();
+	public static final NONSTOP _ = new NONSTOP();
 
     public static boolean is(Relationship r) {
-    	return r.hasProperty(_.name());
+    	return !r.hasProperty(_.name());
     }
 
 //	private static boolean debug = false;
 
-	private STOPPER() { super("#"); }
+	private NONSTOP() { super("^"); }
 
     @Override
 	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
