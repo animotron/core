@@ -80,7 +80,7 @@ public abstract class BinaryExpression extends AbstractBinaryExpression {
     }
 
     @Override
-    public String id() {
+    protected String id() {
         return hash();
     }
 
