@@ -20,13 +20,10 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.exception.AnimoException;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Relationship;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -74,18 +71,7 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 			}
 		}
     }
-
-    @Override
-	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        Relationship r = super.build(parent, reference, hash, ready, ignoreNotFound);
-        r.setProperty(STOPPER._.name(), true);
-		return r;
-	}
-
-	public Relationship _build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        return super.build(parent, reference, hash, ready, ignoreNotFound);
-	}
-
+	
 	public static Pipe getREFs(final PFlow pf, final QCAVector vector) {
 		return Utils.getByREF(pf, vector);
 	}
