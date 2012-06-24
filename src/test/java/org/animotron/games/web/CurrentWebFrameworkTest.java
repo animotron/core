@@ -107,16 +107,16 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head (each (get icon) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
 
-                "def hello-foo (^html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
-                "def hello-bar (^html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
+                "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
+                "def hello-bar (html-page) (use root) (title \"hello bar\") (content \"bar bar bar\")",
 
                 "def xxx-service (html-page) (use xxx) (title \"hello xxx\") (content \"xxx xxx xxx\")",
 
-                "def zzz-service (^html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
-                "def yyy-service (^html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
+                "def zzz-service (html-page) (use qLayout) (title \"hello zzz\") (content \"zzz zzz zzz\")",
+                "def yyy-service (html-page) (use qLayout) (title \"hello yyy\") (content \"yyy yyy yyy\")",
 
                 "def foo-root-layout (layout, foo, root) (\\h1 get title) (\\p get content)",
                 "def bar-root-layout (layout, bar, root) (\\h2 get title) (\\div get content)",
@@ -128,9 +128,9 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def not-found-error (error) (code 404)",
 
-                "def default-not-found (^html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
+                "def default-not-found (html-page) (use default-error-layout) (title \"Not found\") (message \"Not found anything\")",
 
-                "def bar-not-found (^html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
+                "def bar-not-found (html-page) (use error) (title \"Error. Not found\") (message \"Sorry, not found anything\")",
 
                 "def default-error-layout (layout) (\\h1 get code) (\\h2 get title) (\\p get message) (\\p get stack-trace)",
                 "def bar-errogr-layout (layout, bar, error) (\\h1 get code) (\\h2 get title) (\\div get message) (\\div get stack-trace)",
@@ -229,7 +229,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head (each (get icon) (\\link @href get uri)) (\\title get title)) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
@@ -436,7 +436,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
@@ -498,7 +498,7 @@ public class CurrentWebFrameworkTest extends ATest {
         __(
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
@@ -540,7 +540,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def foo-site (site) (server-name \"foo.com\") (weak-use foo)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
                 "def not-found-error (error) (code 404)",
@@ -612,7 +612,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
                 "def foo-site (site) (server-name \"foo.com\") (root hello-foo)",
 
-                "def text-html (mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
+                "def text-html (#mime-type) (type \"text/html\") (extension \"htm\" \"html\")",
                 "def html-page (text-html) (\\html (\\head \\title get title) (\\body any layout))",
 
                 "def hello-foo (html-page) (use root) (title \"hello foo\") (content \"foo foo foo\")",
