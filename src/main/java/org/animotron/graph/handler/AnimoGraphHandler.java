@@ -116,7 +116,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                 }
             }
             Node n= r.getEndNode();
-            if (r.hasProperty(STOPPER._.name())) {
+            if (!r.hasProperty(STOPPER._.name())) {
                 write(STOPPER._.name());
             } else if (!n.hasRelationship(REF._, OUTGOING)) {
                 write(statement.name());
