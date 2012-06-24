@@ -125,7 +125,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	        				if (!r.isType(AN._))
 	        					return EXCLUDE_AND_PRUNE;
 	        				
-        					if (r.hasProperty(NONSTOP._.name()))
+        					if (r.hasProperty(STOPPER._.name()))
         						return INCLUDE_AND_PRUNE;
 
         					return INCLUDE_AND_CONTINUE;
@@ -621,7 +621,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 								return EXCLUDE_AND_PRUNE;
 								
 							if (s.isType(REF._)) {
-								if (b != null && NONSTOP.is(b))
+								if (b != null && STOPPER.is(b))
 									countSTOPPER++;
 							}
 							b = s;
@@ -634,7 +634,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					Relationship b = null;
 					for (Relationship s : path.relationships()) {
 						if (s.equals(r)) {
-							if (b != null && NONSTOP.is(b))
+							if (b != null && STOPPER.is(b))
 								return EXCLUDE_AND_PRUNE;
 						}
 						b = s;
