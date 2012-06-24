@@ -41,10 +41,12 @@ public class STOPPER extends AN implements Prefix {
 
 //	private static boolean debug = false;
 
-	private STOPPER() { super("^"); }
+	private STOPPER() { super("#"); }
 
     @Override
 	public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        return AN._._build(parent, reference, hash, ready, ignoreNotFound);
+        Relationship r = AN._.build(parent, reference, hash, ready, ignoreNotFound);
+        r.setProperty(name(), true);
+		return r;
 	}
 }
