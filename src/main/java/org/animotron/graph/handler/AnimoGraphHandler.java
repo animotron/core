@@ -24,9 +24,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Suffix;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.*;
 import org.animotron.statement.value.AbstractValue;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
@@ -115,7 +113,9 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                 }
             }
             Node n= r.getEndNode();
-            if (!n.hasRelationship(REF._, OUTGOING)) {
+            if (r.hasProperty(NONSTOP._.name())) {
+                write(NONSTOP._.name());
+            } else if (!n.hasRelationship(REF._, OUTGOING)) {
                 write(statement.name());
             } else if (pos == 0 && ps instanceof Operator) {
                 write(statement.name());
