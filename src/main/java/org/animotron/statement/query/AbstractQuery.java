@@ -125,7 +125,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	        				if (!r.isType(AN._))
 	        					return EXCLUDE_AND_PRUNE;
 	        				
-        					if (r.hasProperty(STOPPER._.name()))
+        					if (!NONSTOP.is(r))
         						return INCLUDE_AND_PRUNE;
 
         					return INCLUDE_AND_CONTINUE;
@@ -569,7 +569,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 
 	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
-		public Evaluation _evaluate_(Path path, Set<Node> targets) { //, RelationshipType type
+		public Evaluation _evaluate_(Path path, Set<Node> targets) {
 //			System.out.println(path);
 			
 			if (path.length() == 0)
@@ -585,28 +585,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(REF._) && FREEZE.has(r))
 				return EXCLUDE_AND_PRUNE;
 			
-//			if (r.isType(SHALL._)) {
-//				if (path.length() < 2)
-//					return EXCLUDE_AND_PRUNE;
-//
-//				for (Path p : td_IS_down.traverse(r.getEndNode())) {
-//					if (targets.contains(p.lastRelationship().getEndNode()))
-//						return INCLUDE_AND_PRUNE;
-//				}
-//				//for (QCAVector rr : Utils.getByREF(null, r))
-//				//	if (targets.contains(rr.getAnswer().getEndNode()))
-//				//		return INCLUDE_AND_PRUNE;
-//				
-//				return EXCLUDE_AND_PRUNE;
-//			}
-
 			if (path.length() == 1) {
 				if (r.isType(REF._) && targets.contains(r.getEndNode()))
 					return INCLUDE_AND_PRUNE;
 
-//				if (r.isType(type))
-//					return EXCLUDE_AND_CONTINUE;
-					
 				return EXCLUDE_AND_CONTINUE;
 				
 			} else if (path.length() >= 2) {
@@ -614,14 +596,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					Node node = r.getEndNode();
 					if (targets.contains(node)) {
 						
-						//check for STOP sign
+						//check for NONSTOP sign
 						Relationship b = null; int countSTOPPER = 0;
 						for (Relationship s : path.relationships()) {
 							if (countSTOPPER > 0)
 								return EXCLUDE_AND_PRUNE;
 								
 							if (s.isType(REF._)) {
-								if (b != null && STOPPER.is(b))
+								if (b != null && !NONSTOP.is(b))
 									countSTOPPER++;
 							}
 							b = s;
@@ -630,11 +612,11 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						return INCLUDE_AND_PRUNE;
 					}
 
-					//check for STOP sign
+					//check for NONSTOP sign
 					Relationship b = null;
 					for (Relationship s : path.relationships()) {
 						if (s.equals(r)) {
-							if (b != null && STOPPER.is(b))
+							if (b != null && !NONSTOP.is(b))
 								return EXCLUDE_AND_PRUNE;
 						}
 						b = s;

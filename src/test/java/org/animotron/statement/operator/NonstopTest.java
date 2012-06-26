@@ -28,59 +28,45 @@ import org.junit.Test;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class StopperTest extends ATest {
+public class NonstopTest extends ATest {
 	
     @Test
     public void test_00() throws Throwable {
 
-        testAnimo("def a #b.");
+        testAnimo("def a b.");
         assertAnimoResult("all b", "def a b.");
-
     }
 
     @Test
     public void test_01() throws Throwable {
 
-        testAnimo("def a # b.", "def a #b.");
+        testAnimo("def a b.");
+        testAnimo("def c ^a.");
         assertAnimoResult("all b", "def a b.");
-
     }
 
     @Test
     public void test_02() throws Throwable {
 
-        testAnimo("def a #b.");
-        testAnimo("def c a.");
-        assertAnimoResult("all b", "def a b.");
-
+        testAnimo("def a b.");
+        testAnimo("def c ^a.");
+        assertAnimoResult("get b c", "a.");
     }
 
     @Test
     public void test_03() throws Throwable {
 
-        testAnimo("def a #b.");
-        testAnimo("def c a.");
-        assertAnimoResult("get b c", "a.");
-
+        testAnimo("def a b.");
+        testAnimo("def c ^a.");
+        testAnimo("def d ^c.");
+        assertAnimoResult("get b d", "a.");
     }
 
     @Test
     public void test_04() throws Throwable {
 
-        testAnimo("def a #b.");
-        testAnimo("def c a.");
-        testAnimo("def d c.");
-        assertAnimoResult("get b d", "a.");
-
-    }
-
-    @Test
-    public void test_05() throws Throwable {
-
-        testAnimo("def a #b.");
-        testAnimo("def c (a) (x 1).");
+        testAnimo("def a b.");
+        testAnimo("def c (^a) (x 1).");
         assertAnimoResult("all b with x 1", "");
-
     }
-
 }
