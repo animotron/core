@@ -596,6 +596,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					Node node = r.getEndNode();
 					if (targets.contains(node)) {
 						
+						//XXX: hack, fix required!
+						if (AN.beginWithHasA(path))
+							return INCLUDE_AND_PRUNE;
+
 						//check for NONSTOP sign
 						Relationship b = null; int countSTOPPER = 0;
 						for (Relationship s : path.relationships()) {
@@ -612,6 +616,9 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						return INCLUDE_AND_PRUNE;
 					}
 
+					if (r.equals(AN.endOfHasA(path)))
+						return EXCLUDE_AND_CONTINUE;
+
 					//check for NONSTOP sign
 					Relationship b = null;
 					for (Relationship s : path.relationships()) {
@@ -626,8 +633,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				
 				} else if (r.isType(AN._)) {
 					Node endNode = r.getEndNode();
-					if (!Utils.haveContext(endNode) && endNode.equals(path.endNode())) {
-						return EXCLUDE_AND_CONTINUE;
+					if (endNode.equals(path.endNode())) {
+						//must be empty to be IS-A
+//						if (!Utils.haveContext(endNode))
+							return EXCLUDE_AND_CONTINUE;
+					} else {
+						//check top HAS-A structure
+						if (AN.endOfHasA(path) == null)
+							return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;
 

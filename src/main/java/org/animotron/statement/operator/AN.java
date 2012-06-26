@@ -24,6 +24,9 @@ import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.neo4j.graphdb.Node;
+import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.Relationship;
 
 /**
  * Operation 'AN'. Direct reference to 'the' instance.
@@ -74,5 +77,27 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 	
 	public static Pipe getREFs(final PFlow pf, final QCAVector vector) {
 		return Utils.getByREF(pf, vector);
+	}
+	
+	public static Relationship endOfHasA(Path path) {
+		Node node = path.startNode();
+		for (Relationship rr : path.relationships()) {
+			if (!(rr.isType(AN._) && node.equals(rr.getEndNode()))) {
+				return rr;
+			}
+			node = rr.getEndNode();
+		}
+		return null;
+	}
+
+	public static boolean beginWithHasA(Path path) {
+		Node node = path.startNode();
+		for (Relationship rr : path.relationships()) {
+			if (!(rr.isType(AN._) && node.equals(rr.getEndNode()))) {
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 }

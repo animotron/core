@@ -31,6 +31,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.SHALL;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -46,6 +47,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.neo4j.graphdb.Direction.BOTH;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -479,7 +481,7 @@ public class GET extends AbstractQuery implements Shift {
 			relationships(ANY._, OUTGOING).
 			relationships(ALL._, OUTGOING).
 			relationships(PREFER._, OUTGOING).
-			relationships(AN._, OUTGOING).
+			relationships(AN._, BOTH).
 			relationships(REF._, OUTGOING).
 			relationships(GET._, OUTGOING);
 //			.
