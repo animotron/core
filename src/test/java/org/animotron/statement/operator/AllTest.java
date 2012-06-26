@@ -29,6 +29,7 @@ import org.junit.Test;
 
 import static org.animotron.expression.JExpression._;
 import static org.animotron.expression.AnimoExpression.__;
+import static org.animotron.expression.JExpression.nonstop;
 import static org.animotron.expression.JExpression.value;
 
 /**
@@ -46,10 +47,10 @@ public class AllTest extends ATest {
                 _(DEF._, "A", _(AN._, "value"))
             ),
             new JExpression(
-                _(DEF._, "B", _(AN._, "A"), _(AN._, "value", value("B")))
+                _(DEF._, "B", nonstop(AN._, "A"), _(AN._, "value", value("B")))
             ),
             new JExpression(
-                _(DEF._, "C", _(AN._, "B"), _(AN._, "value", value("C")))
+                _(DEF._, "C", nonstop(AN._, "B"), _(AN._, "value", value("C")))
             )
         );
 
