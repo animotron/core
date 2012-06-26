@@ -776,5 +776,24 @@ public class CurrentWebFrameworkTest extends ATest {
 
     }
 
+    @Test
+    public void test_20() throws Throwable {
+
+        __(
+                "def foo-site (not-found-error default-not-found)",
+
+                "def html-page (\\html (\\head get title) (\\body get code))",
+
+                "def not-found-error (code 404)",
+
+                "def default-not-found (html-page) (title \"Not found\")"
+
+
+        );
+
+        assertXMLResult("an get not-found-error foo-site", "<html><head>Not found</head><body>404</body></html>");
+
+    }
+
 
 }
