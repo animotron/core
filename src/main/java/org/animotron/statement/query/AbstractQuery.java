@@ -570,7 +570,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 	protected abstract class Searcher implements org.neo4j.graphdb.traversal.Evaluator {
 
 		public Evaluation _evaluate_(Path path, Set<Node> targets) {
-//			System.out.println(path);
+			System.out.println(path);
 			
 			if (path.length() == 0)
 				return EXCLUDE_AND_CONTINUE;
@@ -625,7 +625,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					return EXCLUDE_AND_CONTINUE;
 				
 				} else if (r.isType(AN._)) {
-					if (r.getEndNode().equals(path.endNode())) {
+					Node endNode = r.getEndNode();
+					if (!Utils.haveContext(endNode) && endNode.equals(path.endNode())) {
 						return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;
