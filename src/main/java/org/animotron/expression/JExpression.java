@@ -30,6 +30,7 @@ import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.*;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.NONSTOP;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.AbstractValue;
@@ -215,6 +216,10 @@ public class JExpression extends AbstractExpression {
 
     public static Object[] value(Object value, Object[] p) {
         return _(VALUE._, value, p);
+    }
+
+    public static Object[] nonstop(Object[] p) {
+        return _(NONSTOP._, p);
     }
 
 }
