@@ -634,6 +634,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				} else if (r.isType(AN._)) {
 					Node endNode = r.getEndNode();
 					if (endNode.equals(path.endNode())) {
+						if (!AN.beginWithHasA(path))
 						//must be empty to be IS-A
 //						if (!Utils.haveContext(endNode))
 							return EXCLUDE_AND_CONTINUE;
