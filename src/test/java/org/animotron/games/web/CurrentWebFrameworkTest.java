@@ -102,7 +102,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-                "def site (icon any logo) (^not-found-error default-not-found) (xxx xxx-service)",
+                "def site (icon any logo) (not-found-error default-not-found) (xxx xxx-service)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (^site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
@@ -224,7 +224,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def stack-trace",
                 "def logo", "def foo-logo", "def bar-logo", "def icon",
 
-                "def site (icon any logo) (^not-found-error default-not-found) (xxx xxx-service)",
+                "def site (icon any logo) (not-found-error default-not-found) (xxx xxx-service)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (^site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
@@ -306,7 +306,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_02() throws Throwable {
 
         __(
-                "def site (^not-found-error default-not-found) (xxx xxx-service)",
+                "def site (not-found-error default-not-found) (xxx xxx-service)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo) (root hello-foo) (zzz zzz-service)",
                 "def bar-site (^site) (server-name \"bar.com\") (weak-use bar) (root hello-bar) (yyy yyy-service) (not-found-error bar-not-found)",
@@ -432,7 +432,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_04() throws Throwable {
 
         __(
-                "def site (^not-found-error default-not-found)",
+                "def site (not-found-error default-not-found)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
@@ -464,7 +464,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_05() throws Throwable {
 
         __(
-                "def site (^not-found-error default-not-found)",
+                "def site (not-found-error default-not-found)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo) (root hello-foo)",
 
@@ -536,7 +536,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_08() throws Throwable {
 
         __(
-                "def site (^not-found-error default-not-found)",
+                "def site (not-found-error default-not-found)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo)",
 
@@ -561,7 +561,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_09() throws Throwable {
 
         __(
-                "def site (^not-found-error default-not-found)",
+                "def site (not-found-error default-not-found)",
 
                 "def foo-site (^site) (server-name \"foo.com\") (weak-use foo)",
 
