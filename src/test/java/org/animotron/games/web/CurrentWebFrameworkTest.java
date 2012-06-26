@@ -709,7 +709,7 @@ public class CurrentWebFrameworkTest extends ATest {
     public void test_16() throws Throwable {
 
         __(
-                "def foo-site (site) (root hello-foo hello-css)",
+                "def foo-site (site) (root hello-foo ^hello-css)",
 
                 "def html-page  each (get css) (\\link get uri)",
 
