@@ -749,7 +749,7 @@ public class CurrentWebFrameworkTest extends ATest {
         __(
                 "def html-page each (get less) (\\link get uri)",
 
-                "def hello (html-page) (any bootstrap.less)",
+                "def hello (html-page) (any ^bootstrap.less)",
 
                 "def xxx (bootstrap.less) (uri \"uri-bootstrap.less\")",
 
