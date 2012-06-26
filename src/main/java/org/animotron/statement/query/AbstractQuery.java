@@ -22,6 +22,8 @@ package org.animotron.statement.query;
 
 import javolution.util.FastSet;
 import javolution.util.FastTable;
+
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -634,7 +636,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				} else if (r.isType(AN._)) {
 					Node endNode = r.getEndNode();
 					if (endNode.equals(path.endNode())) {
-						if (!AN.beginWithHasA(path))
+						if (AN.beginWithHasA(path)) {
+							boolean haveAREV = false;
+							for (Relationship rr : path.relationships())
+								if (rr.isType(AREV._))
+									haveAREV = true;
+							if (!haveAREV)
+								return EXCLUDE_AND_PRUNE;
+						}
 						//must be empty to be IS-A
 //						if (!Utils.haveContext(endNode))
 							return EXCLUDE_AND_CONTINUE;
