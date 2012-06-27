@@ -63,7 +63,7 @@ public class ConnectionTest extends ATest {
 
             new JExpression(
                 _(DEF._, "fileA",
-                    _(AN._, "file"),
+                    _(NONSTOP._, "file"),
                     _(AN._, "path", value("/home/test.txt"))
                 )),
 
@@ -139,7 +139,7 @@ public class ConnectionTest extends ATest {
 
             new JExpression(
                 _(DEF._, "fileA",
-                    _(AN._, "file"),
+                    _(NONSTOP._, "file"),
                     _(AN._, "path", value("/home/test.txt"))
                 )),
 
