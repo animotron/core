@@ -722,7 +722,7 @@ public class GetTest extends ATest {
 
         __(
             new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"))
+                    _(DEF._, "B", _(AN._, "A"))
             ),
             new JExpression(
                     _(DEF._, "C", _(NONSTOP._, "B", value("π")))
