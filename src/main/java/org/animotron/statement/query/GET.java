@@ -489,7 +489,7 @@ public class GET extends AbstractQuery implements Shift {
 	private boolean getByHave(
 			final PFlow pf, 
 			QCAVector vector, 
-			Relationship op, 
+			final Relationship op, 
 			final Node context, 
 			final Node middle, 
 			final Set<Node> thes, 
@@ -504,6 +504,16 @@ public class GET extends AbstractQuery implements Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
+				if (debug)
+					System.out.println(path);
+				
+				if (path.length() == 0)
+					return Evaluation.EXCLUDE_AND_CONTINUE;
+				
+				Relationship r = path.relationships().iterator().next();
+				if (r.equals(op))
+					return Evaluation.EXCLUDE_AND_PRUNE;
+				
 				return _evaluate_(path, thes);
 			}
 		});
