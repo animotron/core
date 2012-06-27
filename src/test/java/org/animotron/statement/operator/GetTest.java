@@ -680,7 +680,7 @@ public class GetTest extends ATest {
 
         __(
             new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"))
+                    _(DEF._, "B", _(AN._, "A"))
             ),
             new JExpression(
                     _(DEF._, "C", _(AN._, "B", value("π")))
@@ -725,7 +725,7 @@ public class GetTest extends ATest {
                     _(DEF._, "B", _(AN._, "A"))
             ),
             new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B", value("π")))
+                    _(DEF._, "C", _(AN._, "B", value("π")))
             ),
             new JExpression(
                     _(DEF._, "D", _(NONSTOP._, "C"))
@@ -741,7 +741,7 @@ public class GetTest extends ATest {
     @Test
     public void test_000() throws Throwable {
         testAnimo("def a (x) (foo 1).");
-        testAnimo("def y (a) (get foo).");
+        testAnimo("def y (^a) (get foo).");
         assertAnimoResult("y", "y (a (x) (foo)) 1.");
     }
 

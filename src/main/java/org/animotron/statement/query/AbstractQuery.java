@@ -603,17 +603,17 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							return INCLUDE_AND_PRUNE;
 
 						//check for NONSTOP sign
-						Relationship b = null; int countSTOPPER = 0;
-						for (Relationship s : path.relationships()) {
-							if (countSTOPPER > 0)
-								return EXCLUDE_AND_PRUNE;
-								
-							if (s.isType(REF._)) {
-								if (b != null && !NONSTOP.is(b))
-									countSTOPPER++;
-							}
-							b = s;
-						}
+//						Relationship b = null; int countSTOPPER = 0;
+//						for (Relationship s : path.relationships()) {
+//							if (countSTOPPER > 0)
+//								return EXCLUDE_AND_PRUNE;
+//								
+//							if (s.isType(REF._)) {
+//								if (b != null && !NONSTOP.is(b))
+//									countSTOPPER++;
+//							}
+//							b = s;
+//						}
 
 						return INCLUDE_AND_PRUNE;
 					}
@@ -622,14 +622,14 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						return EXCLUDE_AND_CONTINUE;
 
 					//check for NONSTOP sign
-					Relationship b = null;
-					for (Relationship s : path.relationships()) {
-						if (s.equals(r)) {
-							if (b != null && !NONSTOP.is(b))
-								return EXCLUDE_AND_PRUNE;
-						}
-						b = s;
-					}
+//					Relationship b = null;
+//					for (Relationship s : path.relationships()) {
+//						if (s.equals(r)) {
+//							if (b != null && !NONSTOP.is(b))
+//								return EXCLUDE_AND_PRUNE;
+//						}
+//						b = s;
+//					}
 					
 					return EXCLUDE_AND_CONTINUE;
 				
