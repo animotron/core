@@ -795,5 +795,24 @@ public class CurrentWebFrameworkTest extends ATest {
 
     }
 
+    @Test
+    public void test_21() throws Throwable {
+
+        __(
+                "def foo-site (site) (root foo)",
+
+                "def html-page \\html any layout",
+
+                "def foo-layout (layout) (get code)",
+
+                "def foo (html-page)"
+
+
+
+        );
+
+        assertXMLResult("an (get root any site) (code 500)", "<html>500</html>");
+
+    }
 
 }
