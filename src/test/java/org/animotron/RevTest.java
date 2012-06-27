@@ -87,15 +87,30 @@ public class RevTest extends ATest {
         testAnimo("def a.");
         testAnimo("def a b.");
         testAnimo("def c a.");
-        assertAnimoResult("get b c", "a.");
+        assertAnimoResult("get b c", "");
     }
 
     @Test
     public void test_07() throws Throwable {
         testAnimo("def c.");
-        testAnimo("def a b.");
-        testAnimo("def c a.");
+        testAnimo("def a ^b.");
+        testAnimo("def c ^a.");
         assertAnimoResult("get b c", "a.");
     }
 
+    @Test
+    public void test_08() throws Throwable {
+        testAnimo("def c.");
+        testAnimo("def a ^b.");
+        testAnimo("def c a.");
+        assertAnimoResult("get b c", "");
+    }
+
+    @Test
+    public void test_09() throws Throwable {
+        testAnimo("def c.");
+        testAnimo("def a b.");
+        testAnimo("def c ^a.");
+        assertAnimoResult("get b c", "a.");
+    }
 }
