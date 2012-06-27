@@ -205,7 +205,7 @@ public class MathTest extends ATest {
             "def a (x 1) (y 2) (z 3)",
             "def b + (get x) (get y) (get z)"
         );
-    	assertStringResult("b a", "6");
+    	assertStringResult("b ^a", "6");
 	}
 
     @Test
