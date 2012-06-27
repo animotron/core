@@ -24,6 +24,7 @@ import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.NONSTOP;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.relation.USE;
@@ -45,7 +46,7 @@ public class ResourceTest extends ATest {
         JExpression.__(
                 new JExpression(
                         _(DEF._, "service",
-                                _(AN._, "resource")
+                                _(NONSTOP._, "resource")
                         )
                 ),
                 new JExpression(
@@ -87,7 +88,7 @@ public class ResourceTest extends ATest {
         JExpression.__(
                 new JExpression(
                         _(DEF._, "service",
-                                _(AN._, "resource")
+                                _(NONSTOP._, "resource")
                         )
                 ),
                 new JExpression(
@@ -137,12 +138,12 @@ public class ResourceTest extends ATest {
         JExpression.__(
                 new JExpression(
                         _(DEF._, "service",
-                                _(AN._, "resource")
+                                _(NONSTOP._, "resource")
                         )
                 ),
                 new JExpression(
                         _(DEF._, "root-service",
-                                _(AN._, "service"),
+                                _(NONSTOP._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
@@ -270,7 +271,7 @@ public class ResourceTest extends ATest {
         JExpression.__(
                 new JExpression(
                         _(DEF._, "root-service",
-                                _(AN._, "service"),
+                                _(NONSTOP._, "service"),
                                 _(AN._, "root"),
                                 _(AN._, "title", value("root"))
                         )
