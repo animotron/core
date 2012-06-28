@@ -44,13 +44,13 @@ public class AllUseTest extends ATest {
 
         __(
             new JExpression(
-                _(DEF._, "A", _(AN._, "S"), element("X", value("α")))
+                _(DEF._, "A", _(NONSTOP._, "S"), element("X", value("α")))
             ),
             new JExpression(
-                _(DEF._, "B", _(AN._, "A"), element("Y", value("β")))
+                _(DEF._, "B", _(NONSTOP._, "A"), element("Y", value("β")))
             ),
             new JExpression(
-                _(DEF._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
+                _(DEF._, "C", _(NONSTOP._, "B"), element("Z", value("γ")), element("X", value("αα")))
             ),
             new JExpression(
                 _(DEF._, "s", _(ALL._, "S"))
@@ -112,19 +112,19 @@ public class AllUseTest extends ATest {
 
         __(
             new JExpression(
-                _(DEF._, "A", _(AN._, "S"), element("X", value("α")))
+                _(DEF._, "A", _(NONSTOP._, "S"), element("X", value("α")))
             ),
             new JExpression(
-                _(DEF._, "B", _(AN._, "A"), element("Y", value("β")))
+                _(DEF._, "B", _(NONSTOP._, "A"), element("Y", value("β")))
             ),
             new JExpression(
-                _(DEF._, "B1", _(AN._, "B"), element("Y", value("ββ")))
+                _(DEF._, "B1", _(NONSTOP._, "B"), element("Y", value("ββ")))
             ),
             new JExpression(
-                _(DEF._, "C", _(AN._, "B"), element("Z", value("γ")), element("X", value("αα")))
+                _(DEF._, "C", _(NONSTOP._, "B"), element("Z", value("γ")), element("X", value("αα")))
             ),
             new JExpression(
-                _(DEF._, "C1", _(AN._, "C"), element("Z", value("γγ")), element("X", value("ααα")))
+                _(DEF._, "C1", _(NONSTOP._, "C"), element("Z", value("γγ")), element("X", value("ααα")))
             ),
             new JExpression(
                 _(DEF._, "s", _(ALL._, "S"))
