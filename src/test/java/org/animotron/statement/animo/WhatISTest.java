@@ -34,9 +34,9 @@ public class WhatISTest extends ATest {
     public void test_03() throws IOException {
         __("def a x.", "def b y.", "def c b a.");
 
-        assertAnimoResult("what-is get b c", "y.");
+        assertAnimoResult("what-is get b c", "x.");
 
-        assertAnimoResult("each (get b c) (what-is this b)", "x. y.");
+        assertAnimoResult("each (get b c) (what-is this b)", "x.");
     }
 
     @Test
@@ -50,14 +50,14 @@ public class WhatISTest extends ATest {
     public void test_05() throws IOException {
         __("def a x.", "def b y.", "def c part (a) (b).", "def part foo.");
 
-        assertAnimoResult("each (get part c) (what-is this part)", "x. foo. y. foo.");
+        assertAnimoResult("each (get part c) (what-is this part)", "x. y.");//foo.???
     }
 
     @Test
     public void test_06() throws IOException {
         __("def foo bar.", "def a bar x.");
 
-        assertAnimoResult("get (what-is foo) (a)", "bar x.");
+        assertAnimoResult("get (what-is foo) (a)", "x.");
     }
 
 }
