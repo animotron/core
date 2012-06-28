@@ -60,8 +60,8 @@ public class DiamondTest extends ATest {
         testAnimo("def b use bar.");
         testAnimo("def c any x.");
         testAnimo("def d a, b, c.");
-        assertAnimoResult("any a", "def c (a use foo) (b use bar) (c def foo x).");
-        assertAnimoResult("any b", "def c (a use foo) (b use bar) (c def bar x).");
+        assertAnimoResult("any a", "def d (a use foo) (b use bar) (c def foo x).");
+        assertAnimoResult("any b", "def d (a use foo) (b use bar) (c def bar x).");
     }
 
     @Test
@@ -72,8 +72,8 @@ public class DiamondTest extends ATest {
         testAnimo("def b use bar.");
         testAnimo("def c any x.");
         testAnimo("def d (a, b) (c).");
-        assertAnimoResult("any a", "def c (a use foo) (b use bar) (c def foo x).");
-        assertAnimoResult("any b", "def c (a use foo) (b use bar) (c def bar x).");
+        assertAnimoResult("any a", "def d (a use foo) (b use bar) (c def foo x).");
+        assertAnimoResult("any b", "def d (a use foo) (b use bar) (c def bar x).");
     }
 
     @Test
@@ -84,8 +84,8 @@ public class DiamondTest extends ATest {
         testAnimo("def b use bar.");
         testAnimo("def c any x.");
         testAnimo("def d (a) (b) (c).");
-        assertAnimoResult("any a", "def c (a use foo) (b use bar) (c def foo x).");
-        assertAnimoResult("any b", "def c (a use foo) (b use bar) (c def bar x).");
+        assertAnimoResult("any a", "def d (a use foo) (b use bar) (c def foo x).");
+        assertAnimoResult("any b", "def d (a use foo) (b use bar) (c def bar x).");
     }
 
     @Test
