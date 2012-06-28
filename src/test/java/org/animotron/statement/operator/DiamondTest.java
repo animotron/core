@@ -32,6 +32,7 @@ import org.junit.Test;
 public class DiamondTest extends ATest {
 
     @Test
+    @Ignore
     public void test_001a() throws Throwable {
         testAnimo("def foo x.");
         testAnimo("def bar x.");
