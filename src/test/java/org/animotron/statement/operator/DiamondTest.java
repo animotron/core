@@ -21,6 +21,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -42,6 +43,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_001b() throws Throwable {
         testAnimo("def foo x.");
         testAnimo("def bar x.");
@@ -53,6 +55,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_002a() throws Throwable {
         testAnimo("def foo x.");
         testAnimo("def bar x.");
@@ -65,6 +68,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_002b() throws Throwable {
         testAnimo("def foo x.");
         testAnimo("def bar x.");
@@ -77,6 +81,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_002c() throws Throwable {
         testAnimo("def foo x.");
         testAnimo("def bar x.");
@@ -89,6 +94,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_005a() throws Throwable {
         testAnimo("def a x foo.");
         testAnimo("def b x bar.");
@@ -98,6 +104,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_005b() throws Throwable {
         testAnimo("def a x foo.");
         testAnimo("def b x bar.");
@@ -107,6 +114,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_006a() throws Throwable {
         testAnimo("def a x foo.");
         testAnimo("def b x bar.");
@@ -117,6 +125,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_006b() throws Throwable {
         testAnimo("def a x foo.");
         testAnimo("def b x bar.");
@@ -127,6 +136,7 @@ public class DiamondTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_006c() throws Throwable {
         testAnimo("def a x foo.");
         testAnimo("def b x bar.");
@@ -135,5 +145,4 @@ public class DiamondTest extends ATest {
         assertAnimoResult("any a", "def d (a x) (b x) (c x foo).");
         assertAnimoResult("any b", "def d (a x) (b x) (c x bar).");
     }
-
 }
