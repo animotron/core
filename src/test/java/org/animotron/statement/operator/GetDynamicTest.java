@@ -182,7 +182,7 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_08() throws Throwable {
-        testAnimo("def y a.");
+        testAnimo("def y ^a.");
         testAnimo("def x y.");
 
         testAnimoResult("all a use y.", "def y a. def x y a.");
@@ -190,7 +190,7 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_09() throws Throwable {
-        testAnimo("def a b.");
+        testAnimo("def a ^b.");
         testAnimo("def y a.");
         testAnimo("def x y z.");
 
@@ -200,11 +200,29 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_10() throws Throwable {
-        testAnimo("def a b.");
-        testAnimo("def y a.");
+        testAnimo("def a ^b.");
+        testAnimo("def y ^a.");
         testAnimo("def x y.");
 
         testAnimoResult("all b use y.", "def y a b. def x y a b.");
+    }
+
+    @Test
+    public void test_10_1() throws Throwable {
+        testAnimo("def a b.");
+        testAnimo("def y ^a.");
+        testAnimo("def x y.");
+
+        testAnimoResult("all b use y.", "");
+    }
+
+    @Test
+    public void test_10_2() throws Throwable {
+        testAnimo("def a ^b.");
+        testAnimo("def y a.");
+        testAnimo("def x y.");
+
+        testAnimoResult("all b use y.", "def y a b.");
     }
 
     @Test
@@ -226,7 +244,7 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_13() throws Throwable {
-        testAnimo("def y a.");
+        testAnimo("def y ^a.");
         testAnimo("def x y.");
 
         testAnimoResult("prefer a use y.", "def y a. def x y a.");
@@ -234,7 +252,7 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_14() throws Throwable {
-        testAnimo("def a b.");
+        testAnimo("def a ^b.");
         testAnimo("def y a.");
         testAnimo("def x y z.");
 
@@ -244,11 +262,29 @@ public class GetDynamicTest extends ATest {
 
     @Test
     public void test_15() throws Throwable {
-        testAnimo("def a b.");
-        testAnimo("def y a.");
+        testAnimo("def a ^b.");
+        testAnimo("def y ^a.");
         testAnimo("def x y.");
 
         testAnimoResult("prefer b use y.", "def y a b. def x y a b.");
+    }
+
+    @Test
+    public void test_15_1() throws Throwable {
+        testAnimo("def a ^b.");
+        testAnimo("def y a.");
+        testAnimo("def x y.");
+
+        testAnimoResult("prefer b use y.", "def y a b.");
+    }
+
+    @Test
+    public void test_15_2() throws Throwable {
+        testAnimo("def a b.");
+        testAnimo("def y ^a.");
+        testAnimo("def x y.");
+
+        testAnimoResult("prefer b use y.", "");
     }
 
     @Test
