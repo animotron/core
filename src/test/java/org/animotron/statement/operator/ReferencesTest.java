@@ -41,13 +41,12 @@ public class ReferencesTest extends ATest {
         JExpression A = new JExpression(
             _(DEF._, "A", _(AN._, "B", _(AN._, "C")))
         );
-        //assertAnimoResultOneStep(A, "def A the B.");
-        assertAnimoResultOneStep(A, "def A B.");
+        assertAnimoResult(A, "def A B.");
 
         JExpression.__(new JExpression(
             _(DEF._, "B", _(AN._, "C", value("y")))
         ));
-        assertAnimoResultOneStep(A, "def A B C \"y\".");
+        assertAnimoResult(A, "def A B C.");
     }
 
     @Test
