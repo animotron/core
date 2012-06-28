@@ -87,7 +87,7 @@ public class RevTest extends ATest {
         testAnimo("def a.");
         testAnimo("def a b.");
         testAnimo("def c a.");
-        assertAnimoResult("get b c", "");
+        assertAnimoResult("get b c", "a.");
     }
 
     @Test
@@ -103,7 +103,7 @@ public class RevTest extends ATest {
         testAnimo("def c.");
         testAnimo("def a ^b.");
         testAnimo("def c a.");
-        assertAnimoResult("get b c", "");
+        assertAnimoResult("get b c", "a.");
     }
 
     @Test
