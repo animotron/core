@@ -495,19 +495,22 @@ public class Utils {
                         if (path.length() == 0)
                             return Evaluation.EXCLUDE_AND_CONTINUE;
 
-                        if (!path.endNode().equals(path.lastRelationship().getStartNode()))
+                        Relationship r = path.lastRelationship();
+                        Node endNode = path.endNode();
+                        
+                        if (endNode.getId() == 0)
                             return EXCLUDE_AND_PRUNE;
 
-                        if (Statements.relationshipType(path.lastRelationship()) == null)
+                        if (!endNode.equals(r.getStartNode()))
                             return EXCLUDE_AND_PRUNE;
 
-                        if (path.lastRelationship().isType(REV))
-                            return EXCLUDE_AND_PRUNE;
-
-                        if (path.lastRelationship().isType(DEF._))
+                        if (r.isType(DEF._))
                             return INCLUDE_AND_PRUNE;
 
-                        if (path.endNode().getId() == 0)
+                        if (Statements.relationshipType(r) == null)
+                            return EXCLUDE_AND_PRUNE;
+
+                        if (r.isType(REV))
                             return EXCLUDE_AND_PRUNE;
 
                         return EXCLUDE_AND_CONTINUE;
