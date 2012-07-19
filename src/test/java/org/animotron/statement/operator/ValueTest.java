@@ -18,16 +18,28 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.graph;
+package org.animotron.statement.operator;
 
-import org.neo4j.graphdb.RelationshipType;
+import junit.framework.Assert;
+import org.animotron.ATest;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
+ * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public enum RelationshipTypes implements RelationshipType {
+public class ValueTest extends ATest {
 	
-    CONTEXT, RESULT, FAKE, TRI, REV, FIRST, NEXT, LAST, CONSIST
-	
+    @Test
+    public void test() throws Throwable {
+
+        testAnimo("def \"abc\".");
+
+        Assert.assertNotNull(DEF._.get("a"));
+        Assert.assertNotNull(DEF._.get("b"));
+        Assert.assertNotNull(DEF._.get("c"));
+
+    }
+
 }
