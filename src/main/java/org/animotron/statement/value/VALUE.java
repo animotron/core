@@ -29,9 +29,12 @@ import org.animotron.statement.operator.Prepare;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
+import java.util.Iterator;
+
 import static org.animotron.expression.JExpression._;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.RelationshipTypes.*;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -74,7 +77,14 @@ public class VALUE extends AbstractValue implements Prepare {
                             if (i == 0) {
                                 n.createRelationshipTo(end, FIRST);
                             } else {
-                                pend.createRelationshipTo(end, NEXT);
+                                boolean f = true;
+                                Iterator<Relationship> it = pend.getRelationships(OUTGOING, NEXT).iterator();
+                                while (f && it.hasNext()) {
+                                    f = it.next().getEndNode().equals(end);
+                                }
+                                if (f) {
+                                    pend.createRelationshipTo(end, NEXT);
+                                }
                                 if (i == s.length() - 1) {
                                     n.createRelationshipTo(end, LAST);
                                 }
