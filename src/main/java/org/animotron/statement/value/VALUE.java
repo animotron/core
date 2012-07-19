@@ -24,6 +24,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
+import org.animotron.graph.index.AbstractIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.AN;
@@ -32,6 +33,8 @@ import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.REF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import java.io.IOException;
 
@@ -50,6 +53,32 @@ public class VALUE extends AbstractValue implements Prepare {
     private VALUE() { super("value"); }
 
     protected VALUE(String... name) { super(name); }
+
+    private AbstractIndex<Node> value = new AbstractIndex<Node>(name()) {
+        @Override
+        public void init(IndexManager index) {
+            init(index.forNodes(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
+        }
+    };
+
+    public void init(IndexManager index) {
+        value.init(index);
+	}
+
+	public void add(Node n, Object reference) {
+        value.add(n, reference);
+	}
+
+	public Node get(Object name) {
+        return value.get(name);
+	}
+
+    @Override
+    protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        Node child = super.createChild(reference, ready, ignoreNotFound);
+        add(child, reference);
+        return child;
+    }
 
     @Override
     public OnQuestion onPrepareQuestion() {

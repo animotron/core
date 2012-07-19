@@ -65,11 +65,9 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 //        }
 //    }
     
-    private static final String name = "def";
-
-    private DEF() { super(name); }
+    private DEF() { super("def"); }
     
-    private AbstractIndex<Relationship> def = new AbstractIndex<Relationship>(name) {
+    private AbstractIndex<Relationship> def = new AbstractIndex<Relationship>(name()) {
         @Override
         public void init(IndexManager index) {
             init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));

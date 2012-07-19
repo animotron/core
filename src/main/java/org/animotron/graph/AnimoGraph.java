@@ -26,6 +26,7 @@ import org.animotron.graph.index.Order;
 import org.animotron.graph.index.Result;
 import org.animotron.graph.index.State;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
@@ -99,6 +100,7 @@ public class AnimoGraph {
         Order._.init(index);
         State._.init(index);
         DEF._.init(index);
+        VALUE._.init(index);
     }
 
 	public static GraphDatabaseService getDb() {
