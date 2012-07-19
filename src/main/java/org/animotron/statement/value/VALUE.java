@@ -62,7 +62,7 @@ public class VALUE extends AbstractValue implements Prepare {
                     @Override
                     public Void execute() throws Throwable {
                         String s = (String) o;
-                        Node pn = null;
+                        Node pend = null;
                         for (int i = 0; i < s.length(); i++) {
                             String name = String.copyValueOf(new char[]{s.charAt(i)});
                             Relationship def = DEF._.get(name);
@@ -74,12 +74,12 @@ public class VALUE extends AbstractValue implements Prepare {
                             if (i == 0) {
                                 n.createRelationshipTo(end, FIRST);
                             } else {
-                                pn.createRelationshipTo(end, NEXT);
+                                pend.createRelationshipTo(end, NEXT);
                                 if (i == s.length() - 1) {
                                     n.createRelationshipTo(end, LAST);
                                 }
                             }
-                            pn = n;
+                            pend = end;
                         }
                         return null;
                     }
