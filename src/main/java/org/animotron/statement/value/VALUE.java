@@ -20,8 +20,9 @@
  */
 package org.animotron.statement.value;
 
-import org.animotron.expression.JExpression;
+import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.GraphOperation;
+import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.DEF;
@@ -31,7 +32,6 @@ import org.neo4j.graphdb.Relationship;
 
 import java.util.Iterator;
 
-import static org.animotron.expression.JExpression._;
 import static org.animotron.graph.AnimoGraph.execute;
 import static org.animotron.graph.RelationshipTypes.*;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -61,43 +61,52 @@ public class VALUE extends AbstractValue implements Prepare {
 
     	@Override
         public void act(PFlow pf) throws Throwable {
-            Relationship r = pf.getOP();
-            final Node n = r.getEndNode();
-            final Object o = reference(r);
+            final Relationship r = pf.getOP();
+            Object o = reference(r);
             if (o instanceof String) {
-                execute(new GraphOperation<Void>() {
-                    @Override
-                    public Void execute() throws Throwable {
-                        String s = (String) o;
-                        Node pend = null;
-                        for (int i = 0; i < s.length(); i++) {
-                            String name = String.copyValueOf(new char[]{s.charAt(i)});
-                            Relationship def = DEF._.get(name);
-                            if (def == null) {
-                                def = new JExpression(_(DEF._, value(name)));
+                final String s = (String) o;
+                if (s.length() > 1) {
+                    execute(new GraphOperation<Void>() {
+                        @Override
+                        public Void execute() throws Throwable {
+                            Node n = r.getEndNode();
+                            Node pend = null;
+                            for (int i = 0; i < s.length(); i++) {
+                                final String name = String.copyValueOf(new char[]{s.charAt(i)});
+                                Relationship def = DEF._.get(name);
+                                if (def == null) {
+                                    def = new AbstractExpression(new FastGraphBuilder()) {
+                                        @Override
+                                        public void build() throws Throwable {
+                                            builder.start(DEF._);
+                                                builder._(name);
+                                            builder.end();
+                                        }
+                                    };
+                                }
+                                Node end = def.getEndNode();
+                                n.createRelationshipTo(end, CONSIST);
+                                if (i == 0) {
+                                    n.createRelationshipTo(end, FIRST);
+                                } else {
+                                    boolean f = true;
+                                    Iterator<Relationship> it = pend.getRelationships(OUTGOING, NEXT).iterator();
+                                    while (f && it.hasNext()) {
+                                        f = it.next().getEndNode().equals(end);
+                                    }
+                                    if (f) {
+                                        pend.createRelationshipTo(end, NEXT);
+                                    }
+                                    if (i == s.length() - 1) {
+                                        n.createRelationshipTo(end, LAST);
+                                    }
+                                }
+                                pend = end;
                             }
-                            Node end = def.getEndNode();
-                            n.createRelationshipTo(end, CONSIST);
-                            if (i == 0) {
-                                n.createRelationshipTo(end, FIRST);
-                            } else {
-                                boolean f = true;
-                                Iterator<Relationship> it = pend.getRelationships(OUTGOING, NEXT).iterator();
-                                while (f && it.hasNext()) {
-                                    f = it.next().getEndNode().equals(end);
-                                }
-                                if (f) {
-                                    pend.createRelationshipTo(end, NEXT);
-                                }
-                                if (i == s.length() - 1) {
-                                    n.createRelationshipTo(end, LAST);
-                                }
-                            }
-                            pend = end;
+                            return null;
                         }
-                        return null;
-                    }
-                });
+                    });
+                }
             }
         }
     };
