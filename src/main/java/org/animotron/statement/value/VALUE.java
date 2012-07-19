@@ -51,10 +51,10 @@ public class VALUE extends AbstractValue implements Prepare {
 
     @Override
     public OnQuestion onPrepareQuestion() {
-        return question;
+        return new Prepare();
     }
 
-    private OnQuestion question = new OnQuestion() {
+    class Prepare extends OnQuestion {
         @Override
         public void act(PFlow pf) throws Throwable {
             Relationship r = pf.getOP();
