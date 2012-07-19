@@ -48,6 +48,7 @@ public class AnimoExpression extends AbstractExpression {
     public final static Relationship[] __(String... e) {
         Relationship[] a = new Relationship[e.length];
         for (int i = 0; i < e.length; i++) {
+        	System.out.println(e[i]);
             a[i] = __(new AnimoExpression(e[i]));
         }
         return a;
@@ -103,7 +104,7 @@ public class AnimoExpression extends AbstractExpression {
         while ((len=reader.read(buff))>0) {
             for (int i = 0; i < len; i++) {
                 char ch = buff[i];
-                if (ch == '\"') {
+                if (ch == '\"' || ch == '\'') {
                     if (!text) {
                         newToken();
                         text = true;
