@@ -20,21 +20,23 @@
  */
 package org.animotron.statement.value;
 
+import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.Prepare;
+import org.animotron.statement.operator.REF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
-import java.util.Iterator;
+import java.io.IOException;
 
+import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.execute;
-import static org.animotron.graph.RelationshipTypes.*;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -69,40 +71,39 @@ public class VALUE extends AbstractValue implements Prepare {
                     execute(new GraphOperation<Void>() {
                         @Override
                         public Void execute() throws Throwable {
-                            Node n = r.getEndNode();
-                            Node pend = null;
-                            for (int i = 0; i < s.length(); i++) {
-                                final String name = String.copyValueOf(new char[]{s.charAt(i)});
-                                Relationship def = DEF._.get(name);
-                                if (def == null) {
-                                    def = new AbstractExpression(new FastGraphBuilder()) {
-                                        @Override
-                                        public void build() throws Throwable {
-                                            builder.start(DEF._);
-                                                builder._(name);
-                                            builder.end();
-                                        }
-                                    };
-                                }
-                                Node end = def.getEndNode();
-                                n.createRelationshipTo(end, CONSIST);
-                                if (i == 0) {
-                                    n.createRelationshipTo(end, FIRST);
-                                } else {
-                                    boolean f = true;
-                                    Iterator<Relationship> it = pend.getRelationships(OUTGOING, NEXT).iterator();
-                                    while (f && it.hasNext()) {
-                                        f = it.next().getEndNode().equals(end);
-                                    }
-                                    if (f) {
-                                        pend.createRelationshipTo(end, NEXT);
-                                    }
-                                    if (i == s.length() - 1) {
-                                        n.createRelationshipTo(end, LAST);
+                            Relationship x = new AbstractExpression(new FastGraphBuilder()) {
+
+                                private void step(final String value, final int i) throws AnimoException, IOException {
+                                    if (i >= 0) {
+                                        Relationship def = new AbstractExpression(new FastGraphBuilder()) {
+                                            @Override
+                                            public void build() throws Throwable {
+                                                builder.start(DEF._);
+                                                    builder._(String.copyValueOf(new char[]{value.charAt(i)}));
+                                                builder.end();
+                                            }
+                                        };
+                                        builder.start(AN._);
+                                            builder._(REF._, def.getEndNode());
+                                            step(value, i-1);
+                                        builder.end();
                                     }
                                 }
-                                pend = end;
-                            }
+
+                                @Override
+                                public void build() throws Throwable {
+                                    builder.start(DEF._);
+                                        step(s, s.length()-1);
+                                    builder.end();
+                                }
+
+                            };
+
+                            Node proxy = createNode();
+
+                            r.getEndNode().createRelationshipTo(proxy, AN._);
+                            proxy.createRelationshipTo(x.getEndNode(), REF._);
+
                             return null;
                         }
                     });

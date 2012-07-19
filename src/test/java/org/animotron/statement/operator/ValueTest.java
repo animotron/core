@@ -35,6 +35,7 @@ public class ValueTest extends ATest {
     public void test() throws Throwable {
 
         testAnimo("def foo \"abc\".");
+        testAnimo("def bar \"ebc\".");
 
         try {Thread.sleep(1000);} catch (InterruptedException e) {}
 
