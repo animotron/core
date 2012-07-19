@@ -55,7 +55,11 @@ public class VALUE extends AbstractValue implements Prepare {
     }
 
     class Prepare extends OnQuestion {
-        @Override
+		public boolean needAnswer() {
+			return false;
+		}
+
+    	@Override
         public void act(PFlow pf) throws Throwable {
             Relationship r = pf.getOP();
             final Node n = r.getEndNode();
