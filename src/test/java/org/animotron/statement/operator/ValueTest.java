@@ -34,7 +34,9 @@ public class ValueTest extends ATest {
     @Test
     public void test() throws Throwable {
 
-        testAnimo("def \"abc\".");
+        testAnimo("def foo \"abc\".");
+
+        try {Thread.sleep(1000);} catch (InterruptedException e) {}
 
         Assert.assertNotNull(DEF._.get("a"));
         Assert.assertNotNull(DEF._.get("b"));
