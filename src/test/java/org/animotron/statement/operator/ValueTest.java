@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import junit.framework.Assert;
 import org.animotron.ATest;
+import org.animotron.statement.value.VALUE;
 import org.junit.Test;
 
 /**
@@ -35,13 +36,14 @@ public class ValueTest extends ATest {
     public void test() throws Throwable {
 
         testAnimo("def foo \"abc\".");
+        testAnimo("def foo \"abe\".");
         testAnimo("def bar \"ebc\".");
 
         try {Thread.sleep(1000);} catch (InterruptedException e) {}
 
-        Assert.assertNotNull(DEF._.get("a"));
-        Assert.assertNotNull(DEF._.get("b"));
-        Assert.assertNotNull(DEF._.get("c"));
+        Assert.assertNotNull(VALUE._.get("a"));
+        Assert.assertNotNull(VALUE._.get("b"));
+        Assert.assertNotNull(VALUE._.get("c"));
 
     }
 
