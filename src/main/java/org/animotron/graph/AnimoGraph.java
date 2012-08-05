@@ -29,6 +29,7 @@ import org.animotron.statement.operator.DEF;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
+import org.neo4j.kernel.DeadlockDetectedException;
 import org.neo4j.kernel.EmbeddedGraphDatabase;
 
 import java.io.File;
@@ -186,15 +187,23 @@ public class AnimoGraph {
 	 */
 	public static <T> T execute(GraphOperation<T> operation) throws Throwable {
 		T result = null;
-		Transaction tx = beginTx();
-		try {
-			result = operation.execute();
-			tx.success();
-		} catch (Throwable t) {
-			throw t;
-        } finally {
-			finishTx(tx);
-		}
+        boolean deadlock;
+        do {
+            deadlock = false;
+            Transaction tx = beginTx();
+            try {
+                result = operation.execute();
+                tx.success();
+            } catch (Throwable t) {
+                if (t instanceof DeadlockDetectedException) {
+                    deadlock = true;
+                } else {
+                    throw t;
+                }
+            } finally {
+                finishTx(tx);
+            }
+        } while (deadlock);
         return result;
 	}
 

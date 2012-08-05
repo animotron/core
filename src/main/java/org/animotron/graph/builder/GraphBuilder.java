@@ -30,6 +30,7 @@ import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
+import org.neo4j.kernel.DeadlockDetectedException;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -178,39 +179,47 @@ public abstract class GraphBuilder {
     }
 
     public final void build(AbstractExpression exp) throws Throwable {
+        boolean deadlock;
         order = 0;
         catcher = Manipulators.getCatcher();
-        tx = beginTx();
-        try {
-        	s = null; r = null;
-            stack = new Stack<Object[]>();
-            startGraph();
-            exp.build();
-        	endGraph();
-            tx.success();
-            finishTx(tx);
-        } catch (final Throwable t) {
-            finishTx(tx);
+        do {
+            deadlock = false;
             tx = beginTx();
             try {
-                catcher.clear();
-                fail(t);
-            } finally {
+                s = null; r = null;
+                stack = new Stack<Object[]>();
+                startGraph();
+                exp.build();
+                endGraph();
+                tx.success();
                 finishTx(tx);
+            } catch (Throwable t) {
+                if (t instanceof DeadlockDetectedException) {
+                    deadlock = true;
+                } else {
+                    finishTx(tx);
+                    tx = beginTx();
+                    try {
+                        catcher.clear();
+                        fail(t);
+                    } finally {
+                        finishTx(tx);
+                    }
+                    throw t;
+                }
+            } finally {
+                catcher.push();
             }
-            throw t;
-        } finally {
-            catcher.push();
-        }
+        } while (deadlock);
     }
 
     protected final void step() {
         order++;
-        if (order % (10000) == 0) {
-            tx.success();
-            finishTx(tx);
-            tx = beginTx();
-        }
+//        if (order % (10000) == 0) {
+//            tx.success();
+//            finishTx(tx);
+//            tx = beginTx();
+//        }
     }
 
     protected final void preparative(Relationship r) {
