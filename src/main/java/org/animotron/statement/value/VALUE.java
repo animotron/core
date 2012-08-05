@@ -108,7 +108,7 @@ public class VALUE extends AbstractValue implements Prepare {
                                             @Override
                                             public void build() throws Throwable {
                                                 builder.start(DEF._);
-                                                    builder._(String.valueOf(value.charAt(i)));
+                                                    builder._(String.copyValueOf(new char[]{value.charAt(i)}));
                                                 builder.end();
                                             }
                                         };
