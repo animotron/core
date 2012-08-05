@@ -194,10 +194,10 @@ public abstract class GraphBuilder {
                 tx.success();
                 finishTx(tx);
             } catch (Throwable t) {
+                finishTx(tx);
                 if (t instanceof DeadlockDetectedException) {
                     deadlock = true;
                 } else {
-                    finishTx(tx);
                     tx = beginTx();
                     try {
                         catcher.clear();
