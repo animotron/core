@@ -53,7 +53,7 @@ public class VALUE extends AbstractValue implements Prepare {
 
     public final static VALUE _ = new VALUE();
     
-    private Processor processor = new Processor();
+    private Processor processor = null;
 
     private VALUE() { super("value"); }
 
@@ -68,6 +68,11 @@ public class VALUE extends AbstractValue implements Prepare {
 
     public void init(IndexManager index) {
         value.init(index);
+        
+        if (processor != null)
+        	processor.thread.interrupt();
+        
+        processor = new Processor();
 	}
 
 	public void add(Node n, Object reference) {
@@ -134,7 +139,7 @@ public class VALUE extends AbstractValue implements Prepare {
         	while (true) {
 	        	while (stack.empty()) {
 	        		try {
-	        			Thread.sleep(500);
+	        			Thread.sleep(50);
 	        		} catch (Exception e) {}
 	        	}
 
@@ -206,4 +211,13 @@ public class VALUE extends AbstractValue implements Prepare {
 	        }
 	    }
     }
+
+    //used by tests
+	public void waitToBeEmpty() {
+		while (!processor.stack.isEmpty())
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+			}
+	}
 }
