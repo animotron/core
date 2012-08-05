@@ -25,8 +25,10 @@ import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.AbstractIndex;
+import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.Prepare;
@@ -37,6 +39,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import java.io.IOException;
+import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.execute;
@@ -49,6 +52,8 @@ import static org.animotron.graph.AnimoGraph.execute;
 public class VALUE extends AbstractValue implements Prepare {
 
     public final static VALUE _ = new VALUE();
+    
+    private Processor processor = new Processor();
 
     private VALUE() { super("value"); }
 
@@ -79,6 +84,12 @@ public class VALUE extends AbstractValue implements Prepare {
         add(child, reference);
         return child;
     }
+    
+    public void shutdown() throws IOException, InterruptedException {
+    	processor.toProcess(null);
+    	
+		processor.thread.join();
+    }
 
     @Override
     public OnQuestion onPrepareQuestion() {
@@ -92,52 +103,107 @@ public class VALUE extends AbstractValue implements Prepare {
 
     	@Override
         public void act(PFlow pf) throws Throwable {
-            final Relationship r = pf.getOP();
-            Object o = reference(r);
-            if (o instanceof String) {
-                final String s = (String) o;
-                if (s.length() > 1) {
-                    execute(new GraphOperation<Void>() {
-                        @Override
-                        public Void execute() throws Throwable {
-                            Relationship x = new AbstractExpression(new FastGraphBuilder()) {
-
-                                private void step(final String value, final int i) throws AnimoException, IOException {
-                                    if (i >= 0) {
-                                        Relationship def = new AbstractExpression(new FastGraphBuilder()) {
-                                            @Override
-                                            public void build() throws Throwable {
-                                                builder.start(DEF._);
-                                                    builder._(String.copyValueOf(new char[]{value.charAt(i)}));
-                                                builder.end();
-                                            }
-                                        };
-                                        builder.start(AN._);
-                                            builder._(REF._, def.getEndNode());
-                                            step(value, i-1);
-                                        builder.end();
-                                    }
-                                }
-
-                                @Override
-                                public void build() throws Throwable {
-                                    builder.start(DEF._);
-                                        step(s, s.length()-1);
-                                    builder.end();
-                                }
-
-                            };
-
-                            Node proxy = createNode();
-
-                            r.getEndNode().createRelationshipTo(proxy, AN._);
-                            proxy.createRelationshipTo(x.getEndNode(), REF._);
-
-                            return null;
-                        }
-                    });
-                }
-            }
+    		processor.toProcess(pf.getVector());
         }
     };
+    
+    class Processor implements Runnable {
+    	
+//    	Pipe pipe = Pipe.newInstance();
+    	Stack<QCAVector> stack = new Stack<QCAVector>();
+    	
+    	Thread thread;
+    	
+    	public Processor() {
+    		thread = new Thread(this);
+    		thread.start();
+		}
+    	
+    	public void toProcess(QCAVector v) throws IOException {
+    		//XXX: put mark here?
+//    		pipe.write(v);
+    		
+    		stack.add(v);
+    	}
+
+		@Override
+		public void run() {
+        	QCAVector v;
+//        	while ((v = pipe.take()) != null) {
+
+        	while (true) {
+	        	while (stack.empty()) {
+	        		try {
+	        			Thread.sleep(500);
+	        		} catch (Exception e) {}
+	        	}
+
+	        	v = stack.pop();
+        		if (v == null) return;
+        		
+	            process(v.getClosest());
+        	}
+		}
+    
+	    private void process(final Relationship r) {
+	    	
+	        Object o = reference(r);
+	        if (o instanceof String) {
+	            final String s = (String) o;
+	            System.out.println("-> "+Thread.currentThread()+" "+s);
+	            if (s.length() > 1) {
+	            	try {
+	                    execute(new GraphOperation<Void>() {
+	                        @Override
+	                        public Void execute() throws Throwable {
+	                            Relationship x = new AbstractExpression(new FastGraphBuilder()) {
+	
+	                                private void step(final String value, final int i) throws AnimoException, IOException {
+	                                    if (i >= 0) {
+	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
+	                                        Relationship def = new AbstractExpression(new FastGraphBuilder()) {
+	                                            @Override
+	                                            public void build() throws Throwable {
+	                                                builder.start(DEF._);
+	                                                    builder._(String.valueOf(value.charAt(i)));
+	                                                builder.end();
+	                                            }
+	                                        };
+	                                        builder.start(AN._);
+	                                        	try {
+	                                        		builder._(REF._, def.getEndNode());
+	                                        	} catch (Exception e) {
+	                                        		System.out.println(""+Thread.currentThread()+" "+e.getMessage());
+	                                        		e.printStackTrace();
+												}
+	                                            step(value, i-1);
+	                                        builder.end();
+	                                    }
+	                                }
+	
+	                                @Override
+	                                public void build() throws Throwable {
+	                                    builder.start(DEF._);
+	                                        step(s, s.length()-1);
+	                                    builder.end();
+	                                }
+	
+	                            };
+	
+	                            Node proxy = createNode();
+	
+	                            r.getEndNode().createRelationshipTo(proxy, AN._);
+	                            proxy.createRelationshipTo(x.getEndNode(), REF._);
+	
+	                            return null;
+	                        }
+	                    });
+	            	} catch (Throwable e) {
+						// TODO: handle exception
+	            		e.printStackTrace();
+					}
+	            }
+	        }
+	    }
+    }
 }

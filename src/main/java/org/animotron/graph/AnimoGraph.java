@@ -129,6 +129,12 @@ public class AnimoGraph {
         }
 		System.out.println("shotdown");
 		Executor.shutdown();
+		try {
+			VALUE._.shutdown();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		while (!activeTx.isEmpty()) {
 			System.out.println("Active transactions "+activeTx.size());
 

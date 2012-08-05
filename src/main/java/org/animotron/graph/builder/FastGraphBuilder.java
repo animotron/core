@@ -121,6 +121,7 @@ public class FastGraphBuilder extends GraphBuilder {
                     if (relationship == null) {
                         Node def = createNode();
                         NAME.set(def, reference);
+                        
                         relationship = getROOT().createRelationshipTo(def, DEF._);
                         Relationship rr = def.createRelationshipTo(end, REV);
                         setUUID(rr, uuid());
