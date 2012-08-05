@@ -25,7 +25,6 @@ import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.AbstractIndex;
-import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -155,7 +154,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	        Object o = reference(r);
 	        if (o instanceof String) {
 	            final String s = (String) o;
-	            System.out.println("-> "+Thread.currentThread()+" "+s);
+//	            System.out.println("-> "+Thread.currentThread()+" "+s);
 	            if (s.length() > 1) {
 	            	try {
 	                    execute(new GraphOperation<Void>() {
@@ -165,7 +164,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	
 	                                private void step(final String value, final int i) throws AnimoException, IOException {
 	                                    if (i >= 0) {
-	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
+//	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
 	                                        Relationship def = new AbstractExpression(new FastGraphBuilder()) {
 	                                            @Override
 	                                            public void build() throws Throwable {
