@@ -25,7 +25,6 @@ import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.AbstractIndex;
-import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -53,7 +52,7 @@ public class VALUE extends AbstractValue implements Prepare {
 
     public final static VALUE _ = new VALUE();
     
-    private Processor processor = new Processor();
+    private Processor processor = null;
 
     private VALUE() { super("value"); }
 
@@ -68,6 +67,11 @@ public class VALUE extends AbstractValue implements Prepare {
 
     public void init(IndexManager index) {
         value.init(index);
+        
+        if (processor != null)
+        	processor.thread.interrupt();
+        
+        processor = new Processor();
 	}
 
 	public void add(Node n, Object reference) {
@@ -134,7 +138,7 @@ public class VALUE extends AbstractValue implements Prepare {
         	while (true) {
 	        	while (stack.empty()) {
 	        		try {
-	        			Thread.sleep(500);
+	        			Thread.sleep(50);
 	        		} catch (Exception e) {}
 	        	}
 
@@ -150,7 +154,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	        Object o = reference(r);
 	        if (o instanceof String) {
 	            final String s = (String) o;
-	            System.out.println("-> "+Thread.currentThread()+" "+s);
+//	            System.out.println("-> "+Thread.currentThread()+" "+s);
 	            if (s.length() > 1) {
 	            	try {
 	                    execute(new GraphOperation<Void>() {
@@ -160,7 +164,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	
 	                                private void step(final String value, final int i) throws AnimoException, IOException {
 	                                    if (i >= 0) {
-	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
+//	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
 	                                        Relationship def = new AbstractExpression(new FastGraphBuilder()) {
 	                                            @Override
 	                                            public void build() throws Throwable {
@@ -206,4 +210,13 @@ public class VALUE extends AbstractValue implements Prepare {
 	        }
 	    }
     }
+
+    //used by tests
+	public void waitToBeEmpty() {
+		while (!processor.stack.isEmpty())
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+			}
+	}
 }
