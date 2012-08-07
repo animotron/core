@@ -22,16 +22,20 @@ package org.animotron.statement.value;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.AbstractIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.string.LOWER_CASE;
+import org.animotron.statement.string.UPPER_CASE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
@@ -161,18 +165,46 @@ public class VALUE extends AbstractValue implements Prepare {
 	                        @Override
 	                        public Void execute() throws Throwable {
 	                            Relationship x = new AbstractExpression(new FastGraphBuilder()) {
-	
+
+                                    private Expression letter(final String uuid1, final Instruction c, final String uuid2) {
+                                        return new AbstractExpression(new FastGraphBuilder()) {
+                                            @Override
+                                            public void build() throws Throwable {
+                                                builder.start(DEF._, uuid1);
+                                                    builder._(uuid1);
+                                                    builder.start(AN._);
+                                                        builder._(REF._, "letter");
+                                                    builder.end();
+                                                    builder.start(AN._);
+                                                        builder._(REF._, c.name());
+                                                        builder.start(AN._);
+                                                            builder._(REF._, uuid2);
+                                                        builder.end();
+                                                    builder.end();
+                                                builder.end();
+                                            }
+                                        };
+                                    }
+
 	                                private void step(final String value, final int i) throws AnimoException, IOException {
 	                                    if (i >= 0) {
+	                                        Relationship def;
+                                            final String s = String.valueOf(value.charAt(i));
 //	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
-	                                        Relationship def = new AbstractExpression(new FastGraphBuilder()) {
-	                                            @Override
-	                                            public void build() throws Throwable {
-	                                                builder.start(DEF._);
-	                                                    builder._(String.valueOf(value.charAt(i)));
-	                                                builder.end();
-	                                            }
-	                                        };
+                                            if (!s.toLowerCase().equals(s.toUpperCase())) {
+                                                Relationship l = __(letter(s.toLowerCase(), UPPER_CASE._, s.toUpperCase()));
+                                                Relationship u = __(letter(s.toUpperCase(), LOWER_CASE._, s.toLowerCase()));
+                                                def = s.equals(s.toLowerCase()) ? l : u;
+                                            } else {
+                                                def = new AbstractExpression(new FastGraphBuilder()) {
+                                                    @Override
+                                                    public void build() throws Throwable {
+                                                        builder.start(DEF._);
+                                                            builder._(s);
+                                                        builder.end();
+                                                    }
+                                                };
+	                                        }
 	                                        builder.start(AN._);
 	                                        	try {
 	                                        		builder._(REF._, def.getEndNode());
