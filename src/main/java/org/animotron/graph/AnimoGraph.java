@@ -197,6 +197,8 @@ public class AnimoGraph {
             } catch (Throwable t) {
                 if (t instanceof DeadlockDetectedException) {
                     deadlock = true;
+                    System.out.println("Deadlock");
+                    t.printStackTrace();
                 } else {
                     throw t;
                 }

@@ -196,6 +196,8 @@ public abstract class GraphBuilder {
             } catch (Throwable t) {
                 finishTx(tx);
                 if (t instanceof DeadlockDetectedException) {
+                    System.out.println("Deadlock");
+                    t.printStackTrace();
                     deadlock = true;
                 } else {
                     tx = beginTx();
