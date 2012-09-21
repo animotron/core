@@ -23,18 +23,22 @@
 		</developer>
 	</developers>
 	
+	<properties>
+		<neo4jVersion>1.8.RC1</neo4jVersion>
+	</properties>
+	
 	<dependencies>
         <dependency>
             <groupId>org.neo4j</groupId>
             <artifactId>neo4j</artifactId>
-            <version>1.8.RC1</version>
+            <version>${neo4jVersion}</version>
             <type>pom</type>
         </dependency>
 
         <dependency>
             <groupId>org.neo4j.build</groupId>
             <artifactId>neo4j-berkeleydb-je-index</artifactId>
-            <version>1.8.RC1</version>
+            <version>${neo4jVersion}</version>
         </dependency>
 
 		<!--
@@ -166,7 +170,8 @@
         <repository>
 			<id>eaio.com</id>
 			<url>http://eaio.com/maven2</url>
-		</repository>		<!--
+		</repository>
+		<!--
 		<repository>
 			<id>http://repository.codehaus.org/</id>
 			<url>http://repository.codehaus.org/</url>
@@ -208,5 +213,4 @@
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<testSourceDirectory>src/test/java</testSourceDirectory>
 	</build>
-
 </project>
