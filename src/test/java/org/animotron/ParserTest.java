@@ -525,4 +525,24 @@ public class ParserTest extends ATest {
         testAnimo("def z an (get x) (y).");
     }
 
+    @Test
+    public void test_99() throws Throwable {
+        testAnimo("def z 'x'", "def z \"x\"");
+    }
+
+    @Test
+    public void test_100() throws Throwable {
+        testAnimo("def z '\"x\"'", "def z \"\\\"x\\\"\".");
+    }
+
+    @Test
+    public void test_101() throws Throwable {
+        testAnimo("def z \"'x'\".");
+    }
+
+    @Test
+    public void test_102() throws Throwable {
+        testAnimo("def z \"x'y\".");
+    }
+
 }

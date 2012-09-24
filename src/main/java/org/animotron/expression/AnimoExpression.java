@@ -90,6 +90,7 @@ public class AnimoExpression extends AbstractExpression {
     boolean link = false;
     boolean number = true;
     boolean text = false;
+    char quote = '\0';
     int para = 0;
 
     @Override
@@ -108,13 +109,16 @@ public class AnimoExpression extends AbstractExpression {
                     if (!text) {
                         newToken();
                         text = true;
+                        quote = ch;
                         para++;
                     } else if (prev == '\\') {
                         s.append(ch);
-                    } else {
+                    } else if (quote == ch) {
                         newToken();
                         text = false;
                         para--;
+                    } else {
+                        s.append(ch);
                     }
                 } else {
                     if (text) {
