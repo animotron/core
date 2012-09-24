@@ -25,7 +25,7 @@
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-cypher:1.8.RC1" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.9.1-1" level="project" />
     <orderEntry type="library" name="Maven: org.neo4j:neo4j-jmx:1.8.RC1" level="project" />
-    <orderEntry type="library" name="Maven: org.neo4j.build:neo4j-berkeleydb-je-index:1.8.M07" level="project" />
+    <orderEntry type="library" name="Maven: org.neo4j.build:neo4j-berkeleydb-je-index:1.8.RC1" level="project" />
     <orderEntry type="library" name="Maven: com.sleepycat:je:5.0.55" level="project" />
     <orderEntry type="library" name="Maven: javolution:javolution:5.5.1" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:1.6.2" level="project" />
