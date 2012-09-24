@@ -39,6 +39,7 @@ public abstract class AbstractFSBridge {
         if (!path.exists()) {
             return;
         }
+        System.out.println("Loading " + path);
         if (path.isDirectory()) {
             loadDir(path);
         } else {
