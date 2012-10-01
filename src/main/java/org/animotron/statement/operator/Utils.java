@@ -510,9 +510,6 @@ public class Utils {
                         if (Statements.relationshipType(r) == null)
                             return EXCLUDE_AND_PRUNE;
 
-                        if (r.isType(REV))
-                            return EXCLUDE_AND_PRUNE;
-
                         return EXCLUDE_AND_CONTINUE;
 
                     }
