@@ -109,4 +109,19 @@ public class EachTest extends ATest {
                         "(\\c3 \\b3 \\a3)."
        );
     }
+
+    @Test
+    public void test_02() throws Throwable {
+        testAnimo("def a x 1 2 3.");
+
+        assertAnimoResult("each (get x a) (\\foo this x)", "\\foo 1. \\foo 2. \\foo 3.");
+    }
+
+    @Test
+    public void test_03() throws Throwable {
+        testAnimo("def a x 1 2 3.");
+
+        assertAnimoResult("each (get y a) (\\foo this x)", "");
+    }
+
 }
