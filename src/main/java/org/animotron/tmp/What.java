@@ -36,8 +36,9 @@ public class What extends DetermInstruction {
 	
 	public What() {
 		super("what");
-		
-		init();
+
+        //Ignore
+		//init();
 	}
 	
     public void init() {
