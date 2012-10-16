@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.animotron</groupId>
 	<artifactId>core</artifactId>
-	<version>0.1.M03</version>
+	<version>0.1.M04</version>
 	<name>Animo core</name>
 	
 	<organization>
@@ -24,7 +24,7 @@
 	</developers>
 	
 	<properties>
-		<neo4jVersion>1.8.RC1</neo4jVersion>
+		<neo4jVersion>1.8</neo4jVersion>
 	</properties>
 	
 	<dependencies>
