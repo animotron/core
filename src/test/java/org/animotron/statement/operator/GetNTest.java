@@ -47,7 +47,7 @@ public class GetNTest extends ATest {
 
     @Test
     public void test_001() throws Throwable {
-        testAnimo("def a \\x get 1.");
+        testAnimo("def a \\x get 2.");
         assertAnimoResult("a b", "a \\x b.");
     }
 
@@ -59,7 +59,7 @@ public class GetNTest extends ATest {
 
     @Test
     public void test_003() throws Throwable {
-        testAnimo("def a \\x get 1.");
+        testAnimo("def a \\x get 2.");
         assertAnimoResult("a (b) (c)", "a \\x (b) (c).");
     }
 
