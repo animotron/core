@@ -21,17 +21,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.USE;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,14 +32,14 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_00() throws Throwable {
-        testAnimo("def el \"<\" (id this el) \">\" (an get 2) \"</\" (id this el) \">\".");
-        testAnimo("def p el.");
+        tAnimo("def el '<' (id this el) '>' (get 1) '</' (id this el) '>'.");
+        tAnimo("def p el.");
         assertStringResult("p 'para'", "<p>para</p>");
     }
 
     @Test
     public void test_01() throws Throwable {
-        testAnimo("def el \"<\" (id this el) \">\" (an get 2) \"</\" (id this el) \">\".");
+        testAnimo("def el '<' (id this el) '>' (get 1) '</' (id this el) '>'.");
         testAnimo("def ul el.");
         testAnimo("def li el.");
         assertStringResult("ul li 1", "<ul><li>1</li></ul>");
