@@ -55,4 +55,12 @@ public class HtmlTest extends ATest {
         assertStringResult("ul li 1", "<ul><li>1</li></ul>");
     }
 
+    @Test
+    public void test_03() throws Throwable {
+        testAnimo("def el \"<\" (id this el) \">\" (each (get 2) (an)) \"</\" (id this el) \">\".");
+        testAnimo("def ul el.");
+        testAnimo("def li el.");
+        assertStringResult("ul li 1", "<ul><li>1</li></ul>");
+    }
+
 }
