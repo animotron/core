@@ -39,9 +39,9 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_01() throws Throwable {
-        testAnimo("def el '<' (id this el) '>' (get 1) '</' (id this el) '>'.");
-        testAnimo("def ul el.");
-        testAnimo("def li el.");
+        tAnimo("def el '<' (id this el) '>' (get el) '</' (id this el) '>'.");
+        tAnimo("def ul el.");
+        tAnimo("def li el.");
         assertStringResult("ul li 1", "<ul><li>1</li></ul>");
     }
 
