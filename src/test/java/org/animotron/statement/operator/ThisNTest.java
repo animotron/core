@@ -32,8 +32,8 @@ public class ThisNTest extends ATest {
 
     @Test
     public void test_000() throws Throwable {
-        testAnimo("def a \\x get 1.");
-        assertAnimoResult("a (b) (c)", "a \\x (b) (c).");
+        testAnimo("def a each (get 1) (\\x this 1).");
+        assertAnimoResult("a (b) (c)", "a (\\x b) (\\x c).");
     }
 
 }
