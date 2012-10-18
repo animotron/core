@@ -21,44 +21,17 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.SHALL;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.animotron.expression.Expression.__;
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class GetNTest extends ATest {
+public class ThisNTest extends ATest {
 
     @Test
     public void test_000() throws Throwable {
-        testAnimo("def a get 1.");
-        assertAnimoResult("a b", "a b.");
-    }
-
-    @Test
-    public void test_001() throws Throwable {
-        testAnimo("def a \\x get 1.");
-        assertAnimoResult("a b", "a \\x b.");
-    }
-
-    @Test
-    public void test_002() throws Throwable {
-        testAnimo("def a get 1.");
-        assertAnimoResult("a (b) (c)", "a (b) (c).");
-    }
-
-    @Test
-    public void test_003() throws Throwable {
         testAnimo("def a \\x get 1.");
         assertAnimoResult("a (b) (c)", "a \\x (b) (c).");
     }
