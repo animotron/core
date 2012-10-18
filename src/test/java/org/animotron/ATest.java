@@ -46,7 +46,8 @@ public abstract class ATest {
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
 	protected AnimoExpression testAnimo(String exp) throws Throwable {
-        return testAnimo(exp, exp);
+		String t = exp.replace('\'', '"');
+        return testAnimo(t, t);
     }
 
 	protected AnimoExpression testAnimo(String in, String out) throws Throwable {
