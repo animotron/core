@@ -38,11 +38,17 @@ import static org.animotron.expression.JExpression.*;
  *
  */
 public class GetNTest extends ATest {
-	
-	@Test
+
+    @Test
     public void test_001() throws Throwable {
         testAnimo("def a get 1.");
         assertAnimoResult("a b", "a b.");
+    }
+
+    @Test
+    public void test_002() throws Throwable {
+        testAnimo("def a get 1.");
+        assertAnimoResult("a (b) (c)", "a (b) (c).");
     }
 
 }
