@@ -31,6 +31,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.SHALL;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -88,7 +89,18 @@ public class GET extends AbstractQuery implements Shift {
 				Pipe p = AN.getREFs(pf, pf.getVector());
 				QCAVector theNode = null;
 				while ((theNode = p.take()) != null) {
-					thes.add( theNode.getClosestDefEndNode() );
+					if (theNode.getClosest().isType(VALUE._)) {
+						int num = VALUE.number(VALUE._.reference(theNode.getClosest())).intValue();
+						QCAVector v = pf.getVector();
+						while (num > 0) {
+							v = v.getContext().get(0);
+							num--;
+						}
+						System.out.println(v);
+						relaxReference(pf, v, v.getQuestion());
+//						pf.sendAnswer(v);
+					} else
+						thes.add( theNode.getClosestDefEndNode() );
 				}
 	
 				evalGet(pf, op, node, thes, visitedREFs);
