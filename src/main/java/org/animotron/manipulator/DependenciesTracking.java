@@ -53,7 +53,7 @@ public class DependenciesTracking extends StatementManipulator {
 	
 	public Pipe execute(final Controller controller, final Relationship op) throws Throwable {
 		//System.out.println("DependenciesTracking");
-		final Node current = AREV._.actualEndNode(op);
+		final Node current = op.getEndNode();
 		//System.out.println(current);
 		AnimoGraph.execute(new GraphOperation<Void>() {
             @Override
