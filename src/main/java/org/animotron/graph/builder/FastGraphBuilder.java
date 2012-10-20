@@ -43,26 +43,26 @@ import static org.animotron.utils.MessageDigester.*;
 /**
  * Animo graph builder, it do optimization/compression and 
  * inform listeners on store/delete events.
- * 
+ *
  * Direct graph as input from top element to bottom processing strategy.
- * 
+ *
  * Methods to use:
- * 
+ *
  * startGraph()
  * endGraph()
- * 
+ *
  * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
  * end()
- * 
+ *
  * relationship()
- * 
+ *
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
 public class FastGraphBuilder extends GraphBuilder {
 
-	private List<Object[]> flow;
+    private List<Object[]> flow;
     private Relationship relationship;
     private Node root;
     private byte[] hash;
@@ -88,11 +88,11 @@ public class FastGraphBuilder extends GraphBuilder {
 
     @Override
     public void startGraph() {
-		flow = new LinkedList<Object[]>();
+        flow = new LinkedList<Object[]>();
         root = null;
-	}
-	
-	@Override
+    }
+
+    @Override
     public void endGraph() throws AnimoException, IOException {
         Iterator<Object[]> it = flow.iterator();
         if (it.hasNext()) {
@@ -149,11 +149,11 @@ public class FastGraphBuilder extends GraphBuilder {
             preparative(relationship);
             modified(relationship);
         }
-	}
+    }
 
     @Override
     protected Object[] start(Statement statement, Object reference, boolean hasChild) throws AnimoException {
-		Object[] parent = hasParent() ? peekParent() : null;
+        Object[] parent = hasParent() ? peekParent() : null;
         MessageDigest md = MessageDigester.md();
         byte[] hash = null;
         boolean ready = !hasChild && reference != null;
@@ -164,22 +164,22 @@ public class FastGraphBuilder extends GraphBuilder {
         } else if (reference != null) {
             updateMD(md, reference);
         }
-		Object[] o = {
+        Object[] o = {
                 md,             // 0 message digest    
-				statement,	    // 1 statement
+                statement,	    // 1 statement
                 reference,      // 2 name or value
-				null,	 	    // 3 current relationship
-				null,		    // 4 current node
-				parent, 	    // 5 parent item
+                null,	 	    // 3 current relationship
+                null,		    // 4 current node
+                parent, 	    // 5 parent item
                 false,          // 6 is done?
                 ready,          // 7 is ready?
                 hash            // 8 hash
-			};
-		flow.add(o);
+        };
+        flow.add(o);
         return o;
-	}
-	
-	@Override
+    }
+
+    @Override
     protected byte[] end(Object[] o, boolean hasChild) {
         MessageDigest md = (MessageDigest) o[0];
         if (!(Boolean) o[7]) {
@@ -187,7 +187,7 @@ public class FastGraphBuilder extends GraphBuilder {
         }
         o[8] = hash = md.digest();
         return hash;
-	}
+    }
 
     @Override
     public void bind(Relationship r, Object[] p, byte[] hash) throws IOException {
@@ -220,6 +220,6 @@ public class FastGraphBuilder extends GraphBuilder {
             item[4] = r.getEndNode();
         }
         order(r);
-	}
-	
+    }
+
 }

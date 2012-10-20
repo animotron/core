@@ -52,6 +52,7 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.neo4j.graphdb.Direction.*;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
@@ -81,7 +82,7 @@ public class Utils {
 				depthFirst().
 				uniqueness(Uniqueness.RELATIONSHIP_GLOBAL).
 				relationships(AN._, INCOMING).
-				relationships(DEF._, INCOMING).
+				relationships(AREV._, INCOMING).
 	            evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 	    			@Override
 	    			public Evaluation evaluate(Path path) {
@@ -97,7 +98,7 @@ public class Utils {
 	    				if (!path.endNode().equals(n))
 	    					return EXCLUDE_AND_PRUNE;
 	    				
-    					if (r.isType(DEF._))//|| DEFID.has(n)
+    					if (r.isType(AREV._))//|| DEFID.has(n)
 	    					return INCLUDE_AND_PRUNE;
 	    				
 	    				return EXCLUDE_AND_CONTINUE;
@@ -565,5 +566,38 @@ public class Utils {
 
                     }
                 });
+
+    public static void unfreeze(Node n) {
+        Iterator<Path> it = REFS.traverse(n).iterator();
+        while (it.hasNext()) {
+            Relationship i = it.next().lastRelationship();
+            try {
+                FREEZE.remove(i);
+            } catch (Throwable t) {}
+        }
+    }
+
+    public static void unfreeze(Relationship r) {
+        unfreeze(r.getEndNode());
+    }
+
+    public static void freeze(Node n) {
+        Iterator<Path> it = REFS.traverse(n).iterator();
+        while (it.hasNext()) {
+            boolean f = true;
+            Relationship i = it.next().lastRelationship();
+            Iterator<Relationship> in = i.getEndNode().getRelationships(REF._, INCOMING).iterator(); 
+            while (in.hasNext() && f) {
+                f = f && FREEZE.has(in.next());
+            }
+            if (f) {
+                FREEZE.set(i, true);
+            }
+        }
+    }
+    
+    public static void freeze(Relationship r) {
+        freeze(r.getEndNode());
+    }
 
 }

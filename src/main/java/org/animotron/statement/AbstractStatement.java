@@ -31,6 +31,7 @@ import static org.animotron.graph.Properties.CONTEXT;
 import static org.animotron.graph.Properties.NAME;
 import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
+import static org.animotron.statement.operator.Utils.unfreeze;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -97,6 +98,8 @@ public abstract class AbstractStatement implements Statement {
             if (child == null) {
                 child = createChild(reference, false, ignoreNotFound);
                 Cache.NODE.add(child, hash);
+            } else {
+                unfreeze(child);
             }
             return child;
         } else {

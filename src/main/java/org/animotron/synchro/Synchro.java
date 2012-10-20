@@ -21,6 +21,7 @@
 package org.animotron.synchro;
 
 import org.animotron.expression.AnimoExpression;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.jgroups.*;
 import org.neo4j.graphdb.Direction;
@@ -30,6 +31,7 @@ import org.neo4j.graphdb.Relationship;
 import java.io.IOException;
 
 import static org.animotron.graph.Properties.HASH;
+import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.expression.Expression.__;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
@@ -104,11 +106,11 @@ public class Synchro {
 		if(instance != null) {
 			instanceHash = byteArrayToHex((byte[]) HASH.get(instance));
 
-			Node nn = instance.getEndNode();
-////			Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
-//			if(prev != null) {
-//				instancePreviousHash = byteArrayToHex((byte[]) HASH.get(prev));
-//			}
+			Node nn = AREV._.actualNode(instance);
+			Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
+			if(prev != null) {
+				instancePreviousHash = byteArrayToHex((byte[]) HASH.get(prev));
+			}
 		}
 
 //		System.out.println("synchHash = " + synchHash + " synchPreviousHash = " + synchPreviousHash +

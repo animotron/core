@@ -26,6 +26,7 @@ import javolution.util.FastList;
 import javolution.util.FastSet;
 
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
@@ -96,7 +97,7 @@ public class Brain {
 	
 	private void checkSensorStateForCompleteObjects() {
 		for (Relationship r : sensorState) {
-	        Relationship ar = r.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
+	        Relationship ar = r.getStartNode().getSingleRelationship(AREV._, Direction.INCOMING);
 	        if (ar != null)
 	        	detectedSensorObject(r);
 		}
@@ -208,7 +209,7 @@ public class Brain {
 						return EXCLUDE_AND_CONTINUE;
 
 				if (path.length() == 2)
-					if (r.isType(DEF._))
+					if (r.isType(AREV._))
 						return EXCLUDE_AND_CONTINUE;
 
 				if (path.length() == 3)
@@ -238,7 +239,7 @@ public class Brain {
 					return EXCLUDE_AND_PRUNE;
 				
 				if (path.length() == 1)
-					if (r.isType(DEF._))
+					if (r.isType(AREV._))
 						return EXCLUDE_AND_CONTINUE;
 
 				if (path.length() == 2)
@@ -254,7 +255,7 @@ public class Brain {
 						return EXCLUDE_AND_CONTINUE;
 
 				if (path.length() == 5)
-					if (r.isType(DEF._))
+					if (r.isType(AREV._))
 						return EXCLUDE_AND_CONTINUE;
 
 				if (path.length() == 6)
@@ -284,7 +285,7 @@ public class Brain {
 					return EXCLUDE_AND_PRUNE;
 				
 				if (path.length() == 1)
-					if (r.isType(DEF._))
+					if (r.isType(AREV._))
 						return EXCLUDE_AND_CONTINUE;
 
 				if (path.length() == 2)

@@ -23,6 +23,7 @@ package org.animotron.statement.query;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 
+import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -97,7 +98,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 breadthFirst().
                 relationships(REF._, INCOMING ).
                 relationships(AN._, INCOMING ).
-                relationships(DEF._, INCOMING ).
+                relationships(AREV._, INCOMING ).
                 //evaluator(Evaluators.excludeStartPosition()).
                 evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
         			@Override
@@ -113,7 +114,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				Relationship r = path.lastRelationship();
         				switch (path.length() % 3) {
 						case 0:
-	        				if (!r.isType(DEF._))
+	        				if (!r.isType(AREV._))
 	        					return EXCLUDE_AND_PRUNE;
 							break;
 
@@ -324,6 +325,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					relationships(AN._, INCOMING).
 					relationships(REF._, INCOMING).
 					relationships(DEF._, INCOMING).
+					relationships(AREV._, INCOMING).
 			evaluator(new IntersectionSearcher(){
 				@Override
 				public Evaluation evaluate(Path path) {
@@ -412,7 +414,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					if (firstR.isType(AN._)) {
 						switch (path.length() % 3) {
 						case 0:
-		    				if (!lastR.isType(DEF._))
+		    				if (!lastR.isType(AREV._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
@@ -448,7 +450,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 
 						case 2:
-		    				if (!lastR.isType(DEF._))
+		    				if (!lastR.isType(AREV._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
@@ -457,7 +459,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 						}
 	    				
-					} else if (firstR.isType(DEF._)) {
+					} else if (firstR.isType(AREV._)) {
 						switch (path.length() % 3) {
 						case 0:
 		    				if (!lastR.isType(REF._))
@@ -466,7 +468,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 
 						case 1:
-		    				if (!lastR.isType(DEF._))
+		    				if (!lastR.isType(AREV._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
@@ -576,7 +578,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
-			if (r.isType(DEF._))
+			if (r.isType(AREV._))
 				if (r.getEndNode().equals(path.endNode()))
 					return EXCLUDE_AND_CONTINUE;
 				else
@@ -637,7 +639,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						if (AN.beginWithHasA(path)) {
 							boolean haveAREV = false;
 							for (Relationship rr : path.relationships())
-								if (rr.isType(DEF._))
+								if (rr.isType(AREV._))
 									haveAREV = true;
 							if (!haveAREV)
 								return EXCLUDE_AND_PRUNE;
@@ -687,7 +689,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			return false;
 		}
 
-		private void checkDEFnode(final Node n, final Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection, final Set<Path> directed) {
+		private void checkTHEnode(final Node n, final Path path, final Set<Node> targets, final Set<Node> weakTargets, final Set<Node> intersection, final Set<Node> weakIntersection, final Set<Node> weakestIntersection, final Set<Path> directed) {
 			if (targets.contains(n)) {
 				if (debugUSE) 
 					System.out.println(" =>"+path);
@@ -723,10 +725,10 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_PRUNE;
 
 			if (r.isType(DEF._)) {
-				checkDEFnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+				checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 
 			} else if (path.length() % 3 == 0) {
-				if (!r.isType(DEF._))
+				if (!r.isType(AREV._))
 					return EXCLUDE_AND_PRUNE;
 				
 				return EXCLUDE_AND_CONTINUE;
@@ -737,7 +739,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				
 				Node node = r.getStartNode();
 				try {
-					checkDEFnode(node, path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+					checkTHEnode(DEF._.getDef(node), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 				} catch (Exception e) {}
 				
 				final FastSet<Node> use = FastSet.newInstance();
@@ -790,7 +792,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {
-					checkDEFnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
+					checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 				}
 				
 

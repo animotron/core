@@ -175,7 +175,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 			        		res = DEF._.get(r.getStartNode());
 //			        		System.out.println(res);
 			        		if (res != null) {
-			        			if (filtering(pf, res, uses, weaks)) {
+			        			if (filtering(pf, AREV._.actualRelationship(res), uses, weaks)) {
 			        				pf.sendAnswer( res );
 			        				if (returnFirstOnly) return;
 			        			}
