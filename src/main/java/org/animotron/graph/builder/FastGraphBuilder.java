@@ -115,13 +115,11 @@ public class FastGraphBuilder extends GraphBuilder {
                 if (statement instanceof DEF) {
                     relationship = DEF._.get(reference);
                     if (relationship == null) {
-                        Node def = createNode();
-                        NAME.set(def, reference);
-                        relationship = getROOT().createRelationshipTo(def, DEF._);
+                        NAME.set(end, reference);
+                        relationship = getROOT().createRelationshipTo(end, DEF._);
                         DEF._.add(relationship, reference);
                         HASH.set(relationship, hash);
                     } else {
-                        Node n = relationship.getEndNode();
                         HASH.set(relationship, hash);
                     }
                 } else {
@@ -144,7 +142,6 @@ public class FastGraphBuilder extends GraphBuilder {
                     hits.close();
                 }
                 relationship = DEF._.get(reference);
-                Node n = relationship.getEndNode();
             } else {
                 return;
             }
