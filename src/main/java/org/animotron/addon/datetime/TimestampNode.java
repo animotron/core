@@ -95,7 +95,9 @@ public class TimestampNode implements Node {
 
 	@Override
 	public boolean hasProperty(String key) {
-		// TODO Auto-generated method stub
+		if ("NAME".equals(key))
+			return true;
+
 		return false;
 	}
 
@@ -109,7 +111,8 @@ public class TimestampNode implements Node {
 
 	@Override
 	public Object getProperty(String key, Object defaultValue) {
-		throw new NotFoundException( key );
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
@@ -167,7 +170,21 @@ public class TimestampNode implements Node {
 	}
 
 	@Override
+	public Iterable<Relationship> getRelationships(Direction direction,
+			RelationshipType... types) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public boolean hasRelationship(RelationshipType... types) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean hasRelationship(Direction direction,
+			RelationshipType... types) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -238,18 +255,4 @@ public class TimestampNode implements Node {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public Iterable<Relationship> getRelationships(Direction arg0,
-			RelationshipType... arg1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean hasRelationship(Direction arg0, RelationshipType... arg1) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
