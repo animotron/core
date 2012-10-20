@@ -23,7 +23,7 @@ package org.animotron.games.web;
 import org.animotron.ATest;
 import org.junit.Test;
 
-/**
+/**                   n
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *

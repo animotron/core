@@ -20,8 +20,8 @@
  */
 package org.animotron.expression;
 
+import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
-import org.animotron.graph.builder.StreamGraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.value.VALUE;
@@ -44,7 +44,7 @@ public abstract class AbstractStAXExpression extends AbstractExpression {
     }
 
     public AbstractStAXExpression(XMLStreamReader reader, String name) {
-        this(new StreamGraphBuilder(), reader, name);
+        this(new FastGraphBuilder(), reader, name);
     }
 
     public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader) {

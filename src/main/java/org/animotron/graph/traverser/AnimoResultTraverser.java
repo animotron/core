@@ -63,7 +63,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
-               		node = AREV._.actualEndNode(r);
+               		node = r.getEndNode();
                 	
                     iterate(handler, rr, s, new It(node), level, evaluable);
                 }

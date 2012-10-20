@@ -72,11 +72,9 @@ public class It implements Iterator<Object>, Iterable<Object> {
             if (VALUE.equals(o) ||
                     NAME.equals(o) ||
                         CONTEXT.equals(o) ||
-                            RUUID.equals(o) ||
                                 CACHE.equals(o) ||
                                     UUID.equals(o) ||
-                                        FREEZE.equals(o) ||
-                                            DEFID.equals(o)) {
+                                        FREEZE.equals(o)) {
                 return step();
             } else {
                 return o;

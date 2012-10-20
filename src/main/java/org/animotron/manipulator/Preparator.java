@@ -28,7 +28,6 @@ import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.DEF;
@@ -60,9 +59,6 @@ public class Preparator extends StatementManipulator {
 //        System.out.println("Preparator "+op);
         
         Node node = op;
-        try {
-        	node = AREV._.actualNode(op);
-        } catch (Exception e) {}
         IndexHits<Relationship> hits = Order._.queryDown(node);
         try {
         	for (Relationship r : hits) {
@@ -73,7 +69,7 @@ public class Preparator extends StatementManipulator {
         				String name = (String) DEF._.reference(ref);
         				if (name != null) {
 	                        s = Statements.name(name);
-	        			    
+
 	                        if (canGo(s)) {
 	                            super.execute(controller, new QCAVector(r), onQuestion(s, r), true);
 							}

@@ -33,9 +33,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.Properties.NAME;
-import static org.animotron.graph.RelationshipTypes.REV;
 import static org.animotron.utils.MessageDigester.setUUID;
 import static org.animotron.utils.MessageDigester.uuid;
 
@@ -82,24 +80,10 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         def.add(r, name);
 	}
 
-	public Node getDef(Node rev) {
-        return getDb().getNodeById((Long) DEFID.get(rev));
-	}
-
 	public Relationship get(Object name) {
         return def.get(name);
 	}
 	
-	public Node getDefNode(Node rev) {
-        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
-        return ar == null ? null : ar.getStartNode();
-	}
-
-	public Relationship get(Node rev) {
-        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
-        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
-	}
-
 	public static Relationship getDef(Relationship arev) {
         return getDefR(arev.getStartNode());
 	}
@@ -112,10 +96,6 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         Relationship r = build(getROOT(), name, null, false, true);
         Node n = r.getEndNode();
         NAME.set(n, name);
-        Node x = createNode();
-        AREV._.build(n, x);
-        setUUID(n.createRelationshipTo(x, REV), uuid());
-        DEFID.set(x, n.getId());
         add(r, name);
         return r;
 	}
@@ -159,7 +139,7 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 	
 		@Override
 		public void act(final PFlow pf) throws Throwable {
-			pf.sendAnswer(AREV._.actualRelationship(pf.getOP()));
+			pf.sendAnswer(pf.getOP());
 		}
     }
 

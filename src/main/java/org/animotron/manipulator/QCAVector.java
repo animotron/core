@@ -24,7 +24,6 @@ import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.RelationshipTypes;
-import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
@@ -172,24 +171,14 @@ public class QCAVector {
 
 	public Node getClosestEndNode() {
 		Relationship r = getClosest();
-		
 		Node n = r.getEndNode();
-		try {
-			return AREV._.actualNode(n);
-		} catch (Exception e) {
-			return n;
-		}
+        return n;
 	}
 
 	public Node getAnswerEndNode() {
 		Relationship r = getUnrelaxedAnswer();
-		
 		Node n = r.getEndNode();
-		try {
-			return AREV._.actualNode(n);
-		} catch (Exception e) {
-			return n;
-		}
+    	return n;
 	}
 
 	public Relationship getUnrelaxedClosest() {
@@ -562,10 +551,6 @@ public class QCAVector {
 
 	public Node getClosestDefEndNode() {
 		Node node = getClosestEndNode();
-		try {
-			return DEF._.getDef( node );
-		} catch (Throwable e) {
-		}
 		return node;
 	}
 }

@@ -150,7 +150,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 								if (next.getContext() != null && next.getContext().size() == 1) {
 									Relationship ths = next.getAnswer();
 									QCAVector v = next.getContext().get(0);
-									Node thisNode = DEF._.getDefNode(next.getQuestion().getStartNode());
+									Node thisNode = next.getQuestion().getStartNode();
 									while (thisNode != null) {
 										if (v.getQuestion().isType(AN._) && v.hasAnswer()) {
 											Node nextNode = v.getUnrelaxedAnswer().getEndNode();

@@ -29,7 +29,6 @@ import org.animotron.io.Pipe;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
-import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
@@ -38,7 +37,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.animotron.graph.RelationshipTypes.REV;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -53,16 +51,16 @@ public class DependenciesTracking extends StatementManipulator {
 	
 	public Pipe execute(final Controller controller, final Relationship op) throws Throwable {
 		//System.out.println("DependenciesTracking");
-		final Node current = AREV._.actualEndNode(op);
+		final Node current = op.getEndNode();
 		//System.out.println(current);
 		AnimoGraph.execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws Throwable {
                 Node n = null;
-                for (Relationship r : current.getRelationships(REV, INCOMING)) {
-                    n = r.getStartNode();
-                    walker(n);
-                }
+//                for (Relationship r : current.getRelationships(REV, INCOMING)) {
+//                    n = r.getStartNode();
+//                    walker(n);
+//                }
                 return null;
             }
         });
