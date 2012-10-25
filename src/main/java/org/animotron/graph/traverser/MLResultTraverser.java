@@ -74,7 +74,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
                         handler.end(s, parent, param, --level, isOne, pos, isLast);
                     }
                 } finally {
-                    it.remove();
+                    it.close();
                 }
             } else if (!(s instanceof VALUE) || (s instanceof VALUE)) {
                 String param = CachedSerializer.STRING.serialize(rr);
