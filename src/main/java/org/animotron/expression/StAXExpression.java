@@ -109,7 +109,9 @@ public class StAXExpression extends AbstractStAXExpression {
     }
 
     private void entity() throws AnimoException, IOException {
-        builder._(ENTITY._, _(name(reader.getText())));
+        builder.start(ENTITY._);
+            builder._(QNAME._, reader.getText());
+        builder.end();
     }
 
     private void dtd() throws AnimoException, IOException {
@@ -120,21 +122,33 @@ public class StAXExpression extends AbstractStAXExpression {
     private void pi() throws AnimoException, IOException {
         String target = reader.getPITarget();
         String data = reader.getPIData();
-        //builder.start(PI._, _(name(target), value(data)));
-        //builder.end();
         //XXX: target can't be null/empty ?
-        builder._(PI._, (target.isEmpty()) ? value(data) : _(name(target), value(data)));
+        builder.start(PI._);
+            if (!target.isEmpty()) {
+                builder._(QNAME._, target);
+            }
+            builder._(data);
+        builder.end();
     }
 
     protected void startElement() throws AnimoException, IOException {
-        builder.start(ELEMENT._, _(name(qname(reader.getName()))));
+        builder.start(ELEMENT._);
+        builder._(QNAME._, qname(reader.getName()));
         for (int i = 0; i < reader.getNamespaceCount(); i++) {
             String namespace = reader.getNamespaceURI(i);
             String prefix = reader.getNamespacePrefix(i);
-            builder._(NS._, prefix.isEmpty() ? _(value(namespace)) : _(name(prefix), value(namespace)));
+            builder.start(NS._);
+                if (!prefix.isEmpty()) {
+                    builder._(QNAME._, prefix);
+                }
+                builder._(namespace);
+            builder.end();
         }
         for (int i = 0; i < reader.getAttributeCount(); i++) {
-            builder._(ATTRIBUTE._, _(name(qname(reader.getAttributeName(i))), value(AbstractValue.value(reader.getAttributeValue(i)))));
+            builder.start(ATTRIBUTE._);
+                builder._(QNAME._, qname(reader.getAttributeName(i)));
+                builder._(reader.getAttributeValue(i));
+            builder.end();
         }
     }
 

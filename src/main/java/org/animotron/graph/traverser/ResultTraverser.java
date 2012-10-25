@@ -112,7 +112,7 @@ public class ResultTraverser extends AnimoTraverser {
 
 //        QCAVector prev = null;
         
-        QCAVector i = null;
+        QCAVector i;
         while (it.hasNext()) {
         	i = it.next();
         	rr.addAnswer(i);

@@ -65,21 +65,9 @@ public abstract class AbstractStAXExpression extends AbstractExpression {
         return s.toString();
     }
 
-    protected Object[][] _(Object[]... o) {
-        return o;
-    }
-
     protected Object[] _(Statement s, Object o) {
         Object[] a = {s, o};
         return a;
-    }
-
-    protected Object[] name(String name) {
-        return _(QNAME._, name);
-    }
-
-    protected Object[] value(Object value) {
-        return _(VALUE._, value);
     }
 
 }

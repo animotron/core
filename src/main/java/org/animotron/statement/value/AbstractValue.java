@@ -51,31 +51,16 @@ public abstract class AbstractValue extends AbstractStatement {
         if (reference == null)
             return createNode();
         Node child = createNode();
-        if (reference instanceof List) {
-        	for (int i = 0, n = ((List)reference).size(); i < n; i++) {
-            	Object[] o = ((List<Object[]>)reference).get(i);
-                child.setProperty(((AbstractValue) o[0]).name(), o[1]);
-            }
-        } else if (reference instanceof Iterable) {
-            for (Object[] o : (Iterable<Object[]>) reference) {
-                child.setProperty(((AbstractValue) o[0]).name(), o[1]);
-            }
-        } else if (reference instanceof Object[][]) {
-            for (Object[] o : (Object[][]) reference) {
-                child.setProperty(((AbstractValue) o[0]).name(), o[1]);
-            }
-        } else  if (reference instanceof Object[]) {
-            Object[] o = (Object[]) reference;
-            child.setProperty(((AbstractValue) o[0]).name(), o[1]);
-        } else {
-            VALUE.set(child, reference);
-        }
+        VALUE.set(child, reference);
         return child;
     }
 
     @Override
     public Object reference(Relationship r) {
-        Node n = r.getEndNode();
+        return  reference(r.getEndNode());
+    }
+
+    public Object reference(Node n) {
         if (n.hasProperty(name())) {
             return n.getProperty(name());
         } else  if (VALUE.has(n)) {
@@ -83,18 +68,6 @@ public abstract class AbstractValue extends AbstractStatement {
         } else {
             return null;
         }
-    }
-
-    public Object reference(Node n) {
-        List<Object[]> ref = new FastTable<Object[]>();
-        for (String name : n.getPropertyKeys()) {
-            Statement s = Statements.name(name);
-            if (s != null) {
-                Object[] o = {s, n.getProperty(name)};
-                ref.add(o);
-            }
-        }
-        return ref.isEmpty() ? null : ref;
     }
 
     public static Object value(Object o) {

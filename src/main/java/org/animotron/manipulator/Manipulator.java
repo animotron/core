@@ -268,7 +268,7 @@ public abstract class Manipulator {
 		
 		FastTable<PFlow> list = FastTable.newInstance();
 		try {
-			PFlow nextPF = null;
+			PFlow nextPF;
 
 			IndexHits<Relationship> q = Order._.context(node);
 			try {

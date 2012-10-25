@@ -34,23 +34,21 @@ import static org.animotron.graph.Properties.*;
  * @author <a href="mailto:gazdovskyd@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class It implements Iterator<Object>, Iterable<Object> {
+public class It implements Iterator<Relationship>, Iterable<Relationship> {
 
-    private Iterator<String> p;
     private Iterator<Relationship> r;
     private IndexHits<Relationship> q;
 
-    Object current = null;
+    Relationship current = null;
 
     public It(Node n) {
-        p = n.getPropertyKeys().iterator();
         q = Order._.queryDown(n);
         r = q.iterator();
         next();
     }
 
     @Override
-    public Iterator<Object> iterator() {
+    public Iterator<Relationship> iterator() {
         return this;
     }
 
@@ -60,28 +58,14 @@ public class It implements Iterator<Object>, Iterable<Object> {
     }
 
     @Override
-    public Object next() {
-        Object next = current;
+    public Relationship next() {
+        Relationship next = current;
         current = step();
         return next;
     }
 
-    private Object step() {
-        if (p.hasNext()) {
-            String o = p.next();
-            if (VALUE.equals(o) ||
-                    NAME.equals(o) ||
-                        CONTEXT.equals(o) ||
-                            RUUID.equals(o) ||
-                                CACHE.equals(o) ||
-                                    UUID.equals(o) ||
-                                        FREEZE.equals(o) ||
-                                            DEFID.equals(o)) {
-                return step();
-            } else {
-                return o;
-            }
-        } else if (r.hasNext()) {
+    private Relationship step() {
+        if (r.hasNext()) {
             return r.next();
         } else {
             return null;

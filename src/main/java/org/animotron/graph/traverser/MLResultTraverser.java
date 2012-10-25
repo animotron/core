@@ -54,13 +54,13 @@ public class MLResultTraverser extends AnimoResultTraverser {
                 String[] param = {null, null};
                 try {
                     if (it.hasNext()) {
-                        Object p = it.next();
+                        Relationship p = it.next();
                         param[0] = param(rr, p);
                         if (!(s instanceof ELEMENT)) {
                             param[1] = param(rr, it);
                             if (param[1] == null) {
                                 if (s instanceof NS) {
-                                    if (QNAME._.name().equals(p instanceof String ? p : ((Relationship) p).getType().name())) {
+                                    if (QNAME._.name().equals(p.getType().name())) {
                                         param[1] = "";
                                     } else {
                                         param[1] = param[0];
@@ -93,11 +93,8 @@ public class MLResultTraverser extends AnimoResultTraverser {
         return null;
     }
 
-    private String param(QCAVector rr, Object o) throws IOException {
-        return
-            o instanceof Relationship
-                ? CachedSerializer.STRING.serialize(rr.question((Relationship) o))
-                : (String) node.getProperty((String) o);
+    private String param(QCAVector rr, Relationship r) throws IOException {
+        return CachedSerializer.STRING.serialize(rr.question(r));
     }
 
 }

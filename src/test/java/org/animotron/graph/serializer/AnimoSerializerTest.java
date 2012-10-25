@@ -226,15 +226,15 @@ public class AnimoSerializerTest extends ATest {
         assertAnimoResult(A, "def A (B) (C).");
     }
 
-    @Test
-    public void test_0D() throws Throwable {
-        JExpression A = new JExpression(
-            _(DEF._, "A",
-                value("B", value("C"))
-            )
-        );
-        assertAnimo(A, "def A \"B\" \"C\".");
-    }
+//    @Test
+//    public void test_0D() throws Throwable {
+//        JExpression A = new JExpression(
+//            _(DEF._, "A",
+//                value("B", value("C"))
+//            )
+//        );
+//        assertAnimo(A, "def A \"B\" \"C\".");
+//    }
 
     @Test
     public void test_0E() throws Throwable {
