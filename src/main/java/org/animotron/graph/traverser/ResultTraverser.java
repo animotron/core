@@ -21,7 +21,6 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.index.Order;
 import org.animotron.io.PipeIterator;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.QCAVector;
@@ -68,7 +67,7 @@ public class ResultTraverser extends AnimoTraverser {
         	Relationship r = rr.getClosest();
 
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
-            iterate(handler, rr, s, Order._.queryDown(r.getEndNode()), level, evaluable);
+            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable);
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
 
         } else if (s != null) {
@@ -88,7 +87,7 @@ public class ResultTraverser extends AnimoTraverser {
                 
                 if (!(s instanceof REF  && !(qS instanceof AN))) {
                     node = AREV._.actualEndNode(r);
-	                iterate(handler, rr, s, Order._.queryDown(node), level, evaluable);
+	                iterate(handler, rr, s, new It(node), level, evaluable);
                 }
                 
                 if (s instanceof AbstractValue)

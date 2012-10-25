@@ -21,7 +21,6 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Prefix;
@@ -32,7 +31,6 @@ import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
@@ -52,7 +50,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
         if (s instanceof MLOperator || s instanceof VALUE) {
             if (s instanceof Prefix) {
                 node = rr.getClosest().getEndNode();
-                IndexHits<Relationship> it = Order._.queryDown(node);
+                It it = new It(node);
                 String[] param = {null, null};
                 try {
                     if (it.hasNext()) {
@@ -76,7 +74,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
                         handler.end(s, parent, param, --level, isOne, pos, isLast);
                     }
                 } finally {
-                    it.close();
+                    it.remove();
                 }
             } else if (!(s instanceof VALUE) || (s instanceof VALUE)) {
                 String param = CachedSerializer.STRING.serialize(rr);
@@ -88,7 +86,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
         }
     }
 
-    private String param(QCAVector rr, IndexHits<Relationship> it) throws IOException {
+    private String param(QCAVector rr, It it) throws IOException {
         if (it.hasNext()) {
             return param(rr, it.next());
         }
