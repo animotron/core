@@ -23,6 +23,7 @@ package org.animotron.graph.traverser;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -30,6 +31,7 @@ import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.REF;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
@@ -84,15 +86,18 @@ public class AnimoTraverser {
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof REF)) {
             node = r.getEndNode();
-            It it = new It(node);
-            iterate(handler, rr, statement, it, level, evaluable);
+            IndexHits<Relationship> it = Order._.queryDown(node);
+            try {
+                iterate(handler, rr, statement, it, level, evaluable);
+            } finally {
+                it.close();
+            }
 		}
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level, boolean evaluable) throws IOException {
-        QCAVector prev = null;
-
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable) throws IOException {
+        QCAVector prev;
     	FastTable<Relationship> o = FastTable.newInstance();
         try {
         	Relationship i;
