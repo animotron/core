@@ -61,9 +61,7 @@ public abstract class AbstractValue extends AbstractStatement {
     }
 
     public Object reference(Node n) {
-        if (n.hasProperty(name())) {
-            return n.getProperty(name());
-        } else  if (VALUE.has(n)) {
+        if (VALUE.has(n)) {
             return VALUE.get(n);
         } else {
             return null;
