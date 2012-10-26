@@ -20,16 +20,22 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.graph.index.Order;
+import javolution.util.FastTable;
 import org.animotron.graph.traverser.It;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.string.STRING;
+import org.animotron.statement.ml.CDATA;
+import org.animotron.statement.ml.COMMENT;
+import org.animotron.statement.ml.DTD;
+import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Operation 'PATH'. Direct reference to 'the' instance.
@@ -51,26 +57,84 @@ public class PATH extends Operator implements Evaluable {
     }
 
     class Calc extends OnQuestion {
-	
-		@Override
+
+        private List<Relationship> set = new LinkedList<Relationship>();
+
+        @Override
 		public void act(final PFlow pf) throws Throwable {
-            It it = new It(pf.getOP().getStartNode());
             byte[] hash = pf.getOpHash();
-
             if (!Utils.results(pf, hash)) {
-                while (it.hasNext()) {
-
+                Pipe pipe = Utils.getByREF(pf, pf.getVector());
+                QCAVector v;
+                while ((v = pipe.take()) != null) {
+                    set.add(v.getClosest());
                 }
-                Pipe pipe = AN.getREFs(pf, pf.getVector());
-                QCAVector r;
-                while ((r = pipe.take()) != null) {
-                    if (r.getQuestion().equals(pf.getVector().getQuestion()))
-                        pf.sendAnswer(r);
-                    else
-                        pf.sendAnswer(r.getAnswer(), r);
+                It it = new It(pf.getOPNode());
+                try {
+                    int i = 0;
+                    while (it.hasNext()) {
+                        Relationship r = it.next();
+                        if (i > 0 && !r.isType(REF._)) {
+                            process(pf, r, false, null);
+                        }
+                        i++;
+                    }
+                } finally {
+                    it.close();
                 }
             }
         }
+
+        private void process(PFlow pf, Relationship r, boolean isLast, Relationship res) {
+            if (r.isType(REF._)) {
+                if (isLast) {
+                    filter(pf, r, true, false);
+                }
+            } else if (r.isType(VALUE._) || r.isType(QNAME._) || r.isType(CDATA._) || r.isType(COMMENT._) || r.isType(DTD._)) {
+                filter(pf, r, false, true);
+            } else {
+                filter(pf, r, false, false);
+                Node n = r.getEndNode();
+                It it = new It(n);
+                try {
+                    while (it.hasNext()) {
+                        Relationship i = it.next();
+                        process(pf, i, !it.hasNext(), r);
+                    }
+                } finally {
+                    it.close();
+                }
+            }
+        }
+
+        private void filter(PFlow pf, Relationship p, boolean isRef, boolean isValue) {
+            List<Relationship> zet = new LinkedList<Relationship>();
+            for (Relationship r : set) {
+                It it = new It(r.getEndNode());
+                try {
+                    while (it.hasNext()) {
+                        Relationship i = it.next();
+                        if (i.isType(p.getType())) {
+                            if (isRef || isValue) {
+                                if (i.getEndNode().equals(p.getEndNode())) {
+                                    if (isValue) {
+                                        pf.sendAnswer(i);
+                                    } else {
+                                        pf.sendAnswer(r);
+                                    }
+                                }
+                            } else {
+                                zet.add(i);
+                            }
+                        }
+                    }
+                } finally {
+                    it.close();
+                }
+            }
+            set = zet;
+        }
+
     }
 	
 }

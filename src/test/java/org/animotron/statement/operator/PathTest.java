@@ -40,29 +40,16 @@ public class PathTest extends ATest {
 
     @Test
     public void test_00() throws Throwable {
-
         testAnimo("def a b (c d) (e).");
         testAnimo("def x b c d e.");
-        testAnimoResult("// a,x b c.", "c.");
-
+        testAnimoResult("// a, x b c.", "c. c.");
     }
 
     @Test
     public void test_01() throws Throwable {
-
-        testAnimo("def foo (x) (a b c).");
-        testAnimo("def bar (x) (a b c).");
-        testAnimoResult("// (all x) (a b c).", "c. c.");
-
-    }
-
-    @Test
-    public void test_02() throws Throwable {
-
         testAnimo("def b 1.");
         testAnimo("def a b 1.");
         testAnimoResult("// a b 1.", "1.");
-
     }
 
 }
