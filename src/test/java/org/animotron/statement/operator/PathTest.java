@@ -58,5 +58,11 @@ public class PathTest extends ATest {
         testAnimoResult("// a b c, d.", "c. d.");
     }
 
+    @Test
+    public void test_03() throws Throwable {
+        testAnimo("def a b c.");
+        testAnimoResult("// a c.", "");
+    }
+
 }
 
