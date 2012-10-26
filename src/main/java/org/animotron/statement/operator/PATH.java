@@ -48,8 +48,6 @@ public class PATH extends Operator implements Evaluable {
 
 	private PATH() { super("//"); }
 
-    public PATH(String... name) { super(name); }
-
     @Override
 	public OnQuestion onCalcQuestion() {
 		return new Calc();
