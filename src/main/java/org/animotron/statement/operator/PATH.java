@@ -108,8 +108,8 @@ public class PATH extends Operator implements Evaluable {
         }
 
         private void filter(PFlow pf, Relationship p, boolean isRef, boolean isValue) {
-            List<Relationship> zet = new LinkedList<Relationship>();
-            for (Relationship r : set) {
+            List<Relationship> set = new LinkedList<Relationship>();
+            for (Relationship r : this.set) {
                 It it = new It(r.getEndNode());
                 try {
                     while (it.hasNext()) {
@@ -124,7 +124,7 @@ public class PATH extends Operator implements Evaluable {
                                     }
                                 }
                             } else {
-                                zet.add(i);
+                                set.add(i);
                             }
                         }
                     }
@@ -132,7 +132,7 @@ public class PATH extends Operator implements Evaluable {
                     it.close();
                 }
             }
-            set = zet;
+            this.set = set;
         }
 
     }
