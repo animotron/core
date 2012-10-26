@@ -20,7 +20,6 @@
  */
 package org.animotron.statement.operator;
 
-import javolution.util.FastTable;
 import org.animotron.graph.traverser.It;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
@@ -58,12 +57,11 @@ public class PATH extends Operator implements Evaluable {
 
     class Calc extends OnQuestion {
 
-        private List<Relationship> set = new LinkedList<Relationship>();
-
         @Override
 		public void act(final PFlow pf) throws Throwable {
             byte[] hash = pf.getOpHash();
             if (!Utils.results(pf, hash)) {
+                List<Relationship> set = new LinkedList<Relationship>();
                 Pipe pipe = Utils.getByREF(pf, pf.getVector());
                 QCAVector v;
                 while ((v = pipe.take()) != null) {
@@ -75,7 +73,7 @@ public class PATH extends Operator implements Evaluable {
                     while (it.hasNext()) {
                         Relationship r = it.next();
                         if (i > 0 && !r.isType(REF._)) {
-                            process(pf, r, false, null);
+                            process(pf, r, false, set);
                         }
                         i++;
                     }
@@ -85,21 +83,21 @@ public class PATH extends Operator implements Evaluable {
             }
         }
 
-        private void process(PFlow pf, Relationship r, boolean isLast, Relationship res) {
+        private void process(PFlow pf, Relationship r, boolean isLast, List<Relationship> set) {
             if (r.isType(REF._)) {
                 if (isLast) {
-                    filter(pf, r, true, false);
+                    filter(pf, r, true, false, set);
                 }
             } else if (r.isType(VALUE._) || r.isType(QNAME._) || r.isType(CDATA._) || r.isType(COMMENT._) || r.isType(DTD._)) {
-                filter(pf, r, false, true);
+                filter(pf, r, false, true, set);
             } else {
-                filter(pf, r, false, false);
+                set = filter(pf, r, false, false, set);
                 Node n = r.getEndNode();
                 It it = new It(n);
                 try {
                     while (it.hasNext()) {
                         Relationship i = it.next();
-                        process(pf, i, !it.hasNext(), r);
+                        process(pf, i, !it.hasNext(), set);
                     }
                 } finally {
                     it.close();
@@ -107,9 +105,9 @@ public class PATH extends Operator implements Evaluable {
             }
         }
 
-        private void filter(PFlow pf, Relationship p, boolean isRef, boolean isValue) {
-            List<Relationship> set = new LinkedList<Relationship>();
-            for (Relationship r : this.set) {
+        private List<Relationship> filter(PFlow pf, Relationship p, boolean isRef, boolean isValue, List<Relationship> set) {
+            List<Relationship> zet = new LinkedList<Relationship>();
+            for (Relationship r : set) {
                 It it = new It(r.getEndNode());
                 try {
                     while (it.hasNext()) {
@@ -124,7 +122,7 @@ public class PATH extends Operator implements Evaluable {
                                     }
                                 }
                             } else {
-                                set.add(i);
+                                zet.add(i);
                             }
                         }
                     }
@@ -132,7 +130,7 @@ public class PATH extends Operator implements Evaluable {
                     it.close();
                 }
             }
-            this.set = set;
+            return zet;
         }
 
     }
