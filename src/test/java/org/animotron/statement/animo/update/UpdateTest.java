@@ -35,11 +35,17 @@ import static org.animotron.expression.Expression.__;
 public class UpdateTest extends ATest {
 
     @Test
-	public void test_00() throws Throwable {
+    public void test_00() throws Throwable {
         testAnimo("def a x 1.");
         //testAnimoResult("get x a.", "1.");
-        eval(new AnimoExpression("change (// a x) 1 2."));
+        eval(new AnimoExpression("change (// a x) (1) ((2) (3))."));
         //testAnimoResult("get x a.", "2.");
+    }
+
+    @Test
+    public void test_01() throws Throwable {
+        testAnimo("def a x any foo.");
+        eval(new AnimoExpression("change (// a x) (any foo) (all bar)."));
     }
 
 }
