@@ -38,7 +38,7 @@ public class UpdateTest extends ATest {
 	public void test_00() throws Throwable {
         testAnimo("def a x 1.");
         //testAnimoResult("get x a.", "1.");
-        eval(new AnimoExpression("change (\\ a x) 1 2."));
+        eval(new AnimoExpression("change (// a x) 1 2."));
         //testAnimoResult("get x a.", "2.");
     }
 
