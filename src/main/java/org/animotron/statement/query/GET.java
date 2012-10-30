@@ -397,7 +397,7 @@ public class GET extends AbstractQuery implements Shift {
 		
 		//search for inside 'HAVE'
 		//return searchForHAVE(pf, ref, ref.getEndNode(), thes);
-		if (getByHave(pf, v, ref, AREV._.actualEndNode(ref), middle, thes, onContext))
+		if (getByHave(pf, v, ref, ref.getEndNode(), middle, thes, onContext))
 			return true;
 
 		//search for local 'HAVE'
