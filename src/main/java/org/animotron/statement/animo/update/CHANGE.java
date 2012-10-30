@@ -90,7 +90,7 @@ public class CHANGE extends Operator implements Evaluable {
                     Pipe pipe = Utils.getByREF(pf, pf.getVector());
                     QCAVector v;
                     while ((v = pipe.take()) != null) {
-                        process(v.getClosest().getEndNode(), op, np);
+                        process(v.getClosest().getStartNode(), op, np);
                     }
                     return null;
                 }
