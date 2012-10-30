@@ -44,8 +44,8 @@ public class UpdateTest extends ATest {
 
     @Test
     public void test_01() throws Throwable {
-        testAnimo("def a x any foo.");
-        eval(new AnimoExpression("change (// a x) (any foo) (all bar)."));
+        testAnimo("def a x y z any foo.");
+        eval(new AnimoExpression("change (get y get x a) (any foo) (all bar)."));
     }
 
 }

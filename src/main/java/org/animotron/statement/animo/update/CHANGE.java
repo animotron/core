@@ -20,27 +20,24 @@
  */
 package org.animotron.statement.animo.update;
 
+import javolution.util.FastTable;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.RelationshipTypes;
+import org.animotron.graph.Properties;
 import org.animotron.graph.traverser.It;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.Operator;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Utils;
+import org.animotron.statement.operator.*;
 import org.neo4j.graphdb.Node;
-import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.kernel.impl.util.DebugUtil;
 
-import java.util.LinkedList;
 import java.util.List;
 
+import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.RelationshipTypes.REV;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -90,21 +87,24 @@ public class CHANGE extends Operator implements Evaluable {
                     Pipe pipe = Utils.getByREF(pf, pf.getVector());
                     QCAVector v;
                     while ((v = pipe.take()) != null) {
-                        Node def = v.getClosestDefEndNode();
-                        process(v.getClosest().getStartNode(), op, np);
+                        process(v, op, np);
                     }
                     return null;
                 }
             });
         }
 
-        private void process(Node n, Node op, Node np) {
+        private void process(QCAVector v, Node op, Node np) {
+            Node n = v.getClosest().getStartNode();
             It it = new It(n);
             try {
                 while (it.hasNext()) {
                     Relationship r = it.next();
                     if (r.getEndNode().equals(op)) {
-                        op.createRelationshipTo(np, REV);
+                        for (Relationship i : def(v)) {
+                            Relationship rev = op.createRelationshipTo(np, REV);
+                            DEFID.set(rev, i.getId());
+                        }
                     }
                 }
             } finally {
@@ -112,6 +112,30 @@ public class CHANGE extends Operator implements Evaluable {
             }
         }
 
+        private void add (List<Relationship> set, List<Relationship> r) {
+            for (Relationship i : r) {
+                add(set, i);
+            }
+        }
+
+        private void add (List<Relationship> set, Relationship r) {
+            if (!set.contains(r)) {
+                set.add(r);
+            }
+        }
+
+        private List<Relationship> def (QCAVector v) {
+            FastTable<Relationship> set = new FastTable<Relationship>();
+            List<QCAVector> context = v.getContext();
+            if (context == null) {
+                add(set, v.getClosestDefEndNode().getSingleRelationship(DEF._, INCOMING));
+            } else {
+                for (QCAVector i : context) {
+                    add(set, def(i));
+                }
+            }
+            return set;
+        }
     }
 
 }
