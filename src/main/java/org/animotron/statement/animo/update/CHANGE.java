@@ -128,7 +128,10 @@ public class CHANGE extends Operator implements Evaluable {
             FastTable<Relationship> set = new FastTable<Relationship>();
             List<QCAVector> context = v.getContext();
             if (context == null) {
-                add(set, v.getClosestDefEndNode().getSingleRelationship(DEF._, INCOMING));
+                Node def = v.getClosestDefEndNode();
+                if (def != null) {
+                    add(set, def.getSingleRelationship(DEF._, INCOMING));
+                }
             } else {
                 for (QCAVector i : context) {
                     add(set, def(i));
