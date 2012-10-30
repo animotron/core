@@ -53,12 +53,13 @@ public class AREV extends REF {
     }
 
     public Node actualEndNode(Relationship r) {
-    	Node n = r.getEndNode();
-
-		if (r.isType(REF._) || r.isType(DEF._))
-			return actualNode(n);
-
-		return n;
+    	return r.getEndNode();
+//    	Node n = r.getEndNode();
+//
+//		if (r.isType(REF._) || r.isType(DEF._))
+//			return actualNode(n);
+//
+//		return n;
     }
 
     public Relationship actualRelationship(Relationship r) {

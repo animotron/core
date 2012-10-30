@@ -52,7 +52,7 @@ public class UpdateTest extends ATest {
     public void test_03() throws Throwable {
         testAnimo("def a (x) 1.");
         testAnimo("def b (x) 1.");
-        testAnimoResult("all x.", "a. b.");
+        testAnimoResult("all x.", "def a (x) 1. def b (x) 1.");
         eval(new AnimoExpression("change (all x) 1 2."));
     }
 

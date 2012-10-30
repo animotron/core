@@ -45,7 +45,7 @@ import static org.animotron.utils.MessageDigester.uuid;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class DEF extends AbstractStatement implements Prepare, Evaluable, Definition {
+public class DEF extends AbstractStatement implements Prepare, Definition {
 
 	public static final DEF _ = new DEF();
 
@@ -95,9 +95,13 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
         return ar == null ? null : ar.getStartNode();
 	}
 
-	public Relationship get(Node rev) {
-        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
-        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
+//	public Relationship get(Node rev) {
+//        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
+//        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
+//	}
+
+	public Relationship get(Node node) {
+        return node.getSingleRelationship(DEF._, Direction.INCOMING);
 	}
 
 	public static Relationship getDef(Relationship arev) {
@@ -146,18 +150,18 @@ public class DEF extends AbstractStatement implements Prepare, Evaluable, Defini
 		return NAME.get(n);
 	}
 	
-    @Override
-	public OnQuestion onCalcQuestion() {
-		return new Calc();
-    }
-
-    class Calc extends OnQuestion {
-	
-		@Override
-		public void act(final PFlow pf) throws Throwable {
-			pf.sendAnswer(AREV._.actualRelationship(pf.getOP()));
-		}
-    }
+//    @Override
+//	public OnQuestion onCalcQuestion() {
+//		return new Calc();
+//    }
+//
+//    class Calc extends OnQuestion {
+//	
+//		@Override
+//		public void act(final PFlow pf) throws Throwable {
+//			pf.sendAnswer(AREV._.actualRelationship(pf.getOP()));
+//		}
+//    }
 
 
 	@Override
