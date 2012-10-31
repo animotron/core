@@ -95,7 +95,8 @@ public class CHANGE extends Operator implements Evaluable {
         }
 
         private void process(QCAVector v, Node op, Node np) {
-            Node n = v.getClosest().getStartNode();
+            Relationship s = v.getClosest();
+            Node n = s.isType(DEF._) ? s.getEndNode() : s.getStartNode();
             It it = new It(n);
             try {
                 while (it.hasNext()) {
