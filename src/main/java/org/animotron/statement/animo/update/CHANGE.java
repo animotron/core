@@ -35,6 +35,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.util.List;
 
+import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.RelationshipTypes.REV;
 import static org.neo4j.graphdb.Direction.INCOMING;
@@ -63,8 +64,8 @@ public class CHANGE extends Operator implements Evaluable {
             AnimoGraph.execute(new GraphOperation<Void>() {
                 @Override
                 public Void execute() throws Throwable {
-                    Node op, np;
-                    op = np = null;
+                    Relationship op = null;
+                    Relationship np = null;
                     It it = new It(pf.getOPNode());
                     try {
                         int i = 0;
@@ -72,10 +73,10 @@ public class CHANGE extends Operator implements Evaluable {
                             Relationship r = it.next();
                             if (i > 0 && !r.isType(REF._)) {
                                 if (np == null) {
-                                    np = r.getEndNode();
+                                    np = r;
                                 } else if (op == null) {
                                     op = np;
-                                    np = r.getEndNode();
+                                    np = r;
                                     break;
                                 }
                             }
@@ -94,16 +95,15 @@ public class CHANGE extends Operator implements Evaluable {
             });
         }
 
-        private void process(QCAVector v, Node op, Node np) {
+        private void process(QCAVector v, Relationship op, Relationship np) {
             Relationship s = v.getClosest();
-            Node n = s.isType(DEF._) ? s.getEndNode() : s.getStartNode();
-            It it = new It(n);
+            It it = new It(s.isType(DEF._) ? s.getEndNode() : s.getStartNode());
             try {
                 while (it.hasNext()) {
                     Relationship r = it.next();
-                    if (r.getEndNode().equals(op)) {
+                    if (r.getEndNode().equals(op.getEndNode())) {
                         for (Relationship i : def(v)) {
-                            Relationship rev = op.createRelationshipTo(np, REV);
+                            Relationship rev = op.getEndNode().createRelationshipTo(np.getEndNode(), REV);
                             DEFID.set(rev, i.getId());
                         }
                     }
