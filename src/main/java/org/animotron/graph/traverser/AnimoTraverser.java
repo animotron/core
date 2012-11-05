@@ -23,6 +23,7 @@ package org.animotron.graph.traverser;
 import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.AShift;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -33,6 +34,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+
+import static org.animotron.graph.AnimoGraph.getDb;
+import static org.animotron.graph.Properties.RID;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -48,22 +52,22 @@ public class AnimoTraverser {
 	
 	public void traverse(GraphHandler handler, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, null, r, 0, true, 0, true, true);
+		build(handler, null, r, 0, true, 0, true, true, 0);
 		handler.endGraph();
 	}
 	
     public void traverse(GraphHandler handler, QCAVector vector) throws IOException {
         handler.startGraph();
-        build(handler, null, vector, 0, true, 0, true, true);
+        build(handler, null, vector, 0, true, 0, true, true, 0);
         handler.endGraph();
     }
 
-	protected void build(GraphHandler handler, Statement parent, Object o, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
+	protected void build(GraphHandler handler, Statement parent, Object o, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
         if (o instanceof Relationship) {
-            build(handler, parent, new QCAVector((Relationship)o), level, isOne, pos, isLast, evaluable);
+            build(handler, parent, new QCAVector((Relationship)o), level, isOne, pos, isLast, evaluable, def);
 
         } else if (o instanceof QCAVector) {
-            build(handler, parent, (QCAVector)o, level, isOne, pos, isLast, evaluable);
+            build(handler, parent, (QCAVector)o, level, isOne, pos, isLast, evaluable, def);
             
         } else {
             String name = (String) o;
@@ -77,21 +81,37 @@ public class AnimoTraverser {
         }
     }
 
-	protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
+	protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
 		Relationship r = rr.getClosest();
 		Statement statement = Statements.relationshipType(r);
-		if (statement == null)
+        if (statement == null)
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof REF)) {
+            if (statement instanceof DEF) {
+                def = r.getId();
+            }
             node = r.getEndNode();
-            It it = new It(node);
-            iterate(handler, rr, statement, it, level, evaluable);
-		}
+            Relationship ashift = null;
+            if (def != 0) {
+                ashift = AShift._.get(node, def);
+            }
+            if (ashift != null) {
+                r = getDb().getRelationshipById((Long) RID.get(ashift));
+                build(handler, parent, r, level, true, 0, true, evaluable, def);
+            } else {
+                It it = new It(node);
+                try {
+                    iterate(handler, rr, statement, it, level, evaluable, def);
+                } finally {
+                    it.close();
+                }
+            }
+        }
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level, boolean evaluable) throws IOException {
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level, boolean evaluable, long def) throws IOException {
         QCAVector prev = null;
 
     	FastTable<Relationship> o = FastTable.newInstance();
@@ -128,9 +148,9 @@ public class AnimoTraverser {
                 if (i instanceof Relationship) {
 //                	System.out.println(i);
                 	prev = new QCAVector(i, v, prev);
-                	build(handler, parent, prev, level, isOne, pos++, isLast, evaluable);
+                	build(handler, parent, prev, level, isOne, pos++, isLast, evaluable, 0);
                 } else {
-                	build(handler, parent, i, level, isOne, pos++, isLast, evaluable);
+                	build(handler, parent, i, level, isOne, pos++, isLast, evaluable, def);
                 }
             }
             
@@ -138,9 +158,9 @@ public class AnimoTraverser {
             	i = it.next();
                 if (i instanceof Relationship) {
                 	prev = new QCAVector(i, v, prev);
-                	build(handler, parent, prev, level, isOne, pos++, !it.hasNext(), evaluable);
+                	build(handler, parent, prev, level, isOne, pos++, !it.hasNext(), evaluable, def);
                 } else
-                	build(handler, parent, i, level, isOne, pos++, !it.hasNext(), evaluable);
+                	build(handler, parent, i, level, isOne, pos++, !it.hasNext(), evaluable, def);
             }
         } catch (AnimoException e) {
 //        	e.printStackTrace();

@@ -47,27 +47,27 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, null, r, 0, true, 0, true, true);
+        build(handler, null, r, 0, true, 0, true, true, 0);
         handler.endGraph();
     }
 
     @Override
-    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
+    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
 
     	Relationship r = rr.getClosest();
     	
 		Statement s = Statements.relationshipType(r);
 	        
-        process(handler, s, parent, rr, level, isOne, pos, isLast, evaluable);
+        process(handler, s, parent, rr, level, isOne, pos, isLast, evaluable, 0);
     }
     
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
 
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
-            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable);
+            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable, def);
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
 
         } else if (s != null) {
@@ -87,7 +87,7 @@ public class ResultTraverser extends AnimoTraverser {
                 
                 if (!(s instanceof REF  && !(qS instanceof AN))) {
                     node = ASHIFT._.actualEndNode(r);
-	                iterate(handler, rr, s, new It(node), level, evaluable);
+	                iterate(handler, rr, s, new It(node), level, evaluable, def);
                 }
                 
                 if (s instanceof AbstractValue)
@@ -120,16 +120,16 @@ public class ResultTraverser extends AnimoTraverser {
 //        	prev = i;
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, parent, i, level, false, pos++, isLast, evaluable);
+                    build(handler, parent, i, level, false, pos++, isLast, evaluable, 0);
                 	i = it.next();
 //                	i.setPrecedingSibling(prev);
 //                	prev = i;
-                    build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable);
+                    build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable, 0);
                 } else {
-                    build(handler, parent, i, level, isOne, pos++, isLast && !it.hasNext(), evaluable);
+                    build(handler, parent, i, level, isOne, pos++, isLast && !it.hasNext(), evaluable, 0);
                 }
             } else {
-                build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable);
+                build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable, 0);
             }
             isFirst = false;
             found = true;

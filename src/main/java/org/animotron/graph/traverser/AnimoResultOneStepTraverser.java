@@ -43,13 +43,13 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     public AnimoResultOneStepTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
 
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
-            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable);
+            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable, def);
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
 
         } else if (s != null) {
@@ -69,7 +69,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
                 if (!(s instanceof REF && !(qS instanceof AN))) {
             		node = ASHIFT._.actualEndNode(r);
 
-                	iterate(handler, rr, s, new It(node), level, evaluable);
+                	iterate(handler, rr, s, new It(node), level, evaluable, def);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
