@@ -140,7 +140,7 @@ public abstract class Manipulator {
 	        						
 //	        					Statement qS = Statements.relationshipType(context.getQuestion());
 	
-//	        					if (qS instanceof Shift) {
+//	        					if (qS instanceof AShift) {
 //	                				pipe.write(context);
 //	                				return;
 //	        					
@@ -185,7 +185,7 @@ public abstract class Manipulator {
 	                        } else if (s == null){
 	                            s = Statements.relationshipType(msg);
 //	                            Statement qS = Statements.relationshipType(context.getQuestion());
-//	                            if (!(s instanceof Definition) && s instanceof Evaluable && !(qS instanceof Shift)) {
+//	                            if (!(s instanceof Definition) && s instanceof Evaluable && !(qS instanceof AShift)) {
 	                            if (!(s instanceof Definition) && s instanceof Evaluable) {
 	                                Pipe in = Evaluator._.execute(controller, context);
 	                                QCAVector v;

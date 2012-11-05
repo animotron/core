@@ -20,7 +20,6 @@
  */
 package org.animotron.graph.index;
 
-import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.RelationshipType;
@@ -32,33 +31,29 @@ import org.neo4j.graphdb.index.IndexManager;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class Result extends AbstractRelationshipIndex {
-	
-    public static Result _ = new Result("result");
-    
-    private Result(String name){super(name);}
+public class AShift extends AbstractRelationshipIndex {
+
+    public static AShift _ = new AShift("ashift");
+
+    private AShift(String name) {super(name);}
     
 	public void init(IndexManager index) {
         //init(index.forRelationships(name, BerkeleyDbIndexImplementation.DEFAULT_CONFIG));
         init(index.forRelationships(name));
 	}
 
-//    public ResultHits getHits(byte[] value) {
-//        return new ResultHits(getHits(MessageDigester.byteArrayToHex(value)));
-//    }
-
-    public Relationship getIfExist(Node sNode, Relationship result, RelationshipType type) {
-        IndexHits<Relationship> hits = getHits(null, sNode, result.getEndNode());
+    public Relationship get(Node node, long def) {
+        IndexHits<Relationship> hits = getHits(def, node, null);
         try {
-        	for (Relationship r : hits) {
-        		if (r.isType(type)) {
-        			if (r.getProperty("RID").equals(result.getId()))
-        				return r;
-        		}
-        	}
+        	return hits.hasNext() ? hits.next() : null;
         } finally {
         	hits.close();
         }
-        return null;
     }
+
+    public  IndexHits<Relationship> queryDown(Node node, long def) {
+        return getHits(def, node, null);
+    }
+
+
 }

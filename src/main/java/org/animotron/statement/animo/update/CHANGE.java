@@ -23,7 +23,7 @@ package org.animotron.statement.animo.update;
 import javolution.util.FastTable;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.Properties;
+import org.animotron.graph.index.AShift;
 import org.animotron.graph.traverser.It;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
@@ -35,9 +35,9 @@ import org.neo4j.graphdb.Relationship;
 
 import java.util.List;
 
-import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.Properties.DEFID;
-import static org.animotron.graph.RelationshipTypes.REV;
+import static org.animotron.graph.Properties.RID;
+import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -103,8 +103,25 @@ public class CHANGE extends Operator implements Evaluable {
                     Relationship r = it.next();
                     if (r.getEndNode().equals(op.getEndNode())) {
                         for (Relationship i : def(v)) {
-                            Relationship rev = op.getEndNode().createRelationshipTo(np.getEndNode(), REV);
-                            DEFID.set(rev, i.getId());
+                            long def = i.getId();
+                            Node n = r.getStartNode();
+                            Relationship ashift = AShift._.get(n, def);
+                            if (ashift == null) {
+                                ashift = n.createRelationshipTo(np.getEndNode(), ASHIFT._);
+                                AShift._.add(ashift, def);
+                            } else {
+                                n = ashift.getEndNode();
+                                AShift._.remove(ashift, def);
+                                ashift.delete();
+                                ashift = n.createRelationshipTo(np.getEndNode(), ASHIFT._);
+                                AShift._. add(ashift, def);
+                            }
+                            DEFID.set(ashift, def);
+                            RID.set(ashift, np.getId());
+
+                            Relationship shift = n.createRelationshipTo(np.getEndNode(), SHIFT);
+                            DEFID.set(shift, def);
+                            RID.set(shift, np.getId());
                         }
                     }
                 }

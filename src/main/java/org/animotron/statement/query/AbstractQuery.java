@@ -23,7 +23,6 @@ package org.animotron.statement.query;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
 
-import org.animotron.graph.RelationshipTypes;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -98,7 +97,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
                 breadthFirst().
                 relationships(REF._, INCOMING ).
                 relationships(AN._, INCOMING ).
-//                relationships(AREV._, INCOMING ).
+//                relationships(ASHIFT._, INCOMING ).
                 //evaluator(Evaluators.excludeStartPosition()).
                 evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
         			@Override
@@ -114,7 +113,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				Relationship r = path.lastRelationship();
         				switch (path.length() % 2) {
 //						case 0:
-//	        				if (!r.isType(AREV._))
+//	        				if (!r.isType(ASHIFT._))
 //	        					return EXCLUDE_AND_PRUNE;
 //							break;
 
@@ -325,7 +324,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					relationships(AN._, INCOMING).
 					relationships(REF._, INCOMING).
 					relationships(DEF._, INCOMING).
-					relationships(AREV._, INCOMING).
+					relationships(ASHIFT._, INCOMING).
 			evaluator(new IntersectionSearcher(){
 				@Override
 				public Evaluation evaluate(Path path) {
@@ -414,7 +413,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					if (firstR.isType(AN._)) {
 						switch (path.length() % 3) {
 						case 0:
-		    				if (!lastR.isType(AREV._))
+		    				if (!lastR.isType(ASHIFT._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
@@ -450,7 +449,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 
 						case 2:
-		    				if (!lastR.isType(AREV._))
+		    				if (!lastR.isType(ASHIFT._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
@@ -459,7 +458,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 						}
 	    				
-					} else if (firstR.isType(AREV._)) {
+					} else if (firstR.isType(ASHIFT._)) {
 						switch (path.length() % 3) {
 						case 0:
 		    				if (!lastR.isType(REF._))
@@ -468,7 +467,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							break;
 
 						case 1:
-		    				if (!lastR.isType(AREV._))
+		    				if (!lastR.isType(ASHIFT._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
@@ -578,7 +577,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
-			if (r.isType(AREV._))
+			if (r.isType(ASHIFT._))
 				if (r.getEndNode().equals(path.endNode()))
 					return EXCLUDE_AND_CONTINUE;
 				else
@@ -639,7 +638,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						if (AN.beginWithHasA(path)) {
 							boolean haveAREV = false;
 							for (Relationship rr : path.relationships())
-								if (rr.isType(AREV._))
+								if (rr.isType(ASHIFT._))
 									haveAREV = true;
 							if (!haveAREV)
 								return EXCLUDE_AND_PRUNE;
@@ -728,7 +727,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 
 			} else if (path.length() % 3 == 0) {
-				if (!r.isType(AREV._))
+				if (!r.isType(ASHIFT._))
 					return EXCLUDE_AND_PRUNE;
 				
 				return EXCLUDE_AND_CONTINUE;

@@ -35,8 +35,6 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.Properties.NAME;
-import static org.animotron.graph.RelationshipTypes.REV;
-import static org.animotron.utils.MessageDigester.setUUID;
 import static org.animotron.utils.MessageDigester.uuid;
 
 /**
@@ -91,12 +89,12 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	}
 	
 	public Node getDefNode(Node rev) {
-        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
+        Relationship ar = rev.getSingleRelationship(ASHIFT._, Direction.INCOMING);
         return ar == null ? null : ar.getStartNode();
 	}
 
 //	public Relationship get(Node rev) {
-//        Relationship ar = rev.getSingleRelationship(AREV._, Direction.INCOMING);
+//        Relationship ar = rev.getSingleRelationship(ASHIFT._, Direction.INCOMING);
 //        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
 //	}
 
@@ -159,7 +157,7 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 //	
 //		@Override
 //		public void act(final PFlow pf) throws Throwable {
-//			pf.sendAnswer(AREV._.actualRelationship(pf.getOP()));
+//			pf.sendAnswer(ASHIFT._.actualRelationship(pf.getOP()));
 //		}
 //    }
 

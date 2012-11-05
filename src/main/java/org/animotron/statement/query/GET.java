@@ -488,7 +488,7 @@ public class GET extends AbstractQuery implements Shift {
 			Traversal.description().
 			depthFirst().
 			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			relationships(AREV._, OUTGOING).
+			relationships(ASHIFT._, OUTGOING).
 			relationships(ANY._, OUTGOING).
 			relationships(ALL._, OUTGOING).
 			relationships(PREFER._, OUTGOING).
@@ -648,7 +648,7 @@ public class GET extends AbstractQuery implements Shift {
 							Iterator<Relationship> it = path.relationships().iterator();
 							for (Relationship r = null; it.hasNext(); ) {
 								r = it.next();
-								if (r.isType(AREV._))
+								if (r.isType(ASHIFT._))
 									continue;
 								
 								if (startBy == null)

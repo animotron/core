@@ -29,11 +29,11 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class AREV extends REF {
+public class ASHIFT extends REF {
 
-	public static final AREV _ = new AREV();
+	public static final ASHIFT _ = new ASHIFT();
 
-	private AREV() { super("arev"); }
+	private ASHIFT() { super("ASHIFT"); }
 
     public Relationship build(Node def, Node rev) {
         return def.createRelationshipTo(rev, this);

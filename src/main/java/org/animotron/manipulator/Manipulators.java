@@ -82,8 +82,8 @@ public class Manipulators {
         private void preparative() throws IOException {
 			for (Node n : preparative) {
 //            	for (Relationship r : n.getRelationships(DEF._)) {
-//            		Node nn = AREV._.actualNode(r);
-//            		Relationship prev = nn.getSingleRelationship(REV, Direction.INCOMING);
+//            		Node nn = ASHIFT._.actualNode(r);
+//            		Relationship prev = nn.getSingleRelationship(SHIFT, Direction.INCOMING);
 //            		String previousHash = "";
 //            		if(prev != null)
 //                		previousHash = byteArrayToHex((byte[]) HASH.get(prev));

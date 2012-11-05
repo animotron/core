@@ -21,10 +21,7 @@
 package org.animotron.graph;
 
 import org.animotron.Executor;
-import org.animotron.graph.index.Cache;
-import org.animotron.graph.index.Order;
-import org.animotron.graph.index.Result;
-import org.animotron.graph.index.State;
+import org.animotron.graph.index.*;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.*;
@@ -98,6 +95,7 @@ public class AnimoGraph {
         Cache.RELATIONSHIP.init(index);
         Cache.NODE.init(index);
         Result._.init(index);
+        AShift._.init(index);
         Order._.init(index);
         State._.init(index);
         DEF._.init(index);

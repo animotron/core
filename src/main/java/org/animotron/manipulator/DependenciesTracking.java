@@ -29,7 +29,6 @@ import org.animotron.io.Pipe;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
-import org.animotron.statement.operator.AREV;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
@@ -38,7 +37,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.animotron.graph.RelationshipTypes.REV;
+import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -59,7 +58,7 @@ public class DependenciesTracking extends StatementManipulator {
             @Override
             public Void execute() throws Throwable {
                 Node n = null;
-                for (Relationship r : current.getRelationships(REV, INCOMING)) {
+                for (Relationship r : current.getRelationships(SHIFT, INCOMING)) {
                     n = r.getStartNode();
                     walker(n);
                 }

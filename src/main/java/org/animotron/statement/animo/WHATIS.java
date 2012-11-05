@@ -68,7 +68,7 @@ public class WHATIS extends AbstractQuery implements Reference {
 					Relationship the = vector.getClosest();
 					
 					if (the.isType(REF._) || the.isType(DEF._)) {
-						downIS(pf, AREV._.actualEndNode(the));
+						downIS(pf, ASHIFT._.actualEndNode(the));
 						
 					} else {
 			    		//discover down IS topology

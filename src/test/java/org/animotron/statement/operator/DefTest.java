@@ -53,12 +53,12 @@ public class DefTest extends ATest {
 //        String uuid1 = (String) UUID.getDef(e);
 //        e = testAnimo("def e 2.");
 //        String uuid2 = (String) UUID.getDef(e);
-//        Relationship rev1 = e.getEndNode().getSingleRelationship(REV, OUTGOING);
+//        Relationship rev1 = e.getEndNode().getSingleRelationship(SHIFT, OUTGOING);
 //        Assert.assertNotNull(rev1);
 //        Assert.assertEquals("", UUID.getDef(rev1), uuid1);
 //        e = testAnimo("def e 3.");
 //        String uuid3 = (String) UUID.getDef(e);
-//        Relationship rev2 = e.getEndNode().getSingleRelationship(REV, OUTGOING).getEndNode().getSingleRelationship(REV, OUTGOING);
+//        Relationship rev2 = e.getEndNode().getSingleRelationship(SHIFT, OUTGOING).getEndNode().getSingleRelationship(SHIFT, OUTGOING);
 //        Assert.assertNotNull(rev2);
 //        Assert.assertEquals("", UUID.getDef(rev2), uuid1);
 //        Assert.assertFalse(uuid1.equals(uuid2));

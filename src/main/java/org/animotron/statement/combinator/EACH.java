@@ -85,7 +85,7 @@ public class EACH extends Combinator {
 					} else {
 						for (QCAVector r : set) {
 //			                Statement qS = Statements.relationshipType(r.getQuestion());
-//							if (qS instanceof Shift && r.getAnswer().isType(AN._)) {
+//							if (qS instanceof AShift && r.getAnswer().isType(AN._)) {
 ////								IndexHits<Relationship> hits = Order._.context(r.getAnswerEndNode());
 ////								try {
 ////									for (Relationship h : hits) {

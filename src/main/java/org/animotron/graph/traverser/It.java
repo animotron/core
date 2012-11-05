@@ -20,6 +20,8 @@
  */
 package org.animotron.graph.traverser;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.index.AShift;
 import org.animotron.graph.index.Order;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -36,13 +38,24 @@ import static org.animotron.graph.Properties.*;
  */
 public class It implements Iterator<Relationship>, Iterable<Relationship> {
 
-    private Iterator<Relationship> r;
-    private IndexHits<Relationship> q;
+    private Iterator<Relationship> r = null;
+    private IndexHits<Relationship> q = null;
 
     Relationship current = null;
 
     public It(Node n) {
         q = Order._.queryDown(n);
+        r = q.iterator();
+        next();
+    }
+
+    public It(Node n, long def) {
+        Relationship ashift = AShift._.get(n, def);
+        if (ashift != null) {
+            q = AShift._.queryDown(n, def);
+        } else {
+            q = Order._.queryDown(n);
+        }
         r = q.iterator();
         next();
     }

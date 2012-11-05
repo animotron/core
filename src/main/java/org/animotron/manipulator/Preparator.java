@@ -27,11 +27,8 @@ import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.AREV;
-import org.animotron.statement.operator.Prepare;
-import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.*;
+import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -61,7 +58,7 @@ public class Preparator extends StatementManipulator {
         
         Node node = op;
         try {
-        	node = AREV._.actualNode(op);
+        	node = ASHIFT._.actualNode(op);
         } catch (Exception e) {}
         IndexHits<Relationship> hits = Order._.queryDown(node);
         try {
