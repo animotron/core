@@ -36,6 +36,7 @@ import org.neo4j.graphdb.Relationship;
 import java.util.List;
 
 import static org.animotron.graph.Properties.DEFID;
+import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.neo4j.graphdb.Direction.INCOMING;
@@ -103,6 +104,7 @@ public class CHANGE extends Operator implements Evaluable {
                     Relationship r = it.next();
                     if (r.getEndNode().equals(op.getEndNode())) {
                         for (Relationship i : def(v)) {
+                            HASH.remove(i);
                             long def = i.getId();
                             Node n = r.getStartNode();
                             Relationship ashift = AShift._.get(n, def);
@@ -118,7 +120,6 @@ public class CHANGE extends Operator implements Evaluable {
                             }
                             DEFID.set(ashift, def);
                             RID.set(ashift, np.getId());
-
                             Relationship shift = n.createRelationshipTo(np.getEndNode(), SHIFT);
                             DEFID.set(shift, def);
                             RID.set(shift, np.getId());

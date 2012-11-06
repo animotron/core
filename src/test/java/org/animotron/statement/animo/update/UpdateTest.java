@@ -36,16 +36,16 @@ public class UpdateTest extends ATest {
 
     @Test
     public void test_00() throws Throwable {
-        testAnimo("def a x 1.");
-        testAnimoResult("get x a.", "1.");
-        eval(new AnimoExpression("change (// a x) (1) ((2) (3))."));
-        //testAnimoResult("get x a.", "2.");
+        Relationship a = testAnimo("def a x 1.");
+        eval(new AnimoExpression("change (get x a) (1) ((2) (3))."));
+        assertAnimo(a, "def a x (2 3).");
     }
 
     @Test
     public void test_01() throws Throwable {
-        testAnimo("def a x y z any foo.");
+        Relationship a = testAnimo("def a x y z any foo.");
         eval(new AnimoExpression("change (get y get x a) (any foo) (all bar)."));
+        assertAnimo(a, "def a x y z all bar.");
     }
 
     @Test
@@ -61,7 +61,7 @@ public class UpdateTest extends ATest {
     public void test_04() throws Throwable {
         Relationship a = testAnimo("def a (x) 1.");
         eval(new AnimoExpression("change (all x) 1 ((x) 2)."));
-        assertAnimo(a, "def a (x) 2.");
+        assertAnimo(a, "def a ((x) 2).");
     }
 
 }

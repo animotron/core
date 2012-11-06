@@ -148,7 +148,7 @@ public class AnimoTraverser {
                 if (i instanceof Relationship) {
 //                	System.out.println(i);
                 	prev = new QCAVector(i, v, prev);
-                	build(handler, parent, prev, level, isOne, pos++, isLast, evaluable, 0);
+                	build(handler, parent, prev, level, isOne, pos++, isLast, evaluable, def);
                 } else {
                 	build(handler, parent, i, level, isOne, pos++, isLast, evaluable, def);
                 }
