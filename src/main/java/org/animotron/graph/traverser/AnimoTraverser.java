@@ -86,6 +86,7 @@ public class AnimoTraverser {
                 ashift = AShift._.get(node, def);
             }
             if (ashift != null) {
+                pos = iterateRef(handler, rr, statement, Order._.queryDown(node), level, evaluable, def);
                 r = getDb().getRelationshipById((Long) RID.get(ashift));
                 build(handler, parent, r, level, true, pos++, true, evaluable, def);
             } else {
@@ -95,24 +96,53 @@ public class AnimoTraverser {
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
-
+    protected int iterateRef(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
         QCAVector prev;
+        FastTable<Relationship> o = FastTable.newInstance();
+        try {
+            int count = 0;
+            while (it.hasNext()) {
+                Relationship i = it.next();
+                if (!(i.isType(REF._) || i.isType(QNAME._))) {
+                    if (count == 0) {
+                        o.add(i);
+                    }
+                    break;
+                }
+                o.add(i);
+                count++;
+            }
+            prev = null;
+            int pos = 0;
+            boolean isOne = o.size() - count < 2;
+            for (int index = 0, size = o.size(); index < size; index++) {
+                Relationship i = o.get(index);
+                boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
+                prev = new QCAVector(i, v, prev);
+                build(handler, parent, prev, level, isOne, pos++, isLast, evaluable, def);
+            }
+            return pos;
+        } catch (AnimoException e) {
+//        	e.printStackTrace();
+            throw new IOException("on "+v,e);
+        } finally {
+            FastTable.recycle(o);
+            it.close();
+        }
 
+    }
+
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
+       QCAVector prev;
     	FastTable<Relationship> o = FastTable.newInstance();
         try {
         	Relationship i;
-
             int count = 0;
             while (it.hasNext()) {
                 i = it.next();
                 o.add(i);
-                if (i instanceof Relationship) {
-                    Relationship r = i;
-                    if (!(r.isType(REF._) || r.isType(QNAME._))) {
-                        break;
-                    }
-                } else if (!i.equals(QNAME._.name())) {
+                Relationship r = i;
+                if (!(r.isType(REF._) || r.isType(QNAME._))) {
                     break;
                 }
                 count++;
@@ -122,30 +152,19 @@ public class AnimoTraverser {
                 o.add(it.next());
                 n++;
             }
-            
             prev = null;
             int pos = 0;
             boolean isOne = o.size() - count < 2;
         	for (int index = 0, size = o.size(); index < size; index++) {
         		i = o.get(index);
-
                 boolean isLast = pos < o.size() - 1 ? false : !it.hasNext();
-                if (i instanceof Relationship) {
-//                	System.out.println(i);
-                	prev = new QCAVector(i, v, prev);
-                	build(handler, parent, prev, level, isOne, pos++, isLast, evaluable, def);
-                } else {
-                	build(handler, parent, i, level, isOne, pos++, isLast, evaluable, def);
-                }
+                prev = new QCAVector(i, v, prev);
+                build(handler, parent, prev, level, isOne, pos++, isLast, evaluable, def);
             }
-            
             while (it.hasNext()) {
             	i = it.next();
-                if (i instanceof Relationship) {
-                	prev = new QCAVector(i, v, prev);
-                	build(handler, parent, prev, level, isOne, pos++, !it.hasNext(), evaluable, def);
-                } else
-                	build(handler, parent, i, level, isOne, pos++, !it.hasNext(), evaluable, def);
+                prev = new QCAVector(i, v, prev);
+                build(handler, parent, prev, level, isOne, pos++, !it.hasNext(), evaluable, def);
             }
         } catch (AnimoException e) {
 //        	e.printStackTrace();
