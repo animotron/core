@@ -31,13 +31,11 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
-import java.util.Iterator;
 
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.RID;
@@ -86,19 +84,20 @@ public class AnimoTraverser {
                 ashift = AShift._.get(node, def);
             }
             if (ashift != null) {
-                pos = iterateRef(handler, rr, statement, Order._.queryDown(node), level, evaluable, def);
+                pos = iterateRef(handler, rr, statement, node, level, evaluable, def);
                 r = getDb().getRelationshipById((Long) RID.get(ashift));
                 build(handler, parent, r, level, true, pos++, true, evaluable, def);
             } else {
-                iterate(handler, rr, statement, Order._.queryDown(node), level, evaluable, def);
+                iterate(handler, rr, statement, node, level, evaluable, def);
             }
         }
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected int iterateRef(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
+    protected int iterateRef(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, long def) throws IOException {
         QCAVector prev;
         FastTable<Relationship> o = FastTable.newInstance();
+        IndexHits<Relationship> it = Order._.queryDown(n);
         try {
             int count = 0;
             while (it.hasNext()) {
@@ -130,6 +129,14 @@ public class AnimoTraverser {
             it.close();
         }
 
+    }
+
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, Relationship r, int level, boolean evaluable, long def) throws IOException {
+        iterate(handler, v, parent, r.getEndNode(), level, evaluable, def);
+    }
+
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, long def) throws IOException {
+        iterate(handler, v, parent, Order._.queryDown(n), level, evaluable, def);
     }
 
     protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
