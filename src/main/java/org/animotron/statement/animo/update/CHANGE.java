@@ -26,6 +26,7 @@ import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.AShift;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
+import org.animotron.manipulator.DependenciesTracking;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
@@ -40,6 +41,7 @@ import java.util.List;
 import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.Properties.RID;
+import static org.animotron.graph.Properties.UID;
 import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
@@ -91,40 +93,46 @@ public class CHANGE extends Operator implements Evaluable {
                     Pipe pipe = Utils.getByREF(pf, pf.getVector());
                     QCAVector v;
                     while ((v = pipe.take()) != null) {
-                        process(v, op, np);
+                        process(pf, v, op, np);
                     }
                     return null;
                 }
             });
         }
 
-        private void process(QCAVector v, Relationship op, Relationship np) {
-            Relationship s = v.getClosest();
-            IndexHits<Relationship> it = Order._.queryDown(s.isType(DEF._) ? s.getEndNode() : s.getStartNode());
+        private void process(PFlow pf, QCAVector v, Relationship op, Relationship np) throws Throwable {
+            Relationship c = v.getClosest();
+            IndexHits<Relationship> it = Order._.queryDown(c.isType(DEF._) ? c.getEndNode() : c.getStartNode());
             try {
                 while (it.hasNext()) {
                     Relationship r = it.next();
                     if (r.getEndNode().equals(op.getEndNode())) {
                         for (Relationship i : def(v)) {
-                            HASH.remove(i);
                             long def = i.getId();
-                            Node n = r.getStartNode();
-                            Relationship ashift = AShift._.get(n, def);
+                            Node s = r.getStartNode();
+                            Node n = np.getEndNode();
+                            Relationship ashift = AShift._.get(s, def);
                             if (ashift == null) {
-                                ashift = n.createRelationshipTo(np.getEndNode(), ASHIFT._);
+                                ashift = s.createRelationshipTo(n, ASHIFT._);
                                 AShift._.add(ashift, def);
                             } else {
-                                n = ashift.getEndNode();
+                                s = ashift.getEndNode();
                                 AShift._.remove(ashift, def);
                                 ashift.delete();
-                                ashift = n.createRelationshipTo(np.getEndNode(), ASHIFT._);
+                                ashift = s.createRelationshipTo(n, ASHIFT._);
                                 AShift._. add(ashift, def);
                             }
+                            Relationship shift = s.createRelationshipTo(n, SHIFT);
+                            long rid = s.getId();
+                            RID.set(ashift, rid);
+                            RID.set(shift, rid);
+                            long uid = pf.getOP().getId();
+                            UID.set(ashift, uid);
+                            UID.set(shift, uid);
                             DEFID.set(ashift, def);
-                            RID.set(ashift, np.getId());
-                            Relationship shift = n.createRelationshipTo(np.getEndNode(), SHIFT);
                             DEFID.set(shift, def);
-                            RID.set(shift, np.getId());
+                            HASH.remove(i);
+                            DependenciesTracking._.execute(null, i);
                         }
                     }
                 }
