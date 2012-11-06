@@ -21,6 +21,7 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Prefix;
@@ -31,8 +32,10 @@ import org.animotron.statement.ml.NS;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -50,31 +53,27 @@ public class MLResultTraverser extends AnimoResultTraverser {
         if (s instanceof MLOperator || s instanceof VALUE) {
             if (s instanceof Prefix) {
                 node = rr.getClosest().getEndNode();
-                It it = new It(node);
+                IndexHits<Relationship> it = Order._.queryDown(node);
                 String[] param = {null, null};
-                try {
-                    if (it.hasNext()) {
-                        Relationship p = it.next();
-                        param[0] = param(rr, p);
-                        if (!(s instanceof ELEMENT)) {
-                            param[1] = param(rr, it);
-                            if (param[1] == null) {
-                                if (s instanceof NS) {
-                                    if (QNAME._.name().equals(p.getType().name())) {
-                                        param[1] = "";
-                                    } else {
-                                        param[1] = param[0];
-                                        param[0] = "";
-                                    }
+                if (it.hasNext()) {
+                    Relationship p = it.next();
+                    param[0] = param(rr, p);
+                    if (!(s instanceof ELEMENT)) {
+                        param[1] = param(rr, it);
+                        if (param[1] == null) {
+                            if (s instanceof NS) {
+                                if (QNAME._.name().equals(p.getType().name())) {
+                                    param[1] = "";
+                                } else {
+                                    param[1] = param[0];
+                                    param[0] = "";
                                 }
                             }
                         }
-                        handler.start(s, parent, param, level++, isOne, pos, isLast);
-                        iterate(handler, rr, s, it, level, evaluable, def);
-                        handler.end(s, parent, param, --level, isOne, pos, isLast);
                     }
-                } finally {
-                    it.close();
+                    handler.start(s, parent, param, level++, isOne, pos, isLast);
+                    iterate(handler, rr, s, it, level, evaluable, def);
+                    handler.end(s, parent, param, --level, isOne, pos, isLast);
                 }
             } else if (!(s instanceof VALUE) || (s instanceof VALUE)) {
                 String param = CachedSerializer.STRING.serialize(rr);
@@ -86,7 +85,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
         }
     }
 
-    private String param(QCAVector rr, It it) throws IOException {
+    private String param(QCAVector rr, Iterator<Relationship> it) throws IOException {
         if (it.hasNext()) {
             return param(rr, it.next());
         }

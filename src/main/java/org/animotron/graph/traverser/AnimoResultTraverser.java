@@ -21,11 +21,13 @@
 package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
@@ -47,7 +49,7 @@ public class AnimoResultTraverser extends ResultTraverser {
         	Relationship r = rr.getClosest();
 
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
-            iterate(handler, rr, s, new It(r.getEndNode()), level, evaluable, def);
+            iterate(handler, rr, s, Order._.queryDown(r.getEndNode()), level, evaluable, def);
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
 
         } else if (s != null) {
@@ -64,8 +66,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof AN))) {
                		node = ASHIFT._.actualEndNode(r);
-                	
-                    iterate(handler, rr, s, new It(node), level, evaluable, def);
+                    iterate(handler, rr, s, Order._.queryDown(node), level, evaluable, def);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }

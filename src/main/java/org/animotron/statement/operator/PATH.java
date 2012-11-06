@@ -20,7 +20,7 @@
  */
 package org.animotron.statement.operator;
 
-import org.animotron.graph.traverser.It;
+import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -32,6 +32,7 @@ import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class PATH extends Operator implements Evaluable {
                 while ((v = pipe.take()) != null) {
                     set.add(v.getClosest());
                 }
-                It it = new It(pf.getOPNode());
+                IndexHits<Relationship> it = Order._.queryDown(pf.getOPNode());
                 try {
                     int i = 0;
                     while (it.hasNext()) {
@@ -91,7 +92,7 @@ public class PATH extends Operator implements Evaluable {
             } else {
                 set = filter(pf, r, false, false, set);
                 Node n = r.getEndNode();
-                It it = new It(n);
+                IndexHits<Relationship> it = Order._.queryDown(n);
                 try {
                     while (it.hasNext()) {
                         Relationship i = it.next();
@@ -106,7 +107,7 @@ public class PATH extends Operator implements Evaluable {
         private List<Relationship> filter(PFlow pf, Relationship p, boolean isRef, boolean isValue, List<Relationship> set) {
             List<Relationship> zet = new LinkedList<Relationship>();
             for (Relationship r : set) {
-                It it = new It(r.getEndNode());
+                IndexHits<Relationship> it = Order._.queryDown(r.getEndNode());
                 try {
                     while (it.hasNext()) {
                         Relationship i = it.next();

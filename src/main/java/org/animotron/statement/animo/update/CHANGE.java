@@ -24,7 +24,7 @@ import javolution.util.FastTable;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.AShift;
-import org.animotron.graph.traverser.It;
+import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -32,7 +32,9 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.*;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static org.animotron.graph.Properties.DEFID;
@@ -67,7 +69,7 @@ public class CHANGE extends Operator implements Evaluable {
                 public Void execute() throws Throwable {
                     Relationship op = null;
                     Relationship np = null;
-                    It it = new It(pf.getOPNode());
+                    IndexHits<Relationship> it = Order._.queryDown(pf.getOPNode());
                     try {
                         int i = 0;
                         while (it.hasNext()) {
@@ -98,7 +100,7 @@ public class CHANGE extends Operator implements Evaluable {
 
         private void process(QCAVector v, Relationship op, Relationship np) {
             Relationship s = v.getClosest();
-            It it = new It(s.isType(DEF._) ? s.getEndNode() : s.getStartNode());
+            IndexHits<Relationship> it = Order._.queryDown(s.isType(DEF._) ? s.getEndNode() : s.getStartNode());
             try {
                 while (it.hasNext()) {
                     Relationship r = it.next();

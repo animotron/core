@@ -24,16 +24,20 @@ import javolution.util.FastTable;
 import org.animotron.exception.AnimoException;
 import org.animotron.graph.handler.GraphHandler;
 import org.animotron.graph.index.AShift;
+import org.animotron.graph.index.Order;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
+import java.util.Iterator;
 
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.RID;
@@ -98,21 +102,17 @@ public class AnimoTraverser {
             }
             if (ashift != null) {
                 r = getDb().getRelationshipById((Long) RID.get(ashift));
-                build(handler, parent, r, level, true, 0, true, evaluable, def);
+                build(handler, parent, r, level, true, pos++, true, evaluable, def);
             } else {
-                It it = new It(node);
-                try {
-                    iterate(handler, rr, statement, it, level, evaluable, def);
-                } finally {
-                    it.close();
-                }
+                iterate(handler, rr, statement, Order._.queryDown(node), level, evaluable, def);
             }
         }
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, It it, int level, boolean evaluable, long def) throws IOException {
-        QCAVector prev = null;
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
+
+        QCAVector prev;
 
     	FastTable<Relationship> o = FastTable.newInstance();
         try {
@@ -169,5 +169,7 @@ public class AnimoTraverser {
             FastTable.recycle(o);
             it.close();
         }
+
     }
+
 }
