@@ -60,8 +60,8 @@ public class UpdateTest extends ATest {
     @Test
     public void test_04() throws Throwable {
         Relationship a = testAnimo("def a (x) 1.");
-        eval(new AnimoExpression("change (all x) 1 ((x) 2)."));
-        assertAnimo(a, "def a ((x) 2).");
+        eval(new AnimoExpression("change (all x) 1 ((z) 2)."));
+        assertAnimo(a, "def a ((z) 2).");
     }
 
 }

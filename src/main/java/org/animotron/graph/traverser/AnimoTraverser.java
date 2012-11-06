@@ -31,6 +31,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.Reference;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -84,7 +85,7 @@ public class AnimoTraverser {
                 ashift = AShift._.get(node, def);
             }
             if (ashift != null) {
-                pos = iterateRef(handler, rr, statement, node, level, evaluable, def);
+                pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
                 r = getDb().getRelationshipById((Long) RID.get(ashift));
                 build(handler, parent, r, level, true, pos++, true, evaluable, def);
             } else {
