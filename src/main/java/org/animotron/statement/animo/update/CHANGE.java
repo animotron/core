@@ -123,7 +123,7 @@ public class CHANGE extends Operator implements Evaluable {
                                 AShift._. add(ashift, def);
                             }
                             Relationship shift = s.createRelationshipTo(n, SHIFT);
-                            long rid = s.getId();
+                            long rid = np.getId();
                             RID.set(ashift, rid);
                             RID.set(shift, rid);
                             long uid = pf.getOP().getId();
