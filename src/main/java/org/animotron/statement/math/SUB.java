@@ -20,15 +20,15 @@
  */
 package org.animotron.statement.math;
 
-import static org.animotron.expression.JExpression.value;
-import static org.animotron.expression.JExpression._;
-
-import java.io.IOException;
-
 import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)

@@ -20,14 +20,14 @@
  */
 package org.animotron.io;
 
+import javolution.lang.Reusable;
+import org.animotron.manipulator.QCAVector;
+
 import java.io.IOException;
 import java.util.concurrent.SynchronousQueue;
 
 //import javolution.context.ObjectFactory;
-import javolution.lang.Reusable;
 //import javolution.util.FastList;
-
-import org.animotron.manipulator.QCAVector;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

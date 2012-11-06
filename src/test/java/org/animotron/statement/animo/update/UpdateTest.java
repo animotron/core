@@ -22,11 +22,8 @@ package org.animotron.statement.animo.update;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
-
-import static org.animotron.expression.Expression.__;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

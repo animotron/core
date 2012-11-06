@@ -20,13 +20,9 @@
  */
 package org.animotron.tmp;
 
-import static org.neo4j.graphdb.traversal.Evaluation.*;
-
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.animotron.statement.operator.*;
-import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
@@ -36,6 +32,8 @@ import org.neo4j.graphdb.traversal.Evaluation;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
+
+import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

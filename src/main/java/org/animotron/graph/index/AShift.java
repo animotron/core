@@ -22,7 +22,6 @@ package org.animotron.graph.index;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 

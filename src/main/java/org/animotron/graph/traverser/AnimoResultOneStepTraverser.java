@@ -22,7 +22,6 @@ package org.animotron.graph.traverser;
 
 import org.animotron.graph.handler.AnimoGraphHandler;
 import org.animotron.graph.handler.GraphHandler;
-import org.animotron.graph.index.Order;
 import org.animotron.io.PipeIterator;
 import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.QCAVector;
@@ -30,7 +29,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.util.Iterator;

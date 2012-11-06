@@ -20,11 +20,10 @@
  */
 package org.animotron;
 
-import junit.framework.Assert;
-import org.junit.Test;
-
 import com.eaio.uuid.UUID;
 import com.eaio.uuid.UUIDGen;
+import junit.framework.Assert;
+import org.junit.Test;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

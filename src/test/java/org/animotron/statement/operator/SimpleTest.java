@@ -25,9 +25,7 @@ import org.animotron.expression.JExpression;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.expression.JExpression.*;
 
 
 /**

@@ -35,7 +35,6 @@ import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.Properties.NAME;
-import static org.animotron.utils.MessageDigester.uuid;
 
 /**
  * Operator 'DEF'.

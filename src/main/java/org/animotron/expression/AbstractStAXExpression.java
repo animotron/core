@@ -23,8 +23,6 @@ package org.animotron.expression;
 import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
-import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.value.VALUE;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamReader;

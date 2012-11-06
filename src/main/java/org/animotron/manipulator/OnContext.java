@@ -20,11 +20,11 @@
  */
 package org.animotron.manipulator;
 
-import java.io.IOException;
-import java.util.concurrent.CountDownLatch;
-
 import org.animotron.io.Pipe;
 import org.jetlang.fibers.Fiber;
+
+import java.io.IOException;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

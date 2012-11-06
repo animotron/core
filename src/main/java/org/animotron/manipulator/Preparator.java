@@ -28,7 +28,6 @@ import org.animotron.marker.Marker;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.relation.USE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -36,7 +35,8 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
-import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>

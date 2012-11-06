@@ -21,16 +21,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.SHALL;
-import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.animotron.expression.Expression.__;
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

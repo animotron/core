@@ -22,7 +22,6 @@ package org.animotron.games.labels;
 
 import javolution.util.FastMap;
 import javolution.util.FastSet;
-
 import org.junit.Ignore;
 import org.junit.Test;
 

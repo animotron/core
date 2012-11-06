@@ -20,14 +20,13 @@
  */
 package org.animotron.tmp;
 
-import static org.junit.Assert.*;
+import javolution.util.FastSet;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.IOException;
 
-import javolution.util.FastSet;
-
-import org.junit.Ignore;
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author Ferenc Kovacs

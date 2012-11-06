@@ -22,7 +22,6 @@ package org.animotron.statement.query;
 
 import javolution.util.FastSet;
 import javolution.util.FastTable;
-
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;

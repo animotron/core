@@ -37,7 +37,8 @@ import java.util.List;
 import java.util.Set;
 
 import static org.animotron.graph.Properties.FREEZE;
-import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Compare operator 'WITH'.

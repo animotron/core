@@ -35,13 +35,9 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
-import java.util.Iterator;
 import java.util.List;
 
-import static org.animotron.graph.Properties.DEFID;
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.Properties.RID;
-import static org.animotron.graph.Properties.UID;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 

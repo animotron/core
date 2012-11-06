@@ -20,16 +20,15 @@
  */
 package org.animotron.statement.query;
 
-import java.io.IOException;
-import java.util.Set;
-
 import javolution.util.FastSet;
-
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Predicate;
 import org.animotron.statement.operator.Utils;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+import java.util.Set;
 
 /**
  * Predicate '?IS'.

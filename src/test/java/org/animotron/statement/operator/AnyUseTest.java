@@ -27,10 +27,7 @@ import org.animotron.statement.relation.USE;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
-import static org.animotron.expression.JExpression.value;
-import static org.animotron.expression.JExpression.element;
+import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

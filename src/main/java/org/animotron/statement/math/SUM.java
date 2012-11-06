@@ -20,15 +20,14 @@
  */
 package org.animotron.statement.math;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-
 import javolution.util.FastList;
-
 import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.animotron.expression.JExpression.value;
 

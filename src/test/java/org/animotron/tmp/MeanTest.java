@@ -21,7 +21,6 @@
 package org.animotron.tmp;
 
 import javolution.util.FastSet;
-
 import org.animotron.statement.value.VALUE;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -30,7 +29,8 @@ import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.expression.AnimoExpression.__;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

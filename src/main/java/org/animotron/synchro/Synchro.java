@@ -30,9 +30,9 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.graph.Properties.HASH;
 import static org.animotron.graph.RelationshipTypes.SHIFT;
-import static org.animotron.expression.Expression.__;
 import static org.animotron.utils.MessageDigester.byteArrayToHex;
 
 /**

@@ -21,7 +21,6 @@
 package org.animotron.exception;
 
 import javolution.util.FastTable;
-
 import org.neo4j.graphdb.Relationship;
 
 import java.util.List;

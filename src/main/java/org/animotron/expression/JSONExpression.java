@@ -22,14 +22,12 @@ package org.animotron.expression;
 
 import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.REF;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.JsonToken;
 
-import static org.codehaus.jackson.JsonToken.END_ARRAY;
-import static org.codehaus.jackson.JsonToken.END_OBJECT;
-import static org.codehaus.jackson.JsonToken.FIELD_NAME;
+import static org.codehaus.jackson.JsonToken.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

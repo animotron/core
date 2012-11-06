@@ -21,15 +21,7 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.EQ;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.query.ANY;
 import org.junit.Test;
-
-import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

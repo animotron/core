@@ -20,21 +20,16 @@
  */
 package org.animotron.statement.value;
 
-import javolution.util.FastTable;
-
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.AbstractStatement;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.StringTokenizer;
 
-import static org.animotron.graph.Properties.VALUE;
 import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.Properties.VALUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

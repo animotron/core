@@ -20,9 +20,9 @@
  */
 package org.animotron.io;
 
-import java.util.Iterator;
-
 import org.animotron.manipulator.QCAVector;
+
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

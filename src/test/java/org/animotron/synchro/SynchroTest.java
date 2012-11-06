@@ -20,8 +20,6 @@
  */
 package org.animotron.synchro;
 
-import static org.animotron.graph.AnimoGraph.startDB;
-
 import org.animotron.ATest;
 import org.jgroups.JChannel;
 import org.jgroups.Message;
@@ -30,6 +28,8 @@ import org.jgroups.View;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.animotron.graph.AnimoGraph.startDB;
 
 /**
  * @author <a href="mailto:amir.akhmedov@gmail.com">Amir Akhmedov</a>

@@ -38,7 +38,8 @@ import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
-import static org.animotron.utils.MessageDigester.*;
+import static org.animotron.utils.MessageDigester.cloneMD;
+import static org.animotron.utils.MessageDigester.updateMD;
 
 /**
  * Animo graph builder, it do optimization/compression and 

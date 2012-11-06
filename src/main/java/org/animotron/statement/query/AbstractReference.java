@@ -21,10 +21,8 @@
 package org.animotron.statement.query;
 
 import javolution.util.FastSet;
-
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;

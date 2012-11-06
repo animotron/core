@@ -52,7 +52,8 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.*;
+import static org.neo4j.graphdb.Direction.INCOMING;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 import static org.neo4j.graphdb.traversal.Evaluation.*;
 
 /**

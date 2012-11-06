@@ -20,13 +20,13 @@
  */
 package org.animotron.statement.operator;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
-
 import org.animotron.ATest;
 import org.animotron.expression.JExpression;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.animotron.expression.JExpression._;
+import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
