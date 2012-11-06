@@ -66,26 +66,11 @@ public class AnimoTraverser {
         handler.endGraph();
     }
 
-	protected void build(GraphHandler handler, Statement parent, Object o, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
-        if (o instanceof Relationship) {
-            build(handler, parent, new QCAVector((Relationship)o), level, isOne, pos, isLast, evaluable, def);
-
-        } else if (o instanceof QCAVector) {
-            build(handler, parent, (QCAVector)o, level, isOne, pos, isLast, evaluable, def);
-            
-        } else {
-            String name = (String) o;
-            Statement statement = Statements.name(name);
-            try {
-	            String reference = (String) node.getProperty(name);
-	            handler.start(statement, parent, reference, level, isOne, pos, isLast);
-	            handler.end(statement, parent, reference, level, isOne, pos, isLast);
-            } catch (Throwable t) {
-			}
-        }
+    protected void build(GraphHandler handler, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+        build(handler, parent, new QCAVector(r), level, isOne, pos, isLast, evaluable, def);
     }
 
-	protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
 		Relationship r = rr.getClosest();
 		Statement statement = Statements.relationshipType(r);
         if (statement == null)
