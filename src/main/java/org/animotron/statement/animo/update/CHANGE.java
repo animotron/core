@@ -53,16 +53,15 @@ public class CHANGE extends Operator implements Evaluable {
 
     @Override
     public OnQuestion onCalcQuestion() {
-        return calc;
+        return new Calc();
     }
-
-    private Calc calc = new Calc();
 
     private class Calc extends OnQuestion {
 
         @Override
         public void act(final PFlow pf) throws Throwable {
-            AnimoGraph.execute(new GraphOperation<Void>() {
+
+        	AnimoGraph.execute(new GraphOperation<Void>() {
                 @Override
                 public Void execute() throws Throwable {
                     Relationship op = null;
@@ -128,7 +127,7 @@ public class CHANGE extends Operator implements Evaluable {
                             DEFID.set(ashift, def);
                             DEFID.set(shift, def);
                             HASH.remove(i);
-                            DependenciesTracking._.execute(null, i);
+                            DependenciesTracking._.execute(pf.getController(), i);
                         }
                     }
                 }
