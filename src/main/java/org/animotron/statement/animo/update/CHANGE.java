@@ -96,6 +96,8 @@ public class CHANGE extends Operator implements Evaluable {
         }
 
         private void process(PFlow pf, QCAVector v, Relationship op, Relationship np) throws Throwable {
+            long rid = np.getId();
+            long uid = pf.getOP().getId();
             Relationship c = v.getClosest();
             IndexHits<Relationship> it = Order._.queryDown(c.isType(DEF._) ? c.getEndNode() : c.getStartNode());
             try {
@@ -109,23 +111,20 @@ public class CHANGE extends Operator implements Evaluable {
                             Relationship ashift = AShift._.get(s, def);
                             if (ashift == null) {
                                 ashift = s.createRelationshipTo(n, ASHIFT._);
-                                AShift._.add(ashift, def);
                             } else {
                                 s = ashift.getEndNode();
                                 AShift._.remove(ashift, def);
                                 ashift.delete();
                                 ashift = s.createRelationshipTo(n, ASHIFT._);
-                                AShift._. add(ashift, def);
                             }
                             Relationship shift = s.createRelationshipTo(n, SHIFT);
-                            long rid = np.getId();
-                            RID.set(ashift, rid);
-                            RID.set(shift, rid);
-                            long uid = pf.getOP().getId();
                             UID.set(ashift, uid);
                             UID.set(shift, uid);
                             DEFID.set(ashift, def);
                             DEFID.set(shift, def);
+                            RID.set(ashift, rid);
+                            RID.set(shift, rid);
+                            AShift._. add(ashift, def);
                             HASH.remove(i);
                             DependenciesTracking._.execute(pf.getController(), i);
                         }

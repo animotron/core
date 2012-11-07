@@ -24,6 +24,7 @@ import org.animotron.exception.AnimoException;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
+import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.operator.DEF;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
@@ -38,8 +39,10 @@ import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
+import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -121,6 +124,17 @@ public class FastGraphBuilder extends GraphBuilder {
                         DEF._.add(relationship, reference);
                         HASH.set(relationship, hash);
                     } else {
+                        Node n = relationship.getEndNode();
+                        Node s = n;
+                        Relationship ashift = s.getSingleRelationship(ASHIFT._, OUTGOING);
+                        if (ashift == null) {
+                            s.createRelationshipTo(end, ASHIFT._);
+                        } else {
+                            n = ashift.getEndNode();
+                            ashift.delete();
+                            s.createRelationshipTo(end, ASHIFT._);
+                        }
+                        n.createRelationshipTo(end, SHIFT);
                         HASH.set(relationship, hash);
                     }
                 } else {

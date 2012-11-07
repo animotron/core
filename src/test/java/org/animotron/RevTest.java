@@ -50,8 +50,8 @@ public class RevTest extends ATest {
         testAnimo("def b x.");
         testAnimo("def a y.");
         testAnimo("def b y.");
-        testAnimo("def a z.");
-        testAnimo("def b z.");
+//        testAnimo("def a z.");
+//        testAnimo("def b z.");
     }
 
     @Test

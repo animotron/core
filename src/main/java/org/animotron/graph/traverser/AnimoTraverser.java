@@ -28,7 +28,9 @@ import org.animotron.graph.index.Order;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.QNAME;
+import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
@@ -40,6 +42,7 @@ import java.io.IOException;
 
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.RID;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -76,20 +79,40 @@ public class AnimoTraverser {
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
 		if (!(statement instanceof REF)) {
+            node = r.getEndNode();
             if (statement instanceof DEF) {
                 def = r.getId();
-            }
-            node = r.getEndNode();
-            Relationship ashift = null;
-            if (def != 0) {
-                ashift = AShift._.get(node, def);
-            }
-            if (ashift != null) {
-                pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
-                r = getDb().getRelationshipById((Long) RID.get(ashift));
-                build(handler, parent, r, level, true, pos++, true, evaluable, def);
+                Relationship ashift = node.getSingleRelationship(ASHIFT._, OUTGOING);
+                if (ashift != null) {
+                    if (RID.has(ashift)) {
+                        ashift = getDb().getRelationshipById((Long) RID.get(ashift));
+                        if (ashift.isType(LINK._)) {
+                            iterate(handler, rr, statement, ashift, level, evaluable, def);
+                        } else {
+                            build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
+                        }
+                    } else {
+                        iterate(handler, rr, statement, ashift, level, evaluable, def);
+                    }
+                } else {
+                    iterate(handler, rr, statement, node, level, evaluable, def);
+                }
             } else {
-                iterate(handler, rr, statement, node, level, evaluable, def);
+                Relationship ashift = null;
+                if (def != 0) {
+                    ashift = AShift._.get(node, def);
+                }
+                if (ashift != null) {
+                    ashift = getDb().getRelationshipById((Long) RID.get(ashift));
+                    pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
+                    if (ashift.isType(LINK._)) {
+                        iterate(handler, rr, statement, ashift, level, evaluable, def);
+                    } else {
+                        build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
+                    }
+                } else {
+                    iterate(handler, rr, statement, node, level, evaluable, def);
+                }
             }
         }
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
