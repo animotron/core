@@ -24,6 +24,8 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.Expression;
 import org.animotron.graph.index.Cache;
+import org.animotron.io.Pipe;
+import org.animotron.manipulator.Evaluator;
 import org.animotron.statement.Statement;
 import org.animotron.statement.animo.update.CHANGE;
 import org.animotron.statement.link.LINK;
@@ -41,10 +43,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.animotron.expression.Expression.__;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -99,7 +103,7 @@ public class FastGraphBuilder extends GraphBuilder {
     }
 
     @Override
-    public void endGraph() throws AnimoException, IOException {
+    public void endGraph() throws AnimoException {
         Iterator<Object[]> it = flow.iterator();
         if (it.hasNext()) {
             Object[] o = it.next();
@@ -129,7 +133,7 @@ public class FastGraphBuilder extends GraphBuilder {
                         preparative(relationship);
                     } else {
                         final Node def = relationship.getEndNode();
-                        Expression e = new AbstractExpression(new FastGraphBuilder()) {
+                        final Relationship e =  __(new AbstractExpression(new FastGraphBuilder()) {
                             @Override
                             public void build() throws Throwable {
                                 builder.start(CHANGE._);
@@ -137,14 +141,17 @@ public class FastGraphBuilder extends GraphBuilder {
                                         builder._(REF._,  def);
                                     builder.end();
                                     builder.start(LINK._);
-                                        for (Relationship i : end.getRelationships(Direction.OUTGOING)) {
+                                        for (Relationship i : end.getRelationships(OUTGOING)) {
                                             builder.bind(i);
                                         }
                                     builder.end();
                                 builder.end();
-                                destructive(end);
                             }
-                        };
+                        });
+                        for (Relationship i : end.getRelationships(OUTGOING)) {
+                            i.delete();
+                        }
+                        end.delete();
                         evaluative(e);
                     }
                 } else {

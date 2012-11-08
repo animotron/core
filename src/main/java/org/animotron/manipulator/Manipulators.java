@@ -111,10 +111,7 @@ public class Manipulators {
         private void evaluative() throws Throwable {
             if (evaluative != null) {
                 Pipe pipe = Evaluator._.execute(null, evaluative);
-                QCAVector v;
-                while ((v = pipe.take()) != null) {
-                   v.getClosest();
-                }
+                while (pipe.take() != null);
             }
         }
 
