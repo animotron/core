@@ -21,6 +21,7 @@
 package org.animotron.manipulator;
 
 import javolution.util.FastTable;
+import org.animotron.io.Pipe;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -42,9 +43,10 @@ public class Manipulators {
 		
 		FastTable<Node> preparative = new FastTable<Node>();
 		FastTable<Node> destructive = new FastTable<Node>();
-        Relationship modified = null;
+        Relationship modificative = null;
+        Relationship evaluative = null;
 
-		public Catcher() {}
+        public Catcher() {}
 		
         public void preparative(Node node) {
             preparative.add(node);
@@ -52,7 +54,7 @@ public class Manipulators {
 
         //TODO refacor catcher
 		public void clear() {
-			modified = null;
+			modificative = null;
             preparative.clear();
 		}
 
@@ -60,8 +62,12 @@ public class Manipulators {
 			preparative(r.getEndNode());
 		}
 
-        public void modified(Relationship r) {
-            modified = r;
+        public void modificative(Relationship r) {
+            modificative = r;
+        }
+
+        public void evaluative(Relationship r) {
+            evaluative = r;
         }
 
         public void destructive(Node node) {
@@ -75,7 +81,8 @@ public class Manipulators {
 
 		public void push() throws Throwable {
 			preparative();
-            modified();
+            modificative();
+            evaluative();
 			destructive();
 		}
 
@@ -95,10 +102,19 @@ public class Manipulators {
 			}
         }
 
-        private void modified() throws Throwable {
-            if (modified != null) {
-                //CachedSerializer.drop(modified);
-                DependenciesTracking._.execute(null, modified);
+        private void modificative() throws Throwable {
+            if (modificative != null) {
+                DependenciesTracking._.execute(null, modificative);
+            }
+        }
+
+        private void evaluative() throws Throwable {
+            if (evaluative != null) {
+                Pipe pipe = Evaluator._.execute(null, evaluative);
+                QCAVector v;
+                while ((v = pipe.take()) != null) {
+                   v.getClosest();
+                }
             }
         }
 
@@ -106,6 +122,7 @@ public class Manipulators {
 			for (Node n : destructive) {
 				GC._.execute(null, n);
 			}
+
 		}
 
     }

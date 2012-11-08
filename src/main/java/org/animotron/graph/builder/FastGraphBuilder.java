@@ -21,15 +21,19 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.graph.index.Cache;
-import org.animotron.graph.index.Order;
 import org.animotron.statement.Statement;
-import org.animotron.statement.operator.ASHIFT;
+import org.animotron.statement.animo.update.CHANGE;
+import org.animotron.statement.link.LINK;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.REF;
 import org.animotron.utils.MessageDigester;
+import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
-import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 import java.security.MessageDigest;
@@ -39,10 +43,8 @@ import java.util.List;
 
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
-import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.animotron.utils.MessageDigester.cloneMD;
 import static org.animotron.utils.MessageDigester.updateMD;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -108,7 +110,7 @@ public class FastGraphBuilder extends GraphBuilder {
                 root = createNode();
                 o[6] = Cache.NODE.get(hash) != null;
                 Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
-                Node end = r.getEndNode();
+                final Node end = r.getEndNode();
                 o[3] = r;
                 o[4] = end;
                 step();
@@ -122,47 +124,39 @@ public class FastGraphBuilder extends GraphBuilder {
                         NAME.set(end, reference);
                         relationship = getROOT().createRelationshipTo(end, DEF._);
                         DEF._.add(relationship, reference);
+                        modificative(relationship);
                         HASH.set(relationship, hash);
+                        preparative(relationship);
                     } else {
-                        Node n = relationship.getEndNode();
-                        Node s = n;
-                        Relationship ashift = s.getSingleRelationship(ASHIFT._, OUTGOING);
-                        if (ashift == null) {
-                            s.createRelationshipTo(end, ASHIFT._);
-                        } else {
-                            n = ashift.getEndNode();
-                            ashift.delete();
-                            s.createRelationshipTo(end, ASHIFT._);
-                        }
-                        n.createRelationshipTo(end, SHIFT);
-                        HASH.set(relationship, hash);
+                        final Node def = relationship.getEndNode();
+                        Expression e = new AbstractExpression(new FastGraphBuilder()) {
+                            @Override
+                            public void build() throws Throwable {
+                                builder.start(CHANGE._);
+                                    builder.start(AN._);
+                                        builder._(REF._,  def);
+                                    builder.end();
+                                    builder.start(LINK._);
+                                        for (Relationship i : end.getRelationships(Direction.OUTGOING)) {
+                                            builder.bind(i);
+                                        }
+                                    builder.end();
+                                builder.end();
+                                destructive(end);
+                            }
+                        };
+                        evaluative(e);
                     }
                 } else {
                     relationship = getROOT().createRelationshipTo(end, r.getType());
                     Cache.RELATIONSHIP.add(relationship, hash);
+                    modificative(relationship);
+                    HASH.set(relationship, hash);
+                    preparative(relationship);
                 }
                 r.delete();
                 root.delete();
-            } else if (statement instanceof DEF) {
-                Node end = relationship.getEndNode();
-                Node nn = createNode();
-                copyProperties(end, nn);
-                int i = 1;
-                IndexHits<Relationship> hits = Order._.queryDown(end);
-                try {
-                    for (Relationship r : hits) {
-                        order(copy(nn, r), i++);
-                    }
-                } finally {
-                    hits.close();
-                }
-                relationship = DEF._.get(reference);
-            } else {
-                return;
             }
-            HASH.set(relationship, hash);
-            preparative(relationship);
-            modified(relationship);
         }
     }
 

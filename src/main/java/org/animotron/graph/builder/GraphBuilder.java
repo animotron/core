@@ -224,12 +224,16 @@ public abstract class GraphBuilder {
 //        }
     }
 
+    protected final void evaluative(Relationship r) {
+        catcher.evaluative(r);
+    }
+
     protected final void preparative(Relationship r) {
         catcher.preparative(r);
     }
 
-    protected final void modified(Relationship r) {
-        catcher.modified(r);
+    protected final void modificative(Relationship r) {
+        catcher.modificative(r);
     }
 
     protected final void destructive(Relationship r) {

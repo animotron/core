@@ -67,17 +67,24 @@ public class PATH extends Operator implements Evaluable {
                     set.add(v.getClosest());
                 }
                 IndexHits<Relationship> it = Order._.queryDown(pf.getOPNode());
+                boolean done = false;
                 try {
                     int i = 0;
                     while (it.hasNext()) {
                         Relationship r = it.next();
                         if (i > 0 && !r.isType(REF._)) {
                             process(pf, r, false, set);
+                            done = true;
                         }
                         i++;
                     }
                 } finally {
                     it.close();
+                }
+                if (!done)  {
+                    for (Relationship i : set) {
+                        pf.sendAnswer(i);
+                    }
                 }
             }
         }

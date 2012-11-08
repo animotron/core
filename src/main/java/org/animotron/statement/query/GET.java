@@ -369,7 +369,7 @@ public class GET extends AbstractQuery implements Shift {
 //	
 //				} else if (st instanceof Reference) {
 ////					if (!pf.isInStack(r)) {
-//						//System.out.println("["+pf.getOP()+"] evaluate "+prev);
+//						//System.out.println("["+pf.getOP()+"] evaluative "+prev);
 //						Pipe in = Evaluator._.execute(pf.getController(), cV);
 //						QCAVector v;
 //						while ((v = in.take()) != null) {

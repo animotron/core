@@ -82,37 +82,21 @@ public class AnimoTraverser {
             node = r.getEndNode();
             if (statement instanceof DEF) {
                 def = r.getId();
-                Relationship ashift = node.getSingleRelationship(ASHIFT._, OUTGOING);
-                if (ashift != null) {
-                    if (RID.has(ashift)) {
-                        ashift = getDb().getRelationshipById((Long) RID.get(ashift));
-                        if (ashift.isType(LINK._)) {
-                            iterate(handler, rr, statement, ashift, level, evaluable, def);
-                        } else {
-                            build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
-                        }
-                    } else {
-                        iterate(handler, rr, statement, ashift, level, evaluable, def);
-                    }
+            }
+            Relationship ashift = null;
+            if (def != 0) {
+                ashift = AShift._.get(node, def);
+            }
+            if (ashift != null) {
+                ashift = getDb().getRelationshipById((Long) RID.get(ashift));
+                pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
+                if (ashift.isType(LINK._)) {
+                    iterate(handler, rr, statement, ashift, level, evaluable, def);
                 } else {
-                    iterate(handler, rr, statement, node, level, evaluable, def);
+                    build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
                 }
             } else {
-                Relationship ashift = null;
-                if (def != 0) {
-                    ashift = AShift._.get(node, def);
-                }
-                if (ashift != null) {
-                    ashift = getDb().getRelationshipById((Long) RID.get(ashift));
-                    pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
-                    if (ashift.isType(LINK._)) {
-                        iterate(handler, rr, statement, ashift, level, evaluable, def);
-                    } else {
-                        build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
-                    }
-                } else {
-                    iterate(handler, rr, statement, node, level, evaluable, def);
-                }
+                iterate(handler, rr, statement, node, level, evaluable, def);
             }
         }
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
