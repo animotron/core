@@ -33,6 +33,7 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import static org.animotron.graph.AnimoGraph.*;
+import static org.animotron.graph.Properties.CONTEXT;
 import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.Properties.NAME;
 
@@ -134,7 +135,14 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
         return createNode();
     }
 
-	@Override
+    @Override
+    public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
+        CONTEXT.set(parent, true);
+        return parent.createRelationshipTo(createChild(reference, ready, ignoreNotFound), this);
+    }
+
+
+    @Override
 	public Object reference(Relationship r) {
 		try {
 			return NAME.get(r.getEndNode());

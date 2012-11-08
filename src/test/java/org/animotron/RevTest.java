@@ -32,7 +32,7 @@ public class RevTest extends ATest {
     public void test_00() throws Throwable {
         testAnimo("def a x.");
         testAnimo("def a y.");
-//        testAnimo("def a x.");
+        testAnimo("def a x.");
     }
 
     @Test

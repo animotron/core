@@ -175,8 +175,9 @@ public class QCAVector {
 		
 		Node n = r.getEndNode();
 		try {
-			return ASHIFT._.actualNode(n);
-		} catch (Exception e) {
+//            return ASHIFT._.actualNode(n);
+            return n;
+        } catch (Exception e) {
 			return n;
 		}
 	}
