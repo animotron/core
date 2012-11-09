@@ -110,16 +110,17 @@ public class CHANGE extends Operator implements Evaluable {
                     if (op == null || r.getEndNode().equals(op.getEndNode())) {
                         for (Relationship i : def(v)) {
                             long def = i.getId();
-                            Node s = r.getStartNode();
+                            Node a = r.getStartNode();
+                            Node s = a;
                             Node n = np.getEndNode();
                             Relationship ashift = AShift._.get(s, def);
                             if (ashift == null) {
-                                ashift = s.createRelationshipTo(n, ASHIFT._);
+                                ashift = a.createRelationshipTo(n, ASHIFT._);
                             } else {
                                 s = ashift.getEndNode();
                                 AShift._.remove(ashift, def);
                                 ashift.delete();
-                                ashift = s.createRelationshipTo(n, ASHIFT._);
+                                ashift = a.createRelationshipTo(n, ASHIFT._);
                             }
                             Relationship shift = s.createRelationshipTo(n, SHIFT);
                             UID.set(ashift, uid);
