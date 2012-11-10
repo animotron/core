@@ -47,18 +47,18 @@ public class ResultTraverser extends AnimoTraverser {
     @Override
     public void traverse(GraphHandler handler, Relationship r) throws IOException {
         handler.startGraph();
-        build(handler, null, r, 0, true, 0, true, true, 0);
+        build(handler, null, r, 0, true, 0, true, true, null);
         handler.endGraph();
     }
 
     @Override
-    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
     	Relationship r = rr.getClosest();
 		Statement s = Statements.relationshipType(r);
-        process(handler, s, parent, rr, level, isOne, pos, isLast, evaluable, 0);
+        process(handler, s, parent, rr, level, isOne, pos, isLast, evaluable, null);
     }
     
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
@@ -74,7 +74,7 @@ public class ResultTraverser extends AnimoTraverser {
 
         	if (evaluable && s instanceof Evaluable) { 
 
-        		result(handler, rr, level, isOne, pos, isLast);
+        		result(handler, rr, level, isOne, pos, isLast, def);
 			
         	} else {
 				Relationship r = rr.getClosest();
@@ -93,17 +93,17 @@ public class ResultTraverser extends AnimoTraverser {
         }
     }
 
-    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, Relationship def) throws IOException {
     	Relationship r = rr.getClosest();
-    	
-		Iterator<QCAVector> in = 
-        		new PipeIterator( 
+
+		Iterator<QCAVector> in =
+        		new PipeIterator(
         				Evaluator._.execute(handler.getController(), rr.question(r)) );
-        
-        iterate(handler, null, rr, in, level, isOne, pos, isLast, true);
+
+        iterate(handler, null, rr, in, level, isOne, pos, isLast, true, def);
     }
     
-    protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne, int pos, boolean isLast, boolean evaluable) throws IOException {
+    protected boolean iterate(GraphHandler handler, Statement parent, QCAVector rr, Iterator<QCAVector> it, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
         boolean found = false;
         boolean isFirst = isOne;
 
@@ -117,16 +117,16 @@ public class ResultTraverser extends AnimoTraverser {
 //        	prev = i;
             if (isFirst) {
                 if (it.hasNext()) {
-                    build(handler, parent, i, level, false, pos++, isLast, evaluable, 0);
+                    build(handler, parent, i, level, false, pos++, isLast, evaluable, def);
                 	i = it.next();
 //                	i.setPrecedingSibling(prev);
 //                	prev = i;
-                    build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable, 0);
+                    build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable, def);
                 } else {
-                    build(handler, parent, i, level, isOne, pos++, isLast && !it.hasNext(), evaluable, 0);
+                    build(handler, parent, i, level, isOne, pos++, isLast && !it.hasNext(), evaluable, def);
                 }
             } else {
-                build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable, 0);
+                build(handler, parent, i, level, false, pos++, isLast && !it.hasNext(), evaluable, def);
             }
             isFirst = false;
             found = true;

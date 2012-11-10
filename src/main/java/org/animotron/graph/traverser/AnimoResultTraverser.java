@@ -41,7 +41,7 @@ public class AnimoResultTraverser extends ResultTraverser {
     protected AnimoResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
@@ -56,7 +56,7 @@ public class AnimoResultTraverser extends ResultTraverser {
 				evaluable = false;
 
 			if (evaluable && s instanceof Evaluable) {
-                result(handler, rr, level, isOne, pos, isLast);
+                result(handler, rr, level, isOne, pos, isLast, def);
                 
             } else {
 				Relationship r = rr.getClosest();

@@ -26,6 +26,11 @@ import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
+import org.animotron.statement.animo.update.CHANGE;
+import org.animotron.statement.link.LINK;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -48,7 +53,6 @@ import static org.animotron.graph.Properties.HASH;
  *
  * Methods to use:
  *
- * startGraph()
  * endGraph()
  *
  * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
@@ -67,6 +71,8 @@ public abstract class GraphBuilder {
     protected final boolean ignoreNotFound;
     private Manipulators.Catcher catcher;
     private Stack<Object[]> stack;
+
+    private Relationship relationship;
 
     public GraphBuilder() {
         this(true);
@@ -90,13 +96,11 @@ public abstract class GraphBuilder {
         }
     }
 
-    public abstract Relationship relationship();
+    public final Relationship relationship() {
+        return relationship;
+    };
 
-    protected abstract void fail(Throwable t);
-
-    protected abstract void startGraph();
-
-    protected abstract void endGraph() throws AnimoException, IOException;
+    protected abstract Relationship endGraph() throws AnimoException, IOException;
 
     public final void start(Statement statement) throws AnimoException, IOException {
         start(statement, null);
@@ -106,9 +110,21 @@ public abstract class GraphBuilder {
         start(VALUE._, value);
     }
 
-    Statement s; Object r;
+   private Statement s;
+   private Object r;
 
     public final void start(Statement statement, Object reference) throws AnimoException, IOException {
+        if (statement instanceof DEF) {
+            relationship = DEF._.get(reference);
+            if (relationship != null) {
+                start(CHANGE._);
+                    start(AN._);
+                        _(REF._,  reference);
+                    end();
+                    start(LINK._);
+                return;
+            }
+        }
     	if (s != null) {
     		stack.push(start(s, r, true));
         }
@@ -121,18 +137,18 @@ public abstract class GraphBuilder {
     public final void end() throws AnimoException, IOException {
     	byte[] hash;
     	if (s != null) {
-    		hash = end(start(s, r, false), false);
+    		hash = end(start(s, r, false));
     		s = null; r = null;
     	} else {
     		Object[] p = popParent();
-    		hash = end(p, true);
+    		hash = end(p);
     	}
         if (hasParent()) {
             ((MessageDigest) peekParent()[0]).update(hash);
         }
     }
 
-	protected abstract byte[] end(Object[] o, boolean hasChild) throws AnimoException;
+	protected abstract byte[] end(Object[] o) throws AnimoException;
 
     public final void bind(Relationship e) throws IOException, AnimoException {
         Object[] o;
@@ -188,9 +204,16 @@ public abstract class GraphBuilder {
             try {
                 s = null; r = null;
                 stack = new Stack<Object[]>();
-                startGraph();
                 exp.build();
-                endGraph();
+                while (!stack.empty()) {
+                    end();
+                }
+                Relationship c = endGraph();
+                if (relationship == null) {
+                    relationship = c;
+                } else {
+                    evaluative(c);
+                }
                 tx.success();
                 finishTx(tx);
             } catch (Throwable t) {
@@ -203,7 +226,6 @@ public abstract class GraphBuilder {
                     tx = beginTx();
                     try {
                         catcher.clear();
-                        fail(t);
                     } finally {
                         finishTx(tx);
                     }

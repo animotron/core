@@ -49,7 +49,7 @@ public class MLResultTraverser extends AnimoResultTraverser {
     protected MLResultTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
         if (s instanceof MLOperator || s instanceof VALUE) {
             if (s instanceof Prefix) {
                 node = rr.getClosest().getEndNode();

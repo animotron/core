@@ -58,21 +58,21 @@ public class AnimoTraverser {
 	
 	public void traverse(GraphHandler handler, Relationship r) throws IOException {
 		handler.startGraph();
-		build(handler, null, r, 0, true, 0, true, true, 0);
+		build(handler, null, r, 0, true, 0, true, true, null);
 		handler.endGraph();
 	}
 	
     public void traverse(GraphHandler handler, QCAVector vector) throws IOException {
         handler.startGraph();
-        build(handler, null, vector, 0, true, 0, true, true, 0);
+        build(handler, null, vector, 0, true, 0, true, true, null);
         handler.endGraph();
     }
 
-    protected void build(GraphHandler handler, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void build(GraphHandler handler, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
         build(handler, parent, new QCAVector(r), level, isOne, pos, isLast, evaluable, def);
     }
 
-    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
 		Relationship r = rr.getClosest();
 		Statement statement = Statements.relationshipType(r);
         if (statement == null)
@@ -81,11 +81,11 @@ public class AnimoTraverser {
 		if (!(statement instanceof REF)) {
             node = r.getEndNode();
             if (statement instanceof DEF) {
-                def = r.getId();
+                def = r;
             }
             Relationship ashift = null;
-            if (def != 0) {
-                ashift = AShift._.get(node, def);
+            if (def != null) {
+                ashift = AShift._.get(node, def.getId());
             }
             if (ashift != null) {
                 ashift = getDb().getRelationshipById((Long) RID.get(ashift));
@@ -102,7 +102,7 @@ public class AnimoTraverser {
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
-    protected int iterateRef(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, long def) throws IOException {
+    protected int iterateRef(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, Relationship def) throws IOException {
         QCAVector prev;
         FastTable<Relationship> o = FastTable.newInstance();
         IndexHits<Relationship> it = Order._.queryDown(n);
@@ -139,15 +139,15 @@ public class AnimoTraverser {
 
     }
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, Relationship r, int level, boolean evaluable, long def) throws IOException {
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, Relationship r, int level, boolean evaluable, Relationship def) throws IOException {
         iterate(handler, v, parent, r.getEndNode(), level, evaluable, def);
     }
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, long def) throws IOException {
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, Relationship def) throws IOException {
         iterate(handler, v, parent, Order._.queryDown(n), level, evaluable, def);
     }
 
-    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, long def) throws IOException {
+    protected void iterate(GraphHandler handler, QCAVector v, Statement parent, IndexHits<Relationship> it, int level, boolean evaluable, Relationship def) throws IOException {
        QCAVector prev;
     	FastTable<Relationship> o = FastTable.newInstance();
         try {

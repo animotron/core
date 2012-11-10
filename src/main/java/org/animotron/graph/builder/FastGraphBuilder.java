@@ -21,19 +21,10 @@
 package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.expression.AbstractExpression;
-import org.animotron.expression.Expression;
 import org.animotron.graph.index.Cache;
-import org.animotron.io.Pipe;
-import org.animotron.manipulator.Evaluator;
 import org.animotron.statement.Statement;
-import org.animotron.statement.animo.update.CHANGE;
-import org.animotron.statement.link.LINK;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
-import org.animotron.statement.operator.REF;
 import org.animotron.utils.MessageDigester;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 
@@ -47,8 +38,8 @@ import static org.animotron.expression.Expression.__;
 import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.*;
 import static org.animotron.utils.MessageDigester.cloneMD;
+import static org.animotron.utils.MessageDigester.md;
 import static org.animotron.utils.MessageDigester.updateMD;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and 
@@ -72,9 +63,7 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class FastGraphBuilder extends GraphBuilder {
 
-    private List<Object[]> flow;
-    private Relationship relationship;
-    private Node root;
+    private List<Object[]> flow = new LinkedList<Object[]>();
     private byte[] hash;
 
     public FastGraphBuilder () {
@@ -86,91 +75,52 @@ public class FastGraphBuilder extends GraphBuilder {
     }
 
     @Override
-    protected void fail(Throwable t) {
-        if (root != null) {
-            destructive(root);
-        }
-    }
-
-    @Override public Relationship relationship() {
-        return relationship;
-    }
-
-    @Override
-    public void startGraph() {
-        flow = new LinkedList<Object[]>();
-        root = null;
-    }
-
-    @Override
-    public void endGraph() throws AnimoException {
+    public Relationship endGraph() throws AnimoException {
+        Relationship r = null;
         Iterator<Object[]> it = flow.iterator();
         if (it.hasNext()) {
             Object[] o = it.next();
-            Statement statement = (Statement) o[1];
-            relationship = Cache.RELATIONSHIP.get(hash);
-            Object reference = statement instanceof DEF && o[2] == null ? MessageDigester.byteArrayToHex(hash) : o[2];
-            if (relationship == null) {
-                root = createNode();
-                o[6] = Cache.NODE.get(hash) != null;
-                Relationship r = statement.build(root, reference, hash, true, ignoreNotFound);
-                final Node end = r.getEndNode();
-                o[3] = r;
-                o[4] = end;
-                step();
-                while (it.hasNext()) {
-                    build(it.next());
-                    step();
+            if (o[1] instanceof DEF) {
+                if (o[2] == null) {
+                    o[2] = MessageDigester.byteArrayToHex(hash);
                 }
-                if (statement instanceof DEF) {
-                    relationship = DEF._.get(reference);
-                    if (relationship == null) {
-                        NAME.set(end, reference);
-                        relationship = getROOT().createRelationshipTo(end, DEF._);
-                        DEF._.add(relationship, reference);
-                        modificative(relationship);
-                        HASH.set(relationship, hash);
-                        preparative(relationship);
-                    } else {
-                        final Node def = relationship.getEndNode();
-                        final Relationship e =  __(new AbstractExpression(new FastGraphBuilder()) {
-                            @Override
-                            public void build() throws Throwable {
-                                builder.start(CHANGE._);
-                                    builder.start(AN._);
-                                        builder._(REF._,  def);
-                                    builder.end();
-                                    builder.start(LINK._);
-                                        for (Relationship i : end.getRelationships(OUTGOING)) {
-                                            builder.bind(i);
-                                        }
-                                    builder.end();
-                                builder.end();
-                            }
-                        });
-                        for (Relationship i : end.getRelationships(OUTGOING)) {
-                            i.delete();
-                        }
-                        end.delete();
-                        evaluative(e);
-                    }
-                } else {
-                    relationship = getROOT().createRelationshipTo(end, r.getType());
-                    Cache.RELATIONSHIP.add(relationship, hash);
-                    modificative(relationship);
-                    HASH.set(relationship, hash);
-                    preparative(relationship);
+                r = build(o, it);
+                NAME.set(r.getEndNode(), o[2]);
+                DEF._.add(r, o[2]);
+                modificative(r);
+                preparative(r);
+            } else {
+                r = Cache.RELATIONSHIP.get(hash);
+                if (r == null) {
+                    o[6] = Cache.NODE.get(hash) != null;
+                    r= build(o, it);
+                    Cache.RELATIONSHIP.add(r, hash);
+                    modificative(r);
+                    HASH.set(r, hash);
+                    preparative(r);
                 }
-                r.delete();
-                root.delete();
             }
         }
+        return r;
+    }
+
+    private Relationship build(Object[] o, Iterator<Object[]> it) throws AnimoException {
+        Relationship r = ((Statement) o[1]).build(getROOT(), o[2], hash, true, ignoreNotFound);
+        final Node end = r.getEndNode();
+        o[3] = r;
+        o[4] = end;
+        step();
+        while (it.hasNext()) {
+            build(it.next());
+            step();
+        }
+        return r;
     }
 
     @Override
     protected Object[] start(Statement statement, Object reference, boolean hasChild) throws AnimoException {
         Object[] parent = hasParent() ? peekParent() : null;
-        MessageDigest md = MessageDigester.md();
+        MessageDigest md = md();
         byte[] hash = null;
         boolean ready = !hasChild && reference != null;
         if (ready) {
@@ -196,7 +146,7 @@ public class FastGraphBuilder extends GraphBuilder {
     }
 
     @Override
-    protected byte[] end(Object[] o, boolean hasChild) {
+    protected byte[] end(Object[] o) {
         MessageDigest md = (MessageDigest) o[0];
         if (!(Boolean) o[7]) {
             updateMD(md, (Statement) o[1]);

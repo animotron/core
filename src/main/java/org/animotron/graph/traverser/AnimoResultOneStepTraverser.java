@@ -43,7 +43,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
     public AnimoResultOneStepTraverser() {}
 
     @Override
-    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, long def) throws IOException {
+    protected void process(GraphHandler handler, Statement s, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
@@ -60,7 +60,7 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 			if (evaluable && s instanceof Evaluable  && !handler.isStepMade() ) {
 
             	GraphHandler gh = new AnimoGraphHandler(handler);
-                result(gh, rr, level, isOne, pos, isLast);
+                result(gh, rr, level, isOne, pos, isLast, def);
                 
             } else {
 				Relationship r = rr.getClosest();
@@ -75,13 +75,13 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
         }
     }
     
-    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    protected void result(GraphHandler handler, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, Relationship def) throws IOException {
     	Relationship r = rr.getClosest();
     	
         Iterator<QCAVector> in = 
         		new PipeIterator( 
         				Evaluator._.execute(handler.getController(), rr.question(r), null, false) );
         
-        iterate(handler, null, rr, in, level, isOne, pos, isLast, true);
+        iterate(handler, null, rr, in, level, isOne, pos, isLast, true, null);
     }
 }
