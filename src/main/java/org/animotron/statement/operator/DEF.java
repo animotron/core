@@ -36,6 +36,7 @@ import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.CONTEXT;
 import static org.animotron.graph.Properties.DEFID;
 import static org.animotron.graph.Properties.NAME;
+import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * Operator 'DEF'.
@@ -89,7 +90,7 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	}
 	
 	public Node getDefNode(Node rev) {
-        Relationship ar = rev.getSingleRelationship(ASHIFT._, Direction.INCOMING);
+        Relationship ar = rev.getSingleRelationship(ASHIFT._, INCOMING);
         return ar == null ? null : ar.getStartNode();
 	}
 
@@ -99,7 +100,8 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 //	}
 
 	public Relationship get(Node node) {
-        return getDb().getRelationshipById((Long) DEFID.get(node));
+        //return getDb().getRelationshipById((Long) DEFID.get(node));
+        return  node.getSingleRelationship(DEF._, INCOMING);
 	}
 
 	public static Relationship getDef(Relationship arev) {
@@ -107,7 +109,7 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	}
 
 	public static Relationship getDefR(Node defNode) {
-        return defNode.getSingleRelationship(DEF._, Direction.INCOMING);
+        return defNode.getSingleRelationship(DEF._, INCOMING);
 	}
 
 	private Relationship create(String name) throws AnimoException {
