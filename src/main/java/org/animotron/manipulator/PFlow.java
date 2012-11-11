@@ -53,12 +53,6 @@ public class PFlow {
 	private Controller controller;
 	private QCAVector path;
 	
-	public PFlow(Controller controller, Relationship op) {
-		path = new QCAVector(op);
-		
-		this.controller = controller;
-	}
-
 	public PFlow(Controller controller, QCAVector vector) {
 		path = vector;
 

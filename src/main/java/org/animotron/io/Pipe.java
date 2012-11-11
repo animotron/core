@@ -22,6 +22,7 @@ package org.animotron.io;
 
 import javolution.lang.Reusable;
 import org.animotron.manipulator.QCAVector;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 import java.util.concurrent.SynchronousQueue;
@@ -35,7 +36,7 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class Pipe extends SynchronousQueue<QCAVector> implements Reusable {
 	
-	private final static QCAVector EOP = new QCAVector(null);
+	private final static QCAVector EOP = new QCAVector((Relationship)null, (Relationship)null);
 
 	private static final long serialVersionUID = -4081186589534725579L;
 	

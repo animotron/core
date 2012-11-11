@@ -24,6 +24,9 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
+
+import org.animotron.graph.Properties;
+import org.animotron.graph.index.AShift;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.*;
@@ -34,9 +37,12 @@ import org.animotron.statement.relation.SHALL;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
+import org.neo4j.graphdb.PathExpander;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
+import org.neo4j.graphdb.traversal.BranchState;
 import org.neo4j.graphdb.traversal.Evaluation;
+import org.neo4j.graphdb.traversal.InitialStateFactory;
 import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
@@ -46,6 +52,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static org.animotron.graph.AnimoGraph.getDb;
+import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
 import static org.neo4j.graphdb.Direction.BOTH;
 import static org.neo4j.graphdb.Direction.OUTGOING;
@@ -99,8 +107,10 @@ public class GET extends AbstractQuery implements Shift {
 						System.out.println(v);
 						relaxReference(pf, v, v.getQuestion());
 //						pf.sendAnswer(v);
-					} else
-						thes.add( theNode.getClosestDefEndNode() );
+					} else {
+						thes.add( theNode.getClosestEndNode() );
+						System.out.println("THEs += "+theNode);
+					}
 				}
 	
 				evalGet(pf, op, node, thes, visitedREFs);
@@ -487,20 +497,22 @@ public class GET extends AbstractQuery implements Shift {
 	private static TraversalDescription prepared = 
 			Traversal.description().
 			depthFirst().
-			uniqueness(Uniqueness.RELATIONSHIP_PATH).
-			relationships(ASHIFT._, OUTGOING).
-			relationships(ANY._, OUTGOING).
-			relationships(ALL._, OUTGOING).
-			relationships(PREFER._, OUTGOING).
-			relationships(AN._, BOTH).
-			relationships(REF._, OUTGOING).
-			relationships(GET._, OUTGOING);
+			uniqueness(Uniqueness.RELATIONSHIP_PATH);
+//			relationships(ASHIFT._, OUTGOING).
+//			
+//			relationships(AN._, BOTH).
+//			relationships(REF._, OUTGOING).
+//
+//			relationships(ANY._, OUTGOING).
+//			relationships(ALL._, OUTGOING).
+//			relationships(PREFER._, OUTGOING).
+//			relationships(GET._, OUTGOING);
 //			.
 //			relationships(SHALL._, OUTGOING);
 	
 	private boolean getByHave(
 			final PFlow pf, 
-			QCAVector vector, 
+			final QCAVector vector, 
 			final Relationship op, 
 			final Node context, 
 			final Node middle, 
@@ -513,6 +525,51 @@ public class GET extends AbstractQuery implements Shift {
 			System.out.println("middle "+middle);
 		
 		TraversalDescription trav = prepared.
+		expand(new PathExpander<Boolean>() {
+
+			@Override
+			public Iterable<Relationship> expand(Path path, BranchState<Boolean> state) {
+				System.out.println(path);
+				
+				long defId = -1;
+				final Node node = path.endNode();
+				if (vector.getLastDef() != null) {
+					defId = vector.getLastDef().getId();
+				} else if (Properties.DEFID.has(node)) {
+					defId = (Long) Properties.DEFID.get(node);
+				}
+				if (defId > -1) {
+					Relationship ashift = AShift._.get(node, defId);
+					if (ashift != null) {
+		                ashift = getDb().getRelationshipById((Long) RID.get(ashift));
+	//	                if (ashift.isType(LINK._)) {
+	//	                    iterate(handler, rr, statement, ashift, level, evaluable, def);
+	//	                } else {
+	//	                    build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
+	//	                }
+	
+						return Order._.queryDownIterable( ashift.getEndNode() );
+					}
+				}
+
+				return Order._.queryDownIterable(node);
+			}
+
+			@Override
+			public PathExpander<Boolean> reverse() {
+				return null;
+			}
+			
+		}, 
+		new InitialStateFactory<Boolean>() {
+
+			@Override
+			public Boolean initialState(Path path) {
+				System.out.println("state");
+				return null;
+			}
+			
+		}).
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {

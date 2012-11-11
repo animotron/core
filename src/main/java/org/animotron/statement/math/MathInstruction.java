@@ -256,7 +256,7 @@ public abstract class MathInstruction extends DetermInstruction implements Evalu
     				if (!r.isType(GET._)) {
     					return;
     				}
-    				Pipe p = AN.getREFs(pf, new QCAVector(r));
+    				Pipe p = AN.getREFs(pf, new QCAVector(pf.getVector().getLastDef(), r));
     				QCAVector v;
     				while ((v = p.take()) != null) {
     					thes.add(v.getClosest().getEndNode());

@@ -60,7 +60,7 @@ public class ORDERED extends DetermInstruction {
 			try {
 				for (Relationship r : hits) {
 
-                    Pipe in = Evaluator._.execute(pf.getController(), new QCAVector(r, pf.getVector().getContext()));
+                    Pipe in = Evaluator._.execute(pf.getController(), new QCAVector(pf.getVector().getLastDef(), r, pf.getVector().getContext()));
                     QCAVector v;
                     while ((v = in.take()) != null) {
     					pf.sendAnswer(v);

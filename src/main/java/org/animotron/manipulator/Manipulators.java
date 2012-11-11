@@ -110,6 +110,7 @@ public class Manipulators {
 
         private void evaluative() throws Throwable {
             if (evaluative != null) {
+            	System.out.println(evaluative);
                 Pipe pipe = Evaluator._.execute(null, evaluative);
                 while (pipe.take() != null);
             }

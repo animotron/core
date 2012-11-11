@@ -20,6 +20,8 @@
  */
 package org.animotron.graph.index;
 
+import java.util.Iterator;
+
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.neo4j.graphdb.Node;
@@ -67,8 +69,41 @@ public class Order extends AbstractRelationshipIndex {
     }
 
 
-    public  IndexHits<Relationship> queryDown(Node node) {
+    public IndexHits<Relationship> queryDown(Node node) {
         return index().query(name, sort(name), node, null);
+    }
+
+    public Iterable<Relationship> queryDownIterable(final Node node) {
+    	return new Iterable<Relationship>() {
+
+			@Override
+			public Iterator<Relationship> iterator() {
+				return new Iterator<Relationship>() {
+					
+					IndexHits<Relationship> hits = queryDown(node);
+
+					@Override
+					public boolean hasNext() {
+						if (!hits.hasNext()) {
+							hits.close();
+						}
+
+						return hits.hasNext();
+					}
+
+					@Override
+					public Relationship next() {
+						return hits.next();
+					}
+
+					@Override
+					public void remove() {
+					}
+					
+				};
+			}
+    		
+    	};
     }
 
     @Deprecated //not safe to use

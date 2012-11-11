@@ -449,6 +449,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_26() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");
@@ -456,6 +457,7 @@ public class GetTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_27() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");

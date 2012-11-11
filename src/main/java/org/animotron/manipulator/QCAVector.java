@@ -54,71 +54,83 @@ public class QCAVector {
 	private List<QCAVector> answers = null;
 
 	private List<QCAVector> context = null;
+	
+	private Relationship def = null;
 
 //	private QCAVector preceding_sibling = null;
 	
 	private static boolean debug = false;
 
-	public QCAVector(Relationship question) {
+	public QCAVector(Relationship lastDef, Relationship question) {
 		this.question = question;
+		def = lastDef;
+		
 //		if (question != null && question.isType(DEF._))
 //			answer = question;
+		
+		if (question != null && question.isType(DEF._))
+			def = question;
 		
 		if (debug) System.out.println(" .... create vector 1 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer) {
-		this.question = question;
+	public QCAVector(Relationship lastDef, Relationship question, Relationship answer) {
+		this(lastDef, question);
+
 		this.answer = answer;
+
+		if (answer.isType(DEF._))
+			def = answer;
+		
 		if (debug) System.out.println(" .... create vector 2 .... ");
 	}
 
 	public QCAVector(Relationship question, QCAVector context, Relationship answer) {
-		this.question = question;
+		this(context.getLastDef(), question, answer);
+
 		if (context != null) {
 			this.context = new FastTable<QCAVector>();
 			this.context.add(context);
 		}
-		this.answer = answer;
+
 		if (debug) System.out.println(" .... create vector 3 .... ");
 	}
 	
 	public QCAVector(Relationship question, QCAVector context) {
-		this.question = question;
+		this(context.getLastDef(), question);
 
 		this.context = new FastTable<QCAVector>();
 		this.context.add(context);
 		if (debug) System.out.println(" .... create vector 4 .... ");
 	}
 	
-	public QCAVector(Relationship question, List<QCAVector> context) {
-		this.question = question;
+	public QCAVector(Relationship lastDef, Relationship question, List<QCAVector> context) {
+		this(lastDef, question);
 
 		this.context = context;
 		if (debug) System.out.println(" .... create vector 4 .... ");
 	}
 
 	public QCAVector(Relationship question, Relationship answer, QCAVector context) {
-		this.question = question;
-		this.answer = answer;
+		this(context.getLastDef(), question, answer);
 
 		this.context = new FastTable<QCAVector>();
 		this.context.add(context);
+
 		if (debug) System.out.println(" .... create vector 5 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context) {
-		this.question = question;
-		this.answer = answer;
+	public QCAVector(Relationship lastDef, Relationship question, Relationship answer, List<QCAVector> context) {
+		this(lastDef, question, answer);
 		
 		this.context = context;
+
 		if (debug) System.out.println(" .... create vector 6 .... ");
 	}
 
-	public QCAVector(Relationship question, Relationship answer, List<QCAVector> context, QCAVector preceding_sibling) {
-		this.question = question;
-		this.answer = answer;
-		
+	public QCAVector(Relationship lastDef, Relationship question, Relationship answer, List<QCAVector> context, QCAVector preceding_sibling) {
+		this(lastDef, question, answer);
+
 		this.context = context;
 		
 //		this.preceding_sibling = preceding_sibling;
@@ -127,17 +139,17 @@ public class QCAVector {
 //			System.out.println(" .... create vector 7 .... "+this);
 	}
 
-	public QCAVector(Relationship question, Relationship context, Relationship answer) {
-		this.question = question;
-		this.answer = answer;
+	public QCAVector(Relationship lastDef, Relationship question, Relationship context, Relationship answer) {
+		this(lastDef, question, answer);
 
 		this.context = new FastTable<QCAVector>();
 		this.context.add(new QCAVector(null, answer));
+
 		if (debug) System.out.println(" .... create vector 8 .... ");
 	}
 
 	public QCAVector(Relationship question, QCAVector context, QCAVector precedingSibling) throws AnimoException {
-		this.question = question;
+		this(context.getLastDef(), question);
 		//this.answer = answer;
 		
 		this.context = new FastTable<QCAVector>();
@@ -162,6 +174,10 @@ public class QCAVector {
 		
 //		if (preceding_sibling != null)
 //			preceding_sibling.cyclingDetection(op);
+	}
+	
+	public Relationship getLastDef() {
+		return def;
 	}
 
 	public Relationship getClosest() {
@@ -226,22 +242,6 @@ public class QCAVector {
 		return context;
 	}
 	
-//	public void setPrecedingSibling(QCAVector prev) {
-//		if (preceding_sibling == this) {
-//			System.out.println("setPrecedingSibling "+preceding_sibling);
-//			System.out.println(prev);
-//		}
-//		preceding_sibling = prev;
-//	}
-//
-//	public QCAVector getPrecedingSibling() {
-//		if (preceding_sibling == this) {
-//			System.out.println("getPrecedingSibling "+preceding_sibling);
-//			System.out.println(this);
-//		}
-//		return preceding_sibling;
-//	}
-
 	public boolean questionEquals(QCAVector vector) {
 		return question.equals(vector.question);
 	}
@@ -460,7 +460,7 @@ public class QCAVector {
 //			System.out.println("!!!answered 1 "+this);
 //
 //		return new QCAVector(question, createdAnswer, context, preceding_sibling);
-		return new QCAVector(question, createdAnswer, context);
+		return new QCAVector(def, question, createdAnswer, context);
 	}
 
 	public QCAVector answered(Relationship createdAnswer, QCAVector context) {
@@ -478,7 +478,7 @@ public class QCAVector {
 		}
 			
 //		return new QCAVector(question, createdAnswer, c, preceding_sibling);
-		return new QCAVector(question, createdAnswer, c);
+		return new QCAVector(def, question, createdAnswer, c);
 	}
 	
 	public QCAVector answered(Relationship createdAnswer, List<QCAVector> contexts) {
@@ -486,14 +486,14 @@ public class QCAVector {
 //			System.out.println("!!!answered 3 "+this);
 //
 //		return new QCAVector(question, createdAnswer, contexts, preceding_sibling);
-		return new QCAVector(question, createdAnswer, contexts);
+		return new QCAVector(def, question, createdAnswer, contexts);
 	}
 
 	public QCAVector question(Relationship q) {
 		if (question != null && question.equals(q) && answer == null)
 			return this;
 		
-		return new QCAVector(q, this);
+		return new QCAVector(getLastDef(), q, this);
 	}
 
 	public QCAVector question2(Relationship q) {
@@ -501,12 +501,12 @@ public class QCAVector {
 			return this;
 		
 		if (answer == null) {
-			QCAVector v = new QCAVector(q, context);
+			QCAVector v = new QCAVector(getLastDef(), q, context);
 			//v.setPrecedingSibling(this);
 			return v;
 		}
 		
-		return new QCAVector(q, this);
+		return new QCAVector(getLastDef(), q, this);
 	}
 	
 	public QCAVector question(Relationship q, QCAVector prev) throws AnimoException {

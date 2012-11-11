@@ -30,7 +30,6 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.ml.QNAME;
-import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
@@ -69,7 +68,7 @@ public class AnimoTraverser {
     }
 
     protected void build(GraphHandler handler, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
-        build(handler, parent, new QCAVector(r), level, isOne, pos, isLast, evaluable, def);
+        build(handler, parent, new QCAVector(def, r), level, isOne, pos, isLast, evaluable, def);
     }
 
     protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
