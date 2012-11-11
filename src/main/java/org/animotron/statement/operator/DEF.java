@@ -81,7 +81,7 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	}
 
 	public Node getDef(Node rev) {
-        return getDb().getNodeById((Long) DEFID.get(rev));
+        return rev;// getDb().getNodeById((Long) DEFID.get(rev));
 	}
 
 	public Relationship get(Object name) {
@@ -99,7 +99,7 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 //	}
 
 	public Relationship get(Node node) {
-        return node.getSingleRelationship(DEF._, Direction.INCOMING);
+        return getDb().getRelationshipById((Long) DEFID.get(node));
 	}
 
 	public static Relationship getDef(Relationship arev) {
