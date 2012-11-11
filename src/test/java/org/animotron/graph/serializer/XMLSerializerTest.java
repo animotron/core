@@ -43,7 +43,6 @@ public class XMLSerializerTest extends ATest {
 
     private void test(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
         assertXMLResult(expression, out);
     }
 
