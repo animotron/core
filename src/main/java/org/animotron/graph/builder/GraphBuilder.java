@@ -118,9 +118,7 @@ public abstract class GraphBuilder {
             relationship = DEF._.get(reference);
             if (relationship != null) {
                 start(CHANGE._);
-                    start(AN._);
-                        _(REF._,  reference);
-                    end();
+                    _(REF._,  reference);
                     start(LINK._);
                 return;
             }
