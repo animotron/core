@@ -54,20 +54,6 @@ import static org.animotron.graph.Properties.HASH;
  */
 public class BindTest extends ATest {
 
-    public void test(Expression e, String animo) throws Throwable {
-        String inA = CachedSerializer.ANIMO.serialize(e);
-        byte[] inH = (byte[]) HASH.get(e);
-        assertEquals(inH, DigestSerializer._.serialize(e));
-        cleanDB();
-        startDB(DATA_FOLDER);
-        Expression x = new AnimoExpression(animo);
-        String outA = CachedSerializer.ANIMO.serialize(x);
-        byte[] outH = (byte[]) HASH.get(x);
-        assertEquals(outH, DigestSerializer._.serialize(x));
-        assertEquals(inH, outH);
-        Assert.assertEquals(inA, outA);
-    }
-
     @Test
 	public void test_00() throws Throwable {
         Expression a = new JExpression(
@@ -76,7 +62,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(a))
         );
-        test(b, "def b a.");
+        assertAnimo(b, "def b a.");
 	}
 
     @Test
@@ -87,7 +73,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(a))
         );
-        test(b, "def b a.");
+        assertAnimo(b, "def b a.");
 	}
 
     @Test
@@ -98,7 +84,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(AN._, "x"), _(a))
         );
-        test(b, "def b (x) (a).");
+        assertAnimo(b, "def b (x) (a).");
 	}
 
     @Test
@@ -109,7 +95,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(AN._, "x"), _(a))
         );
-        test(b, "def b (x) (a).");
+        assertAnimo(b, "def b (x) (a).");
 	}
 
     @Test
@@ -123,7 +109,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(AN._, x), _(AN._, y))
         );
-        test(b, "def b (x) (y).");
+        assertAnimo(b, "def b (x) (y).");
 	}
 
     @Test
@@ -134,7 +120,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(AN._, "y", _(a)))
         );
-        test(b, "def b y any a.");
+        assertAnimo(b, "def b y any a.");
 	}
 
     @Test
@@ -151,36 +137,7 @@ public class BindTest extends ATest {
         Expression b = new JExpression(
             _(DEF._, "b", _(AN._, x), _(AN._, y, _(a)))
         );
-        test(b, "def b (x) (y any a).");
-	}
-
-    @Test
-    @Ignore
-	public void test_07() throws Throwable {
-        Expression x = new JExpression(
-            _(DEF._, "x")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "y", _(x))
-        );
-        test(b, "def x y.");
-	}
-
-    private static final XMLInputFactory FACTORY = new WstxInputFactory();
-
-    @Test
-	public void test_08() throws Throwable {
-        Expression a = new AnimoExpression("any a.");
-        Expression b = new AnimoExpression("all b.");
-        Expression c = new AnimoExpression("def c bla bla bla.");
-        Expression x = new JExpression(
-            _(AN._, c, _(a), _(b))
-        );
-        Expression y = new StAXExpression(FACTORY.createXMLStreamReader(new StringReader("<y z=\"test\">content</y>")));
-        Expression z = new JExpression(
-            element("z", _(GET._, "e", _(x)), _(ASHIFT._.actualNode(y).getSingleRelationship(ELEMENT._, Direction.OUTGOING)))
-        );
-        test(z, "\\z (get e c (any a) (all b)) (\\y (@z \"test\") \"content\").");
+        assertAnimo(b, "def b (x) (y any a).");
 	}
 
 }
