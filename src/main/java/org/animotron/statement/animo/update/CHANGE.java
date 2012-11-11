@@ -105,34 +105,62 @@ public class CHANGE extends Operator implements Evaluable {
             Statement q = Statements.relationshipType(v.getQuestion());
             IndexHits<Relationship> it = Order._.queryDown(c.isType(DEF._) || c.isType(REF._) && !(q instanceof GET) ? c.getEndNode() : c.getStartNode());
             try {
-                while (it.hasNext()) {
-                    Relationship r = it.next();
-                    if (op == null || r.getEndNode().equals(op.getEndNode())) {
-                        for (Relationship i : def(v)) {
-                            long def = i.getId();
-                            Node a = r.getStartNode();
-                            Node s = a;
-                            Node n = np.getEndNode();
-                            Relationship ashift = AShift._.get(s, def);
-                            if (ashift == null) {
-                                ashift = a.createRelationshipTo(n, ASHIFT._);
-                            } else {
-                                s = ashift.getEndNode();
-                                AShift._.remove(ashift, def);
-                                ashift.delete();
-                                ashift = a.createRelationshipTo(n, ASHIFT._);
+                if (it.hasNext()) {
+                    while (it.hasNext()) {
+                        Relationship r = it.next();
+                        if (op == null || r.getEndNode().equals(op.getEndNode())) {
+                            for (Relationship i : def(v)) {
+                                long def = i.getId();
+                                Node a = r.getStartNode();
+                                Node s = a;
+                                Node n = np.getEndNode();
+                                Relationship ashift = AShift._.get(s, def);
+                                if (ashift == null) {
+                                    ashift = a.createRelationshipTo(n, ASHIFT._);
+                                } else {
+                                    s = ashift.getEndNode();
+                                    AShift._.remove(ashift, def);
+                                    ashift.delete();
+                                    ashift = a.createRelationshipTo(n, ASHIFT._);
+                                }
+                                Relationship shift = s.createRelationshipTo(n, SHIFT);
+                                UID.set(ashift, uid);
+                                UID.set(shift, uid);
+                                DEFID.set(ashift, def);
+                                DEFID.set(shift, def);
+                                RID.set(ashift, rid);
+                                RID.set(shift, rid);
+                                AShift._. add(ashift, def);
+                                HASH.remove(i);
+                                DependenciesTracking._.execute(pf.getController(), i);
                             }
-                            Relationship shift = s.createRelationshipTo(n, SHIFT);
-                            UID.set(ashift, uid);
-                            UID.set(shift, uid);
-                            DEFID.set(ashift, def);
-                            DEFID.set(shift, def);
-                            RID.set(ashift, rid);
-                            RID.set(shift, rid);
-                            AShift._. add(ashift, def);
-                            HASH.remove(i);
-                            DependenciesTracking._.execute(pf.getController(), i);
                         }
+                    }
+                } else {
+                    for (Relationship i : def(v)) {
+                        long def = i.getId();
+                        Node a = c.getEndNode();
+                        Node s = a;
+                        Node n = np.getEndNode();
+                        Relationship ashift = AShift._.get(s, def);
+                        if (ashift == null) {
+                            ashift = a.createRelationshipTo(n, ASHIFT._);
+                        } else {
+                            s = ashift.getEndNode();
+                            AShift._.remove(ashift, def);
+                            ashift.delete();
+                            ashift = a.createRelationshipTo(n, ASHIFT._);
+                        }
+                        Relationship shift = s.createRelationshipTo(n, SHIFT);
+                        UID.set(ashift, uid);
+                        UID.set(shift, uid);
+                        DEFID.set(ashift, def);
+                        DEFID.set(shift, def);
+                        RID.set(ashift, rid);
+                        RID.set(shift, rid);
+                        AShift._. add(ashift, def);
+                        HASH.remove(i);
+                        DependenciesTracking._.execute(pf.getController(), i);
                     }
                 }
             } finally {

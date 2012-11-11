@@ -84,4 +84,20 @@ public class UpdateTest extends ATest {
         assertAnimo(a, "def a 3.");
     }
 
+    @Test
+    public void test_08() throws Throwable {
+        Relationship a = testAnimo("def a.");
+        eval(new AnimoExpression("change a 1."));
+        assertAnimo(a, "def a 1.");
+    }
+
+    @Test
+    public void test_09() throws Throwable {
+        Relationship a = testAnimo("def a.");
+        Relationship b = testAnimo("def b.");
+        eval(new AnimoExpression("change a,b 1."));
+        assertAnimo(a, "def a 1.");
+        assertAnimo(b, "def b 1.");
+    }
+
 }
