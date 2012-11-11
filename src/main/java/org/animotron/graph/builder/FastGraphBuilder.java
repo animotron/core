@@ -85,7 +85,9 @@ public class FastGraphBuilder extends GraphBuilder {
                     o[2] = MessageDigester.byteArrayToHex(hash);
                 }
                 r = build(o, it);
-                NAME.set(r.getEndNode(), o[2]);
+                Node def = r.getEndNode();
+                NAME.set(def, o[2]);
+                DEFID.set(def, r.getId());
                 DEF._.add(r, o[2]);
                 modificative(r);
                 preparative(r);
