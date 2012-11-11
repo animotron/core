@@ -126,13 +126,13 @@ public class AnimoGraph {
         if (graphDb == null) {
             return;
         }
-		System.out.println("shotdown");
-		Executor.shutdown();
+		System.out.println("shutdown");
 		try {
 			VALUE._.shutdown();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Executor.shutdown();
 		
 		while (!activeTx.isEmpty()) {
 			System.out.println("Active transactions "+activeTx.size());
