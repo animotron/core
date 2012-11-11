@@ -45,26 +45,20 @@ public class AnimoResultTraverser extends ResultTraverser {
     	Statement qS = Statements.relationshipType(rr.getQuestion());
     	if (qS instanceof Definition && rr.hasAnswer()) {
         	Relationship r = rr.getClosest();
-
 			handler.start(qS, null, rr.getQuestion(), level++, isOne, pos, isLast);
             iterate(handler, rr, s, r, level, evaluable, def);
             handler.end(qS, null, rr.getQuestion(), --level, isOne, pos, isLast);
-
         } else if (s != null) {
 			//avoid cycling
 			if (rr.hasAnswer() && rr.getAnswer().equals(rr.getQuestion()))
 				evaluable = false;
-
 			if (evaluable && s instanceof Evaluable) {
                 result(handler, rr, level, isOne, pos, isLast, def);
-                
             } else {
 				Relationship r = rr.getClosest();
-
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
-                if (!(s instanceof REF && !(qS instanceof AN))) {
-               		node = ASHIFT._.actualEndNode(r);
-                    iterate(handler, rr, s, node, level, evaluable, def);
+                if (!(qS instanceof AN)) {
+                    iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }

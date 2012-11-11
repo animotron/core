@@ -78,7 +78,12 @@ public class AnimoTraverser {
         if (statement == null)
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
-		if (!(statement instanceof REF)) {
+        iterate(statement, handler, parent, rr, r, level, pos, evaluable,def);
+		handler.end(statement, parent, r, --level, isOne, pos, isLast);
+	}
+
+    protected void iterate(Statement statement, GraphHandler handler, Statement parent, QCAVector rr, Relationship r, int level, int pos, boolean evaluable, Relationship def) throws IOException {
+        if (!(statement instanceof REF)) {
             node = r.getEndNode();
             if (statement instanceof DEF) {
                 def = r;
@@ -99,10 +104,9 @@ public class AnimoTraverser {
                 iterate(handler, rr, statement, node, level, evaluable, def);
             }
         }
-		handler.end(statement, parent, r, --level, isOne, pos, isLast);
-	}
+    }
 
-    protected int iterateRef(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, Relationship def) throws IOException {
+    private int iterateRef(GraphHandler handler, QCAVector v, Statement parent, Node n, int level, boolean evaluable, Relationship def) throws IOException {
         QCAVector prev;
         FastTable<Relationship> o = FastTable.newInstance();
         IndexHits<Relationship> it = Order._.queryDown(n);
