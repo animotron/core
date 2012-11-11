@@ -138,7 +138,10 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
     @Override
     public Relationship build(Node parent, Object reference, byte[] hash, boolean ready, boolean ignoreNotFound) throws AnimoException {
         CONTEXT.set(parent, true);
-        return parent.createRelationshipTo(createChild(reference, ready, ignoreNotFound), this);
+        Node n = createChild(reference, ready, ignoreNotFound);
+        Relationship r = parent.createRelationshipTo(n, this);
+        DEFID.set(n, r.getId());
+        return r;
     }
 
 
