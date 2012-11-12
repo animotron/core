@@ -40,6 +40,7 @@ import static org.junit.Assert.assertNotNull;
 public class MeanTest extends ATest {
 
 	@Test
+	@Ignore
 	public void test_00() throws Throwable {
 		String image = "Петя";
 		
@@ -61,6 +62,7 @@ public class MeanTest extends ATest {
 	}
 
 	@Test
+	@Ignore
 	public void test_01() throws Throwable {
 		
 		String sentence = "Петя пошёл";
@@ -87,6 +89,7 @@ public class MeanTest extends ATest {
 	}
 
 	@Test
+	@Ignore
 	public void test_02() throws Throwable {
 		
 		String sentence = "Петя пошёл";
