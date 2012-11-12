@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import junit.framework.Assert;
 import org.animotron.ATest;
+import org.animotron.expression.Expression;
 import org.animotron.statement.value.VALUE;
 import org.junit.Test;
 
@@ -31,7 +32,7 @@ import org.junit.Test;
  *
  */
 public class ValueTest extends ATest {
-	
+
     @Test
     public void test() throws Throwable {
 
@@ -44,6 +45,31 @@ public class ValueTest extends ATest {
         Assert.assertNotNull(VALUE._.get("a"));
         Assert.assertNotNull(VALUE._.get("b"));
         Assert.assertNotNull(VALUE._.get("c"));
+
+    }
+
+    @Test
+    public void test_00() throws Throwable {
+
+        testAnimo("def foo \"abc\".");
+        assertStringResult("foo", "abc");
+
+    }
+
+    @Test
+    public void test_01() throws Throwable {
+
+        testAnimo("def foo (x) \"abc\".");
+        assertStringResult("any x", "abc");
+
+    }
+
+    @Test
+    public void test_02() throws Throwable {
+
+        testAnimo("def foo (x) \"abc\".");
+        testAnimo("def bar (x) \"def\".");
+        assertStringResult("all x", "abcdef");
 
     }
 
