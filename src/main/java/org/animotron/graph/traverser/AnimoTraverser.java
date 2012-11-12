@@ -76,31 +76,31 @@ public class AnimoTraverser {
         if (statement == null)
 			return;
 		handler.start(statement, parent, r, level++, isOne, pos, isLast);
-        iterate(statement, handler, parent, rr, r, level, pos, evaluable,def);
+        if (!(statement instanceof REF)) {
+            iterate(statement, handler, parent, rr, r, level, pos, evaluable,def);
+        }
 		handler.end(statement, parent, r, --level, isOne, pos, isLast);
 	}
 
     protected void iterate(Statement statement, GraphHandler handler, Statement parent, QCAVector rr, Relationship r, int level, int pos, boolean evaluable, Relationship def) throws IOException {
-        if (!(statement instanceof REF)) {
-            node = r.getEndNode();
-            if (statement instanceof DEF) {
-                def = r;
-            }
-            Relationship ashift = null;
-            if (def != null) {
-                ashift = AShift._.get(node, def.getId());
-            }
-            if (ashift != null) {
-                ashift = getDb().getRelationshipById((Long) RID.get(ashift));
-                pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
-                if (ashift.isType(LINK._)) {
-                    iterate(handler, rr, statement, ashift, level, evaluable, def);
-                } else {
-                    build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
-                }
+        node = r.getEndNode();
+        if (statement instanceof DEF) {
+            def = r;
+        }
+        Relationship ashift = null;
+        if (def != null) {
+            ashift = AShift._.get(node, def.getId());
+        }
+        if (ashift != null) {
+            ashift = getDb().getRelationshipById((Long) RID.get(ashift));
+            pos = statement instanceof Reference ? iterateRef(handler, rr, statement, node, level, evaluable, def) : 0;
+            if (ashift.isType(LINK._)) {
+                iterate(handler, rr, statement, ashift, level, evaluable, def);
             } else {
-                iterate(handler, rr, statement, node, level, evaluable, def);
+                build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
             }
+        } else {
+            iterate(handler, rr, statement, node, level, evaluable, def);
         }
     }
 

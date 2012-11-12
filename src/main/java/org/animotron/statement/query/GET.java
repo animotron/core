@@ -24,7 +24,6 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import javolution.util.FastSet;
 import javolution.util.FastTable;
-
 import org.animotron.graph.Properties;
 import org.animotron.graph.index.AShift;
 import org.animotron.graph.index.Order;

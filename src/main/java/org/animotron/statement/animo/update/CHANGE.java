@@ -42,7 +42,6 @@ import java.util.List;
 
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.SHIFT;
-import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

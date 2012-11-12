@@ -21,8 +21,6 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
@@ -61,24 +59,11 @@ public class AnimoExpression extends AbstractExpression {
         this(new InputStreamReader(stream));
     }
 
-    public AnimoExpression(GraphBuilder builder, InputStream stream) {
-        this(builder, new InputStreamReader(stream));
-    }
-
     public AnimoExpression(String str) {
         this(new StringReader(str));
     }
 
-    public AnimoExpression(GraphBuilder builder, String str) {
-        this(builder, new StringReader(str));
-    }
-
     public AnimoExpression(Reader reader) {
-        this(new FastGraphBuilder(), reader);
-    }
-
-    public AnimoExpression(GraphBuilder builder, Reader reader) {
-        super(builder);
         this.reader = reader;
     }
 

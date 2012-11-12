@@ -23,7 +23,6 @@ package org.animotron.games.geo;
 import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.ATest;
 import org.animotron.expression.StAXExpression;
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.junit.Test;
 
 import javax.xml.stream.XMLInputFactory;
@@ -51,29 +50,6 @@ public class GeoTest extends ATest {
     private XMLStreamReader osm(String resource) throws XMLStreamException {
         return FACTORY.createXMLStreamReader(getClass().getResourceAsStream(resource));
     }
-
-    @Test
-	public void test_01() throws Throwable {
-        byte[] in = (byte[]) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        cleanDB();
-        startDB(DATA_FOLDER);
-        byte[] out = (byte[]) HASH.get(new StAXExpression(osm()));
-        assertEquals(in, out);
-	}
-
-    @Test
-	public void test_02() throws Throwable {
-        byte[] in = (byte[]) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        byte[] out = (byte[]) HASH.get(new StAXExpression(osm()));
-        assertEquals(in, out);
-	}
-
-    @Test
-	public void test_03() throws Throwable {
-        byte[] in = (byte[]) HASH.get(new StAXExpression(osm()));
-        byte[] out = (byte[]) HASH.get(new StAXExpression(new FastGraphBuilder(), osm()));
-        assertEquals(in, out);
-	}
 
     @Test
 	public void test() throws Throwable {

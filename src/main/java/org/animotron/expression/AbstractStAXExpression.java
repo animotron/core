@@ -20,8 +20,6 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
 
 import javax.xml.namespace.QName;
@@ -42,15 +40,6 @@ public abstract class AbstractStAXExpression extends AbstractExpression {
     }
 
     public AbstractStAXExpression(XMLStreamReader reader, String name) {
-        this(new FastGraphBuilder(), reader, name);
-    }
-
-    public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader) {
-        this(builder, reader, null);
-    }
-
-    public AbstractStAXExpression(GraphBuilder builder, XMLStreamReader reader, String name) {
-        super(builder);
         this.name = name;
         this.reader = reader;
     }
