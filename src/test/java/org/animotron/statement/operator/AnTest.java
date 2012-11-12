@@ -34,19 +34,31 @@ import static org.animotron.expression.JExpression.value;
  *
  */
 public class AnTest extends ATest {
-	
+
     @Test
     public void testAN() throws Throwable {
 
         __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "value", value("B")))
-            )
+                new JExpression(
+                        _(DEF._, "A", _(AN._, "value", value("B")))
+                )
         );
 
         JExpression test = new JExpression(
-            _(AN._, "A")
+                _(AN._, "A")
         );
         assertAnimoResultOneStep(test, "def A value \"B\".");
+    }
+
+    @Test
+    public void test_00() throws Throwable {
+
+        testAnimo("def e f.");
+        testAnimo("def d e.");
+        testAnimo("def c d.");
+        testAnimo("def b c.");
+        testAnimo("def a b.");
+
+        assertAnimoResult("a", "def a def b def c def d def e def f.");
     }
 }
