@@ -524,10 +524,10 @@ public class GET extends AbstractQuery implements Shift {
 			System.out.println("middle "+middle);
 		
 		TraversalDescription trav = prepared.
-		expand(new PathExpander<Boolean>() {
+		expand(new PathExpander<Long>() {
 
 			@Override
-			public Iterable<Relationship> expand(Path path, BranchState<Boolean> state) {
+			public Iterable<Relationship> expand(Path path, BranchState<Long> state) {
 				System.out.println(path);
 				
 				if (path.length() == 0) {
@@ -544,13 +544,14 @@ public class GET extends AbstractQuery implements Shift {
 
 					node = path.endNode();
 					
-					long defId = -1;
+					long defId = state.getState();
 					if (vector.lastDefId() != -1) {
 						defId = vector.lastDefId();
-						
-					} else if (Properties.DEFID.has(node)) {
+					}	
+					if (Properties.DEFID.has(node)) {
 						defId = (Long) Properties.DEFID.get(node);
 					}
+					state.setState(defId);
 					
 					if (defId > -1) {
 						final Relationship ashift = AShift._.get(node, defId);
@@ -590,17 +591,17 @@ public class GET extends AbstractQuery implements Shift {
 			}
 
 			@Override
-			public PathExpander<Boolean> reverse() {
+			public PathExpander<Long> reverse() {
 				return null;
 			}
 			
 		}, 
-		new InitialStateFactory<Boolean>() {
+		new InitialStateFactory<Long>() {
 
 			@Override
-			public Boolean initialState(Path path) {
-				System.out.println("state");
-				return null;
+			public Long initialState(Path path) {
+				System.out.println("state "+path);
+				return (long) -1;
 			}
 			
 		}).
