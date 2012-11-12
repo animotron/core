@@ -41,7 +41,6 @@ import java.io.IOException;
 
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.RID;
-import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -68,7 +67,7 @@ public class AnimoTraverser {
     }
 
     protected void build(GraphHandler handler, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
-        build(handler, parent, new QCAVector(def, r), level, isOne, pos, isLast, evaluable, def);
+        build(handler, parent, new QCAVector(def.getId(), r), level, isOne, pos, isLast, evaluable, def);
     }
 
     protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {

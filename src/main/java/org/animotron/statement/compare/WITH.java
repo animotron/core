@@ -250,7 +250,7 @@ public class WITH extends Operator implements Predicate {
 				System.out.println("get from Evaluator "+e);
 			}
 		} else {
-			list.add(new QCAVector(null, i));
+			list.add(new QCAVector(i));
 		}
 //			}
 //		} finally {

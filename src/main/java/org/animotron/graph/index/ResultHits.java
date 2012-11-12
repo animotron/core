@@ -72,8 +72,8 @@ public class ResultHits extends AbstractIndexHits<QCAVector> implements IndexHit
 		} catch (Throwable t) {
 		}
 		if (c == null)
-			return new QCAVector(op, r);
+			return new QCAVector(-1, op, r);
 		else
-			return new QCAVector(op, c, r);
+			return new QCAVector(-1, op, c, r);
 	}
 }

@@ -133,7 +133,7 @@ public class PFlow {
 		Relationship answer = Utils.createResult(this, answerVector.getContext(), getOPNode(), answerVector.getAnswer(), rType);
 //		answerChannel().publish(new QCAVector(getOP(), answer, answerVector.getContext(), answerVector.getPrecedingSibling()));
 		
-		QCAVector v = new QCAVector(getOP(), answer, answerVector.getContext());
+		QCAVector v = new QCAVector(answerVector.lastDefId(), getOP(), answer, answerVector.getContext());
 //		System.out.println("sendAnswer "+v);
 		answerChannel().publish(v);
 	}

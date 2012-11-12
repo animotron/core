@@ -55,7 +55,6 @@ import java.util.Set;
 import static org.animotron.graph.AnimoGraph.getDb;
 import static org.animotron.graph.Properties.RID;
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.neo4j.graphdb.Direction.BOTH;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
@@ -531,24 +530,60 @@ public class GET extends AbstractQuery implements Shift {
 			public Iterable<Relationship> expand(Path path, BranchState<Boolean> state) {
 				System.out.println(path);
 				
-				long defId = -1;
-				final Node node = path.endNode();
-				if (vector.getLastDef() != null) {
-					defId = vector.getLastDef().getId();
-				} else if (Properties.DEFID.has(node)) {
-					defId = (Long) Properties.DEFID.get(node);
+				if (path.length() == 0) {
+					return Order._.queryDownIterable(path.endNode());
 				}
-				if (defId > -1) {
-					Relationship ashift = AShift._.get(node, defId);
-					if (ashift != null) {
-		                ashift = getDb().getRelationshipById((Long) RID.get(ashift));
-	//	                if (ashift.isType(LINK._)) {
-	//	                    iterate(handler, rr, statement, ashift, level, evaluable, def);
-	//	                } else {
-	//	                    build(handler, parent, ashift, level, true, pos++, true, evaluable, def);
-	//	                }
-	
-						return Order._.queryDownIterable( ashift.getEndNode() );
+
+				final Node node;
+				
+				Relationship r = path.lastRelationship();
+				if (r.isType(ASHIFT._)) {
+					node = getDb().getRelationshipById((Long) RID.get(r)).getEndNode();
+
+				} else {
+
+					node = path.endNode();
+					
+					long defId = -1;
+					if (vector.lastDefId() != -1) {
+						defId = vector.lastDefId();
+						
+					} else if (Properties.DEFID.has(node)) {
+						defId = (Long) Properties.DEFID.get(node);
+					}
+					
+					if (defId > -1) {
+						Relationship ashift = AShift._.get(node, defId);
+						if (ashift != null) {
+			                final Relationship shift = getDb().getRelationshipById((Long) RID.get(ashift));
+		
+							return new Iterable<Relationship>() {
+								@Override
+								public Iterator<Relationship> iterator() {
+									return new Iterator<Relationship>() {
+										
+										boolean hasNext = true;
+
+										@Override
+										public boolean hasNext() {
+											return hasNext && shift != null;
+										}
+
+										@Override
+										public Relationship next() {
+											hasNext = false;
+											return shift;
+										}
+
+										@Override
+										public void remove() {
+										}
+										
+									};
+								}
+								
+							};
+						}
 					}
 				}
 

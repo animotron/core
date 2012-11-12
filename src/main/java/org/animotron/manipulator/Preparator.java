@@ -72,7 +72,7 @@ public class Preparator extends StatementManipulator {
 	                        s = Statements.name(name);
 	        			    
 	                        if (canGo(s)) {
-	                            super.execute(controller, new QCAVector(null, r), onQuestion(s, r), true);
+	                            super.execute(controller, new QCAVector(r), onQuestion(s, r), true);
 							}
         				}
         			} catch (Throwable t) {
@@ -80,7 +80,7 @@ public class Preparator extends StatementManipulator {
         				//e.printStackTrace();
 					}
 				} else if (canGo(s)) {
-                    super.execute(controller, new QCAVector(null, r), onQuestion(s, r), false);
+                    super.execute(controller, new QCAVector(r), onQuestion(s, r), false);
 				}
         	}
         } finally {
