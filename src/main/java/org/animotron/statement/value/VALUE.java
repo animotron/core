@@ -24,7 +24,6 @@ import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.Expression;
 import org.animotron.graph.GraphOperation;
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.AbstractIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -164,10 +163,10 @@ public class VALUE extends AbstractValue implements Prepare {
 	                    execute(new GraphOperation<Void>() {
 	                        @Override
 	                        public Void execute() throws Throwable {
-	                            Relationship x = new AbstractExpression(new FastGraphBuilder()) {
+	                            Relationship x = new AbstractExpression() {
 
                                     private Expression letter(final String uuid1, final Instruction c, final String uuid2) {
-                                        return new AbstractExpression(new FastGraphBuilder()) {
+                                        return new AbstractExpression() {
                                             @Override
                                             public void build() throws Throwable {
                                                 builder.start(DEF._, uuid1);
@@ -196,7 +195,7 @@ public class VALUE extends AbstractValue implements Prepare {
                                                 Relationship u = __(letter(s.toUpperCase(), LOWER_CASE._, s.toLowerCase()));
                                                 def = s.equals(s.toLowerCase()) ? l : u;
                                             } else {
-                                                def = new AbstractExpression(new FastGraphBuilder()) {
+                                                def = new AbstractExpression() {
                                                     @Override
                                                     public void build() throws Throwable {
                                                         builder.start(DEF._);

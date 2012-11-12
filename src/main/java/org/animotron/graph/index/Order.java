@@ -20,8 +20,6 @@
  */
 package org.animotron.graph.index;
 
-import java.util.Iterator;
-
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.neo4j.graphdb.Node;
@@ -29,6 +27,8 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.lucene.QueryContext;
+
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

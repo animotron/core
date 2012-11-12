@@ -23,7 +23,6 @@ package org.animotron.statement.math;
 import javolution.util.FastList;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.JExpression;
-import org.animotron.graph.builder.FastGraphBuilder;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -63,26 +62,22 @@ public class AnimObject extends AbstractExpression {
     Relationship result = null;
 
 	private AnimObject(MathInstruction op, Relationship r) {
-        super(r);
         this.op = op;
         result = r;
 	}
 
     public AnimObject(PFlow pf, MathInstruction op, Relationship r) {
-        super(r);
         this.op = op;
         this.pf = pf;
 	}
     
 	public AnimObject(PFlow pf, MathInstruction op, List<Relationship> elements) {
-        super(new FastGraphBuilder());
 		this.elements = elements;
         this.op = op;
         this.pf = pf;
 	}
 
 	public AnimObject(PFlow pf, MathInstruction op, Relationship... elements) {
-        super(new FastGraphBuilder());
         this.elements = new FastList<Relationship>();
         for (Relationship r : elements) {
 		    this.elements.add(r);

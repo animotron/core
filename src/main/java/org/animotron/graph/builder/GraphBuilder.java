@@ -22,16 +22,18 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
+import org.animotron.graph.Properties;
+import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.manipulator.Manipulators;
 import org.animotron.statement.Statement;
 import org.animotron.statement.animo.update.CHANGE;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.value.VALUE;
+import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.Transaction;
@@ -39,11 +41,18 @@ import org.neo4j.kernel.DeadlockDetectedException;
 
 import java.io.IOException;
 import java.security.MessageDigest;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Stack;
 
-import static org.animotron.graph.AnimoGraph.beginTx;
-import static org.animotron.graph.AnimoGraph.finishTx;
+import static org.animotron.graph.AnimoGraph.*;
 import static org.animotron.graph.Properties.HASH;
+import static org.animotron.graph.Properties.NAME;
+import static org.animotron.graph.Properties.DEFID;
+import static org.animotron.graph.Properties.CONTEXT;
+import static org.animotron.utils.MessageDigester.*;
+import static org.neo4j.graphdb.Direction.OUTGOING;
 
 /**
  * Animo graph builder, it do optimization/compression and
@@ -64,13 +73,15 @@ import static org.animotron.graph.Properties.HASH;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public abstract class GraphBuilder {
+public class GraphBuilder {
 
     Transaction tx;
     private int order;
-    protected final boolean ignoreNotFound;
+    private boolean ignoreNotFound;
     private Manipulators.Catcher catcher;
     private Stack<Object[]> stack;
+    private List<Object[]> flow = new LinkedList<Object[]>();
+    private byte[] hash;
 
     private Relationship relationship;
 
@@ -82,41 +93,114 @@ public abstract class GraphBuilder {
         this.ignoreNotFound = ignoreNotFound;
     }
 
-    protected final int order(){
+    private int order(){
         return order;
     }
 
-    protected final void order(Relationship r){
+    private void order(Relationship r){
         order(r, order);
     }
 
-    protected final void order(Relationship r, int order){
+    private void order(Relationship r, int order){
         if (order > 0) {
             Order._.add(r, order);
         }
     }
 
-    public final Relationship relationship() {
+    public Relationship relationship() {
         return relationship;
     };
 
-    protected abstract Relationship endGraph() throws AnimoException, IOException;
+    private Relationship endGraph() throws AnimoException {
+        Relationship r = null;
+        Iterator<Object[]> it = flow.iterator();
+        if (it.hasNext()) {
+            Object[] o = it.next();
+            if (o[1] instanceof DEF) {
+                if (o[2] == null) {
+                    o[2] = MessageDigester.byteArrayToHex(hash);
+                }
+                Relationship done = DEF._.get(o[2]);
+                r = build(getROOT(), o, it, done);
+                if (done == null) {
+                    Node def = r.getEndNode();
+                    NAME.set(def, o[2]);
+                    DEFID.set(def, r.getId());
+                    DEF._.add(r, o[2]);
+                }
+                modificative(r);
+                preparative(r);
+            } else {
+                r = Cache.RELATIONSHIP.get(hash);
+                if (r == null) {
+                    o[6] = Cache.NODE.get(hash) != null;
+                    r = build(getROOT(), o, it, null);
+                    Cache.RELATIONSHIP.add(r, hash);
+                    modificative(r);
+                    HASH.set(r, hash);
+                    preparative(r);
+                }
+            }
+        }
+        return r;
+    }
 
-    public final void start(Statement statement) throws AnimoException, IOException {
+    private Relationship build(Node parent, Object[] o, Iterator<Object[]> it, Relationship r) throws AnimoException {
+        if (r == null) {
+            r = ((Statement) o[1]).build(parent, o[2], hash, true, ignoreNotFound);
+        }
+        Node end = r.getEndNode();
+        o[3] = r;
+        o[4] = end;
+        step();
+        while (it.hasNext()) {
+            build(it.next());
+            step();
+        }
+        return r;
+    }
+
+    private void build(Object[] item) throws AnimoException {
+        Relationship r;
+        if (item.length == 2) {
+            Node n = (Node) ((Object[]) item[0])[4];
+            r = copy(n, (Relationship) item[1]);
+            CONTEXT.set(n, true);
+        } else {
+            Object[] p =  (Object[]) item[5];
+            if (p != null) {
+                if ((Boolean) p[6]) {
+                    item[6] = true;
+                    return;
+                }
+            }
+            Statement statement = (Statement) item[1];
+            Object reference = item[2];
+            byte[] hash = (byte[]) item[8];
+            Node parent = (Node) p[4];
+            item[6] = Cache.NODE.get(hash) != null;
+            r = statement.build(parent, reference, hash, true, ignoreNotFound);
+            item[3] = r;
+            item[4] = r.getEndNode();
+        }
+        order(r);
+    }
+
+    public void start(Statement statement) throws AnimoException, IOException {
         start(statement, null);
     }
 
-    public final void start(Object value) throws AnimoException, IOException {
+    public void start(Object value) throws AnimoException, IOException {
         start(VALUE._, value);
     }
 
    private Statement s;
    private Object r;
 
-    public final void start(Statement statement, Object reference) throws AnimoException, IOException {
+    public void start(Statement statement, Object reference) throws AnimoException, IOException {
         if (statement instanceof DEF) {
             relationship = DEF._.get(reference);
-            if (relationship != null) {
+            if (relationship != null && relationship.getEndNode().hasRelationship(OUTGOING)) {
                 start(CHANGE._);
                     _(REF._,  reference);
                     start(LINK._);
@@ -130,9 +214,34 @@ public abstract class GraphBuilder {
         r = reference;
     }
 
-    protected abstract Object[] start(Statement statement, Object reference, boolean ready) throws AnimoException, IOException;
+    private Object[] start(Statement statement, Object reference, boolean hasChild) throws AnimoException {
+        Object[] parent = hasParent() ? peekParent() : null;
+        MessageDigest md = md();
+        byte[] hash = null;
+        boolean ready = !hasChild && reference != null;
+        if (ready) {
+            updateMD(md, reference);
+            hash = cloneMD(md).digest();
+            updateMD(md, statement);
+        } else if (reference != null) {
+            updateMD(md, reference);
+        }
+        Object[] o = {
+                md,             // 0 message digest    
+                statement,	    // 1 statement
+                reference,      // 2 name or value
+                null,	 	    // 3 current relationship
+                null,		    // 4 current node
+                parent, 	    // 5 parent item
+                false,          // 6 is done?
+                ready,          // 7 is ready?
+                hash            // 8 hash
+        };
+        flow.add(o);
+        return o;
+    }
 
-    public final void end() throws AnimoException, IOException {
+    public void end() throws AnimoException, IOException {
     	byte[] hash;
     	if (s != null) {
     		hash = end(start(s, r, false));
@@ -146,9 +255,16 @@ public abstract class GraphBuilder {
         }
     }
 
-	protected abstract byte[] end(Object[] o) throws AnimoException;
+    private byte[] end(Object[] o) {
+        MessageDigest md = (MessageDigest) o[0];
+        if (!(Boolean) o[7]) {
+            updateMD(md, (Statement) o[1]);
+        }
+        o[8] = hash = md.digest();
+        return hash;
+    }
 
-    public final void bind(Relationship e) throws IOException, AnimoException {
+    public void bind(Relationship e) throws IOException, AnimoException {
         Object[] o;
         byte[] hash = HASH.has(e) ? (byte[]) HASH.get(e) : DigestSerializer._.serialize(e);
         if (s != null) {
@@ -165,34 +281,38 @@ public abstract class GraphBuilder {
         }
     };
 
-    protected abstract void bind(Relationship r, Object[] o, byte[] hash) throws IOException;
+    public void bind(Relationship r, Object[] p, byte[] hash) throws IOException {
+        step();
+        Object[] o = {p, r};
+        flow.add(o);
+    }
 
-    public final void _(Statement statement) throws AnimoException, IOException {
+    public void _(Statement statement) throws AnimoException, IOException {
         _(statement, null);
     }
 
-    public final void _(Object value) throws AnimoException, IOException {
+    public void _(Object value) throws AnimoException, IOException {
         _(VALUE._, value);
     }
 
-    public final void _(Statement statement, Object reference) throws AnimoException, IOException {
+    public void _(Statement statement, Object reference) throws AnimoException, IOException {
         start(statement, reference);
         end();
     }
 
-    protected final boolean hasParent() {
+    private boolean hasParent() {
         return !stack.empty();
     }
 
-    protected final Object[] popParent() {
+    private Object[] popParent() {
         return stack.pop();
     }
 
-    protected final Object[] peekParent() {
+    private Object[] peekParent() {
         return stack.peek();
     }
 
-    public final void build(AbstractExpression exp) throws Throwable {
+    public void build(AbstractExpression exp) throws Throwable {
         boolean deadlock;
         order = 0;
         catcher = Manipulators.getCatcher();
@@ -235,7 +355,7 @@ public abstract class GraphBuilder {
         } while (deadlock);
     }
 
-    protected final void step() {
+    private void step() {
         order++;
 //        if (order % (10000) == 0) {
 //            tx.success();
@@ -244,23 +364,23 @@ public abstract class GraphBuilder {
 //        }
     }
 
-    protected final void evaluative(Relationship r) {
+    private void evaluative(Relationship r) {
         catcher.evaluative(r);
     }
 
-    protected final void preparative(Relationship r) {
+    private void preparative(Relationship r) {
         catcher.preparative(r);
     }
 
-    protected final void modificative(Relationship r) {
+    private void modificative(Relationship r) {
         catcher.modificative(r);
     }
 
-    protected final void destructive(Relationship r) {
+    private void destructive(Relationship r) {
         catcher.destructive(r);
     }
 
-    protected final void destructive(Node n) {
+    private void destructive(Node n) {
         catcher.destructive(n);
     }
 

@@ -21,8 +21,6 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.Statement;
 import org.animotron.statement.combinator.EACH;
 import org.animotron.statement.combinator.MAP;
@@ -49,11 +47,6 @@ public class JExpression extends AbstractExpression {
 	Object[][] e;
 	
     public JExpression(Object[]... e) {
-        this(new FastGraphBuilder(), e);
-    }
-
-    public JExpression(GraphBuilder builder, Object[]... e) {
-        super(builder);
         this.e = e;
     }
 

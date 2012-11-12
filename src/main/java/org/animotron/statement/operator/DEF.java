@@ -26,16 +26,14 @@ import org.animotron.graph.index.AbstractIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.AbstractStatement;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
-import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Properties.CONTEXT;
-import static org.animotron.graph.Properties.DEFID;
-import static org.animotron.graph.Properties.NAME;
+import static org.animotron.graph.AnimoGraph.createNode;
+import static org.animotron.graph.AnimoGraph.getROOT;
+import static org.animotron.graph.Properties.*;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**

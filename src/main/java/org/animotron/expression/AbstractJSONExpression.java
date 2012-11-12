@@ -20,8 +20,6 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.FastGraphBuilder;
-import org.animotron.graph.builder.GraphBuilder;
 import org.codehaus.jackson.JsonParser;
 
 /**
@@ -39,15 +37,6 @@ public abstract class AbstractJSONExpression extends AbstractExpression {
     }
 
     public AbstractJSONExpression(JsonParser parser, String name) {
-        this(new FastGraphBuilder(), parser, name);
-    }
-
-    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser) {
-        this(builder, parser, null);
-    }
-
-    public AbstractJSONExpression(GraphBuilder builder, JsonParser parser, String name) {
-        super(builder);
         this.name = name;
         this.parser = parser;
     }

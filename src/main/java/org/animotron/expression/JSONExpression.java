@@ -20,7 +20,6 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.GraphBuilder;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
@@ -42,14 +41,6 @@ public class JSONExpression extends AbstractJSONExpression {
 
     public JSONExpression(JsonParser parser, String name) {
         super(parser, name);
-    }
-
-    public JSONExpression(GraphBuilder builder, JsonParser parser) {
-        super(builder, parser);
-    }
-
-    public JSONExpression(GraphBuilder builder, JsonParser parser, String name) {
-        super(builder, parser, name);
     }
 
     @Override

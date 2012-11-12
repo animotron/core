@@ -27,7 +27,9 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.operator.*;
+import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.Definition;
+import org.animotron.statement.operator.Evaluable;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
