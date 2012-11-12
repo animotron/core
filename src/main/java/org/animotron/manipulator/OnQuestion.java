@@ -52,7 +52,7 @@ public abstract class OnQuestion extends Subscribable<PFlow> {
 			if (pf.getController() != null)
 				pf.getController().endStatement(pf.getOP());
 
-			System.out.println("done "+Thread.currentThread());
+//			System.out.println("done "+Thread.currentThread());
 		}
 		
 //		System.out.println("Common OnQuestion in use");

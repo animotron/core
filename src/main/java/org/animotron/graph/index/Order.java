@@ -93,9 +93,10 @@ public class Order extends AbstractRelationshipIndex {
 
 					@Override
 					public Relationship next() {
-						final Relationship r = hits.next();
-						System.out.println("next: "+r);
-						return r;
+//						final Relationship r = hits.next();
+//						System.out.println("next: "+r);
+//						return r;
+						return hits.next();
 					}
 
 					@Override
