@@ -128,17 +128,17 @@ public class GraphBuilder {
                     DEFID.set(def, r.getId());
                     DEF._.add(r, o[2]);
                 }
-                modificative(r);
-                preparative(r);
+                catcher.modificative(r);
+                catcher.preparative(r);
             } else {
                 r = Cache.RELATIONSHIP.get(hash);
                 if (r == null) {
                     o[6] = Cache.NODE.get(hash) != null;
                     r = build(getROOT(), o, it, null);
                     Cache.RELATIONSHIP.add(r, hash);
-                    modificative(r);
+                    catcher.modificative(r);
                     HASH.set(r, hash);
-                    preparative(r);
+                    catcher.preparative(r);
                 }
             }
         }
@@ -330,7 +330,7 @@ public class GraphBuilder {
                 if (relationship == null) {
                     relationship = c;
                 } else {
-                    evaluative(c);
+                    catcher.evaluative(c);
                 }
                 tx.success();
                 finishTx(tx);
@@ -357,31 +357,6 @@ public class GraphBuilder {
 
     private void step() {
         order++;
-//        if (order % (10000) == 0) {
-//            tx.success();
-//            finishTx(tx);
-//            tx = beginTx();
-//        }
-    }
-
-    private void evaluative(Relationship r) {
-        catcher.evaluative(r);
-    }
-
-    private void preparative(Relationship r) {
-        catcher.preparative(r);
-    }
-
-    private void modificative(Relationship r) {
-        catcher.modificative(r);
-    }
-
-    private void destructive(Relationship r) {
-        catcher.destructive(r);
-    }
-
-    private void destructive(Node n) {
-        catcher.destructive(n);
     }
 
 }
