@@ -47,6 +47,6 @@ public class AnTest extends ATest {
         JExpression test = new JExpression(
             _(AN._, "A")
         );
-        assertAnimoResultOneStep(test, "def A (value \"B\").");
+        assertAnimoResultOneStep(test, "def A value \"B\".");
     }
 }
