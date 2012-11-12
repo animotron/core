@@ -22,7 +22,6 @@ package org.animotron.graph.builder;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AbstractExpression;
-import org.animotron.graph.Properties;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
@@ -75,11 +74,11 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  */
 public class GraphBuilder {
 
-    Transaction tx;
-    private int order;
+    private Transaction tx;
+    private int order = 0;
     private boolean ignoreNotFound;
-    private Manipulators.Catcher catcher;
-    private Stack<Object[]> stack;
+    private Manipulators.Catcher catcher = Manipulators.getCatcher();
+    private Stack<Object[]> stack = new Stack<Object[]>();
     private List<Object[]> flow = new LinkedList<Object[]>();
     private byte[] hash;
 
@@ -91,20 +90,6 @@ public class GraphBuilder {
 
     public GraphBuilder(boolean ignoreNotFound) {
         this.ignoreNotFound = ignoreNotFound;
-    }
-
-    private int order(){
-        return order;
-    }
-
-    private void order(Relationship r){
-        order(r, order);
-    }
-
-    private void order(Relationship r, int order){
-        if (order > 0) {
-            Order._.add(r, order);
-        }
     }
 
     public Relationship relationship() {
@@ -183,7 +168,9 @@ public class GraphBuilder {
             item[3] = r;
             item[4] = r.getEndNode();
         }
-        order(r);
+        if (order > 0) {
+            Order._.add(r, order);
+        }
     }
 
     public void start(Statement statement) throws AnimoException, IOException {
@@ -194,8 +181,8 @@ public class GraphBuilder {
         start(VALUE._, value);
     }
 
-   private Statement s;
-   private Object r;
+   private Statement s = null;
+   private Object r = null;
 
     public void start(Statement statement, Object reference) throws AnimoException, IOException {
         if (statement instanceof DEF) {
@@ -313,22 +300,20 @@ public class GraphBuilder {
     }
 
     public void build(AbstractExpression exp) throws Throwable {
+        Relationship r;
+        exp.build();
+        while (!stack.empty()) {
+            end();
+        }
         boolean deadlock;
-        order = 0;
-        catcher = Manipulators.getCatcher();
         do {
+            r = relationship;
             deadlock = false;
             tx = beginTx();
             try {
-                s = null; r = null;
-                stack = new Stack<Object[]>();
-                exp.build();
-                while (!stack.empty()) {
-                    end();
-                }
                 Relationship c = endGraph();
-                if (relationship == null) {
-                    relationship = c;
+                if (r == null) {
+                    r = c;
                 } else {
                     catcher.evaluative(c);
                 }
@@ -353,6 +338,7 @@ public class GraphBuilder {
                 catcher.push();
             }
         } while (deadlock);
+        relationship = r;
     }
 
     private void step() {
