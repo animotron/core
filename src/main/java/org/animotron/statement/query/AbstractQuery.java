@@ -576,11 +576,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 				return EXCLUDE_AND_CONTINUE;
 			
 			Relationship r = path.lastRelationship();
-//			if (r.isType(ASHIFT._))
-//				if (r.getEndNode().equals(path.endNode()))
-//					return EXCLUDE_AND_CONTINUE;
-//				else
-//					return EXCLUDE_AND_PRUNE;
+			if (r.isType(ASHIFT._))
+				return EXCLUDE_AND_CONTINUE;
 
 			if (r.isType(REF._) && FREEZE.has(r))
 				return EXCLUDE_AND_PRUNE;

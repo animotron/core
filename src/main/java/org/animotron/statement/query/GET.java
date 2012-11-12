@@ -553,10 +553,8 @@ public class GET extends AbstractQuery implements Shift {
 					}
 					
 					if (defId > -1) {
-						Relationship ashift = AShift._.get(node, defId);
+						final Relationship ashift = AShift._.get(node, defId);
 						if (ashift != null) {
-			                final Relationship shift = getDb().getRelationshipById((Long) RID.get(ashift));
-		
 							return new Iterable<Relationship>() {
 								@Override
 								public Iterator<Relationship> iterator() {
@@ -566,13 +564,14 @@ public class GET extends AbstractQuery implements Shift {
 
 										@Override
 										public boolean hasNext() {
-											return hasNext && shift != null;
+											return hasNext;
 										}
 
 										@Override
 										public Relationship next() {
+											System.out.println("next "+ashift);
 											hasNext = false;
-											return shift;
+											return ashift;
 										}
 
 										@Override
