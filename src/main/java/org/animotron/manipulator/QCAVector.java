@@ -63,7 +63,7 @@ public class QCAVector {
 	private static boolean debug = false;
 	
 	private void discoverDefId(Relationship r) {
-		if (r.isType(DEF._)) {
+		if (r != null && r.isType(DEF._)) {
 			lastDefId = r.getId();
 		
 		} else {
@@ -72,7 +72,6 @@ public class QCAVector {
 			} catch (Exception e) {
 			}
 		}
-		
 	}
 
 	public QCAVector(Relationship question) {

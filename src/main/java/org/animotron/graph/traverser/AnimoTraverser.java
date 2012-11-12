@@ -67,7 +67,7 @@ public class AnimoTraverser {
     }
 
     protected void build(GraphHandler handler, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
-        build(handler, parent, new QCAVector(def.getId(), r), level, isOne, pos, isLast, evaluable, def);
+        build(handler, parent, new QCAVector(def == null? -1 : def.getId(), r), level, isOne, pos, isLast, evaluable, def);
     }
 
     protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
