@@ -60,9 +60,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             } else {
 				Relationship r = rr.getClosest();
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
-                if (!(s instanceof REF && !(qS instanceof AN))) {
-                    iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
-                }
+                iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
         }
