@@ -64,12 +64,12 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 				QCAVector r;
 				while ((r = pipe.take()) != null) {
 					if (r.getQuestion().equals(pf.getVector().getQuestion()))
-//						pf.sendAnswer(r);
-						pf.sendAnswer(DEF._.get(r.getAnswer().getEndNode()), r);
+						pf.sendAnswer(r);
+//						pf.sendAnswer(DEF._.get(r.getAnswer().getEndNode()), r);
 					
 					else 
-						pf.sendAnswer(DEF._.get(r.getAnswer().getEndNode()), r);
-						//pf.sendAnswer(new QCAVector(pf.getOP(), r, r.getUnrelaxedAnswer()));
+//						pf.sendAnswer(DEF._.get(r.getAnswer().getEndNode()), r);
+						pf.sendAnswer(new QCAVector(pf.getOP(), r, r.getUnrelaxedAnswer()));
 						
 				}
 			}
