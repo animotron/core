@@ -26,10 +26,7 @@ import org.animotron.manipulator.Evaluator;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.Definition;
-import org.animotron.statement.operator.Evaluable;
-import org.animotron.statement.operator.REF;
+import org.animotron.statement.operator.*;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
 
@@ -78,7 +75,9 @@ public class ResultTraverser extends AnimoTraverser {
 				Relationship r = rr.getClosest();
                 if (s instanceof AbstractValue)
                     handler.start(s, parent, r, level++, isOne, pos, isLast);
-                iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
+                if (!(s instanceof REF && !(qS instanceof Reference))) {
+                    iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
+                }
                 if (s instanceof AbstractValue)
                     handler.end(s, parent, r, --level, isOne, pos, isLast);
             }

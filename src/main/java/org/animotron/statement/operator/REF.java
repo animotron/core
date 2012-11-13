@@ -30,7 +30,7 @@ import org.neo4j.graphdb.Relationship;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class REF extends AbstractStatement implements Reference, Private {
+public class REF extends AbstractStatement implements Private {
 
 	public static final REF _ = new REF();
 
