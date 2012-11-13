@@ -81,7 +81,7 @@ public class WHouseFormTest extends ATest {
 
         assertAnimo(
                 doc,
-                "def docA " +
+                "docA " +
                 	"(event) " +
                     "(date \"D2012-02-11\") " +
                     "(issue-party companyA) " +
@@ -101,15 +101,15 @@ public class WHouseFormTest extends ATest {
 
         assertAnimoResult(
     		"all event (with party centralWhouse) (with date \"D2012-02-11\")",
-    		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
+    		"docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
        		"all event (with receive-party centralWhouse) (with date \"D2012-02-11\")",
-    		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
+    		"docA (event) (date) (issue-party) (receive-party) (SKU).");
 
 //        assertAnimoResult(
 //           		"all event (with centralWhouse) (with date \"D2012-02-11\")",
-//        		"def docA (event) (date) (issue-party) (receive-party) (SKU).");
+//        		"docA (event) (date) (issue-party) (receive-party) (SKU).");
 
         assertAnimoResult(
     		"get SKU all event (with receive-party centralWhouse) (with date \"D2012-02-11\")",
@@ -198,7 +198,7 @@ public class WHouseFormTest extends ATest {
         assertAnimoResult(
                 "generate-form prism whouse-issue",
                 "generate-form " +
-                    "def html-form " +
+                    "html-form " +
                         "(form-widget) " +
                         "(\\form (@name \"whouse-issue\") " +
                             "(html-label-input " +
@@ -225,7 +225,7 @@ public class WHouseFormTest extends ATest {
 //        assertAnimoResult(
 //                "generate-table-row prism whouse-issue",
 //                "generate-table-row " +
-//                    "def html-table-row (table-row-widget) " +
+//                    "html-table-row (table-row-widget) " +
 //                        "(\\tr (@name \"uuid\") " +
 //                            "(\\td html-input \\input @name \"goods\") " +
 //                            "(\\td html-input \\input @name \"qty\") " +
@@ -236,7 +236,7 @@ public class WHouseFormTest extends ATest {
 //        assertAnimoResult(
 //                "fill-form (prism whouse-issue) ",// (object docA) ",
 //                "fill-form " +
-//                    "def html-table-row (table-row-widget) " +
+//                    "html-table-row (table-row-widget) " +
 //                        "(\\tr (@name \"uuid\") " +
 //                            "(\\td html-input \\input @name \"goods\") " +
 //                            "(\\td html-input \\input @name \"qty\") " +

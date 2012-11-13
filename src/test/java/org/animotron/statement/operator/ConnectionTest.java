@@ -98,9 +98,9 @@ public class ConnectionTest extends ATest {
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         ));
-        //XXX: assertAnimoResult(D, "def D mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
+        //XXX: assertAnimoResult(D, "D mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
         //assertAnimoResult(test, "mime-type the value-plain (mime-type) (type) (extension).");
-        assertAnimoResult(test, "def value-plain (mime-type) (type) (extension).");
+        assertAnimoResult(test, "value-plain (mime-type) (type) (extension).");
 
         test = new JExpression(
             _(GET._, "type",
@@ -173,8 +173,8 @@ public class ConnectionTest extends ATest {
             _(GET._, "mime-type",
                 _(AN._, "fileA")
         ));
-        //XXX: assertAnimoResult(test, "def value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
-        assertAnimoResult(test, "def value-plain (mime-type) (type) (extension).");
+        //XXX: assertAnimoResult(test, "value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
+        assertAnimoResult(test, "value-plain (mime-type) (type) (extension).");
 
         test = new JExpression(
             _(GET._, "type",
@@ -232,6 +232,6 @@ public class ConnectionTest extends ATest {
 		        _(GET._, "type")
 	        )
         );
-        assertAnimoResult(test, "def test (mime-type the value-plain (mime-type) (type) (extension)) (type \"value/plain\").");
+        assertAnimoResult(test, "test (mime-type the value-plain (mime-type) (type) (extension)) (type \"value/plain\").");
     }
 }

@@ -49,7 +49,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(DEF._, "x", _(ANY._, "X", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "def x def A X.");
+        assertAnimoResult(x, "x A X.");
     }
 
     @Test
@@ -67,7 +67,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(DEF._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "def x q def A X.");
+        assertAnimoResult(x, "x q A X.");
     }
 
     @Test
@@ -85,7 +85,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(DEF._, "x", _(ALL._, "X", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "def x (def A X) (def B X).");
+        assertAnimoResult(x, "x (A X) (B X).");
     }
 
     @Test
@@ -106,7 +106,7 @@ public class UseTest extends ATest {
         JExpression x = new JExpression(
             _(DEF._, "x", _(AN._, "q", _(USE._, "Y")))
         );
-        assertAnimoResult(x, "def x q (def A X) (def B X).");
+        assertAnimoResult(x, "x q (A X) (B X).");
     }
     
     @Test
@@ -128,22 +128,22 @@ public class UseTest extends ATest {
         test = new JExpression(
             _(ALL._, "S")
         );
-        assertAnimoResult(test, "def A (S) (X). def B (S) (Y). def C (S) (X) (Y).");
+        assertAnimoResult(test, "A (S) (X). B (S) (Y). C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "X"))
         );
-        assertAnimoResult(test, "def A (S) (X). def C (S) (X) (Y).");
+        assertAnimoResult(test, "A (S) (X). C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "Y"))
         );
-        assertAnimoResult(test, "def B (S) (Y). def C (S) (X) (Y).");
+        assertAnimoResult(test, "B (S) (Y). C (S) (X) (Y).");
 
         test = new JExpression(
             _(ALL._, "S", _(USE._, "X"), _(USE._, "Y"))
         );
-        assertAnimoResult(test, "def C (S) (X) (Y).");
+        assertAnimoResult(test, "C (S) (X) (Y).");
 
     }    
 }

@@ -132,7 +132,7 @@ public class GetTest extends ATest {
     	JExpression test = new JExpression(
 			_(DEF._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(AN._, "C", value("_")))))
 		);
-    	assertAnimoResult(test, "def F A \\B \".\" \"_\".");
+    	assertAnimoResult(test, "F A \\B \".\" \"_\".");
 
 	}
 	
@@ -175,7 +175,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "B", value("β")))))
         );
-        assertAnimoResult(E, "def E C \"γ\".");
+        assertAnimoResult(E, "E C \"γ\".");
 
     }
 
@@ -197,7 +197,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
         );
-        assertAnimoResult(E, "def E C Z \"γ\".");
+        assertAnimoResult(E, "E C Z \"γ\".");
     }
 
     @Test
@@ -218,14 +218,14 @@ public class GetTest extends ATest {
         JExpression D = new JExpression(
             _(DEF._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(AN._, "X", value("."))))))
         );
-        assertAnimoResult(D, "def D C Z Y X \".\".");
+        assertAnimoResult(D, "D C Z Y X \".\".");
     }
     
     @Test
 	public void test_01() throws Throwable {
         __(
-            new AnimoExpression("def a (x 1) (y 2) (z 3)"),
-            new AnimoExpression("def b (get x) (get y) (get z)")
+            new AnimoExpression("a (x 1) (y 2) (z 3)"),
+            new AnimoExpression("b (get x) (get y) (get z)")
         );
         Expression e = new AnimoExpression("b a");
         assertStringResult(e, "123");
@@ -294,9 +294,9 @@ public class GetTest extends ATest {
 		testAnimo("def text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 		testAnimo("def text-html (mime-type) (text) (type \"text/html\") (name \"HTML Document\") (extension \"htm\" \"html\").");
 		
-		//assertAnimoResultOneStep("any mime-type with extension \"txt\"", "def text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
+		//assertAnimoResultOneStep("any mime-type with extension \"txt\"", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 
-		assertAnimoResultOneStep("get mime-type file", "def text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
+		assertAnimoResultOneStep("get mime-type file", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 	}
 
     @Test
@@ -305,7 +305,7 @@ public class GetTest extends ATest {
         testAnimo("def john male.");
 
         assertAnimoResult("get sex john", "male.");
-        assertAnimoResult("any male", "def john male sex.");
+        assertAnimoResult("any male", "john male sex.");
         assertAnimoResult("get sex any male", "male.");
     }
 
@@ -338,7 +338,7 @@ public class GetTest extends ATest {
         testAnimo("def male sex.");
         testAnimo("def john person, male.");
 
-        assertAnimoResult("any person", "def john (person) (male sex).");
+        assertAnimoResult("any person", "john (person) (male sex).");
         assertAnimoResult("get sex any person", "person, male.");
     }
 
@@ -453,7 +453,7 @@ public class GetTest extends ATest {
     public void test_26() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");
-        assertAnimoResult("def foo an (get y x)", "def foo z \\bar.");
+        assertAnimoResult("def foo an (get y x)", "foo z \\bar.");
     }
 
     @Test
@@ -461,7 +461,7 @@ public class GetTest extends ATest {
     public void test_27() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");
-        assertAnimoResult("def foo (^x) (an (get y))", "def foo (x y) (z \\bar).");
+        assertAnimoResult("def foo (^x) (an (get y))", "foo (x y) (z \\bar).");
     }
 
     @Test
@@ -469,7 +469,7 @@ public class GetTest extends ATest {
         testAnimo("def x y z.");
         testAnimo("def z get bar.");
         testAnimo("def a bar 0.");
-        assertAnimoResult("def foo (^a) (^x) (an (get y))", "def foo (a bar) (x y) (z 0).");
+        assertAnimoResult("def foo (^a) (^x) (an (get y))", "foo (a bar) (x y) (z 0).");
     }
 
     @Test
@@ -503,10 +503,10 @@ public class GetTest extends ATest {
         testAnimo("def x y foo.");
         assertAnimoResult("get foo x", "foo.");
         assertAnimoResult("get foo get y x", "foo.");
-        assertAnimoResult("def q1 (x) (get foo)", "def q1 (x y) (y foo).");
-        assertAnimoResult("def q2 (x) (get foo get y)", "def q2 (x y) (y sfoo).");
-        assertAnimoResult("def q3 (x) (an get foo)", "def q3 (x y) (foo).");
-        assertAnimoResult("def q4 (x) (an get foo get y)", "def q4 (x y) (foo).");
+        assertAnimoResult("def q1 (x) (get foo)", "q1 (x y) (y foo).");
+        assertAnimoResult("def q2 (x) (get foo get y)", "q2 (x y) (y sfoo).");
+        assertAnimoResult("def q3 (x) (an get foo)", "q3 (x y) (foo).");
+        assertAnimoResult("def q4 (x) (an get foo get y)", "q4 (x y) (foo).");
     }
 
     @Test
@@ -516,10 +516,10 @@ public class GetTest extends ATest {
         testAnimo("def x y foo.");
         assertAnimoResult("get foo x", "foo.");
         assertAnimoResult("get foo get y x", "foo.");
-        assertAnimoResult("def q1 (x) (\\p get foo)", "def q1 (x y) (\\p foo).");
-        assertAnimoResult("def q2 (x) (\\p get foo get y)", "def q2 (x y) (\\p foo).");
-        assertAnimoResult("def q3 (x) (\\p an get foo)", "def q3 (x y) (\\p foo).");
-        assertAnimoResult("def q4 (x) (\\p an get foo get y)", "def q4 (x y) (\\p foo).");
+        assertAnimoResult("def q1 (x) (\\p get foo)", "q1 (x y) (\\p foo).");
+        assertAnimoResult("def q2 (x) (\\p get foo get y)", "q2 (x y) (\\p foo).");
+        assertAnimoResult("def q3 (x) (\\p an get foo)", "q3 (x y) (\\p foo).");
+        assertAnimoResult("def q4 (x) (\\p an get foo get y)", "q4 (x y) (\\p foo).");
     }
 
     @Test
@@ -615,7 +615,7 @@ public class GetTest extends ATest {
         testAnimo("def a (foo) (b c).");
         testAnimo("def y (z) (b v).");
         testAnimo("def x (^a) (any z) (get b).");
-        assertAnimoResult("any a", "def x (a (foo) (b)) (def y (z) (b)) (c).");
+        assertAnimoResult("any a", "x (a (foo) (b)) (y (z) (b)) (c).");
     }
 
     @Test
@@ -623,7 +623,7 @@ public class GetTest extends ATest {
         testAnimo("def a (foo) (b c).");
         testAnimo("def y (z) (b v).");
         testAnimo("def x (^a) (any z) (get b this a).");
-        assertAnimoResult("any a", "def x (a (foo) (b)) (def y (z) (b)) (c).");
+        assertAnimoResult("any a", "x (a (foo) (b)) (y (z) (b)) (c).");
     }
 
     @Test
@@ -631,7 +631,7 @@ public class GetTest extends ATest {
     public void test_42() throws Throwable {
         testAnimo("def a (foo) (b c).");
         testAnimo("def x (any foo) (get b).");
-        assertAnimoResult("x", "x (def a (foo) (b)) (b c).");
+        assertAnimoResult("x", "x (a (foo) (b)) (b c).");
     }
 
     @Test
@@ -715,8 +715,8 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(GET._, "A", _(AN._, "D")))
         );
-        //XXX: assertAnimoResult(E, "def E B \"π\".");
-        assertAnimoResult(E, "def E shall B \"π\".");
+        //XXX: assertAnimoResult(E, "E B \"π\".");
+        assertAnimoResult(E, "E shall B \"π\".");
     }
 
     @Test
@@ -737,7 +737,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(GET._, "A", _(AN._, "D")))
         );
-        assertAnimoResult(E, "def E \"π\".");
+        assertAnimoResult(E, "E \"π\".");
     }
 
     @Test
@@ -752,7 +752,7 @@ public class GetTest extends ATest {
     public void test_001() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (any x) (get foo).");
-        assertAnimoResult("y", "y (def a (x) (foo)) (foo 1).");
+        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
     }
 
     @Test
@@ -760,7 +760,7 @@ public class GetTest extends ATest {
     public void test_002() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (all x) (get foo).");
-        assertAnimoResult("y", "y (def a (x) (foo)) (foo 1).");
+        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
     }
 
     @Test
@@ -768,7 +768,7 @@ public class GetTest extends ATest {
     public void test_003() throws Throwable {
         testAnimo("def a (x) (foo 1).");
         testAnimo("def y (prefer x use a) (get foo).");
-        assertAnimoResult("y", "y (def a (x) (foo)) (foo 1).");
+        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
     }
 
     @Test

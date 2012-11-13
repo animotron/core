@@ -56,7 +56,7 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        assertAnimoResultOneStep(test, "def B (^A) (value \"B\"). def C (^B) (value \"C\").");
+        assertAnimoResultOneStep(test, "B (^A) (value \"B\"). C (^B) (value \"C\").");
     }
 	
     @Test
@@ -77,7 +77,7 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A")
         );
-        assertAnimoResultOneStep(test, "def B (^A) (value \"B\"). def C (^B) (value \"C\").");
+        assertAnimoResultOneStep(test, "B (^A) (value \"B\"). C (^B) (value \"C\").");
     }
 
     @Test
@@ -104,12 +104,12 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", value("B")))
         );
-        assertAnimoResultOneStep(test, "def B (^A) (value \"B\"). def B1 (^B) (value \"B\").");
+        assertAnimoResultOneStep(test, "B (^A) (value \"B\"). B1 (^B) (value \"B\").");
 
         test = new JExpression(
             _(ALL._, "A", _(WITH._, "value", value("C")))
         );
-        assertAnimoResultOneStep(test, "def C (^B) (value \"C\"). def C1 (^C) (value \"C\").");
+        assertAnimoResultOneStep(test, "C (^B) (value \"C\"). C1 (^C) (value \"C\").");
     }
 
 	@Test
@@ -139,8 +139,8 @@ public class AllTest extends ATest {
 		JExpression test = new JExpression(
 			_(ALL._, "mime-type", _(EQ._, "extension", value("txt")))
 		);
-        //assertAnimoResult(test, "def test the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
-		assertAnimoResultOneStep(test, "def value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+        //assertAnimoResult(test, "test the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+		assertAnimoResultOneStep(test, "value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
 	}
 	
 	@Test
@@ -152,7 +152,7 @@ public class AllTest extends ATest {
 
         assertAnimoResult(
             "all item",
-            "def item1 (goods) (qty) (cost). def item2 (goods) (qty) (cost)."
+            " item1 (goods) (qty) (cost).  item2 (goods) (qty) (cost)."
         );
 	}
 
@@ -175,17 +175,17 @@ public class AllTest extends ATest {
         JExpression test = new JExpression(
             _(ALL._, "S", _(WITH._, "X", value("α")))
         );
-        assertAnimoResultOneStep(test, "def A (^S) (X \"α\"). def B (^A) (Y \"β\").");
+        assertAnimoResultOneStep(test, "A (^S) (X \"α\"). B (^A) (Y \"β\").");
 
         test = new JExpression(
             _(ALL._, "S", _(WITH._, "Y", value("β")))
         );
-        assertAnimoResultOneStep(test, "def B (^A) (Y \"β\"). def C (^B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(test, "B (^A) (Y \"β\"). C (^B) (Z \"γ\") (X \"αα\").");
 
         test = new JExpression(
             _(ALL._, "S", _(WITH._, "Z", value("γ")))
         );
-        assertAnimoResultOneStep(test, "def C (^B) (Z \"γ\") (X \"αα\").");
+        assertAnimoResultOneStep(test, "C (^B) (Z \"γ\") (X \"αα\").");
 
     }
 }

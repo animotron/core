@@ -34,7 +34,7 @@ public class NonstopTest extends ATest {
     public void test_00() throws Throwable {
 
         testAnimo("def a b.");
-        assertAnimoResult("all b", "def a b.");
+        assertAnimoResult("all b", "a b.");
     }
 
     @Test
@@ -42,7 +42,7 @@ public class NonstopTest extends ATest {
 
         testAnimo("def a b.");
         testAnimo("def c ^a.");
-        assertAnimoResult("all b", "def a b.");
+        assertAnimoResult("all b", "a b.");
     }
 
     @Test

@@ -51,7 +51,7 @@ public class GetDynamicTest extends ATest {
     	JExpression d = new JExpression(
 			_(DEF._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "def d", " \"A\"", " \"B\"", ".");
+        assertAnimoResult(d, "d", " \"A\"", " \"B\"", ".");
 	}
 
 	@Test
@@ -72,7 +72,7 @@ public class GetDynamicTest extends ATest {
     	JExpression d = new JExpression(
 			_(DEF._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
 		);
-        assertAnimoResult(d, "def d", " \"A\"", " \"B\"", ".");
+        assertAnimoResult(d, "d", " \"A\"", " \"B\"", ".");
 	}
 
 	@Test
@@ -94,17 +94,17 @@ public class GetDynamicTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(GET._, "A", _(ALL._, "Z")))
         );
-        assertAnimoResult(E, "def E (B \"π\") (A \"Aπ\").");
+        assertAnimoResult(E, "E (B \"π\") (A \"Aπ\").");
 
         JExpression E1 = new JExpression(
             _(DEF._, "E1", _(GET._, "B", _(ALL._, "Z")))
         );
-        assertAnimoResult(E1, "def E1 B \"π\".");
+        assertAnimoResult(E1, "E1 B \"π\".");
 
         JExpression F = new JExpression(
             _(DEF._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
         );
-        assertAnimoResult(F, "def F B \"π\".");
+        assertAnimoResult(F, "F B \"π\".");
     }
 
     @Test
@@ -166,7 +166,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def x y z.");
 
 //        testAnimoResult("all a.", "z.");
-        testAnimoResult("all a.", "def y a.");
+        testAnimoResult("all a.", "y a.");
     }
 
     @Test
@@ -175,7 +175,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def x y z.");
 
 //        testAnimoResult("all a use y.", "z.");
-        testAnimoResult("all a use y.", "def y a.");
+        testAnimoResult("all a use y.", "y a.");
     }
 
     @Test
@@ -183,7 +183,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def y ^a.");
         testAnimo("def x y.");
 
-        testAnimoResult("all a use y.", "def y a. def x y a.");
+        testAnimoResult("all a use y.", "y a. x y a.");
     }
 
     @Test
@@ -193,7 +193,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def x y z.");
 
 //        testAnimoResult("all b use y.", "z.");
-        testAnimoResult("all b use y.", "def y a b.");
+        testAnimoResult("all b use y.", "y a b.");
     }
 
     @Test
@@ -202,7 +202,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def y ^a.");
         testAnimo("def x y.");
 
-        testAnimoResult("all b use y.", "def y a b. def x y a b.");
+        testAnimoResult("all b use y.", "y a b. x y a b.");
     }
 
     @Test
@@ -220,7 +220,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def y a.");
         testAnimo("def x y.");
 
-        testAnimoResult("all b use y.", "def y a b.");
+        testAnimoResult("all b use y.", "y a b.");
     }
 
     @Test
@@ -237,7 +237,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def x y z.");
 
 //        testAnimoResult("prefer a use y.", "z.");
-        testAnimoResult("prefer a use y.", "def y a.");
+        testAnimoResult("prefer a use y.", "y a.");
     }
 
     @Test
@@ -245,7 +245,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def y ^a.");
         testAnimo("def x y.");
 
-        testAnimoResult("prefer a use y.", "def y a. def x y a.");
+        testAnimoResult("prefer a use y.", "y a. x y a.");
     }
 
     @Test
@@ -255,7 +255,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def x y z.");
 
 //        testAnimoResult("prefer b use y.", "z.");
-        testAnimoResult("prefer b use y.", "def y a b.");
+        testAnimoResult("prefer b use y.", "y a b.");
     }
 
     @Test
@@ -264,7 +264,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def y ^a.");
         testAnimo("def x y.");
 
-        testAnimoResult("prefer b use y.", "def y a b. def x y a b.");
+        testAnimoResult("prefer b use y.", "y a b. x y a b.");
     }
 
     @Test
@@ -273,7 +273,7 @@ public class GetDynamicTest extends ATest {
         testAnimo("def y a.");
         testAnimo("def x y.");
 
-        testAnimoResult("prefer b use y.", "def y a b.");
+        testAnimoResult("prefer b use y.", "y a b.");
     }
 
     @Test
@@ -307,21 +307,21 @@ public class GetDynamicTest extends ATest {
         testAnimo("def foo c, d, e.");
         testAnimo("def bar (c) (d) (e).");
         testAnimo("def a b (c) (d) (e).");
-        assertAnimoResult("all get b a", "def bar (c) (d) (e). def foo (c) (d) (e).");
+        assertAnimoResult("all get b a", "bar (c) (d) (e). foo (c) (d) (e).");
     }
 
     @Test
     public void test_19() throws Throwable {
         testAnimo("def x c, d, e.");
         testAnimo("def a b (c) (d) (e).");
-        assertAnimoResult("any get b a", "def x (c) (d) (e).");
+        assertAnimoResult("any get b a", "x (c) (d) (e).");
     }
 
     @Test
     public void test_20() throws Throwable {
         testAnimo("def x (c) (d) (e).");
         testAnimo("def a b (c) (d) (e).");
-        assertAnimoResult("any get b a", "def x (c) (d) (e).");
+        assertAnimoResult("any get b a", "x (c) (d) (e).");
     }
 
 }
