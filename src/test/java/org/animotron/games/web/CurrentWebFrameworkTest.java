@@ -140,7 +140,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
+        assertAnimoResult("any error with code 404", "not-found-error (error) (code).");
         assertAnimoResult("get not-found-error site", "default-not-found.");
         assertAnimoResult("get (any error with code 404) (site)", "default-not-found.");// (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
 
@@ -262,7 +262,7 @@ public class CurrentWebFrameworkTest extends ATest {
 
         );
 
-        assertAnimoResult("any error with code 404", "def not-found-error (error) (code).");
+        assertAnimoResult("any error with code 404", "not-found-error (error) (code).");
         assertAnimoResult("get not-found-error site", "default-not-found.");// (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
         assertAnimoResult("get (any error with code 404) (site)", "default-not-found.");// (html-page (text-html (mime-type) (type) (extension)) (\\html (\\head (\\link @href uri \"foo.png\") (\\title title \"Not found\")) (\\body def default-error-layout (layout) (\\h1 code 404) (\\h2 title \"Not found\") (\\p message \"Not found anything\") (\\p)))) (use default-error-layout) (title) (message).");
 
@@ -756,7 +756,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def bootstrap.less (less)."
         );
 
-        assertAnimoResult("hello", "hello (html-page \\link \"uri-bootstrap.less\") (def xxx (bootstrap.less less) (uri)).");
+        assertAnimoResult("hello", "hello (html-page \\link \"uri-bootstrap.less\") (xxx (bootstrap.less less) (uri)).");
 
     }
 

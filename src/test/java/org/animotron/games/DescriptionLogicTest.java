@@ -128,7 +128,7 @@ public class DescriptionLogicTest extends ATest {
 				//eq an:personB; an:mother?
 		);
 		
-		assertAnimoResult(a, "def a the yes.");
+		assertAnimoResult(a, "a yes.");
 		
 	}
 
@@ -143,6 +143,6 @@ public class DescriptionLogicTest extends ATest {
 
 		testAnimo("def john (child joe).");
 
-		assertAnimoResult("john", "def joe parent john.");
+		assertAnimoResult("john", "joe parent john.");
 	}
 }
