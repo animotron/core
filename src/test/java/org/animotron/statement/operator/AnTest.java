@@ -59,7 +59,7 @@ public class AnTest extends ATest {
         testAnimo("def b c.");
         testAnimo("def a b.");
 
-        assertAnimoResult("a", "def a def b def c def d def e def f.");
+        assertAnimoResult("a", "def a b c d e f.");
     }
 
     @Test
@@ -70,6 +70,6 @@ public class AnTest extends ATest {
         testAnimo("def c a.");
         testAnimo("def b a.");
 
-        assertAnimoResult("e", "def e (def d def a) (def c def a) (def b def a).");
+        assertAnimoResult("e", "def e (d a) (c a) (b a).");
     }
 }
