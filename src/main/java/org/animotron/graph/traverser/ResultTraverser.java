@@ -55,6 +55,7 @@ public class ResultTraverser extends AnimoTraverser {
     protected void build(GraphHandler handler, Statement parent, QCAVector rr, int level, boolean isOne, int pos, boolean isLast, boolean evaluable, Relationship def) throws IOException {
     	Relationship r = rr.getClosest();
 		Statement s = Statements.relationshipType(r);
+        if (s instanceof Definition) s = REF._;
         process(handler, s, parent, rr, level, isOne, pos, isLast, evaluable, def);
     }
     

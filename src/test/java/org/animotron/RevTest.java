@@ -76,7 +76,8 @@ public class RevTest extends ATest {
     public void test_04() throws Throwable {
         testAnimo("def a.");
         testAnimo("def a x.");
-        assertAnimoResult("all x", "def a x.");
+        assertAnimoResult("a", "a x.");
+        assertAnimoResult("all x", "a x.");
     }
 
     @Test
