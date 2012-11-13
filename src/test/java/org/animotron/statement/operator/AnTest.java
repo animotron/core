@@ -61,4 +61,16 @@ public class AnTest extends ATest {
 
         assertAnimoResult("a", "a b c d e f.");
     }
+
+    @Test
+    public void test_01() throws Throwable {
+
+        testAnimo("def e all a.");
+        testAnimo("def d a.");
+        testAnimo("def c a.");
+        testAnimo("def b a.");
+
+        assertAnimoResult("e", "e (d a) (c a) (b a).");
+    }
+
 }
