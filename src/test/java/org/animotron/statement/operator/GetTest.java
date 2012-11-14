@@ -197,7 +197,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
         );
-        assertAnimoResult(E, "E C Z \"γ\".");
+        assertAnimoResult(E, "E C \"γ\".");
     }
 
     @Test
@@ -322,7 +322,7 @@ public class GetTest extends ATest {
     @Test
     @Ignore
     public void test_09() throws Throwable {
-        testAnimo("def male #sex.");
+        testAnimo("def male sex.");
         testAnimo("def john male.");
 
         testAnimo("def _man_ john.");
@@ -334,13 +334,12 @@ public class GetTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_10() throws Throwable {
         testAnimo("def male sex.");
         testAnimo("def john person, male.");
 
         assertAnimoResult("any person", "john (person) (male sex).");
-        assertAnimoResult("get sex any person", "person, male.");
+        assertAnimoResult("get sex any person", "person. male.");
     }
 
     @Test
@@ -628,11 +627,8 @@ public class GetTest extends ATest {
     }
 
     @Test
-    @Ignore // a is not on vector
+    @Ignore
     public void test_42() throws Throwable {
-        testAnimo("def a (foo) (b c).");
-        testAnimo("def x (any foo) (get b).");
-        assertAnimoResult("x", "x (a (foo) (b)) (b c).");
     }
 
     @Test
@@ -693,7 +689,7 @@ public class GetTest extends ATest {
         JExpression E = new JExpression(
             _(DEF._, "E", _(GET._, "A", _(AN._, "C")))
         );
-        assertAnimoResult(E, "def E \"π\".");
+        assertAnimoResult(E, "E \"π\".");
 
     }
 
