@@ -97,12 +97,16 @@ public class CHANGE extends Operator implements Evaluable {
                     QCAVector v;
                     while ((v = pipe.take()) != null) {
 //                    	System.out.println("process "+v);
-                        process(pf, v, op, np);
-//                    	System.out.println("end process "+v);
+                    	try {
+                    		process(pf, v, op, np);
+                    	} catch (Throwable e) {
+                    		e.printStackTrace();
+						}
                     }
                     return null;
                 }
             });
+//            System.out.println("AAA");
         }
 
         private void process(PFlow pf, QCAVector v, Relationship op, Relationship np) throws Throwable {

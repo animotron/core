@@ -104,7 +104,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
         				if (path.endNode().getId() == 0)
         					return EXCLUDE_AND_PRUNE;
         				
-        				System.out.println(path);
+//        				System.out.println(path);
         				
         				if (path.length() < 1)
         					return EXCLUDE_AND_CONTINUE;

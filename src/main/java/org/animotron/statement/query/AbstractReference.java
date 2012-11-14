@@ -160,7 +160,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 		        for (Path path : td_IS_leaf.traverse(node)) {
 		        	
-//		        	System.out.println("-> "+path);
+		        	System.out.println("-> "+path);
 
 		        	Relationship r = path.lastRelationship();
 		        	if (!Utils.haveContext(r.getEndNode())) {
