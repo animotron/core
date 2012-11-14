@@ -52,7 +52,7 @@ public class WITH extends Operator implements Predicate {
 	
 	private WITH() { super("with"); }
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 
 	@Override
 	public boolean filter(final PFlow pf, Relationship op, final Relationship ref) throws InterruptedException, IOException {

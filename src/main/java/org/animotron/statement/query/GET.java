@@ -68,7 +68,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
