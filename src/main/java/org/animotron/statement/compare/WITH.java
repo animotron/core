@@ -52,7 +52,7 @@ public class WITH extends Operator implements Predicate {
 	
 	private WITH() { super("with"); }
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 
 	@Override
 	public boolean filter(final PFlow pf, Relationship op, final Relationship ref) throws InterruptedException, IOException {
@@ -250,7 +250,7 @@ public class WITH extends Operator implements Predicate {
 				System.out.println("get from Evaluator "+e);
 			}
 		} else {
-			list.add(new QCAVector(i));
+			list.add(vector);//new QCAVector(i));
 		}
 //			}
 //		} finally {
