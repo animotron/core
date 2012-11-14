@@ -81,7 +81,7 @@ public class WHouseFormTest extends ATest {
 
         assertAnimo(
                 doc,
-                "docA " +
+                "def docA " +
                 	"(event) " +
                     "(date \"D2012-02-11\") " +
                     "(issue-party companyA) " +
