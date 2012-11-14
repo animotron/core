@@ -75,6 +75,6 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
         		new PipeIterator( 
         				Evaluator._.execute(handler.getController(), rr.question(r), null, false) );
         
-        iterate(handler, null, rr, in, level, isOne, pos, isLast, true, null);
+        iterate(handler, null, rr, in, level, isOne, pos, isLast, true, def);
     }
 }
