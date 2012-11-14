@@ -97,6 +97,7 @@ public class CHANGE extends Operator implements Evaluable {
             AnimoGraph.execute(new GraphOperation<Void>() {
                 @Override
                 public Void execute() throws Throwable {
+                	//XXX: check if relationship exist
             		process(pf, v, op, np);
                     return null;
                 }
