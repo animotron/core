@@ -135,32 +135,28 @@ public class JExpression extends AbstractExpression {
         return e;
     }
 
-    private static Object[] $(AbstractValue s, Object[]... ref) {
-        return _(s, ref, (Object[])null);
-    }
-
 	public static Object[] element(String name) {
-		return $(ELEMENT._, qname(name));
+		return _(ELEMENT._, qname(name));
 	}
 
 	public static Object[] element(String name, Object[]... p) {
-		return _(ELEMENT._, qname(name), p);
+		return _(ELEMENT._, _(qname(name), p));
 	}
 	
     public static Object[] attribute(String name) {
-        return $(ATTRIBUTE._, qname(name));
+        return _(ATTRIBUTE._, qname(name));
     }
 
     public static Object[] attribute(String name, Object value) {
-        return $(ATTRIBUTE._, qname(name), value(value));
+        return _(ATTRIBUTE._, _(qname(name), value(value)));
     }
 
     public static Object[] entity(String name) {
-        return $(ENTITY._, qname(name));
+        return _(ENTITY._, qname(name));
     }
 
     public static Object[] comment() {
-        return $(COMMENT._);
+        return _(COMMENT._);
     }
 
     public static Object[] comment(String value) {
@@ -176,11 +172,11 @@ public class JExpression extends AbstractExpression {
     }
 
     public static Object[] pi(String name, String value) {
-        return $(PI._, qname(name), value(value));
+        return _(PI._, _(qname(name), value(value)));
     }
 
     public static Object[] pi(String value) {
-        return $(PI._, value(value));
+        return _(PI._, value(value));
     }
 
     public static Object[] dtd() {
@@ -192,11 +188,11 @@ public class JExpression extends AbstractExpression {
     }
 
     public static Object[] namespace(String name, String value) {
-        return $(NS._, qname(name), value(value));
+        return _(NS._, _(qname(name), value(value)));
     }
 
     public static Object[] namespace(String value) {
-        return $(NS._, value(value));
+        return _(NS._, value(value));
     }
 
     public static Object[] qname(String value) {
