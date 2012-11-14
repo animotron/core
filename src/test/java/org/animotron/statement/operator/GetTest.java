@@ -449,7 +449,6 @@ public class GetTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_26() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");
@@ -457,7 +456,6 @@ public class GetTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_27() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");
@@ -578,7 +576,6 @@ public class GetTest extends ATest {
     }
 
     @Test
-    @Ignore //parser not ready
     public void test_36() throws Throwable {
         testAnimo("def bar z.");
         testAnimo("def foo1 (bar) 1.");
@@ -603,7 +600,7 @@ public class GetTest extends ATest {
     }
 
     @Test
-    @Ignore
+    @Ignore //UNDERSTAND: require pseudoIS topology check during THIS evaluation. do we really need it?
     public void test_39() throws Throwable {
         testAnimo("def a b c.");
         testAnimo("def x (a) (get b this a).");
@@ -743,38 +740,4 @@ public class GetTest extends ATest {
         testAnimo("def y (^a) (get foo).");
         assertAnimoResult("y", "y (a (x) (foo)) 1.");
     }
-
-    @Test
-    @Ignore // "foo 1" don't stay on vector (need to calc "any x" to reach)
-    public void test_001() throws Throwable {
-        testAnimo("def a (x) (foo 1).");
-        testAnimo("def y (any x) (get foo).");
-        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
-    }
-
-    @Test
-    @Ignore // "foo 1" don't stay on vector (need to calc "all x" to reach)
-    public void test_002() throws Throwable {
-        testAnimo("def a (x) (foo 1).");
-        testAnimo("def y (all x) (get foo).");
-        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
-    }
-
-    @Test
-    @Ignore // "foo 1" don't stay on vector (need to calc "prefer x" to reach)
-    public void test_003() throws Throwable {
-        testAnimo("def a (x) (foo 1).");
-        testAnimo("def y (prefer x use a) (get foo).");
-        assertAnimoResult("y", "y (a (x) (foo)) (foo 1).");
-    }
-
-    @Test
-    @Ignore // "foo 1" don't stay on vector (need to calc "any x" to reach)
-    public void test_004() throws Throwable {
-        testAnimo("def a (x) (foo 1).");
-        testAnimo("def y get foo.");
-        testAnimo("def z y any x.");
-        assertAnimoResult("z", "z y foo 1.");
-    }
-
 }
