@@ -49,7 +49,7 @@ public class SimpleTest extends ATest {
     	JExpression C = new JExpression(
 			_(DEF._, "CC", _(AN._, "BB"))
 		);
-        assertAnimoResultOneStep(C, "CC BB AA \"a@b\".");
+        assertAnimoResultOneStep(C, "CC BB");// AA \"a@b\".");
 	}
 
 	@Test

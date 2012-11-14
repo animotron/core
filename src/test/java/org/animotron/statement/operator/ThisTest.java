@@ -85,6 +85,6 @@ public class ThisTest extends ATest {
     		"def html-page any layout",
     		"def app-layout (layout) (get js this app)"
 		);
-        assertAnimoResult("IDE", "IDE (app (html-page def app-layout (layout) (bar)) (js)) (js).");
+        assertAnimoResult("IDE", "IDE (app (html-page app-layout (layout) (bar)) (js)) (js).");
     }
 }
