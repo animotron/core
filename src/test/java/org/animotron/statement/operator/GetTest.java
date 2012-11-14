@@ -218,7 +218,8 @@ public class GetTest extends ATest {
         JExpression D = new JExpression(
             _(DEF._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(AN._, "X", value("."))))))
         );
-        assertAnimoResult(D, "D C Z Y X \".\".");
+//        assertAnimoResult(D, "D C Z Y X \".\".");
+        assertAnimoResult(D, "D C \".\".");
     }
     
     @Test
