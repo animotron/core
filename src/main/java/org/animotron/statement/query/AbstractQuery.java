@@ -38,6 +38,7 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -722,13 +723,13 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			if (r.isType(DEF._)) {
 				checkTHEnode(r.getEndNode(), path, targets, weakTargets, intersection, weakIntersection, weakestIntersection, directed);
 
-			} else if (path.length() % 3 == 0) {
-				if (!r.isType(ASHIFT._))
-					return EXCLUDE_AND_PRUNE;
-				
-				return EXCLUDE_AND_CONTINUE;
-
-			} else if (path.length() % 3 == 2) {
+//			} else if (path.length() % 3 == 0) {
+//				if (!r.isType(ASHIFT._))
+//					return EXCLUDE_AND_PRUNE;
+//				
+//				return EXCLUDE_AND_CONTINUE;
+//
+			} else if (path.length() % 2 == 0) {
 				if (!r.isType(AN._))
 					return EXCLUDE_AND_PRUNE;
 				
@@ -783,7 +784,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		    	if (Utils.haveContext(r.getEndNode()))
 		    		return EXCLUDE_AND_PRUNE;
 
-			} else if (path.length() % 3 == 1)
+			} else if (path.length() % 2 == 1)
 				if (!r.isType(REF._))
 					return EXCLUDE_AND_PRUNE;
 				else {
