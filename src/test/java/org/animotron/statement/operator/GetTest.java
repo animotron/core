@@ -412,7 +412,7 @@ public class GetTest extends ATest {
     public void test_20() throws Throwable {
         testAnimo("def x a 1.");
         testAnimo("def y a 2 (x).");
-        assertAnimoResult("each (get a y) (this a)", "2. x.");
+        assertAnimoResult("each (get a y) (this a)", "2. x a.");
     }
 
     @Test

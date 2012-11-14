@@ -26,6 +26,7 @@ import javolution.util.FastSet;
 import javolution.util.FastTable;
 import org.animotron.graph.Properties;
 import org.animotron.graph.index.AShift;
+import org.animotron.graph.index.IteratorSingle;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.*;
@@ -38,6 +39,7 @@ import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.PathExpander;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.BranchState;
 import org.neo4j.graphdb.traversal.Evaluation;
@@ -508,6 +510,20 @@ public class GET extends AbstractQuery implements Shift {
 //			.
 //			relationships(SHALL._, OUTGOING);
 	
+	static FastSet<RelationshipType> allowedSet = new FastSet<RelationshipType>();
+	static {
+		allowedSet.add(ASHIFT._);
+		allowedSet.add(REF._);
+
+		allowedSet.add(AN._);
+		
+		allowedSet.add(ANY._);
+		allowedSet.add(ALL._);
+		allowedSet.add(PREFER._);
+		
+		allowedSet.add(GET._);
+	}
+	
 	private boolean getByHave(
 			final PFlow pf, 
 			final QCAVector vector, 
@@ -530,7 +546,7 @@ public class GET extends AbstractQuery implements Shift {
 //				System.out.println(path);
 				
 				if (path.length() == 0) {
-					return Order._.queryDownIterable(path.endNode());
+					return Order._.queryDownIterable(path.endNode(), allowedSet);
 				}
 
 				final Node node;
@@ -558,35 +574,14 @@ public class GET extends AbstractQuery implements Shift {
 							return new Iterable<Relationship>() {
 								@Override
 								public Iterator<Relationship> iterator() {
-									return new Iterator<Relationship>() {
-										
-										boolean hasNext = true;
-
-										@Override
-										public boolean hasNext() {
-											return hasNext;
-										}
-
-										@Override
-										public Relationship next() {
-//											System.out.println("next "+ashift);
-											hasNext = false;
-											return ashift;
-										}
-
-										@Override
-										public void remove() {
-										}
-										
-									};
+									return new IteratorSingle(ashift);
 								}
-								
 							};
 						}
 					}
 				}
 
-				return Order._.queryDownIterable(node);
+				return Order._.queryDownIterable(node, allowedSet);
 			}
 
 			@Override

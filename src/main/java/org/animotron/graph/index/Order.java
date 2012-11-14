@@ -24,11 +24,13 @@ import org.apache.lucene.search.Sort;
 import org.apache.lucene.search.SortField;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.lucene.QueryContext;
 
 import java.util.Iterator;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -68,44 +70,16 @@ public class Order extends AbstractRelationshipIndex {
         return q.sort( new Sort( sortFields ) );
     }
 
-
     public IndexHits<Relationship> queryDown(Node node) {
         return index().query(name, sort(name), node, null);
     }
 
-    public Iterable<Relationship> queryDownIterable(final Node node) {
+    public Iterable<Relationship> queryDownIterable(final Node node, final Set<RelationshipType> allowed) {
     	return new Iterable<Relationship>() {
-
 			@Override
 			public Iterator<Relationship> iterator() {
-				return new Iterator<Relationship>() {
-					
-					IndexHits<Relationship> hits = queryDown(node);
-
-					@Override
-					public boolean hasNext() {
-						if (!hits.hasNext()) {
-							hits.close();
-						}
-
-						return hits.hasNext();
-					}
-
-					@Override
-					public Relationship next() {
-//						final Relationship r = hits.next();
-//						System.out.println("next: "+r);
-//						return r;
-						return hits.next();
-					}
-
-					@Override
-					public void remove() {
-					}
-					
-				};
+				return new IteratorFiltered(node, allowed);
 			}
-    		
     	};
     }
 
