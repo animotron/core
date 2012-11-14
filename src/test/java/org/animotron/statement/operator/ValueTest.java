@@ -22,7 +22,6 @@ package org.animotron.statement.operator;
 
 import junit.framework.Assert;
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
 import org.animotron.statement.value.VALUE;
 import org.junit.Test;
 
