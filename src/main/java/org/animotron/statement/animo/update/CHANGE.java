@@ -20,7 +20,7 @@
  */
 package org.animotron.statement.animo.update;
 
-import javolution.util.FastTable;
+import javolution.util.FastSet;
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.AShift;
@@ -39,6 +39,7 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.animotron.graph.Properties.*;
 import static org.animotron.graph.RelationshipTypes.SHIFT;
@@ -63,34 +64,41 @@ public class CHANGE extends Operator implements Evaluable {
         @Override
         public void act(final PFlow pf) throws Throwable {
 
-        	AnimoGraph.execute(new GraphOperation<Void>() {
+            Relationship op = null;
+            Relationship np = null;
+            IndexHits<Relationship> it = Order._.queryDown(pf.getOPNode());
+            try {
+                int i = 0;
+                while (it.hasNext()) {
+                    Relationship r = it.next();
+                    if (i > 0 && !r.isType(REF._)) {
+                        if (np == null) {
+                            np = r;
+                        } else if (op == null) {
+                            op = np;
+                            np = r;
+                            break;
+                        }
+                    }
+                    i++;
+                }
+            } finally {
+                it.close();
+            }
+            
+            process(pf, op, np);
+        }
+
+        private void process(final PFlow pf, final Relationship op, final Relationship np) throws Throwable {
+            AnimoGraph.execute(new GraphOperation<Void>() {
                 @Override
                 public Void execute() throws Throwable {
-                    Relationship op = null;
-                    Relationship np = null;
-                    IndexHits<Relationship> it = Order._.queryDown(pf.getOPNode());
-                    try {
-                        int i = 0;
-                        while (it.hasNext()) {
-                            Relationship r = it.next();
-                            if (i > 0 && !r.isType(REF._)) {
-                                if (np == null) {
-                                    np = r;
-                                } else if (op == null) {
-                                    op = np;
-                                    np = r;
-                                    break;
-                                }
-                            }
-                            i++;
-                        }
-                    } finally {
-                        it.close();
-                    }
                     Pipe pipe = Utils.getByREF(pf, pf.getVector());
                     QCAVector v;
                     while ((v = pipe.take()) != null) {
+//                    	System.out.println("process "+v);
                         process(pf, v, op, np);
+//                    	System.out.println("end process "+v);
                     }
                     return null;
                 }
@@ -120,55 +128,47 @@ public class CHANGE extends Operator implements Evaluable {
         }
 
         private void process(PFlow pf, Node a, Relationship np, QCAVector v, long uid, long rid) throws Throwable {
-            for (Relationship i : def(v)) {
-                long def = i.getId();
-                Node s = a;
-                Node n = np.getEndNode();
-                Relationship ashift = AShift._.get(s, def);
-                if (ashift == null) {
-                    ashift = a.createRelationshipTo(n, ASHIFT._);
-                } else {
-                    s = ashift.getEndNode();
-                    AShift._.remove(ashift, def);
-                    ashift.delete();
-                    ashift = a.createRelationshipTo(n, ASHIFT._);
-                }
-                Relationship shift = s.createRelationshipTo(n, SHIFT);
-                UID.set(ashift, uid);
-                UID.set(shift, uid);
-                DEFID.set(ashift, def);
-                DEFID.set(shift, def);
-                RID.set(ashift, rid);
-                RID.set(shift, rid);
-                AShift._. add(ashift, def);
-                HASH.remove(i);
-                DependenciesTracking._.execute(pf.getController(), i);
-            }
+        	FastSet<Relationship> set = FastSet.newInstance();
+        	try {
+	            for (Relationship i : def(set, v)) {
+	                long def = i.getId();
+	                Node s = a;
+	                Node n = np.getEndNode();
+	                Relationship ashift = AShift._.get(s, def);
+	                if (ashift == null) {
+	                    ashift = a.createRelationshipTo(n, ASHIFT._);
+	                } else {
+	                    s = ashift.getEndNode();
+	                    AShift._.remove(ashift, def);
+	                    ashift.delete();
+	                    ashift = a.createRelationshipTo(n, ASHIFT._);
+	                }
+	                Relationship shift = s.createRelationshipTo(n, SHIFT);
+	                UID.set(ashift, uid);
+	                UID.set(shift, uid);
+	                DEFID.set(ashift, def);
+	                DEFID.set(shift, def);
+	                RID.set(ashift, rid);
+	                RID.set(shift, rid);
+	                AShift._. add(ashift, def);
+	                HASH.remove(i);
+	                DependenciesTracking._.execute(pf.getController(), i);
+	            }
+        	} finally {
+        		FastSet.recycle(set);
+        	}
         }
 
-        private void add (List<Relationship> set, List<Relationship> r) {
-            for (Relationship i : r) {
-                add(set, i);
-            }
-        }
-
-        private void add (List<Relationship> set, Relationship r) {
-            if (!set.contains(r)) {
-                set.add(r);
-            }
-        }
-
-        private List<Relationship> def (QCAVector v) {
-            FastTable<Relationship> set = new FastTable<Relationship>();
+        private Set<Relationship> def(Set<Relationship> set, QCAVector v) {
             List<QCAVector> context = v.getContext();
             if (context == null) {
                 Node def = v.getClosestDefEndNode();
                 if (def != null) {
-                    add(set, DEF._.get(def));
+                    set.add(DEF._.get(def));
                 }
             } else {
                 for (QCAVector i : context) {
-                    add(set, def(i));
+                    def(set, i);
                 }
             }
             return set;
