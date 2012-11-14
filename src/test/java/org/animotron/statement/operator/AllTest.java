@@ -146,13 +146,13 @@ public class AllTest extends ATest {
 	@Test
 	public void test_00() throws Exception {
         __(
-	        "def item1 (goods item) (qty (1) (kg)) (cost (10) (USD)).",
-	        "def item2 (goods item) (qty (1) (kg)) (cost (5) (USD))."
+	        "def item1 (item) (qty (1) (kg)) (cost (10) (USD)).",
+	        "def item2 (item) (qty (1) (kg)) (cost (5) (USD))."
         );
 
         assertAnimoResult(
             "all item",
-            " item1 (goods) (qty) (cost).  item2 (goods) (qty) (cost)."
+            "item1 (item) (qty) (cost). item2 (item) (qty) (cost)."
         );
 	}
 
