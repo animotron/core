@@ -201,7 +201,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
     		return false;
     	}
 //    	System.out.println("filtering: "+ref+" "+Arrays.toString(uses.toArray()));
-    	return filtering(pf, ref, ref.getStartNode(), uses, weaks);
+    	return filtering(pf, ref, ref.getEndNode(), uses, weaks);
     }
 
     protected boolean filtering(final PFlow pf, final Relationship ref, final Node toCheckByUSE, final Set<Node> uses, final Set<Node> weaks) {
@@ -313,10 +313,8 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 			searchForUSE(allUses, allWeaks, pf.getVector(), visited);
 			
 //			System.out.println(pf.getVector());
-//			System.out.println("allUses");
-//			System.out.println(Arrays.toString(allUses.toArray()));
-//			System.out.println("allWeaks");
-//			System.out.println(Arrays.toString(allWeaks.toArray()));
+//			System.out.println("allUses : "+Arrays.toString(allUses.toArray()));
+//			System.out.println("allWeaks: "+Arrays.toString(allWeaks.toArray()));
 			
 	    	if (allUses.isEmpty() && allWeaks.isEmpty()) return;
 	    		
@@ -397,7 +395,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 		evaluator(new org.neo4j.graphdb.traversal.Evaluator(){
 			@Override
 			public Evaluation evaluate(Path path) {
-//				System.out.println(" "+path);
+				System.out.println(" "+path);
 
 				Node sNode;
 				if (path.length() == 0) {
@@ -411,20 +409,20 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					
 					Relationship firstR = firstRelationsip(path);
 					if (firstR.isType(AN._)) {
-						switch (path.length() % 3) {
-						case 0:
-		    				if (!lastR.isType(ASHIFT._))
-		    					return EXCLUDE_AND_PRUNE;
-							
-							break;
-
+						switch (path.length() % 2) {
+//						case 0:
+//		    				if (!lastR.isType(ASHIFT._))
+//		    					return EXCLUDE_AND_PRUNE;
+//							
+//							break;
+//
 						case 1:
 		    				if (!lastR.isType(AN._))
 		    					return EXCLUDE_AND_PRUNE;
 							
 							break;
 
-						case 2:
+						case 0:
 		    				if (!lastR.isType(REF._))
 		    					return EXCLUDE_AND_PRUNE;
 							
@@ -435,7 +433,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 						}
 					
 					} else if (firstR.isType(REF._)) {
-						switch (path.length() % 3) {
+						switch (path.length() % 2) {
 						case 0:
 		    				if (!lastR.isType(AN._))
 		    					return EXCLUDE_AND_PRUNE;
@@ -448,40 +446,40 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							
 							break;
 
-						case 2:
-		    				if (!lastR.isType(ASHIFT._))
-		    					return EXCLUDE_AND_PRUNE;
-							
-							break;
+//						case 2:
+//		    				if (!lastR.isType(ASHIFT._))
+//		    					return EXCLUDE_AND_PRUNE;
+//							
+//							break;
 
 						default:
 							break;
 						}
 	    				
-					} else if (firstR.isType(ASHIFT._)) {
-						switch (path.length() % 3) {
-						case 0:
-		    				if (!lastR.isType(REF._))
-		    					return EXCLUDE_AND_PRUNE;
-							
-							break;
-
-						case 1:
-		    				if (!lastR.isType(ASHIFT._))
-		    					return EXCLUDE_AND_PRUNE;
-							
-							break;
-
-						case 2:
-		    				if (!lastR.isType(AN._))
-		    					return EXCLUDE_AND_PRUNE;
-							
-							break;
-
-						default:
-							break;
-						}
-
+//					} else if (firstR.isType(ASHIFT._)) {
+//						switch (path.length() % 3) {
+//						case 0:
+//		    				if (!lastR.isType(REF._))
+//		    					return EXCLUDE_AND_PRUNE;
+//							
+//							break;
+//
+//						case 1:
+//		    				if (!lastR.isType(ASHIFT._))
+//		    					return EXCLUDE_AND_PRUNE;
+//							
+//							break;
+//
+//						case 2:
+//		    				if (!lastR.isType(AN._))
+//		    					return EXCLUDE_AND_PRUNE;
+//							
+//							break;
+//
+//						default:
+//							break;
+//						}
+//
 					} else {
 						return EXCLUDE_AND_PRUNE;
 					}

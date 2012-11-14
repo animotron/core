@@ -81,10 +81,8 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 					uses.add(n);
 				}
 				
-//				System.out.println("uses");
-//				System.out.println(Arrays.toString(uses.toArray()));
-//				System.out.println("weaks");
-//				System.out.println(Arrays.toString(weaks.toArray()));
+//				System.out.println("uses : "+Arrays.toString(uses.toArray()));
+//				System.out.println("weaks: "+Arrays.toString(weaks.toArray()));
 				
         		Relationship res;
 
