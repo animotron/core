@@ -599,7 +599,7 @@ public class GET extends AbstractQuery implements Shift {
 
 			@Override
 			public Long initialState(Path path) {
-				System.out.println("state "+path);
+//				System.out.println("state "+path);
 				return (long) -1;
 			}
 			
