@@ -86,23 +86,18 @@ public class CHANGE extends Operator implements Evaluable {
                 it.close();
             }
             
-            process(pf, op, np);
+            Pipe pipe = Utils.getByREF(pf, pf.getVector());
+            QCAVector v;
+            while ((v = pipe.take()) != null) {
+        		process(pf, op, np, v);
+            }
         }
 
-        private void process(final PFlow pf, final Relationship op, final Relationship np) throws Throwable {
+        private void process(final PFlow pf, final Relationship op, final Relationship np, final QCAVector v) throws Throwable {
             AnimoGraph.execute(new GraphOperation<Void>() {
                 @Override
                 public Void execute() throws Throwable {
-                    Pipe pipe = Utils.getByREF(pf, pf.getVector());
-                    QCAVector v;
-                    while ((v = pipe.take()) != null) {
-//                    	System.out.println("process "+v);
-                    	try {
-                    		process(pf, v, op, np);
-                    	} catch (Throwable e) {
-                    		e.printStackTrace();
-						}
-                    }
+            		process(pf, v, op, np);
                     return null;
                 }
             });
