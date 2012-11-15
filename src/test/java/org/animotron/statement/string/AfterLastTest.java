@@ -48,7 +48,7 @@ public class AfterLastTest extends ATest {
 			_(DEF._, "C", _(AFTER_LAST._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
 		);
     	
-        assertAnimoResult(C, "def C \"z\".");
+        assertAnimoResult(C, "C \"z\".");
 
         //System.out.println("done.");
 	}
