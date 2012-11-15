@@ -71,7 +71,7 @@ public class PreferTest extends ATest {
         JExpression test = new JExpression(
                 _(PREFER._, "X", _(USE._, "X"))
         );
-        assertAnimoResultOneStep(test, "def A X. def B X.");
+        assertAnimoResultOneStep(test, "A X. B X.");
 
     }
 
@@ -90,7 +90,7 @@ public class PreferTest extends ATest {
         JExpression test = new JExpression(
             _(PREFER._, "X", _(USE._, "A"))
         );
-        assertAnimoResultOneStep(test, "def A X.");
+        assertAnimoResultOneStep(test, "A X.");
 
     }
 
@@ -109,6 +109,6 @@ public class PreferTest extends ATest {
         JExpression test = new JExpression(
                 _(PREFER._, "X", _(USE._, "B"))
         );
-        assertAnimoResultOneStep(test, "def B X.");
+        assertAnimoResultOneStep(test, "B X.");
     }
 }
