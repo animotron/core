@@ -108,6 +108,6 @@ public class AnimoMLSerializerTest extends ATest {
                 new JExpression(_(DEF._, "d", value("d"))),
                 new JExpression(_(DEF._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
         );
-        test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\ (e (b \"b\") (c \"c\") (d \"d\"))).");
+        test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\ e (b \"b\") (c \"c\") (d \"d\")).");
     }
 }
