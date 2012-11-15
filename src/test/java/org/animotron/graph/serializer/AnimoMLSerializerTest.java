@@ -25,7 +25,6 @@ import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -48,9 +47,8 @@ public class AnimoMLSerializerTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_01() throws Throwable {
-    	test("def a \\ get element-name element-name \"b\"", "a \\ element-name \"b\".");
+    	test("def a \\ get element-name element-name \"b\"", "a \\ \"b\".");
     }
 
     @Test
@@ -110,6 +108,6 @@ public class AnimoMLSerializerTest extends ATest {
                 new JExpression(_(DEF._, "d", value("d"))),
                 new JExpression(_(DEF._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
         );
-        test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\e (b \"b\") (c \"c\") (d \"d\")).");
+        test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\ (e (b \"b\") (c \"c\") (d \"d\"))).");
     }
 }
