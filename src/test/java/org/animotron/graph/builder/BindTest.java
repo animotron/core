@@ -20,33 +20,15 @@
  */
 package org.animotron.graph.builder;
 
-import com.ctc.wstx.stax.WstxInputFactory;
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.expression.JExpression;
-import org.animotron.expression.StAXExpression;
-import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.graph.serializer.DigestSerializer;
-import org.animotron.statement.ml.ELEMENT;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.ASHIFT;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GET;
-import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.neo4j.graphdb.Direction;
-
-import javax.xml.stream.XMLInputFactory;
-import java.io.StringReader;
 
 import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.element;
-import static org.animotron.graph.AnimoGraph.startDB;
-import static org.animotron.graph.Properties.HASH;
-
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
