@@ -32,7 +32,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.animotron.expression.JExpression.*;
-import static org.animotron.graph.Properties.HASH;
 
 
 /**

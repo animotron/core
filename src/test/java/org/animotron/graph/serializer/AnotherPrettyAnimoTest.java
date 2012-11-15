@@ -24,9 +24,6 @@ import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.junit.Test;
 
-import static org.animotron.graph.Properties.HASH;
-
-
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
