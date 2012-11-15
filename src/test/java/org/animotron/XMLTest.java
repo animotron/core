@@ -25,16 +25,12 @@ import junit.framework.Assert;
 import org.animotron.expression.StAXExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
-import org.animotron.graph.serializer.DigestSerializer;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import javax.xml.stream.XMLInputFactory;
 import java.io.StringReader;
-
-import static org.animotron.graph.Properties.HASH;
-
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
