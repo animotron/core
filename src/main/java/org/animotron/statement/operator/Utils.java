@@ -34,6 +34,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
+import org.animotron.statement.link.LINK;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;
@@ -232,11 +233,18 @@ public class Utils {
 		try {
 		
 			Statement s = Statements.relationshipType(v.getClosest());
-			if (s instanceof AN) {
+			if (s instanceof LINK) {
+				IndexHits<Relationship> hits = Order._.queryDown(v.getClosestEndNode());
+				try {
+					for (Relationship r : hits) {
+						pipe.write(v.answered(r));
+					}
+				} finally {
+					hits.close();
+				}
+				return;
+			} else if (s instanceof AN) {
                 try {
-//                	for (QCAVector a : AN._.getREFs(pf, v)) {
-//                		out.write(a);
-//                	}
                     s = Statements.name((String) DEF._.reference(v.getClosest()));
                     
                 } catch (Throwable t) {
@@ -250,20 +258,8 @@ public class Utils {
 				Pipe in = Evaluator._.execute(pf.getController(), v);
 				QCAVector e;
 				while ((e = in.take()) != null) {
+					pipe.write(e);
 
-//					Relationship result = e.getAnswer();
-//					
-//	                Statement aS = Statements.relationshipType(result);
-//					if (result.isType(REF._) || result.isType(DEF._) || result.isType(ASHIFT._)) {
-						pipe.write(e);
-//
-//					} else {
-//						Pipe p = eval(pf.getController(), e);
-//						QCAVector rr;
-//						while ((rr = p.take()) != null) {
-//							pipe.write(rr);
-//						}
-//					}
 				}
 				//System.out.println("end++++++++++++++++++++++++++++++++++++++ getDef evaluable");
 			} else {
