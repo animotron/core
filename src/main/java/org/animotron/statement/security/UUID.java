@@ -20,7 +20,6 @@
  */
 package org.animotron.statement.security;
 
-import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -28,7 +27,7 @@ import org.animotron.statement.instruction.NonDetermInstruction;
 import org.animotron.statement.string.STRING;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 import static org.animotron.utils.MessageDigester.uuid;
 
 /**
@@ -55,7 +54,7 @@ public class UUID extends NonDetermInstruction {
 			try {
                 Relationship[] params = Order._.first(1, pf.getOP().getStartNode());
                 String uuid = (params.length > 1 ? uuid(STRING._.eval(pf, params).toString()) : uuid()).toString();
-                answered(pf, new JExpression(value(uuid)));
+                answered(pf, value(uuid));
 			} catch (Throwable t) {
 				pf.sendException(t);
 			}

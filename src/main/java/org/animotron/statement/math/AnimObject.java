@@ -22,7 +22,6 @@ package org.animotron.statement.math;
 
 import javolution.util.FastList;
 import org.animotron.expression.AbstractExpression;
-import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -43,7 +42,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.List;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -51,7 +50,7 @@ import static org.animotron.expression.JExpression.value;
  */
 public class AnimObject extends AbstractExpression {
 	
-	protected static Relationship ONE = new JExpression(value(Long.valueOf(1)));
+	protected static Relationship ONE = value(Long.valueOf(1));
 	
 	protected static AnimObject PLUS_ONE = new AnimObject(SUM._, ONE);
 	protected static AnimObject MINUS_ONE = new AnimObject(SUB._, ONE);

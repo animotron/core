@@ -23,13 +23,10 @@ package org.animotron.statement.math;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -38,10 +35,7 @@ import static org.animotron.expression.JExpression.value;
 public class MathTest extends ATest {
 
 	public void test_performace() throws Throwable {
-        Expression e = new JExpression(
-            _(SUM._, value(1), value(2), value(3), value(4))
-        );
-        
+        Expression e = new AnimoExpression("+ 1 2 3 4");
         long time = System.currentTimeMillis();
         for (int i = 0; i<10000;i++) {
             time = System.currentTimeMillis();
@@ -51,79 +45,59 @@ public class MathTest extends ATest {
 	}
 	@Test
 	public void test_00() throws Throwable {
-        Expression e = new JExpression(
-            _(SUM._, value(1), value(2), value(3), value(4))
-        );
-    	assertStringResult(e, "10");
+        Expression e = new AnimoExpression("+ 1 2 3 4");
+        assertStringResult(e, "10");
 	}
 
     @Test
 	public void test_01() throws Throwable {
-        Expression e = new JExpression(
-            _(MUL._, value(2), value(2))
-        );
-    	assertStringResult(e, "4");
+        Expression e = new AnimoExpression("* 2 2");
+        assertStringResult(e, "4");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        Expression e = new JExpression(
-            _(MUL._, value(2), value(2.0))
-        );
+        Expression e = new AnimoExpression("* 2 2.0");
     	assertStringResult(e, "4.0");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        Expression e = new JExpression(
-            _(MUL._, value(2.0), value(2))
-        );
+        Expression e = new AnimoExpression("* 2.0 2");
     	assertStringResult(e, "4.0");
 	}
 
     @Test
 	public void test_04() throws Throwable {
-        Expression e = new JExpression(
-            _(MUL._, value(2.0), value(2.0))
-        );
+        Expression e = new AnimoExpression("* 2.0 2.0");
     	assertStringResult(e, "4.0");
 	}
 
     @Test
 	public void test_05() throws Throwable {
-        Expression e = new JExpression(
-            _(DIV._, value(4.0), value(2.0))
-        );
+        Expression e = new AnimoExpression("/ 4.0 2.0");
     	assertStringResult(e, "2.0");
 	}
 
     @Test
 	public void test_06() throws Throwable {
-        Expression e = new JExpression(
-            _(DIV._, value(4), value(2))
-        );
+        Expression e = new AnimoExpression("/ 4 2");
     	assertStringResult(e, "2");
 
-        e = new JExpression(
-            _(DIV._, value(5), value(2))
-        );
+        e = new AnimoExpression("/ 5 2");
     	assertStringResult(e, "2.5");
     }
 
     @Test
     @Ignore //ignore for now
 	public void test_07() throws Throwable {
-        Expression e = new JExpression(
-            _(SUB._, value(1), value(2), value(3.0), value(4))
-        );
+        Expression e = new AnimoExpression("- 1 2 3.0 4");
     	assertStringResult(e, "-8.0");
 	}
 
     @Test
 	public void test_08() throws Throwable {
-        Expression e = new JExpression(
-            _(SUM._, value("1"), value("2"), value("3.0"), value("4"))
-        );
+        Expression e = new AnimoExpression("+ 1 2 3.0 4");
     	assertStringResult(e, "10.0");
 	}
     

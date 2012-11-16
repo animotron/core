@@ -20,14 +20,13 @@
  */
 package org.animotron.statement.string;
 
-import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.DetermInstruction;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * VALUE instruction 'after-last'.
@@ -54,7 +53,7 @@ public class LOWER_CASE extends DetermInstruction {
                 //UNDERSTAND: if we have more that 2 params, what to do?
                 Relationship[] params = Order._.first(2, pf.getOP().getStartNode());
                 String source = STRING._.eval(pf, params[1]).toString();
-                answered(pf, new JExpression(value(source.toLowerCase())));
+                answered(pf, value(source.toLowerCase()));
             } catch (Throwable t) {
                 pf.sendException(t);
             }

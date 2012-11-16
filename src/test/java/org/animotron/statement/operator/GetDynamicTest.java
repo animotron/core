@@ -21,12 +21,8 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.ALL;
-import org.animotron.statement.query.GET;
+import org.animotron.expression.Expression;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,70 +34,36 @@ public class GetDynamicTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "Z", value("A")))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(AN._, "Z", value("B")))
-            )
-        );
-
-    	JExpression d = new JExpression(
-			_(DEF._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
-		);
+        tAnimo("def A Z 'A'.");
+        tAnimo("def B Z 'B'.");
+    	Expression d = tAnimo("def d get (Z) (A) (B)");
         assertAnimoResult(d, "d", " \"A\"", " \"B\"", ".");
 	}
 
 	@Test
 	public void getOnManyANbyIS() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "ZZ", _(AN._, "Z"))
-            ),
-            new JExpression(
-                _(DEF._, "A", _(AN._, "Z", value("A")))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(AN._, "ZZ", value("B")))
-            )
-        );
-
-    	JExpression d = new JExpression(
-			_(DEF._, "d", _(GET._, _(AN._, "Z"), _(AN._, "A"), _(AN._, "B")))
-		);
+        tAnimo("def ZZ Z.");
+        tAnimo("def A Z 'A'.");
+        tAnimo("def B ZZ 'B'.");
+        Expression d = tAnimo("def d get (Z) (A) (B)");
         assertAnimoResult(d, "d", " \"A\"", " \"B\"", ".");
 	}
 
 	@Test
     public void get_via_is() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "B", _(AN._, "A"))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(AN._, "Z"), _(AN._, "B", value("π")))
-            ),
-            new JExpression(
-                _(DEF._, "D", _(AN._, "Z"), _(AN._, "A", value("Aπ")))
-            )
-        );
+        tAnimo("def B A.");
+        tAnimo("def C (Z) (B 'π').");
+        tAnimo("def D (Z) (A 'Aπ').");
 
-        JExpression E = new JExpression(
-            _(DEF._, "E", _(GET._, "A", _(ALL._, "Z")))
-        );
+        Expression E = tAnimo("def E get A all Z");
         assertAnimoResult(E, "E \"π\" \"Aπ\".");
 
-        JExpression E1 = new JExpression(
-            _(DEF._, "E1", _(GET._, "B", _(ALL._, "Z")))
-        );
+        Expression E1 = tAnimo("def E get B all Z");
         assertAnimoResult(E1, "E1 \"π\".");
 
-        JExpression F = new JExpression(
-            _(DEF._, "F", _(GET._, _(ALL._, "A"), _(ALL._, "Z")))
-        );
+        Expression F = tAnimo("def E get (all A) (all Z)");
         assertAnimoResult(F, "F \"π\".");
     }
 

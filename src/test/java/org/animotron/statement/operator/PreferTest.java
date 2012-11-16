@@ -21,13 +21,11 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.PREFER;
-import org.animotron.statement.relation.USE;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
+import static org.animotron.expression.AnimoExpression.__;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,17 +39,11 @@ public class PreferTest extends ATest {
     public void test_0() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "X"))
-            )
+            "def A X",
+            "def B X"
         );
 
-        JExpression test = new JExpression(
-                _(PREFER._, "X")
-        );
+        Expression test = new AnimoExpression("prefer X");
         assertAnimoResultOneStep(test, "");
 
     }
@@ -60,17 +52,11 @@ public class PreferTest extends ATest {
     public void test_01() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "X"))
-            )
+                "def A X",
+                "def B X"
         );
 
-        JExpression test = new JExpression(
-                _(PREFER._, "X", _(USE._, "X"))
-        );
+        Expression test = new AnimoExpression("prefer X use X");
         assertAnimoResultOneStep(test, "A X. B X.");
 
     }
@@ -79,17 +65,11 @@ public class PreferTest extends ATest {
     public void test_02() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "X"))
-            )
+                "def A X",
+                "def B X"
         );
 
-        JExpression test = new JExpression(
-            _(PREFER._, "X", _(USE._, "A"))
-        );
+        Expression test = new AnimoExpression("prefer X use A");
         assertAnimoResultOneStep(test, "A X.");
 
     }
@@ -98,17 +78,11 @@ public class PreferTest extends ATest {
     public void test_03() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "X"))
-            )
+                "def A X",
+                "def B X"
         );
 
-        JExpression test = new JExpression(
-                _(PREFER._, "X", _(USE._, "B"))
-        );
+        Expression test = new AnimoExpression("prefer X use B");
         assertAnimoResultOneStep(test, "B X.");
     }
 }

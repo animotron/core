@@ -21,17 +21,8 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.USE;
+import org.animotron.expression.Expression;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -43,45 +34,13 @@ public class CurrentWayTest extends ATest {
     @Test
     public void test() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                    _(DEF._, "current-site",
-                        _(ANY._, "site",
-                            _(WITH._, "server-name", _(GET._, "host", _(ANY._, "request")))
-                        )
-                    )
-                ),
-                new JExpression(
-                    _(DEF._, "test-service",
-                        _(AN._, "service")
-                    )
-                ),
-                new JExpression(
-                    _(DEF._, "localhost-site",
-                        _(AN._, "site"),
-                        _(AN._, "server-name", value("localhost"))
-                    )
-                ),
-                new JExpression(
-                    _(DEF._, "rest",
-                        _(ANY._, "service",
-                            _(AN._, "current-site")
-                        )
-                    )
-                ),
-                new JExpression(
-                    _(DEF._, "current-request",
-                        _(AN._, "request"),
-                        _(AN._, "host", value("localhost"))
-                    )
-                )
-        );
+        tAnimo("def current-site any site with server-name get host any request.");
+        tAnimo("def localhost-site (site) server-name 'localhost'.");
+        tAnimo("def rest any service current-site");
+        tAnimo("def current-request (request) (host 'localhost'.)");
+        tAnimo("def rest any service current-site.");
 
-        JExpression s = new JExpression(
-            _(AN._, "rest",
-                _(USE._, "current-request")
-            )
-        );
+        Expression s = tAnimo("rest use current-request.");
 
         assertAnimoResult(s, "rest test-service service.");
     }

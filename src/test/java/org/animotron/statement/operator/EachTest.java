@@ -21,11 +21,10 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -46,9 +45,7 @@ public class EachTest extends ATest {
     @Test
     public void test_00() throws Throwable {
 
-        JExpression s = new JExpression(
-                element("ul", each(_(_(AN._, "A"), _(AN._, "B"), _(AN._, "C")), element("li")))
-        );
+        Expression s = new AnimoExpression("\\ul each ((A) (B) (C)) (\\li)");
         assertAnimoResult(s, "\\ ul (\\li) (\\li) (\\li).");
 
     }
@@ -57,15 +54,7 @@ public class EachTest extends ATest {
     @Ignore
     public void test_01() throws Throwable {
 
-        JExpression s = new JExpression(
-            element("x",
-                each(
-                        _(element("a1"), element("a2"), element("a3")),
-                        _(element("b1"), element("b2"), element("b3")),
-                        _(element("c1"), element("c2"), element("c3"))
-                )
-            )
-        );
+        Expression s = new AnimoExpression("\\x each ((\\a1) (\\b1) (\\c1)) ((\\a2) (\\b2) (\\c2)) ((\\a3) (\\b3) (\\c3))");
 
         assertAnimoResult(s,
 

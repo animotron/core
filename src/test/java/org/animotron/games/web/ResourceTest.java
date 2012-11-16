@@ -21,17 +21,9 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.operator.NONSTOP;
-import org.animotron.statement.query.ALL;
-import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.USE;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -43,40 +35,12 @@ public class ResourceTest extends ATest {
     @Test
     public void test1() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(DEF._, "service",
-                                _(NONSTOP._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "rest",
-                                _(ANY._, "resource")
-                        )
-                )
-        );
+        tAnimo("def service resource.");
+        tAnimo("def root-service (service) (root) (title 'root').");
+        tAnimo("def not-found-service (service) (not-found) (title 404).");
+        tAnimo("def rest any resource.");
 
-        JExpression s = new JExpression(
-            _(DEF._, "s",
-                _(AN._, "rest",
-                    _(USE._, "root")
-                )
-            )
-        );
+        Expression s = tAnimo("def rest use root.");
 
         //assertAnimoResult(s, "s rest root-service (service resource) (root) (title \"root\").");
         assertAnimoResult(s, "s rest root-service (service resource) (root) (title).");
@@ -85,47 +49,13 @@ public class ResourceTest extends ATest {
     @Test
     public void test2() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(DEF._, "service",
-                                _(NONSTOP._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service1",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "rest",
-                                _(ALL._, "resource")
-                        )
-                )
-        );
+        tAnimo("def service ^resource.");
+        tAnimo("def root-service (service) (root) (title 'root').");
+        tAnimo("def root-service1 (service) (root) (title 'root1').");
+        tAnimo("def not-found-service (service) (not-found) (title 404).");
+        tAnimo("def rest all resource.");
 
-        JExpression s = new JExpression(
-            _(DEF._, "s",
-                _(AN._, "rest",
-                    _(USE._, "root")
-                )
-            )
-        );
+        Expression s = tAnimo("def s rest use root.");
 
         //assertAnimoResult(s, "s rest (root-service (service resource) (root) (title \"root\")) (root-service1 (service resource) (root) (title \"root1\")).");
         assertAnimoResult(s, "s rest (root-service (service resource) (root) (title)) (root-service1 (service resource) (root) (title)).");
@@ -135,46 +65,13 @@ public class ResourceTest extends ATest {
     @Test
     public void test3() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(DEF._, "service",
-                                _(NONSTOP._, "resource")
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service",
-                                _(NONSTOP._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service1",
-                                _(AN._, "root-service"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "rest",
-                                _(ALL._, "resource")
-                        )
-                )
-        );
+        tAnimo("def service ^resource.");
+        tAnimo("def root-service (^service) (root) (title 'root').");
+        tAnimo("def root-service1 (root-service) (title 'root1').");
+        tAnimo("def not-found-service (service) (not-found) (title 404).");
+        tAnimo("def rest all resource.");
 
-        JExpression s = new JExpression(
-            _(DEF._, "s",
-                _(AN._, "rest",
-                    _(USE._, "root")
-                )
-            )
-        );
+        Expression s = tAnimo("def s rest use root.");
 
         //assertAnimoResult(s, "s rest (root-service (service resource) (root) (title \"root\")) (root-service1 (root-service (service resource) (root) (title \"root\")) (title)) (title \"root1\")).");
         //assertAnimoResult(s, "s rest (root-service (service resource) (root) (title)) (root-service1 (root-service (service resource) (root) (title)) (title)).");
@@ -187,35 +84,11 @@ public class ResourceTest extends ATest {
     @Test
     public void test4() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(DEF._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "rest",
-                                _(ANY._, "service")
-                        )
-                )
-        );
+        tAnimo("def root-service (service) (root) (title 'root').");
+        tAnimo("def not-found-service (service) (not-found) (title 404).");
+        tAnimo("def rest any service.");
 
-        JExpression s = new JExpression(
-            _(DEF._, "s",
-                _(AN._, "rest",
-                    _(USE._, "root")
-                )
-            )
-        );
+        Expression s = tAnimo("def s rest use root.");
 
         //assertAnimoResult(s, "s rest root-service (service) (root) (title \"root\").");
         assertAnimoResult(s, "s rest root-service (service) (root) (title).");
@@ -224,42 +97,12 @@ public class ResourceTest extends ATest {
     @Test
     public void test5() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(DEF._, "root-service",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service1",
-                                _(AN._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "rest",
-                                _(ALL._, "service")
-                        )
-                )
-        );
+        tAnimo("def root-service (service) (root) (title 'root').");
+        tAnimo("def root-service1 (service) (root) (title 'root1').");
+        tAnimo("def not-found-service (service) (not-found) (title 404).");
+        tAnimo("def rest all service.");
 
-        JExpression s = new JExpression(
-            _(DEF._, "s",
-                _(AN._, "rest",
-                    _(USE._, "root")
-                )
-            )
-        );
+        Expression s = tAnimo("def s rest use root.");
 
         //assertAnimoResult(s, "s rest (root-service (service) (root) (title \"root\")) (root-service1 (service) (root) (title \"root1\")).");
         assertAnimoResult(s, "s rest (root-service (service) (root) (title)) (root-service1 (service) (root) (title)).");
@@ -268,41 +111,12 @@ public class ResourceTest extends ATest {
     @Test
     public void test6() throws Throwable {
 
-        JExpression.__(
-                new JExpression(
-                        _(DEF._, "root-service",
-                                _(NONSTOP._, "service"),
-                                _(AN._, "root"),
-                                _(AN._, "title", value("root"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "root-service1",
-                                _(AN._, "root-service"),
-                                _(AN._, "title", value("root1"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "not-found-service",
-                                _(AN._, "service"),
-                                _(AN._, "not-found"),
-                                _(AN._, "title", value("404"))
-                        )
-                ),
-                new JExpression(
-                        _(DEF._, "rest",
-                                _(ALL._, "service")
-                        )
-                )
-        );
+        tAnimo("def root-service (^service) (root) (title 'root').");
+        tAnimo("def root-service1 (root-service) (title 'root1').");
+        tAnimo("def not-found-service (service) (not-found) (title 404).");
+        tAnimo("def rest all service.");
 
-        JExpression s = new JExpression(
-            _(DEF._, "s",
-                _(AN._, "rest",
-                    _(USE._, "root")
-                )
-            )
-        );
+        Expression s = tAnimo("def s rest use root.");
 
         //assertAnimoResult(s, "s rest (root-service (service) (root) (title \"root\")) (root-service1 (root-service) (title \"root1\")).");
         //assertAnimoResult(s, "s rest (root-service (service) (root) (title)) (root-service1 (root-service (service) (root) (title)) (title)).");

@@ -21,15 +21,11 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.EQ;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.query.ANY;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -40,87 +36,49 @@ public class AnyTest extends ATest {
 	
     @Test
     public void testANY() throws Throwable {
-        
+
         __(
-            new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "value", value("B")))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "value", value("C")))
-            )
+                "def B (^A) (v 'B')",
+                "def C (^B) (v 'C')"
         );
 
-        JExpression test = new JExpression(
-            _(ANY._, "A")
-        );
-        assertAnimoResultOneStep(test, "B (^A) (value \"B\").");
-//        assertAnimoResultOneStep(test, "C (B) (value \"C\").");
+        Expression test = new AnimoExpression("any A");
+        assertAnimoResultOneStep(test, "B (^A) (v \"B\").");
+//        assertAnimoResultOneStep(test, "C (B) (v \"C\").");
 
-        test = new JExpression(
-            _(ANY._, "B")
-        );
-        assertAnimoResultOneStep(test, "C (^B) (value \"C\").");
+        test = new AnimoExpression("any B");
+        assertAnimoResultOneStep(test, "C (^B) (v \"C\").");
     }
 	
     @Test
     public void testANYwithWITH() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "value", value("B")))
-            ),
-            new JExpression(
-                    _(DEF._, "B1", _(NONSTOP._, "B"), _(AN._, "value", value("B1")))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "value", value("C")))
-            ),
-            new JExpression(
-                    _(DEF._, "C1", _(NONSTOP._, "C"), _(AN._, "value", value("C1")))
-            )
+                "def B (^A) (v 'B')",
+                "def B1 (^B) (v 'B1')",
+                "def C (^B) (v 'C')",
+                "def C1 (^C) (v 'C1')"
         );
 
-        JExpression test = new JExpression(
-            _(ANY._, "A", _(WITH._, "value", value("B")))
-        );
-        assertAnimoResultOneStep(test, "B (^A) (value \"B\").");
-//        assertAnimoResultOneStep(test, "B1 (B) (value \"B\").");
+        Expression test = new AnimoExpression("any A with v 'B'");
+        assertAnimoResultOneStep(test, "B (^A) (v \"B\").");
+//        assertAnimoResultOneStep(test, "B1 (B) (v \"B\").");
 
-        test = new JExpression(
-            _(ANY._, "A", _(WITH._, "value", value("C")))
-        );
-        assertAnimoResultOneStep(test, "C (^B) (value \"C\").");
-//        assertAnimoResultOneStep(test, "C1 (C) (value \"C\").");
+        test = new AnimoExpression("any A with v 'C'");
+        assertAnimoResultOneStep(test, "C (^B) (v \"C\").");
+//        assertAnimoResultOneStep(test, "C1 (C) (v \"C\").");
     }
 
 	@Test
 	public void ANYwithEQ() throws Throwable {
 
-		__(
-            new JExpression(
-                _(DEF._, "value-plain",
-                    _(AN._, "mime-type"),
-                    _(AN._, "value"),
-                    _(AN._, "type", value("value/plain")),
-                    _(AN._, "reference", value("Plain value")),
-                    _(AN._, "extension", value("txt"))
-                )
-            ),
-            new JExpression(
-                _(DEF._, "application-atom",
-                    _(AN._, "mime-type"),
-                    _(AN._, "application"),
-                    _(AN._, "type", value("application/atom+xml")),
-                    _(AN._, "reference", value("Atom Feed Document")),
-                    _(AN._, "extension", value("atom"))
-                )
-            )
+        __(
+                "def v-plain (mime-type) (v) (type 'v/plain') (reference 'Plain v') (extension 'txt')",
+                "def application-atom (mime-type) (type 'application/atom+xml') (reference 'Atom Feed Document') (extension 'atom')"
         );
 
-		JExpression test = new JExpression(
-			_(ANY._, "mime-type", _(EQ._, "extension", value("txt")))
-		);
-		assertAnimoResultOneStep(test, "value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+        Expression test = new AnimoExpression("any mime-type eq (extension) ('txt')");
+		assertAnimoResultOneStep(test, "v-plain (mime-type) (v) (type \"v/plain\") (reference \"Plain v\") (extension \"txt\").");
 	}
 
 	@Test
@@ -146,31 +104,18 @@ public class AnyTest extends ATest {
     public void test_03() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(NONSTOP._, "S"), _(AN._, "X", value("α")))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "Y", value("β")))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "Z", value("γ")))
-            )
+                "def A (^S) (X 'α')",
+                "def B (^A) (Y 'β')",
+                "def C (^B) (Z 'γ')"
         );
 
-        JExpression test = new JExpression(
-            _(ANY._, "S", _(WITH._, "X", value("α")))
-        );
+        Expression test = new AnimoExpression("any S with X 'α'");
         assertAnimoResultOneStep(test, "A (^S) (X \"α\").");
-        
 
-        test = new JExpression(
-            _(ANY._, "S", _(WITH._, "Y", value("β")))
-        );
+        test = new AnimoExpression("any S with X 'β'");
         assertAnimoResultOneStep(test, "B (^A) (Y \"β\").");
 
-        test = new JExpression(
-            _(ANY._, "S", _(WITH._, "Z", value("γ")))
-        );
+        test = new AnimoExpression("any S with X 'γ'");
         assertAnimoResultOneStep(test, "C (^B) (Z \"γ\").");
     }
 

@@ -23,6 +23,7 @@ package org.animotron;
 import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.After;
 import org.junit.Before;
@@ -45,16 +46,16 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-	protected AnimoExpression tAnimo(String exp) throws Throwable {
+	protected Expression tAnimo(String exp) throws Throwable {
 		String t = exp.replace('\'', '"');
         return testAnimo(t, t);
     }
 
-	protected AnimoExpression testAnimo(String exp) throws Throwable {
+	protected Expression testAnimo(String exp) throws Throwable {
         return testAnimo(exp, exp);
     }
 
-	protected AnimoExpression testAnimo(String in, String out) throws Throwable {
+	protected Expression testAnimo(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
         assertAnimo(expression, out);
         return expression;

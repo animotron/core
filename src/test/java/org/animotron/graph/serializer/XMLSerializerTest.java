@@ -23,15 +23,10 @@ package org.animotron.graph.serializer;
 import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static org.animotron.expression.JExpression.*;
 
 
 /**
@@ -60,14 +55,14 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        __(new JExpression(_(DEF._, "b", value("c"))));
+        testAnimo("def b \"c\"");
         test("\\ b", "<c/>");
         test("def a \\ b", "<c/>");
     }
 
     @Test
     public void test_03() throws Throwable {
-        __(new JExpression(_(DEF._, "b", value("c"))));
+        testAnimo("def b \"c\"");
         test("\\ an b", "<c/>");
         test("def a \\ an b", "<c/>");
     }
@@ -92,36 +87,31 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Throwable {
-        __(
-                new JExpression(_(DEF._, "b", value("b"))),
-                new JExpression(_(DEF._, "c", value("c"))),
-                new JExpression(_(DEF._, "d", value("d"))),
-                new JExpression(_(DEF._, "e", value("e")))
-        );
+        testAnimo("def b \"b\"");
+        testAnimo("def c \"c\"");
+        testAnimo("def d \"d\"");
+        testAnimo("def e \"e\"");
         test("\\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
         test("def a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_08() throws Throwable {
-        __(
-                new JExpression(_(DEF._, "b", value("b"))),
-                new JExpression(_(DEF._, "c", value("c"))),
-                new JExpression(_(DEF._, "d", value("d"))),
-                new JExpression(_(DEF._, "e", value("e")))
-        );
+        testAnimo("def b \"b\"");
+        testAnimo("def c \"c\"");
+        testAnimo("def d \"d\"");
+        testAnimo("def e \"e\"");
         test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
         test("def a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
     public void test_09() throws Throwable {
-        __(
-                new JExpression(_(DEF._, "b", value("b"))),
-                new JExpression(_(DEF._, "c", value("c"))),
-                new JExpression(_(DEF._, "d", value("d"))),
-                new JExpression(_(DEF._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
-        );
+        testAnimo("def b \"b\"");
+        testAnimo("def c \"c\"");
+        testAnimo("def d \"d\"");
+        testAnimo("def e \"e\"");
+        testAnimo("def e \\e (b) (c) (d)");
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
         test("def a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
@@ -138,7 +128,7 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0C() throws Throwable {
-        __(new JExpression(_(DEF._, "b", value("path"))));
+        testAnimo("def b \"path\"");
         test("def a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 

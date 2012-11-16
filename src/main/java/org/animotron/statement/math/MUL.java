@@ -20,13 +20,12 @@
  */
 package org.animotron.statement.math;
 
-import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
@@ -55,6 +54,6 @@ public class MUL extends MathInstruction {
 		
 		System.out.println(""+Na.doubleValue()+" * "+Nb.doubleValue()+" = "+result);
 
-		return new JExpression(value(result));
+		return value(result);
 	}
 }

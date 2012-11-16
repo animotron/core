@@ -22,14 +22,9 @@ package org.animotron.graph.serializer;
 
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
 import org.junit.Test;
 
 import java.io.IOException;
-
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -53,13 +48,13 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        __(new JExpression(_(DEF._, "b", value("c"))));
+        tAnimo("def b 'c'.");
         test("def a \\ b", "a \\ b \"c\".");
     }
 
     @Test
     public void test_03() throws Throwable {
-        __(new JExpression(_(DEF._, "b", value("c"))));
+        tAnimo("def b 'c'.");
         test("def a \\ an b", "a \\ b \"c\".");
     }
 
@@ -80,34 +75,28 @@ public class AnimoMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Throwable {
-        __(
-                new JExpression(_(DEF._, "b", value("b"))),
-                new JExpression(_(DEF._, "c", value("c"))),
-                new JExpression(_(DEF._, "d", value("d"))),
-                new JExpression(_(DEF._, "e", value("e")))
-        );
+        tAnimo("def b 'b'.");
+        tAnimo("def c 'c'.");
+        tAnimo("def d 'd'.");
+        tAnimo("def e 'e'.");
         test("def a \\ (b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \"e\").");
     }
 
     @Test
     public void test_08() throws Throwable {
-        __(
-                new JExpression(_(DEF._, "b", value("b"))),
-                new JExpression(_(DEF._, "c", value("c"))),
-                new JExpression(_(DEF._, "d", value("d"))),
-                new JExpression(_(DEF._, "e", value("e")))
-        );
+        tAnimo("def b 'b'.");
+        tAnimo("def c 'c'.");
+        tAnimo("def d 'd'.");
+        tAnimo("def e 'e'.");
         test("def a \\((b) (@ (c) (d)) (e))", "a \\ ((b \"b\") (@ (c \"c\") (d \"d\")) (e \"e\")).");
     }
 
     @Test
     public void test_09() throws Throwable {
-        __(
-                new JExpression(_(DEF._, "b", value("b"))),
-                new JExpression(_(DEF._, "c", value("c"))),
-                new JExpression(_(DEF._, "d", value("d"))),
-                new JExpression(_(DEF._, "e", element("e", _(AN._, "b"), _(AN._, "c"), _(AN._, "d"))))
-        );
+        tAnimo("def b 'b'.");
+        tAnimo("def c 'c'.");
+        tAnimo("def d 'd'.");
+        tAnimo("def e \\e (b) (c) (d).");
         test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\ e (b \"b\") (c \"c\") (d \"d\")).");
     }
 }

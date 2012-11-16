@@ -21,14 +21,8 @@
 package org.animotron.statement.string;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.query.GET;
+import org.animotron.expression.Expression;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -39,18 +33,10 @@ public class AfterLastTest extends ATest {
 	@Test
 	public void testAfterLast() throws Throwable {
         System.out.println("Test 'AfterLast' ...");
-        
-    	JExpression.__(new JExpression(
-                JExpression._(DEF._, "A", _(AN._, "B", value("x.y.z")))
-        ));
-    	
-    	JExpression C = new JExpression(
-			_(DEF._, "C", _(AFTER_LAST._, value("."), _(GET._, "B", JExpression._(AN._, "A"))))
-		);
-    	
-        assertAnimoResult(C, "C \"z\".");
 
-        //System.out.println("done.");
+        tAnimo("def a B 'x.y.z'.");
+        Expression C = tAnimo("def c after-last '.' get B A.");
+        assertAnimoResult(C, "C \"z\".");
 	}
 	
 }

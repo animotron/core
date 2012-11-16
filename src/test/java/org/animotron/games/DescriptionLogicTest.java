@@ -21,17 +21,9 @@
 package org.animotron.games;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.instruction.COUNT;
-import org.animotron.statement.instruction.compare.GE;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.query.ANY;
+import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -45,89 +37,44 @@ public class DescriptionLogicTest extends ATest {
 		//TODO: Person ≡ Female ⊔ Male?
 		
 		//Woman ≡ Person ⊓ Female
-		new JExpression(
-			_(DEF._, "woman"),
-				_(AN._, "person"),
-				_(AN._, "female")
-		);
+        tAnimo("def woman (person) (female).");
 
 		//Man ≡ Person ⊓ ¬Woman
-		new JExpression(
-			_(DEF._, "man"),
-				_(AN._, "person")/*,
-				_(IS_NOT._, "woman")*/
-		);
+        tAnimo("def man person.");
+//        tAnimo("def man (person) (is_not woman).");
 
 		//Mother ≡ Woman ⊓ ∃hasChild.Person
-		new JExpression(
-			_(DEF._, "mother"),
-				_(AN._, "woman"),
-				_(AN._, "child", _(AN._, "person"))
-		);
-		
+        tAnimo("def mother (woman) (child person).");
+
 		//Father ≡ Man ⊓ ∃hasChild.Person
-		new JExpression(
-			_(DEF._, "father"),
-				_(AN._, "man"),
-				_(AN._, "child", _(AN._, "person"))
-		);
+        tAnimo("def father (man) (child person).");
 
 		//TODO: find a way to describe ⊔ ....
 		//the:parents` is:mother` is:father` is:parent?
 		
  		//Parent ≡ Mother ⊔ Father.
-		new JExpression(
-			_(DEF._, "parent"),
-				_(AN._, "mother"),
-				_(AN._, "father")
-		);
-		
+        tAnimo("def parent (mother) (father).");
+
 		//Grandmother ≡ Mother ⊓ ∃hasChild.Parent
-		new JExpression(
-			_(DEF._, "grandmother"),
-				_(AN._, "mother"),
-				_(AN._, "child", _(AN._, "parent"))
-		);
+        tAnimo("def grandmother (mother) (child person).");
 
 		//MotherWith3Children  ≡ Mother ⊓ >= 3 hasChild
-		new JExpression(
-			_(DEF._, "motherWith3Children"),
-				_(ANY._, "mother", _(GE._, _(COUNT._, "child"), value(3)))
-		);
+        tAnimo("def motherWith3Children any mother ge (count child) 3.");
 
 		//MotherWithoutDaughter ≡ Mother ⊓ ∀hasChild.¬Woman
-		new JExpression(
-			_(DEF._, "motherWithoutDaughter"),
-				_(ANY._, "mother"/*, _(HAVE_NOT._, "child", _(AN._, "woman"))*/)
-		);
+        tAnimo("def motherWithoutDaughter any mother have_not child woman.");
 
 		//Wife  ≡ Woman ⊓ ∃hasHusband.Man
-		new JExpression(
-			_(DEF._, "wife"),
-				_(AN._, "woman",
-				_(AN._, "husband", _(AN._, "man")))
-		);
-		
+        tAnimo("def wife (woman) (husband man).");
 
-		new JExpression(
-			_(DEF._, "personA"),
-				_(AN._, "man")
-		);
-		
-		new JExpression(
-			_(DEF._, "personB"),
-				_(AN._, "woman"),
-				_(AN._, "child", _(AN._, "personA"))
-		);
+
+        tAnimo("def personA man.");
+
+        tAnimo("def ppersonB (woman) (child personA).");
 
 		//TODO: Is personA mother? (personA is mother => is:mother an:personA)
-		JExpression a = new JExpression(
-			_(DEF._, "a"),
-				_(AN._, "Question", _(AN._, "mother", _(AN._, "personB")))
-				//is:personB an:mother?
-				//eq an:personB; an:mother?
-		);
-		
+        Expression a = tAnimo("def a Question mother personB.");
+
 		assertAnimoResult(a, "a yes.");
 		
 	}

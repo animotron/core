@@ -21,15 +21,11 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.EQ;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.query.ALL;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,107 +38,46 @@ public class AllTest extends ATest {
     public void testALL() throws Throwable {
 
         __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "value"))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "value", value("B")))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "value", value("C")))
-            )
+                "def A v",
+                "def B (^A) (v 'B')",
+                "def C (^B) (v 'C')"
         );
 
-        JExpression test = new JExpression(
-            _(ALL._, "A")
-        );
-        assertAnimoResultOneStep(test, "B (^A) (value \"B\"). C (^B) (value \"C\").");
-    }
-	
-    @Test
-    public void testALLwithoutTHE() throws Throwable {
-
-        __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "value"))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "value", value("B")))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "value", value("C")))
-            )
-        );
-
-        JExpression test = new JExpression(
-            _(ALL._, "A")
-        );
-        assertAnimoResultOneStep(test, "B (^A) (value \"B\"). C (^B) (value \"C\").");
+        Expression test = new AnimoExpression("all A");
+        assertAnimoResultOneStep(test, "B (^A) (v \"B\"). C (^B) (v \"C\").");
     }
 
     @Test
     public void testALLwithWITH() throws Throwable {
 
         __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "value"))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "value", value("B")))
-            ),
-            new JExpression(
-                _(DEF._, "B1", _(NONSTOP._, "B"), _(AN._, "value", value("B")))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "value", value("C")))
-            ),
-            new JExpression(
-                _(DEF._, "C1", _(NONSTOP._, "C"), _(AN._, "value", value("C")))
-            )
+                "def A v",
+                "def B (^A) (v 'B')",
+                "def B1 (^B) (v 'B')",
+                "def C (^B) (v 'C')",
+                "def C1 (^C) (v 'C')"
         );
 
-        JExpression test = new JExpression(
-            _(ALL._, "A", _(WITH._, "value", value("B")))
-        );
-        assertAnimoResultOneStep(test, "B (^A) (value \"B\"). B1 (^B) (value \"B\").");
+        Expression test = new AnimoExpression("all A with v 'B'");
+        assertAnimoResultOneStep(test, "B (^A) (v \"B\"). B1 (^B) (v \"B\").");
 
-        test = new JExpression(
-            _(ALL._, "A", _(WITH._, "value", value("C")))
-        );
-        assertAnimoResultOneStep(test, "C (^B) (value \"C\"). C1 (^C) (value \"C\").");
+        test = new AnimoExpression("all A with v 'C'");
+        assertAnimoResultOneStep(test, "C (^B) (v \"C\"). C1 (^C) (v \"C\").");
     }
 
 	@Test
 	public void ALLwithEQ() throws Throwable {
 
         __(
-            new JExpression(
-                _(DEF._, "value-plain",
-                    _(AN._, "mime-type"),
-                    _(AN._, "value"),
-                    _(AN._, "type", value("value/plain")),
-                    _(AN._, "reference", value("Plain value")),
-                    _(AN._, "extension", value("txt"))
-                )
-            ),
-            new JExpression(
-                _(DEF._, "application-atom",
-                    _(AN._, "mime-type"),
-                    _(AN._, "application"),
-                    _(AN._, "type", value("application/atom+xml")),
-                    _(AN._, "reference", value("Atom Feed Document")),
-                    _(AN._, "extension", value("atom"))
-                )
-            )
+                "def v-plain (mime-type) (v) (type 'v/plain') (reference 'Plain v') (extension 'txt')",
+                "def application-atom (mime-type) (type 'application/atom+xml') (reference 'Atom Feed Document') (extension 'atom')"
         );
 
-		JExpression test = new JExpression(
-			_(ALL._, "mime-type", _(EQ._, "extension", value("txt")))
-		);
-        //assertAnimoResult(test, "test the value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
-		assertAnimoResultOneStep(test, "value-plain (mime-type) (value) (type \"value/plain\") (reference \"Plain value\") (extension \"txt\").");
+		Expression test = new AnimoExpression("all mime-type eq (extension) ('txt')");
+        //assertAnimoResult(test, "test the v-plain (mime-type) (v) (type \"v/plain\") (reference \"Plain v\") (extension \"txt\").");
+		assertAnimoResultOneStep(test, "v-plain (mime-type) (v) (type \"v/plain\") (reference \"Plain v\") (extension \"txt\").");
 	}
-	
+
 	@Test
 	public void test_00() throws Exception {
         __(
@@ -161,30 +96,18 @@ public class AllTest extends ATest {
     public void test_01() throws Throwable {
 
     	__(
-            new JExpression(
-                    _(DEF._, "A", _(NONSTOP._, "S"), _(AN._, "X", value("α")))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"), _(AN._, "Y", value("β")))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B"), _(AN._, "Z", value("γ")), _(AN._, "X", value("αα")))
-            )
+            "def A (^S) (X 'α')",
+            "def B (^A) (Y 'β')",
+            "def C (^B) (Z 'γ')"
         );
 
-        JExpression test = new JExpression(
-            _(ALL._, "S", _(WITH._, "X", value("α")))
-        );
+        Expression test = new AnimoExpression("all S with X 'α'");
         assertAnimoResultOneStep(test, "A (^S) (X \"α\"). B (^A) (Y \"β\").");
 
-        test = new JExpression(
-            _(ALL._, "S", _(WITH._, "Y", value("β")))
-        );
+        test = new AnimoExpression("all S with X 'β'");
         assertAnimoResultOneStep(test, "B (^A) (Y \"β\"). C (^B) (Z \"γ\") (X \"αα\").");
 
-        test = new JExpression(
-            _(ALL._, "S", _(WITH._, "Z", value("γ")))
-        );
+        test = new AnimoExpression("all S with X 'γ'");
         assertAnimoResultOneStep(test, "C (^B) (Z \"γ\") (X \"αα\").");
 
     }

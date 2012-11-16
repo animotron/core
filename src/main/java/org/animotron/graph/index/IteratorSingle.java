@@ -20,9 +20,9 @@
  */
 package org.animotron.graph.index;
 
-import java.util.Iterator;
-
 import org.neo4j.graphdb.Relationship;
+
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>

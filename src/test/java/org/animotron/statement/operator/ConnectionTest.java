@@ -21,15 +21,10 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.query.ANY;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.string.AFTER_LAST;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -39,150 +34,56 @@ public class ConnectionTest extends ATest {
 	
     @Test
     public void mimeType_usecase() throws Throwable {
+
+        tAnimo("def mime-type.");
+        tAnimo("def file (reference 'file') (path) (extension after-last '.' get path) (any mime-type with extension get extension).");
+        tAnimo("def fileA (^file) (path '/home/test.txt').");
+        tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
+
+        Expression test;
         
-        __(
-
-            new JExpression(_(DEF._, "mime-type")),
-
-            new JExpression(
-                _(DEF._, "file",
-                    _(AN._, "reference", value("file")),
-                    _(AN._, "path"),
-
-                    _(AN._, "extension",
-                        _(AFTER_LAST._,
-                            value("."),
-                            _(GET._, "path"))),
-
-                    _(ANY._, "mime-type",
-                        _(WITH._, "extension",
-                    		_(GET._, "extension")))
-                )),
-
-            new JExpression(
-                _(DEF._, "fileA",
-                    _(NONSTOP._, "file"),
-                    _(AN._, "path", value("/home/test.txt"))
-                )),
-
-            new JExpression(
-                _(DEF._, "value-plain",
-                    _(AN._, "mime-type"),
-                    _(AN._, "type", value("value/plain")),
-                    _(AN._, "extension", value("txt"), value("value"))
-                ))
-
-        );
-
-        JExpression test;
-        
-        test = new JExpression(
-            _(GET._, "reference",
-                _(AN._, "fileA")
-        ));
+        test = new AnimoExpression("get reference fileA");
         assertAnimoResult(test, "\"file\".");
 
-        test = new JExpression(
-            _(GET._, "path",
-                _(AN._, "fileA")
-        ));
+        test = new AnimoExpression("get path fileA");
         assertAnimoResult(test, "\"/home/test.txt\".");
 
-        test = new JExpression(
-            _(GET._, "extension",
-                _(AN._, "fileA")
-        ));
+        test = new AnimoExpression("get extension fileA");
         assertAnimoResult(test, "\"txt\".");
 
-        test = new JExpression(
-            _(GET._, "mime-type",
-                _(AN._, "fileA")
-        ));
+        test = new AnimoExpression("get mime-type fileA");
         //XXX: assertAnimoResult(D, "D mime-type the value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
         //assertAnimoResult(test, "mime-type the value-plain (mime-type) (type) (extension).");
         assertAnimoResult(test, "value-plain (mime-type) (type) (extension).");
 
-        test = new JExpression(
-            _(GET._, "type",
-                _(GET._, "mime-type",
-                    _(AN._, "fileA")
-        )));
+        test = new AnimoExpression("get type get mime-type fileA");
         assertAnimoResult(test, "\"value/plain\".");
     }
 	
     @Test
     public void mimeType_one_more_usecase() throws Throwable {
 
-        __(
+        tAnimo("def mime-type.");
+        tAnimo("def file (reference 'file') (path1 'some.path.value') (path2 get path1) (extension1 after-last '.' get path1) (any mime-type with extension get extension1).");
+        tAnimo("def fileA (^file) (path '/home/test.txt').");
+        tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
 
-            new JExpression(_(DEF._, "mime-type")),
+        Expression test;
 
-            new JExpression(
-                _(DEF._, "file",
-                    _(AN._, "reference", value("file")),
-                    _(AN._, "path1", value("some.path.value")),
-
-                    _(AN._, "path2",
-                        _(GET._, "path1")),
-
-                    _(AN._, "extension1",
-                        _(AFTER_LAST._,
-                            value("."),
-                            _(GET._, "path1"))),
-
-                    _(ANY._, "mime-type",
-                        _(WITH._, "extension",
-                            _(GET._, "extension1")))
-                )),
-
-            new JExpression(
-                _(DEF._, "fileA",
-                    _(NONSTOP._, "file"),
-                    _(AN._, "path", value("/home/test.txt"))
-                )),
-
-            new JExpression(
-                _(DEF._, "value-plain",
-                    _(AN._, "mime-type"),
-                    _(AN._, "type", value("value/plain")),
-                    _(AN._, "extension", value("txt"), value("value"))
-                ))
-
-        );
-        JExpression test;
-
-//        test = new JExpression(
-//            _(GET._, "path1",
-//                _(AN._, "fileA")
-//        ));
+//        test = new AnimoExpression("get path1 fileA");
 //        assertAnimoResult(test, "\"some.path.value\".");
 //
-//        test = new JExpression(
-//            _(GET._, "path2",
-//                _(AN._, "fileA")
-//        ));
+//        test = new AnimoExpression("get path2 fileA");
 //        assertAnimoResult(test, "\"some.path.value\".");
 //
-//        test = new JExpression(
-//            _(GET._, "extension1",
-//                _(AN._, "fileA")
-//        ));
+//        test = new AnimoExpression("get extension1 fileA");
 //        assertAnimoResult(test, "\"value\".");
 
-        test = new JExpression(
-            _(GET._, "mime-type",
-                _(AN._, "fileA")
-        ));
+        test = new AnimoExpression("get mime-type fileA");
         //XXX: assertAnimoResult(test, "value-plain (mime-type) (type \"value/plain\") (extension \"txt\" \"value\").");
         assertAnimoResult(test, "value-plain (mime-type) (type) (extension).");
 
-        test = new JExpression(
-            _(GET._, "type",
-	            _(GET._, "mime-type",
-	                _(AN._, "fileA")
-	            )
-            )
-        );
+        test = new AnimoExpression("get type get mime-type fileA");
         assertAnimoResult(test, "\"value/plain\".");
     }
 
@@ -190,48 +91,14 @@ public class ConnectionTest extends ATest {
     @Ignore
     public void mimeType_parallel() throws Throwable {
 
-        __(
-            new JExpression(_(DEF._, "mime-type")),
+        tAnimo("def mime-type.");
+        tAnimo("def file (reference 'file') (path) (extension after-last '.' get path) (any mime-type with extension get extension).");
+        tAnimo("def fileA (file) (path '/home/test.txt').");
+        tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
 
-            new JExpression(
-                _(DEF._, "file",
-                    _(AN._, "reference", value("file")),
-                    _(AN._, "path"),
+        Expression test;
 
-                    _(AN._, "extension",
-                        _(AFTER_LAST._,
-                            value("."),
-                            _(GET._, "path"))),
-
-                    _(ANY._, "mime-type",
-                        _(WITH._, "extension",
-                            _(GET._, "extension")))
-            )),
-
-            new JExpression(
-	            _(DEF._, "fileA",
-	                _(AN._, "file"),
-	                _(AN._, "path", value("/home/test.txt"))
-            )),
-
-            new JExpression(
-                _(DEF._, "value-plain",
-                    _(AN._, "mime-type"),
-                    _(AN._, "type", value("value/plain")),
-                    _(AN._, "extension", value("txt"), value("value"))
-            ))
-
-        );
-        JExpression test;
-
-        test = new JExpression(
-    		_(DEF._, "test",
-		        _(GET._, "mime-type",
-		            _(AN._, "fileA")
-		        ),
-		        _(GET._, "type")
-	        )
-        );
+        test = new AnimoExpression("def test (get mime-type fileA) (get type)");
         assertAnimoResult(test, "test (mime-type the value-plain (mime-type) (type) (extension)) (type \"value/plain\").");
     }
 }

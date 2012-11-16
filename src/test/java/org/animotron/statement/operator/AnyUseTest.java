@@ -21,12 +21,9 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.USE;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,68 +35,36 @@ public class AnyUseTest extends ATest {
     @Test
     public void simple_any_Use() throws Throwable {
 
-        __(
-            new JExpression(
-                    _(DEF._, "A", _(NONSTOP._, "S"), element("X", value("α")))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"), element("Y", value("β")))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B"), element("Z", value("γ")), element("X", value("αα")))
-            ),
-            new JExpression(
-                    _(DEF._, "s", _(ANY._, "S"))
-            )
-        );
+        tAnimo("def A (^S) (\\X 'α').");
+        tAnimo("def B (^A) (\\Y 'β').");
+        tAnimo("def C (^B) (\\Z 'γ') (\\X 'αα').");
+        tAnimo("def s (any S).");
 
-        JExpression b = new JExpression(
-            _(DEF._, "b", _(AN._, "s", _(USE._, "B")))
-        );
+        Expression b = new AnimoExpression("def b s use B");
         //assertAnimoResult(b, "b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
 //        assertAnimoResult(b, "b s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
         assertAnimoResult(b, "b s B (A (S) (\\X \"α\")) (\\Y \"β\").");
 
-        JExpression c = new JExpression(
-            _(DEF._, "c", _(AN._, "s", _(USE._, "C")))
-        );
+        Expression c = new AnimoExpression("def c s use C");
         assertAnimoResult(c, "c s C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
     }
 
     @Test
     public void complex_any_Use() throws Throwable {
 
-        __(
-            new JExpression(
-                    _(DEF._, "A", _(NONSTOP._, "S"), element("X", value("α")))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(NONSTOP._, "A"), element("Y", value("β")))
-            ),
-            new JExpression(
-                    _(DEF._, "B1", _(NONSTOP._, "B"), element("Y", value("ββ")))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(NONSTOP._, "B"), element("Z", value("γ")), element("X", value("αα")))
-            ),
-            new JExpression(
-                    _(DEF._, "C1", _(NONSTOP._, "C"), element("Z", value("γγ")), element("X", value("ααα")))
-            ),
-            new JExpression(
-                    _(DEF._, "s", _(ANY._, "S"))
-            )
-        );
+        tAnimo("def A (^S) (\\X 'α').");
+        tAnimo("def B (^A) (\\Y 'β').");
+        tAnimo("def B1 (^B) (\\Y 'ββ').");
+        tAnimo("def C (^B) (\\Z 'γ') (\\X 'αα').");
+        tAnimo("def C1 (^C) (\\Z 'γγ') (\\X 'ααα').");
+        tAnimo("def s (any S).");
 
-        JExpression b = new JExpression(
-            _(DEF._, "b", _(AN._, "s", _(USE._, "B")))
-        );
+        Expression b = new AnimoExpression("def b s use B");
         //assertAnimoResult(b, "b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
 //        assertAnimoResult(b, "b s B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\").");
         assertAnimoResult(b, "b s B (A (S) (\\X \"α\")) (\\Y \"β\").");
 
-        JExpression c = new JExpression(
-            _(DEF._, "c", _(AN._, "s", _(USE._, "C")))
-        );
+        Expression c = new AnimoExpression("def b s use C");
         //assertAnimoResult(c, "c s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
 //        assertAnimoResult(c, "c s C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\").");
         assertAnimoResult(c, "c s C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");

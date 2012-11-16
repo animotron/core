@@ -20,7 +20,6 @@
  */
 package org.animotron.statement.security;
 
-import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -29,7 +28,7 @@ import org.animotron.statement.string.STRING;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * Security instruction 'sha-512'.
@@ -57,7 +56,7 @@ public class SHA512 extends DetermInstruction {
                 //source
                 String message = STRING._.eval(pf, params).toString();
                 message = MessageDigester.calculate(message, "SHA-512");
-                answered(pf, new JExpression(value(message)));
+                answered(pf, value(message));
 			} catch (Throwable t) {
 				pf.sendException(t);
 			}

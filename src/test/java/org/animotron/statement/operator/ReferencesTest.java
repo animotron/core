@@ -21,12 +21,13 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.expression.AnimoExpression.__;
+
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,14 +39,10 @@ public class ReferencesTest extends ATest {
     @Test
     public void test() throws Throwable {
 
-        JExpression A = new JExpression(
-            _(DEF._, "A", _(AN._, "B", _(AN._, "C")))
-        );
+        Expression A = new AnimoExpression("def A B C");
         assertAnimoResult(A, "A B.");
 
-        JExpression.__(new JExpression(
-            _(DEF._, "B", _(AN._, "C", value("y")))
-        ));
+        __("def B C 'y'");
         assertAnimoResult(A, "A B C.");
     }
 

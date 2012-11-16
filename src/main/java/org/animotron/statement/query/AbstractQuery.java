@@ -38,7 +38,6 @@ import org.neo4j.graphdb.traversal.TraversalDescription;
 import org.neo4j.kernel.Traversal;
 import org.neo4j.kernel.Uniqueness;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;

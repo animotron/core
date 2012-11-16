@@ -21,7 +21,6 @@
 package org.animotron.statement.math;
 
 import javolution.util.FastList;
-import org.animotron.expression.JExpression;
 import org.animotron.manipulator.PFlow;
 import org.neo4j.graphdb.Relationship;
 
@@ -29,7 +28,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * Math instruction 'SUM'. (aka summation)
@@ -60,7 +59,7 @@ public class SUM extends MathInstruction {
 
 		System.out.println(""+Na.doubleValue()+" + "+Nb.doubleValue()+" = "+result);
 
-		return new JExpression(value(result));
+		return value(result);
 	}
 	
 	protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {

@@ -23,17 +23,10 @@ package org.animotron.games.whouse;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.compare.WITH;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.query.ALL;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -47,153 +40,60 @@ public class WHouseTest extends ATest {
 		
 		//party: person & organization
 		// + receipt or issue
-		new JExpression(
-    		_(DEF._, "party")
-        );
+        tAnimo("def party.");
 
-		new JExpression(
-    		_(DEF._, "receipt-party",
-				_(AN._, "party"),
-				_(AN._, "receipt")
-		)	);
+        tAnimo("def receipt-party (party) (receipty).");
 
-		new JExpression(
-    		_(DEF._, "issue-party",
-				_(AN._, "party"),
-				_(AN._, "issue")
-		)	);
+        tAnimo("def issue-party (party) (issue).");
 
-		new JExpression(
-    		_(DEF._, "person",
-				_(AN._, "party")
-		)	);
+        tAnimo("def person party.");
 
-		new JExpression(
-    		_(DEF._, "organization",
-				_(AN._, "party")
-		)	);
+        tAnimo("def organization party.");
 
-		new JExpression(
-    		_(DEF._, "ORG-01",
-				_(AN._, "organization")
-		)	);
+        tAnimo("def ORG-1 organization.");
 
-		new JExpression(
-    		_(DEF._, "ORG-02",
-				_(AN._, "organization")
-		)	);
+        tAnimo("def ORG-2 organization.");
 
-		new JExpression(
-    		_(DEF._, "I",
-				_(AN._, "person")
-		)	);
-		
+        tAnimo("def I person.");
+
 		//unit of measure
-		new JExpression(_(DEF._, "UoM"));
-		
-//		new JExpression(
-//    		_(DEF._, "kilo",
-//				_(AN._, "number", _(Q._, "N1000"))
-//		)	);
+        tAnimo("def UoM.");
+
+        tAnimo("def kilo number Q N1000.");
 
 		//kg -> kilo + gramm
-		new JExpression(
-    		_(DEF._, "gram",
-				_(AN._, "UoM")
-		)	);
+        tAnimo("def gram UoM.");
 
-		new JExpression(
-    		_(DEF._, "kilogram",
-				_(AN._, "kilo"),
-				_(AN._, "gram")
-		)	);
+        tAnimo("def kilogram (kilo) (gram).");
 
 		//currency
-		new JExpression(
-    		_(DEF._, "USD",
-				_(AN._, "currency")
-		)	);
-		
+        tAnimo("def USD currency.");
+
 		//Stock Keeping Unit
-		new JExpression(
-    		_(DEF._, "SKU",
-				_(AN._, "reference"),
-				_(AN._, "qty"),
-				_(AN._, "price"),
-				_(AN._, "cost")
-		)	);
+        tAnimo("def SKU (reference) (qty) (price) (cost).");
 
 		//documents structure
-		new JExpression(
-    		_(DEF._, "document", _(AN._, "date"))
-        );
+        tAnimo("def document date.");
 
-        new JExpression(
-    		_(DEF._, "whouse-document",
-				_(AN._, "document"),
-				_(AN._, "issue-party"),
-				_(AN._, "receipt-party"),
-				_(AN._, "SKU")
-		)	);
+        tAnimo("def whouse-document (document) (issue-party) (receipt-party) (SKU).");
 
-        new JExpression(
-    		_(DEF._, "whouse-receipt",
-				_(AN._, "whouse-document"),
-				//I do receipt
-				_(AN._, "receipt")
-		)	);
+        tAnimo("def whouse-receipt (whouse-receipt) (receipt).");
 
-        new JExpression(
-    		_(DEF._, "whouse-issue",
-				_(AN._, "whouse-document"),
-				//I do issue
-				_(AN._, "issue")
-		)	);
+        tAnimo("def whouse-issue (whouse-document) (issue).");
 
-        new JExpression(
-    		_(DEF._, "whouse-transfer",
-				_(AN._, "whouse-document"),
-				//I do receipt & issue
-				_(AN._, "receipt"),
-				_(AN._, "issue")
-		)	);
-        
+        tAnimo("def whouse-transfer (receipt) (issue).");
+
         //documents
-        new JExpression(
-    		_(DEF._, "R01",
-				_(AN._, "whouse-document"),
-				_(AN._, "date", value("T2011-08-07")), //TODO: date instruction
-				_(AN._, "issue-party", _(AN._, "ORG-01")),
-				_(AN._, "receipt-party", _(AN._, "I")),
-				_(AN._, "SKU",
-					_(DEF._, "item01",
-						_(AN._, "reference", value("item01"))
-//						_(AN._, "qty",
-//							_(AN._, "number", _(Q._, "N2")),
-//							_(AN._, "UoM", _(AN._, "KG")) //TODO: _(AN._, "UoM", KG))
-//						),
-//						_(AN._, "price", //
-//							_(AN._, "number", _(Q._, "N5")),
-//							_(AN._, "UoM", _(AN._, "G")),
-//							_(AN._, "currency", _(AN._, "USD"))
-//						)
-				)	)
-		)	);
-        
-        JExpression a = new JExpression(
-    		_(DEF._, "a",
-				_(ALL._, "whouse-receive",
-					_(WITH._, "party", _(AN._, "I"))))
-		);
+        tAnimo("def R01 (whouse-document) (date 'T2011-08-07') (issue-party ORG1) (receipt-party I) (SKU item01).");
+        tAnimo("def item01 reference 'item01'.");
+
+        Expression a = tAnimo("def a all whouse-receive with party I.");
         assertAnimoResult(a, "a.");
 
         //TODO: how to answer "what do I have?" ("SKU") (answer "item01")
         //How may of "item01" I have?
 
-        JExpression f = new JExpression(
-    		_(DEF._, "f",
-				_(AN._, "form", _(AN._, "R01")))
-		);
+        Expression f = tAnimo("def f form R01.");
 
         assertXMLResult(f, "<form id='R01'>" +
                 "<input id='date' value='T2011-08-07'>07 August 2011</input>" +

@@ -23,14 +23,10 @@ package org.animotron.statement.operator;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GET;
-import org.animotron.statement.relation.SHALL;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.animotron.expression.Expression.__;
-import static org.animotron.expression.JExpression.*;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -42,96 +38,49 @@ public class GetTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "Z", value("A")))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(AN._, "Z", value("B")))
-            )
-        );
-
-    	JExpression test = new JExpression(
-			_(GET._, "Z", _(AN._, "A"), _(AN._, "B"))
-		);
+        tAnimo("def A Z 'A'.");
+        tAnimo("def B Z 'B'.");
+    	Expression test = new AnimoExpression("get Z (A) (B)");
     	assertAnimoResultOneStep(test, "\"A\".", "\"B\".");
 	}
 
 	@Test
 	public void getFromPFlow_an_with_param() throws Throwable {
 
-    	__(new JExpression(
-            _(DEF._, "A", element("B" , _(GET._, "C")))
-        ));
-    	JExpression test = new JExpression(
-			_(AN._, "A", _(AN._, "C", value(".")))
-		);
+        tAnimo("def A \\B get C.");
+    	Expression test = new AnimoExpression("A C '.'");
     	assertAnimoResult(test, "A \\B \".\".");
 
-    	__(new JExpression(
-            _(DEF._, "A1", _(GET._, "B1"))
-        ));
-
-    	test = new JExpression(
-			_(AN._, "A1", _(AN._, "B1", value(".")))
-		);
+        tAnimo("def A1 get B1.");
+    	test = new AnimoExpression("A1 B1 '.'");
     	assertAnimoResult(test, "A1 \".\".");
 	}
 	
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "B", _(GET._, "C")))
-            ),
-            new JExpression(
-                _(DEF._, "D", element("E", _(GET._, "B")))
-            )
-        );
-    	
-    	JExpression test = new JExpression(
-			_(AN._, "D", _(AN._, "A", _(AN._, "C", value(":"))))
-		);
+        tAnimo("def A B get C.");
+        tAnimo("def D \\E get B.");
+    	Expression test = new AnimoExpression("D A C ':'");
     	assertAnimoResult(test, "D \\E \":\".");
 	}
 
 	@Test
 	public void getFromPFlow_an_with_an() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", element("B", _(GET._, "C")))
-            ),
-            new JExpression(
-                _(DEF._, "D", _(AN._, "C", value(".")))
-            )
-        );
-
-    	JExpression test = new JExpression(
-			_(AN._, "A", _(AN._, "D"))
-		);
-    	assertAnimoResult(test, "A \\B \".\".");
+        tAnimo("def A \\B get C.");
+        tAnimo("def D C '.'.");
+        Expression test = new AnimoExpression("A D");
+        assertAnimoResult(test, "A \\B \".\".");
 	}
 	
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Throwable {
 
-    	__(
-            new JExpression(
-                _(DEF._, "A", element("B", _(GET._, "C")))
-            ),
-            new JExpression(
-                _(DEF._, "D", _(AN._, "C", value(".")))
-            ),
-            new JExpression(
-                _(DEF._, "E", _(AN._, "C", value(":")))
-            )
-        );
-
-    	JExpression test = new JExpression(
-			_(DEF._, "F", _(AN._, "A", _(AN._, "D"), _(AN._, "E", _(AN._, "C", value("_")))))
-		);
+        tAnimo("def A \\B get C.");
+        tAnimo("def D C '.'.");
+        tAnimo("def E C ':'.");
+        Expression test = new AnimoExpression("def F A (D) (E C '_')");
     	assertAnimoResult(test, "F A \\B \".\" \"_\".");
 
 	}
@@ -139,42 +88,20 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_an_with_stack() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(GET._, "X"))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(GET._, "Y"), _(AN._, "A"))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(GET._, "Z"), _(AN._, "B"))
-            )
-        );
-
-        JExpression E = new JExpression(
-            _(AN._, "C", _(AN._, "X", value("α")), _(AN._, "Y", value("β")), _(AN._, "Z", value("γ")))
-        );
+        tAnimo("def A get X.");
+        tAnimo("def B (get Y) (A).");
+        tAnimo("def C (get Z) (B).");
+        Expression E = new AnimoExpression("C (X 'α') (Y 'β') (Z 'γ')");
         assertAnimoResult(E, "C \"γ\" (B \"β\" (A \"α\")).");
     }
 
     @Test
     public void getFromPFlow_more_an_with_stack() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(GET._, "Y"), _(AN._, "A"))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(GET._, "Z"))
-            )
-        );
-
-        JExpression E = new JExpression(
-            _(DEF._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "B", value("β")))))
-        );
+        tAnimo("def A (get X) (Z 'γ').");
+        tAnimo("def B (get Y) (A).");
+        tAnimo("def C get Z.");
+        Expression E = new AnimoExpression("def E C  B B 'β");
         assertAnimoResult(E, "E C \"γ\".");
 
     }
@@ -182,42 +109,20 @@ public class GetTest extends ATest {
     @Test
     public void getFromPFlow_one_more_an_with_stack() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(GET._, "X"), _(AN._, "Z", value("γ")))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(GET._, "Y"))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(GET._, "Z"))
-            )
-        );
-
-        JExpression E = new JExpression(
-            _(DEF._, "E", _(AN._, "C", _(AN._, "B", _(AN._, "A"))))
-        );
+        tAnimo("def A (get X) (Z 'γ').");
+        tAnimo("def B get Y.");
+        tAnimo("def C get Z.");
+        Expression E = new AnimoExpression("def E C  B A");
         assertAnimoResult(E, "E C \"γ\".");
     }
 
     @Test
     public void getFromPFlow_an_an_an() throws Throwable {
 
-        __(
-            new JExpression(
-                _(DEF._, "A", _(AN._, "Y", _(GET._, "X")))
-            ),
-            new JExpression(
-                _(DEF._, "B", _(AN._, "Z", _(GET._, "Y")))
-            ),
-            new JExpression(
-                _(DEF._, "C", _(GET._, "Z"))
-            )
-        );
-
-        JExpression D = new JExpression(
-            _(DEF._, "D", _(AN._, "C", _(AN._, "B", _(AN._, "A", _(AN._, "X", value("."))))))
-        );
+        tAnimo("def A Y get X.");
+        tAnimo("def B Z get Y.");
+        tAnimo("def C get Z.");
+        Expression D = new AnimoExpression("def D C B A X '.'");
 //        assertAnimoResult(D, "D C Z Y X \".\".");
         assertAnimoResult(D, "D C \".\".");
     }
@@ -674,18 +579,9 @@ public class GetTest extends ATest {
     @Test
     public void test_49() throws Throwable {
 
-        __(
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "A"))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(AN._, "B", value("π")))
-            )
-        );
-
-        JExpression E = new JExpression(
-            _(DEF._, "E", _(GET._, "A", _(AN._, "C")))
-        );
+        tAnimo("def B A.");
+        tAnimo("def C B 'π'.");
+        Expression E = new AnimoExpression("def E get A C");
         assertAnimoResult(E, "E \"π\".");
 
     }
@@ -694,21 +590,10 @@ public class GetTest extends ATest {
     @Ignore //no SHALL
     public void test_50() throws Throwable {
 
-        __(
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "A"))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(SHALL._, "B", value("π")))
-            ),
-            new JExpression(
-                    _(DEF._, "D", _(AN._, "C"))
-            )
-        );
-
-        JExpression E = new JExpression(
-            _(DEF._, "E", _(GET._, "A", _(AN._, "D")))
-        );
+        tAnimo("def B A.");
+        tAnimo("def C shall B 'π'.");
+        tAnimo("def D C.");
+        Expression E = new AnimoExpression("def E get A D");
         //XXX: assertAnimoResult(E, "E B \"π\".");
         assertAnimoResult(E, "E shall B \"π\".");
     }
@@ -716,21 +601,10 @@ public class GetTest extends ATest {
     @Test
     public void test_51() throws Throwable {
 
-        __(
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "A"))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(AN._, "B", value("π")))
-            ),
-            new JExpression(
-                    _(DEF._, "D", _(NONSTOP._, "C"))
-            )
-        );
-
-        JExpression E = new JExpression(
-            _(DEF._, "E", _(GET._, "A", _(AN._, "D")))
-        );
+        tAnimo("def B A.");
+        tAnimo("def C B 'π'.");
+        tAnimo("def D ^C.");
+        Expression E = new AnimoExpression("def E get A D");
         assertAnimoResult(E, "E \"π\".");
     }
 

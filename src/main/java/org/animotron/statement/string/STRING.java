@@ -20,7 +20,6 @@
  */
 package org.animotron.statement.string;
 
-import org.animotron.expression.JExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.manipulator.OnQuestion;
@@ -32,7 +31,7 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * VALUE instruction 'STRING'.
@@ -65,11 +64,7 @@ public class STRING extends DetermInstruction {
 
 	            Relationship r;
 				try {
-					r = new JExpression(
-					    value(
-                            sb.toString()
-                        )
-					);
+					r = value(sb.toString());
 				} catch (Throwable t) {
 					pf.sendException(t);
 					return;

@@ -21,12 +21,8 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
-
-import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -38,15 +34,10 @@ public class AnTest extends ATest {
     @Test
     public void testAN() throws Throwable {
 
-        __(
-                new JExpression(
-                        _(DEF._, "A", _(AN._, "value", value("B")))
-                )
-        );
 
-        JExpression test = new JExpression(
-                _(AN._, "A")
-        );
+        tAnimo("def A v 'B'.");
+
+        Expression test = tAnimo("a.");
         assertAnimoResultOneStep(test, "A value \"B\".");
     }
 

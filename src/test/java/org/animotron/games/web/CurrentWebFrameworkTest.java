@@ -21,10 +21,11 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
+import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
 import org.junit.Test;
@@ -32,9 +33,6 @@ import org.junit.Test;
 import java.io.IOException;
 
 import static org.animotron.expression.AnimoExpression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
-
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -43,36 +41,65 @@ import static org.animotron.expression.JExpression.value;
  */
 public class CurrentWebFrameworkTest extends ATest {
 
-    private Expression query(String site, String service) {
-        return new JExpression(
-                _(AN._,
-                        _(GET._, service,
-                                _(ANY._, "site",
-                                        _(WITH._, "server-name", value(site))
-                                )
-                        )
-                )
-        );
+    private Expression query(final String site, final String service) {
+        return new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(AN._);
+                    builder.start(GET._);
+                        builder._(REF._, service);
+                        builder.start(ANY._);
+                            builder._(REF._, "site");
+                            builder.start(WITH._);
+                                builder._(REF._, "server-name");
+                                builder._(site);
+                            builder.end();
+                        builder.end();
+                    builder.end();
+                builder.end();
+            }
+        };
     }
 
-    private Expression error(String site, int code, String trace) {
-        return new JExpression(
-                _(AN._,
-                        _(GET._,
-                                _(ANY._, "error",
-                                        _(WITH._, "code", value(code))
-                                ),
-                                _(ANY._, "site",
-                                        _(WITH._, "server-name", value(site))
-                                )
-                        ),
-                        _(AN._, "stack-trace", value(trace))
-                )
-        );
+    private Expression error(final String site, final int code, String trace) {
+        return new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(AN._);
+                    builder.start(GET._);
+                        builder.start(ANY._);
+                            builder._(REF._, "error");
+                            builder.start(WITH._);
+                                builder._(REF._, "code");
+                                builder._(code);
+                            builder.end();
+                        builder.end();
+                        builder.start(ANY._);
+                            builder._(REF._, "site");
+                            builder.start(WITH._);
+                                builder._(REF._, "server-name");
+                                builder._(site);
+                            builder.end();
+                        builder.end();
+                    builder.end();
+                builder.end();
+            }
+        };
     }
 
-    private Expression mime(Expression query) {
-        return new JExpression(_(GET._, "type", _(GET._, "mime-type", _(query))));
+    private Expression mime(final Expression query) {
+        return new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(GET._);
+                    builder._(REF._, "type");
+                    builder.start(GET._);
+                        builder._(REF._, "mime-type");
+                        builder.bind(query);
+                    builder.end();
+                builder.end();
+            }
+        };
     }
 
     private void assertQuery(String site, String service, String mime, String html) throws IOException, InterruptedException {

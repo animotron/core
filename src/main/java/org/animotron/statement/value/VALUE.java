@@ -242,6 +242,15 @@ public class VALUE extends AbstractValue implements Prepare {
 	    }
     }
 
+    public static Relationship value (final Object o) {
+        return new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder._(o);
+            }
+        };
+    }
+
     //used by tests
 	public void waitToBeEmpty() {
 		while (!processor.stack.isEmpty())

@@ -24,17 +24,13 @@ import org.animotron.ATest;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import static java.lang.System.currentTimeMillis;
-import static org.animotron.expression.Expression.__;
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.expression.AnimoExpression.__;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -68,12 +64,7 @@ public class SUM500Test extends ATest {
         long t;
         t = currentTimeMillis();
         for (int i = 0; i < 500; i++) {
-            __(new JExpression(
-                    _(DEF._, "a" + i,
-                            _(AN._, "a"),
-                            _(AN._, "b", value(i))
-                    )
-            ));
+            __("def a" + i + "(a) (b '" + i + "')");
         }
         Expression e = new AnimoExpression("+ get b all a");
         System.out.println("Build expressions in " + (currentTimeMillis() - t));

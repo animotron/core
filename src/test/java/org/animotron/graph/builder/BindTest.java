@@ -21,14 +21,13 @@
 package org.animotron.graph.builder;
 
 import org.animotron.ATest;
+import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JExpression;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
-import org.animotron.statement.query.ANY;
+import org.animotron.statement.operator.REF;
 import org.junit.Test;
-
-import static org.animotron.expression.JExpression._;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -37,88 +36,92 @@ import static org.animotron.expression.JExpression._;
 public class BindTest extends ATest {
 
     @Test
-	public void test_00() throws Throwable {
-        Expression a = new JExpression(
-            _(AN._, "a")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(a))
-        );
-        assertAnimo(b, "def b a.");
-	}
-
-    @Test
 	public void test_01() throws Throwable {
-        Expression a = new JExpression(
-            _(AN._, "a")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(a))
-        );
+        final Expression a = new AnimoExpression("a");
+        Expression b = new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(DEF._, "b");
+                    builder.bind(a);
+                builder.end();
+            }
+        };
         assertAnimo(b, "def b a.");
 	}
 
     @Test
 	public void test_02() throws Throwable {
-        Expression a = new JExpression(
-            _(AN._, "a")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(AN._, "x"), _(a))
-        );
+        final Expression a = new AnimoExpression("a");
+        Expression b = new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(DEF._, "b");
+                    builder.start(AN._);
+                        builder._(REF._,  "x");
+                    builder.end();
+                    builder.bind(a);
+                builder.end();
+            }
+        };
         assertAnimo(b, "def b (x) (a).");
 	}
 
     @Test
 	public void test_03() throws Throwable {
-        Expression a = new JExpression(
-            _(AN._, "a")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(AN._, "x"), _(a))
-        );
-        assertAnimo(b, "def b (x) (a).");
-	}
-
-    @Test
-	public void test_04() throws Throwable {
-        Expression x = new JExpression(
-            _(DEF._, "x")
-        );
-        Expression y = new JExpression(
-            _(DEF._, "y")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(AN._, x), _(AN._, y))
-        );
+        final Expression x = new AnimoExpression("def x");
+        final Expression y = new AnimoExpression("def y");
+        Expression b = new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(DEF._, "b");
+                    builder.start(AN._);
+                        builder._(REF._,  x);
+                    builder.end();
+                    builder.start(AN._);
+                        builder._(REF._,  y);
+                    builder.end();
+                builder.end();
+            }
+        };
         assertAnimo(b, "def b (x) (y).");
 	}
 
     @Test
-	public void test_05() throws Throwable {
-        Expression a = new JExpression(
-            _(ANY._, "a")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(AN._, "y", _(a)))
-        );
+	public void test_04() throws Throwable {
+        final Expression a = new AnimoExpression("any a");
+        Expression b = new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(DEF._, "b");
+                    builder.start(AN._);
+                        builder._(REF._,  "x");
+                        builder.bind(a);
+                    builder.end();
+                builder.end();
+            }
+        };
         assertAnimo(b, "def b y any a.");
 	}
 
     @Test
 	public void test_06() throws Throwable {
-        Expression a = new JExpression(
-            _(ANY._, "a")
-        );
-        Expression x = new JExpression(
-            _(DEF._, "x")
-        );
-        Expression y = new JExpression(
-            _(DEF._, "y")
-        );
-        Expression b = new JExpression(
-            _(DEF._, "b", _(AN._, x), _(AN._, y, _(a)))
-        );
+        final Expression a = new AnimoExpression("any a");
+        final Expression x = new AnimoExpression("def x");
+        final Expression y = new AnimoExpression("def y");
+        Expression b = new AbstractExpression() {
+            @Override
+            public void build() throws Throwable {
+                builder.start(DEF._, "b");
+                    builder.start(AN._);
+                        builder._(REF._,  x);
+                    builder.end();
+                    builder.start(AN._);
+                        builder._(REF._, y);
+                        builder.bind(a);
+                    builder.end();
+                builder.end();
+            }
+        };
         assertAnimo(b, "def b (x) (y any a).");
 	}
 

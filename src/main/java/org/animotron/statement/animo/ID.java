@@ -20,7 +20,6 @@
  */
 package org.animotron.statement.animo;
 
-import org.animotron.expression.JExpression;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -29,7 +28,7 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Utils;
 
-import static org.animotron.expression.JExpression.value;
+import static org.animotron.statement.value.VALUE.value;
 
 /**
  * Return object's NAME.
@@ -56,11 +55,7 @@ public class ID extends Operator implements Evaluable {
         	QCAVector v;
         	while ((v = p.take()) != null) {
         		pf.sendAnswer(pf.getVector().answered(
-                    new JExpression(
-                        value(
-                            Utils.name(v.getClosest().getEndNode())
-                        )
-                    )
+                    value(Utils.name(v.getClosest().getEndNode()))
                 ));
             }
         }

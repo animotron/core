@@ -21,14 +21,12 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.ALL;
-import org.animotron.statement.query.ANY;
-import org.animotron.statement.relation.USE;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression._;
-import static org.animotron.expression.JExpression.__;
+import static org.animotron.expression.AnimoExpression.__;
+
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -41,14 +39,10 @@ public class UseTest extends ATest {
     public void any_use() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            )
+                "def A X"
         );
 
-        JExpression x = new JExpression(
-            _(DEF._, "x", _(ANY._, "X", _(USE._, "Y")))
-        );
+        Expression x = new AnimoExpression("def x any A use Y");
         assertAnimoResult(x, "x A X.");
     }
 
@@ -56,17 +50,11 @@ public class UseTest extends ATest {
     public void an_any_use() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "q", _(ANY._, "X"))
-            )
+                "def A X",
+                "def q any X"
         );
 
-        JExpression x = new JExpression(
-            _(DEF._, "x", _(AN._, "q", _(USE._, "Y")))
-        );
+        Expression x = new AnimoExpression("def x q use Y");
         assertAnimoResult(x, "x q A X.");
     }
 
@@ -74,17 +62,11 @@ public class UseTest extends ATest {
     public void all_use() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "X"))
-            )
+                "def A X",
+                "def B X"
         );
 
-        JExpression x = new JExpression(
-            _(DEF._, "x", _(ALL._, "X", _(USE._, "Y")))
-        );
+        Expression x = new AnimoExpression("def x all X use Y");
         assertAnimoResult(x, "x (A X) (B X).");
     }
 
@@ -92,20 +74,12 @@ public class UseTest extends ATest {
     public void an_all_use() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "q", _(ALL._, "X"))
-            )
+                "def A X",
+                "def B X",
+                "def q all X"
         );
 
-        JExpression x = new JExpression(
-            _(DEF._, "x", _(AN._, "q", _(USE._, "Y")))
-        );
+        Expression x = new AnimoExpression("def x q use Y");
         assertAnimoResult(x, "x q (A X) (B X).");
     }
     
@@ -113,36 +87,23 @@ public class UseTest extends ATest {
     public void cross_use_case() throws Throwable {
 
         __(
-            new JExpression(
-                    _(DEF._, "A", _(AN._, "S"), _(AN._, "X"))
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "S"), _(AN._, "Y"))
-            ),
-            new JExpression(
-                    _(DEF._, "C", _(AN._, "S"), _(AN._, "X"), _(AN._, "Y"))
-            )
+                "def A (S) (X)",
+                "def B (S) (X)",
+                "def C (S) (X) (Y)"
         );
 
-        JExpression test;
-        test = new JExpression(
-            _(ALL._, "S")
-        );
+        Expression test;
+
+        test = new AnimoExpression("all S");
         assertAnimoResult(test, "A (S) (X). B (S) (Y). C (S) (X) (Y).");
 
-        test = new JExpression(
-            _(ALL._, "S", _(USE._, "X"))
-        );
+        test = new AnimoExpression("all S use X");
         assertAnimoResult(test, "A (S) (X). C (S) (X) (Y).");
 
-        test = new JExpression(
-            _(ALL._, "S", _(USE._, "Y"))
-        );
+        test = new AnimoExpression("all S use Y");
         assertAnimoResult(test, "B (S) (Y). C (S) (X) (Y).");
 
-        test = new JExpression(
-            _(ALL._, "S", _(USE._, "X"), _(USE._, "Y"))
-        );
+        test = new AnimoExpression("all S (use X) (use Y)");
         assertAnimoResult(test, "C (S) (X) (Y).");
 
     }    

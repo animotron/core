@@ -21,11 +21,11 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.JExpression;
-import org.animotron.statement.query.GET;
+import org.animotron.expression.AnimoExpression;
+import org.animotron.expression.Expression;
 import org.junit.Test;
 
-import static org.animotron.expression.JExpression.*;
+import static org.animotron.expression.AnimoExpression.__;
 
 
 /**
@@ -38,35 +38,23 @@ public class SimpleTest extends ATest {
 	public void an() throws Throwable {
         
     	__(
-            new JExpression(
-                    _(DEF._, "AA")
-            ),
-            new JExpression(
-                    _(DEF._, "BB", _(AN._, "AA", value("a@b")))
-            )
+            "def AA",
+            "def BB AA 'a@b'"
         );
 
-    	JExpression C = new JExpression(
-			_(DEF._, "CC", _(AN._, "BB"))
-		);
+    	Expression C = new AnimoExpression("def CC BB");
         assertAnimoResultOneStep(C, "CC BB");// AA \"a@b\".");
 	}
 
 	@Test
 	public void get() throws Throwable {
-        
-    	__(
-            new JExpression(
-                    _(DEF._, "A")
-            ),
-            new JExpression(
-                    _(DEF._, "B", _(AN._, "A", value("a@b")))
-            )
+
+        __(
+                "def A",
+                "def B A 'a@b'"
         );
 
-    	JExpression C = new JExpression(
-			_(DEF._, "C", _(GET._, "A", _(AN._, "B")))
-		);
+        Expression C = new AnimoExpression("def C get A B");
         assertAnimoResult(C, "C \"a@b\".");
 	}
 }

@@ -21,7 +21,7 @@
 package org.animotron.statement.combinator;
 
 import javolution.util.FastSet;
-import org.animotron.expression.JExpression;
+import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
@@ -32,6 +32,7 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
+import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
@@ -99,31 +100,58 @@ public class EACH extends Combinator {
 	}
 
 	@SuppressWarnings("unused")
-	private void processByBuildSubgraph(PFlow pf, LinkedList<Relationship> sets, int pos, Relationship[] res) {
+	private void processByBuildSubgraph(PFlow pf, LinkedList<Relationship> sets, int pos, final Relationship[] res) {
 		if (pos > sets.size()) {
 
             Relationship r = res[res.length-1];
             Relationship the = null;
 			for (int i = res.length-2; i >= 0; i--) {
-                Statement s = Statements.relationshipType(res[i]);
+                final int finalI = i;
+                final Statement s = Statements.relationshipType(res[i]);
                 if (s instanceof AbstractValue) {
                     // TODO analyze more complex expressions
                     IndexHits<Relationship> subelements = Order._.queryDown(res[i].getEndNode());
-                    Object[][] bind = new Object[subelements.size() + 1][];
+                    final Relationship[] bind = new Relationship[subelements.size() + 1];
                     try {
                         int n = 0;
                         for (Relationship x : subelements) {
-                            bind[n] = JExpression._(x);
+                            bind[n] = x;
                             n++;
                         }
-                        bind[n] = JExpression._(r);
-                        r = new JExpression(JExpression._(s, ((AbstractValue) s).reference(res[i].getEndNode()), bind));
+                        bind[n] = r;
+                        r = new AbstractExpression() {
+                            @Override
+                            public void build() throws Throwable {
+                                builder.start(s, ((AbstractValue) s).reference(res[finalI].getEndNode()));
+                                for (Relationship i : bind) {
+                                    builder.bind(i);
+                                }
+                                builder.end();
+                            }
+                        };
                     } finally {
                         subelements.close();
                     }
                 } else {
-                    the = new JExpression(JExpression._(DEF._, JExpression._(res[i])));
-                    r = new JExpression(JExpression._(AN._, the, JExpression._(r)));
+                    the = new AbstractExpression() {
+                        @Override
+                        public void build() throws Throwable {
+                            builder.start(DEF._);
+                                builder.bind(res[finalI]);
+                            builder.end();
+                        }
+                    };
+                    final Relationship finalThe = the;
+                    final Relationship finalR = r;
+                    r = new AbstractExpression() {
+                        @Override
+                        public void build() throws Throwable {
+                            builder.start(AN._);
+                                builder._(REF._, finalThe);
+                                builder.bind(finalR);
+                            builder.end();
+                        }
+                    };
                 }
             }
 
