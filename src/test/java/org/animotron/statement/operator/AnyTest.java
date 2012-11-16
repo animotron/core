@@ -112,10 +112,10 @@ public class AnyTest extends ATest {
         Expression test = new AnimoExpression("any S with X 'α'");
         assertAnimoResultOneStep(test, "A (^S) (X \"α\").");
 
-        test = new AnimoExpression("any S with X 'β'");
+        test = new AnimoExpression("any S with Y 'β'");
         assertAnimoResultOneStep(test, "B (^A) (Y \"β\").");
 
-        test = new AnimoExpression("any S with X 'γ'");
+        test = new AnimoExpression("any S with Z 'γ'");
         assertAnimoResultOneStep(test, "C (^B) (Z \"γ\").");
     }
 
