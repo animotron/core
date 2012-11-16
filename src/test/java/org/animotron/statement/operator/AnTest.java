@@ -37,8 +37,8 @@ public class AnTest extends ATest {
 
         tAnimo("def A v 'B'.");
 
-        Expression test = tAnimo("a.");
-        assertAnimoResultOneStep(test, "A value \"B\".");
+        Expression test = tAnimo("A.");
+        assertAnimoResultOneStep(test, "A v \"B\".");
     }
 
     @Test
