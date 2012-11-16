@@ -30,8 +30,16 @@ import org.neo4j.graphdb.Relationship;
  */
 public abstract class AbstractExpression extends Expression {
 
-	private Relationship relationship = null;
+	private Relationship relationship;
     protected final GraphBuilder builder = new GraphBuilder();
+
+    protected AbstractExpression(Relationship r) {
+        relationship = r;
+    }
+
+    protected AbstractExpression() {
+        this(null);
+    }
 
     public abstract void build() throws Throwable;
 

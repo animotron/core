@@ -42,6 +42,7 @@ public class MathTest extends ATest {
         	assertStringResult(e, "10", false);
         	System.out.println(System.currentTimeMillis() - time);
         }
+
 	}
 	@Test
 	public void test_00() throws Throwable {

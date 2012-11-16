@@ -60,12 +60,15 @@ public class AnimObject extends AbstractExpression {
     MathInstruction op = null;
     Relationship result = null;
 
+
 	private AnimObject(MathInstruction op, Relationship r) {
+        super(r);
         this.op = op;
         result = r;
 	}
 
     public AnimObject(PFlow pf, MathInstruction op, Relationship r) {
+        super(r);
         this.op = op;
         this.pf = pf;
 	}
