@@ -97,6 +97,6 @@ public class AnimoMLSerializerTest extends ATest {
         tAnimo("def c 'c'.");
         tAnimo("def d 'd'.");
         tAnimo("def e \\e (b) (c) (d).");
-        test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\ e (b \"b\") (c \"c\") (d \"d\")).");
+        test("def a \\(b) (@ (c) (d)) (e)", "a \\ (b \"b\") (@ (c \"c\") (d \"d\")) (e \\e (b \"b\") (c \"c\") (d \"d\")).");
     }
 }

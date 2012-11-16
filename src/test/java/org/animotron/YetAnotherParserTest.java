@@ -20,6 +20,7 @@
  */
 package org.animotron;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -39,6 +40,7 @@ public class YetAnotherParserTest extends ATest {
 	}
 
     @Test
+    @Ignore
 	public void test_02() throws Throwable {
         testAnimo("get user's name.");
 	}
