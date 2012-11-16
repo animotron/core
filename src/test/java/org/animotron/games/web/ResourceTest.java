@@ -35,12 +35,12 @@ public class ResourceTest extends ATest {
     @Test
     public void test1() throws Throwable {
 
-        tAnimo("def service resource.");
+        tAnimo("def service ^resource.");
         tAnimo("def root-service (service) (root) (title 'root').");
         tAnimo("def not-found-service (service) (not-found) (title 404).");
         tAnimo("def rest any resource.");
 
-        Expression s = tAnimo("def rest use root.");
+        Expression s = tAnimo("def s rest use root.");
 
         //assertAnimoResult(s, "s rest root-service (service resource) (root) (title \"root\").");
         assertAnimoResult(s, "s rest root-service (service resource) (root) (title).");
