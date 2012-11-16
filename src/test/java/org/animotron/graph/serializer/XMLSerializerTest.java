@@ -55,14 +55,14 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        testAnimo("def b \"c\"");
+        testAnimo("def b \"c\".");
         test("\\ b", "<c/>");
         test("def a \\ b", "<c/>");
     }
 
     @Test
     public void test_03() throws Throwable {
-        testAnimo("def b \"c\"");
+        testAnimo("def b \"c\".");
         test("\\ an b", "<c/>");
         test("def a \\ an b", "<c/>");
     }
@@ -87,31 +87,31 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_07() throws Throwable {
-        testAnimo("def b \"b\"");
-        testAnimo("def c \"c\"");
-        testAnimo("def d \"d\"");
-        testAnimo("def e \"e\"");
+        testAnimo("def b \"b\".");
+        testAnimo("def c \"c\".");
+        testAnimo("def d \"d\".");
+        testAnimo("def e \"e\".");
         test("\\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
         test("def a \\ (b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
     }
 
     @Test
     public void test_08() throws Throwable {
-        testAnimo("def b \"b\"");
-        testAnimo("def c \"c\"");
-        testAnimo("def d \"d\"");
-        testAnimo("def e \"e\"");
+        testAnimo("def b \"b\".");
+        testAnimo("def c \"c\".");
+        testAnimo("def d \"d\".");
+        testAnimo("def e \"e\".");
         test("\\((b) (@ (c) (d)) (e))", "<bcde/>");
         test("def a \\((b) (@ (c) (d)) (e))", "<bcde/>");
     }
 
     @Test
     public void test_09() throws Throwable {
-        testAnimo("def b \"b\"");
-        testAnimo("def c \"c\"");
-        testAnimo("def d \"d\"");
-        testAnimo("def e \"e\"");
-        testAnimo("def e \\e (b) (c) (d)");
+        testAnimo("def b \"b\".");
+        testAnimo("def c \"c\".");
+        testAnimo("def d \"d\".");
+        testAnimo("def e \"e\".");
+        testAnimo("def e \\e (b) (c) (d).");
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
         test("def a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
     }
@@ -128,7 +128,7 @@ public class XMLSerializerTest extends ATest {
 
     @Test
     public void test_0C() throws Throwable {
-        testAnimo("def b \"path\"");
+        testAnimo("def b \"path\".");
         test("def a (??stylesheet b) \\root", "<?stylesheet path?><root/>");
     }
 
