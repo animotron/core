@@ -111,6 +111,8 @@ public class XMLSerializerTest extends ATest {
         testAnimo("def c \"c\".");
         testAnimo("def d \"d\".");
         testAnimo("def e \"e\".");
+        test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
+        test("def a \\(b) (@ (c) (d)) (e)", "<b c=\"d\">e</b>");
         testAnimo("def e \\e (b) (c) (d).");
         test("\\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
         test("def a \\(b) (@ (c) (d)) (e)", "<b c=\"d\"><e>bcd</e></b>");
