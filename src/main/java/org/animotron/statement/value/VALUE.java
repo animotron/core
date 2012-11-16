@@ -148,7 +148,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	        	v = stack.pop();
         		if (v == null) return;
         		
-	            process(v.getClosest());
+	           // process(v.getClosest());
         	}
 		}
     
