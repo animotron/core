@@ -188,7 +188,7 @@ public class AnimoExpression extends AbstractExpression {
 
     private void token() throws AnimoException, IOException {
         String token = s.toString();
-    	if (token.length() == 1 && ".".equals(token)) return; //XXX:start new graph
+    	if (token.length() == 1 && ".".equals(token) && !text) return; //XXX:start new graph
     	if (text) {
             builder._(token);
         } else {
