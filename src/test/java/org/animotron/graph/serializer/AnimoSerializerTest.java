@@ -98,7 +98,7 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_0D() throws Throwable {
-        testAnimo("def A (B C).");
+        testAnimo("def A (B C).", "def A B C.");
     }
 
     @Test
@@ -113,42 +113,41 @@ public class AnimoSerializerTest extends ATest {
 
     @Test
     public void test_10() throws Throwable {
-        testAnimo("def A (B).");
+        testAnimo("def A (B).", "def A B.");
     }
 
     @Test
     public void test_11() throws Throwable {
-        testAnimo("def A ((B)).");
+        testAnimo("def A ((B)).", "def A (B).");
     }
 
     @Test
     public void test_12() throws Throwable {
-        testAnimo("def A (((B))).");
+        testAnimo("def A (((B))).", "def A ((B)).");
     }
 
     @Test
     public void test_13() throws Throwable {
-        testAnimo("def A (B).");
+        testAnimo("def A (B).", "def A B.");
     }
 
     @Test
     public void test_14() throws Throwable {
-        testAnimo("def A ((B)).");
+        testAnimo("def A ((B)).", "def A (B).");
     }
 
     @Test
     public void test_15() throws Throwable {
-        testAnimo("def A (((B))).");
+        testAnimo("def A (((B))).", "def A ((B)).");
     }
 
     @Test
     public void test_16() throws Throwable {
-        testAnimo("def A ((B)).");
+        testAnimo("def A ((B)).", "def A (B).");
     }
 
     @Test
     public void test_17() throws Throwable {
-        testAnimo("def A ((B)).");
+        testAnimo("def A ((B)).", "def A (B).");
     }
-
 }

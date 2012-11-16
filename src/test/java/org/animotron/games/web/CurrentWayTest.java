@@ -35,9 +35,9 @@ public class CurrentWayTest extends ATest {
     public void test() throws Throwable {
 
         tAnimo("def current-site any site with server-name get host any request.");
-        tAnimo("def localhost-site (site) server-name 'localhost'.");
-        tAnimo("def rest any service current-site");
-        tAnimo("def current-request (request) (host 'localhost'.)");
+        tAnimo("def localhost-site (site) (server-name 'localhost').");
+        tAnimo("def rest any service current-site.");
+        tAnimo("def current-request (request) (host 'localhost').");
         tAnimo("def rest any service current-site.");
 
         Expression s = tAnimo("rest use current-request.");
