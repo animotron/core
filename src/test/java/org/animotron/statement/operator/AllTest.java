@@ -98,16 +98,16 @@ public class AllTest extends ATest {
     	__(
             "def A (^S) (X 'α')",
             "def B (^A) (Y 'β')",
-            "def C (^B) (Z 'γ')"
+            "def C (^B) (Z 'γ') (X 'αα')"
         );
 
         Expression test = new AnimoExpression("all S with X 'α'");
         assertAnimoResultOneStep(test, "A (^S) (X \"α\"). B (^A) (Y \"β\").");
 
-        test = new AnimoExpression("all S with X 'β'");
+        test = new AnimoExpression("all S with Y 'β'");
         assertAnimoResultOneStep(test, "B (^A) (Y \"β\"). C (^B) (Z \"γ\") (X \"αα\").");
 
-        test = new AnimoExpression("all S with X 'γ'");
+        test = new AnimoExpression("all S with Z 'γ'");
         assertAnimoResultOneStep(test, "C (^B) (Z \"γ\") (X \"αα\").");
 
     }
