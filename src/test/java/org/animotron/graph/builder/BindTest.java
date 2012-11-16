@@ -94,7 +94,7 @@ public class BindTest extends ATest {
             public void build() throws Throwable {
                 builder.start(DEF._, "b");
                     builder.start(AN._);
-                        builder._(REF._,  "x");
+                        builder._(REF._,  "y");
                         builder.bind(a);
                     builder.end();
                 builder.end();
