@@ -34,8 +34,8 @@ public class AfterLastTest extends ATest {
 	public void testAfterLast() throws Throwable {
         System.out.println("Test 'AfterLast' ...");
 
-        tAnimo("def a B 'x.y.z'.");
-        Expression C = tAnimo("def c after-last '.' get B A.");
+        tAnimo("def A B 'x.y.z'.");
+        Expression C = tAnimo("def C after-last '.' (get B A).");
         assertAnimoResult(C, "C \"z\".");
 	}
 	
