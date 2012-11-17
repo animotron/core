@@ -46,26 +46,33 @@ public abstract class ATest {
 	
 	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
 
-	protected Expression tAnimo(String exp) throws Throwable {
+	protected void __(String ... exps) throws IOException {
+		for (String exp : exps) {
+			String t = exp.replace('\'', '"');
+	        testAnimo(t, t);
+		}
+    }
+
+	protected Expression tAnimo(String exp) throws IOException {
 		String t = exp.replace('\'', '"');
         return testAnimo(t, t);
     }
 
-	protected Expression testAnimo(String exp) throws Throwable {
+	protected Expression testAnimo(String exp) throws IOException {
         return testAnimo(exp, exp);
     }
 
-	protected Expression testAnimo(String in, String out) throws Throwable {
+	protected Expression testAnimo(String in, String out) throws IOException {
         AnimoExpression expression = new AnimoExpression(in);
         assertAnimo(expression, out);
         return expression;
     }
 
-	protected void testAnimoResult(String exp, String res) throws Throwable {
+	protected void testAnimoResult(String exp, String res) throws IOException {
 		testAnimoResult(exp, exp, res);
     }
 
-	protected void testAnimoResult(String in, String out, String res) throws Throwable {
+	protected void testAnimoResult(String in, String out, String res) throws IOException {
         AnimoExpression expression = new AnimoExpression(in);
         assertAnimo(expression, out);
 

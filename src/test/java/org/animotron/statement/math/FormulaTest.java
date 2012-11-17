@@ -21,14 +21,12 @@
 package org.animotron.statement.math;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.animotron.statement.operator.DEF;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.animotron.graph.RelationshipTypes.TRI;
 
 /**
@@ -41,9 +39,9 @@ public class FormulaTest extends ATest {
 	@Ignore
 	public void test_01() throws Throwable {
         __(
-            new AnimoExpression("def qty / (get cost) (get price)."),
-            new AnimoExpression("def cost * (get qty) (get price)."),
-            new AnimoExpression("def price / (get cost) (get qty).")
+            "def qty / (get cost) (get price).",
+            "def cost * (get qty) (get price).",
+            "def price / (get cost) (get qty)."
 
             //new AnimoExpression("def m1 (qty 10) (cost 50).")
 		);

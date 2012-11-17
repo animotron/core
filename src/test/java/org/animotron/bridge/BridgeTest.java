@@ -22,6 +22,7 @@ package org.animotron.bridge;
 
 import org.animotron.ATest;
 import org.animotron.exception.AnimoException;
+import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.BinaryExpression;
 import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.statement.operator.DEF;
@@ -32,7 +33,6 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -70,7 +70,7 @@ public class BridgeTest extends ATest {
 
         @Override
         protected void loadEntry(ZipInputStream zis, final ZipEntry entry) {
-            __(
+        	AnimoExpression.__(
                     new BinaryExpression(zis, false) {
                         @Override
                         public String id() {

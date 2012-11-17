@@ -30,7 +30,6 @@ import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
 
 import static java.lang.System.currentTimeMillis;
-import static org.animotron.expression.AnimoExpression.__;
 
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -42,7 +41,7 @@ public class SUM500Test extends ATest {
 	public void test_00() throws Throwable {
         long t;
         t = currentTimeMillis();
-        Relationship e = __(new AbstractExpression() {
+        Relationship e = AnimoExpression.__(new AbstractExpression() {
             @Override
             public void build() throws Throwable {
                 builder.start(AN._);

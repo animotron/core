@@ -26,8 +26,6 @@ import org.animotron.expression.Expression;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.Expression.__;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
@@ -38,125 +36,124 @@ public class GetTest extends ATest {
 	@Test
 	public void getOnManyAN() throws Throwable {
 
-        tAnimo("def A Z 'A'.");
-        tAnimo("def B Z 'B'.");
-    	Expression test = new AnimoExpression("get Z (A) (B)");
-    	assertAnimoResultOneStep(test, "\"A\".", "\"B\".");
+        __("def A Z 'A'.");
+        __("def B Z 'B'.");
+
+    	assertAnimoResult("get Z (A) (B)", "\"A\".", "\"B\".");
 	}
 
 	@Test
 	public void getFromPFlow_an_with_param() throws Throwable {
 
-        tAnimo("def A \\B get C.");
-    	Expression test = new AnimoExpression("A C '.'");
-    	assertAnimoResult(test, "A \\B \".\".");
+        __("def A \\B get C.");
 
-        tAnimo("def A1 get B1.");
-    	test = new AnimoExpression("A1 B1 '.'");
-    	assertAnimoResult(test, "A1 \".\".");
+        assertAnimoResult("A C '.'", "A \\B \".\".");
+
+        __("def A1 get B1.");
+
+    	assertAnimoResult("A1 B1 '.'", "A1 \".\".");
 	}
 	
 	@Test
 	public void getFromPFlow_cross_an_with_param() throws Throwable {
 
-        tAnimo("def A B get C.");
-        tAnimo("def D \\E get B.");
-    	Expression test = new AnimoExpression("D A C ':'");
-    	assertAnimoResult(test, "D \\E \":\".");
+        __("def A B get C.");
+        __("def D \\E get B.");
+
+    	assertAnimoResult("D A C ':'", "D \\E \":\".");
 	}
 
 	@Test
 	public void getFromPFlow_an_with_an() throws Throwable {
 
-        tAnimo("def A \\B get C.");
-        tAnimo("def D C '.'.");
-        Expression test = new AnimoExpression("A D");
-        assertAnimoResult(test, "A \\B \".\".");
+        __("def A \\B get C.");
+        __("def D C '.'.");
+
+        assertAnimoResult("A D", "A \\B \".\".");
 	}
 	
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Throwable {
 
-        tAnimo("def A \\B get C.");
-        tAnimo("def D C '.'.");
-        tAnimo("def E C ':'.");
-        Expression test = new AnimoExpression("def F A (D) (E C '_')");
-    	assertAnimoResult(test, "F A \\B \".\" \"_\".");
+        __("def A \\B get C.");
+        __("def D C '.'.");
+        __("def E C ':'.");
+
+    	assertAnimoResult("def F A (D) (E C '_')", "F A \\B \".\" \"_\".");
 
 	}
 	
     @Test
     public void getFromPFlow_an_with_stack() throws Throwable {
 
-        tAnimo("def A get X.");
-        tAnimo("def B (get Y) (A).");
-        tAnimo("def C (get Z) (B).");
-        Expression E = new AnimoExpression("C (X 'α') (Y 'β') (Z 'γ')");
-        assertAnimoResult(E, "C \"γ\" (B \"β\" (A \"α\")).");
+        __("def A get X.");
+        __("def B (get Y) (A).");
+        __("def C (get Z) (B).");
+
+        assertAnimoResult("C (X 'α') (Y 'β') (Z 'γ')", "C \"γ\" (B \"β\" (A \"α\")).");
     }
 
     @Test
     public void getFromPFlow_more_an_with_stack() throws Throwable {
 
-        tAnimo("def A (get X) (Z 'γ').");
-        tAnimo("def B (get Y) (A).");
-        tAnimo("def C get Z.");
-        Expression E = new AnimoExpression("def E C B B 'β'");
-        assertAnimoResult(E, "E C \"γ\".");
+        __("def A (get X) (Z 'γ').");
+        __("def B (get Y) (A).");
+        __("def C get Z.");
+
+        assertAnimoResult("def E C B B 'β'", "E C \"γ\".");
 
     }
 
     @Test
     public void getFromPFlow_one_more_an_with_stack() throws Throwable {
 
-        tAnimo("def A (get X) (Z 'γ').");
-        tAnimo("def B get Y.");
-        tAnimo("def C get Z.");
-        Expression E = new AnimoExpression("def E C  B A");
-        assertAnimoResult(E, "E C \"γ\".");
+        __("def A (get X) (Z 'γ').");
+        __("def B get Y.");
+        __("def C get Z.");
+
+        assertAnimoResult("def E C  B A", "E C \"γ\".");
     }
 
     @Test
     public void getFromPFlow_an_an_an() throws Throwable {
 
-        tAnimo("def A Y get X.");
-        tAnimo("def B Z get Y.");
-        tAnimo("def C get Z.");
-        Expression D = new AnimoExpression("def D C B A X '.'");
-//        assertAnimoResult(D, "D C Z Y X \".\".");
-        assertAnimoResult(D, "D C \".\".");
+        __("def A Y get X.");
+        __("def B Z get Y.");
+        __("def C get Z.");
+
+        assertAnimoResult("def D C B A X '.'", "D C \".\".");
     }
     
     @Test
 	public void test_01() throws Throwable {
         __(
-            new AnimoExpression("a (x 1) (y 2) (z 3)"),
-            new AnimoExpression("b (get x) (get y) (get z)")
+            "a (x 1) (y 2) (z 3)",
+            "b (get x) (get y) (get z)"
         );
-        Expression e = new AnimoExpression("b a");
-        assertStringResult(e, "123");
+
+        assertStringResult("b a", "123");
 	}
 
     @Test
 	public void test_02() throws Throwable {
         __(
-                new AnimoExpression("def a (x 1)"),
-                new AnimoExpression("def b (x 2)"),
-                new AnimoExpression("def c (x 3)")
+                "def a (x 1)",
+                "def b (x 2)",
+                "def c (x 3)"
         );
-        Expression e = new AnimoExpression("get x (a) (b) (c)");
-        assertAnimoResult(e, "1.", "2.", "3.");
+
+        assertAnimoResult("get x (a) (b) (c)", "1.", "2.", "3.");
 	}
 
     @Test
 	public void test_03() throws Throwable {
         __(
-            new AnimoExpression("def a x 1"),
-            new AnimoExpression("def b x 2"),
-            new AnimoExpression("def c x 3")
+            "def a x 1",
+            "def b x 2",
+            "def c x 3"
         );
-        Expression e = new AnimoExpression("get x a,b,c");
-        assertAnimoResult(e, "1. 2. 3.");
+
+        assertAnimoResult("get x a,b,c", "1. 2. 3.");
 	}
     
 	@Test
@@ -166,17 +163,17 @@ public class GetTest extends ATest {
 		testAnimo("def item1 (item) (name \"item1\").");
 		
 		assertAnimoResult(
-            new AnimoExpression("get name (user1) (item1)."),
+            "get name (user1) (item1).",
             "\"user1\".", "\"item1\"."
         );
 
 		assertAnimoResult(
-            new AnimoExpression("get name (user1, item1)."),
+            "get name (user1, item1).",
             "\"user1\".", "\"item1\"."
         );
 
 		assertAnimoResult(
-            new AnimoExpression("get name user1,item1."),
+            "get name user1,item1.",
             "\"user1\".", "\"item1\"."
         );
 	}
@@ -200,7 +197,7 @@ public class GetTest extends ATest {
 		testAnimo("def text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 		testAnimo("def text-html (mime-type) (text) (type \"text/html\") (name \"HTML Document\") (extension \"htm\" \"html\").");
 		
-		//assertAnimoResultOneStep("any mime-type with extension \"txt\"", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
+		assertAnimoResultOneStep("any mime-type with extension \"txt\"", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 
 		assertAnimoResultOneStep("get mime-type file", "text-plain (mime-type) (text) (type \"text/plain\") (name \"Plain text\") (extension \"txt\" \"text\").");
 	}
@@ -579,8 +576,8 @@ public class GetTest extends ATest {
     @Test
     public void test_49() throws Throwable {
 
-        tAnimo("def B A.");
-        tAnimo("def C B 'π'.");
+        __("def B A.");
+        __("def C B 'π'.");
         Expression E = new AnimoExpression("def E get A C");
         assertAnimoResult(E, "E \"π\".");
 
@@ -590,9 +587,9 @@ public class GetTest extends ATest {
     @Ignore //no SHALL
     public void test_50() throws Throwable {
 
-        tAnimo("def B A.");
-        tAnimo("def C shall B 'π'.");
-        tAnimo("def D C.");
+        __("def B A.");
+        __("def C shall B 'π'.");
+        __("def D C.");
         Expression E = new AnimoExpression("def E get A D");
         //XXX: assertAnimoResult(E, "E B \"π\".");
         assertAnimoResult(E, "E shall B \"π\".");
@@ -601,9 +598,9 @@ public class GetTest extends ATest {
     @Test
     public void test_51() throws Throwable {
 
-        tAnimo("def B A.");
-        tAnimo("def C B 'π'.");
-        tAnimo("def D ^C.");
+        __("def B A.");
+        __("def C B 'π'.");
+        __("def D ^C.");
         Expression E = new AnimoExpression("def E get A D");
         assertAnimoResult(E, "E \"π\".");
     }
