@@ -88,7 +88,6 @@ public class MathTest extends ATest {
     }
 
     @Test
-    @Ignore //ignore for now
 	public void test_07() throws Throwable {
         Expression e = new AnimoExpression("- 1 2 3.0 4");
     	assertStringResult(e, "-8.0");
@@ -101,7 +100,6 @@ public class MathTest extends ATest {
 	}
     
     @Test
-    @Ignore //ignore for now
 	public void test_09() throws Throwable {
     	assertStringResult("- 5 * 6 7", "-37"); //5-(6*7) = 5 - 42 = -37
 
@@ -156,7 +154,6 @@ public class MathTest extends ATest {
 	}
 
     @Test
-    @Ignore //ignore for now
 	public void test_17() throws Throwable {
         Expression e = new AnimoExpression("- 1 2 3.0 4");
 
@@ -167,7 +164,7 @@ public class MathTest extends ATest {
     @Test
 	public void test_18() throws Throwable {
         __(
-            "def a (x 1) (y 2) (z 3)"
+            "def a (x 1) (y 2) (z 3)."
         );
     	assertStringResult("+ (get x a) (get y a) (get z a)", "6");
 	}
@@ -175,8 +172,8 @@ public class MathTest extends ATest {
     @Test
 	public void test_19() throws Throwable {
         __(
-            "def a (x 1) (y 2) (z 3)",
-            "def b + (get x) (get y) (get z)"
+            "def a (x 1) (y 2) (z 3).",
+            "def b + (get x) (get y) (get z)."
         );
     	assertStringResult("b ^a", "6");
 	}
@@ -215,10 +212,10 @@ public class MathTest extends ATest {
     @Ignore //TODO: deadlocking
 	public void test_30() throws Throwable {
         __(
-            "def a 1",
-            "def b 2",
-            "def c 3",
-            "def d 4"
+            "def a 1.",
+            "def b 2.",
+            "def c 3.",
+            "def d 4."
         );
     	assertStringResult("a", "1");
     	assertStringResult("+ (a) (b) (c) (d)", "10");
@@ -239,10 +236,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_32() throws Throwable {
         __(
-            "def a x 1",
-            "def b x 2",
-            "def c x 3",
-            "def d x 4"
+            "def a x 1.",
+            "def b x 2.",
+            "def c x 3.",
+            "def d x 4."
         );
     	assertStringResult("+ get x (a) (b) (c) (d)", "10");
 	}
@@ -250,10 +247,10 @@ public class MathTest extends ATest {
     @Test
 	public void test_33() throws Throwable {
         __(
-            "def a (z) (x 1)",
-            "def b (z) (x 2)",
-            "def c (z) (x 3)",
-            "def d (z) (x 4)"
+            "def a (z) (x 1).",
+            "def b (z) (x 2).",
+            "def c (z) (x 3).",
+            "def d (z) (x 4)."
         );
     	assertStringResult("+ get x all z", "10");
 	}
@@ -268,8 +265,8 @@ public class MathTest extends ATest {
     @Ignore
 	public void test_35() throws Throwable {
         __(
-            "def a 2",
-            "def b 3"
+            "def a 2.",
+            "def b 3."
         );
     	assertStringResult("+ a,b", "5");
 	}
