@@ -43,7 +43,7 @@ public class ConnectionTest extends ATest {
 
         assertAnimoResult("get extension fileA", "\"txt\".");
 
-        assertAnimoResult("get mime-type fileA", "value-plain.");
+        assertAnimoResult("get mime-type fileA", "value-plain (mime-type) (type) (extension).");
 
         assertAnimoResult("get type get mime-type fileA", "\"text/plain\".");
     }
@@ -62,7 +62,7 @@ public class ConnectionTest extends ATest {
 
         assertAnimoResult("get extension1 fileA", "\"value\".");
 
-        assertAnimoResult("get mime-type fileA", "value-plain.");// (mime-type) (type) (extension).");
+        assertAnimoResult("get mime-type fileA", "value-plain (mime-type) (type) (extension).");// (mime-type) (type) (extension).");
 
         assertAnimoResult("get type get mime-type fileA", "\"text/plain\".");
     }

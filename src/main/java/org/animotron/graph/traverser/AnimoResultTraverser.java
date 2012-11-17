@@ -28,6 +28,7 @@ import org.animotron.statement.operator.Definition;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
+import org.animotron.statement.query.GET;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -60,7 +61,7 @@ public class AnimoResultTraverser extends ResultTraverser {
             } else {
 				Relationship r = rr.getClosest();
 				handler.start(s, parent, r, level++, isOne, pos, isLast);
-                if (!(s instanceof REF && !(qS instanceof Reference || qS instanceof Definition))) {
+                if (!(s instanceof REF && !(qS instanceof Reference || qS instanceof Definition || qS instanceof GET))) {
                     iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
                 }
                 handler.end(s, parent, r, --level, isOne, pos, isLast);
