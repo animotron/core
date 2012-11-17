@@ -47,4 +47,19 @@ public class HtmlTest extends ATest {
         assertStringResult("ul li 1", "<ul><li>1</li></ul>");
     }
 
+    @Test
+    public void test_03() throws Throwable {
+        tAnimo("def ul '<ul>' (get 1) '</ul>'.");
+        tAnimo("def li '<li>' (get 1) '</li>'.");
+        assertStringResult("ul li 1", "<ul><li>1</li></ul>");
+    }
+
+    @Test
+    public void test_04() throws Throwable {
+        tAnimo("def el '<' (id this el) '>' (get c) '</' (id this el) '>'.");
+        tAnimo("def ul el.");
+        tAnimo("def li el.");
+        assertStringResult("ul c li c 1", "<ul><li>1</li></ul>");
+    }
+
 }
