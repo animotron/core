@@ -46,7 +46,7 @@ public class EachTest extends ATest {
     public void test_00() throws Throwable {
 
         Expression s = new AnimoExpression("\\ul each ((A) (B) (C)) (\\li)");
-        assertAnimoResult(s, "\\ ul (\\li) (\\li) (\\li).");
+        assertAnimoResult(s, "\\ul (\\li) (\\li) (\\li).");
 
     }
 
