@@ -42,7 +42,7 @@ public class UseTest extends ATest {
                 "def A X"
         );
 
-        Expression x = new AnimoExpression("def x any A use Y");
+        Expression x = new AnimoExpression("def x any X use Y");
         assertAnimoResult(x, "x A X.");
     }
 
@@ -88,7 +88,7 @@ public class UseTest extends ATest {
 
         __(
                 "def A (S) (X)",
-                "def B (S) (X)",
+                "def B (S) (Y)",
                 "def C (S) (X) (Y)"
         );
 
