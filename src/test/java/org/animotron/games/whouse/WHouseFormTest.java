@@ -38,17 +38,17 @@ public class WHouseFormTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-                "def companyA (party) (word \"Company A & Co.\")",
-                "def centralWhouse (party) (word \"Central warehouse\")",
+                "def companyA (party) (word \"Company A & Co.\").",
+                "def centralWhouse (party) (word \"Central warehouse\").",
 
-                "def book (goods).",
-                "def ISBN:0-387-97061-4 (book) (word \"Origins of Programming\")",
-                "def ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\")",
+                "def book goods.",
+                "def ISBN:0-387-97061-4 (book) (word \"Origins of Programming\").",
+                "def ISBN:3-540-11157-3 (book) (word \"Algorithms in Modern Mathematics and Computer Science: Proceedings, Urgench, Uzbek SSR September 16-22, 1979 (Lecture Notes in Computer Science)\").",
 
-                "def pcs (UoM) (word \"pcs\")",
+                "def pcs (UoM) (word \"pcs\").",
 
-                "def EUR (currency) (word \"EUR\")",
-                "def USD (currency) (word \"USD\")"
+                "def EUR (currency) (word \"EUR\").",
+                "def USD (currency) (word \"USD\")."
 
         );
 
@@ -121,11 +121,11 @@ public class WHouseFormTest extends ATest {
                     "(issue-party centralWhouse) " +
                     "(receive-party personA) " +
                     "(SKU " +
-                        "(uuidA " +
+                        "uuidA " +
                         	"(goods ISBN:0-387-97061-4) " +
                         	"(qty (number 1) (UoM pcs)) " +
                         	"(price (number 35) (currency EUR) (UoM pcs)) " +
-                        	"(cost (number 35) (currency EUR)))" +
+                        	"(cost (number 35) (currency EUR))" +
                 	")."
 		);
 
@@ -141,8 +141,8 @@ public class WHouseFormTest extends ATest {
                 "def SKU part (goods) (qty) (price) (cost).",
 
                 "def date word \"date\".",
-                "def receive-party (word \"receiver\") (party,receive).",
-                "def issue-party (word \"issue\") (party,issue).",
+                "def receive-party (word \"receiver\") (party, receive).",
+                "def issue-party (word \"issue\") (party, issue).",
                 "def goods word \"goods\".",
                 "def qty (word \"quantity\") (part (number) (UoM)).",
                 "def price (word \"price\") (part (number) (currency) (UoM)).",
@@ -152,14 +152,14 @@ public class WHouseFormTest extends ATest {
                 "def generate-table-row each (get row get prism) (any table-row-widget).",
 
                 "def html-form " +
-                    "(form-widget)" +
-                    "(\\form (@name id this prism)" +
+                    "(form-widget) " +
+                    "(\\form (@name id this prism) " +
                         "(each (get part) " +
                             "(ptrn (this part) " +
                                 "(?is table html-table) " +
                                 "(html-label-input)))).",
 
-                "def html-input \\input (@name id this part).",
+                "def html-input \\input @name id this part.",
 
                 "def html-label-input \\label (get word this part) (html-input).",
 
@@ -186,7 +186,7 @@ public class WHouseFormTest extends ATest {
                 "def fill-input \\input " +
                     "(@name id this part) " +
                     "(each (get (this part) (this object)) " +
-                        "(@id id this this part)" +
+                        "(@id id this this part) " +
                         "(@value get word this this part))."
 
         );
@@ -249,7 +249,7 @@ public class WHouseFormTest extends ATest {
 			"def generator " +
 				"\\form " +
 					"(@id id this generator) " +
-					"(each (get part this generator) (\\input @name id this part))"
+					"(each (get part this generator) (\\input @name id this part))."
 		);
         assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
         
