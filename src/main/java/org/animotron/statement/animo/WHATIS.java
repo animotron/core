@@ -57,7 +57,7 @@ public class WHATIS extends AbstractQuery implements Reference {
         @Override
         public void act(final PFlow pf) {
         	
-        	System.out.println("WHATIS "+pf.getVector());
+//        	System.out.println("WHATIS "+pf.getVector());
         	
 			FastSet<QCAVector> thes = FastSet.newInstance();
 			try {
