@@ -42,8 +42,8 @@ public class HtmlTest extends ATest {
         tAnimo("def el '<' (id this el) '>' (get 2) '</' (id this el) '>'.");
         tAnimo("def ul el.");
         tAnimo("def li el.");
-//        assertStringResult("ul 1", "<ul>1</ul>");
-//        assertStringResult("ul li", "<ul><li>1</li></ul>");
+        assertStringResult("ul 1", "<ul>1</ul>");
+        assertStringResult("ul li", "<ul><li></li></ul>");
         assertStringResult("ul li 1", "<ul><li>1</li></ul>");
     }
 
