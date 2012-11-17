@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = false;
+	private static boolean debug = true;
 	
 	private GET() { super("get", "<~"); }
 
@@ -541,39 +541,38 @@ public class GET extends AbstractQuery implements Shift {
 			public Iterable<Relationship> expand(Path path, BranchState<Long> state) {
 //				System.out.println(path);
 				
-				if (path.length() == 0) {
-					return Order._.queryDownIterable(path.endNode(), allowedSet);
-				}
+//				if (path.length() == 0) {
+//					return Order._.queryDownIterable(path.endNode(), allowedSet);
+//				}
 
 				final Node node;
 				
 				Relationship r = path.lastRelationship();
-				if (r.isType(ASHIFT._)) {
+				if (r != null && r.isType(ASHIFT._)) {
 					node = getDb().getRelationshipById((Long) RID.get(r)).getEndNode();
 
 				} else {
-
 					node = path.endNode();
+				}
 					
-					long defId = state.getState();
-					if (vector.lastDefId() != -1) {
-						defId = vector.lastDefId();
-					}	
-					if (Properties.DEFID.has(node)) {
-						defId = (Long) Properties.DEFID.get(node);
-					}
-					state.setState(defId);
-					
-					if (defId > -1) {
-						final Relationship ashift = AShift._.get(node, defId);
-						if (ashift != null) {
-							return new Iterable<Relationship>() {
-								@Override
-								public Iterator<Relationship> iterator() {
-									return new IteratorSingle(ashift);
-								}
-							};
-						}
+				long defId = state.getState();
+				if (vector.lastDefId() != -1) {
+					defId = vector.lastDefId();
+				}	
+				if (Properties.DEFID.has(node)) {
+					defId = (Long) Properties.DEFID.get(node);
+				}
+				state.setState(defId);
+				
+				if (defId > -1) {
+					final Relationship ashift = AShift._.get(node, defId);
+					if (ashift != null) {
+						return new Iterable<Relationship>() {
+							@Override
+							public Iterator<Relationship> iterator() {
+								return new IteratorSingle(ashift);
+							}
+						};
 					}
 				}
 

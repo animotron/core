@@ -133,6 +133,28 @@ public class DependenciesTrackingTest extends ATest {
 		);
     }
 
+    @Test
+    public void test_03() throws Throwable {
+
+        __(
+	        "def item cost 10."
+        );
+
+        assertAnimoResult(
+            "get cost item",
+            "10."
+        );
+
+        __(
+	        "def item cost 5."
+        );
+
+        assertAnimoResult(
+            "get cost item",
+            "5."
+		);
+    }
+
     protected void assertCachedAnimoResult(String op, String expected) throws Throwable {
         assertNotNull(op);
         System.out.println("Animo result serializer...");

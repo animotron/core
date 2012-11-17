@@ -43,7 +43,9 @@ public class IteratorSingle implements Iterator<Relationship> {
 
 	@Override
 	public Relationship next() {
-		return next;
+		Relationship _next = next;
+		next = null;
+		return _next;
 	}
 	
 	@Override
