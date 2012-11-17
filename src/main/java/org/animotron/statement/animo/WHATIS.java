@@ -57,7 +57,7 @@ public class WHATIS extends AbstractQuery implements Reference {
         @Override
         public void act(final PFlow pf) {
         	
-//        	System.out.println("WHATIS "+pf.getVector());
+        	System.out.println("WHATIS "+pf.getVector());
         	
 			FastSet<QCAVector> thes = FastSet.newInstance();
 			try {
@@ -67,14 +67,16 @@ public class WHATIS extends AbstractQuery implements Reference {
 					QCAVector vector = thes.valueOf(rc);
 					Relationship the = vector.getClosest();
 					
+//					System.out.println("=> "+vector);
+					
 					if (the.isType(REF._) || the.isType(DEF._)) {
-						downIS(pf, ASHIFT._.actualEndNode(the));
+						downIS(pf, the.getEndNode());
 						
 					} else {
 			    		//discover down IS topology
 						discoverDownIS(pf, vector, the);
 					}
-					upIS(pf, vector, the);
+//					upIS(pf, vector, the);
 				}
 			} finally {
 				FastSet.recycle(thes);
