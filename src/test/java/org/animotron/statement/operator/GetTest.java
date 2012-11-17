@@ -210,7 +210,7 @@ public class GetTest extends ATest {
         testAnimo("def male sex.");
         testAnimo("def john male.");
 
-        assertAnimoResult("get sex john", "male.");
+        assertAnimoResult("get sex john", "male sex.");
         assertAnimoResult("any male", "john male sex.");
         assertAnimoResult("get sex any male", "male.");
     }
@@ -221,7 +221,7 @@ public class GetTest extends ATest {
         testAnimo("def man male.");
         testAnimo("def john man.");
 
-        assertAnimoResult("get sex john", "male.");
+        assertAnimoResult("get sex john", "male sex.");
     }
 
     @Test
@@ -244,7 +244,7 @@ public class GetTest extends ATest {
         testAnimo("def john person, male.");
 
         assertAnimoResult("any person", "john (person) (male sex).");
-        assertAnimoResult("get sex any person", "person. male.");
+        assertAnimoResult("get sex any person", "person. male sex.");
     }
 
     @Test
@@ -290,7 +290,7 @@ public class GetTest extends ATest {
     public void test_16() throws Throwable {
         testAnimo("def x (foo) (bar).");
         testAnimo("def y ^x.");
-        assertAnimoResult("get foo y", "x.");
+        assertAnimoResult("get foo y", "x (foo) (bar).");
     }
 
     @Test
@@ -309,7 +309,7 @@ public class GetTest extends ATest {
     public void test_19() throws Throwable {
         testAnimo("def x a 1.");
         testAnimo("def y a 2 (x).");
-        assertAnimoResult("get a y", "2. x.");
+        assertAnimoResult("get a y", "2. x a.");
     }
 
     @Test
@@ -379,9 +379,9 @@ public class GetTest extends ATest {
     public void test_29() throws Throwable {
         testAnimo("def foo bar.");
         testAnimo("def x y ^foo.");
-        assertAnimoResult("get foo x", "foo.");
-        assertAnimoResult("get bar x", "foo.");
-        assertAnimoResult("get foo get y x", "foo.");
+        assertAnimoResult("get foo x", "foo bar.");
+        assertAnimoResult("get bar x", "foo bar.");
+        assertAnimoResult("get foo get y x", "foo bar.");
         assertAnimoResult("get bar get y x", "bar.");
     }
 
@@ -389,14 +389,14 @@ public class GetTest extends ATest {
     public void test_29_() throws Throwable {
         testAnimo("def bar 1.");
         testAnimo("def x y foo bar.");
-        assertAnimoResult("get foo x", "bar."); 
+        assertAnimoResult("get foo x", "bar 1."); 
     }
 
     @Test
     public void test_29__() throws Throwable {
         testAnimo("def bar 1.");
         testAnimo("def x y foo bar.");
-        assertAnimoResult("get foo get y x", "bar.");
+        assertAnimoResult("get foo get y x", "bar 1.");
     }
 
     @Test
@@ -439,7 +439,7 @@ public class GetTest extends ATest {
         testAnimo("def foo1 (bar) 1.");
         testAnimo("def foo2 (bar) 2.");
         testAnimo("def x y (^foo3) (^foo1).");
-        assertAnimoResult("get bar x", "foo1.");
+        assertAnimoResult("get bar x", "foo1 (bar z) 1.");
     }
 
     @Test
@@ -477,7 +477,7 @@ public class GetTest extends ATest {
         testAnimo("def foo1 (bar) 1.");
         testAnimo("def foo2 (bar) 2.");
         testAnimo("def x y ^foo3, foo1.");
-        assertAnimoResult("get bar x", "foo3. foo1."); //UNDERSTAND: foo3, foo1?
+        assertAnimoResult("get bar x", "foo3. foo1 (bar z) 1."); //UNDERSTAND: foo3, foo1?
     }
 
     @Test
@@ -538,7 +538,7 @@ public class GetTest extends ATest {
         testAnimo("def a b c.");
         testAnimo("def c get d.");
         testAnimo("def x (get b a) (d e).");
-        assertAnimoResult("x", "x (c d e) (d).");
+        assertAnimoResult("x", "x (c e) (d).");
     }
 
     @Test
@@ -559,7 +559,7 @@ public class GetTest extends ATest {
     public void test_46() throws Throwable {
         testAnimo("def c b.");
         testAnimo("def a get b.");
-        assertAnimoResult("a ^c", "a c.");
+        assertAnimoResult("a ^c", "a c b.");
     }
 
     @Test
