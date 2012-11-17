@@ -127,8 +127,8 @@ public class GetTest extends ATest {
     @Test
 	public void test_01() throws Throwable {
         __(
-            "a (x 1) (y 2) (z 3)",
-            "b (get x) (get y) (get z)"
+            "a (x 1) (y 2) (z 3).",
+            "b (get x) (get y) (get z)."
         );
 
         assertStringResult("b a", "123");
@@ -137,9 +137,9 @@ public class GetTest extends ATest {
     @Test
 	public void test_02() throws Throwable {
         __(
-                "def a (x 1)",
-                "def b (x 2)",
-                "def c (x 3)"
+            "def a x 1.",
+            "def b x 2.",
+            "def c x 3."
         );
 
         assertAnimoResult("get x (a) (b) (c)", "1.", "2.", "3.");
@@ -148,9 +148,9 @@ public class GetTest extends ATest {
     @Test
 	public void test_03() throws Throwable {
         __(
-            "def a x 1",
-            "def b x 2",
-            "def c x 3"
+            "def a x 1.",
+            "def b x 2.",
+            "def c x 3."
         );
 
         assertAnimoResult("get x a,b,c", "1. 2. 3.");
@@ -179,15 +179,14 @@ public class GetTest extends ATest {
 	}
 
 	@Test
-	@Ignore
 	public void test_05() throws Throwable {
 		testAnimo("def site host \"localhost\".");
 		
 		testAnimo("def resource get host.");
 		
-		assertAnimoResult("an site, resource", "site host. resource host \"localhost\".");
+		assertAnimoResult("an site, resource", "site host. resource \"localhost\".");
 		
-		assertAnimoResult("an resource, site", "resource host \"localhost\". site host.");
+		assertAnimoResult("an resource, site", "resource \"localhost\". site host.");
 	}
 
 	@Test
@@ -209,7 +208,7 @@ public class GetTest extends ATest {
 
         assertAnimoResult("get sex john", "male sex.");
         assertAnimoResult("any male", "john male sex.");
-        assertAnimoResult("get sex any male", "male.");
+        assertAnimoResult("get sex any male", "male sex.");
     }
 
     @Test
@@ -228,11 +227,11 @@ public class GetTest extends ATest {
         testAnimo("def john male.");
 
         testAnimo("def _man_ john.");
-        assertAnimoResult("get sex _man_", "male.");
+        assertAnimoResult("get sex _man_", "male sex.");
 
         testAnimo("def man any male.");
 
-        assertAnimoResult("get sex man", "male.");
+        assertAnimoResult("get sex man", "male sex.");
     }
 
     @Test

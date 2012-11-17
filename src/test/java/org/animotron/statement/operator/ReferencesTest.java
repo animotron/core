@@ -34,18 +34,18 @@ import org.junit.Test;
 public class ReferencesTest extends ATest {
 
     @Test
-    public void test() throws Throwable {
+    public void test_000() throws Throwable {
 
         Expression A = new AnimoExpression("def A B C");
         assertAnimoResult(A, "A B.");
 
-        __("def B C 'y'");
+        __("def B C 'y'.");
         assertAnimoResult(A, "A B C.");
     }
 
     @Test
     @Ignore
-    public void test_000() throws Throwable {
+    public void test_005() throws Throwable {
         testAnimo("def john sex male.");
         assertAnimoResult("all male", "john sex.");
     }

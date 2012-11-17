@@ -69,7 +69,7 @@ public class ThisTest extends ATest {
         __(
     		"def app-layout each (get js this app) (\\js get uri this js).",
     		"def app app-layout.",
-    		"def some-js uri \"some-js-uri\"",
+    		"def some-js uri \"some-js-uri\".",
     		"def IDE (app) (js some-js)."
 		);
         assertAnimoResult("IDE", "IDE (app app-layout \\js \"some-js-uri\") (js).");
