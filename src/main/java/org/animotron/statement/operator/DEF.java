@@ -98,7 +98,7 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 //        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
 //	}
 
-	public static Relationship get(Node node) {
+	public static Relationship getRelationship(Node node) {
 		try {
 			return AnimoGraph.getDb().getRelationshipById((Long) DEFID.get(node));
 		} catch (Throwable e) {
