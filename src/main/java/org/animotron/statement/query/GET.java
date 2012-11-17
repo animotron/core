@@ -100,12 +100,12 @@ public class GET extends AbstractQuery implements Shift {
 							v = v.getContext().get(0);
 							num--;
 						}
-						System.out.println(v);
+//						System.out.println(v);
 						relaxReference(pf, v, v.getQuestion());
 //						pf.sendAnswer(v);
 					} else {
 						thes.add( theNode.getClosestEndNode() );
-						System.out.println("THEs += "+theNode);
+//						System.out.println("THEs += "+theNode);
 					}
 				}
 	
