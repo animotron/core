@@ -176,7 +176,7 @@ public class QCAVector {
 //		if (preceding_sibling == this)
 //			System.out.println(" .... create vector 9 .... "+this);
 		
-		cyclingDetection(question);
+//		cyclingDetection(question);
 	}
 	
 	protected void cyclingDetection(Relationship op) throws AnimoException {

@@ -186,7 +186,7 @@ public class AnimoTraverser {
                 build(handler, parent, prev, level, isOne, pos++, !it.hasNext(), evaluable, def);
             }
         } catch (AnimoException e) {
-//        	e.printStackTrace();
+        	e.printStackTrace();
         	throw new IOException("on "+v,e);
         } finally {
             FastTable.recycle(o);
