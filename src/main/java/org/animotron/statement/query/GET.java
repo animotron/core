@@ -101,7 +101,7 @@ public class GET extends AbstractQuery implements Shift {
 							num--;
 						}
 						System.out.println("GET-N = "+v);
-						relaxDown(pf, v, v.getQuestion());
+						relaxDown(pf, v.getQuestion());
 //						pf.sendAnswer(v);
 					} else {
 						thes.add( theNode.getClosestEndNode() );
@@ -444,12 +444,13 @@ public class GET extends AbstractQuery implements Shift {
         return false;
 	}
 
-	private boolean relaxDown(PFlow pf, QCAVector vector, Relationship op) {
+	private boolean relaxDown(PFlow pf, Relationship op) {
         try{
     		IndexHits<Relationship> hits = Order._.context(op.getEndNode());
     		try {
     			for (Relationship rr : hits) {
-    				pf.sendAnswer(vector.answered(rr), RESULT);
+    				pf.sendAnswer(pf.getVector().answered(rr), RESULT);
+//    				pf.sendAnswer(vector.answered(rr), RESULT);
     			}
     		} finally {
     			hits.close();
