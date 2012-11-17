@@ -50,7 +50,7 @@ public class NonstopTest extends ATest {
 
         testAnimo("def a b.");
         testAnimo("def c ^a.");
-        assertAnimoResult("get b c", "a.");
+        assertAnimoResult("get b c", "a b.");
     }
 
     @Test
@@ -59,7 +59,7 @@ public class NonstopTest extends ATest {
         testAnimo("def a b.");
         testAnimo("def c ^a.");
         testAnimo("def d ^c.");
-        assertAnimoResult("get b d", "a.");
+        assertAnimoResult("get b d", "a b.");
     }
 
     @Test

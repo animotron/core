@@ -96,7 +96,7 @@ public class AnyTest extends ATest {
 		testAnimo("def x2 (foo) 2.");
 		testAnimo("def y1 (z) (^x1).");
 		testAnimo("def y2 (z) (^x2).");
-		assertAnimoResult("get foo y1", "x1.");		
+		assertAnimoResult("get foo y1", "x1 (foo) 1.");		
 		assertAnimoResult("any z with foo x2", "y2 (z) (x2 (foo) 2).");
 	}
 
