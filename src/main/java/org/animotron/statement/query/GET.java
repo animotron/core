@@ -100,8 +100,8 @@ public class GET extends AbstractQuery implements Shift {
 							v = v.getContext().get(0);
 							num--;
 						}
-//						System.out.println(v);
-						relaxReference(pf, v, v.getQuestion());
+						System.out.println("GET-N = "+v);
+						relaxDown(pf, v, v.getQuestion());
 //						pf.sendAnswer(v);
 					} else {
 						thes.add( theNode.getClosestEndNode() );
@@ -444,6 +444,22 @@ public class GET extends AbstractQuery implements Shift {
         return false;
 	}
 
+	private boolean relaxDown(PFlow pf, QCAVector vector, Relationship op) {
+        try{
+    		IndexHits<Relationship> hits = Order._.context(op.getEndNode());
+    		try {
+    			for (Relationship rr : hits) {
+    				pf.sendAnswer(vector.answered(rr), RESULT);
+    			}
+    		} finally {
+    			hits.close();
+    		}
+        } catch (Throwable t) {
+            pf.sendException(t);
+        }
+        return false;
+	}
+
 	private boolean relaxReference(PFlow pf, QCAVector vector, Relationship op) {
         try{
             if (!(op.isType(ANY._) || op.isType(GET._))) {
@@ -451,7 +467,7 @@ public class GET extends AbstractQuery implements Shift {
                     System.out.println("["+pf.getOP()+"] answered "+op);
 
 //                pf.sendAnswer(pf.getVector().answered(op, vector), RESULT);
-                //pf.sendAnswer(op);
+//                pf.sendAnswer(op);
                 
                 if (!Utils.haveContext(op.getEndNode())) {
                     return eval(pf, vector, op);

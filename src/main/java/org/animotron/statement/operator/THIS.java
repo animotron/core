@@ -22,6 +22,8 @@ package org.animotron.statement.operator;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
+
+import org.animotron.graph.Properties;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
@@ -150,12 +152,15 @@ public class THIS extends Operator implements Reference, Evaluable {
 									Relationship ths = next.getAnswer();
 									QCAVector v = next.getContext().get(0);
 									Node thisNode = next.getQuestion().getStartNode();
-									while (thisNode != null) {
+									while (thisNode != null ) {
 										if (v.getQuestion().isType(AN._) && v.hasAnswer()) {
 											Node nextNode = v.getUnrelaxedAnswer().getEndNode();
 											if (nextNode.equals(thisNode)) {
 												
 												thisNode = nextNode;
+												if (!Properties.DEFID.has(thisNode))
+													break;
+												
 												ths = v.getAnswer();
 
 												if (v.getContext() == null || v.getContext().size() != 1)

@@ -473,7 +473,7 @@ public class QCAVector {
 
 	public QCAVector answered(Relationship createdAnswer) {
 //		if (preceding_sibling == this)
-//			System.out.println("!!!answered 1 "+this);
+			System.out.println("!!!answered 1 "+this);
 //
 //		return new QCAVector(question, createdAnswer, context, preceding_sibling);
 		return new QCAVector(lastDefId, question, createdAnswer, context);
