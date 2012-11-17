@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.exception.ENotFound;
+import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.index.AbstractIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
@@ -97,8 +98,11 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 //        return ar == null ? null : ar.getStartNode().getSingleRelationship(DEF._, Direction.INCOMING);
 //	}
 
-	public Relationship get(Node node) {
-        //return getDb().getRelationshipById((Long) DEFID.get(node));
+	public static Relationship get(Node node) {
+		try {
+			return AnimoGraph.getDb().getRelationshipById((Long) DEFID.get(node));
+		} catch (Throwable e) {
+		}
         return  node.getSingleRelationship(DEF._, INCOMING);
 	}
 
