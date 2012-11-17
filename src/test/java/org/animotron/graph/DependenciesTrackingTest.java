@@ -41,11 +41,11 @@ public class DependenciesTrackingTest extends ATest {
 
         __(
 	        "def goods word \"goods\".",
-	        "def qty (part (number) (UoM)).",
-	        "def price (part (number) (currency) (UoM)).",
-	        "def cost (part (number) (currency)).",
+	        "def qty part (number) (UoM).",
+	        "def price part (number) (currency) (UoM).",
+	        "def cost part (number) (currency).",
 	        
-	        "def item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+	        "def item (goods aaa) (qty 1 (kg)) (cost 10 (USD))."
         );
 
         assertAnimoResult(
@@ -54,7 +54,7 @@ public class DependenciesTrackingTest extends ATest {
         );
 
         __(
-	        "def item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+	        "def item (goods aaa) (qty 1 (kg)) (cost 5 (USD))."
         );
 
         assertAnimoResult(
@@ -68,11 +68,11 @@ public class DependenciesTrackingTest extends ATest {
 
         __(
 	        "def goods word \"goods\".",
-	        "def qty (part (number) (UoM)).",
-	        "def price (part (number) (currency) (UoM)).",
-	        "def cost (part (number) (currency)).",
+	        "def qty part (number) (UoM).",
+	        "def price part (number) (currency) (UoM).",
+	        "def cost part (number) (currency).",
 	        
-	        "def item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+	        "def item (goods aaa) (qty 1 (kg)) (cost 10 (USD))."
         );
 
         assertCachedAnimoResult(
@@ -81,7 +81,7 @@ public class DependenciesTrackingTest extends ATest {
         );
 
         __(
-	        "def item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+	        "def item (goods aaa) (qty 1 (kg)) (cost 5 (USD))."
         );
 
         assertCachedAnimoResult(
@@ -99,11 +99,11 @@ public class DependenciesTrackingTest extends ATest {
 
         __(
 	        "def goods word \"goods\".",
-	        "def qty (part (number) (UoM)).",
-	        "def price (part (number) (currency) (UoM)).",
-	        "def cost (part (number) (currency)).",
+	        "def qty part (number) (UoM).",
+	        "def price part (number) (currency) (UoM).",
+	        "def cost part (number) (currency).",
 	        
-	        "def item1 (goods item) (qty * (1) (kg)) (cost * (10) (USD))."
+	        "def item1 (goods item) (qty * 1 (kg)) (cost * 10 (USD))."
         );
 
 
@@ -118,7 +118,7 @@ public class DependenciesTrackingTest extends ATest {
 		);
 
         __(
-	        "def item2 (goods item) (qty * (1) (kg)) (cost * (5) (USD))."
+	        "def item2 (goods item) (qty * 1 (kg)) (cost * 5 (USD))."
         );
 
         assertCachedAnimoResult(
