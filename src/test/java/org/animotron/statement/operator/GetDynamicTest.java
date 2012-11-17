@@ -21,7 +21,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
 import org.junit.Test;
 
 /**
@@ -36,8 +35,8 @@ public class GetDynamicTest extends ATest {
 
         tAnimo("def A Z 'A'.");
         tAnimo("def B Z 'B'.");
-    	Expression d = tAnimo("def d get (Z) (A) (B)");
-        assertAnimoResult(d, "d", " \"A\"", " \"B\"", ".");
+
+        assertAnimoResult("def d get Z (A) (B).", "d", " \"A\"", " \"B\"", ".");
 	}
 
 	@Test
@@ -46,8 +45,8 @@ public class GetDynamicTest extends ATest {
         tAnimo("def ZZ Z.");
         tAnimo("def A Z 'A'.");
         tAnimo("def B ZZ 'B'.");
-        Expression d = tAnimo("def d get (Z) (A) (B)");
-        assertAnimoResult(d, "d", " \"A\"", " \"B\"", ".");
+
+        assertAnimoResult("def d get Z (A) (B).", "d", " \"A\"", " \"B\"", ".");
 	}
 
 	@Test
@@ -57,14 +56,9 @@ public class GetDynamicTest extends ATest {
         tAnimo("def C (Z) (B 'π').");
         tAnimo("def D (Z) (A 'Aπ').");
 
-        Expression E = tAnimo("def E get A all Z");
-        assertAnimoResult(E, "E \"π\" \"Aπ\".");
-
-        Expression E1 = tAnimo("def E get B all Z");
-        assertAnimoResult(E1, "E1 \"π\".");
-
-        Expression F = tAnimo("def E get (all A) (all Z)");
-        assertAnimoResult(F, "F \"π\".");
+        assertAnimoResult("def E get A all Z.", "E \"π\" \"Aπ\".");
+        assertAnimoResult("def E1 get B all Z.", "E1 \"π\".");
+        assertAnimoResult("def F get (all A) (all Z).", "F \"π\".");
     }
 
     @Test
