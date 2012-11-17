@@ -120,7 +120,7 @@ public abstract class Manipulator {
 	            public void onMessage(QCAVector context) {
 	            	super.onMessage(context);
 	            	
-	            	//System.out.println("getDef answer ["+vector+"]\n"+context);
+	            	System.out.println("getDef answer ["+vector+"]\n"+context);
 	            	//out.debug();
 	            	try {
 	            		if (context == null) {
@@ -187,7 +187,7 @@ public abstract class Manipulator {
 //	                            Statement qS = Statements.relationshipType(context.getQuestion());
 //	                            if (!(s instanceof Definition) && s instanceof Evaluable && !(qS instanceof AShift)) {
 	                            if (!(s instanceof Definition) && s instanceof Evaluable) {
-	                                Pipe in = Evaluator._.execute(controller, context);
+	                                Pipe in = Evaluator._.execute(controller, context.question(msg));
 	                                QCAVector v;
 	                                while ((v = in.take()) != null) {
 	                                    pipe.write(v);
