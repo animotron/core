@@ -42,8 +42,10 @@ public class SimpleTest extends ATest {
             "def BB AA 'a@b'"
         );
 
-    	Expression C = new AnimoExpression("def CC BB");
-        assertAnimoResultOneStep(C, "CC BB");// AA \"a@b\".");
+    	Expression C = new AnimoExpression("def C1 BB");
+        assertAnimoResultOneStep(C, "C1 BB AA \"a@b\".");
+
+        assertAnimoResult("def C2 BB", "C2 BB AA.");// AA \"a@b\".");
 	}
 
 	@Test
