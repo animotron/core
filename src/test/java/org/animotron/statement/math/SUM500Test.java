@@ -63,7 +63,7 @@ public class SUM500Test extends ATest {
         long t;
         t = currentTimeMillis();
         for (int i = 0; i < 500; i++) {
-            __("def a" + i + "(a) (b '" + i + "')");
+            __("def a" + i + " (a) (b '" + i + "').");
         }
         Expression e = new AnimoExpression("+ get b all a");
         System.out.println("Build expressions in " + (currentTimeMillis() - t));
