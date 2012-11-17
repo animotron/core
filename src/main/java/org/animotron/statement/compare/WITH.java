@@ -108,7 +108,7 @@ public class WITH extends Operator implements Predicate {
 
 			Relationship h = have.getClosest();
 			if (h.isType(AN._)) {
-				Pipe in = AN._.getREFs(pf, have);
+				Pipe in = AN.getREFs(pf, have);
 				QCAVector e;
 				while ((e = in.take()) != null) {
 					actual.add(e);

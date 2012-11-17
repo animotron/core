@@ -41,7 +41,6 @@ public abstract class AbstractValue extends AbstractStatement {
 	protected AbstractValue(String... name) { super(name); }
 
 	@Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
         if (reference == null)
             return createNode();

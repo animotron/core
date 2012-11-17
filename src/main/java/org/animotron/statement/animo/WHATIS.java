@@ -29,7 +29,6 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.query.AbstractQuery;
-import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -96,14 +95,14 @@ public class WHATIS extends AbstractQuery implements Reference {
         	}
         }
 
-        private void upIS(PFlow pf, QCAVector vector, Relationship the) {
-    		//discover up IS topology
-    		for (Relationship r : the.getStartNode().getRelationships(AN._, Direction.INCOMING)) {
-        		for (Relationship rr : r.getStartNode().getRelationships(AN._, Direction.INCOMING)) {
-        			discoverDownIS(pf, vector, rr);
-        		}
-    		}
-        }
+//        private void upIS(PFlow pf, QCAVector vector, Relationship the) {
+//    		//discover up IS topology
+//    		for (Relationship r : the.getStartNode().getRelationships(AN._, Direction.INCOMING)) {
+//        		for (Relationship rr : r.getStartNode().getRelationships(AN._, Direction.INCOMING)) {
+//        			discoverDownIS(pf, vector, rr);
+//        		}
+//    		}
+//        }
 
         private void discoverDownIS(PFlow pf, QCAVector vector, Relationship the) {
 			Pipe pipe;
