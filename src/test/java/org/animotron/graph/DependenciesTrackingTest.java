@@ -28,7 +28,6 @@ import org.animotron.graph.serializer.CachedSerializer;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.AnimoExpression.__;
 import static org.junit.Assert.assertNotNull;
 
 /**

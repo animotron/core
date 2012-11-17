@@ -26,10 +26,6 @@ import org.animotron.expression.JSONExpression;
 import org.codehaus.jackson.JsonFactory;
 import org.junit.Test;
 
-import static org.animotron.expression.AnimoExpression.__;
-
-//import org.codehaus.jackson.JsonFactory;
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *

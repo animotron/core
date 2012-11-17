@@ -35,9 +35,7 @@ public class UseTest extends ATest {
     @Test
     public void any_use() throws Throwable {
 
-        __(
-                "def A X"
-        );
+        __("def A X.");
 
         Expression x = new AnimoExpression("def x any X use Y");
         assertAnimoResult(x, "x A X.");
@@ -47,8 +45,8 @@ public class UseTest extends ATest {
     public void an_any_use() throws Throwable {
 
         __(
-                "def A X",
-                "def q any X"
+                "def A X.",
+                "def q any X."
         );
 
         Expression x = new AnimoExpression("def x q use Y");
@@ -59,8 +57,8 @@ public class UseTest extends ATest {
     public void all_use() throws Throwable {
 
         __(
-                "def A X",
-                "def B X"
+                "def A X.",
+                "def B X."
         );
 
         Expression x = new AnimoExpression("def x all X use Y");
@@ -71,9 +69,9 @@ public class UseTest extends ATest {
     public void an_all_use() throws Throwable {
 
         __(
-                "def A X",
-                "def B X",
-                "def q all X"
+                "def A X.",
+                "def B X.",
+                "def q all X."
         );
 
         Expression x = new AnimoExpression("def x q use Y");
@@ -84,9 +82,9 @@ public class UseTest extends ATest {
     public void cross_use_case() throws Throwable {
 
         __(
-                "def A (S) (X)",
-                "def B (S) (Y)",
-                "def C (S) (X) (Y)"
+                "def A (S) (X).",
+                "def B (S) (Y).",
+                "def C (S) (X) (Y)."
         );
 
         Expression test;
@@ -102,6 +100,5 @@ public class UseTest extends ATest {
 
         test = new AnimoExpression("all S (use X) (use Y)");
         assertAnimoResult(test, "C (S) (X) (Y).");
-
     }    
 }

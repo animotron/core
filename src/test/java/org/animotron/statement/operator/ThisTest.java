@@ -24,8 +24,6 @@ import org.animotron.ATest;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.animotron.expression.AnimoExpression.__; 
-
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
