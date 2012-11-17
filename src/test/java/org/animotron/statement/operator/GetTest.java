@@ -101,7 +101,7 @@ public class GetTest extends ATest {
         tAnimo("def A (get X) (Z 'γ').");
         tAnimo("def B (get Y) (A).");
         tAnimo("def C get Z.");
-        Expression E = new AnimoExpression("def E C  B B 'β");
+        Expression E = new AnimoExpression("def E C B B 'β'");
         assertAnimoResult(E, "E C \"γ\".");
 
     }
