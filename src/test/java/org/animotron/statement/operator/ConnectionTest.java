@@ -77,7 +77,7 @@ public class ConnectionTest extends ATest {
 
         assertAnimoResult(
     		"def test (get mime-type fileA) (get type)",
-    		"test (value-plain)."
+    		"test (value-plain (mime-type) (type) (extension))."
 		);
     }
 }
