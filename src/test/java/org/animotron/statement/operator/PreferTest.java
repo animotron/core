@@ -21,8 +21,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
 import org.junit.Test;
 
 /**
@@ -34,53 +32,46 @@ public class PreferTest extends ATest {
 
 
     @Test
-    public void test_0() throws Throwable {
+    public void test_00() throws Throwable {
 
         __(
-            "def A X",
-            "def B X"
+            "def A X.",
+            "def B X."
         );
 
-        Expression test = new AnimoExpression("prefer X");
-        assertAnimoResultOneStep(test, "");
-
+        assertAnimoResultOneStep("prefer X", "");
     }
 
     @Test
     public void test_01() throws Throwable {
 
         __(
-                "def A X",
-                "def B X"
+            "def A X.",
+            "def B X."
         );
 
-        Expression test = new AnimoExpression("prefer X use X");
-        assertAnimoResultOneStep(test, "A X. B X.");
-
+        assertAnimoResultOneStep("prefer X use X", "A X. B X.");
     }
 
     @Test
     public void test_02() throws Throwable {
 
         __(
-                "def A X",
-                "def B X"
+            "def A X.",
+            "def B X."
         );
 
-        Expression test = new AnimoExpression("prefer X use A");
-        assertAnimoResultOneStep(test, "A X.");
-
+        assertAnimoResultOneStep("prefer X use A", "A X.");
     }
 
     @Test
     public void test_03() throws Throwable {
 
         __(
-                "def A X",
-                "def B X"
+            "def A X.",
+            "def B X."
         );
 
-        Expression test = new AnimoExpression("prefer X use B");
-        assertAnimoResultOneStep(test, "B X.");
+        assertAnimoResultOneStep("prefer X use B", "B X.");
     }
 }

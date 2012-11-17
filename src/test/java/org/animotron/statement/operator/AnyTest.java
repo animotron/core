@@ -21,8 +21,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
 import org.junit.Test;
 
 /**
@@ -36,34 +34,30 @@ public class AnyTest extends ATest {
     public void testANY() throws Throwable {
 
         __(
-                "def B (^A) (v 'B')",
-                "def C (^B) (v 'C')"
+                "def B (^A) (v 'B').",
+                "def C (^B) (v 'C')."
         );
 
-        Expression test = new AnimoExpression("any A");
-        assertAnimoResultOneStep(test, "B (^A) (v \"B\").");
+        assertAnimoResultOneStep("any A", "B (^A) (v \"B\").");
 //        assertAnimoResultOneStep(test, "C (B) (v \"C\").");
 
-        test = new AnimoExpression("any B");
-        assertAnimoResultOneStep(test, "C (^B) (v \"C\").");
+        assertAnimoResultOneStep("any B", "C (^B) (v \"C\").");
     }
 	
     @Test
     public void testANYwithWITH() throws Throwable {
 
         __(
-                "def B (^A) (v 'B')",
-                "def B1 (^B) (v 'B1')",
-                "def C (^B) (v 'C')",
-                "def C1 (^C) (v 'C1')"
+                "def B (^A) (v 'B').",
+                "def B1 (^B) (v 'B1').",
+                "def C (^B) (v 'C').",
+                "def C1 (^C) (v 'C1')."
         );
 
-        Expression test = new AnimoExpression("any A with v 'B'");
-        assertAnimoResultOneStep(test, "B (^A) (v \"B\").");
+        assertAnimoResultOneStep("any A with v 'B'", "B (^A) (v \"B\").");
 //        assertAnimoResultOneStep(test, "B1 (B) (v \"B\").");
 
-        test = new AnimoExpression("any A with v 'C'");
-        assertAnimoResultOneStep(test, "C (^B) (v \"C\").");
+        assertAnimoResultOneStep("any A with v 'C'", "C (^B) (v \"C\").");
 //        assertAnimoResultOneStep(test, "C1 (C) (v \"C\").");
     }
 
@@ -71,29 +65,32 @@ public class AnyTest extends ATest {
 	public void ANYwithEQ() throws Throwable {
 
         __(
-                "def v-plain (mime-type) (v) (type 'v/plain') (reference 'Plain v') (extension 'txt')",
-                "def application-atom (mime-type) (type 'application/atom+xml') (reference 'Atom Feed Document') (extension 'atom')"
+                "def v-plain (mime-type) (v) (type 'v/plain') (reference 'Plain v') (extension 'txt').",
+                "def application-atom (mime-type) (type 'application/atom+xml') (reference 'Atom Feed Document') (extension 'atom')."
         );
 
-        Expression test = new AnimoExpression("any mime-type eq (extension) ('txt')");
-		assertAnimoResultOneStep(test, "v-plain (mime-type) (v) (type \"v/plain\") (reference \"Plain v\") (extension \"txt\").");
+		assertAnimoResultOneStep("any mime-type eq (extension) ('txt')", "v-plain (mime-type) (v) (type \"v/plain\") (reference \"Plain v\") (extension \"txt\").");
 	}
 
 	@Test
 	public void test_01() throws Throwable {
-		testAnimo("def x1 1.");
-		testAnimo("def x2 2.");
-		testAnimo("def y1 (z) (foo x1).");
-		testAnimo("def y2 (z) (foo x2).");
+		__(
+			"def x1 1.",
+			"def x2 2.",
+			"def y1 (z) (foo x1).",
+			"def y2 (z) (foo x2)."
+		);
 		assertAnimoResult("any z with foo x2", "y2 (z) (foo).");
 	}
 
 	@Test
 	public void test_02() throws Throwable {
-		testAnimo("def x1 (foo) 1.");
-		testAnimo("def x2 (foo) 2.");
-		testAnimo("def y1 (z) (^x1).");
-		testAnimo("def y2 (z) (^x2).");
+		__(
+			"def x1 (foo) 1.",
+			"def x2 (foo) 2.",
+			"def y1 (z) (^x1).",
+			"def y2 (z) (^x2)."
+		);
 		assertAnimoResult("get foo y1", "x1 (foo) 1.");		
 		assertAnimoResult("any z with foo x2", "y2 (z) (x2 (foo) 2).");
 	}
@@ -102,31 +99,28 @@ public class AnyTest extends ATest {
     public void test_03() throws Throwable {
 
         __(
-                "def A (^S) (X 'α')",
-                "def B (^A) (Y 'β')",
-                "def C (^B) (Z 'γ')"
+                "def A (^S) (X 'α').",
+                "def B (^A) (Y 'β').",
+                "def C (^B) (Z 'γ')."
         );
 
-        Expression test = new AnimoExpression("any S with X 'α'");
-        assertAnimoResultOneStep(test, "A (^S) (X \"α\").");
+        assertAnimoResultOneStep("any S with X 'α'", "A (^S) (X \"α\").");
 
-        test = new AnimoExpression("any S with Y 'β'");
-        assertAnimoResultOneStep(test, "B (^A) (Y \"β\").");
+        assertAnimoResultOneStep("any S with Y 'β'", "B (^A) (Y \"β\").");
 
-        test = new AnimoExpression("any S with Z 'γ'");
-        assertAnimoResultOneStep(test, "C (^B) (Z \"γ\").");
+        assertAnimoResultOneStep("any S with Z 'γ'", "C (^B) (Z \"γ\").");
     }
 
     @Test
     public void test_04() throws Throwable {
         __(
-            "def foo-site (site) (server-name \"foo.com\")",
-            "def bar-site (site) (server-name \"bar.com\")",
+            "def foo-site (site) (server-name \"foo.com\").",
+            "def bar-site (site) (server-name \"bar.com\").",
 
-            "def hello-foo (^foo-site, root) (title \"hello foo\")",
-            "def hello-bar (^bar-site, root) (title \"hello bar\")",
+            "def hello-foo (^foo-site, root) (title \"hello foo\").",
+            "def hello-bar (^bar-site, root) (title \"hello bar\").",
             
-            "def foo-root-layout (layout, foo, root) (\\h1)"
+            "def foo-root-layout (layout, foo, root) (\\h1)."
 		);
 
         assertAnimoResult(
@@ -138,13 +132,13 @@ public class AnyTest extends ATest {
     public void test_05() throws Throwable {
 
         __(
-            "def foo-site (site) (server-name \"foo.com\") (weak-use foo)",
-            "def bar-site (site) (server-name \"bar.com\") (weak-use bar)",
+            "def foo-site (site) (server-name \"foo.com\") (weak-use foo).",
+            "def bar-site (site) (server-name \"bar.com\") (weak-use bar).",
 
-            "def hello-foo (foo-site, root) (title \"hello foo\")",
-            "def hello-bar (bar-site, root) (title \"hello bar\")",
+            "def hello-foo (foo-site, root) (title \"hello foo\").",
+            "def hello-bar (bar-site, root) (title \"hello bar\").",
             
-            "def foo-root-layout (layout, foo, root) (\\h1)"
+            "def foo-root-layout (layout, foo, root) (\\h1)."
         );
 
         assertAnimoResult("any xxx with server-name \"foo.com\"", "");

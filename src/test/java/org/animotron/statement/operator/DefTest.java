@@ -99,7 +99,7 @@ public class DefTest extends ATest {
     public void test_11() throws Throwable {
 
         __(
-	        "def item (goods aaa) (qty (1) (kg)) (cost (10) (USD))."
+	        "def item (goods aaa) (qty 1 (kg)) (cost 10 (USD))."
         );
 
         assertAnimoResult(
@@ -108,7 +108,7 @@ public class DefTest extends ATest {
         );
 
         __(
-	        "def item (goods aaa) (qty (1) (kg)) (cost (5) (USD))."
+	        "def item (goods aaa) (qty 1 (kg)) (cost 5 (USD))."
         );
 
         assertAnimoResult(

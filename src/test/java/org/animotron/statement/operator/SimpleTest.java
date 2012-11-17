@@ -21,8 +21,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
-import org.animotron.expression.Expression;
 import org.junit.Test;
 
 /**
@@ -35,12 +33,11 @@ public class SimpleTest extends ATest {
 	public void an() throws Throwable {
         
     	__(
-            "def AA",
-            "def BB AA 'a@b'"
+            "def AA.",
+            "def BB AA 'a@b'."
         );
 
-    	Expression C = new AnimoExpression("def C1 BB");
-        assertAnimoResultOneStep(C, "C1 BB AA \"a@b\".");
+        assertAnimoResultOneStep("def C1 BB", "C1 BB AA \"a@b\".");
 
         assertAnimoResult("def C2 BB", "C2 BB AA.");// AA \"a@b\".");
 	}
@@ -49,11 +46,10 @@ public class SimpleTest extends ATest {
 	public void get() throws Throwable {
 
         __(
-                "def A",
-                "def B A 'a@b'"
+            "def A.",
+            "def B A 'a@b'."
         );
 
-        Expression C = new AnimoExpression("def C get A B");
-        assertAnimoResult(C, "C \"a@b\".");
+        assertAnimoResult("def C get A B", "C \"a@b\".");
 	}
 }

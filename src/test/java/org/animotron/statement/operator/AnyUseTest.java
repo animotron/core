@@ -33,10 +33,12 @@ public class AnyUseTest extends ATest {
     @Test
     public void simple_any_Use() throws Throwable {
 
-        tAnimo("def A (^S) (\\X 'α').");
-        tAnimo("def B (^A) (\\Y 'β').");
-        tAnimo("def C (^B) (\\Z 'γ') (\\X 'αα').");
-        tAnimo("def s any S.");
+        __(
+    		"def A (^S) (\\X 'α').",
+    		"def B (^A) (\\Y 'β').",
+    		"def C (^B) (\\Z 'γ') (\\X 'αα').",
+    		"def s any S."
+		);
 
         //assertAnimoResult(b, "b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
 //        assertAnimoResult(b, "b s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
@@ -48,12 +50,14 @@ public class AnyUseTest extends ATest {
     @Test
     public void complex_any_Use() throws Throwable {
 
-        tAnimo("def A (^S) (\\X 'α').");
-        tAnimo("def B (^A) (\\Y 'β').");
-        tAnimo("def B1 (^B) (\\Y 'ββ').");
-        tAnimo("def C (^B) (\\Z 'γ') (\\X 'αα').");
-        tAnimo("def C1 (^C) (\\Z 'γγ') (\\X 'ααα').");
-        tAnimo("def s any S.");
+        __(
+    		"def A (^S) (\\X 'α').",
+    		"def B (^A) (\\Y 'β').",
+    		"def B1 (^B) (\\Y 'ββ').",
+    		"def C (^B) (\\Z 'γ') (\\X 'αα').",
+    		"def C1 (^C) (\\Z 'γγ') (\\X 'ααα').",
+    		"def s any S."
+		);
 
         //assertAnimoResult(b, "b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
 //        assertAnimoResult(b, "b s B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\").");

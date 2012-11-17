@@ -35,7 +35,7 @@ public class PtrnTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-    		"def doc (part (number) (table (goods) (qty)) )"
+    		"def doc part (number) (table (goods) (qty))."
         );
 
         assertAnimoResult(
