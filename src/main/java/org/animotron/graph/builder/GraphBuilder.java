@@ -105,21 +105,23 @@ public class GraphBuilder {
                 if (o[2] == null) {
                     o[2] = MessageDigester.byteArrayToHex(hash);
                 }
-                Relationship done = DEF._.get(o[2]);
-                r = build(getROOT(), o, it, done);
-                if (done == null) {
+                r = DEF._.get(o[2]);
+                if (r == null) {
+                    r = ((Statement) o[1]).build(getROOT(), o[2], hash, true, ignoreNotFound);
                     Node def = r.getEndNode();
                     NAME.set(def, o[2]);
                     DEFID.set(def, r.getId());
                     DEF._.add(r, o[2]);
                 }
+                build(getROOT(), o, it, r);
                 catcher.modificative(r);
                 catcher.preparative(r);
             } else {
                 r = Cache.RELATIONSHIP.get(hash);
                 if (r == null) {
                     o[6] = Cache.NODE.get(hash) != null;
-                    r = build(getROOT(), o, it, null);
+                    r = ((Statement) o[1]).build(getROOT(), o[2], hash, true, ignoreNotFound);
+                    build(getROOT(), o, it, r);
                     Cache.RELATIONSHIP.add(r, hash);
                     catcher.modificative(r);
                     HASH.set(r, hash);
@@ -130,10 +132,7 @@ public class GraphBuilder {
         return r;
     }
 
-    private Relationship build(Node parent, Object[] o, Iterator<Object[]> it, Relationship r) throws AnimoException {
-        if (r == null) {
-            r = ((Statement) o[1]).build(parent, o[2], hash, true, ignoreNotFound);
-        }
+    private void build(Node parent, Object[] o, Iterator<Object[]> it, Relationship r) throws AnimoException {
         Node end = r.getEndNode();
         o[3] = r;
         o[4] = end;
@@ -142,7 +141,6 @@ public class GraphBuilder {
             build(it.next());
             step();
         }
-        return r;
     }
 
     private void build(Object[] item) throws AnimoException {

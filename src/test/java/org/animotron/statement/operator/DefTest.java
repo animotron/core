@@ -116,4 +116,12 @@ public class DefTest extends ATest {
             "5. USD."
 		);
     }
+
+    @Test
+    public void test_12() throws Throwable {
+
+        testAnimo("def a a.");
+
+    }
+
 }
