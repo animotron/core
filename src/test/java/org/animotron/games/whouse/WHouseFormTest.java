@@ -64,7 +64,7 @@ public class WHouseFormTest extends ATest {
                         "(goods 'ISBN:3-540-11157-3') " +
                         "(qty (number 1) (UoM pcs)) " +
                         "(price (number 35) (currency USD) (UoM pcs)) " +
-                        "(cost (number 35) (currency USD)))."
+                        "(cost (number 35) (currency USD))))."
         );
 
         assertAnimo(
@@ -76,12 +76,12 @@ public class WHouseFormTest extends ATest {
                     "(receive-party centralWhouse) " +
                     "(SKU " +
                         "(uuidA " +
-                        	"(goods ISBN:0-387-97061-4) " +
+                        	"(goods \"ISBN:0-387-97061-4\") " +
                         	"(qty (number 1) (UoM pcs)) " +
                         	"(price (number 35) (currency EUR) (UoM pcs)) " +
                         	"(cost (number 35) (currency EUR))) " +
                         "(uuidB " +
-                        	"(goods ISBN:3-540-11157-3) " +
+                        	"(goods \"ISBN:3-540-11157-3\") " +
                         	"(qty (number 1) (UoM pcs)) " +
                         	"(price (number 35) (currency USD) (UoM pcs)) " +
                         	"(cost (number 35) (currency USD))))."
