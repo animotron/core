@@ -22,7 +22,6 @@ package org.animotron.statement.operator;
 
 import javolution.util.FastList;
 import javolution.util.FastSet;
-
 import org.animotron.graph.Properties;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;

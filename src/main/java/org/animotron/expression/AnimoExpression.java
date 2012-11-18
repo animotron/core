@@ -27,8 +27,6 @@ import org.animotron.statement.Statements;
 import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.MLOperator;
-import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.value.AbstractValue;
 import org.neo4j.graphdb.Relationship;
@@ -71,7 +69,6 @@ public class AnimoExpression extends AbstractExpression {
     private Stack<Integer> stack = new Stack<Integer>();
     private Statement op = null;
     private int level = 0;
-    private boolean isML = false;
     boolean link = false;
     boolean number = true;
     boolean text = false;
@@ -161,7 +158,6 @@ public class AnimoExpression extends AbstractExpression {
             level++;
             op = st;
             link = false;
-            isML = st instanceof MLOperator;
             s = new StringBuilder();
             number = true;
         }
@@ -171,8 +167,6 @@ public class AnimoExpression extends AbstractExpression {
         if (s.length() > 0) {
             token();
             s = new StringBuilder();
-        } else {
-            isML = false;
         }
         number = true;
     }
@@ -180,8 +174,6 @@ public class AnimoExpression extends AbstractExpression {
     private void lastToken() throws AnimoException, IOException {
         if (s.length() > 0) {
             token();
-        } else {
-            isML = false;
         }
         number = true;
     }
@@ -192,11 +184,7 @@ public class AnimoExpression extends AbstractExpression {
     	if (text) {
             builder._(token);
         } else {
-            if (isML) {
-                builder._(QNAME._, token);
-                op = null;
-                isML = false;
-            } else if (op instanceof DEF) {
+            if (op instanceof DEF) {
                 builder.start(op, token);
                 op = null;
                 level++;
@@ -211,7 +199,7 @@ public class AnimoExpression extends AbstractExpression {
                 if (s instanceof Operator) {
                     builder.start(s);
                     level++;
-                } else if (s instanceof MLOperator || s instanceof AbstractLink) {
+                } else if (s instanceof AbstractLink) {
                     builder.start(s);
                     s = null;
                     level++;

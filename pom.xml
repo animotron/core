@@ -41,14 +41,6 @@
             <version>${neo4jVersion}</version>
         </dependency>
 
-		<!--
-        <dependency>
-            <groupId>org.neo4j</groupId>
-            <artifactId>neo4j-graph-collections</artifactId>
-            <version>1.5-SNAPSHOT</version>
-        </dependency>
-        -->
-
 		<!-- light/fast date-time (animo/time) -->
 		<dependency>
 			<groupId>joda-time</groupId>
@@ -80,21 +72,7 @@
 			<version>5.5.1</version>
 		</dependency>
 
-		<!-- library to serialize objects to XML and back again. -->
-		<dependency>
-			<groupId>org.codehaus.woodstox</groupId>
-			<artifactId>woodstox-core-asl</artifactId>
-			<version>4.1.2</version>
-		</dependency>
-
-        <!-- library to serialize objects to JSON and back again. -->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.4</version>
-        </dependency>
-
-        <!-- library for multicast communication via a flexible protocol stack. --> 
+        <!-- library for multicast communication via a flexible protocol stack. -->
 		<dependency>
 			<groupId>jgroups</groupId>
 			<artifactId>jgroups</artifactId>

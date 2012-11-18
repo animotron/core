@@ -93,7 +93,7 @@ public class WHouseTest extends ATest {
 
         Expression f = tAnimo("def f form R01.");
 
-        assertXMLResult(f, "<form id='R01'>" +
+        assertAnimoResult(f, "<form id='R01'>" +
                 "<input id='date' value='T2011-08-07'>07 August 2011</input>" +
                 "<input id='issue-party' value='an:ORG-01'>Organization 01</input>" +
                 "<input id='receipt-party' value='an:I'>I</input>" +

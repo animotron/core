@@ -20,7 +20,6 @@
  */
 package org.animotron.tmp;
 
-import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.graph.serializer.CachedSerializer;
@@ -50,8 +49,6 @@ public abstract class ATest {
 
     public static final String DATA_FOLDER = "data-test";
 	
-	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
 	protected String uuid() {
 		return MessageDigester.uuid().toString();
 	}
@@ -231,20 +228,6 @@ public abstract class ATest {
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
-        System.out.println();
-    }
-
-    protected void assertXMLResult(Relationship op, String expected) throws IOException {
-        assertNotNull(op);
-
-        System.out.println("XML Result serializer...");
-
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out = new PipedOutputStream(in);
-
-        CachedSerializer.XML.serialize(op, out);
-        out.close();
-        assertEquals(in, "<?xml version='1.0' encoding='UTF-8'?>"+expected);
         System.out.println();
     }
 

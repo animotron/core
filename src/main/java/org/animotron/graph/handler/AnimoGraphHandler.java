@@ -23,7 +23,6 @@ package org.animotron.graph.handler;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Suffix;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.NONSTOP;
 import org.animotron.statement.operator.Operator;
@@ -66,11 +65,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     protected void write(Statement statement, Object reference) throws IOException {
-        if (statement instanceof QNAME) {
-        	if (reference != null)
-        		write(reference.toString());
-        	
-        } else if (statement instanceof AbstractValue) {
+        if (statement instanceof AbstractValue) {
             if (!(statement instanceof VALUE)) {
                 write(statement.name());
                 if (reference != null) {
@@ -152,7 +147,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             if (dot) {
                 write(" ");
             }
-        } else if (!(statement instanceof QNAME)) {
+        } else {
             if (!(ps instanceof LINK || statement instanceof Suffix)) {
                 if (statement instanceof REF && ps instanceof REF && parent != null) {
                     write(", ");
@@ -179,7 +174,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         if (level==0) {
             write(".");
             dot = true;
-        } else if (!(statement instanceof REF && parent != null || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF && parent != null || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
     }

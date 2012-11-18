@@ -20,7 +20,6 @@
  */
 package org.animotron;
 
-import com.ctc.wstx.stax.WstxOutputFactory;
 import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
@@ -44,8 +43,6 @@ public abstract class ATest {
 
     public static final String DATA_FOLDER = "data-test";
 	
-	public static final WstxOutputFactory OUTPUT_FACTORY = new WstxOutputFactory();
-
 	protected void __(String ... exps) throws IOException {
 		for (String exp : exps) {
 			String t = exp.replace('\'', '"');
@@ -204,37 +201,6 @@ public abstract class ATest {
         }
         if (!result.trim().isEmpty())
     		Assert.fail("Result contain unmatched part '"+result+"'");
-    }
-
-    protected void assertXMLResult(String op, String expected) throws IOException {
-    	assertXMLResult(new AnimoExpression(op), expected);
-    }
-    
-    protected void assertXMLResult(Relationship op, String expected) throws IOException {
-        assertNotNull(op);
-        System.out.println("XML Result serializer...");
-        Assert.assertEquals("", "<?xml version='1.0' encoding='UTF-8'?>" + expected, CachedSerializer.XML.serialize(op));
-        System.out.println();
-    }
-
-    protected void assertJSONResult(Relationship op, String expected) throws IOException {
-        assertNotNull(op);
-        System.out.println("JSON Result serializer...");
-        Assert.assertEquals("", expected, CachedSerializer.JSON.serialize(op));
-        System.out.println();
-    }
-
-    protected void assertHtmlResult(Relationship op, String expected) throws IOException, InterruptedException {
-        assertHtmlResult(op, expected, true);
-    }
-
-    protected void assertHtmlResult(Relationship op, String expected, boolean messagers) throws IOException {
-        assertNotNull(op);
-        if (messagers) System.out.println("HTML result serializer...");
-        String result = CachedSerializer.HTML.serialize(op);
-        if (messagers) System.out.println(result);
-        Assert.assertEquals("", "<!DOCTYPE html>" + expected, result);
-        if (messagers) System.out.println();
     }
 
     protected void assertStringResult(String op, String expected) throws IOException, InterruptedException {

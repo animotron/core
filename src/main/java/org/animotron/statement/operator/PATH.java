@@ -25,10 +25,6 @@ import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.ml.CDATA;
-import org.animotron.statement.ml.COMMENT;
-import org.animotron.statement.ml.DTD;
-import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -94,7 +90,7 @@ public class PATH extends Operator implements Evaluable {
                 if (isLast) {
                     filter(pf, r, true, false, set);
                 }
-            } else if (r.isType(VALUE._) || r.isType(QNAME._) || r.isType(CDATA._) || r.isType(COMMENT._) || r.isType(DTD._)) {
+            } else if (r.isType(VALUE._)) {
                 filter(pf, r, false, true, set);
             } else {
                 set = filter(pf, r, false, false, set);

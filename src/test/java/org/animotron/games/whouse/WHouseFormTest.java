@@ -22,8 +22,6 @@ package org.animotron.games.whouse;
 
 import org.animotron.ATest;
 import org.animotron.expression.Expression;
-import org.animotron.expression.JSONExpression;
-import org.codehaus.jackson.JsonFactory;
 import org.junit.Test;
 
 /**
@@ -31,8 +29,6 @@ import org.junit.Test;
  *
  */
 public class WHouseFormTest extends ATest {
-
-    private static final JsonFactory FACTORY = new JsonFactory();
 
     @Test
     public void test_00() throws Throwable {
@@ -52,28 +48,24 @@ public class WHouseFormTest extends ATest {
 
         );
 
-        Expression doc = new JSONExpression(FACTORY.createJsonParser(
-            "{" +
-                "\"event\" : null, " +
-                "\"date\" : \"D2012-02-11\", " +
-                "\"issue-party\" : {\"companyA\" : null}, " +
-                "\"receive-party\" : {\"centralWhouse\" : null}, " +
-                "\"SKU\" : {" +
-                    "\"uuidA\" : {" +
-                        "\"goods\" : {\"ISBN:0-387-97061-4\" : null}, " +
-                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
-                        "\"price\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
-                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"EUR\" : null}}" +
-                    "}, " +
-                    "\"uuidB\" : {" +
-                        "\"goods\" : {\"ISBN:3-540-11157-3\" : null}, " +
-                        "\"qty\" : {\"number\" : 1, \"UoM\" : {\"pcs\" : null}}, " +
-                        "\"price\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}, \"UoM\" : {\"pcs\" : null}}, " +
-                        "\"cost\" : {\"number\" : 35, \"currency\" : {\"USD\" : null}}" +
-                    "}" +
-                "}" +
-            "}"
-        ), "docA");
+        Expression doc = tAnimo(
+            "def docA " +
+                "(event) " +
+                "(date 'D2012-02-11') " +
+                "(issue-party companyA) " +
+                "(receive-party centralWhouse) " +
+                "(SKU " +
+                    "(uuidA " +
+                        "(goods 'ISBN:0-387-97061-4') " +
+                        "(qty (number 1) (UoM pcs)) " +
+                        "(price (number 35) (currency EUR) (UoM pcs)) " +
+                        "(cost (number 35) (currency EUR))) " +
+                    "(uuidB " +
+                        "(goods 'ISBN:3-540-11157-3') " +
+                        "(qty (number 1) (UoM pcs)) " +
+                        "(price (number 35) (currency USD) (UoM pcs)) " +
+                        "(cost (number 35) (currency USD)))."
+        );
 
         assertAnimo(
                 doc,

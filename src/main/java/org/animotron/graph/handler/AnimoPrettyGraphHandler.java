@@ -24,7 +24,6 @@ import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Suffix;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
@@ -140,7 +139,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
                 }
             }
         } else {
-            if (level != 0 && !(statement instanceof QNAME)) {
+            if (level != 0) {
                 if ((Boolean) o[5]) {
                     indent++;
                     write("\n");
@@ -175,7 +174,7 @@ public class AnimoPrettyGraphHandler extends AnimoGraphHandler {
         }
         if (level == 0) {
             write(".");
-        } else if (!(statement instanceof REF && o[7] != null || statement instanceof QNAME || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
+        } else if (!(statement instanceof REF && o[7] != null || statement instanceof VALUE) && (!isOne || statement instanceof LINK)) {
             write(")");
         }
     }

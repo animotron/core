@@ -65,7 +65,7 @@ public class DocumentTest extends ATest {
 		
 		testAnimo("def journal (table) (column (date) (number)) (row all document).");
 
-		assertXMLResult(
+		assertAnimoResult(
             new AnimoExpression("get html journal"),
 			"<table>" +
 				"<tr>" +

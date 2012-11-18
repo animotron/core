@@ -103,13 +103,13 @@ public class CurrentWebFrameworkTest extends ATest {
     private void assertQuery(String site, String service, String mime, String html) throws IOException, InterruptedException {
         Expression e = query(site, service);
         assertStringResult(mime(e), mime);
-        assertHtmlResult(e, html);
+        assertStringResult(e, html);
     }
 
     private void assertError(String site, int code, String trace, String mime, String html) throws IOException, InterruptedException {
         Expression e = error(site, code, trace);
         assertStringResult(mime(e), mime);
-        assertHtmlResult(e, html);
+        assertStringResult(e, html);
     }
 
     @Test
@@ -775,7 +775,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def root (app) (script \"alert('Hello world!')\")."
         );
 
-        assertXMLResult("root", "<script>alert('Hello world!')</script>");
+        assertStringResult("root", "<script>alert('Hello world!')</script>");
 
     }
 
@@ -792,7 +792,7 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def default-not-found (html-page) (title \"Not found\")."
         );
 
-        assertXMLResult("an get not-found-error foo-site", "<html><head>Not found</head><body>404</body></html>");
+        assertStringResult("an get not-found-error foo-site", "<html><head>Not found</head><body>404</body></html>");
 
     }
 
@@ -809,6 +809,6 @@ public class CurrentWebFrameworkTest extends ATest {
                 "def foo html-page."
         );
 
-        assertXMLResult("an (get root any site) (code 500)", "<html>500</html>");
+        assertStringResult("an (get root any site) (code 500)", "<html>500</html>");
     }
 }

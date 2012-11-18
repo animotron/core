@@ -29,7 +29,6 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
-import org.animotron.statement.ml.QNAME;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
@@ -115,7 +114,7 @@ public class AnimoTraverser {
             int count = 0;
             while (it.hasNext()) {
                 Relationship i = it.next();
-                if (!(i.isType(REF._) || i.isType(QNAME._))) {
+                if (!(i.isType(REF._))) {
                     if (count == 0) {
                         o.add(i);
                     }
@@ -162,7 +161,7 @@ public class AnimoTraverser {
                 i = it.next();
                 o.add(i);
                 Relationship r = i;
-                if (!(r.isType(REF._) || r.isType(QNAME._))) {
+                if (!(r.isType(REF._))) {
                     break;
                 }
                 count++;
