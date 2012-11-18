@@ -64,7 +64,7 @@ public class GET extends AbstractQuery implements Shift {
 
 	public static final GET _ = new GET();
 	
-	private static boolean debug = true;
+	private static boolean debug = false;
 	
 	private GET() { super("get", "<~"); }
 
@@ -556,7 +556,7 @@ public class GET extends AbstractQuery implements Shift {
 
 			@Override
 			public Iterable<Relationship> expand(Path path, BranchState<Long> state) {
-				System.out.println(path);
+//				System.out.println(path);
 				
 //				if (path.length() == 0) {
 //					return Order._.queryDownIterable(path.endNode(), allowedSet);
@@ -832,7 +832,9 @@ public class GET extends AbstractQuery implements Shift {
 				FastTable.recycle(resByHAVE);
 				FastTable.recycle(resByIS);
 			}
-			System.out.println("***TRUE***");
+			if (debug)
+				System.out.println("***TRUE***");
+			
 			return true;
 		} finally {
 			FastMap.recycle(paths);

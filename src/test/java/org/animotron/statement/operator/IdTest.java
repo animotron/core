@@ -21,7 +21,6 @@
 package org.animotron.statement.operator;
 
 import org.animotron.ATest;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -50,10 +49,9 @@ public class IdTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_03() throws Throwable {
         testAnimo("def a (x) (y 1).");
-        assertAnimoResult("id get y a", "\"y\".");
+        assertAnimoResult("id get y a", "1.");
     }
 
     @Test
@@ -73,23 +71,20 @@ public class IdTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_06() throws Throwable {
         testAnimo("def a (x) (y id this).");
         testAnimo("def b (x) (y id this).");
         testAnimo("def c (x) (y id this).");
 
-        assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo y \"b\". \\foo y \"c\".");
+        assertAnimoResult("each (all x) (\\foo get y)", "\\foo \"a\". \\foo \"b\". \\foo \"c\".");
     }
 
     @Test
-    @Ignore
     public void test_07() throws Throwable {
         testAnimo("def x y id this.");
         testAnimo("def a x.");
         testAnimo("def b x.");
         testAnimo("def c x.");
-        assertAnimoResult("each (all x) (\\foo get y)", "\\foo y \"a\". \\foo y \"b\". \\foo y \"c\".");
+        assertAnimoResult("each (all x) (\\foo get y)", "\\foo \"a\". \\foo \"b\". \\foo \"c\".");
     }
-
 }

@@ -24,9 +24,12 @@ import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Utils;
+import org.animotron.statement.value.VALUE;
+import org.neo4j.graphdb.Relationship;
 
 import static org.animotron.statement.value.VALUE.value;
 
@@ -51,12 +54,25 @@ public class ID extends Operator implements Evaluable {
     class Calc extends OnQuestion {
     	@Override
         public void act(final PFlow pf) {
-        	Pipe p = Utils.getByREF(pf);
-        	QCAVector v;
-        	while ((v = p.take()) != null) {
-        		pf.sendAnswer(pf.getVector().answered(
-                    value(Utils.name(v.getClosest().getEndNode()))
-                ));
+    		System.out.println("ID "+pf.getVector());
+
+    		Pipe p = AN.getREFs(pf, pf.getVector());
+			QCAVector v = null;
+			while ((v = p.take()) != null) {
+        		System.out.println(v);
+        		Relationship r = v.getClosest();
+        		if (r.isType(VALUE._)) {
+	        		pf.sendAnswer(pf.getVector().answered(r));
+        			
+        		} else {
+	        		String name = Utils.name(v.getClosest().getEndNode());
+	        		System.out.println(name);
+	        		if (name != null && !name.isEmpty()) {
+		        		pf.sendAnswer(pf.getVector().answered(
+		                    value(name)
+		                ));
+	        		}
+        		}
             }
         }
     }

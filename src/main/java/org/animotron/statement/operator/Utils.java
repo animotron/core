@@ -478,7 +478,11 @@ public class Utils {
 	}
 	
     public static String name(Node theNode) {
-    	return (String) Properties.NAME.get(theNode);
+    	try {
+    		return (String) Properties.NAME.get(theNode);
+    	} catch (Throwable e) {
+		}
+    	return null;
     }
 
 	public static TraversalDescription THES =
