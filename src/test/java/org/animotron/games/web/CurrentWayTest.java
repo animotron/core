@@ -21,7 +21,6 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.Expression;
 import org.junit.Test;
 
 /**
@@ -34,14 +33,17 @@ public class CurrentWayTest extends ATest {
     @Test
     public void test() throws Throwable {
 
-        tAnimo("def current-site any site with server-name get host any request.");
-        tAnimo("def localhost-site (site) (server-name 'localhost').");
-        tAnimo("def rest any service current-site.");
-        tAnimo("def current-request (request) (host 'localhost').");
+        __(
+    		"def current-site any site with server-name get host any request.",
+    		"def test-service service.",
+        	"def localhost-site (site) (server-name 'localhost').",
+        	"def current-request (request) (host 'localhost')."
+    	);
+        
+        assertAnimoResult("any service.", "test-service service.");
+        
         tAnimo("def rest any service current-site.");
 
-        Expression s = tAnimo("rest use current-request.");
-
-        assertAnimoResult(s, "rest test-service service.");
+        assertAnimoResult("rest use current-request.", "rest test-service service.");
     }
 }
