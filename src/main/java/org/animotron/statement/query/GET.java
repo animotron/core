@@ -832,7 +832,9 @@ public class GET extends AbstractQuery implements Shift {
 				FastTable.recycle(resByHAVE);
 				FastTable.recycle(resByIS);
 			}
-			System.out.println("***TRUE***");
+			if (debug)
+				System.out.println("***TRUE***");
+			
 			return true;
 		} finally {
 			FastMap.recycle(paths);
