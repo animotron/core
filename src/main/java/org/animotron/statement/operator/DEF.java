@@ -81,7 +81,10 @@ public class DEF extends AbstractStatement implements Prepare, Definition {
 	}
 
 	public Node getDef(Node rev) {
-        return rev;// getDb().getNodeById((Long) DEFID.get(rev));
+        if (DEFID.has(rev)) {
+        	return rev;
+        }
+        return null;
 	}
 
 	public Relationship get(Object name) {

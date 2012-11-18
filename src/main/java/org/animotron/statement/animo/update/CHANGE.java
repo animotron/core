@@ -162,7 +162,7 @@ public class CHANGE extends Operator implements Evaluable {
         private Set<Relationship> def(Set<Relationship> set, QCAVector v) {
             List<QCAVector> context = v.getContext();
             if (context == null) {
-                Node def = v.getClosestDefEndNode();
+                Node def = v.getClosestDef();
                 if (def != null) {
                     set.add(DEF.getRelationship(def));
                 }

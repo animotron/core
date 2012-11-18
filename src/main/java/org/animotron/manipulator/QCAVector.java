@@ -577,7 +577,7 @@ public class QCAVector {
 		);
 	}
 
-	public Node getClosestDefEndNode() {
+	public Node getClosestDef() {
 		Node node = getClosestEndNode();
 		try {
 			return DEF._.getDef( node );
