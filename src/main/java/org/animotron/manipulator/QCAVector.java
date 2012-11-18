@@ -73,6 +73,10 @@ public class QCAVector {
 			}
 		}
 	}
+	
+	public QCAVector() {
+		question = null;
+	}
 
 	public QCAVector(Relationship question) {
 		this(-1, question);
@@ -81,6 +85,10 @@ public class QCAVector {
 	}
 
 	public QCAVector(long lastDef, Relationship question) {
+		if (question.isType(DEF._)) {
+			answer = question;
+		}
+		
 		this.question = question;
 		
 		if (lastDef != -1)
@@ -338,7 +346,7 @@ public class QCAVector {
 		}
 		spaces(b, level);
 		if (answer != null) {
-			if (visited.contains(answer)) {
+			if (visited.contains(answer) && question != answer) {
 				b.append(" cycling detected "+answer);
 				return;
 			}

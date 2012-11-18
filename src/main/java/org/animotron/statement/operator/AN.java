@@ -63,6 +63,7 @@ public class AN extends Operator implements Reference, Evaluable, Shift {
 				Pipe pipe = getREFs(pf, pf.getVector());
 				QCAVector r;
 				while ((r = pipe.take()) != null) {
+					System.out.println("AN "+r);
 					if (r.getQuestion().equals(pf.getVector().getQuestion()))
 						pf.sendAnswer(r);
 //						pf.sendAnswer(DEF._.get(r.getAnswer().getEndNode()), r);

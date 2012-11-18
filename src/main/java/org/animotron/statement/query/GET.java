@@ -556,7 +556,7 @@ public class GET extends AbstractQuery implements Shift {
 
 			@Override
 			public Iterable<Relationship> expand(Path path, BranchState<Long> state) {
-//				System.out.println(path);
+				System.out.println(path);
 				
 //				if (path.length() == 0) {
 //					return Order._.queryDownIterable(path.endNode(), allowedSet);

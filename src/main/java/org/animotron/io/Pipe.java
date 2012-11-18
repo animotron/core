@@ -35,7 +35,7 @@ import java.util.concurrent.SynchronousQueue;
  */
 public class Pipe extends SynchronousQueue<QCAVector> implements Reusable {
 	
-	private final static QCAVector EOP = new QCAVector(null);
+	private final static QCAVector EOP = new QCAVector();
 
 	private static final long serialVersionUID = -4081186589534725579L;
 	
