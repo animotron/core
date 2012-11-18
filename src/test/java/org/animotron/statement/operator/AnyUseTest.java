@@ -34,39 +34,33 @@ public class AnyUseTest extends ATest {
     public void simple_any_Use() throws Throwable {
 
         __(
-    		"def A (^S) (X 'α').",
-    		"def B (^A) (Y 'β').",
-    		"def C (^B) (Z 'γ') (X 'αα').",
+    		"def A (^S) 'α'.",
+    		"def B (^A) 'β'.",
+    		"def C (^B) 'γ'.",
     		"def s any S."
 		);
 
-        //assertAnimoResult(b, "b s the B (A (S) (X \"α\")) (Y \"β\").");
-//        assertAnimoResult(b, "b s the C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
-        assertAnimoResult("def b s use B", "b s B (A (S) (X \"α\")) (Y \"β\").");
+        assertAnimoResult("def b s use B", "b s B (A (S) 'α') 'β'.".replace('\'', '"'));
 
-        assertAnimoResult("def c s use C", "c s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult("def c s use C", "c s C (B (A (S) 'α') 'β') 'γ'.".replace('\'', '"'));
     }
 
     @Test
     public void complex_any_Use() throws Throwable {
 
         __(
-    		"def A (^S) (X 'α').",
-    		"def B (^A) (Y 'β').",
-    		"def B1 (^B) (Y 'ββ').",
-    		"def C (^B) (Z 'γ') (X 'αα').",
-    		"def C1 (^C) (Z 'γγ') (X 'ααα').",
+    		"def A (^S) 'α'.",
+    		"def B (^A) 'β'.",
+    		"def B1 (^B) 'ββ'.",
+    		"def C (^B) 'γ'.",
+    		"def C1 (^C) 'γγ'.",
     		"def s any S."
 		);
 
-        //assertAnimoResult(b, "b s the B (A (S) (X \"α\")) (Y \"β\").");
-//        assertAnimoResult(b, "b s B1 (B (A (S) (X \"α\")) (Y \"β\")) (Y \"ββ\").");
-        assertAnimoResult("def b s use B", "b s B (A (S) (X \"α\")) (Y \"β\").");
+        assertAnimoResult("def b s use B", "b s B (A (S) 'α') 'β'.".replace('\'', '"'));
 
-        //assertAnimoResult(c, "c s the C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
-//        assertAnimoResult(c, "c s C1 (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) (Z \"γγ\") (X \"ααα\").");
-        assertAnimoResult("def c s use C", "c s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult("def c s use C", "c s C (B (A (S) 'α') 'β') 'γ'.".replace('\'', '"'));
 
-        assertAnimoResult("def b s use C", "b s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult("def b s use C", "b s C (B (A (S) 'α') 'β') 'γ'.".replace('\'', '"'));
     }
 }

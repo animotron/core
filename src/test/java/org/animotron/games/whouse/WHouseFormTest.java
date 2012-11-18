@@ -64,7 +64,7 @@ public class WHouseFormTest extends ATest {
                         "(goods 'ISBN:3-540-11157-3') " +
                         "(qty (number 1) (UoM pcs)) " +
                         "(price (number 35) (currency USD) (UoM pcs)) " +
-                        "(cost (number 35) (currency USD)))."
+                        "(cost (number 35) (currency USD))))."
         );
 
         assertAnimo(
@@ -76,12 +76,12 @@ public class WHouseFormTest extends ATest {
                     "(receive-party centralWhouse) " +
                     "(SKU " +
                         "(uuidA " +
-                        	"(goods ISBN:0-387-97061-4) " +
+                        	"(goods \"ISBN:0-387-97061-4\") " +
                         	"(qty (number 1) (UoM pcs)) " +
                         	"(price (number 35) (currency EUR) (UoM pcs)) " +
                         	"(cost (number 35) (currency EUR))) " +
                         "(uuidB " +
-                        	"(goods ISBN:3-540-11157-3) " +
+                        	"(goods \"ISBN:3-540-11157-3\") " +
                         	"(qty (number 1) (UoM pcs)) " +
                         	"(price (number 35) (currency USD) (UoM pcs)) " +
                         	"(cost (number 35) (currency USD))))."
@@ -237,13 +237,15 @@ public class WHouseFormTest extends ATest {
     @Test
     public void test_01() throws Throwable {
     	__(
-			"def form part field.",
+			"def some-form field.",
+	        "def el '<' (id this el) '>' (get 2) '</' (id this el) '>'.",
+	        "def form el.",
 			"def generator " +
-				"\\form " +
+				"form " +
 					"(@id id this generator) " +
-					"(each (get part this generator) (\\input @name id this part))."
+					"(each (get 2) (\\input @name id this))."
 		);
-        assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
+        assertAnimoResult("generator some-form", "generator \\form (@id \"form\") (\\input @name \"field\").");
         
     	__(
 			"def form2 part (field1) (field2)."
