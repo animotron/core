@@ -360,9 +360,9 @@ public class GetTest extends ATest {
     public void test_27() throws Throwable {
         testAnimo("def x y z.");
         testAnimo("def z \\bar.");
-        assertAnimoResult("def foo (^x) (get y)", "def foo (x y) (z \\bar).");
+        assertAnimoResult("def foo (^x) (get y)", "foo (x y) (z \\bar).");
 
-        assertAnimoResult("def foo (^x) (an (get y))", "def foo (x y) (z \\bar).");
+        assertAnimoResult("def foo (^x) (an (get y))", "foo (x y) (z \\bar).");
     }
 
     @Test
