@@ -35,19 +35,22 @@ public class EachTest extends ATest {
 
     @Test
     public void test() throws Throwable {
-        testAnimo("def a (s) (x 1).");
-        testAnimo("def b (s) (x 2).");
-        testAnimo("def c (s) (x 3).");
+        __(
+    		"def a (s) (x 1).",
+    		"def b (s) (x 2).",
+    		"def c (s) (x 3).",
+    		"def foo get 1."
+		);
 
         assertAnimoResult("each (all s) (foo get x)", "foo 1. foo 2. foo 3.");
     }
 
     @Test
     public void test_00() throws Throwable {
+        __("def ul get 1.");
 
         Expression s = new AnimoExpression("ul each ((A) (B) (C)) (li)");
         assertAnimoResult(s, "ul (li) (li) (li).");
-
     }
 
     @Test
@@ -100,14 +103,20 @@ public class EachTest extends ATest {
 
     @Test
     public void test_02() throws Throwable {
-        testAnimo("def a x 1 2 3.");
+        __(
+    		"def a x 1 2 3.",
+    		"def foo get 1."
+		);
 
         assertAnimoResult("each (get x a) (foo this x)", "foo 1. foo 2. foo 3.");
     }
 
     @Test
     public void test_03() throws Throwable {
-        testAnimo("def a x 1 2 3.");
+        __(
+    		"def a x 1 2 3.",
+    		"def foo get 1."
+		);
 
         assertAnimoResult("each (get y a) (foo this x)", "");
     }
