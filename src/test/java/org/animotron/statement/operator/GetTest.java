@@ -127,8 +127,8 @@ public class GetTest extends ATest {
     @Test
 	public void test_01() throws Throwable {
         __(
-            "a (x 1) (y 2) (z 3).",
-            "b (get x) (get y) (get z)."
+            "def a (x 1) (y 2) (z 3).",
+            "def b (get x) (get y) (get z)."
         );
 
         assertStringResult("b a", "123");
