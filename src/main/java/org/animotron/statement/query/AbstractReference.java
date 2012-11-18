@@ -122,7 +122,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 					        	
 					        	Node n = path.lastRelationship().getStartNode();
 								if (setFiltering(n, uses, weaks)) {
-									if (isLeaf(n) && (res = DEF._.get(n)) != null) {
+									if (isLeaf(n) && (res = DEF.getRelationship(n)) != null) {
 										//System.out.print("answered ");
 										//Utils.debug(r);
 				        				pf.sendAnswer( res );

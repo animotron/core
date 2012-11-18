@@ -164,7 +164,7 @@ public class CHANGE extends Operator implements Evaluable {
             if (context == null) {
                 Node def = v.getClosestDefEndNode();
                 if (def != null) {
-                    set.add(DEF._.get(def));
+                    set.add(DEF.getRelationship(def));
                 }
             } else {
                 for (QCAVector i : context) {

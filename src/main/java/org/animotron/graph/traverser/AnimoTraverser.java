@@ -87,7 +87,8 @@ public class AnimoTraverser {
         if (statement instanceof DEF) {
             def = r;
         } else if (statement instanceof REF) {
-            def = DEF._.get(r.getEndNode());
+        	//XXX: make it cheaper!
+            def = DEF.getRelationship(r.getEndNode());
         }
         Relationship ashift = null;
         if (def != null) {
