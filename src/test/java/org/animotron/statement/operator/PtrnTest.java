@@ -35,11 +35,14 @@ public class PtrnTest extends ATest {
     public void test_00() throws Throwable {
 
         __(
-    		"def doc part (number) (table (goods) (qty))."
+                "def el '<' (get name this el) ' id=\\\"' (id get 2) '\\\"/>'.",
+                "def html:table (el) (name 'table').",
+                "def html:input (el) (name 'input').",
+                "def doc part (number) (table (goods) (qty))."
         );
 
-        assertAnimoResult(
-    		"each (get part doc) (ptrn (this part) (?is table '<table id=' (id this part) '/>') ('<input id=' (id this part) '/>'))", 
-    		"'<input id='. 'number'. '/>'. '<table id='. 'table'. '/>'.".replace('\'', '"'));
+        assertStringResult(
+    		"each (get part doc) (ptrn (this part) (?is table html:table this part) (html:input this part))",
+    		"<input id=\"number\"/><table id=\"table\"/>");
     }
 }
