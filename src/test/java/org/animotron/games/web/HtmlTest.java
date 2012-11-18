@@ -62,4 +62,19 @@ public class HtmlTest extends ATest {
         assertStringResult("ul c li c 1", "<ul><li>1</li></ul>");
     }
 
+    @Test
+    public void test_05() throws Throwable {
+        tAnimo("def el '<' (id this el) '>' (get 2) '</' (id this el) '>'.");
+        tAnimo("def html el.");
+        tAnimo("def head el.");
+        tAnimo("def title el.");
+        tAnimo("def script '<script src=\\'' (get 1) '\\'></script>'.");
+        tAnimo("def inline-script el.");
+        tAnimo("def body el.");
+        tAnimo("def h1 el.");
+        tAnimo("def p el.");
+        tAnimo("def page html (head title get caption) (body (h1 get title) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get title) '\\');')).");
+        assertStringResult("page caption 'Hello world!'", "<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1><p></p><script src=\"jquery.js\"></script><inline-script>alert(\"Hello world!\");</inline-script></body></html>");
+    }
+
 }
