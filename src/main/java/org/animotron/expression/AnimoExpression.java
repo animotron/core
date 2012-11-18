@@ -244,6 +244,7 @@ public class AnimoExpression extends AbstractExpression {
             builder.end();
         }
         level = stack.pop();
+        op = null;
     }
 
 }

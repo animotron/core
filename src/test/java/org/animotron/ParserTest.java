@@ -66,8 +66,13 @@ public class ParserTest extends ATest {
 	}
 
     @Test
+    public void test_07() throws Throwable {
+        testAnimo("def a (all this) (c).");
+    }
+
+    @Test
     public void test_26() throws Throwable {
-    	testAnimo("def a \"\\\"\".");
+        testAnimo("def a \"\\\"\".");
     }
 
     @Test
