@@ -168,7 +168,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 //		        			continue;
 
 	        			try {
-			        		res = DEF._.get(r.getStartNode());
+			        		res = DEF.getRelationship(r.getStartNode());
 //			        		System.out.println(res);
 			        		if (res != null) {
 			        			if (filtering(pf, res, uses, weaks)) {
