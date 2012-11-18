@@ -47,6 +47,7 @@ public class SynchroTest extends ATest{
 
 	@Before
 	public void beforeTests() throws Exception {
+		@SuppressWarnings("unused")
 		Synchro synchro = Synchro._;
 		startDB("data-test");
 		initChannels();
