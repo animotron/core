@@ -97,12 +97,18 @@ public class GET extends AbstractQuery implements Shift {
 						int num = VALUE.number(VALUE._.reference(theNode.getClosest())).intValue();
 						QCAVector v = pf.getVector();
 						while (num > 0) {
+							if (v.getContext() != null) {
+								v = null;
+								break;
+							}
 							v = v.getContext().get(0);
 							num--;
 						}
-						System.out.println("GET-N = "+v);
-						relaxDown(pf, v.getQuestion());
-//						pf.sendAnswer(v);
+						if (v != null) {
+							System.out.println("GET-N = "+v);
+							relaxDown(pf, v.getQuestion());
+						}
+
 					} else {
 						thes.add( theNode.getClosestEndNode() );
 //						System.out.println("THEs += "+theNode);

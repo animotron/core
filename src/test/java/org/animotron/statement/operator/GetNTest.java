@@ -38,8 +38,8 @@ public class GetNTest extends ATest {
 
     @Test
     public void test_001() throws Throwable {
-        testAnimo("def a  get 2.");
-        assertAnimoResult("a b", "a  b.");
+        testAnimo("def a get 1.");
+        assertAnimoResult("a b", "a b.");
     }
 
     @Test
@@ -50,8 +50,13 @@ public class GetNTest extends ATest {
 
     @Test
     public void test_003() throws Throwable {
-        testAnimo("def a  get 2.");
-        assertAnimoResult("a (b) (c)", "a  (b) (c).");
+        testAnimo("def a get 1.");
+        assertAnimoResult("a (b) (c)", "a (b) (c).");
     }
 
+    @Test
+    public void test_004() throws Throwable {
+        testAnimo("def a get 2.");
+        assertAnimoResult("a b", "a.");
+    }
 }

@@ -90,7 +90,6 @@ public class EACH extends Combinator {
 						}
 					}
 				}
-
 				//process(pf, sets, 1, null);
 
 			} finally {

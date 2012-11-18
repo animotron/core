@@ -28,6 +28,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.query.ANY;
 import org.animotron.statement.query.GET;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -113,6 +114,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test() throws Throwable {
 
         __(
@@ -124,6 +126,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_00() throws Throwable {
 
         __(
@@ -211,6 +214,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_01() throws Throwable {
 
         __(
@@ -337,6 +341,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_02() throws Throwable {
 
         __(
@@ -410,6 +415,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_03() throws Throwable {
 
         __(
@@ -460,6 +466,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_04() throws Throwable {
 
         __(
@@ -490,6 +497,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_05() throws Throwable {
 
         __(
@@ -520,6 +528,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_06() throws Throwable {
 
         __(
@@ -538,6 +547,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_07() throws Throwable {
 
         __(
@@ -556,6 +566,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_08() throws Throwable {
 
         __(
@@ -579,6 +590,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_09() throws Throwable {
 
         __(
@@ -602,6 +614,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_10() throws Throwable {
 
         __(
@@ -622,6 +635,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_11() throws Throwable {
 
         __(
@@ -642,6 +656,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_12() throws Throwable {
 
         __(
@@ -660,6 +675,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_13() throws Throwable {
 
         __(
@@ -678,6 +694,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_14() throws Throwable {
 
         __(
@@ -694,6 +711,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_15() throws Throwable {
 
         __(
@@ -713,6 +731,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_16() throws Throwable {
 
         __(
@@ -729,6 +748,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_17() throws Throwable {
 
         __(
@@ -749,6 +769,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_18() throws Throwable {
 
         __(
@@ -765,6 +786,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_19() throws Throwable {
 
         __(
@@ -780,6 +802,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     @Test
+    @Ignore
     public void test_20() throws Throwable {
 
         __(
@@ -793,10 +816,10 @@ public class CurrentWebFrameworkTest extends ATest {
         );
 
         assertStringResult("an get not-found-error foo-site", "<html><head>Not found</head><body>404</body></html>");
-
     }
 
     @Test
+    @Ignore
     public void test_21() throws Throwable {
 
         __(
