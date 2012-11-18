@@ -237,13 +237,15 @@ public class WHouseFormTest extends ATest {
     @Test
     public void test_01() throws Throwable {
     	__(
-			"def form part field.",
+			"def some-form field.",
+	        "def el '<' (id this el) '>' (get 2) '</' (id this el) '>'.",
+	        "def form el.",
 			"def generator " +
-				"\\form " +
+				"form " +
 					"(@id id this generator) " +
-					"(each (get part this generator) (\\input @name id this part))."
+					"(each (get 2) (\\input @name id this))."
 		);
-        assertAnimoResult("generator form", "generator \\form (@id \"form\") (\\input @name \"field\").");
+        assertAnimoResult("generator some-form", "generator \\form (@id \"form\") (\\input @name \"field\").");
         
     	__(
 			"def form2 part (field1) (field2)."

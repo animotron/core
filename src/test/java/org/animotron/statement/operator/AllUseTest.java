@@ -34,43 +34,58 @@ public class AllUseTest extends ATest {
     public void simple_all_Use() throws Throwable {
 
         __(
-            "def A (^S) (X 'α').",
-            "def B (^A) (Y 'β').",
-            "def C (^B) (Z 'γ') (X 'αα').",
+            "def A (^S) 'α'.",
+            "def B (^A) 'β'.",
+            "def C (^B) 'γ'.",
             "def s all S."
         );
 
-        assertAnimoResult("s use B", "s (B (A (S) (X \"α\")) (Y \"β\")) (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")).");
-//        assertAnimoResult(test, "s (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")).");
+        assertAnimoResult("s use B", 
+    		"s (B (A (S) 'α') 'β') (C (B (A (S) 'α') 'β') 'γ')."
+    		.replace('\'', '"')
+		);
 
-//        assertAnimoResult(test, "s C (B) (Z \"γ\") (X \"αα\").");
-        assertAnimoResult("s use C", "s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult("s use C", 
+    		"s C (B (A (S) 'α') 'β') 'γ'."
+    		.replace('\'', '"')
+		);
     }
 
     @Test
     public void complex_all_Use() throws Throwable {
 
         __(
-                "def A (^S) (X 'α').",
-                "def B (^A) (Y 'β').",
-                "def B1 (^B) (Y 'ββ').",
-                "def C (^B) (Z 'γ') (X 'αα').",
-                "def C1 (^C) (Z 'γγ') (X 'ααα').",
-                "def s all S."
+            "def A (^S) 'α'.",
+            "def B (^A) 'β'.",
+            "def B1 (^B) 'ββ'.",
+            "def C (^B) 'γ'.",
+            "def C1 (^C) 'γγ'.",
+            "def s all S."
         );
 
-        assertAnimoResult("def b s use B", "b s " +
-    		"(B (A (S) (X \"α\")) (Y \"β\")) " +
-    		"(B1 (B (A (S) (X \"α\")) (Y \"β\")) (Y \"ββ\")) " +
-    		"(C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) " +
-			"(C1 (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) (Z \"γγ\") (X \"ααα\")).");
+        assertAnimoResult("def b s use B",
+        	new String(
+	        	"b s " +
+	    		"(B (A (S) 'α') 'β') " +
+	    		"(B1 (B (A (S) 'α') 'β') 'ββ') " +
+	    		"(C (B (A (S) 'α') 'β') 'γ') " +
+				"(C1 (C (B (A (S) 'α') 'β') 'γ') 'γγ')."
+    		).replace('\'', '"')
+		);
 
         assertAnimoResult("def c s use C", "c s " +
-			"(C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) " +
-			"(C1 (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) (Z \"γγ\") (X \"ααα\")).");
+        	new String(
+				"(C (B (A (S) 'α') 'β') 'γ') " +
+				"(C1 (C (B (A (S) 'α') 'β') 'γ') 'γγ')."
+			).replace('\'', '"')
+		);
 
-        assertAnimoResult("def b s use C", "b s " +
-			"(C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) " +
-			"(C1 (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) (Z \"γγ\") (X \"ααα\")).");
+        assertAnimoResult("def b s use C", 
+        	new String(
+    			"b s " +
+				"(C (B (A (S) 'α') 'β') 'γ') " +
+				"(C1 (C (B (A (S) 'α') 'β') 'γ') 'γγ')."
+			).replace('\'', '"')
+		);
     }
 }
