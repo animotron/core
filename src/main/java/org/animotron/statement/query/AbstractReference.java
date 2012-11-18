@@ -148,7 +148,7 @@ public abstract class AbstractReference extends AbstractQuery implements Referen
 				
 				if (underUSE 
 //						&& isLeaf(node) 
-						&& (res = DEF._.get(node)) != null
+						&& (res = DEF.getRelationship(node)) != null
 						&& filtering(pf, res, uses, weaks))
 					
 	            	try {

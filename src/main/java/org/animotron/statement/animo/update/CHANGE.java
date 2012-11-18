@@ -109,8 +109,7 @@ public class CHANGE extends Operator implements Evaluable {
             long rid = np.getId();
             long uid = pf.getOP().getId();
             Relationship c = v.getClosest();
-            Statement q = Statements.relationshipType(v.getQuestion());
-            IndexHits<Relationship> it = Order._.queryDown(c.isType(DEF._) || c.isType(REF._) && !(q instanceof GET) ? c.getEndNode() : c.getStartNode());
+            IndexHits<Relationship> it = Order._.queryDown(c.getStartNode());
             try {
                 if (it.hasNext()) {
                     while (it.hasNext()) {
