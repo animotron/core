@@ -39,7 +39,7 @@ public class PtrnTest extends ATest {
         );
 
         assertAnimoResult(
-    		"each (get part doc) (ptrn (this part) (?is table '<table>' @id id this part) ('<input>' @id id this part))", 
-    		"'<input>' @id 'number'. '<table>' @id 'table'.");
+    		"each (get part doc) (ptrn (this part) (?is table '<table id=' (id this part) '/>') ('<input id=' (id this part) '/>'))", 
+    		"'<input id='. 'number'. '/>'. '<table id='. 'table'. '/>'.".replace('\'', '"'));
     }
 }
