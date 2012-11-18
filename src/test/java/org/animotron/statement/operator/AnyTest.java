@@ -120,7 +120,7 @@ public class AnyTest extends ATest {
             "def hello-foo (^foo-site, root) (title \"hello foo\").",
             "def hello-bar (^bar-site, root) (title \"hello bar\").",
             
-            "def foo-root-layout (layout, foo, root) (\\h1)."
+            "def foo-root-layout (layout, foo, root) (h1)."
 		);
 
         assertAnimoResult(
@@ -138,7 +138,7 @@ public class AnyTest extends ATest {
             "def hello-foo (foo-site, root) (title \"hello foo\").",
             "def hello-bar (bar-site, root) (title \"hello bar\").",
             
-            "def foo-root-layout (layout, foo, root) (\\h1)."
+            "def foo-root-layout (layout, foo, root) (h1)."
         );
 
         assertAnimoResult("any xxx with server-name \"foo.com\"", "");

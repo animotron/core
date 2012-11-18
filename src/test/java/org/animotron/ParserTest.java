@@ -66,133 +66,8 @@ public class ParserTest extends ATest {
 	}
 
     @Test
-    public void test_07() throws Throwable {
-    	testAnimo("def a \\ get element-name.");
-    }
-
-    @Test
-    public void test_08() throws Throwable {
-    	testAnimo("def a \\ b.");
-    }
-
-    @Test
-    public void test_09() throws Throwable {
-    	testAnimo("def a \\ an b.", "def a \\ b.");
-    }
-
-    @Test
-	public void test_10() throws Throwable {
-    	testAnimo("def a \\ \"b\"", "def a \\ \"b\".");
-	}
-
-    @Test
-	public void test_11() throws Throwable {
-    	testAnimo("def a \\b.");
-	}
-
-    @Test
-    public void test_12() throws Throwable {
-    	testAnimo("def a @b \"c\".");
-    }
-
-    @Test
-    public void test_13() throws Throwable {
-    	testAnimo("def a @b (get c)", "def a @b get c.");
-    }
-
-    @Test
-    public void test_14() throws Throwable {
-    	testAnimo("def a @b get c.");
-    }
-
-    @Test
-    public void test_15() throws Throwable {
-    	testAnimo("def a @b get c d.");
-    }
-
-    @Test
-    public void test_16() throws Throwable {
-    	testAnimo("def a @b (get c) (all d).");
-    }
-
-    @Test
-    public void test_17() throws Throwable {
-    	testAnimo("def a @ (get c) (all d).");
-    }
-
-    @Test
-    public void test_18() throws Throwable {
-    	testAnimo("def a @b (get c) (all d).");
-    }
-
-    @Test
-    public void test_19() throws Throwable {
-    	testAnimo("def a @b (get c x) (all d y).");
-    }
-
-    @Test
-    public void test_20() throws Throwable {
-    	testAnimo("def a @(b c)", "def a @ b c.");
-    }
-
-    @Test
-    public void test_21() throws Throwable {
-    	testAnimo("def a @((b) (c))", "def a @ ((b) (c)).");
-    }
-
-    @Test
-    public void test_22() throws Throwable {
-    	testAnimo("def a @(\"b\" c)", "def a @ \"b\" (c).");
-    }
-
-    @Test
-    public void test_23() throws Throwable {
-    	testAnimo("def a @((\"b\") (c))", "def a @ (\"b\" (c)).");
-    }
-
-    @Test
-    public void test_24() throws Throwable {
-    	testAnimo("def a @ \"b\" (c) (d).");
-    }
-
-    @Test
-    public void test_25() throws Throwable {
-    	testAnimo("def a @x \"x\".");
-    }
-
-    @Test
     public void test_26() throws Throwable {
     	testAnimo("def a \"\\\"\".");
-    }
-
-    @Test
-    public void test_27() throws Throwable {
-    	testAnimo("def a ??stylesheet.");
-    }
-
-    @Test
-    public void test_28() throws Throwable {
-    	testAnimo("def a ??stylesheet b.");
-    }
-
-    @Test
-    public void test_29() throws Throwable {
-    	testAnimo("def a $b.");
-    }
-
-    @Test
-    public void test_30() throws Throwable {
-    	testAnimo("def a $b c.");
-    }
-
-    @Test
-    public void test_31() throws Throwable {
-    	testAnimo("def a !! \"html\".");
-    }
-
-    @Test
-    public void test_32() throws Throwable {
-    	testAnimo("def a &#amp.");
     }
 
     @Test
@@ -468,11 +343,6 @@ public class ParserTest extends ATest {
     @Test
     public void test_87() throws Throwable {
     	testAnimo("def a (b \"x\") (c \"x\").");
-    }
-
-    @Test
-    public void test_88() throws Throwable {
-    	testAnimo("\\a ($a \"a\") (@a \"a\") \"a\".");
     }
 
     @Test

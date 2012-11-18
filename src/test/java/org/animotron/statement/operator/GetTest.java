@@ -45,9 +45,9 @@ public class GetTest extends ATest {
 	@Test
 	public void getFromPFlow_an_with_param() throws Throwable {
 
-        __("def A \\B get C.");
+        __("def A  get C.");
 
-        assertAnimoResult("A C '.'", "A \\B \".\".");
+        assertAnimoResult("A C '.'", "A  \".\".");
 
         __("def A1 get B1.");
 
@@ -58,28 +58,28 @@ public class GetTest extends ATest {
 	public void getFromPFlow_cross_an_with_param() throws Throwable {
 
         __("def A B get C.");
-        __("def D \\E get B.");
+        __("def D E get B.");
 
-    	assertAnimoResult("D A C ':'", "D \\E \":\".");
+    	assertAnimoResult("D A C ':'", "D E \":\".");
 	}
 
 	@Test
 	public void getFromPFlow_an_with_an() throws Throwable {
 
-        __("def A \\B get C.");
+        __("def A  get C.");
         __("def D C '.'.");
 
-        assertAnimoResult("A D", "A \\B \".\".");
+        assertAnimoResult("A D", "A  \".\".");
 	}
 	
 	@Test
 	public void getFromPFlow_an_with_more_an() throws Throwable {
 
-        __("def A \\B get C.");
+        __("def A  get C.");
         __("def D C '.'.");
         __("def E C ':'.");
 
-    	assertAnimoResult("def F A (D) (E C '_')", "F A \\B \".\" \"_\".");
+    	assertAnimoResult("def F A (D) (E C '_')", "F A  \".\" \"_\".");
 
 	}
 	
@@ -345,24 +345,24 @@ public class GetTest extends ATest {
 
     @Test
     public void test_25() throws Throwable {
-        testAnimo("def x \\a y z.");
+        testAnimo("def x a y z.");
         assertAnimoResult("get y x", "");
     }
 
     @Test
     public void test_26() throws Throwable {
         testAnimo("def x y z.");
-        testAnimo("def z \\bar.");
-        assertAnimoResult("def foo an (get y x)", "foo z \\bar.");
+        testAnimo("def z bar.");
+        assertAnimoResult("def foo an (get y x)", "foo z bar.");
     }
 
     @Test
     public void test_27() throws Throwable {
         testAnimo("def x y z.");
-        testAnimo("def z \\bar.");
-        assertAnimoResult("def foo (^x) (get y)", "foo (x y) (z \\bar).");
+        testAnimo("def z bar.");
+        assertAnimoResult("def foo (^x) (get y)", "foo (x y) (z bar).");
 
-        assertAnimoResult("def foo (^x) (an (get y))", "foo (x y) (z \\bar).");
+        assertAnimoResult("def foo (^x) (an (get y))", "foo (x y) (z bar).");
     }
 
     @Test
@@ -417,10 +417,10 @@ public class GetTest extends ATest {
         testAnimo("def x y foo.");
         assertAnimoResult("get foo x", "foo.");
         assertAnimoResult("get foo get y x", "foo.");
-        assertAnimoResult("def q1 (x) (\\p get foo)", "q1 (x y) (\\p foo).");
-        assertAnimoResult("def q2 (x) (\\p get foo get y)", "q2 (x y) (\\p foo).");
-        assertAnimoResult("def q3 (x) (\\p an get foo)", "q3 (x y) (\\p foo).");
-        assertAnimoResult("def q4 (x) (\\p an get foo get y)", "q4 (x y) (\\p foo).");
+        assertAnimoResult("def q1 (x) (p get foo)", "q1 (x y) (p foo).");
+        assertAnimoResult("def q2 (x) (p get foo get y)", "q2 (x y) (p foo).");
+        assertAnimoResult("def q3 (x) (p an get foo)", "q3 (x y) (p foo).");
+        assertAnimoResult("def q4 (x) (p an get foo get y)", "q4 (x y) (p foo).");
     }
 
     @Test
@@ -462,11 +462,11 @@ public class GetTest extends ATest {
     @Test
     public void test_34_() throws Throwable {
         testAnimo("def bar z.");
-        testAnimo("def foo1 (bar) (\\p get a).");
+        testAnimo("def foo1 (bar) (p get a).");
         testAnimo("def foo2 (bar) 2.");
-        assertAnimoResult("foo1 a 1", "foo1 (bar z) (\\p 1).");
-        assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (\\p 1).");
-        //assertAnimoResult("an (getDef bar getDef y x) (a 1)", "foo1 \\p a 1."); //answer '' correct because (getDef bar getDef y x) == ''
+        assertAnimoResult("foo1 a 1", "foo1 (bar z) (p 1).");
+        assertAnimoResult("an (an foo1) (a 1)", "foo1 (bar z) (p 1).");
+        //assertAnimoResult("an (getDef bar getDef y x) (a 1)", "foo1 p a 1."); //answer '' correct because (getDef bar getDef y x) == ''
     }
 
     @Test

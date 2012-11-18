@@ -39,14 +39,14 @@ public class EachTest extends ATest {
         testAnimo("def b (s) (x 2).");
         testAnimo("def c (s) (x 3).");
 
-        assertAnimoResult("each (all s) (\\foo get x)", "\\foo 1. \\foo 2. \\foo 3.");
+        assertAnimoResult("each (all s) (foo get x)", "foo 1. foo 2. foo 3.");
     }
 
     @Test
     public void test_00() throws Throwable {
 
-        Expression s = new AnimoExpression("\\ul each ((A) (B) (C)) (\\li)");
-        assertAnimoResult(s, "\\ul (\\li) (\\li) (\\li).");
+        Expression s = new AnimoExpression("ul each ((A) (B) (C)) (li)");
+        assertAnimoResult(s, "ul (li) (li) (li).");
 
     }
 
@@ -54,47 +54,47 @@ public class EachTest extends ATest {
     @Ignore
     public void test_01() throws Throwable {
 
-        Expression s = new AnimoExpression("\\x each ((\\a1) (\\b1) (\\c1)) ((\\a2) (\\b2) (\\c2)) ((\\a3) (\\b3) (\\c3))");
+        Expression s = new AnimoExpression("x each ((a1) (b1) (c1)) ((a2) (b2) (c2)) ((a3) (b3) (c3))");
 
         assertAnimoResult(s,
 
-                "\\x " +
+                "x " +
 
-                        "(\\c1 \\b1 \\a1) " +
-                        "(\\c1 \\b1 \\a2) " +
-                        "(\\c1 \\b1 \\a3) " +
+                        "(c1 b1 a1) " +
+                        "(c1 b1 a2) " +
+                        "(c1 b1 a3) " +
 
-                        "(\\c1 \\b2 \\a1) " +
-                        "(\\c1 \\b2 \\a2) " +
-                        "(\\c1 \\b2 \\a3) " +
+                        "(c1 b2 a1) " +
+                        "(c1 b2 a2) " +
+                        "(c1 b2 a3) " +
 
-                        "(\\c1 \\b3 \\a1) " +
-                        "(\\c1 \\b3 \\a2) " +
-                        "(\\c1 \\b3 \\a3) " +
+                        "(c1 b3 a1) " +
+                        "(c1 b3 a2) " +
+                        "(c1 b3 a3) " +
 
-                        "(\\c2 \\b1 \\a1) " +
-                        "(\\c2 \\b1 \\a2) " +
-                        "(\\c2 \\b1 \\a3) " +
+                        "(c2 b1 a1) " +
+                        "(c2 b1 a2) " +
+                        "(c2 b1 a3) " +
 
-                        "(\\c2 \\b2 \\a1) " +
-                        "(\\c2 \\b2 \\a2) " +
-                        "(\\c2 \\b2 \\a3) " +
+                        "(c2 b2 a1) " +
+                        "(c2 b2 a2) " +
+                        "(c2 b2 a3) " +
 
-                        "(\\c2 \\b3 \\a1) " +
-                        "(\\c2 \\b3 \\a2) " +
-                        "(\\c2 \\b3 \\a3) " +
+                        "(c2 b3 a1) " +
+                        "(c2 b3 a2) " +
+                        "(c2 b3 a3) " +
 
-                        "(\\c3 \\b1 \\a1) " +
-                        "(\\c3 \\b1 \\a2) " +
-                        "(\\c3 \\b1 \\a3) " +
+                        "(c3 b1 a1) " +
+                        "(c3 b1 a2) " +
+                        "(c3 b1 a3) " +
 
-                        "(\\c3 \\b2 \\a1) " +
-                        "(\\c3 \\b2 \\a2) " +
-                        "(\\c3 \\b2 \\a3) " +
+                        "(c3 b2 a1) " +
+                        "(c3 b2 a2) " +
+                        "(c3 b2 a3) " +
 
-                        "(\\c3 \\b3 \\a1) " +
-                        "(\\c3 \\b3 \\a2) " +
-                        "(\\c3 \\b3 \\a3)."
+                        "(c3 b3 a1) " +
+                        "(c3 b3 a2) " +
+                        "(c3 b3 a3)."
        );
     }
 
@@ -102,14 +102,14 @@ public class EachTest extends ATest {
     public void test_02() throws Throwable {
         testAnimo("def a x 1 2 3.");
 
-        assertAnimoResult("each (get x a) (\\foo this x)", "\\foo 1. \\foo 2. \\foo 3.");
+        assertAnimoResult("each (get x a) (foo this x)", "foo 1. foo 2. foo 3.");
     }
 
     @Test
     public void test_03() throws Throwable {
         testAnimo("def a x 1 2 3.");
 
-        assertAnimoResult("each (get y a) (\\foo this x)", "");
+        assertAnimoResult("each (get y a) (foo this x)", "");
     }
 
 }

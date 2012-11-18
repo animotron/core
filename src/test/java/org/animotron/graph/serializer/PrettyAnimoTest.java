@@ -81,38 +81,6 @@ public class PrettyAnimoTest extends ATest {
     }
 
     @Test
-    public void test_08() throws Throwable {
-        test("def a\n    \\b \\c @d e.");
-    }
-
-    @Test
-    public void test_09() throws Throwable {
-        test("def a\n    \\b \\c\n        @d\n            (e)\n            (f).");
-    }
-
-    @Test
-    public void test_0A() throws Throwable {
-        test(
-            "def rest\n" +
-            "    content\n" +
-            "        \\html\n" +
-            "            (\\head \\title title \"Welcome to Animo\")\n" +
-            "            (\\body\n" +
-            "                theme-concrete-root-layout\n" +
-            "                    (root-layout)\n" +
-            "                    (\\h1 title \"Welcome to Animo\")\n" +
-            "                    (\\p content \"It is working\")\n" +
-            "                    (\\ul\n" +
-            "                        (\\li\n" +
-            "                            \"host:\"\n" +
-            "                            (\\strong host \"localhost\"))\n" +
-            "                        (\\li\n" +
-            "                            \"uri:\"\n" +
-            "                            (\\strong uri \"/\"))))."
-        );
-    }
-
-    @Test
     public void test_0B() throws Throwable {
         test("an\n" +
                 "    get x.");

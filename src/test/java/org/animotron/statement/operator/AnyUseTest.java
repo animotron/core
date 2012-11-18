@@ -34,39 +34,39 @@ public class AnyUseTest extends ATest {
     public void simple_any_Use() throws Throwable {
 
         __(
-    		"def A (^S) (\\X 'α').",
-    		"def B (^A) (\\Y 'β').",
-    		"def C (^B) (\\Z 'γ') (\\X 'αα').",
+    		"def A (^S) (X 'α').",
+    		"def B (^A) (Y 'β').",
+    		"def C (^B) (Z 'γ') (X 'αα').",
     		"def s any S."
 		);
 
-        //assertAnimoResult(b, "b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
-//        assertAnimoResult(b, "b s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
-        assertAnimoResult("def b s use B", "b s B (A (S) (\\X \"α\")) (\\Y \"β\").");
+        //assertAnimoResult(b, "b s the B (A (S) (X \"α\")) (Y \"β\").");
+//        assertAnimoResult(b, "b s the C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
+        assertAnimoResult("def b s use B", "b s B (A (S) (X \"α\")) (Y \"β\").");
 
-        assertAnimoResult("def c s use C", "c s C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
+        assertAnimoResult("def c s use C", "c s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
     }
 
     @Test
     public void complex_any_Use() throws Throwable {
 
         __(
-    		"def A (^S) (\\X 'α').",
-    		"def B (^A) (\\Y 'β').",
-    		"def B1 (^B) (\\Y 'ββ').",
-    		"def C (^B) (\\Z 'γ') (\\X 'αα').",
-    		"def C1 (^C) (\\Z 'γγ') (\\X 'ααα').",
+    		"def A (^S) (X 'α').",
+    		"def B (^A) (Y 'β').",
+    		"def B1 (^B) (Y 'ββ').",
+    		"def C (^B) (Z 'γ') (X 'αα').",
+    		"def C1 (^C) (Z 'γγ') (X 'ααα').",
     		"def s any S."
 		);
 
-        //assertAnimoResult(b, "b s the B (A (S) (\\X \"α\")) (\\Y \"β\").");
-//        assertAnimoResult(b, "b s B1 (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Y \"ββ\").");
-        assertAnimoResult("def b s use B", "b s B (A (S) (\\X \"α\")) (\\Y \"β\").");
+        //assertAnimoResult(b, "b s the B (A (S) (X \"α\")) (Y \"β\").");
+//        assertAnimoResult(b, "b s B1 (B (A (S) (X \"α\")) (Y \"β\")) (Y \"ββ\").");
+        assertAnimoResult("def b s use B", "b s B (A (S) (X \"α\")) (Y \"β\").");
 
-        //assertAnimoResult(c, "c s the C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
-//        assertAnimoResult(c, "c s C1 (C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\")) (\\Z \"γγ\") (\\X \"ααα\").");
-        assertAnimoResult("def c s use C", "c s C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
+        //assertAnimoResult(c, "c s the C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
+//        assertAnimoResult(c, "c s C1 (C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\")) (Z \"γγ\") (X \"ααα\").");
+        assertAnimoResult("def c s use C", "c s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
 
-        assertAnimoResult("def b s use C", "b s C (B (A (S) (\\X \"α\")) (\\Y \"β\")) (\\Z \"γ\") (\\X \"αα\").");
+        assertAnimoResult("def b s use C", "b s C (B (A (S) (X \"α\")) (Y \"β\")) (Z \"γ\") (X \"αα\").");
     }
 }

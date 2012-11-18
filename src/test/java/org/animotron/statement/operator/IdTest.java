@@ -67,7 +67,7 @@ public class IdTest extends ATest {
         testAnimo("def a (x) (y 1).");
         testAnimo("def b (x) (y 2).");
         testAnimo("def c (x) (y 3).");
-        assertAnimoResult("each (all x) (\\foo id this x)", "\\foo \"a\". \\foo \"b\". \\foo \"c\".");
+        assertAnimoResult("each (all x) (id this x)", "\"a\". \"b\". \"c\".");
     }
 
     @Test
@@ -76,7 +76,7 @@ public class IdTest extends ATest {
         testAnimo("def b (x) (y id this).");
         testAnimo("def c (x) (y id this).");
 
-        assertAnimoResult("each (all x) (\\foo get y)", "\\foo \"a\". \\foo \"b\". \\foo \"c\".");
+        assertAnimoResult("each (all x) (get y)", "\"a\". \"b\". \"c\".");
     }
 
     @Test
@@ -85,6 +85,6 @@ public class IdTest extends ATest {
         testAnimo("def a x.");
         testAnimo("def b x.");
         testAnimo("def c x.");
-        assertAnimoResult("each (all x) (\\foo get y)", "\\foo \"a\". \\foo \"b\". \\foo \"c\".");
+        assertAnimoResult("each (all x) (get y)", "\"a\". \"b\". \"c\".");
     }
 }
