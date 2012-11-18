@@ -31,12 +31,6 @@ import org.junit.Test;
 public class GetNTest extends ATest {
 
     @Test
-    public void test_000() throws Throwable {
-        testAnimo("def a get 1.");
-        assertAnimoResult("a b", "a b.");
-    }
-
-    @Test
     public void test_001() throws Throwable {
         testAnimo("def a get 1.");
         assertAnimoResult("a b", "a b.");
