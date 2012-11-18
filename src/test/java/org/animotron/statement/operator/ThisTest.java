@@ -59,15 +59,16 @@ public class ThisTest extends ATest {
     @Test
     public void test_10() throws Throwable {
         __(
-    		"def rainbow each (this) (\\p id this)."
+    		"def p get 1.",
+    		"def rainbow each (this) (p id this)."
 		);
-        assertAnimoResult("rainbow (red) (green).", "rainbow (\\p \"red\") (\\p \"green\").");
+        assertAnimoResult("rainbow (red) (green).", "rainbow (p \"red\") (p \"green\").");
     }
 
     @Test
     public void test_11() throws Throwable {
         __(
-    		"def app-layout each (get js this app) (\\js get uri this js).",
+    		"def app-layout each (get js this app) ('<js uri=' (get uri this) '/>').",
     		"def app app-layout.",
     		"def some-js uri \"some-js-uri\".",
     		"def IDE (app) (js some-js)."
