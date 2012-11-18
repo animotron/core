@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.animotron</groupId>
 	<artifactId>core</artifactId>
-	<version>0.1.M04</version>
+	<version>0.1.M05</version>
 	<name>Animo core</name>
 	
 	<organization>
