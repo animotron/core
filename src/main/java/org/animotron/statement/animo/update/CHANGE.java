@@ -30,10 +30,7 @@ import org.animotron.manipulator.DependenciesTracking;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.Statement;
-import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.query.GET;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
@@ -108,8 +105,11 @@ public class CHANGE extends Operator implements Evaluable {
         private void process(PFlow pf, QCAVector v, Relationship op, Relationship np) throws Throwable {
             long rid = np.getId();
             long uid = pf.getOP().getId();
+            
+//            System.out.println("*** "+v);
+            
             Relationship c = v.getClosest();
-            IndexHits<Relationship> it = Order._.queryDown(c.getStartNode());
+            IndexHits<Relationship> it = Order._.queryDown(pf.getOP() == v.getQuestion() ? c.getEndNode() : c.getStartNode());
             try {
                 if (it.hasNext()) {
                     while (it.hasNext()) {
