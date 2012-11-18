@@ -151,18 +151,15 @@ public class WHouseFormTest extends ATest {
                                 "(?is table html-table) " +
                                 "(html-label-input)))).",
 
-                "def html-input \\input @name id this part.",
+                "def html-input '<input name=' (id this part) '/>'.",
 
-                "def html-label-input \\label (get word this part) (html-input).",
+                "def html-label-input '<label>' (get word this part) '</label>' (html-input).",
 
-                "def html-table " +
-                    "each (get row this part) "+
-                        "(\\table (@name id this row) " +
-                            "(html-table-head) (html-table-row)).",
+                "def html-table each (get row this part) ('<table name=' (id this row) '>' (html-table-head) (html-table-row) '</table>').",
 
-                "def html-table-head \\tr each (get part this row) (\\th get word this part).",
+                "def html-table-head '<tr>' (each (get part this row) (\\th get word this part)) '</tr>'.",
 
-                "def html-table-row (table-row-widget) (\\tr (@name \"uuid\") (each (get part this row) (\\td html-input))).",
+                "def html-table-row (table-row-widget) ('<tr name=uuid>' (each (get part this row) ('<td>' (html-input) '</td>'))).",
 
                 "def fill-form " +
                     "each (get prism) " +
@@ -175,11 +172,10 @@ public class WHouseFormTest extends ATest {
                     "each (get row this part) " +
                         "(fill-form prizm this row).",
 
-                "def fill-input \\input " +
-                    "(@name id this part) " +
+                "def fill-input '<input name=\"' (id this part) '\" ' " +
                     "(each (get (this part) (this object)) " +
-                        "(@id id this this part) " +
-                        "(@value get word this this part))."
+                        "('id=\"' (id this this part) '\" ') " +
+                        "('value=\"' (get word this this part) '\" ')) '/>'."
 
         );
 
@@ -243,7 +239,7 @@ public class WHouseFormTest extends ATest {
 			"def generator " +
 				"form " +
 					"(@id id this generator) " +
-					"(each (get 2) (\\input @name id this))."
+					"(each (get 2) ('<input name=' (id this) '/>'))."
 		);
         assertAnimoResult("generator some-form", "generator \\form (@id \"form\") (\\input @name \"field\").");
         
