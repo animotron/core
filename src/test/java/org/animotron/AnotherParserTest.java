@@ -41,11 +41,12 @@ public class AnotherParserTest extends ATest {
     @Test
 	public void test_02() throws Throwable {
         testAnimo("def a get an b c", "def a get an b c.");
-	}
+        testAnimo("def a get (b c)", "def a get an b c.");
+    }
 
     @Test
 	public void test_03() throws Throwable {
-        testAnimo("def a get (b) (c)", "def a get b c.");
+        testAnimo("def a get (b) (c)", "def a get (b) (c).");
 	}
 
     @Test
