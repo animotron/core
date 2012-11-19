@@ -109,4 +109,10 @@ public class HtmlTest extends ATest {
         assertStringResult("hello", "<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1><p></p><script src=\"jquery.js\"></script><script>alert(\"Hello world!\");</script></body></html>");
     }
 
+    @Test
+    public void test_08() throws Throwable {
+        tAnimo("def meta '<meta ' (each (get 1) ((id this 1) '=\\\"' (get (this 1) (this)) '\\\" ')) '>'.");
+        assertStringResult("meta (a 1) (b 2) (c 3)", "<meta a=\"1\" b=\"2\" c=\"3\" >");
+    }
+
 }
