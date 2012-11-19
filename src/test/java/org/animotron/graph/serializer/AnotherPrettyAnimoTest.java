@@ -52,11 +52,12 @@ public class AnotherPrettyAnimoTest extends ATest {
     @Test
 	public void test_02() throws Throwable {
         test("def a get an b c", "def a\n    get an b c.");
-	}
+        test("def a get (b c)", "def a\n    get an b c.");
+    }
 
     @Test
 	public void test_03() throws Throwable {
-        test("def a get (b) (c)", "def a\n    get b c.");
+        test("def a get (b) (c)", "def a\n    get (b)\n        (c).");
 	}
 
     @Test
