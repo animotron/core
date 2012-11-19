@@ -113,7 +113,7 @@ public class GraphBuilder {
                     DEFID.set(def, r.getId());
                     DEF._.add(r, o[2]);
                 }
-                build(getROOT(), o, it, r);
+                build(o, it, r);
                 catcher.modificative(r);
                 catcher.preparative(r);
             } else {
@@ -121,7 +121,7 @@ public class GraphBuilder {
                 if (r == null) {
                     o[6] = Cache.NODE.get(hash) != null;
                     r = ((Statement) o[1]).build(getROOT(), o[2], hash, true, ignoreNotFound);
-                    build(getROOT(), o, it, r);
+                    build(o, it, r);
                     Cache.RELATIONSHIP.add(r, hash);
                     catcher.modificative(r);
                     HASH.set(r, hash);
@@ -132,7 +132,7 @@ public class GraphBuilder {
         return r;
     }
 
-    private void build(Node parent, Object[] o, Iterator<Object[]> it, Relationship r) throws AnimoException {
+    private void build(Object[] o, Iterator<Object[]> it, Relationship r) throws AnimoException {
         Node end = r.getEndNode();
         o[3] = r;
         o[4] = end;

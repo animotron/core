@@ -86,9 +86,8 @@ public class ParserTest extends ATest {
     }
 
     @Test
-    @Ignore
     public void test_11() throws Throwable {
-        testAnimo("def x s (1 (t) (v)).");
+        testAnimo("def x s (y) (1 (t) (v) 2) 3.");
     }
 
     @Test

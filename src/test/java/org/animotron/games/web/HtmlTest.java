@@ -21,6 +21,7 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
+import org.animotron.expression.AnimoExpression;
 import org.junit.Test;
 
 /**
@@ -111,8 +112,8 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_08() throws Throwable {
-        tAnimo("def meta '<meta ' (each (get 1) ((id this 1) '=\\\"' (get (this 1) (this)) '\\\" ')) '>'.");
-        assertStringResult("meta (a 1) (b 2) (c 3)", "<meta a=\"1\" b=\"2\" c=\"3\" >");
+        AnimoExpression.__("def meta '<meta' (each (get 1) ((' ') (id this 1) '=\\\"' (get (this 1) (this)) '\\\"')) '>'.");
+        assertStringResult("meta (a 1) (b 2) (c 3)", "<meta a=\"1\" b=\"2\" c=\"3\">");
     }
 
 }

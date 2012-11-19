@@ -70,6 +70,7 @@ public class AnimoExpression extends AbstractExpression {
     private Statement op = null;
     private int level = 0;
     boolean link = false;
+    boolean link_ = false;
     boolean number = true;
     boolean text = false;
     char quote = '\0';
@@ -127,12 +128,14 @@ public class AnimoExpression extends AbstractExpression {
 	                            case ','  : newToken();
 	                                        comma = true;
 	                                        break;
-	                            case '('  : newToken();
+	                            case '('  : link_ = true;
+                                            newToken();
 	                                        startList();
                                             para++;
 	                                        break;
 	                            case ')'  : newToken();
 	                                        endList();
+                                            link_ = false;
                                             para--;
 	                                        break;
 	                            default   : s.append(ch);
@@ -152,6 +155,7 @@ public class AnimoExpression extends AbstractExpression {
     }
 
     private void processPrefix() throws AnimoException, IOException {
+        value();
         Statement st = Statements.name(s.toString());
         if (st instanceof Prefix) {
             builder.start(st);
@@ -178,11 +182,26 @@ public class AnimoExpression extends AbstractExpression {
         number = true;
     }
 
+    private Object v = null;
+
+    private void value() throws AnimoException, IOException {
+        if (v != null) {
+            if (link_) {
+                builder.start(LINK._);
+                link_ = false;
+                level++;
+            }
+            builder._(v);
+            v = null;
+        }
+    }
+
     private void token() throws AnimoException, IOException {
+        value();
         String token = s.toString();
     	if (token.length() == 1 && ".".equals(token) && !text) return; //XXX:start new graph
     	if (text) {
-            builder._(token);
+            v = token;
         } else {
             if (op instanceof DEF) {
                 builder.start(op, token);
@@ -218,16 +237,19 @@ public class AnimoExpression extends AbstractExpression {
                         builder._(s, token);
                         comma = false;
                     } else {
-                        builder._(o);
+                        v = o;
                     }
                 }
                 op = s;
             }
         }
+
         link = false;
+
     }
 
     private void startList() throws AnimoException, IOException {
+        value();
         if (link) {
             builder.start(LINK._);
             op = null;
@@ -241,6 +263,7 @@ public class AnimoExpression extends AbstractExpression {
     }
 
     private void endList() throws AnimoException, IOException {
+        value();
         for (int i = 0; i < level; i++) {
             builder.end();
         }
