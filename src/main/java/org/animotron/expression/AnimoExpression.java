@@ -237,6 +237,7 @@ public class AnimoExpression extends AbstractExpression {
         }
         stack.push(level);
         level = 0;
+        op = null;
     }
 
     private void endList() throws AnimoException, IOException {

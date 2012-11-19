@@ -115,11 +115,11 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
                 write(NONSTOP._.name());
             } else if (!n.hasRelationship(REF._, OUTGOING)) {
                 write(statement.name());
-            } else if (pos == 0 && ps instanceof Operator) {
-                write(statement.name());
-                if (n.hasRelationship(OUTGOING)) {
-                    write(" ");
-                }
+            //} else if (pos == 0 && ps instanceof Operator) {
+                //write(statement.name());
+                //if (n.hasRelationship(OUTGOING)) {
+                //    write(" ");
+                //}
             }
             ps = statement;
         } else {

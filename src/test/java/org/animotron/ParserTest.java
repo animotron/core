@@ -71,6 +71,27 @@ public class ParserTest extends ATest {
     }
 
     @Test
+    public void test_08() throws Throwable {
+        testAnimo("def x all (a b) (c d).");
+    }
+
+    @Test
+    public void test_09() throws Throwable {
+        testAnimo("def x an (any a b) (c all d).");
+    }
+
+    @Test
+    public void test_10() throws Throwable {
+        testAnimo("def x s ((t) 1 (v)).");
+    }
+
+    @Test
+    @Ignore
+    public void test_11() throws Throwable {
+        testAnimo("def x s (1 (t) (v)).");
+    }
+
+    @Test
     public void test_26() throws Throwable {
         testAnimo("def a \"\\\"\".");
     }
