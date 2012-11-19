@@ -64,23 +64,23 @@ public class UpdateTest extends ATest {
     @Test
     public void test_05() throws Throwable {
         Relationship a = testAnimo("def a 1.");
-        eval(new AnimoExpression("change (a) 1 2."));
+        eval(new AnimoExpression("change a 1 2."));
         assertAnimo(a, "def a 2.");
     }
 
     @Test
     public void test_06() throws Throwable {
         Relationship a = testAnimo("def a 1.");
-        eval(new AnimoExpression("change (a) 2."));
+        eval(new AnimoExpression("change a 2."));
         assertAnimo(a, "def a 2.");
     }
 
     @Test
     public void test_07() throws Throwable {
         Relationship a = testAnimo("def a 1.");
-        eval(new AnimoExpression("change (a) 2."));
+        eval(new AnimoExpression("change a 2."));
         assertAnimo(a, "def a 2.");
-        eval(new AnimoExpression("change (a) 3."));
+        eval(new AnimoExpression("change a 3."));
         assertAnimo(a, "def a 3.");
     }
 
