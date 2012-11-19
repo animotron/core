@@ -112,7 +112,7 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_08() throws Throwable {
-        AnimoExpression.__("def meta '<meta' (each (get 1) ((' ') (id this 1) '=\\\"' (get (this 1) (this)) '\\\"')) '>'.");
+        tAnimo("def meta '<meta' (each (get 1) (' ' (id this 1) '=\\\"' (get (this 1) (this)) '\\\"')) '>'.");
         assertStringResult("meta (a 1) (b 2) (c 3)", "<meta a=\"1\" b=\"2\" c=\"3\">");
     }
 

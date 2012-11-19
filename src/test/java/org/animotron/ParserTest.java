@@ -122,7 +122,7 @@ public class ParserTest extends ATest {
 
     @Test
     public void test_38() throws Throwable {
-    	testAnimo("def a (\"b\" c)", "def a \"b\" (c).");
+    	testAnimo("def a (\"b\" c)", "def a (\"b\" (c)).");
     }
 
     @Test

@@ -20,6 +20,7 @@
  */
 package org.animotron.expression;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
@@ -133,9 +134,9 @@ public class AnimoExpression extends AbstractExpression {
 	                                        startList();
                                             para++;
 	                                        break;
-	                            case ')'  : newToken();
+	                            case ')'  : link_ = false;
+                                            newToken();
 	                                        endList();
-                                            link_ = false;
                                             para--;
 	                                        break;
 	                            default   : s.append(ch);
@@ -184,6 +185,14 @@ public class AnimoExpression extends AbstractExpression {
 
     private Object v = null;
 
+    private void value(Object o) throws AnimoException, IOException {
+        if (link_) {
+            v = o;
+        } else {
+            builder._(o);
+        }
+    }
+
     private void value() throws AnimoException, IOException {
         if (v != null) {
             if (link_) {
@@ -201,7 +210,7 @@ public class AnimoExpression extends AbstractExpression {
         String token = s.toString();
     	if (token.length() == 1 && ".".equals(token) && !text) return; //XXX:start new graph
     	if (text) {
-            v = token;
+            value(token);
         } else {
             if (op instanceof DEF) {
                 builder.start(op, token);
@@ -237,7 +246,7 @@ public class AnimoExpression extends AbstractExpression {
                         builder._(s, token);
                         comma = false;
                     } else {
-                        v = o;
+                        value(o);
                     }
                 }
                 op = s;
