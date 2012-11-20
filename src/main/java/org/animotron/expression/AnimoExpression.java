@@ -254,6 +254,9 @@ public class AnimoExpression extends AbstractExpression {
         }
 
         link = false;
+        if (v == null) {
+            link_ = false;
+        }
 
     }
 
