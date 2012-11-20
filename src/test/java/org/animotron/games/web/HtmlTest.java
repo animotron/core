@@ -118,7 +118,7 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_09() throws Throwable {
-        tAnimo("def \\ '<' (id this) '>' (each (get 1 (this)) (this)) '</' (id this) '>'.");
+        tAnimo("def \\ '<' (id this) '>' (each (get 1) (this)) '</' (id this) '>'.");
         assertStringResult("\\ p (\\ strong 'foo') (\\ span 'bar')", "<p><strong>foo</strong><span>bar</span></p>");
     }
 
