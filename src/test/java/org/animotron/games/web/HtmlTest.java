@@ -116,4 +116,10 @@ public class HtmlTest extends ATest {
         assertStringResult("meta (a 1) (b 2) (c 3)", "<meta a=\"1\" b=\"2\" c=\"3\">");
     }
 
+    @Test
+    public void test_09() throws Throwable {
+        tAnimo("def \\ '<' (id this) '>' (each (get 1 (this)) (this)) '</' (id this) '>'.");
+        assertStringResult("\\ p (\\ strong 'foo') (\\ span 'bar')", "<p><strong>foo</strong><span>bar</span></p>");
+    }
+
 }
