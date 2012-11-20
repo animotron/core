@@ -118,8 +118,8 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_09() throws Throwable {
-        tAnimo("def \\ '<' (id this) '>' (each (get 1) (this)) '</' (id this) '>'.");
-        assertStringResult("\\ p (\\ strong 'foo') (\\ span 'bar')", "<p><strong>foo</strong><span>bar</span></p>");
+        tAnimo("def \\ '<' (id this) (each (get @ this) (this)) '>' (each (get 1) (this)) '</' (id this) '>'.");
+        assertAnimoResult("\\ p (@ class 'abc') (\\ strong 'foo') (\\ span 'bar')", "<p><stong>foo</strong><span>bar</span></p>");
     }
 
 }
