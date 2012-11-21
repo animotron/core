@@ -132,7 +132,7 @@ public class HtmlTest extends ATest {
     public void test_11() throws Throwable {
         tAnimo("def \\ (this) (each (get 1) (this)).");
         //tAnimo("def a 'test'.");
-        assertAnimoResult("\\ a 'test'", "\\ a.");
+        assertAnimoResult("\\ a 'test'", "\\ a 'test'.");
     }
 
 }
