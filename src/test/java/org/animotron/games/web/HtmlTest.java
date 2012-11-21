@@ -183,4 +183,16 @@ public class HtmlTest extends ATest {
         assertAnimoResult("\\ a (\\ c  @ b 'x')", "\\ \"a\" (\\ \"c\" (b) \"x\" (@)).");
     }
 
+    @Test
+    public void test_20() throws Throwable {
+        tAnimo("def \\ '<' (id context) (each (get @ context) (' ' (id this @) '=\\\"')) (each (get @ context) ((context) '\\\"')) '>' (each (get 1) (context)) '</' (id context) '>'.");
+        assertStringResult("\\ a (@ b 'x') 'foo' (\\ c 'bar') 'y'", "<a b=\"x\">foo<c>bar</c>y</a>");
+    }
+
+    @Test
+    public void test_21() throws Throwable {
+        tAnimo("def \\ '<' (id context) (each (get @ context) (' ' (id this @) '=\\\"')) (each (get @ context) ((context) '\\\"')) '>' (each (get 1) (context)) '</' (id context) '>'.");
+        assertStringResult("\\ a 'foo' (\\ c  (@ b 'x') 'bar') 'y'", "<a>foo<c b=\"x\">bar</c>y</a>");
+    }
+
 }
