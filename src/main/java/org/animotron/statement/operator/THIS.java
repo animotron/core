@@ -101,26 +101,9 @@ public class THIS extends Operator implements Reference, Evaluable {
 				
 				FastList<QCAVector> list = FastList.newInstance();
 				try {
-					Relationship toCheck = next.getAnswer();
-					if (toCheck != null && toCheck.isType(DEF._)) {
-						if (thes.isEmpty()) {
-							Node n = toCheck.getEndNode();
-							
-							if (debug) System.out.println(n);
-							
-							if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
-							pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext())); //, next.getContext()
-							return true;
-						}
-					}
-					
-					toCheck = next.getQuestion();
+					Relationship toCheck = next.getQuestion();
 					if (toCheck.isType(THIS._)) {
 						if (thes.isEmpty()) {
-							if (next.getUnrelaxedAnswer() != null) {
-								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer())); //, next.getContext()
-								return true;
-							}
 						} else {
 							Node n = Utils.getByREF(toCheck).getEndNode();
 							if (thes.contains( n )) {
@@ -129,22 +112,15 @@ public class THIS extends Operator implements Reference, Evaluable {
 							}
 						}
 					} else if (toCheck.isType(ALL._) || toCheck.isType(ANY._) || toCheck.isType(PREFER._) || toCheck.isType(GET._)) {
-						if (thes.isEmpty()) {
-							
-						} else {
-							Node n = Utils.getByREF(toCheck).getEndNode();
-							
-							if (debug) System.out.println(n);
-							
-							if (thes.contains( n )) {
-								if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
-								pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext())); //, next.getContext()
-								return true;
-							}
+						Node n = Utils.getByREF(toCheck).getEndNode();
+						
+						if (debug) System.out.println(n);
+						
+						if (thes.contains( n )) {
+							if (debug) System.out.println("answer "+next.getUnrelaxedAnswer());
+							pf.sendAnswer(pf.getVector().answered(next.getUnrelaxedAnswer(), next.getContext())); //, next.getContext()
+							return true;
 						}
-//					} else if (toCheck.isType(GET._)) {
-//						if (prevAnswer != null)
-//							pf.sendAnswer(pf.getVector().answered(prevAnswer));
 
 					} else if (toCheck.isType(AN._)) {
 						if (next.hasAnswer()) {
