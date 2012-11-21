@@ -191,8 +191,45 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_21() throws Throwable {
-        tAnimo("def \\ '<' (id context) (each (get @ context) (' ' (id this @) '=\\\"')) (each (get @ context) ((context) '\\\"')) '>' (each (get 1) (context)) '</' (id context) '>'.");
+        tAnimo("def \\ '<' (id context) (each (get @ context) (' ' (id this @) '=\\\"')) (each (get @ context) ((context) '\\\"')) '>' (each (context) (context)) '</' (id context) '>'.");
         assertStringResult("\\ a 'foo' (\\ c  (@ b 'x') 'bar') 'y'", "<a>foo<c b=\"x\">bar</c>y</a>");
+    }
+
+    @Test
+    public void test_22() throws Throwable {
+        tAnimo("def _@_ ' ' (id context) '=\\\"' (each (context) (context)) '\\\"'.");
+        tAnimo("def \\ '<' (id context) (each (get @ context) (_@_ this @)) '>' (each (context) (context)) '</' (id context) '>'.");
+        assertStringResult("\\ a 'foo' (\\ c  (@ b 'x') 'bar') 'y'", "<a>foo<c b=\"x\">bar</c>y</a>");
+    }
+
+    @Test
+    public void test_23() throws Throwable {
+        tAnimo("def _@_ ' ' (id context) '=\\\"' (each (context) (context)) '\\\"'.");
+        tAnimo("def \\ '<' (id context) (each (get @ context) (_@_ this @)) '>' (each (context) (context)) '</' (id context) '>'.");
+        assertStringResult("\\ a @ (b 1) (c 2)", "<a b=\"1\" c=\"2\"></a>");
+    }
+
+    @Test
+    public void test_24() throws Throwable {
+        tAnimo("def _\\_ '<' (id context) '>' (each (context) (context)) '</' (id context) '>'.");
+        tAnimo("def \\ each (get 1) (_\\_ this 1).");
+        assertStringResult("\\ (b 1) (c 2)", "<b>1</b><c>2</c>");
+    }
+
+    @Test
+    public void test_25() throws Throwable {
+        tAnimo("def @@ ' ' (id context) '=\\\"' (each (context) (context)) '\\\"'.");
+        tAnimo("def \\\\ '<' (id context) (each (get @ this 1) (@@ this @)) '>' (each (context) (context)) '</' (id context) '>'.");
+        tAnimo("def \\ each (get 1) (\\\\ this 1).");
+        assertStringResult("\\ a (@ n 11) (\\ (b 1) (c 2))", "<a n=\"11\"><b>1</b><c>2</c></a>");
+    }
+
+    @Test
+    public void test_26() throws Throwable {
+        tAnimo("def @@ ' ' (id context) '=\\\"' (each (context) (context)) '\\\"'.");
+        tAnimo("def \\\\ '<' (id context) (each (get @ this 1) (@@ this @)) '>' (each (context) (context)) '</' (id context) '>'.");
+        tAnimo("def \\ each (get 1) (\\\\ this 1).");
+        assertStringResult("\\ a (@ n 11) (\\ (b 1) (c 2))", "<a n=\"11\"><b>1</b><c>2</c></a>");
     }
 
 }
