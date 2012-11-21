@@ -122,4 +122,10 @@ public class HtmlTest extends ATest {
         assertStringResult("\\ p (@ class 'abc') (\\ strong 'foo') (\\ span (@ style 'display:none') 'bar' \\ a (@ href '#') 'home')", "<p class=\"abc\"><strong>foo</strong><span style=\"display:none\">bar<a href=\"#\">home</a></span></p>");
     }
 
+    @Test
+    public void test_10() throws Throwable {
+        tAnimo("def \\ (this) (get @ this) (each (get 1) (this)).");
+        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ c).");
+    }
+
 }
