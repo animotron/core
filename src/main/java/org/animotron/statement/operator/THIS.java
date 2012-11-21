@@ -75,6 +75,9 @@ public class THIS extends Operator implements Reference, Evaluable {
 			if (debug) 
 				Utils.debug(THIS._, op, thes);
 			
+			if (thes.isEmpty())
+				return;
+			
 			if (!Utils.results(pf)) {
 				FastList<QCAVector> list = FastList.newInstance();
 				try {
@@ -144,19 +147,7 @@ public class THIS extends Operator implements Reference, Evaluable {
 //							pf.sendAnswer(pf.getVector().answered(prevAnswer));
 
 					} else if (toCheck.isType(AN._)) {
-						if (thes.isEmpty()) {
-							if (next.getUnrelaxedAnswer() != null) {
-								IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
-								try {
-									for (Relationship r : hits) {
-										pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
-									}
-									return true;
-								} finally {
-									hits.close();
-								}
-							}
-						} else if (next.hasAnswer()) {
+						if (next.hasAnswer()) {
 							Node n = Utils.getByREF(toCheck).getEndNode();
 							if (thes.contains( n )) {
 								//find highest by pseudo-IS
