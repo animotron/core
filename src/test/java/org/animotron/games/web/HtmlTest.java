@@ -144,7 +144,7 @@ public class HtmlTest extends ATest {
     @Test
     public void test_13() throws Throwable {
         tAnimo("def \\ (id context) (get @ context) (each (get 1) (context)).");
-        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ (c)).");
+        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ \"a\" (b) (@) (\\ \"c\").");
     }
 
     @Test
@@ -170,4 +170,17 @@ public class HtmlTest extends ATest {
         tAnimo("def \\ get @ context.");
         assertAnimoResult("\\ ^a ^\\ ^b @ c", "\\ c.");
     }
+
+    @Test
+    public void test_18() throws Throwable {
+        tAnimo("def \\ (id context) (get @ context) (each (get @ context) (context)) (each (get 1) (context)).");
+        assertAnimoResult("\\ a (@ b 'x') (\\ c)", "\\ \"a\" (b) \"x\" (@) (\\ \"c\").");
+    }
+
+    @Test
+    public void test_19() throws Throwable {
+        tAnimo("def \\ (id context) (get @ context) (each (get @ context) (context)) (each (get 1) (context)).");
+        assertAnimoResult("\\ a (\\ c  @ b 'x')", "\\ \"a\" (\\ \"c\" (b) \"x\" (@)).");
+    }
+
 }
