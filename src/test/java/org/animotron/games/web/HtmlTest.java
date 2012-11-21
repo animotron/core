@@ -130,9 +130,9 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_11() throws Throwable {
-        tAnimo("def \\ this.");
-        tAnimo("def a \"test\".");
-        assertAnimoResult("\\ a", "\\ a.");
+        tAnimo("def \\ (this) (each (get 1) (this)).");
+        //tAnimo("def a 'test'.");
+        assertAnimoResult("\\ a 'test'", "\\ a.");
     }
 
 }
