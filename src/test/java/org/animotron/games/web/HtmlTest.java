@@ -124,14 +124,14 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_10() throws Throwable {
-        tAnimo("def \\ (get @ context) (each (get 1) (context)).");
-        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ c).");
+        tAnimo("def \\ (context) (get @ context) (each (get 1) (context)).");
+        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ (c)).");
     }
 
     @Test
     public void test_11() throws Throwable {
         tAnimo("def \\ (context) (get @ context) (each (get 1) (context)).");
-        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ c).");
+        assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ (c)).");
     }
 
     @Test
