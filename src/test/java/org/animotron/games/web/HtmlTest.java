@@ -130,7 +130,7 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_11() throws Throwable {
-        tAnimo("def \\ (context) (get @ cotext) (each (get 1) (context)).");
+        tAnimo("def \\ (context) (get @ cotext) '-' (each (get 1) (context)).");
         assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ c).");
     }
 
