@@ -159,4 +159,10 @@ public class HtmlTest extends ATest {
         assertAnimoResult("\\ a \\ b @ c", "\\ (a) (\\ (b) (c) (@)).");
     }
 
+    @Test
+    public void test_16() throws Throwable {
+        tAnimo("def \\ get @ context.");
+        assertAnimoResult("\\ a \\ b @ c", "\\.");
+    }
+
 }
