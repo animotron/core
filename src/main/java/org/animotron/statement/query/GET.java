@@ -149,7 +149,9 @@ public class GET extends AbstractQuery implements Shift {
 							System.out.println("GET ["+op+"] vector "+vector);
 						}
 						
-						get(pf, vector, thes, visitedREFs);
+						get(pf, 
+							new QCAVector(-1, vector.getQuestion(), vector.getAnswer()), 
+							thes, visitedREFs);
 					}
 				};
 				//pf.answerChannel().subscribe(onContext);
