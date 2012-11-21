@@ -124,8 +124,14 @@ public class HtmlTest extends ATest {
 
     @Test
     public void test_10() throws Throwable {
-        tAnimo("def \\ (this) (get @ this) (each (get 1) (this)).");
+        tAnimo("def \\ (this) (get @ this) (get 1).");
         assertAnimoResult("\\ a (@ b) (\\ c)", "\\ (a) (b) (@) (\\ c).");
+    }
+
+    @Test
+    public void test_11() throws Throwable {
+        tAnimo("def \\ this.");
+        assertAnimoResult("\\ a", "\\ a.");
     }
 
 }
