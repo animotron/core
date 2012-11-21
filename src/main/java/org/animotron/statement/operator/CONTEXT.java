@@ -22,16 +22,20 @@ package org.animotron.statement.operator;
 
 import javolution.util.FastList;
 import org.animotron.graph.index.Order;
+import org.animotron.manipulator.Evaluator;
+import org.animotron.manipulator.OnContext;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.query.ALL;
 import org.animotron.statement.query.ANY;
+import org.animotron.statement.query.GET;
 import org.animotron.statement.query.PREFER;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -56,20 +60,50 @@ public class CONTEXT extends AbstractLink implements Reference, Evaluable {
     class Calc extends OnQuestion {
 	
 		@Override
-		public void act(final PFlow pf) {
+		public void act(final PFlow pf) throws IOException {
 			
-			Relationship op = pf.getOP();
+			System.out.println("CONTEXT");
 			
 			if (!Utils.results(pf)) {
-				FastList<QCAVector> list = FastList.newInstance();
-				try {
-					if (pf.getVector().getContext() != null)
-						list.addAll( pf.getVector().getContext() );
+				if (Utils.haveContext(pf)) {
+					OnContext onContext = new OnContext() {
+						@Override
+						public void onMessage(QCAVector vector) {
+							super.onMessage(vector);
+							
+							if (vector == null)
+								return;
+							
+							System.out.println(vector);
+							
+							FastList<QCAVector> list = FastList.newInstance();
+							try {
+								if (pf.getVector().getContext() != null)
+									list.addAll( vector.getContext() );
+								
+								search(pf, list, null);
+								
+							} finally {
+								FastList.recycle(list);
+							}
+						}
+					};
+					//pf.answerChannel().subscribe(onContext);
 					
-					search(pf, list, null);
-					
-				} finally {
-					FastList.recycle(list);
+					Evaluator.sendQuestion(pf.getController(), onContext, pf.getVector(), pf.getOPNode(), false);
+					onContext.isDone();
+				} else {
+
+					FastList<QCAVector> list = FastList.newInstance();
+					try {
+						if (pf.getVector().getContext() != null)
+							list.addAll( pf.getVector().getContext() );
+						
+						search(pf, list, null);
+						
+					} finally {
+						FastList.recycle(list);
+					}
 				}
 			}
 		}
@@ -95,6 +129,21 @@ public class CONTEXT extends AbstractLink implements Reference, Evaluable {
 							IndexHits<Relationship> hits = Order._.context(toCheck.getEndNode());
 							try {
 								for (Relationship r : hits) {
+									System.out.println(r);
+									pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
+								}
+								return true;
+							} finally {
+								hits.close();
+							}
+						}
+					} else if ( toCheck.isType(GET._) ) {
+
+						if (next.getUnrelaxedAnswer() != null) {
+							IndexHits<Relationship> hits = Order._.context(next.getAnswerEndNode());
+							try {
+								for (Relationship r : hits) {
+									System.out.println(r);
 									pf.sendAnswer(pf.getVector().answered(r));//, next.getContext()
 								}
 								return true;

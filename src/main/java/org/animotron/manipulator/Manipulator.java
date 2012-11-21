@@ -261,6 +261,10 @@ public abstract class Manipulator {
 	}
 	
 	public static void sendQuestion(final Controller controller, final OnContext onAnswer, final QCAVector vector, final Node node) {
+		sendQuestion(controller, onAnswer, vector, node, true);
+	}
+
+	public static void sendQuestion(final Controller controller, final OnContext onAnswer, final QCAVector vector, final Node node, boolean haveREF) {
 		
 		//System.out.println("sendQuestion");
 		
@@ -270,7 +274,12 @@ public abstract class Manipulator {
 		try {
 			PFlow nextPF;
 
-			IndexHits<Relationship> q = Order._.context(node);
+			IndexHits<Relationship> q;
+			if (haveREF)
+				q = Order._.context(node);
+			else
+				q = Order._.queryDown(node);
+				
 			try {
 				Iterator<Relationship> it = q.iterator();
 				while (it.hasNext()) {

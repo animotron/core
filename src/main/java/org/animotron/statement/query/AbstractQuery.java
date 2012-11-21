@@ -627,6 +627,19 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 					return EXCLUDE_AND_CONTINUE;
 				
 				} else if (r.isType(AN._)) {
+					Iterator<Relationship> it = path.reverseRelationships().iterator();
+					if (it.hasNext()) {
+						it.next();
+						if (it.hasNext()) {
+							final Relationship before = it.next();
+							if (before.isType(AN._) && !NONSTOP.is(before)) {
+								return EXCLUDE_AND_PRUNE;
+							}
+						}
+					} else {
+						return EXCLUDE_AND_PRUNE;
+					}
+
 					Node endNode = r.getEndNode();
 					if (endNode.equals(path.endNode())) {
 						if (AN.beginWithHasA(path)) {
@@ -646,7 +659,7 @@ public abstract class AbstractQuery extends Operator implements Evaluable, Query
 							return EXCLUDE_AND_CONTINUE;
 					}
 					return EXCLUDE_AND_PRUNE;
-
+					
 				} else if (r.isType(ANY._)  || r.isType(ALL._)  || r.isType(PREFER._)) {
 					if (!r.getEndNode().equals(path.endNode()))
 						return EXCLUDE_AND_PRUNE;

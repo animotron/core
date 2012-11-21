@@ -136,27 +136,27 @@ public class GET extends AbstractQuery implements Shift {
 			if (!Utils.results(pf)) {
 				//no pre-calculated result, calculate it
 				
-				OnContext onContext = new OnContext() {
-					@Override
-					public void onMessage(QCAVector vector) {
-						super.onMessage(vector);
-						
-						if (vector == null)
-							return;
-						
-						if (debug) { 
-							System.out.println("GET on context "+Thread.currentThread());
-							System.out.println("GET ["+op+"] vector "+vector);
-						}
-						
-						get(pf, 
-							new QCAVector(-1, vector.getQuestion(), vector.getAnswer()), 
-							thes, visitedREFs);
-					}
-				};
-				//pf.answerChannel().subscribe(onContext);
-				
 				if (Utils.haveContext(pf)) {
+					OnContext onContext = new OnContext() {
+						@Override
+						public void onMessage(QCAVector vector) {
+							super.onMessage(vector);
+							
+							if (vector == null)
+								return;
+							
+							if (debug) { 
+								System.out.println("GET on context "+Thread.currentThread());
+								System.out.println("GET ["+op+"] vector "+vector);
+							}
+							
+							get(pf, 
+								new QCAVector(-1, vector.getQuestion(), vector.getAnswer()), 
+								thes, visitedREFs);
+						}
+					};
+					//pf.answerChannel().subscribe(onContext);
+					
 					Evaluator.sendQuestion(pf.getController(), onContext, pf.getVector(), node);
 					onContext.isDone();
 				} else {
@@ -621,7 +621,7 @@ public class GET extends AbstractQuery implements Shift {
 		evaluator(new Searcher(){
 			@Override
 			public Evaluation evaluate(Path path) {
-				if (debug)
+//				if (debug)
 					System.out.println(path);
 				
 				if (path.length() == 0)
