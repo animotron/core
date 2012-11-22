@@ -74,7 +74,7 @@ public class HtmlTest extends ATest {
         tAnimo("def body el.");
         tAnimo("def h1 el.");
         tAnimo("def p el.");
-        tAnimo("def page html (head title get caption) (body (h1 get title) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get title) '\\');')).");
+        tAnimo("def page html (head title get caption) (body (h1 get caption) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get caption) '\\');')).");
         assertStringResult("page caption 'Hello world!'", "<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1><p></p><script src=\"jquery.js\"></script><inline-script>alert(\"Hello world!\");</inline-script></body></html>");
     }
 
@@ -89,7 +89,7 @@ public class HtmlTest extends ATest {
         tAnimo("def body el.");
         tAnimo("def h1 el.");
         tAnimo("def p el.");
-        tAnimo("def page html (head title get caption) (body (h1 get title) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get title) '\\');')).");
+        tAnimo("def page html (head title get caption) (body (h1 get caption) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get caption) '\\');')).");
         tAnimo("def hello (page) (caption 'Hello world!').");
         assertStringResult("hello", "<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1><p></p><script src=\"jquery.js\"></script><inline-script>alert(\"Hello world!\");</inline-script></body></html>");
     }
@@ -105,7 +105,7 @@ public class HtmlTest extends ATest {
         tAnimo("def body (el) (name 'body').");
         tAnimo("def h1 (el) (name 'h1').");
         tAnimo("def p (el) (name 'p').");
-        tAnimo("def page html (head title get caption) (body (h1 get title) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get title) '\\');')).");
+        tAnimo("def page html (head title get caption) (body (h1 get caption) (p get para) (script 'jquery.js') (inline-script 'alert(\\'' (get caption) '\\');')).");
         tAnimo("def hello (page) (caption 'Hello world!').");
         assertStringResult("hello", "<html><head><title>Hello world!</title></head><body><h1>Hello world!</h1><p></p><script src=\"jquery.js\"></script><script>alert(\"Hello world!\");</script></body></html>");
     }
