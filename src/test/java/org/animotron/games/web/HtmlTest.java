@@ -219,7 +219,7 @@ public class HtmlTest extends ATest {
     @Test
     public void test_25() throws Throwable {
         tAnimo("def @@ ' ' (id context) '=\\\"' (each (context) (context)) '\\\"'.");
-        tAnimo("def \\\\ '<' (id context) (each (get @ this 1) (@@ this @)) '>' (each (context) (context)) '</' (id context) '>'.");
+        tAnimo("def \\\\ '<' (id this 1) (each (get @ this 1) (@@ this @)) '>' (each (context) (context)) '</' (id this 1) '>'.");
         tAnimo("def \\ each (get 1) (\\\\ this 1).");
         assertStringResult("\\ a (@ n 11) (\\ (b 1) (c 2))", "<a n=\"11\"><b>1</b><c>2</c></a>");
     }
