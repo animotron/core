@@ -231,4 +231,20 @@ public class HtmlTest extends ATest {
         assertStringResult("\\ a (@ n 11) (\\ (b 1) (c 2))", "<a n=\"11\"><b>1</b><c>2</c></a>");
     }
 
+    @Test
+    public void test_27() throws Throwable {
+        tAnimo("def d x.");
+        tAnimo("def \\\\ '<' (id context) '>' (each (context) (context)) '</' (id context) '>'.");
+        tAnimo("def \\ each (get 1) (\\\\ this 1).");
+        assertStringResult("\\  an (any x) 1", "<d>1</d>");
+    }
+
+    @Test
+    public void test_28() throws Throwable {
+        tAnimo("def d x.");
+        tAnimo("def \\\\ '<' (id context) '>' (each (context) (context)) '</' (id context) '>'.");
+        tAnimo("def \\ each (get 1) (\\\\ this 1).");
+        assertStringResult("\\ any x 1", "<d>1</d>");
+    }
+
 }
