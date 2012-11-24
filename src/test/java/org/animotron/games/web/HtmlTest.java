@@ -21,7 +21,6 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.AnimoExpression;
 import org.junit.Test;
 
 /**
