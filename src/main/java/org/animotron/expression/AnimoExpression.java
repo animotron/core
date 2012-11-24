@@ -129,9 +129,9 @@ public class AnimoExpression extends AbstractExpression {
 	                            case ','  : newToken();
 	                                        comma = true;
 	                                        break;
-	                            case '('  : link_ = true;
-                                            newToken();
+	                            case '('  : newToken();
 	                                        startList();
+                                            link_ = true;
                                             para++;
 	                                        break;
 	                            case ')'  : link_ = false;

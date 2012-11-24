@@ -111,6 +111,11 @@ public class ParserTest extends ATest {
     }
 
     @Test
+    public void test_16() throws Throwable {
+        testAnimo("def x (0 (1 2 3) 4) (5 (6 7 8) 9).");
+    }
+
+    @Test
     public void test_26() throws Throwable {
         testAnimo("def a \"\\\"\".");
     }
