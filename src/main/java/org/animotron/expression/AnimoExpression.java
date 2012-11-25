@@ -147,8 +147,8 @@ public class AnimoExpression extends AbstractExpression {
                 }
                 prev = prev == '\\' ? '\0' : ch;
             }
-            lastToken();
         }
+        lastToken();
         endList();
         if (para != 0) {
             throw new AnimoException((Relationship) null);
