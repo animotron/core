@@ -312,21 +312,9 @@ public class GET extends AbstractQuery implements Shift {
 					if (cs != null) {
 						for (QCAVector c : cs) {
 							checkVector(c, newREFs, visitedREFs);
+							break;
 						}
 					}
-					
-//					t = v.getUnrelaxedAnswer();
-//					if (t != null && !t.equals(v.getQuestion())) {
-//						if (! t.isType(AN._))
-//							getOutgoingReferences(pf, v, t, t.getStartNode(), newREFs, visitedREFs);
-//						
-//						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
-//					}
-//
-//					t = v.getQuestion();
-//					if (t != null && t.isType(DEF._)) {
-//						getOutgoingReferences(pf, v, t, t.getEndNode(), newREFs, visitedREFs);
-//					}
 				}
 	
 				if (newREFs.size() == 0) return false;
@@ -622,7 +610,7 @@ public class GET extends AbstractQuery implements Shift {
 			@Override
 			public Evaluation evaluate(Path path) {
 //				if (debug)
-					System.out.println(path);
+//					System.out.println(path);
 				
 				if (path.length() == 0)
 					return Evaluation.EXCLUDE_AND_CONTINUE;
