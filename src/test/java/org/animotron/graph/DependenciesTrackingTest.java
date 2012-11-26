@@ -48,7 +48,7 @@ public class DependenciesTrackingTest extends ATest {
 	        "def item (goods aaa) (qty 1 (kg)) (cost 10 (USD))."
         );
 
-        assertAnimoResult(
+        assertCachedAnimoResult(
             "get cost item",
             "10. USD."
         );
@@ -57,7 +57,7 @@ public class DependenciesTrackingTest extends ATest {
 	        "def item (goods aaa) (qty 1 (kg)) (cost 5 (USD))."
         );
 
-        assertAnimoResult(
+        assertCachedAnimoResult(
             "get cost item",
             "5. USD."
 		);
