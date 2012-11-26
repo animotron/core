@@ -37,7 +37,6 @@ import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
 import static org.animotron.graph.RelationshipTypes.RESULT;
-import static org.animotron.graph.RelationshipTypes.SHIFT;
 import static org.neo4j.graphdb.Direction.INCOMING;
 
 /**
@@ -51,17 +50,19 @@ public class DependenciesTracking extends StatementManipulator {
 	private DependenciesTracking() {};
 	
 	public Pipe execute(final Controller controller, final Relationship op) throws Throwable {
-		//System.out.println("DependenciesTracking");
+//		System.out.println("DependenciesTracking");
 		final Node current = op.getEndNode();
-		//System.out.println(current);
+//		System.out.println(current);
 		AnimoGraph.execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws Throwable {
-                Node n = null;
-                for (Relationship r : current.getRelationships(SHIFT, INCOMING)) {
-                    n = r.getStartNode();
-                    walker(n);
-                }
+                walker(current);
+
+//                Node n = null;
+//                for (Relationship r : current.getRelationships(SHIFT, INCOMING)) {
+//                    n = r.getStartNode();
+//                    walker(n);
+//                }
                 return null;
             }
         });
