@@ -72,6 +72,7 @@ public class DependenciesTracking extends StatementManipulator {
 	}
 	
 	private void walker(Node node) throws Throwable {
+		FastSet<Node> visited = FastSet.newInstance();
 		FastSet<Node> set = FastSet.newInstance();
 		FastSet<Node> next = FastSet.newInstance();
 		set.add(node);
@@ -79,7 +80,8 @@ public class DependenciesTracking extends StatementManipulator {
 		try {
 			while (!set.isEmpty()) {
 				for (FastSet.Record record = set.head(), end = set.tail(); (record = record.getNext()) != end;) {
-					Node n = set.valueOf(record); 
+					Node n = set.valueOf(record);
+					visited.add(n);
 					
 					for (Relationship r : n.getRelationships(REF._, INCOMING)) {
 						for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
@@ -98,8 +100,9 @@ public class DependenciesTracking extends StatementManipulator {
 					
 					IndexHits<Relationship> hits = Order._.queryDown(n);
 					for (Relationship r : hits) {
-						//System.out.println(r);
-						next.add(r.getEndNode());
+						final Node nn = r.getEndNode();
+						if (!visited.contains(nn))
+							next.add(r.getEndNode());
 					}
 				}
 				set.clear();
