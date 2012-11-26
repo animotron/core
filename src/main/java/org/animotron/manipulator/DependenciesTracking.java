@@ -113,6 +113,7 @@ public class DependenciesTracking extends StatementManipulator {
 		} finally {
 			FastSet.recycle(set);
 			FastSet.recycle(next);
+			FastSet.recycle(visited);
 		}
 	}
 	
