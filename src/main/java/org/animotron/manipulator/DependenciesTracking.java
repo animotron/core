@@ -20,6 +20,8 @@
  */
 package org.animotron.manipulator;
 
+import javolution.util.FastSet;
+
 import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
@@ -69,27 +71,45 @@ public class DependenciesTracking extends StatementManipulator {
         return null;
 	}
 	
-	private void walker(Node n) throws Throwable {
+	private void walker(Node node) throws Throwable {
+		FastSet<Node> set = FastSet.newInstance();
+		FastSet<Node> next = FastSet.newInstance();
+		set.add(node);
 
-		for (Relationship r : n.getRelationships(REF._, INCOMING)) {
-			for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
-				//System.out.println(path);
-				CachedSerializer.drop(path.lastRelationship());
-			}
-		}
-
-		for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
-			for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
-				//System.out.println(path);
-				CachedSerializer.drop(path.lastRelationship());
-			}
-			r.delete();
-		}
-
-		IndexHits<Relationship> hits = Order._.queryDown(n);
-		for (Relationship r : hits) {
-			//System.out.println(r);
-			walker(r.getEndNode());
+		try {
+			while (!set.isEmpty()) {
+				for (FastSet.Record record = set.head(), end = set.tail(); (record = record.getNext()) != end;) {
+					Node n = set.valueOf(record); 
+					
+					for (Relationship r : n.getRelationships(REF._, INCOMING)) {
+						for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
+							//System.out.println(path);
+							CachedSerializer.drop(path.lastRelationship());
+						}
+					}
+			
+					for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
+						for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
+							//System.out.println(path);
+							CachedSerializer.drop(path.lastRelationship());
+						}
+						r.delete();
+					}
+					
+					IndexHits<Relationship> hits = Order._.queryDown(n);
+					for (Relationship r : hits) {
+						//System.out.println(r);
+						next.add(r.getEndNode());
+					}
+				}
+				set.clear();
+				final FastSet<Node> tmp = set;
+				set = next;
+				next = tmp;
+			}			
+		} finally {
+			FastSet.recycle(set);
+			FastSet.recycle(next);
 		}
 	}
 	
