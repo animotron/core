@@ -22,6 +22,7 @@ package org.animotron.statement.operator;
 
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
+import org.neo4j.graphdb.RelationshipType;
 
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -29,19 +30,13 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  */
-public class ASHIFT extends REF {
+public class ASHIFT implements RelationshipType {
 
 	public static final ASHIFT _ = new ASHIFT();
 
-	private ASHIFT() { super("ASHIFT"); }
-
-    public Relationship build(Node def, Node rev) {
-        return def.createRelationshipTo(rev, this);
-    }
-
-    public Relationship set(Node def, Node rev) {
-        def.getSingleRelationship(this, OUTGOING).delete();
-        return def.createRelationshipTo(rev, this);
+    @Override
+    public String name() {
+        return "ASHIFT";
     }
 
     public Node actualNode(Node node) {
@@ -51,26 +46,5 @@ public class ASHIFT extends REF {
     public Node actualNode(Relationship relationship) {
         return actualNode(relationship.getEndNode());
     }
-
-    public Node actualEndNode(Relationship r) {
-    	return r.getEndNode();
-//    	Node n = r.getEndNode();
-//
-//		if (r.isType(REF._) || r.isType(DEF._))
-//			return actualNode(n);
-//
-//		return n;
-    }
-
-    public Relationship actualRelationship(Relationship r) {
-        return r.getEndNode().getSingleRelationship(this, OUTGOING);
-    }
-
-    @Override
-    public Object reference(Relationship r) {
-        return DEF._.reference(r.getStartNode());
-    }
-
-
 
 }
