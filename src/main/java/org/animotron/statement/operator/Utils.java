@@ -91,7 +91,7 @@ public class Utils {
 	    				if (path.length() == 0)
 	    					return EXCLUDE_AND_CONTINUE;
 	    				
-	    				//System.out.println(path);
+	    				//System.out.println(fs);
 	    				
 	    				Relationship r = path.lastRelationship();
 	    				Node n = r.getStartNode();
@@ -531,7 +531,7 @@ public class Utils {
                         if (Statements.relationshipType(path.lastRelationship()) == null)
                             return EXCLUDE_AND_PRUNE;
 
-//                        if (path.lastRelationship().isType(DEF._))
+//                        if (fs.lastRelationship().isType(DEF._))
 //                            return INCLUDE_AND_PRUNE;
 
                         if (path.endNode().getId() == 0)

@@ -67,7 +67,7 @@ public class Brain {
 		detectedSensorObjects.add(r);
 		
 		for (Path path : tdSensorToMental.traverse(r.getStartNode())) {
-//			System.out.println(path);
+//			System.out.println(fs);
 			
 			boolean matched = false;
 			Relationship last = path.lastRelationship();

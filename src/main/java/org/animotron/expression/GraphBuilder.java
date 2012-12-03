@@ -18,9 +18,10 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.graph.builder;
+package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.expression.AbstractBinaryExpression;
 import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
@@ -46,10 +47,7 @@ import java.util.List;
 import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.*;
-import static org.animotron.graph.Properties.HASH;
-import static org.animotron.graph.Properties.NAME;
-import static org.animotron.graph.Properties.DEFID;
-import static org.animotron.graph.Properties.CONTEXT;
+import static org.animotron.graph.Properties.*;
 import static org.animotron.utils.MessageDigester.*;
 import static org.neo4j.graphdb.Direction.OUTGOING;
 
@@ -176,7 +174,7 @@ public class GraphBuilder {
     }
 
     public void start(Object value) throws AnimoException, IOException {
-        start(VALUE._, value);
+        start(org.animotron.statement.value.VALUE._, value);
     }
 
    private Statement s = null;
@@ -277,7 +275,7 @@ public class GraphBuilder {
     }
 
     public void _(Object value) throws AnimoException, IOException {
-        _(VALUE._, value);
+        _(org.animotron.statement.value.VALUE._, value);
     }
 
     public void _(Statement statement, Object reference) throws AnimoException, IOException {
@@ -314,6 +312,9 @@ public class GraphBuilder {
                     r = c;
                 } else {
                     catcher.evaluative(c);
+                }
+                if (exp instanceof AbstractBinaryExpression) {
+                    FS.set(r, ((AbstractBinaryExpression) exp).fs());
                 }
                 tx.success();
                 finishTx(tx);

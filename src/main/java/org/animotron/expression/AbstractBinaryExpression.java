@@ -21,9 +21,14 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.statement.operator.DEF;
+import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+
+import static org.animotron.graph.Properties.FS;
 
 
 /**
@@ -41,6 +46,8 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
     }
 
     protected abstract void description() throws AnimoException, IOException;
+
+    protected abstract String fs();
 
     protected String id() {
         return null;

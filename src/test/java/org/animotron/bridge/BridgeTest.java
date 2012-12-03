@@ -77,6 +77,10 @@ public class BridgeTest extends ATest {
                             return entry.getName();
                         }
                         @Override
+                        protected String fs(){
+                            return "test.txt";
+                        }
+                        @Override
                         protected void description() throws AnimoException, IOException {}
                     }
             );

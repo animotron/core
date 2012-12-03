@@ -20,7 +20,6 @@
  */
 package org.animotron.expression;
 
-import org.animotron.graph.builder.GraphBuilder;
 import org.neo4j.graphdb.Relationship;
 
 /**

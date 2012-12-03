@@ -90,7 +90,7 @@ public class PFlow {
 
 	private void cyclingDetection(Relationship op) throws AnimoException {
 		int deep = 0; int count = 0;
-		//for (QCAVector v : path) {
+		//for (QCAVector v : fs) {
 			if (deep > 0 && path.hasRelationship(op)) {
 				if (count > 2)
 					throw new AnimoException(op, "cycling detected "+path);
@@ -258,7 +258,7 @@ public class PFlow {
 	public boolean isInStack(Relationship r) {
 		boolean debug = false;
 		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
-		//for (QCAVector v : path) {
+		//for (QCAVector v : fs) {
 			if (path.hasRelationship(r)) {
 				if (debug) System.out.println("FOUND!!!");
 				return true;
@@ -272,7 +272,7 @@ public class PFlow {
 	public boolean getFromStack(Relationship r) {
 		boolean debug = false;
 		if (debug) System.out.println("IN STACK CHECK "+r+" in "+path+" ");
-		//for (QCAVector v : path) {
+		//for (QCAVector v : fs) {
 			if (path.hasRelationship(r)) {
 				if (debug) System.out.println("FOUND!!!");
 				return true;

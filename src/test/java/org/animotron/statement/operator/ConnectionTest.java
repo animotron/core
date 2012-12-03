@@ -33,13 +33,13 @@ public class ConnectionTest extends ATest {
     public void mimeType_usecase() throws Throwable {
 
         tAnimo("def mime-type.");
-        tAnimo("def file (reference 'file') (extension after-last '.' (get path)) (any mime-type with extension get extension).");
-        tAnimo("def fileA (^file) (path '/home/test.txt').");
+        tAnimo("def file (reference 'file') (extension after-last '.' (get fs)) (any mime-type with extension get extension).");
+        tAnimo("def fileA (^file) (fs '/home/test.txt').");
         tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
 
         assertAnimoResult("get reference fileA", "\"file\".");
 
-        assertAnimoResult("get path fileA", "\"/home/test.txt\".");
+        assertAnimoResult("get fs fileA", "\"/home/test.txt\".");
 
         assertAnimoResult("get extension fileA", "\"txt\".");
 
@@ -52,13 +52,13 @@ public class ConnectionTest extends ATest {
     public void mimeType_one_more_usecase() throws Throwable {
 
         tAnimo("def mime-type.");
-        tAnimo("def file (reference 'file') (path1 'some.path.value') (path2 get path1) (extension1 after-last '.' (get path1)) (any mime-type with extension get extension1).");
-        tAnimo("def fileA (^file) (path '/home/test.txt').");
+        tAnimo("def file (reference 'file') (path1 'some.fs.value') (path2 get path1) (extension1 after-last '.' (get path1)) (any mime-type with extension get extension1).");
+        tAnimo("def fileA (^file) (fs '/home/test.txt').");
         tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
 
-        assertAnimoResult("get path1 fileA", "\"some.path.value\".");
+        assertAnimoResult("get path1 fileA", "\"some.fs.value\".");
 
-        assertAnimoResult("get path2 fileA", "\"some.path.value\".");
+        assertAnimoResult("get path2 fileA", "\"some.fs.value\".");
 
         assertAnimoResult("get extension1 fileA", "\"value\".");
 
@@ -71,8 +71,8 @@ public class ConnectionTest extends ATest {
     public void mimeType_parallel() throws Throwable {
 
         tAnimo("def mime-type.");
-        tAnimo("def file (reference 'file') (path) (extension after-last '.' (get path)) (any mime-type with extension get extension).");
-        tAnimo("def fileA (file) (path '/home/test.txt').");
+        tAnimo("def file (reference 'file') (fs) (extension after-last '.' (get fs)) (any mime-type with extension get extension).");
+        tAnimo("def fileA (file) (fs '/home/test.txt').");
         tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
 
         assertAnimoResult(

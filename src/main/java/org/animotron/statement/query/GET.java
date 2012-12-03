@@ -551,10 +551,10 @@ public class GET extends AbstractQuery implements Shift {
 
 			@Override
 			public Iterable<Relationship> expand(Path path, BranchState<Long> state) {
-//				System.out.println(path);
+//				System.out.println(fs);
 				
-//				if (path.length() == 0) {
-//					return Order._.queryDownIterable(path.endNode(), allowedSet);
+//				if (fs.length() == 0) {
+//					return Order._.queryDownIterable(fs.endNode(), allowedSet);
 //				}
 
 				final Node node;
@@ -601,7 +601,7 @@ public class GET extends AbstractQuery implements Shift {
 
 			@Override
 			public Long initialState(Path path) {
-//				System.out.println("state "+path);
+//				System.out.println("state "+fs);
 				return (long) -1;
 			}
 			
@@ -610,7 +610,7 @@ public class GET extends AbstractQuery implements Shift {
 			@Override
 			public Evaluation evaluate(Path path) {
 //				if (debug)
-//					System.out.println(path);
+//					System.out.println(fs);
 				
 				if (path.length() == 0)
 					return Evaluation.EXCLUDE_AND_CONTINUE;
@@ -663,7 +663,7 @@ public class GET extends AbstractQuery implements Shift {
 	
 				Relationship fR = path.relationships().iterator().next();
 				List<Path> ps = paths.get(fR);
-				if (ps == null) {// || p.length() > path.length()) {
+				if (ps == null) {// || p.length() > fs.length()) {
 					
 					boolean thisMiddle = haveMiddle(path, middle);
 					if (middlePresent) {
