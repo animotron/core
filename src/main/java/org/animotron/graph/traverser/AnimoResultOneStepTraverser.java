@@ -43,7 +43,9 @@ import java.util.Iterator;
  * 
  */
 public class AnimoResultOneStepTraverser extends ResultTraverser {
-	
+
+    private boolean stepMade = false;
+
     public AnimoResultOneStepTraverser() {}
 
     @Override
@@ -58,8 +60,9 @@ public class AnimoResultOneStepTraverser extends ResultTraverser {
 			//avoid cycling
 			if (rr.hasAnswer() && rr.getAnswer().equals(rr.getQuestion()))
 				evaluable = false;
-			if (evaluable && s instanceof Evaluable) {
+			if (evaluable && s instanceof Evaluable  && !stepMade) {
             	GraphHandler gh = new AnimoGraphHandler(handler);
+                stepMade = true;
                 result(gh, rr, level, isOne, pos, isLast, def);
             } else {
 				Relationship r = rr.getClosest();
