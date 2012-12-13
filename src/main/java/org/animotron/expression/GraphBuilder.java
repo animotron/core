@@ -114,6 +114,7 @@ public class GraphBuilder {
                 build(o, it, r);
                 catcher.modificative(r);
                 catcher.preparative(r);
+                HASH.set(r, hash);
             } else {
                 r = Cache.RELATIONSHIP.get(hash);
                 if (r == null) {
@@ -122,8 +123,8 @@ public class GraphBuilder {
                     build(o, it, r);
                     Cache.RELATIONSHIP.add(r, hash);
                     catcher.modificative(r);
-                    HASH.set(r, hash);
                     catcher.preparative(r);
+                    HASH.set(r, hash);
                 }
             }
         }

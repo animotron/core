@@ -149,7 +149,7 @@ public class CHANGE extends Operator implements Evaluable {
 	                DEFID.set(shift, def);
 	                RID.set(ashift, rid);
 	                RID.set(shift, rid);
-	                AShift._. add(ashift, def);
+	                AShift._.add(ashift, def);
 	                HASH.remove(i);
 	                DependenciesTracking._.execute(pf.getController(), i);
 	            }
