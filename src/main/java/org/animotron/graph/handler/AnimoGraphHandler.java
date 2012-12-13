@@ -132,16 +132,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         end(statement, parent, level, isOne);
     }
 
-    @Override
-    public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-    }
-
-    @Override
-    public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-    }
-
     private boolean dot = false;
-    @Override
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         if (level == 0) {
             if (dot) {
@@ -165,7 +156,6 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         ps = statement;
     }
 
-    @Override
     public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         end(statement, null, level, isOne);
     }

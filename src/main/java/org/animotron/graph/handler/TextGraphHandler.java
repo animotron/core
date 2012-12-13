@@ -60,22 +60,6 @@ public class TextGraphHandler extends AbstractTextGraphHandler {
     }
 
     @Override
-    public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-    }
-
-    @Override
-    public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-    }
-
-    @Override
-    public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-    }
-
-    @Override
-    public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-    }
-
-    @Override
     public void startGraph() {
         if (controller != null)
         	controller.start();

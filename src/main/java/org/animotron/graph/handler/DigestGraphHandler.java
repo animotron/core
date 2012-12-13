@@ -54,24 +54,12 @@ public class DigestGraphHandler implements GraphHandler {
         end(statement, null, statement.reference(r), level, isOne, 0, false);
     }
 
-    @Override
-    public void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        start(statement, null, (Object) param, level, isOne, 0, false);
-    }
-
-    @Override
-    public void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        end(statement, null, (Object) param, level, isOne, 0, false);
-    }
-
-    @Override
     public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         MessageDigest md = MessageDigester.md();
         updateMD(md, param);
         stack.push(md);
     }
 
-    @Override
     public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         md = stack.pop();
         updateMD(md, statement);
@@ -93,13 +81,4 @@ public class DigestGraphHandler implements GraphHandler {
         return md.digest();
     }
 
-	private boolean stepMade = false;
-	
-	public void stepMade() {
-		stepMade = true;
-	}
-
-	public boolean isStepMade() {
-		return stepMade;
-	}
 }

@@ -39,20 +39,10 @@ public interface GraphHandler {
 
     public abstract void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException;
 
-    public abstract void start(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
-
-    public abstract void end(Statement statement, Statement parent, Object[] param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
-
-    public abstract void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
-
-    public abstract void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException;
-
 	public void startGraph() throws IOException;
 
 	public void endGraph() throws IOException;
 	
 	public Controller getController(); 
 
-	@Deprecated //XXX: find better way 
-	public boolean isStepMade();
 }

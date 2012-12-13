@@ -40,7 +40,6 @@ public abstract class AbstractTextGraphHandler implements GraphHandler {
     public AbstractTextGraphHandler(GraphHandler gh) {
     	if (gh instanceof AbstractTextGraphHandler) {
 			out = ((AbstractTextGraphHandler) gh).out;
-			stepMade = true;
 		} else
 			throw new UnsupportedOperationException();
     }
@@ -60,12 +59,6 @@ public abstract class AbstractTextGraphHandler implements GraphHandler {
     public Controller getController() {
     	return controller;
     }
-
-	private boolean stepMade = false;
-	
-	public boolean isStepMade() {
-		return stepMade;
-	}
 
     protected void write(String text) throws IOException {
         out.write(text);
