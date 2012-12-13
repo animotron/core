@@ -92,7 +92,7 @@ public class GraphBuilder {
 
     public Relationship relationship() {
         return relationship;
-    };
+    }
 
     private Relationship endGraph() throws AnimoException {
         Relationship r = null;
