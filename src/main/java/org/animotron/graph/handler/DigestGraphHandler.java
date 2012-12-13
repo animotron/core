@@ -46,21 +46,13 @@ public class DigestGraphHandler implements GraphHandler {
 
     @Override
     public void start(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        start(statement, null, statement.reference(r), level, isOne, 0, false);
+        MessageDigest md = MessageDigester.md();
+        updateMD(md, statement.reference(r));
+        stack.push(md);
     }
 
     @Override
     public void end(Statement statement, Statement parent, Relationship r, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        end(statement, null, statement.reference(r), level, isOne, 0, false);
-    }
-
-    public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        MessageDigest md = MessageDigester.md();
-        updateMD(md, param);
-        stack.push(md);
-    }
-
-    public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
         md = stack.pop();
         updateMD(md, statement);
         if (!stack.empty()) {

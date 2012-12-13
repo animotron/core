@@ -85,7 +85,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             if (ps instanceof Suffix) {
                 write(ps.name());
             }
-        } else if (!(statement instanceof LINK || statement instanceof VALUE || statement instanceof Suffix)) {
+        } else if (!(statement instanceof LINK || statement instanceof Suffix)) {
             write(statement.name());
             if (reference != null) {
                 write(" ");
@@ -123,7 +123,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
             }
             ps = statement;
         } else {
-            start(statement, parent, statement.reference(r), level, isOne, 0, false);
+            start(statement, parent, statement.reference(r), level, isOne);
         }
     }
 
@@ -133,7 +133,7 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
     }
 
     private boolean dot = false;
-    public void start(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
+    public void start(Statement statement, Statement parent, Object param, int level, boolean isOne) throws IOException {
         if (level == 0) {
             if (dot) {
                 write(" ");
@@ -154,10 +154,6 @@ public class AnimoGraphHandler extends AbstractTextGraphHandler {
         }
         write(statement, param);
         ps = statement;
-    }
-
-    public void end(Statement statement, Statement parent, Object param, int level, boolean isOne, int pos, boolean isLast) throws IOException {
-        end(statement, null, level, isOne);
     }
 
     private void end(Statement statement, Statement parent, int level, boolean isOne) throws IOException {
