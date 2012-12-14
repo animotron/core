@@ -77,7 +77,12 @@ public class BinaryAnimoExpression extends AbstractExpression {
                     }
                     break;
                 case END_RELATIONSHIP :
+                    if (s != null) {
+                        builder.start(s, o);
+                        s = null;
+                    }
                     builder.end();
+                    o = null;
                     break;
                 case FS :
                     String fs = readString(is);
@@ -88,9 +93,7 @@ public class BinaryAnimoExpression extends AbstractExpression {
                         os.write(is.read());
                     }
                     os.close();
-
             }
         }
-
     }
 }
