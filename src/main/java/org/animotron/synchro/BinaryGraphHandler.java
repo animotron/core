@@ -30,64 +30,19 @@ import org.neo4j.graphdb.Relationship;
 import java.io.*;
 import java.nio.ByteBuffer;
 
+import static org.animotron.synchro.StreamUtils.*;
+
 /**
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
 public class BinaryGraphHandler implements GraphHandler {
 
-
-    public final static byte START_GRAPH = 1;
-    public final static byte START_RELATIONSHIP = 2;
-    public final static byte END_RELATIONSHIP = 0;
-    public final static byte FS = 3;
-    public final static byte END_GRAPH = -1;
-
-    public final static byte STRING = 0;
-    public final static byte LONG = 1;
-    public final static byte DOUBLE = 2;
-    public final static byte BOOLEAN = 3;
-
     private OutputStream os;
     private String fs = null;
 
     public BinaryGraphHandler(OutputStream os) {
         this.os = os;
-    }
-
-    private void write(byte[] b) throws IOException {
-        os.write(b.length);
-        os.write(b);
-    }
-
-    private void write(String d) throws IOException {
-        os.write(STRING);
-        write(d.getBytes());
-    }
-
-    private void write(Long d) throws IOException {
-        os.write(LONG);
-        byte[] b = new byte[8];
-        ByteBuffer.wrap(b).putLong(d);
-        os.write(b);
-    }
-
-    private void write(Double d) throws IOException {
-        os.write(DOUBLE);
-        byte[] b = new byte[8];
-        ByteBuffer.wrap(b).putDouble(d);
-        os.write(b);
-    }
-
-    private void write(Boolean d) throws IOException {
-        os.write(BOOLEAN);
-        byte b;
-        if (d) {
-            b = 1;
-        } else {
-            b = 0;
-        }
-        os.write(b);
     }
 
     @Override
@@ -97,22 +52,22 @@ public class BinaryGraphHandler implements GraphHandler {
                 fs = (String) Properties.FS.get(r);
             }
             byte[] hash = DigestSerializer._.serialize(r);
-            write(hash);
+            writeBytes(null, hash);
         }
         os.write(START_RELATIONSHIP);
-        write(statement.name().getBytes());
+        writeBytes(null, statement.name().getBytes());
         if (r != null) {
             Object o = statement.reference(r);
             if (o != null) {
-                os.write(3);
+                os.write(REF);
                 if (o instanceof String) {
-                    write((String) o);
+                    writeString(os, (String) o);
                 } else if (o instanceof Long) {
-                    write((Long) o);
+                    writeLong(os, (Long) o);
                 } else if (o instanceof Double) {
-                    write((Double) o);
+                    writeDouble(os, (Double) o);
                 } else if (o instanceof Boolean) {
-                    write((Boolean) o);
+                    writeBoolean(os, (Boolean) o);
                 }
             }
         }
@@ -132,7 +87,7 @@ public class BinaryGraphHandler implements GraphHandler {
     public void endGraph() throws IOException {
         if (fs != null) {
             os.write(FS);
-            write(fs.getBytes());
+            writeBytes(null, fs.getBytes());
             File file = new File(fs);
             byte[] size = new byte[8];
             ByteBuffer.wrap(size).putLong(file.length());
