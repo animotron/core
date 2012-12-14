@@ -112,7 +112,7 @@ public class VALUE extends AbstractValue implements Prepare {
         public void act(PFlow pf) throws Throwable {
     		processor.toProcess(pf.getVector());
         }
-    };
+    }
     
     class Processor implements Runnable {
     	

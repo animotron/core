@@ -20,6 +20,8 @@
  */
 package org.animotron.graph.serializer;
 
+import org.animotron.graph.AnimoGraph;
+import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.DigestGraphHandler;
 import org.animotron.graph.traverser.AnimoTraverser;
 import org.neo4j.graphdb.Relationship;
@@ -38,13 +40,24 @@ public class DigestSerializer {
     public static DigestSerializer _ = new DigestSerializer();
     private DigestSerializer() {}
 
-    public byte[] serialize(Relationship r) throws IOException {
+    public byte[] serialize(final Relationship r) throws IOException {
         if (HASH.has(r)) {
             return (byte[]) HASH.get(r);
         }
         DigestGraphHandler handler = new DigestGraphHandler();
         AnimoTraverser._.traverse(handler, r);
-        return handler.digest();
+        final byte[] hash = handler.digest();
+        try {
+            return AnimoGraph.execute(new GraphOperation<byte[]>() {
+                @Override
+                public byte[] execute() throws Throwable {
+                    HASH.set(r, hash);
+                    return hash;
+                }
+            });
+        } catch (Throwable t) {
+            throw new IOException(t);
+        }
     }
 
 }
