@@ -42,8 +42,8 @@ public class Result extends AbstractRelationshipIndex {
         init(index.forRelationships(name));
 	}
 
-//    public ResultHits getHits(byte[] value) {
-//        return new ResultHits(getHits(MessageDigester.byteArrayToHex(value)));
+//    public ResultHits getHits(byte[] expression) {
+//        return new ResultHits(getHits(MessageDigester.byteArrayToHex(expression)));
 //    }
 
     public Relationship getIfExist(Node sNode, Relationship result, RelationshipType type) {

@@ -35,7 +35,7 @@ public class ConnectionTest extends ATest {
         tAnimo("def mime-type.");
         tAnimo("def file (reference 'file') (extension after-last '.' (get fs)) (any mime-type with extension get extension).");
         tAnimo("def fileA (^file) (fs '/home/test.txt').");
-        tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
+        tAnimo("def expression-plain (mime-type) (type 'text/plain') (extension 'txt' 'expression').");
 
         assertAnimoResult("get reference fileA", "\"file\".");
 
@@ -43,7 +43,7 @@ public class ConnectionTest extends ATest {
 
         assertAnimoResult("get extension fileA", "\"txt\".");
 
-        assertAnimoResult("get mime-type fileA", "value-plain (mime-type) (type) (extension).");
+        assertAnimoResult("get mime-type fileA", "expression-plain (mime-type) (type) (extension).");
 
         assertAnimoResult("get type get mime-type fileA", "\"text/plain\".");
     }
@@ -52,17 +52,17 @@ public class ConnectionTest extends ATest {
     public void mimeType_one_more_usecase() throws Throwable {
 
         tAnimo("def mime-type.");
-        tAnimo("def file (reference 'file') (path1 'some.fs.value') (path2 get path1) (extension1 after-last '.' (get path1)) (any mime-type with extension get extension1).");
+        tAnimo("def file (reference 'file') (path1 'some.fs.expression') (path2 get path1) (extension1 after-last '.' (get path1)) (any mime-type with extension get extension1).");
         tAnimo("def fileA (^file) (fs '/home/test.txt').");
-        tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
+        tAnimo("def expression-plain (mime-type) (type 'text/plain') (extension 'txt' 'expression').");
 
-        assertAnimoResult("get path1 fileA", "\"some.fs.value\".");
+        assertAnimoResult("get path1 fileA", "\"some.fs.expression\".");
 
-        assertAnimoResult("get path2 fileA", "\"some.fs.value\".");
+        assertAnimoResult("get path2 fileA", "\"some.fs.expression\".");
 
-        assertAnimoResult("get extension1 fileA", "\"value\".");
+        assertAnimoResult("get extension1 fileA", "\"expression\".");
 
-        assertAnimoResult("get mime-type fileA", "value-plain (mime-type) (type) (extension).");// (mime-type) (type) (extension).");
+        assertAnimoResult("get mime-type fileA", "expression-plain (mime-type) (type) (extension).");// (mime-type) (type) (extension).");
 
         assertAnimoResult("get type get mime-type fileA", "\"text/plain\".");
     }
@@ -73,11 +73,11 @@ public class ConnectionTest extends ATest {
         tAnimo("def mime-type.");
         tAnimo("def file (reference 'file') (fs) (extension after-last '.' (get fs)) (any mime-type with extension get extension).");
         tAnimo("def fileA (file) (fs '/home/test.txt').");
-        tAnimo("def value-plain (mime-type) (type 'text/plain') (extension 'txt' 'value').");
+        tAnimo("def expression-plain (mime-type) (type 'text/plain') (extension 'txt' 'expression').");
 
         assertAnimoResult(
     		"def test (get mime-type fileA) (get type)",
-    		"test (value-plain (mime-type) (type) (extension))."
+    		"test (expression-plain (mime-type) (type) (extension))."
 		);
     }
 }

@@ -26,7 +26,7 @@ import org.animotron.graph.serializer.CachedSerializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.animotron.utils.MessageDigester;
 import org.junit.After;
 import org.junit.Before;

@@ -18,7 +18,7 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.statement.value;
+package org.animotron.statement.operator;
 
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.Expression;
@@ -27,11 +27,8 @@ import org.animotron.graph.index.AbstractIndex;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
+import org.animotron.statement.AbstractStatement;
 import org.animotron.statement.instruction.Instruction;
-import org.animotron.statement.operator.AN;
-import org.animotron.statement.operator.DEF;
-import org.animotron.statement.operator.Prepare;
-import org.animotron.statement.operator.REF;
 import org.animotron.statement.string.LOWER_CASE;
 import org.animotron.statement.string.UPPER_CASE;
 import org.neo4j.graphdb.Node;
@@ -40,25 +37,25 @@ import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.index.bdbje.BerkeleyDbIndexImplementation;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Stack;
 
 import static org.animotron.graph.AnimoGraph.createNode;
 import static org.animotron.graph.AnimoGraph.execute;
+import static org.animotron.graph.Properties.VALUE;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class VALUE extends AbstractValue implements Prepare {
+public class VALUE extends AbstractStatement implements Prepare {
 
     public final static VALUE _ = new VALUE();
     
     private Processor processor = null;
 
     private VALUE() { super("value"); }
-
-    protected VALUE(String... name) { super(name); }
 
     private AbstractIndex<Node> value = new AbstractIndex<Node>(name()) {
         @Override
@@ -90,7 +87,65 @@ public class VALUE extends AbstractValue implements Prepare {
         add(child, reference);
         return child;
     }
-    
+
+    @Override
+    public Object reference(Relationship r) {
+        return  reference(r.getEndNode());
+    }
+
+    public Object reference(Node n) {
+        if (VALUE.has(n)) {
+            return VALUE.get(n);
+        } else {
+            return null;
+        }
+    }
+
+    public static Object value(Object o) {
+        if (o instanceof String) {
+            String s = (String) o;
+            try {
+                return Long.valueOf(s);
+            } catch (NumberFormatException el) {
+                try {
+                    return Double.valueOf(s);
+                } catch (NumberFormatException ed) {
+                    if (Boolean.FALSE.toString().equals(s))
+                        return Boolean.FALSE;
+                    if (Boolean.TRUE.toString().equals(s))
+                        return Boolean.TRUE;
+                    return s;
+                }
+            }
+        }
+        return o;
+    }
+
+    public static Number number(Object o) {
+        if (o instanceof Number) {
+            return (Number)o;
+
+        } else if (o instanceof String) {
+            String s = (String) o;
+            try {
+                return Long.valueOf(s);
+            } catch (NumberFormatException el) {
+                try {
+                    return Double.valueOf(s);
+                } catch (NumberFormatException ed) {
+                    if (Boolean.FALSE.toString().equals(s))
+                        return BigDecimal.ZERO;
+                    else if (Boolean.TRUE.toString().equals(s))
+                        return BigDecimal.ONE;
+                    else if (s.isEmpty())
+                        return BigDecimal.ZERO;
+
+                }
+            }
+        }
+        throw new IllegalArgumentException("This is not a number '"+o+"'.");
+    }
+
     public void shutdown() throws IOException, InterruptedException {
     	processor.toProcess(null);
     	
@@ -188,7 +243,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	                                    if (i >= 0) {
 	                                        Relationship def;
                                             final String s = String.valueOf(value.charAt(i));
-//	                                    	System.out.println("> "+Thread.currentThread()+" "+value.charAt(i));
+//	                                    	System.out.println("> "+Thread.currentThread()+" "+expression.charAt(i));
                                             if (!s.toLowerCase().equals(s.toUpperCase())) {
                                                 Relationship l = __(letter(s.toLowerCase(), UPPER_CASE._, s.toUpperCase()));
                                                 Relationship u = __(letter(s.toUpperCase(), LOWER_CASE._, s.toLowerCase()));
@@ -241,7 +296,7 @@ public class VALUE extends AbstractValue implements Prepare {
 	    }
     }
 
-    public static Relationship value (final Object o) {
+    public static Expression expression(final Object o) {
         return new Expression() {
             @Override
             public void build() throws Throwable {

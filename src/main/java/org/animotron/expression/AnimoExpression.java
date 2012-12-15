@@ -28,7 +28,7 @@ import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.value.AbstractValue;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
@@ -235,9 +235,9 @@ public class AnimoExpression extends Expression {
                     builder._(REF._, token);
                     level++;
                 } else if (s == null) {
-                    Object o = AbstractValue.value(token);
+                    Object o = VALUE.value(token);
                     if (o instanceof String) {
-                        if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF) && !(op instanceof POSSESSIVE)) {
+                        if (op instanceof REF && !comma || !(op instanceof Operator || op instanceof REF)) {
                             builder.start(AN._);
                             level++;
                         }

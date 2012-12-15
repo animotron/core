@@ -29,6 +29,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.query.GET;
+import org.animotron.statement.query.Query;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 

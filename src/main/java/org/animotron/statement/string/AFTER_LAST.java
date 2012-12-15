@@ -26,7 +26,7 @@ import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.DetermInstruction;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * VALUE instruction 'after-last'.
@@ -56,7 +56,7 @@ public class AFTER_LAST extends DetermInstruction {
                 String source = STRING._.eval(pf, params[2]).toString();
                 int index = source.lastIndexOf(pattern);
                 if (index != -1) {
-                    answered(pf, value(source.substring(index + 1)));
+                    answered(pf, expression(source.substring(index + 1)));
                 }
             } catch (Throwable t) {
                 pf.sendException(t);

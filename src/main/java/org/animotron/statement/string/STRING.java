@@ -31,7 +31,7 @@ import org.neo4j.graphdb.index.IndexHits;
 
 import java.io.IOException;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * VALUE instruction 'STRING'.
@@ -64,7 +64,7 @@ public class STRING extends DetermInstruction {
 
 	            Relationship r;
 				try {
-					r = value(sb.toString());
+					r = expression(sb.toString());
 				} catch (Throwable t) {
 					pf.sendException(t);
 					return;

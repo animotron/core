@@ -35,7 +35,7 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Prepare;
 import org.animotron.statement.operator.Utils;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;

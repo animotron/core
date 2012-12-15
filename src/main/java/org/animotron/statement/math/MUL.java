@@ -25,7 +25,7 @@ import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
@@ -54,6 +54,6 @@ public class MUL extends MathInstruction {
 		
 		System.out.println(""+Na.doubleValue()+" * "+Nb.doubleValue()+" = "+result);
 
-		return value(result);
+		return expression(result);
 	}
 }

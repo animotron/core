@@ -94,9 +94,9 @@ public class WHouseTest extends ATest {
         Expression f = tAnimo("def f form R01.");
 
         assertAnimoResult(f, "<form id='R01'>" +
-                "<input id='date' value='T2011-08-07'>07 August 2011</input>" +
-                "<input id='issue-party' value='an:ORG-01'>Organization 01</input>" +
-                "<input id='receipt-party' value='an:I'>I</input>" +
+                "<input id='date' expression='T2011-08-07'>07 August 2011</input>" +
+                "<input id='issue-party' expression='an:ORG-01'>Organization 01</input>" +
+                "<input id='receipt-party' expression='an:I'>I</input>" +
                 "<table>" +
                 "<head>" +
                 "<col id='reference'>reference</col>" +
@@ -104,9 +104,9 @@ public class WHouseTest extends ATest {
                 "<col id='price'>price</col>" +
                 "<head>" +
                 "<row>" +
-                "<col><input id='item01*reference' value='item01'>item01</input></col>" +
-                "<col><input id='item01*qty' value='have:number Q:N2; have:UoM an:KG'>2 kg</input></col>" +
-                "<col><input id='item01*price' value='have:number Q:N2; have:UoM an:KG'>5 USD per gram</input></col>" +
+                "<col><input id='item01*reference' expression='item01'>item01</input></col>" +
+                "<col><input id='item01*qty' expression='have:number Q:N2; have:UoM an:KG'>2 kg</input></col>" +
+                "<col><input id='item01*price' expression='have:number Q:N2; have:UoM an:KG'>5 USD per gram</input></col>" +
                 "<row>" +
                 "</table>" +
                 "</form>");
@@ -151,7 +151,7 @@ public class WHouseTest extends ATest {
 				"(* (get qty) (get price))" +
 				"(number, currency)."
 		);
-    	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" value=\"\"/></label>");
+    	assertAnimoResult("html-widget qty", "<label>quantity<input id=\"\" name=\"\" expression=\"\"/></label>");
     	
     	__(
             "def whouse-receive " +

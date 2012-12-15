@@ -175,7 +175,7 @@ public class WHouseFormTest extends ATest {
                 "def fill-input '<input name=\"' (id this part) '\" ' " +
                     "(each (get (this part) (this object)) " +
                         "('id=\"' (id this this part) '\" ') " +
-                        "('value=\"' (get word this this part) '\" ')) '/>'."
+                        "('expression=\"' (get word this this part) '\" ')) '/>'."
 
         );
 

@@ -22,7 +22,7 @@ package org.animotron.tmp;
 
 import javolution.util.FastList;
 import org.animotron.io.PipedOutput;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;

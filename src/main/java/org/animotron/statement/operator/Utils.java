@@ -35,6 +35,7 @@ import org.animotron.manipulator.QCAVector;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.link.LINK;
+import org.animotron.statement.query.Query;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.Relationship;

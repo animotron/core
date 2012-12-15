@@ -21,7 +21,7 @@
 package org.animotron.tmp;
 
 import javolution.util.FastSet;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.neo4j.graphdb.Node;

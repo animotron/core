@@ -21,12 +21,12 @@
 package org.animotron.statement.math;
 
 import org.animotron.manipulator.PFlow;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * Math instruction 'MULT'. (aka multiplication)
@@ -47,7 +47,7 @@ public class DIV extends MathInstruction {
 
 			System.out.println(" 1/ "+Na.doubleValue()+" = "+result);
 			
-			return value(result);
+			return expression(result);
 		}
 		return new AnimObject(pf, DIV._, a);
 	}
@@ -68,6 +68,6 @@ public class DIV extends MathInstruction {
 
 		System.out.println(""+Na.doubleValue()+" / "+Nb.doubleValue()+" = "+result);
 		
-		return value(result);
+		return expression(result);
 	}
 }

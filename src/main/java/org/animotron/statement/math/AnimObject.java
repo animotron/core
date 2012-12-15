@@ -33,7 +33,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Direction;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -42,7 +42,7 @@ import org.neo4j.graphdb.index.IndexHits;
 import java.io.IOException;
 import java.util.List;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
@@ -50,7 +50,7 @@ import static org.animotron.statement.value.VALUE.value;
  */
 public class AnimObject extends Expression {
 	
-	protected static Relationship ONE = value(Long.valueOf(1));
+	protected static Relationship ONE = expression(Long.valueOf(1));
 	
 	protected static AnimObject PLUS_ONE = new AnimObject(SUM._, ONE);
 	protected static AnimObject MINUS_ONE = new AnimObject(SUB._, ONE);

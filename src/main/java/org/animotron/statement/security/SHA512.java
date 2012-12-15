@@ -28,7 +28,7 @@ import org.animotron.statement.string.STRING;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * Security instruction 'sha-512'.
@@ -56,7 +56,7 @@ public class SHA512 extends DetermInstruction {
                 //source
                 String message = STRING._.eval(pf, params).toString();
                 message = MessageDigester.calculate(message, "SHA-512");
-                answered(pf, value(message));
+                answered(pf, expression(message));
 			} catch (Throwable t) {
 				pf.sendException(t);
 			}

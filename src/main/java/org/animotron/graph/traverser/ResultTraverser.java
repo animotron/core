@@ -31,7 +31,7 @@ import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Reference;
 import org.animotron.statement.query.GET;
-import org.animotron.statement.value.AbstractValue;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
@@ -78,12 +78,12 @@ public class ResultTraverser extends AnimoTraverser {
         		result(handler, rr, level, isOne, pos, isLast, def);
         	} else {
 				Relationship r = rr.getClosest();
-                if (s instanceof AbstractValue)
+                if (s instanceof VALUE)
                     handler.start(s, parent, r, level++, isOne, pos, isLast);
                 if (!(s instanceof REF && !(qS instanceof Reference || qS instanceof Definition || qS instanceof GET))) {
                     iterate(s, handler, parent, rr, r, level, pos, evaluable,def);
                 }
-                if (s instanceof AbstractValue)
+                if (s instanceof VALUE)
                     handler.end(s, parent, r, --level, isOne, pos, isLast);
             }
         }

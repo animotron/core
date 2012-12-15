@@ -58,8 +58,8 @@ import static org.neo4j.graphdb.Direction.OUTGOING;
  *
  * endGraph()
  *
- * start(VALUE prefix, VALUE ns, VALUE reference, VALUE value)
- * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE value)
+ * start(VALUE prefix, VALUE ns, VALUE reference, VALUE expression)
+ * start(Statement statement, VALUE prefix, VALUE ns, VALUE reference, VALUE expression)
  * end()
  *
  * relationship()
@@ -172,7 +172,7 @@ public class GraphBuilder {
     }
 
     public void start(Object value) throws AnimoException, IOException {
-        start(org.animotron.statement.value.VALUE._, value);
+        start(org.animotron.statement.operator.VALUE._, value);
     }
 
    private Statement s = null;
@@ -210,7 +210,7 @@ public class GraphBuilder {
         Object[] o = {
                 md,             // 0 message digest    
                 statement,	    // 1 statement
-                reference,      // 2 name or value
+                reference,      // 2 name or expression
                 null,	 	    // 3 current relationship
                 null,		    // 4 current node
                 parent, 	    // 5 parent item
@@ -273,7 +273,7 @@ public class GraphBuilder {
     }
 
     public void _(Object value) throws AnimoException, IOException {
-        _(org.animotron.statement.value.VALUE._, value);
+        _(org.animotron.statement.operator.VALUE._, value);
     }
 
     public void _(Statement statement, Object reference) throws AnimoException, IOException {

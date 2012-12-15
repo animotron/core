@@ -34,7 +34,7 @@ import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 import org.animotron.statement.operator.*;
 import org.animotron.statement.relation.SHALL;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexHits;
 import org.neo4j.graphdb.traversal.BranchState;

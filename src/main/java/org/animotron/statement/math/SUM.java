@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * Math instruction 'SUM'. (aka summation)
@@ -59,7 +59,7 @@ public class SUM extends MathInstruction {
 
 		System.out.println(""+Na.doubleValue()+" + "+Nb.doubleValue()+" = "+result);
 
-		return value(result);
+		return expression(result);
 	}
 	
 	protected AnimObject execute(final PFlow pf, AnimObject a, AnimObject b) throws IOException {

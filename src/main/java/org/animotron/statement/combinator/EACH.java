@@ -34,7 +34,7 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.value.AbstractValue;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
 
@@ -107,13 +107,13 @@ public class EACH extends Combinator {
 			for (int i = res.length-2; i >= 0; i--) {
                 final int finalI = i;
                 final Statement s = Statements.relationshipType(res[i]);
-                if (s instanceof AbstractValue) {
+                if (s instanceof VALUE) {
                     // TODO analyze more complex expressions
-                    IndexHits<Relationship> subelements = Order._.queryDown(res[i].getEndNode());
-                    final Relationship[] bind = new Relationship[subelements.size() + 1];
+                    IndexHits<Relationship> elements = Order._.queryDown(res[i].getEndNode());
+                    final Relationship[] bind = new Relationship[elements.size() + 1];
                     try {
                         int n = 0;
-                        for (Relationship x : subelements) {
+                        for (Relationship x : elements) {
                             bind[n] = x;
                             n++;
                         }
@@ -121,7 +121,7 @@ public class EACH extends Combinator {
                         r = new Expression() {
                             @Override
                             public void build() throws Throwable {
-                                builder.start(s, ((AbstractValue) s).reference(res[finalI].getEndNode()));
+                                builder.start(s, ((VALUE) s).reference(res[finalI].getEndNode()));
                                 for (Relationship i : bind) {
                                     builder.bind(i);
                                 }
@@ -129,7 +129,7 @@ public class EACH extends Combinator {
                             }
                         };
                     } finally {
-                        subelements.close();
+                        elements.close();
                     }
                 } else {
                     the = new Expression() {

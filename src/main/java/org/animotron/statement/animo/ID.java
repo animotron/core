@@ -28,10 +28,10 @@ import org.animotron.statement.operator.AN;
 import org.animotron.statement.operator.Evaluable;
 import org.animotron.statement.operator.Operator;
 import org.animotron.statement.operator.Utils;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Relationship;
 
-import static org.animotron.statement.value.VALUE.value;
+import static org.animotron.statement.operator.VALUE.expression;
 
 /**
  * Return object's NAME.
@@ -69,7 +69,7 @@ public class ID extends Operator implements Evaluable {
 	        		System.out.println(name);
 	        		if (name != null && !name.isEmpty()) {
 		        		pf.sendAnswer(pf.getVector().answered(
-		                    value(name)
+		                    expression(name)
 		                ));
 	        		}
         		}

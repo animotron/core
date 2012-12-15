@@ -23,7 +23,7 @@ package org.animotron.graph;
 import org.animotron.Executor;
 import org.animotron.graph.index.*;
 import org.animotron.statement.operator.DEF;
-import org.animotron.statement.value.VALUE;
+import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.*;
 import org.neo4j.graphdb.index.IndexManager;
 import org.neo4j.kernel.DeadlockDetectedException;

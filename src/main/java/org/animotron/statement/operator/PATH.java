@@ -25,7 +25,6 @@ import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.manipulator.QCAVector;
-import org.animotron.statement.value.VALUE;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
 import org.neo4j.graphdb.index.IndexHits;
