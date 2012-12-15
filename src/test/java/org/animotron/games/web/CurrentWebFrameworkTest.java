@@ -21,7 +21,6 @@
 package org.animotron.games.web;
 
 import org.animotron.ATest;
-import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.Expression;
 import org.animotron.statement.compare.WITH;
 import org.animotron.statement.operator.AN;
@@ -41,7 +40,7 @@ import java.io.IOException;
 public class CurrentWebFrameworkTest extends ATest {
 
     private Expression query(final String site, final String service) {
-        return new AbstractExpression() {
+        return new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(AN._);
@@ -61,7 +60,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     private Expression error(final String site, final int code, String trace) {
-        return new AbstractExpression() {
+        return new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(AN._);
@@ -87,7 +86,7 @@ public class CurrentWebFrameworkTest extends ATest {
     }
 
     private Expression mime(final Expression query) {
-        return new AbstractExpression() {
+        return new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(GET._);

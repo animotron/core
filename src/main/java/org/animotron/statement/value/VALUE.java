@@ -21,7 +21,6 @@
 package org.animotron.statement.value;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.Expression;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.AbstractIndex;
@@ -163,10 +162,10 @@ public class VALUE extends AbstractValue implements Prepare {
 	                    execute(new GraphOperation<Void>() {
 	                        @Override
 	                        public Void execute() throws Throwable {
-	                            Relationship x = new AbstractExpression() {
+	                            Relationship x = new Expression() {
 
                                     private Expression letter(final String uuid1, final Instruction c, final String uuid2) {
-                                        return new AbstractExpression() {
+                                        return new Expression() {
                                             @Override
                                             public void build() throws Throwable {
                                                 builder.start(DEF._, uuid1);
@@ -195,7 +194,7 @@ public class VALUE extends AbstractValue implements Prepare {
                                                 Relationship u = __(letter(s.toUpperCase(), LOWER_CASE._, s.toLowerCase()));
                                                 def = s.equals(s.toLowerCase()) ? l : u;
                                             } else {
-                                                def = new AbstractExpression() {
+                                                def = new Expression() {
                                                     @Override
                                                     public void build() throws Throwable {
                                                         builder.start(DEF._);
@@ -243,7 +242,7 @@ public class VALUE extends AbstractValue implements Prepare {
     }
 
     public static Relationship value (final Object o) {
-        return new AbstractExpression() {
+        return new Expression() {
             @Override
             public void build() throws Throwable {
                 builder._(o);
@@ -257,6 +256,7 @@ public class VALUE extends AbstractValue implements Prepare {
 			try {
 				Thread.sleep(100);
 			} catch (Exception e) {
+                e.printStackTrace();
 			}
 	}
 }

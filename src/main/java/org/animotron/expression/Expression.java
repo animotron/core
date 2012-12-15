@@ -32,9 +32,20 @@ import org.neo4j.graphdb.RelationshipType;
  */
 public abstract class Expression implements Relationship {
 
-    protected abstract Relationship relationship();
+    private Relationship relationship;
+    protected final GraphBuilder builder = new GraphBuilder();
 
-    public final static Relationship[] __(Expression... e) {
+    protected Expression(Relationship r) {
+        relationship = r;
+    }
+
+    protected Expression() {
+        this(null);
+    }
+
+    public abstract void build() throws Throwable;
+
+    public static Relationship[] __(Expression... e) {
         Relationship[] a = new Relationship[e.length];
         for (int i = 0; i < e.length; i++) {
             a[i] = __(e[i]);
@@ -42,12 +53,30 @@ public abstract class Expression implements Relationship {
         return a;
     }
 
-    public final static Relationship __(Expression e) {
+    public static Relationship __(Expression e) {
         return e.relationship();
     }
 
     public String fs() {
         return null;
+    }
+
+    protected synchronized Relationship relationship() {
+        if (relationship == null) {
+            try {
+                builder.build(this);
+                relationship = builder.relationship();
+            } catch (Throwable t) {
+                t.printStackTrace();
+                throw new RuntimeException(t);
+            }
+        }
+        return relationship;
+    }
+
+    @Override
+    public String toString() {
+        return relationship == null ? null : relationship.toString();
     }
 
     @Override
@@ -129,11 +158,6 @@ public abstract class Expression implements Relationship {
 	@Override
 	public boolean isType(RelationshipType type) {
 		return relationship().isType(type);
-	}
-
-    @Override
-	public String toString() {
-		return relationship().toString();
 	}
 
 }

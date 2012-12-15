@@ -21,14 +21,9 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
 import org.animotron.statement.operator.DEF;
-import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
-
-import static org.animotron.graph.Properties.FS;
 
 
 /**
@@ -36,7 +31,7 @@ import static org.animotron.graph.Properties.FS;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class AbstractBinaryExpression extends AbstractExpression {
+public abstract class AbstractBinaryExpression extends Expression {
 
     @Override
     public void build() throws Throwable {

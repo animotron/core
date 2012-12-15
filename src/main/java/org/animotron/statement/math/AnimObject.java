@@ -21,7 +21,7 @@
 package org.animotron.statement.math;
 
 import javolution.util.FastList;
-import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.Evaluator;
@@ -48,7 +48,7 @@ import static org.animotron.statement.value.VALUE.value;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
-public class AnimObject extends AbstractExpression {
+public class AnimObject extends Expression {
 	
 	protected static Relationship ONE = value(Long.valueOf(1));
 	

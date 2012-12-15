@@ -21,7 +21,7 @@
 package org.animotron.statement.combinator;
 
 import javolution.util.FastSet;
-import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.graph.index.Order;
 import org.animotron.io.Pipe;
 import org.animotron.manipulator.OnQuestion;
@@ -118,7 +118,7 @@ public class EACH extends Combinator {
                             n++;
                         }
                         bind[n] = r;
-                        r = new AbstractExpression() {
+                        r = new Expression() {
                             @Override
                             public void build() throws Throwable {
                                 builder.start(s, ((AbstractValue) s).reference(res[finalI].getEndNode()));
@@ -132,7 +132,7 @@ public class EACH extends Combinator {
                         subelements.close();
                     }
                 } else {
-                    the = new AbstractExpression() {
+                    the = new Expression() {
                         @Override
                         public void build() throws Throwable {
                             builder.start(DEF._);
@@ -142,7 +142,7 @@ public class EACH extends Combinator {
                     };
                     final Relationship finalThe = the;
                     final Relationship finalR = r;
-                    r = new AbstractExpression() {
+                    r = new Expression() {
                         @Override
                         public void build() throws Throwable {
                             builder.start(AN._);

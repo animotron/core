@@ -21,8 +21,6 @@
 package org.animotron;
 
 import junit.framework.Assert;
-
-import org.animotron.expression.AbstractExpression;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.graph.serializer.CachedSerializer;
@@ -127,8 +125,8 @@ public abstract class ATest {
 
     protected void assertAnimo(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
-        if (op instanceof AbstractExpression) {
-			assertNotNull( Expression.__((AbstractExpression) op) );
+        if (op instanceof Expression) {
+			assertNotNull( Expression.__((Expression) op) );
 		}
         System.out.println("Animo serializer...");
         String result = pretty ? CachedSerializer.PRETTY_ANIMO.serialize(op) : CachedSerializer.ANIMO.serialize(op);

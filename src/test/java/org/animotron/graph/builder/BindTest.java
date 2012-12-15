@@ -21,7 +21,7 @@
 package org.animotron.graph.builder;
 
 import org.animotron.ATest;
-import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.statement.operator.AN;
@@ -38,7 +38,7 @@ public class BindTest extends ATest {
     @Test
 	public void test_01() throws Throwable {
         final Expression a = new AnimoExpression("a");
-        Expression b = new AbstractExpression() {
+        Expression b = new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(DEF._, "b");
@@ -52,7 +52,7 @@ public class BindTest extends ATest {
     @Test
 	public void test_02() throws Throwable {
         final Expression a = new AnimoExpression("a");
-        Expression b = new AbstractExpression() {
+        Expression b = new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(DEF._, "b");
@@ -70,7 +70,7 @@ public class BindTest extends ATest {
 	public void test_03() throws Throwable {
         final Expression x = new AnimoExpression("def x");
         final Expression y = new AnimoExpression("def y");
-        Expression b = new AbstractExpression() {
+        Expression b = new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(DEF._, "b");
@@ -89,7 +89,7 @@ public class BindTest extends ATest {
     @Test
 	public void test_04() throws Throwable {
         final Expression a = new AnimoExpression("any a");
-        Expression b = new AbstractExpression() {
+        Expression b = new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(DEF._, "b");
@@ -108,7 +108,7 @@ public class BindTest extends ATest {
         final Expression a = new AnimoExpression("any a");
         final Expression x = new AnimoExpression("def x");
         final Expression y = new AnimoExpression("def y");
-        Expression b = new AbstractExpression() {
+        Expression b = new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(DEF._, "b");

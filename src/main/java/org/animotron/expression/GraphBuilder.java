@@ -21,8 +21,6 @@
 package org.animotron.expression;
 
 import org.animotron.exception.AnimoException;
-import org.animotron.expression.AbstractBinaryExpression;
-import org.animotron.expression.AbstractExpression;
 import org.animotron.graph.index.Cache;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.serializer.DigestSerializer;
@@ -32,7 +30,6 @@ import org.animotron.statement.animo.update.CHANGE;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.DEF;
 import org.animotron.statement.operator.REF;
-import org.animotron.statement.value.VALUE;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Relationship;
@@ -296,7 +293,7 @@ public class GraphBuilder {
         return stack.peek();
     }
 
-    public void build(AbstractExpression exp) throws Throwable {
+    public void build(Expression exp) throws Throwable {
         Relationship r;
         exp.build();
         while (!stack.empty()) {

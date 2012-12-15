@@ -21,7 +21,7 @@
 package org.animotron.statement.math;
 
 import org.animotron.ATest;
-import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
 import org.animotron.statement.operator.AN;
@@ -41,7 +41,7 @@ public class SUM500Test extends ATest {
 	public void test_00() throws Throwable {
         long t;
         t = currentTimeMillis();
-        Relationship e = AnimoExpression.__(new AbstractExpression() {
+        Relationship e = AnimoExpression.__(new Expression() {
             @Override
             public void build() throws Throwable {
                 builder.start(AN._);

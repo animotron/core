@@ -20,7 +20,6 @@
  */
 package org.animotron.expression;
 
-import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import org.animotron.exception.AnimoException;
 import org.animotron.statement.Prefix;
 import org.animotron.statement.Statement;
@@ -40,7 +39,7 @@ import java.util.Stack;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  * 
  */
-public class AnimoExpression extends AbstractExpression {
+public class AnimoExpression extends Expression {
 
     public final static Relationship[] __(String... e) {
         Relationship[] a = new Relationship[e.length];

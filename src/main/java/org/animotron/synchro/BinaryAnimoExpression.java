@@ -20,7 +20,7 @@
  */
 package org.animotron.synchro;
 
-import org.animotron.expression.AbstractExpression;
+import org.animotron.expression.Expression;
 import org.animotron.statement.Statement;
 import org.animotron.statement.Statements;
 
@@ -32,7 +32,7 @@ import static org.animotron.synchro.StreamUtils.*;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class BinaryAnimoExpression extends AbstractExpression {
+public class BinaryAnimoExpression extends Expression {
 
     private final BufferedInputStream is;
 
