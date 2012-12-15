@@ -83,7 +83,10 @@ public class VALUE extends AbstractStatement implements Prepare {
 
     @Override
     protected Node createChild(Object reference, boolean ready, boolean ignoreNotFound) throws AnimoException {
-        Node child = super.createChild(reference, ready, ignoreNotFound);
+        if (reference == null)
+            return createNode();
+        Node child = createNode();
+        VALUE.set(child, reference);
         add(child, reference);
         return child;
     }
