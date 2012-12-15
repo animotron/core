@@ -314,8 +314,9 @@ public class GraphBuilder {
                 } else {
                     catcher.evaluative(c);
                 }
-                if (exp instanceof AbstractBinaryExpression) {
-                    FS.set(r, ((AbstractBinaryExpression) exp).fs());
+                String fs = exp.fs();
+                if (fs != null) {
+                    FS.set(r, fs);
                 }
                 tx.success();
                 finishTx(tx);

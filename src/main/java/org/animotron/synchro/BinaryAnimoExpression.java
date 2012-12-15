@@ -37,6 +37,7 @@ public class BinaryAnimoExpression extends AbstractExpression {
     private final BufferedInputStream is;
 
     private byte[] hash;
+    private String fs = null;
 
     public BinaryAnimoExpression(InputStream is) {
         this.is = new BufferedInputStream(is);
@@ -85,7 +86,7 @@ public class BinaryAnimoExpression extends AbstractExpression {
                     o = null;
                     break;
                 case FS :
-                    String fs = readString(is);
+                    fs = readString(is);
                     File file = new File(fs);
                     long size = readLong(is);
                     BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file));
@@ -95,5 +96,10 @@ public class BinaryAnimoExpression extends AbstractExpression {
                     os.close();
             }
         }
+    }
+
+    @Override
+    public String fs() {
+        return fs;
     }
 }

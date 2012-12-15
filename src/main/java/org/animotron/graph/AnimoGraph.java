@@ -222,14 +222,6 @@ public class AnimoGraph {
 		return node;
 	}
 
-	public static Node getOrCreateNode(Node parent, RelationshipType type) {
-		Relationship r = parent.getSingleRelationship(type, OUTGOING);
-		if (r != null)
-			return r.getEndNode();
-		Node node = createNode(parent, type);
-		return node;
-	}
-
     public static void copyProperties(PropertyContainer src, PropertyContainer dst) {
         for (String name : src.getPropertyKeys()) {
             dst.setProperty(name, src.getProperty(name));

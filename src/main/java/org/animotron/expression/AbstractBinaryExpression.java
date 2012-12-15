@@ -47,8 +47,6 @@ public abstract class AbstractBinaryExpression extends AbstractExpression {
 
     protected abstract void description() throws AnimoException, IOException;
 
-    protected abstract String fs();
-
     protected String id() {
         return null;
     }

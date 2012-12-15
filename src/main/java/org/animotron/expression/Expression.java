@@ -46,6 +46,10 @@ public abstract class Expression implements Relationship {
         return e.relationship();
     }
 
+    public String fs() {
+        return null;
+    }
+
     @Override
 	public GraphDatabaseService getGraphDatabase() {
 		return relationship().getGraphDatabase();
