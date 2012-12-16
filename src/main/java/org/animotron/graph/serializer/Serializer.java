@@ -30,6 +30,7 @@ import org.animotron.graph.traverser.AnimoResultOneStepTraverser;
 import org.animotron.graph.traverser.AnimoResultTraverser;
 import org.animotron.graph.traverser.AnimoTraverser;
 import org.animotron.graph.traverser.ResultTraverser;
+import org.animotron.manipulator.QCAVector;
 import org.animotron.utils.MessageDigester;
 import org.neo4j.graphdb.Relationship;
 
@@ -47,9 +48,9 @@ import static org.animotron.graph.Properties.RUUID;
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public abstract class CachedSerializer extends AbstractSerializer {
+public abstract class Serializer {
 	
-    public static CachedSerializer STRING = new CachedSerializer(ResultTraverser._, ".txt") {
+    public static Serializer STRING = new Serializer(ResultTraverser._, ".txt") {
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 	        return new TextGraphHandler(out);
@@ -64,7 +65,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
     };
 	
-    public static CachedSerializer PRETTY_ANIMO_RESULT = new CachedSerializer(AnimoResultTraverser._, "-res-pretty.animo") {
+    public static Serializer PRETTY_ANIMO_RESULT = new Serializer(AnimoResultTraverser._, "-res-pretty.animo") {
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 	        return new AnimoPrettyGraphHandler(out);
@@ -79,7 +80,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 	
-	public static CachedSerializer PRETTY_ANIMO = new CachedSerializer(AnimoTraverser._, "-src-pretty.animo") {
+	public static Serializer PRETTY_ANIMO = new Serializer(AnimoTraverser._, "-src-pretty.animo") {
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoPrettyGraphHandler(out);
@@ -94,7 +95,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 
-	public static CachedSerializer ANIMO_RESULT = new CachedSerializer(AnimoResultTraverser._, "-res.animo") {
+	public static Serializer ANIMO_RESULT = new Serializer(AnimoResultTraverser._, "-res.animo") {
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoGraphHandler(out);
@@ -109,7 +110,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 	
-	public static CachedSerializer ANIMO = new CachedSerializer(AnimoTraverser._, "-src.animo") {
+	public static Serializer ANIMO = new Serializer(AnimoTraverser._, "-src.animo") {
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoGraphHandler(out);
@@ -124,7 +125,7 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 
-	public static CachedSerializer ANIMO_RESULT_ONE_STEP = new CachedSerializer(new AnimoResultOneStepTraverser(), "-1step-res.animo") {
+	public static Serializer ANIMO_RESULT_ONE_STEP = new Serializer(new AnimoResultOneStepTraverser(), "-1step-res.animo") {
 		@Override
 		protected GraphHandler handler(StringBuilder out) {
 			return new AnimoGraphHandler(out);
@@ -139,12 +140,59 @@ public abstract class CachedSerializer extends AbstractSerializer {
 		}
 	};
 
-	private String ext;
+    private AnimoTraverser traverser;
 
-    protected CachedSerializer(AnimoTraverser traverser, String ext){
-        super(traverser);
+    private Serializer(AnimoTraverser traverser) {
+        this.traverser = traverser;
+    }
+
+    private Serializer(AnimoTraverser traverser, String ext){
+        this(traverser);
         this.ext = ext;
-	}
+    }
+
+    protected abstract GraphHandler handler(OutputStream out) throws IOException;
+
+    protected abstract GraphHandler handler(Writer out) throws IOException;
+
+    protected abstract GraphHandler handler(StringBuilder out);
+
+    public final void serialize(Relationship r, OutputStream out) throws IOException {
+        traverser.traverse(handler(out), r);
+    }
+
+    public final void serialize(QCAVector v, OutputStream out) throws IOException {
+        traverser.traverse(handler(out), v);
+    }
+
+    public final void serialize(Relationship r, StringBuilder out) throws IOException {
+        traverser.traverse(handler(out), r);
+    }
+
+    public final void serialize(QCAVector v, StringBuilder out) throws IOException {
+        traverser.traverse(handler(out), v);
+    }
+
+    public final void serialize(Relationship r, Writer out) throws IOException {
+        traverser.traverse(handler(out), r);
+    }
+
+    public final void serialize(QCAVector v, Writer out) throws IOException {
+        traverser.traverse(handler(out), v);
+    }
+
+    public String serialize(Relationship r) throws IOException {
+        StringBuilder out = new StringBuilder(256);
+        traverser.traverse(handler(out), r);
+        return out.toString();
+    }
+
+    public String serialize(QCAVector v) throws IOException {
+        StringBuilder out = new StringBuilder(256);
+        traverser.traverse(handler(out), v);
+        return out.toString();
+    }
+	private String ext;
 
     private static String key(String uuid, String ext) throws IOException {
         StringBuilder s = new StringBuilder(2);

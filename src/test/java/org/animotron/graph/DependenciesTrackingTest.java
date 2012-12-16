@@ -24,7 +24,7 @@ import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.cache.FileCache;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -158,7 +158,7 @@ public class DependenciesTrackingTest extends ATest {
         assertNotNull(op);
         System.out.println("Animo result serializer...");
         
-        String result = CachedSerializer.ANIMO_RESULT.serialize(new AnimoExpression(op), FileCache._);
+        String result = Serializer.ANIMO_RESULT.serialize(new AnimoExpression(op), FileCache._);
         
         System.out.println(result);
         Assert.assertEquals("", expected, result);

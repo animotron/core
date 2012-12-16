@@ -21,7 +21,7 @@
 package org.animotron;
 
 import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -54,7 +54,7 @@ public class Shell {
 	        try {
 	        	AnimoExpression expression = new AnimoExpression(argument);
 
-				String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(expression) : CachedSerializer.ANIMO_RESULT.serialize(expression);
+				String result = pretty ? Serializer.PRETTY_ANIMO_RESULT.serialize(expression) : Serializer.ANIMO_RESULT.serialize(expression);
 				writer.write(result);
 				writer.flush();
 			} catch (Throwable t) {

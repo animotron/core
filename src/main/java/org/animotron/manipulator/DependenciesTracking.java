@@ -26,7 +26,7 @@ import org.animotron.graph.AnimoGraph;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.index.Order;
 import org.animotron.graph.index.State;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.animotron.io.Pipe;
 import org.animotron.marker.AbstractMarker;
 import org.animotron.marker.Marker;
@@ -86,14 +86,14 @@ public class DependenciesTracking extends StatementManipulator {
 					for (Relationship r : n.getRelationships(REF._, INCOMING)) {
 						for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
 							//System.out.println(fs);
-							CachedSerializer.drop(path.lastRelationship());
+							Serializer.drop(path.lastRelationship());
 						}
 					}
 			
 					for (Relationship r : n.getRelationships(RESULT, INCOMING)) {
 						for (Path path : Utils.EXPS.traverse(r.getStartNode())) {
 							//System.out.println(fs);
-							CachedSerializer.drop(path.lastRelationship());
+							Serializer.drop(path.lastRelationship());
 						}
 						r.delete();
 					}

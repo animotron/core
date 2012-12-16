@@ -24,7 +24,7 @@ import org.animotron.ATest;
 import org.animotron.exception.AnimoException;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.BinaryExpression;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.animotron.statement.operator.DEF;
 import org.junit.Test;
 import org.neo4j.graphdb.Relationship;
@@ -44,7 +44,7 @@ public class BridgeTest extends ATest {
 	private void check(String the) throws IOException {
         Relationship r = DEF._.get(the);
         assertNotNull(r);
-        CachedSerializer.ANIMO.serialize(r, System.out);
+        Serializer.ANIMO.serialize(r, System.out);
         System.out.println();
 	}
 	

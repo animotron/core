@@ -96,7 +96,7 @@ public class Manipulators {
 //                		previousHash = byteArrayToHex((byte[]) HASH.get(prev));
 //            		String hash = byteArrayToHex((byte[]) HASH.get(r));
 //
-//            		Synchro._.sendDataToChannel("PREVIOUSHASH:" + previousHash + "|HASH:" + hash + "|INSTANCE:" + CachedSerializer.ANIMO.serialize(r));
+//            		Synchro._.sendDataToChannel("PREVIOUSHASH:" + previousHash + "|HASH:" + hash + "|INSTANCE:" + Serializer.ANIMO.serialize(r));
 //            	}
 				Preparator._.execute(null, n);
 			}

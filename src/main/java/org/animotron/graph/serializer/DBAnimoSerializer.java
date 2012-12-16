@@ -37,15 +37,12 @@ import static org.animotron.utils.MessageDigester.byteArrayToHex;
  */
 public class DBAnimoSerializer {
 
-    public static DBAnimoSerializer _ = new DBAnimoSerializer();
-    private DBAnimoSerializer() {}
-
-    public void serialize(File folder) throws IOException {
+    public static void serialize(File folder) throws IOException {
         for (Relationship r : getROOT().getRelationships()) {
             String hash = byteArrayToHex((byte[]) HASH.get(r));
             File f = new File(new File (folder, hash.substring(0, 1)), hash.substring(0, 3));
             f.mkdirs();
-            CachedSerializer.PRETTY_ANIMO.serialize(r, new FileOutputStream(new File(f, hash)));
+            Serializer.PRETTY_ANIMO.serialize(r, new FileOutputStream(new File(f, hash)));
         }
     }
 

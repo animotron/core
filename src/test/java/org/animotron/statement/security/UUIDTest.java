@@ -23,7 +23,7 @@ package org.animotron.statement.security;
 import junit.framework.Assert;
 import org.animotron.ATest;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.io.IOException;
 public class UUIDTest extends ATest {
     
     public void test(String expr) throws IOException {
-        String res = CachedSerializer.STRING.serialize(new AnimoExpression(expr));
+        String res = Serializer.STRING.serialize(new AnimoExpression(expr));
         Assert.assertEquals(res.replaceAll("[0-9a-f]", "x"), "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx");
     }
 

@@ -23,7 +23,7 @@ package org.animotron;
 import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
 import org.animotron.expression.Expression;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.junit.After;
 import org.junit.Before;
 import org.neo4j.graphdb.Relationship;
@@ -129,7 +129,7 @@ public abstract class ATest {
 			assertNotNull( Expression.__((Expression) op) );
 		}
         System.out.println("Animo serializer...");
-        String result = pretty ? CachedSerializer.PRETTY_ANIMO.serialize(op) : CachedSerializer.ANIMO.serialize(op);
+        String result = pretty ? Serializer.PRETTY_ANIMO.serialize(op) : Serializer.ANIMO.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
         System.out.println();
@@ -144,13 +144,13 @@ public abstract class ATest {
     }
 
     protected void eval(Relationship op) throws IOException {
-    	CachedSerializer.ANIMO_RESULT.serialize(op);
+    	Serializer.ANIMO_RESULT.serialize(op);
     }
 
     protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
         System.out.println("Animo result serializer...");
-        String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(op) : CachedSerializer.ANIMO_RESULT.serialize(op);
+        String result = pretty ? Serializer.PRETTY_ANIMO_RESULT.serialize(op) : Serializer.ANIMO_RESULT.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
         System.out.println();
@@ -163,7 +163,7 @@ public abstract class ATest {
     protected void assertAnimoResult(Relationship op, String... expected) throws IOException {
     	assertNotNull(op);
         System.out.println("Animo result serializer...");
-        String result = CachedSerializer.ANIMO_RESULT.serialize(op);
+        String result = Serializer.ANIMO_RESULT.serialize(op);
         System.out.println(result);
         
         for (int i = 0; i < expected.length; i++ ) {
@@ -184,7 +184,7 @@ public abstract class ATest {
     protected void assertAnimoResultOneStep(Relationship op, String expected) throws IOException {
         assertNotNull(op);
         System.out.println("One step Animo result serializer...");
-        String result = CachedSerializer.ANIMO_RESULT_ONE_STEP.serialize(op);
+        String result = Serializer.ANIMO_RESULT_ONE_STEP.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
         System.out.println();
@@ -193,7 +193,7 @@ public abstract class ATest {
     protected void assertAnimoResultOneStep(Relationship op, String... expected) throws IOException {
         assertNotNull(op);
         System.out.println("One step Animo result serializer...");
-        String result = CachedSerializer.ANIMO_RESULT_ONE_STEP.serialize(op);
+        String result = Serializer.ANIMO_RESULT_ONE_STEP.serialize(op);
         System.out.println(result);
         for (int i = 0; i < expected.length; i++ ) {
         	String expect = expected[i];
@@ -217,7 +217,7 @@ public abstract class ATest {
     protected void assertStringResult(Relationship op, String expected, boolean messagers) throws IOException, InterruptedException {
         assertNotNull(op);
         if (messagers) System.out.println("VALUE result serializer...");
-        String result = CachedSerializer.STRING.serialize(op);
+        String result = Serializer.STRING.serialize(op);
         if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
         if (messagers) System.out.println();

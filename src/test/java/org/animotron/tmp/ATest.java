@@ -22,7 +22,7 @@ package org.animotron.tmp;
 
 import junit.framework.Assert;
 import org.animotron.expression.AnimoExpression;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.io.PipedInput;
 import org.animotron.io.PipedOutput;
@@ -104,7 +104,7 @@ public abstract class ATest {
 		if (result == null)
 			Assert.fail("expecting animo object '"+expected+"', but get none");
 		
-		String actual = CachedSerializer.ANIMO.serialize(result);
+		String actual = Serializer.ANIMO.serialize(result);
 		Assert.assertEquals(expected, actual);
 
 		
@@ -131,7 +131,7 @@ public abstract class ATest {
 
 	protected AnimoExpression testAnimo(String in, String out) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer.serialize(expression));
         assertAnimo(expression, out);
         
         return expression;
@@ -143,7 +143,7 @@ public abstract class ATest {
 
 	protected void testAnimoResult(String in, String out, String res) throws Throwable {
         AnimoExpression expression = new AnimoExpression(in);
-        assertEquals((byte[]) HASH.get(expression), DigestSerializer._.serialize(expression));
+        assertEquals((byte[]) HASH.get(expression), DigestSerializer.serialize(expression));
         assertAnimo(expression, out);
 
         assertAnimoResult(expression, res);
@@ -205,7 +205,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         System.out.println("Animo serializer...");
-        String result = pretty ? CachedSerializer.PRETTY_ANIMO.serialize(op) : CachedSerializer.ANIMO.serialize(op);
+        String result = pretty ? Serializer.PRETTY_ANIMO.serialize(op) : Serializer.ANIMO.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -217,14 +217,14 @@ public abstract class ATest {
     }
 
     protected void eval(Relationship op) throws IOException {
-    	CachedSerializer.ANIMO_RESULT.serialize(op);
+    	Serializer.ANIMO_RESULT.serialize(op);
     }
 
     protected void assertAnimoResult(Relationship op, String expected, boolean pretty) throws IOException {
         assertNotNull(op);
 
         System.out.println("Animo result serializer...");
-        String result = pretty ? CachedSerializer.PRETTY_ANIMO_RESULT.serialize(op) : CachedSerializer.ANIMO_RESULT.serialize(op);
+        String result = pretty ? Serializer.PRETTY_ANIMO_RESULT.serialize(op) : Serializer.ANIMO_RESULT.serialize(op);
         System.out.println(result);
         Assert.assertEquals("", expected, result);
 
@@ -239,7 +239,7 @@ public abstract class ATest {
         assertNotNull(op);
 
         if (messagers) System.out.println("VALUE result serializer...");
-        String result = CachedSerializer.STRING.serialize(op);
+        String result = Serializer.STRING.serialize(op);
         if (messagers) System.out.println(result);
         Assert.assertEquals("", expected, result);
 

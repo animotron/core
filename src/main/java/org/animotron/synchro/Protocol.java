@@ -18,43 +18,35 @@
  *  the GNU Affero General Public License along with Animotron.  
  *  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.animotron.graph.serializer;
+package org.animotron.synchro;
 
-import org.animotron.graph.AnimoGraph;
-import org.animotron.graph.GraphOperation;
-import org.animotron.graph.handler.DigestGraphHandler;
+import org.animotron.graph.handler.GraphHandler;
+import org.animotron.graph.serializer.DigestSerializer;
 import org.animotron.graph.traverser.AnimoTraverser;
+import org.animotron.statement.operator.DEF;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
-import static org.animotron.graph.Properties.HASH;
+import static org.animotron.synchro.StreamUtils.*;
 
 /**
- * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  * @author <a href="mailto:gazdovsky@gmail.com">Evgeny Gazdovsky</a>
  *
  */
-public class DigestSerializer {
+public class Protocol {
 
-    public static byte[] serialize(final Relationship r) throws IOException {
-        if (HASH.has(r)) {
-            return (byte[]) HASH.get(r);
-        }
-        DigestGraphHandler handler = new DigestGraphHandler();
+    public static void writeDefVersion(Relationship def, OutputStream os) throws IOException {
+        os.write(START_GRAPH);
+        writeBytes(os, DigestSerializer.serialize(def));
+        writeString(os, (String) DEF._.reference(def));
+        os.write(StreamUtils.END_GRAPH);
+    }
+
+    public static void writeExpression(Relationship r, OutputStream os) throws IOException {
+        GraphHandler handler = new BinaryGraphHandler(os);
         AnimoTraverser._.traverse(handler, r);
-        final byte[] hash = handler.digest();
-        try {
-            return AnimoGraph.execute(new GraphOperation<byte[]>() {
-                @Override
-                public byte[] execute() throws Throwable {
-                    HASH.set(r, hash);
-                    return hash;
-                }
-            });
-        } catch (Throwable t) {
-            throw new IOException(t);
-        }
     }
 
 }

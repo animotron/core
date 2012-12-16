@@ -21,7 +21,7 @@
 package org.animotron.statement.string;
 
 import org.animotron.graph.index.Order;
-import org.animotron.graph.serializer.CachedSerializer;
+import org.animotron.graph.serializer.Serializer;
 import org.animotron.manipulator.OnQuestion;
 import org.animotron.manipulator.PFlow;
 import org.animotron.statement.instruction.DetermInstruction;
@@ -124,7 +124,7 @@ public class STRING extends DetermInstruction {
     }
 
     private void _eval(StringBuilder sb, PFlow pf, Relationship hit) throws IOException {
-        sb.append(CachedSerializer.STRING.serialize(pf.getVector().question2(hit)));
+        sb.append(Serializer.STRING.serialize(pf.getVector().question2(hit)));
     }
 
 }

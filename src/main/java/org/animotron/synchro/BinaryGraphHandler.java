@@ -51,7 +51,7 @@ public class BinaryGraphHandler implements GraphHandler {
             if (Properties.FS.has(r)) {
                 fs = (String) Properties.FS.get(r);
             }
-            byte[] hash = DigestSerializer._.serialize(r);
+            byte[] hash = DigestSerializer.serialize(r);
             writeBytes(null, hash);
         }
         os.write(START_RELATIONSHIP);

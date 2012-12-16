@@ -127,7 +127,6 @@ public class VALUE extends AbstractStatement implements Prepare {
     public static Number number(Object o) {
         if (o instanceof Number) {
             return (Number)o;
-
         } else if (o instanceof String) {
             String s = (String) o;
             try {

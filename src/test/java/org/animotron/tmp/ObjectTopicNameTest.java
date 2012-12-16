@@ -129,7 +129,7 @@ public class ObjectTopicNameTest extends ATest {
 //		if (result == null)
 //			Assert.fail("expecting animo object for '"+word+"', but get none");
 //		
-//		String actual = CachedSerializer.ANIMO.serialize(result);
+//		String actual = Serializer.ANIMO.serialize(result);
 //		Pattern pattern = Pattern.compile("the [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12} name \""+word+"\".");
 //		
 //		System.out.println(actual);
