@@ -51,6 +51,7 @@ import static org.animotron.graph.AnimoGraph.startDB;
 public class BinaryFormatTest extends ATest{
 
     private  void test(String exp) throws IOException {
+        exp = exp.replace('\'', '"');
         Expression e = new AnimoExpression(exp);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         AnimoTraverser._.traverse(new BinaryGraphHandler(baos), e);
