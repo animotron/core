@@ -52,10 +52,10 @@ public class BinaryGraphHandler implements GraphHandler {
                 fs = (String) Properties.FS.get(r);
             }
             byte[] hash = DigestSerializer.serialize(r);
-            writeBytes(null, hash);
+            writeBytes(os, hash);
         }
         os.write(START_RELATIONSHIP);
-        writeBytes(null, statement.name().getBytes());
+        writeBytes(os, statement.name().getBytes());
         if (r != null) {
             Object o = statement.reference(r);
             if (o != null) {
@@ -87,7 +87,7 @@ public class BinaryGraphHandler implements GraphHandler {
     public void endGraph() throws IOException {
         if (fs != null) {
             os.write(FS);
-            writeBytes(null, fs.getBytes());
+            writeBytes(os, fs.getBytes());
             File file = new File(fs);
             byte[] size = new byte[8];
             ByteBuffer.wrap(size).putLong(file.length());
