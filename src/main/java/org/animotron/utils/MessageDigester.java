@@ -35,8 +35,8 @@ import static org.animotron.graph.Properties.NAME;
 
 public class MessageDigester {
 
-    private static String[] hex = 
-    	{"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"};
+    private static char[] hex =
+            {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 	private static final String CACHE_ALGORITHM = "SHA-256";
 
@@ -73,23 +73,14 @@ public class MessageDigester {
         return  digest;
     }
 
-    private static void byteToHex( StringBuilder buf, byte b ) {
-        int n = b;
-        if ( n < 0 ) {
-            n = 256 + n;
-        }
-        int d1 = n / 16;
-        int d2 = n % 16;
-        buf.append( hex[d1] );
-        buf.append( hex[d2] );
-    }
-
     public static String byteArrayToHex( byte[] b ) {
-        StringBuilder buf = new StringBuilder( b.length * 2 );
-        for ( int i = 0; i < b.length; i++ ) {
-            byteToHex( buf, b[i] );
+        char[] buff = new char[b.length * 2];
+        for (int i = 0; i < b.length; i++) {
+            int v = b[i] & 0xff;
+            buff[i * 2] = hex[v >>> 4];
+            buff[i * 2 + 1] = hex[v & 0x0f];
         }
-        return buf.toString();
+        return new String(buff);
     }
 
     public static byte[] longToByteArray( long b ) {
