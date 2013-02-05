@@ -151,8 +151,17 @@ public class MessageDigester {
         md.update(tmp.digest());
     }
 
-    public static UUID uuid() {
-        return new UUID(System.currentTimeMillis(), UUIDGen.getClockSeqAndNode());
+    private static long time = Long.MIN_VALUE;
+
+    public static synchronized UUID uuid() {
+        long t = System.currentTimeMillis() * 1000;
+        if (t > time) {
+            time = t;
+        }
+        else {
+            t = ++time;
+        }
+        return new UUID(t, UUIDGen.getClockSeqAndNode());
     }
 
     public static UUID uuid(String uuid) {
@@ -167,6 +176,10 @@ public class MessageDigester {
     public static UUID getUUID(PropertyContainer c, UUID uuid) {
         long [] v = (long[]) Properties.UUID.get(c);
         return new UUID(v[0], v[1]);
+    }
+
+    public static long getTime(UUID uuid) {
+        return uuid.getTime() / 1000;
     }
 
 }
