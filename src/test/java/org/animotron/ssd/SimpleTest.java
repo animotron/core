@@ -71,11 +71,25 @@ public class SimpleTest extends ATest {
         		"(Email \"abarone@diviana.net\") " +
         		"(FirstName \"Annalisa\") " +
         		"(LastName \"Barone\") " +
-        		"(label " +
         		"(lang:it_IT (get FirstName) (get LastName)) " +
-        		"(lang:ru_RU (get LastName) (get FirstName))).");
+        		"(lang:ru_RU (get LastName) (get FirstName)).");
         
-//        assertAnimoResult("what-is a", "x.");
+        assertAnimoResult("get lang:ru_RU usr:abarone/diviana.net", "\"Barone\". \"Annalisa\".");
+        assertAnimoResult("get lang:it_IT usr:abarone/diviana.net", "\"Annalisa\". \"Barone\".");
+
+        __("def person " +
+        		"(lang:it_IT (get FirstName) (get LastName)) " +
+        		"(lang:ru_RU (get LastName) (get FirstName)).");
+
+        __("def usr:abarone/diviana.net?v=2 " +
+        		"(person) " +
+        		"(CreationDate \"2012-11-20T10:53:32.688+01:00\") " +
+        		"(Email \"abarone@diviana.net\") " +
+        		"(FirstName \"Annalisa\") " +
+        		"(LastName \"Barone\").");
+
+        assertAnimoResult("get lang:ru_RU usr:abarone/diviana.net?v=2", "\"Barone\". \"Annalisa\".");
+        assertAnimoResult("get lang:it_IT usr:abarone/diviana.net?v=2", "\"Annalisa\". \"Barone\".");
 	}
 
 }
