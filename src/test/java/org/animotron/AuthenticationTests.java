@@ -38,9 +38,18 @@ public class AuthenticationTests extends ATest {
 			"def OAuth-2.0" +
 			"	(authorization).",
 			
+			//if have domain & support http service
+			"def fetch-logo" +
+			"	get protocol-https" +
+			"	'://'" +
+			"	get domain" +
+			"	'/favicon.ico'" +
+			".",
+			
 			"def linkedin-oauth" +
 			"	(OAuth-2.0)" +
 			"	(lang_en '')" +
+			"	(domain 'linkedin.com')" +
 			"	(authorize_url " + //redirect there
 			"		'https://www.linkedin.com/uas/oauth2/authorization?response_type=code'" +
 			"		'&client_id='" +
@@ -87,9 +96,10 @@ public class AuthenticationTests extends ATest {
 			".",
 			
 			"def UUID" +
-			"	(authorization-process)" +
-			"	(possition" +
-			"		relation-id here)" +
+			"	(process-state)" +
+			"	(authorization-process" +
+			"		possition" +
+			"			relation-id here)" +
 			"."
 		);
 		
