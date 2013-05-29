@@ -20,6 +20,8 @@
  */
 package org.animotron.graph.index;
 
+import java.util.NoSuchElementException;
+
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.index.Index;
 import org.neo4j.graphdb.index.IndexHits;
@@ -50,12 +52,12 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
 
     public T get(Object value) {
         IndexHits<T> q = getHits(value);
-        T c = null;
         try {
-            c = q.next();
+    		return q.next();
+        } catch (NoSuchElementException e) {
+        	return null;
         } finally {
             q.close();
-            return c;
         }
     }
 
