@@ -1,5 +1,5 @@
 /*
- *  Copyright (C) 2011-2012 The Animo Project
+ *  Copyright (C) 2011-2013 The Animo Project
  *  http://animotron.org
  *
  *  This file is part of Animotron.
@@ -19,6 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.animotron.graph.index;
+
+import java.util.NoSuchElementException;
 
 import org.neo4j.graphdb.PropertyContainer;
 import org.neo4j.graphdb.index.Index;
@@ -50,12 +52,12 @@ public abstract class AbstractIndex<T extends PropertyContainer> {
 
     public T get(Object value) {
         IndexHits<T> q = getHits(value);
-        T c = null;
         try {
-            c = q.next();
+    		return q.next();
+        } catch (NoSuchElementException e) {
+        	return null;
         } finally {
             q.close();
-            return c;
         }
     }
 
