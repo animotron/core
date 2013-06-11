@@ -20,6 +20,7 @@
  */
 package org.animotron.graph.serializer;
 
+import javolution.util.FastSet;
 import org.animotron.cache.Cache;
 import org.animotron.graph.GraphOperation;
 import org.animotron.graph.handler.AnimoGraphHandler;
@@ -271,26 +272,16 @@ public abstract class Serializer {
     }
     
     private void cache(final Relationship r, final Cache cache, final String uuid) throws Throwable {
-        final String[] entities;
-        String entity = entity(cache);
-        if (CACHE.has(r)) {
-            String[] e = (String[]) CACHE.get(r);
-            entities = new String[e.length + 1];
-            for (int i = 0; i < e.length; i++) {
-                if (e[i] == entity) {
-                    return;
-                }
-                entities[i] = e[i];
-            }
-            entities[e.length] = entity;
-        } else {
-            entities = new String[]{entity};
-        }
+        final FastSet<String> entities = FastSet.newInstance();
+        entities.add(entity(cache));
+        if (CACHE.has(r))
+            for (String e : (String[]) CACHE.get(r))
+                entities.add(e);
         execute(new GraphOperation<Void>() {
             @Override
             public Void execute() throws Throwable {
                 RUUID.set(r, uuid);
-                CACHE.set(r, entities);
+                CACHE.set(r, entities.toArray());
                 return null;
             }
         });
