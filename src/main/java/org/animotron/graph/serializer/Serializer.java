@@ -281,7 +281,7 @@ public abstract class Serializer {
             @Override
             public Void execute() throws Throwable {
                 RUUID.set(r, uuid);
-                CACHE.set(r, (String[]) entities.toArray());
+                CACHE.set(r, entities.toArray(new String[entities.size()]));
                 return null;
             }
         });
