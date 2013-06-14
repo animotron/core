@@ -81,6 +81,15 @@ public class PermsTest {
 		
 		System.out.println(perms.size());
 		System.out.println(perms.bytes());
+		
+		long ts = System.nanoTime();
+		
+		final int pattern = rnd.nextInt(MAX);
+		final long subject = rnd.nextLong();
+		
+		perms.validate(subject, pattern);
+		
+		System.out.println(System.nanoTime() - ts);
 	}
 	private static int MAX = READ | UPDATE | DELETE;
 	
@@ -97,12 +106,16 @@ public class PermsTest {
 		perms.set(subject, pattern);
 		
 		checkorder(perms);
-
+		
+		validate(perms, subject, pattern);
+	}
+	
+	private void validate(final Permission perms, final long subject, final int pattern) {
 		testPattern(perms, subject, READ, pattern);
 		testPattern(perms, subject, UPDATE, pattern);
 		testPattern(perms, subject, DELETE, pattern);
 	}
-	
+
 	private void testPattern(Permission perms, long subject, int mode, int pattern) {
 //		System.out.println("pattern = " + pattern + "; mode = "+mode+"; "+((pattern & mode) == mode)+" vs "+perms.validate(subject, mode));
 //		if (perms.validate(subject, mode) != ((pattern & mode) == mode)) {
