@@ -28,10 +28,10 @@ import org.animotron.statement.instruction.Instruction;
 import org.animotron.statement.link.AbstractLink;
 import org.animotron.statement.link.LINK;
 import org.animotron.statement.operator.*;
-import org.animotron.statement.operator.VALUE;
 import org.neo4j.graphdb.Relationship;
 
 import java.io.*;
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 /**
@@ -40,6 +40,12 @@ import java.util.Stack;
  * 
  */
 public class AnimoExpression extends Expression {
+	
+	enum CHARS {
+		SINDLE_QUOTE,
+		DOUBLE_QUOTE,
+		BRACKETS
+	}
 
     public final static Relationship[] __(String... e) {
         Relationship[] a = new Relationship[e.length];
@@ -74,7 +80,56 @@ public class AnimoExpression extends Expression {
     boolean number = true;
     boolean text = false;
     char quote = '\0';
-    int para = 0;
+    
+    Stack<CHARS> paras = new Stack<CHARS>();
+    //int para = 0;
+    
+    private void push(char ch) {
+    	switch (ch) {
+		case '\'':
+			push(CHARS.SINDLE_QUOTE);
+			break;
+
+		case '"':
+			push(CHARS.DOUBLE_QUOTE);
+			break;
+
+		default:
+			break;
+		}
+    }
+
+    private void push(CHARS ch) {
+    	paras.push(ch);
+    }
+
+    private void pop(char ch) throws IOException {
+    	switch (ch) {
+		case '\'':
+			pop(CHARS.SINDLE_QUOTE);
+			break;
+
+		case '"':
+			pop(CHARS.DOUBLE_QUOTE);
+			break;
+
+		default:
+			break;
+		}
+    }
+
+    private void pop(CHARS ch) throws IOException {
+    	try {
+    		final CHARS expected = paras.peek();
+
+    		if (expected == ch)
+    			paras.pop();
+    		else
+    			throw new IOException("Expecting '"+expected+"', but get '"+ch+"'");
+    	} catch (EmptyStackException e) {
+			throw new IOException("do not expectiong anything, but get '"+ch+"'");
+    	}
+    }
 
     @Override
     public void build() throws IOException, AnimoException {
@@ -93,13 +148,13 @@ public class AnimoExpression extends Expression {
                         newToken();
                         text = true;
                         quote = ch;
-                        para++;
+                        push(ch);
                     } else if (prev == '\\') {
                         s.append(ch);
                     } else if (quote == ch) {
                         newToken();
                         text = false;
-                        para--;
+                        pop(ch);
                     } else {
                         s.append(ch);
                     }
@@ -131,12 +186,12 @@ public class AnimoExpression extends Expression {
 	                            case '('  : newToken();
 	                                        startList();
                                             link_ = true;
-                                            para++;
+                                            push(CHARS.BRACKETS);
 	                                        break;
 	                            case ')'  : link_ = false;
                                             newToken();
 	                                        endList();
-                                            para--;
+                                            pop(CHARS.BRACKETS);
 	                                        break;
 	                            default   : s.append(ch);
                                             processPrefix();
@@ -149,8 +204,11 @@ public class AnimoExpression extends Expression {
         }
         lastToken();
         endList();
-        if (para != 0) {
-            throw new AnimoException((Relationship) null);
+        if (!paras.isEmpty()) {
+            throw new AnimoException(
+        		(Relationship) null, 
+        		"Unclosed paras ["+paras.size()+"], where last one is "+paras.get(paras.size() - 1) 
+    		);
         }
     }
 

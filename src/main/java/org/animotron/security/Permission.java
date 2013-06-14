@@ -35,4 +35,10 @@ public interface Permission {
     public void set(long subject, int mode);
     
     public boolean validate(long subject, int mode);
+
+	public long key(int pos);
+	public byte val(int pos);
+	
+	public long bytes();
+	public int size();
 }
