@@ -94,6 +94,13 @@
 			<artifactId>uuid</artifactId>
 			<version>3.3</version>
 		</dependency>
+
+        <!--ANTLR4 dependency-->
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+            <version>4.1</version>
+        </dependency>
 	</dependencies>
 	
 	<dependencyManagement>
