@@ -24,7 +24,7 @@
 	</developers>
 	
 	<properties>
-		<neo4jVersion>1.8</neo4jVersion>
+		<neo4jVersion>3.5.0</neo4jVersion>
 	</properties>
 	
 	<dependencies>
